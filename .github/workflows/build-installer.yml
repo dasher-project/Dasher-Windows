@@ -1,0 +1,69 @@
+name: Build Installer
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  DASHERCORE_REF: 'feature-CAPI'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Dasher-Windows
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build DasherCore DLL
+        working-directory: native
+        run: |
+          cmake -B build -G Ninja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release
+
+      - name: Copy dasher.dll to project
+        run: |
+          Copy-Item native/build/bin/dasher.dll src/Dasher.Windows/dasher.dll -Force
+
+      - name: Publish app (self-contained, win-x64)
+        run: dotnet publish src/Dasher.Windows/Dasher.Windows.csproj -c Release -r win-x64 --self-contained -o publish/app
+
+      - name: Copy DasherCore data files
+        run: |
+          Copy-Item -Recurse DasherCore/Data publish/app/Data
+
+      - name: Install WiX v5
+        run: dotnet tool install --global wix --version 5.0.2
+
+      - name: Build MSI
+        working-directory: installer
+        run: |
+          wix build dasher.wxs -o ../publish/Dasher-Windows.msi `
+            -d AppSource="../publish/app" `
+            -d Version="0.1.0"
+
+      - name: Upload MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dasher-Windows-Installer
+          path: publish/Dasher-Windows.msi
+
+      - name: Upload publish folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dasher-Windows-Portable
+          path: publish/app/

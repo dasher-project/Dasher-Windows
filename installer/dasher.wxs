@@ -1,0 +1,129 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+
+  <?define UpgradeCode = "E4B7A8F0-1C2D-4E6F-9A3B-5D8C7E2F1A0B" ?>
+  <?define Manufacturer = "The Dasher Project" ?>
+
+  <Package
+    Name="Dasher"
+    Manufacturer="$(var.Manufacturer)"
+    Version="$(var.Version)"
+    UpgradeCode="$(var.UpgradeCode)"
+    Language="1033"
+    Scope="perMachine">
+
+    <SummaryInformation
+      Description="Dasher - Zooming Predictive Text Input"
+      Manufacturer="$(var.Manufacturer)" />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="Dasher">
+        <Directory Id="DataFolder" Name="Data" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="AppStartMenuFolder" Name="Dasher" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+
+    <DirectoryRef Id="TARGETDIR">
+      <Directory Id="AppDataFolder">
+        <Directory Id="DasherAppData" Name="Dasher" />
+      </Directory>
+    </DirectoryRef>
+
+    <Feature Id="MainFeature" Title="Dasher" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentGroupRef Id="DataFiles" />
+      <ComponentRef Id="StartMenuShortcut" />
+      <ComponentRef Id="DesktopShortcut" />
+      <ComponentRef Id="AppDataFolderComponent" />
+      <ComponentRef Id="RegistryEntries" />
+    </Feature>
+
+    <InstallExecuteSequence>
+      <RemoveExistingProducts Before="InstallInitialize" />
+    </InstallExecuteSequence>
+
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+    </UI>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+    <util:CloseApplication CloseMessage="yes" Target="Dasher.Windows.exe" />
+  </Package>
+
+  <Fragment>
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <Files Include="$(var.AppSource)\**\*" Exclude="$(var.AppSource)\Data\**\*">
+        <Exclude Files="$(var.AppSource)\*.pdb" />
+        <Exclude Files="$(var.AppSource)\*.xml" />
+      </Files>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="DataFiles" Directory="DataFolder">
+      <Files Include="$(var.AppSource)\Data\**\*" />
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="AppStartMenuFolder">
+      <Component Id="StartMenuShortcut" Guid="*">
+        <Shortcut Id="StartMenuShortcutEntry"
+                  Name="Dasher"
+                  Description="Dasher - Zooming Predictive Text"
+                  Target="[INSTALLFOLDER]Dasher.Windows.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveStartMenuFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="SOFTWARE\Dasher\StartMenu" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="*">
+        <Shortcut Id="DesktopShortcutEntry"
+                  Name="Dasher"
+                  Description="Dasher - Zooming Predictive Text"
+                  Target="[INSTALLFOLDER]Dasher.Windows.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="SOFTWARE\Dasher\Desktop" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="DasherAppData">
+      <Component Id="AppDataFolderComponent" Guid="*">
+        <CreateFolder />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+  <Fragment>
+    <Component Id="RegistryEntries" Directory="INSTALLFOLDER" Guid="*">
+      <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Dasher">
+        <RegistryValue Type="string" Name="DisplayName" Value="Dasher" />
+        <RegistryValue Type="string" Name="Publisher" Value="$(var.Manufacturer)" />
+        <RegistryValue Type="string" Name="DisplayVersion" Value="$(var.Version)" />
+        <RegistryValue Type="string" Name="URLInfoAbout" Value="https://www.dasher.org.uk/" />
+        <RegistryValue Type="integer" Name="NoModify" Value="1" />
+        <RegistryValue Type="integer" Name="NoRepair" Value="1" />
+      </RegistryKey>
+
+      <RegistryKey Root="HKCU" Key="SOFTWARE\Dasher">
+        <RegistryValue Type="string" Name="InstallDir" Value="[INSTALLFOLDER]" />
+        <RegistryValue Type="string" Name="DataDir" Value="[DataFolder]" />
+        <RegistryValue Type="string" Name="UserDir" Value="[DasherAppData]" />
+      </RegistryKey>
+    </Component>
+  </Fragment>
+
+  <Icon Id="DasherIcon" SourceFile="$(var.AppSource)\Dasher.Windows.exe" />
+</Wix>
