@@ -8,19 +8,19 @@ Uses the MIT-licensed [DasherCore](https://github.com/dasher-project/DasherCore)
 
 ## Architecture
 
-### Overview
+### Why a command buffer?
 
-DasherCore is a pure C++ engine with no UI framework dependencies. It computes everything — box positions, sizes, colours, text labels, the full zooming tree layout — and renders through an abstract `CDasherScreen` interface with methods like `DrawRectangle()`, `DrawString()`, `DrawCircle()`.
+DasherCore is a pure C++ engine. It computes the full zooming tree layout — box positions, sizes, colours, text labels — and renders through an abstract `CDasherScreen` interface with methods like `DrawRectangle()`, `DrawString()`, `DrawCircle()`.
 
-Because DasherCore is C++ and Avalonia is C#, they cannot call each other directly. We use a **command-buffer bridge** (Pattern B) to connect them:
+Because DasherCore is C++ and Avalonia is C#, we can't subclass `CDasherScreen` directly from C#. Instead, a thin C++ layer inside the native DLL implements `CDasherScreen` and serialises each draw call into a flat `int[]` buffer. C# reads this buffer via P/Invoke and replays the draw calls into Avalonia's `DrawingContext`. This uses Avalonia's native Skia rendering pipeline — we get DPI scaling, anti-aliasing, and composition for free.
 
 ```
 DasherCore (C++)                    Avalonia (C#)
 ┌──────────────────────┐            ┌─────────────────────────┐
 │ CDasherScreen        │            │ CommandRenderer.cs      │
 │  DrawRectangle()     │            │   decodes [op,a,b,c,d]  │
-│  DrawString()        │──serialise─│   → DrawingContext      │
-│  DrawCircle()        │  via int[] │   .DrawRectangle()      │
+│  DrawString()        │──int[]────►│   → DrawingContext      │
+│  DrawCircle()        │  P/Invoke  │   .DrawRectangle()      │
 │                      │            │   .DrawText()           │
 │ WinCommandScreen     │            │   .DrawEllipse()        │
 │  implements the      │            │                         │
@@ -30,48 +30,43 @@ DasherCore (C++)                    Avalonia (C#)
 │  [opcode,a,b,c,d,   │            │   drives the frame loop │
 │   argb]              │            │                         │
 └──────────────────────┘            └─────────────────────────┘
-         ↕ P/Invoke (~15 C functions)
 ```
 
-This is the same pattern used by [Dasher-Android](https://github.com/dasher-project/Dasher-Android) (JNI + Kotlin Canvas). The tradeoff is that the C# side contains rendering code — translating integers into Avalonia draw calls — which is plumbing Avalonia doesn't normally need.
+This is the same pattern used by [Dasher-Android](https://github.com/dasher-project/Dasher-Android) (JNI + Canvas).
 
-### Two Integration Patterns
+### Command protocol
 
-Across the Dasher ecosystem, frontends use one of two patterns to integrate with DasherCore:
+Each command is 6 ints: `[opcode, a, b, c, d, argb]`
 
-**Pattern A: Direct C++ Subclassing** — used by Dasher-GTK and planned for Dasher-iOS/Dasher-macOS. The frontend is C++ (or Obj-C++) and directly subclasses DasherCore's abstract classes. Zero serialisation overhead, full type safety, full API access. Only possible when the platform language can interop with C++ natively.
+| Op | Meaning | Fields |
+|---|---|---|
+| 0 | Clear screen | argb = background colour |
+| 1 | Circle | a=x, b=y, c=radius, d=1 filled / 0 outline |
+| 2 | Line | a=x1, b=y1, c=x2, d=y2 |
+| 3 | Rectangle outline | a=x1, b=y1, c=x2, d=y2 |
+| 4 | Rectangle filled | a=x1, b=y1, c=x2, d=y2 |
+| 5 | Text | a=x, b=y, c=fontSize, d=stringIndex |
 
-**Pattern B: Command Buffer + FFI** — used by Dasher-Android and currently by Dasher-Windows. DasherCore is compiled as a native DLL. A C++ shim serialises draw calls into a flat array. The platform language (Kotlin, C#) receives the buffer over FFI and renders using its own canvas API. Necessary when the platform language cannot subclass C++ classes.
+The native layer returns a `FrameData` struct with pointers into its internal buffers. No heap allocations per frame. C# copies the data out via `Marshal.Copy`. The pointers are valid until the next `dasher_frame()` call.
 
-### Future: Migrating to Pattern A
-
-The current command-buffer approach works but adds complexity. A cleaner option for Windows would be to switch to Pattern A by having the native C++ layer render directly into a shared pixel buffer:
-
-1. The native DLL creates a `WriteableBitmap`-compatible pixel buffer (shared memory)
-2. A C++ subclass of `CDasherScreen` draws directly into it using Cairo or Skia
-3. Avalonia displays the bitmap via a simple `Image` control — no drawing code in C#
-
-This would eliminate `CommandRenderer.cs` entirely, reduce the P/Invoke surface, and make the Avalonia side pure UI chrome. The native DLL would need a drawing dependency (Cairo or Skia), but the overall architecture would be simpler. This is worth investigating once the core functionality is stable.
-
-### Component Map
+### Component map
 
 | Layer | Files | Purpose |
 |---|---|---|
-| Native bridge | `native/WinBridge.cpp` | Exported C API (~15 functions) for P/Invoke |
-| Native screen | `native/WinCommandScreen.cpp/.h` | `CDasherScreen` subclass that serialises draw calls |
-| Native interface | `native/WinDasherInterface.cpp/.h` | `CDashIntfScreenMsgs` subclass — engine lifecycle, settings |
-| Native file utils | `native/WinFileUtils.cpp` | Windows filesystem implementation for DasherCore |
+| Native bridge | `native/WinBridge.cpp` | Exported C API for P/Invoke |
+| Native screen | `native/WinCommandScreen.cpp/.h` | `CDasherScreen` → command buffer serialisation |
+| Native interface | `native/WinDasherInterface.cpp/.h` | Engine lifecycle, settings, frame rendering |
+| Native file utils | `native/WinFileUtils.cpp` | Windows filesystem for DasherCore |
 | P/Invoke | `src/.../Engine/NativeBridge.cs` | C# declarations for the native DLL |
-| Command renderer | `src/.../Engine/CommandRenderer.cs` | Decodes `[op,a,b,c,d,argb]` → Avalonia `DrawingContext` calls |
-| Canvas control | `src/.../Controls/DasherCanvas.cs` | Rendering, pointer input, frame loop |
-| Main window | `src/.../Views/MainWindow.axaml` | Top nav, bottom nav, canvas + message pane layout |
+| Command renderer | `src/.../Engine/CommandRenderer.cs` | Decodes command buffer → Avalonia `DrawingContext` |
+| Canvas control | `src/.../Controls/DasherCanvas.cs` | Frame loop, pointer input, rendering |
+| Main window | `src/.../Views/MainWindow.axaml` | Top nav, bottom nav, canvas + message pane |
 
 ## Plan
 
 - Migrate v5 core features to this new architecture
 - Implement both standalone app and on-screen keyboard mode
 - Use SAPI for TTS
-- Investigate Pattern A rendering (shared pixel buffer) to simplify the Avalonia side
 
 ## Prerequisites
 
@@ -122,9 +117,9 @@ Dasher-Windows/
   native/                        C++ native bridge
     CMakeLists.txt               CMake build for dasher_native.dll
     build.cmd                    One-command build (sets up MSVC env)
-    WinCommandScreen.cpp/.h      CDasherScreen → command buffer serialisation
-    WinDasherInterface.cpp/.h    CDashIntfScreenMsgs subclass (engine lifecycle)
-    WinFileUtils.cpp             FileUtils for Windows filesystem
+    WinCommandScreen.cpp/.h      CDasherScreen → command buffer
+    WinDasherInterface.cpp/.h    Engine lifecycle and settings
+    WinFileUtils.cpp             Windows filesystem
     WinBridge.cpp                Exported C API for P/Invoke
   src/
     Dasher.Windows/              Avalonia MVVM application

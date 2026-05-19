@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Dasher.Windows.Engine;
@@ -8,7 +7,7 @@ namespace Dasher.Windows.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private long _handle;
+    private IntPtr _handle;
 
     [ObservableProperty]
     private string _outputText = "";
@@ -34,16 +33,25 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string _statusText = "";
 
-    public long Handle => _handle;
+    [ObservableProperty]
+    private bool _isKeyboardMode;
 
-    public void SetHandle(long handle)
+    [ObservableProperty]
+    private bool _isPrefsVisible;
+
+    [ObservableProperty]
+    private int _selectedPrefsIndex = -1;
+
+    public IntPtr Handle => _handle;
+
+    public void SetHandle(IntPtr handle)
     {
         _handle = handle;
     }
 
     public void ApplySpeed()
     {
-        if (_handle == 0) return;
+        if (_handle == IntPtr.Zero) return;
         var percent = (int)Math.Round(Speed * 100);
         NativeBridge.dasher_set_speed_percent(_handle, percent);
     }
