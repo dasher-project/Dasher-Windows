@@ -1,0 +1,41 @@
+## CMake / native build
+native/build/
+
+## .NET build outputs
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Oo]ut/
+
+## Native binaries (built, not tracked)
+*.dll
+*.pdb
+*.exe
+*.lib
+*.exp
+*.ilk
+*.obj
+*.o
+*.a
+*.so
+*.dylib
+
+## IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.cache
+.idea/
+*.sln
+*.csproj.user
+
+## OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+## Temp files
+build_log.txt
+build_output.log
+test.txt

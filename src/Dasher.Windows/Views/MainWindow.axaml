@@ -1,0 +1,175 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Dasher.Windows.ViewModels"
+        xmlns:controls="using:Dasher.Windows.Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
+        x:Class="Dasher.Windows.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Dasher"
+        Width="900" Height="650"
+        MinWidth="400" MinHeight="400"
+        Background="White"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Border.top-bar">
+            <Setter Property="Background" Value="#f3f3f3"/>
+            <Setter Property="BorderBrush" Value="#d8d8d8"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Padding" Value="14,0"/>
+        </Style>
+        <Style Selector="Border.top-bar Button.nav-btn">
+            <Setter Property="Background" Value="#ececed"/>
+            <Setter Property="Foreground" Value="#66676d"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="500"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Border.top-bar Button.nav-btn:pointerover">
+            <Setter Property="Background" Value="#e0e0e1"/>
+        </Style>
+        <Style Selector="Border.top-bar Button.nav-btn.accent">
+            <Setter Property="Background" Value="#7f99a3"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Border.top-bar Button.nav-btn.accent:pointerover">
+            <Setter Property="Background" Value="#6d8a94"/>
+        </Style>
+        <Style Selector="Border.bottom-bar">
+            <Setter Property="Background" Value="#f3f3f3"/>
+            <Setter Property="BorderBrush" Value="#d8d8d8"/>
+            <Setter Property="BorderThickness" Value="0,1,0,0"/>
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="Padding" Value="10,0"/>
+        </Style>
+        <Style Selector="TextBlock.ui-nav-label">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="500"/>
+            <Setter Property="Foreground" Value="#83848c"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.ui-step-btn">
+            <Setter Property="Background" Value="#ececed"/>
+            <Setter Property="Foreground" Value="#66676d"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="600"/>
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.ui-step-btn:pointerover">
+            <Setter Property="Background" Value="#e0e0e1"/>
+        </Style>
+        <Style Selector="Border.ui-value">
+            <Setter Property="Background" Value="#f4f0f0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="36"/>
+        </Style>
+        <Style Selector="Border.ui-value TextBlock">
+            <Setter Property="Foreground" Value="#7a6161"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="500"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="ComboBox.ui-lang-select">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="500"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="MinWidth" Value="160"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.ui-colour-dot">
+            <Setter Property="Width" Value="18"/>
+            <Setter Property="Height" Value="18"/>
+            <Setter Property="CornerRadius" Value="9"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="TextBox.message-area">
+            <Setter Property="Background" Value="#f8f8f9"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="Arial, Segoe UI, Helvetica Neue, sans-serif"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12"/>
+        </Style>
+    </Window.Styles>
+
+    <DockPanel>
+        <Border Classes="top-bar" DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <Button Classes="nav-btn" Content="New" Click="OnNew"/>
+                <Button Classes="nav-btn" Content="Open" Click="OnOpen"/>
+                <Button Classes="nav-btn" Content="Save" Click="OnSave"/>
+                <Button x:Name="BtnPlay" Classes="nav-btn" Content="Play" Click="OnPlay"/>
+                <Button Classes="nav-btn" Content="View stats" Click="OnStats"/>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="bottom-bar" DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                <ComboBox x:Name="LangPicker"
+                          Classes="ui-lang-select"
+                          ItemsSource="{Binding Languages}"
+                          SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"
+                          SelectionChanged="OnLanguageChanged"/>
+
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Classes="ui-nav-label" Text="Speed"/>
+                    <Button Classes="ui-step-btn" Content="-" Click="OnSpeedDown"/>
+                    <Border Classes="ui-value">
+                        <TextBlock Text="{Binding Speed, StringFormat={}{0:F1}}"/>
+                    </Border>
+                    <Button Classes="ui-step-btn" Content="+" Click="OnSpeedUp"/>
+                    <TextBlock Classes="ui-nav-label" Text="Auto"/>
+                    <CheckBox IsChecked="{Binding AutoSpeed}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Classes="ui-nav-label" Text="Colour"/>
+                    <Button Classes="ui-colour-dot" x:Name="Colour0"
+                            Background="#f5db4d" Click="OnColour0"/>
+                    <Button Classes="ui-colour-dot" x:Name="Colour1"
+                            Background="#ffd166" Click="OnColour1"/>
+                    <Button Classes="ui-colour-dot" x:Name="Colour2"
+                            Background="#f3e85a" Click="OnColour2"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Grid ColumnDefinitions="*,8,Auto">
+            <controls:DasherCanvas x:Name="DasherCanvas"
+                                   Grid.Column="0"
+                                   OutputText="{Binding OutputText, Mode=OneWayToSource}"/>
+            <GridSplitter Grid.Column="1" Background="Transparent" Width="8"/>
+            <TextBox Classes="message-area"
+                     Grid.Column="2"
+                     x:Name="MessageArea"
+                     Text="{Binding OutputText, Mode=OneWay}"
+                     IsReadOnly="True"
+                     MinWidth="220" MaxWidth="500"/>
+        </Grid>
+    </DockPanel>
+</Window>
