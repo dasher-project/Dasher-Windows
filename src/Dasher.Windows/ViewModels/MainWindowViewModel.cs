@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Dasher.Windows.Engine;
 
 namespace Dasher.Windows.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ObservableObject
 {
     private IntPtr _handle;
 
@@ -42,11 +44,58 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private int _selectedPrefsIndex = -1;
 
+    [ObservableProperty]
+    private AvaloniaList<PaletteInfo> _palettes = [];
+
     public IntPtr Handle => _handle;
 
     public void SetHandle(IntPtr handle)
     {
         _handle = handle;
+    }
+
+    public void LoadAlphabets()
+    {
+        if (_handle == IntPtr.Zero) return;
+
+        var count = NativeBridge.dasher_get_alphabet_count(_handle);
+        var names = new List<string>();
+        for (int i = 0; i < count; i++)
+        {
+            var ptr = NativeBridge.dasher_get_alphabet_name(_handle, i);
+            if (ptr != IntPtr.Zero)
+                names.Add(Marshal.PtrToStringUTF8(ptr) ?? "");
+        }
+        Languages = new AvaloniaList<string>(names);
+    }
+
+    public void LoadPalettes()
+    {
+        if (_handle == IntPtr.Zero) return;
+
+        var count = NativeBridge.dasher_get_palette_count(_handle);
+        var palettes = new AvaloniaList<PaletteInfo>();
+        var colors = new int[4];
+
+        for (int i = 0; i < count; i++)
+        {
+            var namePtr = NativeBridge.dasher_get_palette_name(_handle, i);
+            var name = namePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(namePtr) ?? "" : "";
+
+            if (NativeBridge.dasher_get_palette_preview_colors(_handle, i, colors) == 0)
+            {
+                palettes.Add(new PaletteInfo
+                {
+                    Name = name,
+                    Color0 = colors[0],
+                    Color1 = colors[1],
+                    Color2 = colors[2],
+                    Color3 = colors[3]
+                });
+            }
+        }
+
+        Palettes = palettes;
     }
 
     public void ApplySpeed()
@@ -67,4 +116,13 @@ public partial class MainWindowViewModel : ViewModelBase
         Speed = Math.Round(Math.Max(Speed - 0.1, 0.1), 1);
         ApplySpeed();
     }
+}
+
+public class PaletteInfo
+{
+    public string Name { get; set; } = "";
+    public int Color0 { get; set; }
+    public int Color1 { get; set; }
+    public int Color2 { get; set; }
+    public int Color3 { get; set; }
 }

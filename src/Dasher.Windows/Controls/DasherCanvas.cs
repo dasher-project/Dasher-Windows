@@ -6,15 +6,19 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Dasher.Windows.Engine;
+using Dasher.Windows.EyeGaze;
 
 namespace Dasher.Windows.Controls;
 
-public class DasherCanvas : Control
+public partial class DasherCanvas : Control
 {
     private IntPtr _handle;
     private int[]? _commands;
     private string[]? _strings;
     private readonly DispatcherTimer _timer;
+
+    private EyeGazeIntegration? _eyeGazeIntegration;
+    private bool _useEyeGazeInput;
 
     public static readonly StyledProperty<string> OutputTextProperty =
         AvaloniaProperty.Register<DasherCanvas, string>(nameof(OutputText));
@@ -34,11 +38,14 @@ public class DasherCanvas : Control
 
     public IntPtr GetHandle() => _handle;
 
-    public void Initialize(string dataDir)
+    public void Initialize(string dataDir, string userDir)
     {
-        _handle = NativeBridge.dasher_create(dataDir);
+        _handle = NativeBridge.dasher_create(dataDir, userDir, out var errorPtr);
         if (_handle == IntPtr.Zero)
-            throw new InvalidOperationException("Failed to create Dasher session");
+        {
+            var errorMsg = errorPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(errorPtr) ?? "Unknown error" : "Unknown error";
+            throw new InvalidOperationException($"Failed to create Dasher session: {errorMsg}");
+        }
 
         if (Bounds.Width > 0 && Bounds.Height > 0)
             NativeBridge.dasher_set_screen_size(_handle, (int)Bounds.Width, (int)Bounds.Height);
@@ -48,6 +55,7 @@ public class DasherCanvas : Control
 
     public void Shutdown()
     {
+        DisableEyeGaze(); // Clean up eye gaze resources
         _timer.Stop();
         if (_handle != IntPtr.Zero)
         {
@@ -86,6 +94,11 @@ public class DasherCanvas : Control
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
+
+        // If eye gaze is active and working, suppress mouse input to prevent interference
+        if (_useEyeGazeInput) return;
+
+        // Existing mouse handling
         if (_handle != IntPtr.Zero)
         {
             var pos = e.GetPosition(this);

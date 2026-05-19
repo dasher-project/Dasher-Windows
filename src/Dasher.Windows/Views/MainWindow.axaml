@@ -161,6 +161,10 @@
             <Setter Property="Background" Value="#7f99a3"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
+        <Style Selector="Border.prefs-content">
+            <Setter Property="Background" Value="#fafafa"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
     </Window.Styles>
 
     <DockPanel>
@@ -185,26 +189,19 @@
             </DockPanel>
         </Border>
 
-        <!-- Prefs secondary nav bar (hidden by default) -->
-        <Border x:Name="PrefsBar" Classes="prefs-bar" DockPanel.Dock="Top"
-                IsVisible="{Binding IsPrefsVisible}">
-            <StackPanel Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
-                <Button Classes="prefs-tab" Content="Colour" Click="OnPrefsColour"
-                        x:Name="PrefsTabColour"/>
-                <Button Classes="prefs-tab" Content="Speed" Click="OnPrefsSpeed"
-                        x:Name="PrefsTabSpeed"/>
-                <Button Classes="prefs-tab" Content="Speech" Click="OnPrefsSpeech"
-                        x:Name="PrefsTabSpeech"/>
-                <Button Classes="prefs-tab" Content="Prediction" Click="OnPrefsPrediction"
-                        x:Name="PrefsTabPrediction"/>
-                <Button Classes="prefs-tab" Content="Display" Click="OnPrefsDisplay"
-                        x:Name="PrefsTabDisplay"/>
-                <Button Classes="prefs-tab" Content="Messages" Click="OnPrefsMessages"
-                        x:Name="PrefsTabMessages"/>
-                <Button Classes="prefs-tab" Content="Manage" Click="OnPrefsManage"
-                        x:Name="PrefsTabManage"/>
-            </StackPanel>
-        </Border>
+        <!-- Prefs bar: tab strip + expandable content panel -->
+        <StackPanel DockPanel.Dock="Top" IsVisible="{Binding IsPrefsVisible}">
+            <Border Classes="prefs-bar">
+                <Border x:Name="PrefsTabStrip" IsVisible="True">
+                    <StackPanel x:Name="PrefsTabContainer" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center"/>
+                </Border>
+            </Border>
+            <Border x:Name="PrefsContentPanel" Classes="prefs-content" IsVisible="False"
+                    Background="#f3f3f3" BorderBrush="#d8d8d8" BorderThickness="0,0,0,1"
+                    MaxHeight="320">
+                <controls:SettingsPanel x:Name="SettingsPanel"/>
+            </Border>
+        </StackPanel>
 
         <!-- Bottom bar -->
         <Border Classes="bottom-bar" DockPanel.Dock="Bottom">
@@ -228,13 +225,10 @@
 
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <TextBlock Classes="ui-nav-label" Text="Colour"/>
-                    <Button Classes="ui-colour-dot" x:Name="Colour0"
-                            Background="#f5db4d" Click="OnColour0"/>
-                    <Button Classes="ui-colour-dot" x:Name="Colour1"
-                            Background="#ffd166" Click="OnColour1"/>
-                    <Button Classes="ui-colour-dot" x:Name="Colour2"
-                            Background="#f3e85a" Click="OnColour2"/>
+                    <StackPanel x:Name="PaletteContainer" Orientation="Horizontal" Spacing="4"/>
                 </StackPanel>
+
+            
             </StackPanel>
         </Border>
 

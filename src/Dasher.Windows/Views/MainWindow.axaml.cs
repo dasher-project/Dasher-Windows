@@ -4,7 +4,9 @@ using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Dasher.Windows.Controls;
 using Dasher.Windows.Engine;
@@ -18,6 +20,8 @@ public partial class MainWindow : Window
     private MainWindowViewModel? _vm;
     private string _previousOutput = "";
     private Button[]? _prefsTabs;
+    private Border? _prefsTabStrip;
+    private Border? _prefsContentPanel;
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -55,30 +59,6 @@ public partial class MainWindow : Window
     private const uint KEYEVENTF_UNICODE = 0x0004;
     private const uint KEYEVENTF_KEYUP = 0x0002;
 
-    private static readonly string[] DefaultLanguages =
-    [
-        "English (limited punctuation)",
-        "English (numerals + punctuation)",
-        "English (lowercase)",
-        "English (accents + numerals)",
-        "English (no punctuation)",
-        "English (LaTeX)",
-        "German (limited punctuation)",
-        "German (numerals + punctuation)",
-    ];
-
-    private static readonly (string alphabetId, string display)[] AlphabetMap =
-    [
-        ("English with limited punctuation", "English (limited punctuation)"),
-        ("English with numerals and lots of punctuation", "English (numerals + punctuation)"),
-        ("English lower case", "English (lowercase)"),
-        ("English with accents numerals punctuation", "English (accents + numerals)"),
-        ("English without punctuation", "English (no punctuation)"),
-        ("English LaTeX", "English (LaTeX)"),
-        ("German with limited punctuation", "German (limited punctuation)"),
-        ("German with numerals and punctuation", "German (numerals + punctuation)"),
-    ];
-
     public MainWindow()
     {
         InitializeComponent();
@@ -92,7 +72,8 @@ public partial class MainWindow : Window
         _vm = DataContext as MainWindowViewModel;
         if (_canvas == null || _vm == null) return;
 
-        _prefsTabs = [PrefsTabColour, PrefsTabSpeed, PrefsTabSpeech, PrefsTabPrediction, PrefsTabDisplay, PrefsTabMessages, PrefsTabManage];
+        _prefsTabStrip = this.FindControl<Border>("PrefsTabStrip");
+        _prefsContentPanel = this.FindControl<Border>("PrefsContentPanel");
 
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var dataDir = Path.Combine(appData, "Dasher");
@@ -101,12 +82,24 @@ public partial class MainWindow : Window
         var coreDataDir = FindCoreDataDir();
         CopyDataIfNeeded(coreDataDir, dataDir);
 
-        _canvas.Initialize(dataDir);
+        _canvas.Initialize(coreDataDir, dataDir);
         _vm.SetHandle(_canvas.GetHandle());
         _vm.ApplySpeed();
 
-        _vm.Languages = new AvaloniaList<string>(DefaultLanguages);
+        _vm.LoadAlphabets();
         _vm.SelectedLanguageIndex = 0;
+
+        _vm.LoadPalettes();
+        BuildPaletteSwatches();
+
+        var settingsPanel = this.FindControl<SettingsPanel>("SettingsPanel");
+        if (settingsPanel != null)
+        {
+            settingsPanel.Initialize(_vm.Handle);
+            settingsPanel.BackRequested += OnSettingsBack;
+            settingsPanel.InputSourceChanged += OnInputSourceChanged;
+            BuildPrefsTabs(settingsPanel);
+        }
 
         _vm.PropertyChanged += (s, args) =>
         {
@@ -119,6 +112,36 @@ public partial class MainWindow : Window
     {
         _canvas?.Shutdown();
         base.OnClosing(e);
+    }
+
+    private void BuildPaletteSwatches()
+    {
+        var container = this.FindControl<StackPanel>("PaletteContainer");
+        if (container == null || _vm == null) return;
+
+        container.Children.Clear();
+        foreach (var palette in _vm.Palettes)
+        {
+            var btn = new Button
+            {
+                Classes = { "ui-colour-dot" },
+                Tag = palette.Name,
+                Background = ArgbToBrush(palette.Color0),
+            };
+            ToolTip.SetTip(btn, palette.Name);
+            btn.Click += OnPaletteSelect;
+            container.Children.Add(btn);
+        }
+    }
+
+    private static SolidColorBrush ArgbToBrush(int argb)
+    {
+        byte a = (byte)((argb >> 24) & 0xFF);
+        byte r = (byte)((argb >> 16) & 0xFF);
+        byte g = (byte)((argb >> 8) & 0xFF);
+        byte b = (byte)(argb & 0xFF);
+        if (a == 0) a = 255;
+        return new SolidColorBrush(Color.FromArgb(a, r, g, b));
     }
 
     private void OnOutputTextChanged()
@@ -208,7 +231,12 @@ public partial class MainWindow : Window
         if (_vm.IsPrefsVisible)
             btn.Classes.Add("accent");
         else
+        {
             btn.Classes.Remove("accent");
+            if (_prefsTabStrip != null) _prefsTabStrip.IsVisible = true;
+            if (_prefsContentPanel != null) _prefsContentPanel.IsVisible = false;
+            ActivatePrefsTab(-1);
+        }
     }
 
     private void ActivatePrefsTab(int index)
@@ -221,13 +249,52 @@ public partial class MainWindow : Window
         }
     }
 
-    private void OnPrefsColour(object? s, RoutedEventArgs e) => ActivatePrefsTab(0);
-    private void OnPrefsSpeed(object? s, RoutedEventArgs e) => ActivatePrefsTab(1);
-    private void OnPrefsSpeech(object? s, RoutedEventArgs e) => ActivatePrefsTab(2);
-    private void OnPrefsPrediction(object? s, RoutedEventArgs e) => ActivatePrefsTab(3);
-    private void OnPrefsDisplay(object? s, RoutedEventArgs e) => ActivatePrefsTab(4);
-    private void OnPrefsMessages(object? s, RoutedEventArgs e) => ActivatePrefsTab(5);
-    private void OnPrefsManage(object? s, RoutedEventArgs e) => ActivatePrefsTab(6);
+    private void BuildPrefsTabs(SettingsPanel settingsPanel)
+    {
+        var container = this.FindControl<StackPanel>("PrefsTabContainer");
+        if (container == null) return;
+
+        container.Children.Clear();
+        _prefsTabs = [];
+
+        foreach (var category in settingsPanel.GetCategoryNames())
+        {
+            var btn = new Button
+            {
+                Classes = { "prefs-tab" },
+                Content = category,
+                Tag = category,
+            };
+            btn.Click += OnPrefsTabClick;
+            container.Children.Add(btn);
+            _prefsTabs = [.. _prefsTabs, btn];
+        }
+    }
+
+    private void OnPrefsTabClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button btn || _vm == null) return;
+        var category = btn.Tag as string ?? "";
+        ActivatePrefsTab(Array.FindIndex(_prefsTabs!, t => t.Tag as string == category));
+
+        var settingsPanel = this.FindControl<SettingsPanel>("SettingsPanel");
+        if (settingsPanel != null && _prefsTabStrip != null && _prefsContentPanel != null)
+        {
+            settingsPanel.ShowCategory(category);
+            _prefsTabStrip.IsVisible = false;
+            _prefsContentPanel.IsVisible = true;
+        }
+    }
+
+    private void OnSettingsBack(object? sender, EventArgs e)
+    {
+        if (_prefsTabStrip != null && _prefsContentPanel != null)
+        {
+            _prefsTabStrip.IsVisible = true;
+            _prefsContentPanel.IsVisible = false;
+        }
+        ActivatePrefsTab(-1);
+    }
 
     private void OnNew(object? sender, RoutedEventArgs e)
     {
@@ -308,30 +375,43 @@ public partial class MainWindow : Window
     private void OnLanguageChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (_vm == null || _vm.Handle == IntPtr.Zero || _vm.SelectedLanguageIndex < 0) return;
-        if (_vm.SelectedLanguageIndex < AlphabetMap.Length)
+        if (_vm.SelectedLanguageIndex < _vm.Languages.Count)
         {
-            NativeBridge.dasher_set_alphabet_id(_vm.Handle, AlphabetMap[_vm.SelectedLanguageIndex].alphabetId);
+            NativeBridge.dasher_set_alphabet_id(_vm.Handle, _vm.Languages[_vm.SelectedLanguageIndex]);
         }
     }
 
     private void OnSpeedDown(object? sender, RoutedEventArgs e) => _vm?.DecreaseSpeed();
     private void OnSpeedUp(object? sender, RoutedEventArgs e) => _vm?.IncreaseSpeed();
 
-    private void OnColour0(object? sender, RoutedEventArgs e) => SelectColour(0, sender);
-    private void OnColour1(object? sender, RoutedEventArgs e) => SelectColour(1, sender);
-    private void OnColour2(object? sender, RoutedEventArgs e) => SelectColour(2, sender);
-
-    private void SelectColour(int index, object? sender)
+    private void OnPaletteSelect(object? sender, RoutedEventArgs e)
     {
-        if (_vm == null) return;
-        _vm.SelectedColourIndex = index;
+        if (_vm == null || sender is not Button btn) return;
+        var name = btn.Tag as string;
+        if (name == null) return;
 
-        Colour0?.Classes.Remove("selected");
-        Colour1?.Classes.Remove("selected");
-        Colour2?.Classes.Remove("selected");
+        NativeBridge.dasher_set_palette(_vm.Handle, name);
 
-        var btn = sender as Button;
-        btn?.Classes.Add("selected");
+        foreach (var child in PaletteContainer.Children)
+        {
+            if (child is Button b)
+                b.Classes.Remove("selected");
+        }
+        btn.Classes.Add("selected");
+    }
+
+    private async void OnInputSourceChanged(object? sender, EyeGazeIntegration.TrackerType trackerType)
+    {
+        if (_canvas == null) return;
+
+        if (trackerType == EyeGazeIntegration.TrackerType.None)
+        {
+            _canvas.DisableEyeGaze();
+        }
+        else
+        {
+            await _canvas.InitializeEyeGazeAsync(trackerType);
+        }
     }
 
     private static string FindCoreDataDir()
