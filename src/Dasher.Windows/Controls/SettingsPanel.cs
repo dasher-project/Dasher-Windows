@@ -116,7 +116,17 @@ public class SettingsPanel : Control
                 _panel.Children.Add(inputSourceRow);
         }
 
+        if (category == "Language")
+        {
+            var localeRow = BuildLocaleRow();
+            if (localeRow != null)
+                _panel.Children.Add(localeRow);
+        }
+
         if (!_groups.TryGetValue(category, out var parameters)) return;
+
+        if (category == "Input")
+            parameters = FilterByActiveInputFilter(parameters);
 
         var grouped = parameters
             .GroupBy(p => string.IsNullOrEmpty(p.Subgroup) ? "" : p.Subgroup)
@@ -195,6 +205,98 @@ public class SettingsPanel : Control
         return row;
     }
 
+    private static readonly Dictionary<string, string> AvailableLocales = new()
+    {
+        ["en"] = "English",
+        ["de"] = "Deutsch",
+        ["es"] = "Espanol",
+        ["fr"] = "Francais",
+        ["it"] = "Italiano",
+        ["pt"] = "Portugues",
+        ["pt-PT"] = "Portugues (Portugal)",
+        ["ar"] = "Arabic",
+        ["el"] = "Greek",
+        ["zh-CN"] = "Chinese (Simplified)",
+    };
+
+    private Control? BuildLocaleRow()
+    {
+        var row = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
+
+        var label = new TextBlock
+        {
+            Text = "App Language",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            VerticalAlignment = VerticalAlignment.Center,
+            Width = 180,
+        };
+        DockPanel.SetDock(label, Dock.Left);
+        row.Children.Add(label);
+
+        var combo = new ComboBox
+        {
+            MinWidth = 200,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            FontSize = 12,
+        };
+
+        var currentLocalePtr = NativeBridge.dasher_get_locale(_handle);
+        var currentLocale = currentLocalePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(currentLocalePtr) ?? "en" : "en";
+
+        foreach (var kvp in AvailableLocales)
+        {
+            combo.Items.Add(kvp.Value);
+            if (kvp.Key == currentLocale)
+                combo.SelectedIndex = combo.Items.Count - 1;
+        }
+
+        if (combo.SelectedIndex < 0) combo.SelectedIndex = 0;
+
+        combo.SelectionChanged += (s, e) =>
+        {
+            var idx = combo.SelectedIndex;
+            var code = AvailableLocales.Keys.ElementAt(idx);
+            NativeBridge.dasher_set_locale(_handle, code);
+            LoadParameterGroups();
+        };
+
+        row.Children.Add(combo);
+        return row;
+    }
+
+    private static readonly Dictionary<string, HashSet<string>> FilterToSubgroup = new()
+    {
+        ["Normal Control"] = ["CDefaultFilter", "CDynamicFilter", "CDynamicButtons"],
+        ["Click Mode"] = ["CDefaultFilter", "CClickFilter"],
+        ["Compass Mode"] = ["CDefaultFilter", "CCompassMode"],
+        ["Button Mode"] = ["CDefaultFilter", "CButtonMode", "CDasherButtons"],
+        ["Direct Mode"] = ["CDefaultFilter"],
+        ["Menu Mode"] = ["CDefaultFilter", "CButtonMode", "CDasherButtons"],
+        ["One Button Mode"] = ["CDefaultFilter", "COneButtonFilter", "COneButtonDynamicFilter"],
+        ["Two Button Mode"] = ["CDefaultFilter", "CTwoButtonDynamicFilter"],
+        ["Two Push Mode"] = ["CDefaultFilter", "CTwoPushDynamicFilter"],
+        ["Smoothing Mode"] = ["CDefaultFilter", "CSmoothingFilter"],
+        ["Stylus Mode"] = ["CDefaultFilter", "CStylusFilter"],
+        ["Static Mode"] = ["CDefaultFilter", "CStaticFilter"],
+        ["Multi-Press Mode"] = ["CDefaultFilter", "CButtonMultiPress"],
+    };
+
+    private List<ParameterDisplayInfo> FilterByActiveInputFilter(List<ParameterDisplayInfo> parameters)
+    {
+        var filterPtr = NativeBridge.dasher_get_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER);
+        var currentFilter = filterPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(filterPtr) ?? "" : "";
+
+        var activeSubgroups = FilterToSubgroup.GetValueOrDefault(currentFilter, new HashSet<string>());
+
+        return parameters.Where(p =>
+        {
+            if (string.IsNullOrEmpty(p.Subgroup)) return true;
+            return activeSubgroups.Contains(p.Subgroup);
+        }).ToList();
+    }
+
     private void LoadParameterGroups()
     {
         _groups.Clear();
@@ -202,6 +304,10 @@ public class SettingsPanel : Control
         for (int i = 0; i < count; i++)
         {
             if (NativeBridge.dasher_get_parameter_info(i, out var raw) != 0) continue;
+
+            var group = Marshal.PtrToStringUTF8(raw.Group) ?? "";
+            if (string.IsNullOrEmpty(group))
+                group = "Input";
 
             var info = new ParameterDisplayInfo
             {
@@ -214,7 +320,7 @@ public class SettingsPanel : Control
                 MaxVal = raw.MaxVal,
                 Step = raw.Step,
                 Advanced = raw.Advanced,
-                Group = Marshal.PtrToStringUTF8(raw.Group) ?? "Other",
+                Group = group,
                 Subgroup = Marshal.PtrToStringUTF8(raw.Subgroup) ?? "",
             };
 
