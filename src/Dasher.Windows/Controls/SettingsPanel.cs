@@ -118,13 +118,13 @@ public class SettingsPanel : Control
 
         if (!_groups.TryGetValue(category, out var parameters)) return;
 
-        if (category == "Advanced")
-        {
-            var grouped = parameters
-                .GroupBy(p => string.IsNullOrEmpty(p.Subgroup) ? "General" : FriendlySubgroup(p.Subgroup))
-                .ToList();
+        var grouped = parameters
+            .GroupBy(p => string.IsNullOrEmpty(p.Subgroup) ? "" : p.Subgroup)
+            .ToList();
 
-            foreach (var group in grouped)
+        foreach (var group in grouped)
+        {
+            if (!string.IsNullOrEmpty(group.Key) && grouped.Count > 1)
             {
                 var header = new TextBlock
                 {
@@ -135,22 +135,9 @@ public class SettingsPanel : Control
                     Margin = new Thickness(0, 10, 0, 4),
                 };
                 _panel.Children.Add(header);
-
-                foreach (var info in group)
-                {
-                    try
-                    {
-                        var row = BuildParameterRow(info);
-                        if (row != null)
-                            _panel.Children.Add(row);
-                    }
-                    catch { }
-                }
             }
-        }
-        else
-        {
-            foreach (var info in parameters)
+
+            foreach (var info in group)
             {
                 try
                 {
@@ -207,24 +194,6 @@ public class SettingsPanel : Control
         row.Children.Add(combo);
         return row;
     }
-
-    private static string FriendlySubgroup(string subgroup) => subgroup switch
-    {
-        "CDefaultFilter" => "Default / Mouse Control",
-        "CSmoothingFilter" => "Smoothing Filter",
-        "CClickFilter" => "Click Filter",
-        "CDynamicFilter" => "Dynamic Filters",
-        "CDynamicButtons" => "Dynamic Button Control",
-        "CButtonMode" => "Button Mode",
-        "CDasherButtons" => "Button Scanning",
-        "CStaticFilter" => "Static Filters",
-        "CTwoButtonDynamicFilter" => "Two-Button Dynamic",
-        "CTwoPushDynamicFilter" => "Two-Push Dynamic",
-        "CCompassMode" => "Compass Mode",
-        "CStylusFilter" => "Stylus Filter",
-        "CDemoFilter" => "Demo Mode",
-        _ => subgroup,
-    };
 
     private void LoadParameterGroups()
     {
