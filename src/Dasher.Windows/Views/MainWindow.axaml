@@ -10,8 +10,9 @@
         Title="Dasher"
         Width="900" Height="650"
         MinWidth="400" MinHeight="300"
-        Background="White"
-        WindowStartupLocation="CenterScreen">
+        Background="{DynamicResource BgLight}"
+        WindowStartupLocation="CenterScreen"
+        Icon="/dasher.ico">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -19,99 +20,99 @@
 
     <Window.Styles>
         <Style Selector="Border.top-bar">
-            <Setter Property="Background" Value="#f3f3f3"/>
-            <Setter Property="BorderBrush" Value="#d8d8d8"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Height" Value="{DynamicResource ToolbarHeight}"/>
+            <Setter Property="Padding" Value="16,0"/>
         </Style>
         <Style Selector="Border.top-bar Button.nav-btn">
-            <Setter Property="Background" Value="#ececed"/>
-            <Setter Property="Foreground" Value="#66676d"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="500"/>
             <Setter Property="Padding" Value="14,0"/>
-            <Setter Property="Height" Value="34"/>
-            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="MinHeight" Value="36"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
         <Style Selector="Border.top-bar Button.nav-btn:pointerover">
-            <Setter Property="Background" Value="#e0e0e1"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
         <Style Selector="Border.top-bar Button.nav-btn.accent">
-            <Setter Property="Background" Value="#7f99a3"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
+            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
         </Style>
         <Style Selector="Border.top-bar Button.nav-btn.accent:pointerover">
-            <Setter Property="Background" Value="#6d8a94"/>
+            <Setter Property="Opacity" Value="0.85"/>
         </Style>
         <Style Selector="Border.prefs-bar">
-            <Setter Property="Background" Value="#f3f3f3"/>
-            <Setter Property="BorderBrush" Value="#d8d8d8"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
             <Setter Property="Height" Value="42"/>
-            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Padding" Value="16,0"/>
         </Style>
         <Style Selector="Border.prefs-bar Button.prefs-tab">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#66676d"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="500"/>
             <Setter Property="Padding" Value="10,0"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="MinHeight" Value="32"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
         <Style Selector="Border.prefs-bar Button.prefs-tab:pointerover">
-            <Setter Property="Background" Value="#ececed"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
         </Style>
         <Style Selector="Border.prefs-bar Button.prefs-tab.active">
-            <Setter Property="Background" Value="#ececed"/>
-            <Setter Property="Foreground" Value="#444"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
         <Style Selector="Border.bottom-bar">
-            <Setter Property="Background" Value="#f3f3f3"/>
-            <Setter Property="BorderBrush" Value="#d8d8d8"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
             <Setter Property="BorderThickness" Value="0,1,0,0"/>
-            <Setter Property="Height" Value="46"/>
-            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="Height" Value="{DynamicResource StatusBarHeight}"/>
+            <Setter Property="Padding" Value="16,0"/>
         </Style>
         <Style Selector="TextBlock.ui-nav-label">
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="FontWeight" Value="500"/>
-            <Setter Property="Foreground" Value="#83848c"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <Style Selector="Button.ui-step-btn">
-            <Setter Property="Background" Value="#ececed"/>
-            <Setter Property="Foreground" Value="#66676d"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="600"/>
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="Height" Value="28"/>
+            <Setter Property="MinWidth" Value="28"/>
+            <Setter Property="MinHeight" Value="28"/>
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
         <Style Selector="Button.ui-step-btn:pointerover">
-            <Setter Property="Background" Value="#e0e0e1"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
         <Style Selector="Border.ui-value">
-            <Setter Property="Background" Value="#f4f0f0"/>
-            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Background" Value="{DynamicResource ControlValue}"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
             <Setter Property="Padding" Value="8,4"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="MinWidth" Value="36"/>
         </Style>
         <Style Selector="Border.ui-value TextBlock">
-            <Setter Property="Foreground" Value="#7a6161"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="500"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -119,7 +120,7 @@
         <Style Selector="ComboBox.ui-lang-select">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="500"/>
-            <Setter Property="Height" Value="28"/>
+            <Setter Property="MinHeight" Value="28"/>
             <Setter Property="MinWidth" Value="160"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
@@ -133,37 +134,69 @@
             <Setter Property="Padding" Value="0"/>
         </Style>
         <Style Selector="TextBox.message-area">
-            <Setter Property="Background" Value="#f8f8f9"/>
-            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontFamily" Value="Arial, Segoe UI, Helvetica Neue, sans-serif"/>
             <Setter Property="AcceptsReturn" Value="True"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Padding" Value="16"/>
         </Style>
         <Style Selector="Button.mode-toggle">
-            <Setter Property="Background" Value="#ececed"/>
-            <Setter Property="Foreground" Value="#66676d"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="500"/>
             <Setter Property="Padding" Value="10,0"/>
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="MinHeight" Value="28"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
         <Style Selector="Button.mode-toggle:pointerover">
-            <Setter Property="Background" Value="#e0e0e1"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
         <Style Selector="Button.mode-toggle.keyboard-active">
-            <Setter Property="Background" Value="#7f99a3"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
+            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
         </Style>
         <Style Selector="Border.prefs-content">
-            <Setter Property="Background" Value="#fafafa"/>
+            <Setter Property="Background" Value="{DynamicResource BgLight}"/>
             <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="Button.sidebar-btn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="500"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="MinHeight" Value="36"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.sidebar-btn:pointerover">
+            <Setter Property="Background" Value="{DynamicResource HighlightLight}"/>
+        </Style>
+        <Style Selector="Button.sidebar-action">
+            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
+            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="600"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusMd}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.sidebar-action:pointerover">
+            <Setter Property="Opacity" Value="0.85"/>
         </Style>
     </Window.Styles>
 
@@ -189,7 +222,7 @@
             </DockPanel>
         </Border>
 
-        <!-- Prefs bar: tab strip + expandable content panel -->
+        <!-- Prefs bar -->
         <StackPanel DockPanel.Dock="Top" IsVisible="{Binding IsPrefsVisible}">
             <Border Classes="prefs-bar">
                 <Border x:Name="PrefsTabStrip" IsVisible="True">
@@ -197,7 +230,7 @@
                 </Border>
             </Border>
             <Border x:Name="PrefsContentPanel" Classes="prefs-content" IsVisible="False"
-                    Background="#f3f3f3" BorderBrush="#d8d8d8" BorderThickness="0,0,0,1"
+                    Background="{DynamicResource BgLight}" BorderBrush="{DynamicResource BorderLight}" BorderThickness="0,0,0,1"
                     MaxHeight="320">
                 <controls:SettingsPanel x:Name="SettingsPanel"/>
             </Border>
@@ -227,24 +260,29 @@
                     <TextBlock Classes="ui-nav-label" Text="Colour"/>
                     <StackPanel x:Name="PaletteContainer" Orientation="Horizontal" Spacing="4"/>
                 </StackPanel>
-
-            
             </StackPanel>
         </Border>
 
-        <!-- Main content: canvas + message pane (message pane hidden in keyboard mode) -->
-        <Grid x:Name="MainGrid" ColumnDefinitions="*,8,Auto">
+        <!-- Main content: canvas + sidebar editor -->
+        <Grid x:Name="MainGrid" ColumnDefinitions="*,1,Auto">
             <controls:DasherCanvas x:Name="DasherCanvas"
                                    Grid.Column="0"
                                    OutputText="{Binding OutputText, Mode=OneWayToSource}"/>
-            <GridSplitter x:Name="MessageSplitter" Grid.Column="1"
-                          Background="Transparent" Width="8"/>
+            <Border x:Name="MessageSplitter" Grid.Column="1"
+                    Background="{DynamicResource BorderLight}" Width="1"/>
             <Border x:Name="MessagePane" Grid.Column="2" MinWidth="220" MaxWidth="500"
-                    Background="#f8f8f9" BorderBrush="#d8d8d8" BorderThickness="1,0,0,0">
+                    Background="{DynamicResource SurfaceLight}" BorderBrush="{DynamicResource BorderLight}" BorderThickness="1,0,0,0">
                 <DockPanel>
                     <TextBlock DockPanel.Dock="Top" Text="Output"
-                               FontSize="11" FontWeight="SemiBold" Foreground="#83848c"
-                               Margin="12,8,12,4"/>
+                               FontSize="11" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextMuted}"
+                               Margin="16,12,16,4"/>
+                    <StackPanel DockPanel.Dock="Bottom" Spacing="2" Margin="8,4,8,8">
+                        <Button Classes="sidebar-action" Content="Quick Speak" Click="OnQuickSpeak"/>
+                        <Button Classes="sidebar-btn" Content="Copy All" Click="OnCopyAll"/>
+                        <Button Classes="sidebar-btn" Content="Copy Selection" Click="OnCopySelection"/>
+                        <Button Classes="sidebar-btn" Content="Paste" Click="OnPaste"/>
+                    </StackPanel>
                     <TextBox Classes="message-area"
                              x:Name="MessageArea"
                              Text="{Binding OutputText, Mode=OneWay}"

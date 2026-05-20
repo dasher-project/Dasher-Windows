@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -412,6 +413,81 @@ public partial class MainWindow : Window
         {
             await _canvas.InitializeEyeGazeAsync(trackerType);
         }
+    }
+
+    private async void OnCopyAll(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+        SetClipboardText(_vm.OutputText);
+    }
+
+    private async void OnCopySelection(object? sender, RoutedEventArgs e)
+    {
+        var messageArea = this.FindControl<TextBox>("MessageArea");
+        if (messageArea?.SelectedText == null) return;
+        SetClipboardText(messageArea.SelectedText);
+    }
+
+    private async void OnPaste(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+        var text = GetClipboardText();
+        if (text != null)
+            _vm.OutputText += text;
+    }
+
+    private void OnQuickSpeak(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null || string.IsNullOrWhiteSpace(_vm.OutputText)) return;
+        try
+        {
+            dynamic synth = Activator.CreateInstance(Type.GetTypeFromProgID("SAPI.SpVoice")!)!;
+            synth.Speak(_vm.OutputText, 1 | 0);
+        }
+        catch { }
+    }
+
+    [DllImport("user32.dll")] private static extern bool OpenClipboard(IntPtr hWndNewOwner);
+    [DllImport("user32.dll")] private static extern bool CloseClipboard();
+    [DllImport("user32.dll")] private static extern bool EmptyClipboard();
+    [DllImport("user32.dll")] private static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
+    [DllImport("user32.dll")] private static extern IntPtr GetClipboardData(uint uFormat);
+    [DllImport("kernel32.dll")] private static extern IntPtr GlobalAlloc(uint uFlags, UIntPtr dwBytes);
+    [DllImport("kernel32.dll")] private static extern IntPtr GlobalLock(IntPtr hMem);
+    [DllImport("kernel32.dll")] private static extern bool GlobalUnlock(IntPtr hMem);
+    [DllImport("kernel32.dll")] private static extern UIntPtr GlobalSize(IntPtr hMem);
+
+    private const uint CF_UNICODETEXT = 13;
+    private const uint GMEM_MOVEABLE = 0x0002;
+
+    private static void SetClipboardText(string text)
+    {
+        OpenClipboard(IntPtr.Zero);
+        EmptyClipboard();
+        var bytes = (System.Text.Encoding.Unicode.GetByteCount(text) + 2);
+        var hMem = GlobalAlloc(GMEM_MOVEABLE, (UIntPtr)bytes);
+        var ptr = GlobalLock(hMem);
+        Marshal.Copy(System.Text.Encoding.Unicode.GetBytes(text + "\0"), 0, ptr, text.Length * 2 + 2);
+        GlobalUnlock(hMem);
+        SetClipboardData(CF_UNICODETEXT, hMem);
+        CloseClipboard();
+    }
+
+    private static string? GetClipboardText()
+    {
+        if (!OpenClipboard(IntPtr.Zero)) return null;
+        try
+        {
+            var hMem = GetClipboardData(CF_UNICODETEXT);
+            if (hMem == IntPtr.Zero) return null;
+            var size = (int)GlobalSize(hMem);
+            var ptr = GlobalLock(hMem);
+            var bytes = new byte[size];
+            Marshal.Copy(ptr, bytes, 0, size);
+            GlobalUnlock(hMem);
+            return System.Text.Encoding.Unicode.GetString(bytes).TrimEnd('\0');
+        }
+        finally { CloseClipboard(); }
     }
 
     private static string FindCoreDataDir()

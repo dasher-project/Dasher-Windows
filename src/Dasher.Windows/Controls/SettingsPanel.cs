@@ -101,7 +101,7 @@ public class SettingsPanel : Control
             Content = "\u2190 Back",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x66, 0x67, 0x6d)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
             Background = Brushes.Transparent,
             Padding = new Thickness(0, 0, 0, 6),
             BorderThickness = new Thickness(0),
@@ -131,7 +131,7 @@ public class SettingsPanel : Control
                     Text = group.Key,
                     FontSize = 13,
                     FontWeight = FontWeight.Bold,
-                    Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33)),
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
                     Margin = new Thickness(0, 10, 0, 4),
                 };
                 _panel.Children.Add(header);
@@ -175,7 +175,7 @@ public class SettingsPanel : Control
             Text = "Input Source",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x44, 0x44, 0x44)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
             VerticalAlignment = VerticalAlignment.Center,
             Width = 180,
         };
@@ -269,7 +269,7 @@ public class SettingsPanel : Control
             Text = labelText,
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x44, 0x44, 0x44)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
             VerticalAlignment = VerticalAlignment.Center,
             Width = 180,
             TextTrimming = TextTrimming.CharacterEllipsis,
@@ -345,7 +345,7 @@ public class SettingsPanel : Control
         {
             Text = current.ToString(),
             FontSize = 11,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x7a, 0x61, 0x61)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
             VerticalAlignment = VerticalAlignment.Center,
             Width = 48,
             TextAlignment = TextAlignment.Center,
@@ -382,7 +382,7 @@ public class SettingsPanel : Control
 
         var valueBorder = new Border
         {
-            Background = new SolidColorBrush(Color.FromRgb(0xf4, 0xf0, 0xf0)),
+            Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xF2, 0xF1)),
             CornerRadius = new CornerRadius(4),
             Padding = new Thickness(8, 4),
             MinWidth = 50,
@@ -392,7 +392,7 @@ public class SettingsPanel : Control
                 Text = current.ToString(),
                 FontSize = 12,
                 FontWeight = FontWeight.Medium,
-                Foreground = new SolidColorBrush(Color.FromRgb(0x7a, 0x61, 0x61)),
+                Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
                 HorizontalAlignment = HorizontalAlignment.Center,
             },
         };
