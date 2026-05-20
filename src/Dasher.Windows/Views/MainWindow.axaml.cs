@@ -1,10 +1,12 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -117,17 +119,19 @@ public partial class MainWindow : Window
 
     private void BuildPaletteSwatches()
     {
-        var container = this.FindControl<StackPanel>("PaletteContainer");
+        var container = this.FindControl<UniformGrid>("PaletteContainer");
         if (container == null || _vm == null) return;
 
         container.Children.Clear();
-        foreach (var palette in _vm.Palettes)
+        foreach (var palette in _vm.Palettes.Take(4))
         {
             var btn = new Button
             {
                 Classes = { "ui-colour-dot" },
                 Tag = palette.Name,
                 Background = ArgbToBrush(palette.Color0),
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
             };
             ToolTip.SetTip(btn, palette.Name);
             btn.Click += OnPaletteSelect;
@@ -195,6 +199,24 @@ public partial class MainWindow : Window
         ApplyMode();
     }
 
+    private void OnModeRightSide(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+        _vm.IsKeyboardMode = false;
+        ApplyMode();
+    }
+
+    private void OnModeKeyboard(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+        _vm.IsKeyboardMode = true;
+        ApplyMode();
+    }
+
+    private void OnBack(object? sender, RoutedEventArgs e)
+    {
+    }
+
     private void ApplyMode()
     {
         if (_vm == null) return;
@@ -204,8 +226,8 @@ public partial class MainWindow : Window
             Topmost = true;
             MessagePane.IsVisible = false;
             MessageSplitter.IsVisible = false;
-            BtnMode.Content = "App";
-            BtnMode.Classes.Add("keyboard-active");
+            TxtModeLabel.Text = "Keyboard";
+            BtnMode.Classes.Add("accent");
 
             var oldWidth = Width;
             Width = Math.Min(oldWidth, 600);
@@ -215,8 +237,8 @@ public partial class MainWindow : Window
             Topmost = false;
             MessagePane.IsVisible = true;
             MessageSplitter.IsVisible = true;
-            BtnMode.Content = "Keyboard";
-            BtnMode.Classes.Remove("keyboard-active");
+            TxtModeLabel.Text = "Right side";
+            BtnMode.Classes.Remove("accent");
 
             if (Width < 700) Width = 900;
         }
@@ -360,13 +382,13 @@ public partial class MainWindow : Window
 
     private void OnPlay(object? sender, RoutedEventArgs e)
     {
-        if (_vm == null || sender is not Button btn) return;
+        if (_vm == null) return;
         _vm.IsPlaying = !_vm.IsPlaying;
-        btn.Content = _vm.IsPlaying ? "Pause" : "Play";
+        TxtPlayLabel.Text = _vm.IsPlaying ? "Pause" : "Play";
         if (_vm.IsPlaying)
-            btn.Classes.Add("accent");
+            BtnPlay.Classes.Add("accent");
         else
-            btn.Classes.Remove("accent");
+            BtnPlay.Classes.Remove("accent");
     }
 
     private void OnStats(object? sender, RoutedEventArgs e)

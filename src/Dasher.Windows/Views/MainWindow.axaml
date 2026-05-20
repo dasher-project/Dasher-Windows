@@ -4,12 +4,12 @@
         xmlns:controls="using:Dasher.Windows.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
+        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
         x:Class="Dasher.Windows.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Dasher"
-        Width="900" Height="650"
-        MinWidth="400" MinHeight="300"
+        Width="1024" Height="768"
+        MinWidth="600" MinHeight="500"
         Background="{DynamicResource BgLight}"
         WindowStartupLocation="CenterScreen"
         Icon="/dasher.ico">
@@ -23,31 +23,61 @@
             <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="Height" Value="{DynamicResource ToolbarHeight}"/>
+            <Setter Property="Height" Value="84"/>
             <Setter Property="Padding" Value="16,0"/>
         </Style>
+
         <Style Selector="Border.top-bar Button.nav-btn">
-            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="500"/>
-            <Setter Property="Padding" Value="14,0"/>
-            <Setter Property="MinHeight" Value="36"/>
+            <Setter Property="Width" Value="68"/>
+            <Setter Property="Height" Value="68"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
             <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Border.top-bar Button.nav-btn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
+        </Style>
+        <Style Selector="Border.top-bar Button.nav-btn.accent /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
+        </Style>
+        <Style Selector="Border.top-bar Button.nav-btn.accent TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
+        </Style>
+
+        <Style Selector="Button.ui-circle-btn">
+            <Setter Property="Width" Value="44"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Background" Value="#EAE5E3"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="22"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.ui-circle-btn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#DFDAD7"/>
+        </Style>
+
+        <Style Selector="Button.ui-step-btn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="600"/>
+            <Setter Property="MinWidth" Value="28"/>
+            <Setter Property="MinHeight" Value="28"/>
+            <Setter Property="Padding" Value="0"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-        <Style Selector="Border.top-bar Button.nav-btn:pointerover">
+        <Style Selector="Button.ui-step-btn:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
-        <Style Selector="Border.top-bar Button.nav-btn.accent">
-            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
-            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
-        </Style>
-        <Style Selector="Border.top-bar Button.nav-btn.accent:pointerover">
-            <Setter Property="Opacity" Value="0.85"/>
-        </Style>
+
         <Style Selector="Border.prefs-bar">
             <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
@@ -67,74 +97,55 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
-        <Style Selector="Border.prefs-bar Button.prefs-tab:pointerover">
+        <Style Selector="Border.prefs-bar Button.prefs-tab:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
         </Style>
-        <Style Selector="Border.prefs-bar Button.prefs-tab.active">
+        <Style Selector="Border.prefs-bar Button.prefs-tab.active /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
+        </Style>
+        <Style Selector="Border.prefs-bar Button.prefs-tab.active TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
-        <Style Selector="Border.bottom-bar">
-            <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
-            <Setter Property="BorderThickness" Value="0,1,0,0"/>
-            <Setter Property="Height" Value="{DynamicResource StatusBarHeight}"/>
-            <Setter Property="Padding" Value="16,0"/>
-        </Style>
+
         <Style Selector="TextBlock.ui-nav-label">
-            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="500"/>
             <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="Button.ui-step-btn">
-            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="600"/>
-            <Setter Property="MinWidth" Value="28"/>
-            <Setter Property="MinHeight" Value="28"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style Selector="Button.ui-step-btn:pointerover">
-            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
-        </Style>
-        <Style Selector="Border.ui-value">
-            <Setter Property="Background" Value="{DynamicResource ControlValue}"/>
-            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
-            <Setter Property="Padding" Value="8,4"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="MinWidth" Value="36"/>
-        </Style>
-        <Style Selector="Border.ui-value TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="500"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
         <Style Selector="ComboBox.ui-lang-select">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="500"/>
             <Setter Property="MinHeight" Value="28"/>
-            <Setter Property="MinWidth" Value="160"/>
+            <Setter Property="MinWidth" Value="140"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <Style Selector="Button.ui-colour-dot">
-            <Setter Property="Width" Value="18"/>
-            <Setter Property="Height" Value="18"/>
-            <Setter Property="CornerRadius" Value="9"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="14"/>
+            <Setter Property="Height" Value="14"/>
+            <Setter Property="CornerRadius" Value="7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Padding" Value="0"/>
         </Style>
-        <Style Selector="TextBox.message-area">
+        <Style Selector="Button.ui-colour-dot.selected">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource DeepNavy}"/>
+        </Style>
+
+        <Style Selector="Border.bottom-bar">
             <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
+            <Setter Property="BorderThickness" Value="0,1,0,0"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="16,0"/>
+        </Style>
+
+        <Style Selector="TextBox.message-area">
+            <Setter Property="Background" Value="#FFFFFF"/>
             <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontFamily" Value="Arial, Segoe UI, Helvetica Neue, sans-serif"/>
@@ -143,86 +154,81 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="16"/>
         </Style>
-        <Style Selector="Button.mode-toggle">
-            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="500"/>
-            <Setter Property="Padding" Value="10,0"/>
-            <Setter Property="MinHeight" Value="28"/>
-            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style Selector="Button.mode-toggle:pointerover">
-            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
-        </Style>
-        <Style Selector="Button.mode-toggle.keyboard-active">
-            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
-            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
-        </Style>
-        <Style Selector="Border.prefs-content">
-            <Setter Property="Background" Value="{DynamicResource BgLight}"/>
-            <Setter Property="Padding" Value="0"/>
-        </Style>
-        <Style Selector="Button.sidebar-btn">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="500"/>
-            <Setter Property="Padding" Value="12,6"/>
-            <Setter Property="MinHeight" Value="36"/>
-            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style Selector="Button.sidebar-btn:pointerover">
-            <Setter Property="Background" Value="{DynamicResource HighlightLight}"/>
-        </Style>
-        <Style Selector="Button.sidebar-action">
-            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
-            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="600"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="MinHeight" Value="40"/>
-            <Setter Property="CornerRadius" Value="{DynamicResource RadiusMd}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style Selector="Button.sidebar-action:pointerover">
-            <Setter Property="Opacity" Value="0.85"/>
-        </Style>
     </Window.Styles>
 
     <DockPanel>
-        <!-- Top bar -->
         <Border Classes="top-bar" DockPanel.Dock="Top">
-            <DockPanel>
-                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center"
-                            HorizontalAlignment="Left">
-                    <Button Classes="nav-btn" Content="New" Click="OnNew"/>
-                    <Button Classes="nav-btn" Content="Open" Click="OnOpen"/>
-                    <Button Classes="nav-btn" Content="Save" Click="OnSave"/>
-                    <Button x:Name="BtnPlay" Classes="nav-btn" Content="Play" Click="OnPlay"/>
-                    <Button Classes="nav-btn" Content="View stats" Click="OnStats"/>
+            <Grid ColumnDefinitions="*, Auto">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Button Classes="nav-btn" Click="OnNew">
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,11H10V13H8V15H10V17H12V15H14V13H12V11Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
+                            <TextBlock Text="New" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="nav-btn" Click="OnOpen">
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8V18A2,2 0 0,1 19,20M19,8H4V18H19V8Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
+                            <TextBlock Text="Open" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Classes="nav-btn" Click="OnSave">
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
+                            <TextBlock Text="Save" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
+
+                    <Button x:Name="BtnPlay" Classes="nav-btn" Click="OnPlay">
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M21,6H3C1.9,6 1,6.9 1,8V16C1,17.1 1.9,18 3,18H21C22.1,18 23,17.1 23,16V8C23,6.9 22.1,6 21,6M6,15H5V13H3V12H5V10H6V12H8V13H6V15M15.5,12A1.5,1.5 0 1,1 14,13.5A1.5,1.5 0 0,1 15.5,12M18.5,10A1.5,1.5 0 1,1 17,11.5A1.5,1.5 0 0,1 18.5,10Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
+                            <TextBlock Name="TxtPlayLabel" Text="Play" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
+
+                    <Button x:Name="BtnMode" Classes="nav-btn" Width="120">
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuItem Header="Right side" Click="OnModeRightSide"/>
+                                <MenuItem Header="Keyboard" Click="OnModeKeyboard"/>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
+                            <StackPanel Orientation="Horizontal" Spacing="2" HorizontalAlignment="Center">
+                                <TextBlock Name="TxtModeLabel" Text="Right side" FontSize="11" FontWeight="Medium" Foreground="{DynamicResource TextSecondary}"/>
+                                <TextBlock Text="▾" FontSize="11" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Button>
+
+                    <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
+
+                    <Button x:Name="BtnPrefs" Classes="nav-btn" Click="OnTogglePrefs">
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M12,1H10V5H12V1M12,19H10V23H12V19M16,1H14V11H16V1M16,23H14V13H16V23M8,1H6V13H8V1M8,23H6V15H8V23M13,5H9V7H13V5M17,11H13V13H17V11M9,13H5V15H9V13Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
+                            <TextBlock Text="Prefs" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center"
-                            HorizontalAlignment="Right">
-                    <Button x:Name="BtnMode" Classes="mode-toggle" Content="Keyboard"
-                            Click="OnToggleMode"/>
-                    <Button x:Name="BtnPrefs" Classes="nav-btn" Content="Prefs"
-                            Click="OnTogglePrefs"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <Button Classes="nav-btn" Width="80" Click="OnStats">
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M19,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M9,17H7V10H9V17M13,17H11V7H13V17M17,17H15V12H17V17Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
+                            <TextBlock Text="View stats" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
-            </DockPanel>
+            </Grid>
         </Border>
 
-        <!-- Prefs bar -->
         <StackPanel DockPanel.Dock="Top" IsVisible="{Binding IsPrefsVisible}">
             <Border Classes="prefs-bar">
                 <Border x:Name="PrefsTabStrip" IsVisible="True">
@@ -236,58 +242,153 @@
             </Border>
         </StackPanel>
 
-        <!-- Bottom bar -->
         <Border Classes="bottom-bar" DockPanel.Dock="Bottom">
-            <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="0" VerticalAlignment="Center">
+                <Button Width="32" Height="32" CornerRadius="16" Background="#ECEFF1" BorderThickness="0"
+                        VerticalAlignment="Center" Click="OnBack">
+                    <PathIcon Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" Width="10" Height="10" Foreground="{DynamicResource TextMuted}"/>
+                </Button>
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
                 <ComboBox x:Name="LangPicker"
                           Classes="ui-lang-select"
                           ItemsSource="{Binding Languages}"
                           SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"
-                          SelectionChanged="OnLanguageChanged"/>
+                          SelectionChanged="OnLanguageChanged"
+                          BorderThickness="0"
+                          Background="Transparent"
+                          VerticalAlignment="Center"/>
 
-                <StackPanel Orientation="Horizontal" Spacing="6">
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                     <TextBlock Classes="ui-nav-label" Text="Speed"/>
-                    <Button Classes="ui-step-btn" Content="-" Click="OnSpeedDown"/>
-                    <Border Classes="ui-value">
-                        <TextBlock Text="{Binding Speed, StringFormat={}{0:F1}}"/>
+                    <Border BorderBrush="{DynamicResource BorderLight}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}" Height="28">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Classes="ui-step-btn" Content="–" Click="OnSpeedDown" Background="Transparent" BorderThickness="0"/>
+                            <Rectangle Width="1" Fill="{DynamicResource BorderLight}"/>
+                            <Border Width="32" Background="Transparent" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Speed, StringFormat={}{0:F1}}" Foreground="{DynamicResource TextSecondary}" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center"/>
+                            </Border>
+                            <Rectangle Width="1" Fill="{DynamicResource BorderLight}"/>
+                            <Button Classes="ui-step-btn" Content="+" Click="OnSpeedUp" Background="Transparent" BorderThickness="0"/>
+                        </StackPanel>
                     </Border>
-                    <Button Classes="ui-step-btn" Content="+" Click="OnSpeedUp"/>
-                    <TextBlock Classes="ui-nav-label" Text="Auto"/>
-                    <CheckBox IsChecked="{Binding AutoSpeed}" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                    <TextBlock Classes="ui-nav-label" Text="Colour"/>
-                    <StackPanel x:Name="PaletteContainer" Orientation="Horizontal" Spacing="4"/>
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Classes="ui-nav-label" Text="Learning"/>
+                    <ToggleSwitch IsChecked="{Binding AutoSpeed}" OnContent="" OffContent="" MinWidth="0" Height="26" VerticalAlignment="Center"/>
                 </StackPanel>
+
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Classes="ui-nav-label" Text="Colour"/>
+                    <StackPanel Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+                        <UniformGrid x:Name="PaletteContainer" Columns="2" Width="32" Height="32" VerticalAlignment="Center"/>
+                        <Button Classes="ui-step-btn" Width="14" Padding="0" BorderThickness="0" Background="Transparent" VerticalAlignment="Center">
+                            <PathIcon Data="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" Width="8" Height="8" Foreground="{DynamicResource TextMuted}"/>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+
+                <ComboBox BorderThickness="0" Background="Transparent" VerticalAlignment="Center" FontSize="12" SelectedIndex="0">
+                    <ComboBoxItem Content="Arial"/>
+                    <ComboBoxItem Content="Roboto"/>
+                    <ComboBoxItem Content="System-UI"/>
+                </ComboBox>
+
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+
+                <Border BorderBrush="{DynamicResource BorderLight}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}" Height="28">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Classes="ui-step-btn" Content="–" Background="Transparent" BorderThickness="0"/>
+                        <Rectangle Width="1" Fill="{DynamicResource BorderLight}"/>
+                        <TextBlock Text="15" Width="30" FontSize="11" FontWeight="Medium" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <Rectangle Width="1" Fill="{DynamicResource BorderLight}"/>
+                        <Button Classes="ui-step-btn" Content="+" Background="Transparent" BorderThickness="0"/>
+                    </StackPanel>
+                </Border>
+
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+
+                <ComboBox BorderThickness="0" Background="Transparent" VerticalAlignment="Center" FontSize="12" SelectedIndex="0">
+                    <ComboBoxItem Content="Speech on"/>
+                    <ComboBoxItem Content="Speech off"/>
+                </ComboBox>
             </StackPanel>
         </Border>
 
-        <!-- Main content: canvas + sidebar editor -->
-        <Grid x:Name="MainGrid" ColumnDefinitions="*,1,Auto">
+        <Grid x:Name="MainGrid" ColumnDefinitions="*,1,320">
             <controls:DasherCanvas x:Name="DasherCanvas"
                                    Grid.Column="0"
                                    OutputText="{Binding OutputText, Mode=OneWayToSource}"/>
+            
             <Border x:Name="MessageSplitter" Grid.Column="1"
                     Background="{DynamicResource BorderLight}" Width="1"/>
-            <Border x:Name="MessagePane" Grid.Column="2" MinWidth="220" MaxWidth="500"
+            
+            <Border x:Name="MessagePane" Grid.Column="2"
                     Background="{DynamicResource SurfaceLight}" BorderBrush="{DynamicResource BorderLight}" BorderThickness="1,0,0,0">
-                <DockPanel>
-                    <TextBlock DockPanel.Dock="Top" Text="Output"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{DynamicResource TextMuted}"
-                               Margin="16,12,16,4"/>
-                    <StackPanel DockPanel.Dock="Bottom" Spacing="2" Margin="8,4,8,8">
-                        <Button Classes="sidebar-action" Content="Quick Speak" Click="OnQuickSpeak"/>
-                        <Button Classes="sidebar-btn" Content="Copy All" Click="OnCopyAll"/>
-                        <Button Classes="sidebar-btn" Content="Copy Selection" Click="OnCopySelection"/>
-                        <Button Classes="sidebar-btn" Content="Paste" Click="OnPaste"/>
-                    </StackPanel>
-                    <TextBox Classes="message-area"
-                             x:Name="MessageArea"
-                             Text="{Binding OutputText, Mode=OneWay}"
+                <Grid RowDefinitions="Auto, Auto, *">
+                    <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="10,6" Height="48">
+                            <Button Width="32" Height="32" CornerRadius="16" Background="#ECEFF1" BorderThickness="0" VerticalAlignment="Center">
+                                <PathIcon Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" Width="10" Height="10" Foreground="{DynamicResource TextMuted}"/>
+                            </Button>
+
+                            <Button Classes="ui-circle-btn" Click="OnToggleMode">
+                                <PathIcon Data="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" Width="16" Height="16" Foreground="#735A52"/>
+                            </Button>
+
+                            <Button Classes="ui-circle-btn" Click="OnQuickSpeak">
+                                <PathIcon Data="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z" Width="16" Height="16" Foreground="#735A52"/>
+                            </Button>
+
+                            <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
+
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnCopySelection">
+                                    <StackPanel Spacing="2" VerticalAlignment="Center">
+                                        <PathIcon Data="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1M19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5M19 21H8V7H19V21Z" Width="13" Height="13" Foreground="{DynamicResource TextSecondary}"/>
+                                        <TextBlock Text="Copy" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnCopyAll">
+                                    <StackPanel Spacing="2" VerticalAlignment="Center">
+                                        <PathIcon Data="M16,1H4C2.9,1 2,1.9 2,3V17H4V3H16V1M19,5H8C6.9,5 6,5.9 6,7V21C6,22.1 6.9,23 8,23H19C20.1,23 21,22.1 21,21V7C21,5.9 20.1,5 19,5M19,21H8V7H19V21Z" Width="13" Height="13" Foreground="{DynamicResource TextSecondary}"/>
+                                        <TextBlock Text="Copy a." FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnPaste">
+                                    <StackPanel Spacing="2" VerticalAlignment="Center">
+                                        <PathIcon Data="M19,2H14V1H10V2H5C3.9,2 3,2.9 3,4V20C3,21.1 3.9,22 5,22H19C20.1,22 21,21.1 21,20V4C21,2.9 20.1,2 19,2M12,2A1,1 0 1,1 11,3A1,1 0 0,1 12,2M19,20H5V4H7V7H17V4H19V20Z" Width="13" Height="13" Foreground="{DynamicResource TextSecondary}"/>
+                                        <TextBlock Text="Paste" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+                            <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
+
+                            <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0">
+                                <StackPanel Spacing="2" VerticalAlignment="Center">
+                                    <PathIcon Data="M12,16A2,2 0 1,1 14,18A2,2 0 0,1 12,16M12,10A2,2 0 1,1 14,12A2,2 0 0,1 12,10M12,4A2,2 0 1,1 14,6A2,2 0 0,1 12,4Z" Width="13" Height="13" Foreground="{DynamicResource TextSecondary}"/>
+                                    <TextBlock Text="More" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <Border Grid.Row="1" Height="1" Background="{DynamicResource BorderLight}"/>
+
+                    <TextBox x:Name="MessageArea" Grid.Row="2"
+                             Classes="message-area"
+                             Text="{Binding OutputText, Mode=TwoWay}"
                              IsReadOnly="True"/>
-                </DockPanel>
+                </Grid>
             </Border>
         </Grid>
     </DockPanel>
