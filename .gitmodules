@@ -2,3 +2,4 @@
 	path = DasherCore
 	url = https://github.com/dasher-project/DasherCore.git
 	branch = feature-CAPI
+	ignore = dirty

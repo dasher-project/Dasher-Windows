@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
@@ -46,6 +47,10 @@ public partial class DasherCanvas : Control
             var errorMsg = errorPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(errorPtr) ?? "Unknown error" : "Unknown error";
             throw new InvalidOperationException($"Failed to create Dasher session: {errorMsg}");
         }
+
+        var locale = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        if (locale != "en")
+            NativeBridge.dasher_set_locale(_handle, locale);
 
         if (Bounds.Width > 0 && Bounds.Height > 0)
             NativeBridge.dasher_set_screen_size(_handle, (int)Bounds.Width, (int)Bounds.Height);

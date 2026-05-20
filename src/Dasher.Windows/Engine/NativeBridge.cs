@@ -122,6 +122,19 @@ public static class NativeBridge
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_save_settings(IntPtr ctx);
 
+    // Localization
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_set_locale(IntPtr ctx, [MarshalAs(UnmanagedType.LPStr)] string? locale);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr dasher_get_locale(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_set_string_override(IntPtr ctx, [MarshalAs(UnmanagedType.LPStr)] string key, [MarshalAs(UnmanagedType.LPStr)] string? value);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr dasher_get_localized_string(IntPtr ctx, [MarshalAs(UnmanagedType.LPStr)] string key);
+
     // Color utilities
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_color_argb(int alpha, int red, int green, int blue);
@@ -140,4 +153,5 @@ public struct DasherParameterInfo
     public int Step;
     public int Advanced;
     public IntPtr Group;
+    public IntPtr Subgroup;
 }

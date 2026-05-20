@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
@@ -24,6 +25,7 @@ public class ParameterDisplayInfo
     public int Step;
     public int Advanced;
     public string Group = "";
+    public string Subgroup = "";
 }
 
 public class SettingsPanel : Control
@@ -115,15 +117,49 @@ public class SettingsPanel : Control
         }
 
         if (!_groups.TryGetValue(category, out var parameters)) return;
-        foreach (var info in parameters)
+
+        if (category == "Advanced")
         {
-            try
+            var grouped = parameters
+                .GroupBy(p => string.IsNullOrEmpty(p.Subgroup) ? "General" : FriendlySubgroup(p.Subgroup))
+                .ToList();
+
+            foreach (var group in grouped)
             {
-                var row = BuildParameterRow(info);
-                if (row != null)
-                    _panel.Children.Add(row);
+                var header = new TextBlock
+                {
+                    Text = group.Key,
+                    FontSize = 13,
+                    FontWeight = FontWeight.Bold,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x33, 0x33, 0x33)),
+                    Margin = new Thickness(0, 10, 0, 4),
+                };
+                _panel.Children.Add(header);
+
+                foreach (var info in group)
+                {
+                    try
+                    {
+                        var row = BuildParameterRow(info);
+                        if (row != null)
+                            _panel.Children.Add(row);
+                    }
+                    catch { }
+                }
             }
-            catch { }
+        }
+        else
+        {
+            foreach (var info in parameters)
+            {
+                try
+                {
+                    var row = BuildParameterRow(info);
+                    if (row != null)
+                        _panel.Children.Add(row);
+                }
+                catch { }
+            }
         }
     }
 
@@ -172,6 +208,24 @@ public class SettingsPanel : Control
         return row;
     }
 
+    private static string FriendlySubgroup(string subgroup) => subgroup switch
+    {
+        "CDefaultFilter" => "Default / Mouse Control",
+        "CSmoothingFilter" => "Smoothing Filter",
+        "CClickFilter" => "Click Filter",
+        "CDynamicFilter" => "Dynamic Filters",
+        "CDynamicButtons" => "Dynamic Button Control",
+        "CButtonMode" => "Button Mode",
+        "CDasherButtons" => "Button Scanning",
+        "CStaticFilter" => "Static Filters",
+        "CTwoButtonDynamicFilter" => "Two-Button Dynamic",
+        "CTwoPushDynamicFilter" => "Two-Push Dynamic",
+        "CCompassMode" => "Compass Mode",
+        "CStylusFilter" => "Stylus Filter",
+        "CDemoFilter" => "Demo Mode",
+        _ => subgroup,
+    };
+
     private void LoadParameterGroups()
     {
         _groups.Clear();
@@ -192,6 +246,7 @@ public class SettingsPanel : Control
                 Step = raw.Step,
                 Advanced = raw.Advanced,
                 Group = Marshal.PtrToStringUTF8(raw.Group) ?? "Other",
+                Subgroup = Marshal.PtrToStringUTF8(raw.Subgroup) ?? "",
             };
 
             if (!_groups.TryGetValue(info.Group, out var list))
