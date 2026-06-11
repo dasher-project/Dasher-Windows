@@ -210,6 +210,15 @@
 
                     <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
 
+                    <Button x:Name="BtnGameMode" Classes="nav-btn" Click="OnToggleGameMode">
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M16.5,9L14,7.5L16.5,6L19,7.5L16.5,9M8.5,13L6,11.5L8.5,10L11,11.5L8.5,13M16.5,13L14,11.5L16.5,10L19,11.5L16.5,13M12.5,5L10,3.5L12.5,2L15,3.5L12.5,5M6,19V15H8V19H10V15H12V19H14V15H16V19H18V15H20V19C20,20.1 19.1,21 18,21H8C6.9,21 6,20.1 6,19Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
+                            <TextBlock x:Name="TxtGameLabel" Text="Game" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
+
                     <Button x:Name="BtnPrefs" Classes="nav-btn" Click="OnTogglePrefs">
                         <StackPanel Spacing="3">
                             <PathIcon Data="M12,1H10V5H12V1M12,19H10V23H12V19M16,1H14V11H16V1M16,23H14V13H16V23M8,1H6V13H8V1M8,23H6V15H8V23M13,5H9V7H13V5M17,11H13V13H17V11M9,13H5V15H9V13Z" Width="20" Height="20" Foreground="{DynamicResource DeepNavy}"/>
@@ -383,6 +392,15 @@
                     </ScrollViewer>
 
                     <Border Grid.Row="1" Height="1" Background="{DynamicResource BorderLight}"/>
+
+                    <Border x:Name="GameTargetBar" Grid.Row="1" Margin="10,4"
+                            IsVisible="False" CornerRadius="{DynamicResource RadiusSm}"
+                            Background="{DynamicResource HighlightLight}" Padding="8,4">
+                        <StackPanel>
+                            <TextBlock x:Name="GameTargetText" FontSize="14" FontFamily="Consolas, Courier New, monospace"
+                                       TextWrapping="Wrap" LineHeight="22"/>
+                        </StackPanel>
+                    </Border>
 
                     <TextBox x:Name="MessageArea" Grid.Row="2"
                              Classes="message-area"

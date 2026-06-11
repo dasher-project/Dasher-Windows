@@ -169,6 +169,9 @@ public partial class MainWindow : Window
         {
             _previousOutput = _vm.OutputText;
         }
+
+        if (_gameModeActive)
+            SyncGameModeState();
     }
 
     private void SendTextToForeground(string text)
@@ -538,6 +541,59 @@ public partial class MainWindow : Window
             return System.Text.Encoding.Unicode.GetString(bytes).TrimEnd('\0');
         }
         finally { CloseClipboard(); }
+    }
+
+    private bool _gameModeActive;
+
+    private void OnToggleGameMode(object? sender, RoutedEventArgs e)
+    {
+        if (_canvas == null || _vm == null) return;
+
+        if (_gameModeActive)
+        {
+            NativeBridge.dasher_leave_game_mode(_vm.Handle);
+            _gameModeActive = false;
+            NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 1);
+            var txtGameLabel = this.FindControl<TextBlock>("TxtGameLabel");
+            if (txtGameLabel != null) txtGameLabel.Text = "Game";
+            var gameBar = this.FindControl<Border>("GameTargetBar");
+            if (gameBar != null) gameBar.IsVisible = false;
+        }
+        else
+        {
+            var result = NativeBridge.dasher_enter_game_mode(_vm.Handle);
+            if (result == 0)
+            {
+                _gameModeActive = true;
+                NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 0);
+                var txtGameLabel = this.FindControl<TextBlock>("TxtGameLabel");
+                if (txtGameLabel != null) txtGameLabel.Text = "Leave";
+                var gameBar = this.FindControl<Border>("GameTargetBar");
+                if (gameBar != null) gameBar.IsVisible = true;
+            }
+        }
+    }
+
+    private void SyncGameModeState()
+    {
+        if (!_gameModeActive || _vm == null) return;
+
+        var targetPtr = NativeBridge.dasher_game_get_target_text(_vm.Handle);
+        var target = targetPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(targetPtr) ?? "" : "";
+        var correct = NativeBridge.dasher_game_get_correct_count(_vm.Handle);
+        var wrongPtr = NativeBridge.dasher_game_get_wrong_text(_vm.Handle);
+        var wrong = wrongPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(wrongPtr) ?? "" : "";
+        var total = NativeBridge.dasher_game_get_target_length(_vm.Handle);
+
+        if (total < 0 || string.IsNullOrEmpty(target)) return;
+
+        var gameTarget = this.FindControl<TextBlock>("GameTargetText");
+        if (gameTarget == null) return;
+
+        var correctText = correct > 0 ? target[..Math.Min(correct, target.Length)] : "";
+        var remaining = correct < target.Length ? target[Math.Min(correct, target.Length)..] : "";
+
+        gameTarget.Text = $"{correctText}[{wrong}]{remaining}";
     }
 
     private static string FindCoreDataDir()
