@@ -322,7 +322,7 @@ public partial class MainWindow : Window
     private void OnNew(object? sender, RoutedEventArgs e)
     {
         if (_canvas == null || _vm == null) return;
-        NativeBridge.dasher_reset_output_text(_vm.Handle);
+        NativeBridge.dasher_reset(_vm.Handle);
         _vm.OutputText = "";
         _previousOutput = "";
     }

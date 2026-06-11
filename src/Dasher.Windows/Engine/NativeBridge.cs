@@ -41,6 +41,9 @@ public static class NativeBridge
     public static extern void dasher_reset_output_text(IntPtr ctx);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_reset(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr dasher_get_alphabet_id(IntPtr ctx);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
@@ -51,6 +54,27 @@ public static class NativeBridge
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_set_language_model_id(IntPtr ctx, int model_id);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_get_language_model_count();
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_get_language_model_id_at(int index);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr dasher_get_language_model_name(int id);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr dasher_get_language_model_description(int id);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_get_language_model_param_count(int id);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_get_language_model_param_key(int id, int index);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_find_parameter_key([MarshalAs(UnmanagedType.LPStr)] string enum_key_name);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_get_speed_percent(IntPtr ctx);
@@ -118,6 +142,31 @@ public static class NativeBridge
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr dasher_get_alphabet_name(IntPtr ctx, int index);
 
+    // Game mode
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_enter_game_mode(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_leave_game_mode(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_game_mode_active(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_game_set_canvas_text(IntPtr ctx, int enabled);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr dasher_game_get_target_text(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_game_get_correct_count(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_game_get_target_length(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr dasher_game_get_wrong_text(IntPtr ctx);
+
     // Persistence
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_save_settings(IntPtr ctx);
@@ -138,6 +187,20 @@ public static class NativeBridge
     // Color utilities
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_color_argb(int alpha, int red, int green, int blue);
+
+    // Output callback
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void OutputCallback(int event_type, IntPtr text, IntPtr user_data);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_set_output_callback(IntPtr ctx, OutputCallback callback, IntPtr user_data);
+
+    // Message callback
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void MessageCallback(int message_type, IntPtr text, IntPtr user_data);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_set_message_callback(IntPtr ctx, MessageCallback callback, IntPtr user_data);
 }
 
 [StructLayout(LayoutKind.Sequential)]

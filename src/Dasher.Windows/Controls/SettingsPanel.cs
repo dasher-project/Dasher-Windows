@@ -128,6 +128,9 @@ public class SettingsPanel : Control
         if (category == "Input")
             parameters = FilterByActiveInputFilter(parameters);
 
+        if (category == "Language")
+            parameters = FilterByActiveLanguageModel(parameters);
+
         var grouped = parameters
             .GroupBy(p => string.IsNullOrEmpty(p.Subgroup) ? "" : p.Subgroup)
             .ToList();
@@ -294,6 +297,24 @@ public class SettingsPanel : Control
         {
             if (string.IsNullOrEmpty(p.Subgroup)) return true;
             return activeSubgroups.Contains(p.Subgroup);
+        }).ToList();
+    }
+
+    private List<ParameterDisplayInfo> FilterByActiveLanguageModel(List<ParameterDisplayInfo> parameters)
+    {
+        var lmId = NativeBridge.dasher_get_language_model_id(_handle);
+        var paramCount = NativeBridge.dasher_get_language_model_param_count(lmId);
+        var lmKeys = new HashSet<int>();
+        for (int i = 0; i < paramCount; i++)
+            lmKeys.Add(NativeBridge.dasher_get_language_model_param_key(lmId, i));
+
+        const int BP_LM_ADAPTIVE = 10;
+        lmKeys.Add(BP_LM_ADAPTIVE);
+
+        return parameters.Where(p =>
+        {
+            if (p.Subgroup != "Learning") return true;
+            return lmKeys.Contains(p.Key);
         }).ToList();
     }
 

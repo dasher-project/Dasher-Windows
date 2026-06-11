@@ -21,6 +21,11 @@ public partial class DasherCanvas : Control
     private EyeGazeIntegration? _eyeGazeIntegration;
     private bool _useEyeGazeInput;
 
+    private NativeBridge.OutputCallback? _outputCallback;
+    private NativeBridge.MessageCallback? _messageCallback;
+
+    public event EventHandler<EngineMessageEventArgs>? EngineMessage;
+
     public static readonly StyledProperty<string> OutputTextProperty =
         AvaloniaProperty.Register<DasherCanvas, string>(nameof(OutputText));
 
@@ -51,6 +56,12 @@ public partial class DasherCanvas : Control
         var locale = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
         if (locale != "en")
             NativeBridge.dasher_set_locale(_handle, locale);
+
+        _outputCallback = new NativeBridge.OutputCallback(OnOutputEvent);
+        NativeBridge.dasher_set_output_callback(_handle, _outputCallback, IntPtr.Zero);
+
+        _messageCallback = new NativeBridge.MessageCallback(OnEngineMessage);
+        NativeBridge.dasher_set_message_callback(_handle, _messageCallback, IntPtr.Zero);
 
         if (Bounds.Width > 0 && Bounds.Height > 0)
             NativeBridge.dasher_set_screen_size(_handle, (int)Bounds.Width, (int)Bounds.Height);
@@ -165,4 +176,33 @@ public partial class DasherCanvas : Control
 
         InvalidateVisual();
     }
+
+    private void OnOutputEvent(int eventType, IntPtr textPtr, IntPtr userData)
+    {
+        var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (eventType == 0)
+                OutputText += text;
+            else if (eventType == 1 && OutputText.Length >= text.Length)
+                OutputText = OutputText[..^text.Length];
+        });
+    }
+
+    private void OnEngineMessage(int messageType, IntPtr textPtr, IntPtr userData)
+    {
+        var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
+        var isWarning = messageType == 1;
+        Dispatcher.UIThread.Post(() =>
+        {
+            EngineMessage?.Invoke(this, new EngineMessageEventArgs(text, isWarning));
+        });
+    }
+}
+
+public class EngineMessageEventArgs : EventArgs
+{
+    public string Text { get; }
+    public bool IsWarning { get; }
+    public EngineMessageEventArgs(string text, bool isWarning) { Text = text; IsWarning = isWarning; }
 }
