@@ -634,11 +634,8 @@ public class SettingsPanel : Control
             var currentPtr = NativeBridge.dasher_get_string_parameter(_handle, info.Key);
             var current = Marshal.PtrToStringUTF8(currentPtr) ?? "";
 
-            if (info.Key == ParameterKeys.SP_ALPHABET_ID || info.Key == ParameterKeys.SP_COLOUR_ID
-                || info.Key == ParameterKeys.SP_INPUT_FILTER || info.Key == ParameterKeys.SP_INPUT_DEVICE)
-            {
+            if ((UIControlType)info.UiType == UIControlType.Enum)
                 return BuildStringDropdown(info, current);
-            }
 
             var textBox = new TextBox
             {
