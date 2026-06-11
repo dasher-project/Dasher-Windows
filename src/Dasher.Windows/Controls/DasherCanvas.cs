@@ -54,6 +54,7 @@ public partial class DasherCanvas : Control
             var errorMsg = errorPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(errorPtr) ?? "Unknown error" : "Unknown error";
             throw new InvalidOperationException($"Failed to create Dasher session: {errorMsg}");
         }
+        NativeBridge.dasher_set_screen_size(_handle, 700, 640);
         _timer.Start();
     }
 
