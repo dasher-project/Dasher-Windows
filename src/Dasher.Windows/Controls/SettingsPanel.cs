@@ -308,8 +308,7 @@ public class SettingsPanel : Control
         for (int i = 0; i < paramCount; i++)
             lmKeys.Add(NativeBridge.dasher_get_language_model_param_key(lmId, i));
 
-        const int BP_LM_ADAPTIVE = 10;
-        lmKeys.Add(BP_LM_ADAPTIVE);
+        lmKeys.Add(ParameterKeys.BP_LM_ADAPTIVE);
 
         return parameters.Where(p =>
         {

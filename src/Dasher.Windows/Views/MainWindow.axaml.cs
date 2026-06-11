@@ -86,8 +86,10 @@ public partial class MainWindow : Window
         CopyDataIfNeeded(coreDataDir, dataDir);
 
         _canvas.Initialize(coreDataDir, dataDir);
+        _canvas.EngineMessage += OnEngineMessage;
         _vm.SetHandle(_canvas.GetHandle());
         _vm.ApplySpeed();
+        _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
 
         _vm.LoadAlphabets();
         _vm.SelectedLanguageIndex = 0;
@@ -197,6 +199,32 @@ public partial class MainWindow : Window
         if (_vm == null) return;
         _vm.IsKeyboardMode = !_vm.IsKeyboardMode;
         ApplyMode();
+    }
+
+    private async void OnEngineMessage(object? sender, EngineMessageEventArgs e)
+    {
+        var icon = e.IsWarning ? "⚠" : "ℹ";
+        var title = e.IsWarning ? "Dasher Warning" : "Dasher";
+        var notification = new Window
+        {
+            Title = title,
+            Content = new TextBlock
+            {
+                Text = $"{icon} {e.Text}",
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(16),
+                MaxWidth = 400,
+                FontSize = 13,
+            },
+            SizeToContent = SizeToContent.WidthAndHeight,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            CanResize = false,
+            ShowInTaskbar = false,
+            Background = new SolidColorBrush(Color.FromRgb(0xF4, 0xF7, 0xF6)),
+        };
+        notification.ShowDialog(this);
+        await Task.Delay(5000);
+        notification.Close();
     }
 
     private void OnModeRightSide(object? sender, RoutedEventArgs e)

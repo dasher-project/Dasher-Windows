@@ -116,6 +116,12 @@ public partial class MainWindowViewModel : ObservableObject
         Speed = Math.Round(Math.Max(Speed - 0.1, 0.1), 1);
         ApplySpeed();
     }
+
+    partial void OnAutoSpeedChanged(bool value)
+    {
+        if (_handle != IntPtr.Zero)
+            NativeBridge.dasher_set_bool_parameter(_handle, ParameterKeys.BP_AUTO_SPEEDCONTROL, value ? 1 : 0);
+    }
 }
 
 public class PaletteInfo
