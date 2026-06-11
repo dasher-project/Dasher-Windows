@@ -14,11 +14,15 @@ public class AccessConfiguration
 
     public void Apply(IntPtr handle)
     {
-        NativeBridge.dasher_set_string_parameter(handle, ParameterKeys.SP_INPUT_FILTER,
-            Selection.FilterName());
+        try
+        {
+            NativeBridge.dasher_set_string_parameter(handle, ParameterKeys.SP_INPUT_FILTER,
+                Selection.FilterName());
 
-        if (Selection == SelectionMethod.Dwell)
-            NativeBridge.dasher_set_bool_parameter(handle, 17, 1);
+            if (Selection == SelectionMethod.Dwell)
+                NativeBridge.dasher_set_bool_parameter(handle, 17, 1);
+        }
+        catch { }
     }
 
     public static AccessConfiguration Load()

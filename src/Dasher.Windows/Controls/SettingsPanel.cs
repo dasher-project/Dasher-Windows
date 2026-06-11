@@ -96,6 +96,8 @@ public class SettingsPanel : Control
         }
         catch (Exception ex)
         {
+            System.IO.File.WriteAllText(@"C:\github\DasherProjects\prefs_crash.log",
+                $"Category: {category}\n{ex}");
             _panel.Children.Clear();
             _panel.Children.Add(new TextBlock
             {

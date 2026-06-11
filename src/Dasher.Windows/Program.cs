@@ -12,7 +12,6 @@ sealed class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Dasher starting...");
-        Console.Out.Flush();
         try
         {
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);

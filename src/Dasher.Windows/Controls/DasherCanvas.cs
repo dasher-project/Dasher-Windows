@@ -24,6 +24,7 @@ public partial class DasherCanvas : Control
     private NativeBridge.OutputCallback? _outputCallback;
     private NativeBridge.MessageCallback? _messageCallback;
     private bool _callbacksRegistered;
+    private bool _screenSizeSet;
 
     public event EventHandler<EngineMessageEventArgs>? EngineMessage;
 
@@ -53,52 +54,13 @@ public partial class DasherCanvas : Control
             var errorMsg = errorPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(errorPtr) ?? "Unknown error" : "Unknown error";
             throw new InvalidOperationException($"Failed to create Dasher session: {errorMsg}");
         }
-
         _timer.Start();
-    }
-
-    private void EnsureCallbacksRegistered()
-    {
-        if (_callbacksRegistered) return;
-        _callbacksRegistered = true;
-
-        try
-        {
-            var locale = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            if (locale != "en")
-                NativeBridge.dasher_set_locale(_handle, locale);
-        }
-        catch { }
-
-        try
-        {
-            _outputCallback = new NativeBridge.OutputCallback(OnOutputEvent);
-            NativeBridge.dasher_set_output_callback(_handle, _outputCallback, IntPtr.Zero);
-        }
-        catch { }
-
-        try
-        {
-            _messageCallback = new NativeBridge.MessageCallback(OnEngineMessage);
-            NativeBridge.dasher_set_message_callback(_handle, _messageCallback, IntPtr.Zero);
-        }
-        catch { }
-    }
-
-    private void TrySetScreenSize()
-    {
-        if (_handle == IntPtr.Zero) return;
-        try
-        {
-            if (Bounds.Width > 0 && Bounds.Height > 0)
-                NativeBridge.dasher_set_screen_size(_handle, (int)Bounds.Width, (int)Bounds.Height);
-        }
-        catch { }
     }
 
     public void Shutdown()
     {
-        DisableEyeGaze(); // Clean up eye gaze resources
+        DisableEyeGaze();
+        DisableJoystick();
         _timer.Stop();
         if (_handle != IntPtr.Zero)
         {
@@ -136,11 +98,7 @@ public partial class DasherCanvas : Control
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
-
-        // If eye gaze is active and working, suppress mouse input to prevent interference
         if (_useEyeGazeInput) return;
-
-        // Existing mouse handling
         if (_handle != IntPtr.Zero)
         {
             var pos = e.GetPosition(this);
@@ -159,6 +117,33 @@ public partial class DasherCanvas : Control
         }
     }
 
+    private void EnsureCallbacksRegistered()
+    {
+        if (_callbacksRegistered) return;
+        _callbacksRegistered = true;
+
+        try
+        {
+            _outputCallback = new NativeBridge.OutputCallback(OnOutputEvent);
+            NativeBridge.dasher_set_output_callback(_handle, _outputCallback, IntPtr.Zero);
+        }
+        catch { }
+
+        try
+        {
+            _messageCallback = new NativeBridge.MessageCallback(OnEngineMessage);
+            NativeBridge.dasher_set_message_callback(_handle, _messageCallback, IntPtr.Zero);
+        }
+        catch { }
+    }
+
+    private void TrySetScreenSize()
+    {
+        if (_screenSizeSet || _handle == IntPtr.Zero || Bounds.Width <= 0 || Bounds.Height <= 0) return;
+        NativeBridge.dasher_set_screen_size(_handle, (int)Bounds.Width, (int)Bounds.Height);
+        _screenSizeSet = true;
+    }
+
     private void OnTick(object? sender, EventArgs e)
     {
         if (_handle == IntPtr.Zero) return;
@@ -168,40 +153,48 @@ public partial class DasherCanvas : Control
 
         var timeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-        NativeBridge.dasher_frame(_handle, timeMs,
-            out IntPtr cmdPtr, out int cmdCount,
-            out IntPtr strPtr, out int strCount);
+        try
+        {
+            NativeBridge.dasher_frame(_handle, timeMs,
+                out IntPtr cmdPtr, out int cmdCount,
+                out IntPtr strPtr, out int strCount);
 
-        if (cmdCount > 0 && cmdPtr != IntPtr.Zero)
-        {
-            _commands = new int[cmdCount];
-            Marshal.Copy(cmdPtr, _commands, 0, cmdCount);
-        }
-        else
-        {
-            _commands = null;
-        }
+            if (cmdCount > 0 && cmdPtr != IntPtr.Zero)
+            {
+                _commands = new int[cmdCount];
+                Marshal.Copy(cmdPtr, _commands, 0, cmdCount);
+            }
+            else
+            {
+                _commands = null;
+            }
 
-        if (strCount > 0 && strPtr != IntPtr.Zero)
-        {
-            _strings = new string[strCount];
-            var ptrs = new IntPtr[strCount];
-            Marshal.Copy(strPtr, ptrs, 0, strCount);
-            for (int i = 0; i < strCount; i++)
-                _strings[i] = Marshal.PtrToStringUTF8(ptrs[i]) ?? "";
+            if (strCount > 0 && strPtr != IntPtr.Zero)
+            {
+                _strings = new string[strCount];
+                var ptrs = new IntPtr[strCount];
+                Marshal.Copy(strPtr, ptrs, 0, strCount);
+                for (int i = 0; i < strCount; i++)
+                    _strings[i] = Marshal.PtrToStringUTF8(ptrs[i]) ?? "";
+            }
+            else
+            {
+                _strings = null;
+            }
         }
-        else
-        {
-            _strings = null;
-        }
+        catch { return; }
 
-        var outputPtr = NativeBridge.dasher_get_output_text(_handle);
-        if (outputPtr != IntPtr.Zero)
+        try
         {
-            var text = Marshal.PtrToStringUTF8(outputPtr);
-            if (text != OutputText)
-                OutputText = text ?? "";
+            var outputPtr = NativeBridge.dasher_get_output_text(_handle);
+            if (outputPtr != IntPtr.Zero)
+            {
+                var text = Marshal.PtrToStringUTF8(outputPtr);
+                if (text != OutputText)
+                    OutputText = text ?? "";
+            }
         }
+        catch { }
 
         InvalidateVisual();
     }
