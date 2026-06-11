@@ -90,6 +90,25 @@ public class SettingsPanel : Control
 
     public void ShowCategory(string category)
     {
+        try
+        {
+            ShowCategoryCore(category);
+        }
+        catch (Exception ex)
+        {
+            _panel.Children.Clear();
+            _panel.Children.Add(new TextBlock
+            {
+                Text = $"Error loading settings: {ex.Message}",
+                FontSize = 12,
+                Foreground = new SolidColorBrush(Color.FromRgb(0xEB, 0x5B, 0x5C)),
+                Margin = new Thickness(16),
+            });
+        }
+    }
+
+    private void ShowCategoryCore(string category)
+    {
         if (_handle == IntPtr.Zero) return;
         _currentCategory = category;
         Title = category;

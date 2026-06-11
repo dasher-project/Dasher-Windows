@@ -9,8 +9,22 @@ sealed class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Dasher starting...");
+        Console.Out.Flush();
+        try
+        {
+            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception ex)
+        {
+            System.IO.File.WriteAllText(@"C:\github\DasherProjects\crash.log",
+                $"Message: {ex.Message}\nType: {ex.GetType()}\nStack: {ex.StackTrace}\nInner: {ex.InnerException}");
+            Console.WriteLine($"CRASH: {ex}");
+            Console.ReadLine();
+        }
+    }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()

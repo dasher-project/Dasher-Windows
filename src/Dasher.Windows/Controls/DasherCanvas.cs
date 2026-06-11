@@ -23,6 +23,7 @@ public partial class DasherCanvas : Control
 
     private NativeBridge.OutputCallback? _outputCallback;
     private NativeBridge.MessageCallback? _messageCallback;
+    private bool _callbacksRegistered;
 
     public event EventHandler<EngineMessageEventArgs>? EngineMessage;
 
@@ -53,20 +54,46 @@ public partial class DasherCanvas : Control
             throw new InvalidOperationException($"Failed to create Dasher session: {errorMsg}");
         }
 
-        var locale = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-        if (locale != "en")
-            NativeBridge.dasher_set_locale(_handle, locale);
-
-        _outputCallback = new NativeBridge.OutputCallback(OnOutputEvent);
-        NativeBridge.dasher_set_output_callback(_handle, _outputCallback, IntPtr.Zero);
-
-        _messageCallback = new NativeBridge.MessageCallback(OnEngineMessage);
-        NativeBridge.dasher_set_message_callback(_handle, _messageCallback, IntPtr.Zero);
-
-        if (Bounds.Width > 0 && Bounds.Height > 0)
-            NativeBridge.dasher_set_screen_size(_handle, (int)Bounds.Width, (int)Bounds.Height);
-
         _timer.Start();
+    }
+
+    private void EnsureCallbacksRegistered()
+    {
+        if (_callbacksRegistered) return;
+        _callbacksRegistered = true;
+
+        try
+        {
+            var locale = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            if (locale != "en")
+                NativeBridge.dasher_set_locale(_handle, locale);
+        }
+        catch { }
+
+        try
+        {
+            _outputCallback = new NativeBridge.OutputCallback(OnOutputEvent);
+            NativeBridge.dasher_set_output_callback(_handle, _outputCallback, IntPtr.Zero);
+        }
+        catch { }
+
+        try
+        {
+            _messageCallback = new NativeBridge.MessageCallback(OnEngineMessage);
+            NativeBridge.dasher_set_message_callback(_handle, _messageCallback, IntPtr.Zero);
+        }
+        catch { }
+    }
+
+    private void TrySetScreenSize()
+    {
+        if (_handle == IntPtr.Zero) return;
+        try
+        {
+            if (Bounds.Width > 0 && Bounds.Height > 0)
+                NativeBridge.dasher_set_screen_size(_handle, (int)Bounds.Width, (int)Bounds.Height);
+        }
+        catch { }
     }
 
     public void Shutdown()
@@ -85,8 +112,7 @@ public partial class DasherCanvas : Control
     protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
         base.OnSizeChanged(e);
-        if (_handle != IntPtr.Zero && e.NewSize.Width > 0 && e.NewSize.Height > 0)
-            NativeBridge.dasher_set_screen_size(_handle, (int)e.NewSize.Width, (int)e.NewSize.Height);
+        TrySetScreenSize();
     }
 
     public override void Render(DrawingContext context)
@@ -136,6 +162,9 @@ public partial class DasherCanvas : Control
     private void OnTick(object? sender, EventArgs e)
     {
         if (_handle == IntPtr.Zero) return;
+
+        EnsureCallbacksRegistered();
+        TrySetScreenSize();
 
         var timeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
