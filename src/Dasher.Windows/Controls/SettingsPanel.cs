@@ -201,8 +201,7 @@ public class SettingsPanel : Control
         };
         panel.Children.Add(methodLabel);
 
-        var methodCombo = new ComboBox
-        {
+        var methodCombo = new ComboBox        {
             MinWidth = 250,
             HorizontalAlignment = HorizontalAlignment.Left,
             FontSize = 12,
@@ -252,7 +251,6 @@ public class SettingsPanel : Control
             Text = config.Selection.Subtitle(),
             Margin = new Thickness(0, 2, 0, 0),
         };
-        panel.Children.Add(subtitle);
 
         methodCombo.SelectionChanged += (s, e) =>
         {
