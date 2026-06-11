@@ -103,6 +103,7 @@ public partial class MainWindow : Window
             settingsPanel.Initialize(_vm.Handle);
             settingsPanel.BackRequested += OnSettingsBack;
             settingsPanel.InputSourceChanged += OnInputSourceChanged;
+            settingsPanel.JoystickRequested += OnJoystickRequested;
             BuildPrefsTabs(settingsPanel);
         }
 
@@ -457,6 +458,7 @@ public partial class MainWindow : Window
     private async void OnInputSourceChanged(object? sender, EyeGazeIntegration.TrackerType trackerType)
     {
         if (_canvas == null) return;
+        _canvas.DisableJoystick();
 
         if (trackerType == EyeGazeIntegration.TrackerType.None)
         {
@@ -466,6 +468,13 @@ public partial class MainWindow : Window
         {
             await _canvas.InitializeEyeGazeAsync(trackerType);
         }
+    }
+
+    private void OnJoystickRequested(object? sender, EventArgs e)
+    {
+        if (_canvas == null) return;
+        _canvas.DisableEyeGaze();
+        _canvas.InitializeJoystick();
     }
 
     private async void OnCopyAll(object? sender, RoutedEventArgs e)

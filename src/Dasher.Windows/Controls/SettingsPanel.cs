@@ -96,8 +96,6 @@ public class SettingsPanel : Control
         }
         catch (Exception ex)
         {
-            System.IO.File.WriteAllText(@"C:\github\DasherProjects\prefs_crash.log",
-                $"Category: {category}\n{ex}");
             _panel.Children.Clear();
             _panel.Children.Add(new TextBlock
             {
@@ -185,7 +183,8 @@ public class SettingsPanel : Control
     }
 
     public event EventHandler? BackRequested;
-    public event EventHandler<Dasher.Windows.Engine.EyeGazeIntegration.TrackerType>? InputSourceChanged;
+    public event EventHandler<EyeGazeIntegration.TrackerType>? InputSourceChanged;
+    public event EventHandler? JoystickRequested;
 
     private Control? BuildInputSourceRow()
     {
@@ -291,6 +290,18 @@ public class SettingsPanel : Control
     {
         config.Apply(_handle);
         config.Save();
+
+        var trackerType = config.Method switch
+        {
+            AccessMethod.EyeGaze => EyeGazeIntegration.TrackerType.WindowsNative,
+            _ => EyeGazeIntegration.TrackerType.None,
+        };
+        InputSourceChanged?.Invoke(this, trackerType);
+
+        if (config.Method == AccessMethod.Joystick)
+        {
+            JoystickRequested?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private static readonly Dictionary<string, string> AvailableLocales = new()
