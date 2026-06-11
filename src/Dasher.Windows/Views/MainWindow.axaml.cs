@@ -226,7 +226,7 @@ public partial class MainWindow : Window
             ShowInTaskbar = false,
             Background = new SolidColorBrush(Color.FromRgb(0xF4, 0xF7, 0xF6)),
         };
-        notification.ShowDialog(this);
+        _ = notification.ShowDialog(this);
         await Task.Delay(5000);
         notification.Close();
     }

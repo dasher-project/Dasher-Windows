@@ -223,7 +223,6 @@ public class SettingsPanel : Control
             Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
             Margin = new Thickness(0, 8, 0, 0),
         };
-        panel.Children.Add(selectionLabel);
 
         var selectionCombo = new ComboBox
         {
