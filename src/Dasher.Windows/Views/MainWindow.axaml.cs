@@ -88,6 +88,10 @@ public partial class MainWindow : Window
         _canvas.Initialize(coreDataDir, dataDir);
         _canvas.EngineMessage += OnEngineMessage;
         _vm.SetHandle(_canvas.GetHandle());
+
+        var accessConfig = AccessConfiguration.Load();
+        accessConfig.Apply(_vm.Handle);
+
         _vm.ApplySpeed();
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
 
