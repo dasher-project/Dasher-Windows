@@ -168,44 +168,108 @@ public class SettingsPanel : Control
 
     private Control? BuildInputSourceRow()
     {
-        var row = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
+        var panel = new StackPanel { Spacing = 8 };
 
-        var label = new TextBlock
+        var config = AccessConfiguration.Load();
+
+        var methodLabel = new TextBlock
         {
-            Text = "Input Source",
+            Text = "Steering Method",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
-            VerticalAlignment = VerticalAlignment.Center,
-            Width = 180,
         };
-        DockPanel.SetDock(label, Dock.Left);
-        row.Children.Add(label);
+        panel.Children.Add(methodLabel);
 
-        var combo = new ComboBox
+        var methodCombo = new ComboBox
         {
-            MinWidth = 200,
+            MinWidth = 250,
             HorizontalAlignment = HorizontalAlignment.Left,
             FontSize = 12,
-            SelectedIndex = 0,
         };
-        combo.Items.Add("Mouse");
-        combo.Items.Add("Eye Tracker (UDP)");
-        combo.Items.Add("Eye Tracker (Windows Native)");
-
-        combo.SelectionChanged += (s, e) =>
+        var methods = Engine.AccessMethodExtensions.AvailableOnWindows();
+        foreach (var m in methods)
         {
-            var trackerType = combo.SelectedIndex switch
-            {
-                1 => Dasher.Windows.Engine.EyeGazeIntegration.TrackerType.UdpGazeTracker,
-                2 => Dasher.Windows.Engine.EyeGazeIntegration.TrackerType.WindowsNative,
-                _ => Dasher.Windows.Engine.EyeGazeIntegration.TrackerType.None,
-            };
-            InputSourceChanged?.Invoke(this, trackerType);
+            methodCombo.Items.Add(m.DisplayName());
+            if (m == config.Method) methodCombo.SelectedIndex = methodCombo.Items.Count - 1;
+        }
+        if (methodCombo.SelectedIndex < 0) methodCombo.SelectedIndex = 0;
+
+        var selectionLabel = new TextBlock
+        {
+            Text = "Selection Method",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+        panel.Children.Add(selectionLabel);
+
+        var selectionCombo = new ComboBox
+        {
+            MinWidth = 250,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            FontSize = 12,
         };
 
-        row.Children.Add(combo);
-        return row;
+        void PopulateSelections(AccessMethod method)
+        {
+            selectionCombo.Items.Clear();
+            var valid = method.ValidFor();
+            foreach (var s in valid)
+            {
+                selectionCombo.Items.Add(s.DisplayName());
+                if (s == config.Selection) selectionCombo.SelectedIndex = selectionCombo.Items.Count - 1;
+            }
+            if (selectionCombo.SelectedIndex < 0) selectionCombo.SelectedIndex = 0;
+        }
+
+        PopulateSelections(config.Method);
+
+        var subtitle = new TextBlock
+        {
+            FontSize = 11,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
+            Text = config.Selection.Subtitle(),
+            Margin = new Thickness(0, 2, 0, 0),
+        };
+        panel.Children.Add(subtitle);
+
+        methodCombo.SelectionChanged += (s, e) =>
+        {
+            var method = methods[methodCombo.SelectedIndex];
+            config.Method = method;
+            PopulateSelections(method);
+            var sel = method.ValidFor();
+            config.Selection = sel[selectionCombo.SelectedIndex];
+            subtitle.Text = config.Selection.Subtitle();
+            ApplyAccessConfig(config);
+        };
+
+        selectionCombo.SelectionChanged += (s, e) =>
+        {
+            var method = methods[methodCombo.SelectedIndex];
+            var valid = method.ValidFor();
+            if (selectionCombo.SelectedIndex >= 0 && selectionCombo.SelectedIndex < valid.Length)
+            {
+                config.Selection = valid[selectionCombo.SelectedIndex];
+                subtitle.Text = config.Selection.Subtitle();
+                ApplyAccessConfig(config);
+            }
+        };
+
+        panel.Children.Add(methodCombo);
+        panel.Children.Add(selectionLabel);
+        panel.Children.Add(selectionCombo);
+        panel.Children.Add(subtitle);
+
+        return panel;
+    }
+
+    private void ApplyAccessConfig(AccessConfiguration config)
+    {
+        config.Apply(_handle);
+        config.Save();
     }
 
     private static readonly Dictionary<string, string> AvailableLocales = new()
@@ -272,18 +336,19 @@ public class SettingsPanel : Control
     private static readonly Dictionary<string, HashSet<string>> FilterToSubgroup = new()
     {
         ["Normal Control"] = ["CDefaultFilter", "CDynamicFilter", "CDynamicButtons"],
+        ["Press Mode"] = ["CDefaultFilter", "CPressFilter"],
         ["Click Mode"] = ["CDefaultFilter", "CClickFilter"],
         ["Compass Mode"] = ["CDefaultFilter", "CCompassMode"],
         ["Button Mode"] = ["CDefaultFilter", "CButtonMode", "CDasherButtons"],
         ["Direct Mode"] = ["CDefaultFilter"],
         ["Menu Mode"] = ["CDefaultFilter", "CButtonMode", "CDasherButtons"],
         ["One Button Mode"] = ["CDefaultFilter", "COneButtonFilter", "COneButtonDynamicFilter"],
+        ["One Button Dynamic Mode"] = ["CDefaultFilter", "COneButtonDynamicFilter"],
         ["Two Button Mode"] = ["CDefaultFilter", "CTwoButtonDynamicFilter"],
-        ["Two Push Mode"] = ["CDefaultFilter", "CTwoPushDynamicFilter"],
+        ["Two Button Dynamic Mode"] = ["CDefaultFilter", "CTwoButtonDynamicFilter"],
+        ["Two Push Dynamic Mode"] = ["CDefaultFilter", "CTwoPushDynamicFilter"],
         ["Smoothing Mode"] = ["CDefaultFilter", "CSmoothingFilter"],
-        ["Stylus Mode"] = ["CDefaultFilter", "CStylusFilter"],
-        ["Static Mode"] = ["CDefaultFilter", "CStaticFilter"],
-        ["Multi-Press Mode"] = ["CDefaultFilter", "CButtonMultiPress"],
+        ["Stylus Control"] = ["CDefaultFilter", "CStylusFilter"],
     };
 
     private List<ParameterDisplayInfo> FilterByActiveInputFilter(List<ParameterDisplayInfo> parameters)
