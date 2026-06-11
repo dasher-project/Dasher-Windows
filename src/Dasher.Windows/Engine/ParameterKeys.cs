@@ -8,4 +8,6 @@ public static class ParameterKeys
     public const int SP_INPUT_DEVICE = 103;
     public const int BP_AUTO_SPEEDCONTROL = 14;
     public const int BP_LM_ADAPTIVE = 15;
+    public const int BP_SPEAK_ALL_ON_STOP = 22;
+    public const int BP_SPEAK_WORDS = 23;
 }

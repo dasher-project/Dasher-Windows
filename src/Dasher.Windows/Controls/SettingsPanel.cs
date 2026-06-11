@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Dasher.Windows.Engine;
+using Dasher.Windows.Speech;
 
 namespace Dasher.Windows.Controls;
 
@@ -73,13 +74,14 @@ public class SettingsPanel : Control
 
     public List<string> GetCategoryNames()
     {
-        var names = new List<string>(_groups.Keys);
+        var names = new List<string>(_groups.Keys) { "Speech" };
         names.Sort((a, b) =>
         {
             var order = new Dictionary<string, int>
             {
                 ["Input"] = 0, ["Language"] = 1, ["Appearance"] = 2,
-                ["Speed"] = 3, ["Output"] = 4, ["Advanced"] = 5, ["Other"] = 6,
+                ["Speed"] = 3, ["Output"] = 4, ["Speech"] = 5,
+                ["Advanced"] = 6, ["Other"] = 7,
             };
             int oa = order.TryGetValue(a, out var va) ? va : 99;
             int ob = order.TryGetValue(b, out var vb) ? vb : 99;
@@ -140,6 +142,12 @@ public class SettingsPanel : Control
             var localeRow = BuildLocaleRow();
             if (localeRow != null)
                 _panel.Children.Add(localeRow);
+        }
+
+        if (category == "Speech")
+        {
+            BuildSpeechSettings();
+            return;
         }
 
         if (!_groups.TryGetValue(category, out var parameters)) return;
@@ -717,6 +725,380 @@ public class SettingsPanel : Control
         };
 
         return comboBox;
+    }
+
+    private void BuildSpeechSettings()
+    {
+        var svc = SpeechService.Instance;
+        var labelBrush = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75));
+        var valueBrush = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70));
+
+        var engineLabel = new TextBlock
+        {
+            Text = "TTS Engine",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = labelBrush,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+
+        var engineCombo = new ComboBox
+        {
+            MinWidth = 200,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            FontSize = 12,
+        };
+        foreach (var eng in SpeechService.EngineNames)
+            engineCombo.Items.Add(SpeechService.EngineDisplayName(eng));
+        engineCombo.SelectedIndex = Array.IndexOf(SpeechService.EngineNames, svc.SelectedEngine);
+        if (engineCombo.SelectedIndex < 0) engineCombo.SelectedIndex = 0;
+
+        var credentialsPanel = new StackPanel { Spacing = 6, Margin = new Thickness(0, 8, 0, 0) };
+
+        void RebuildCredentials()
+        {
+            credentialsPanel.Children.Clear();
+            var keys = SpeechService.RequiredCredentialKeys(svc.SelectedEngine);
+            if (keys.Length == 0)
+            {
+                credentialsPanel.Children.Add(new TextBlock
+                {
+                    Text = "No credentials required",
+                    FontSize = 11,
+                    Foreground = valueBrush,
+                });
+                return;
+            }
+
+            foreach (var key in keys)
+            {
+                var row = new DockPanel { Margin = new Thickness(0, 0, 0, 2) };
+                var lbl = new TextBlock
+                {
+                    Text = key,
+                    FontSize = 12,
+                    Foreground = labelBrush,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Width = 140,
+                };
+                DockPanel.SetDock(lbl, Dock.Left);
+                row.Children.Add(lbl);
+
+                var isSecret = key.IndexOf("key", StringComparison.OrdinalIgnoreCase) >= 0
+                    || key.IndexOf("secret", StringComparison.OrdinalIgnoreCase) >= 0
+                    || key.IndexOf("token", StringComparison.OrdinalIgnoreCase) >= 0
+                    || key.Equals("ApiKey", StringComparison.OrdinalIgnoreCase);
+
+                var textBox = new TextBox
+                {
+                    Text = svc.Credentials.GetValueOrDefault(key, ""),
+                    MinWidth = 200,
+                    FontSize = 12,
+                    PasswordChar = isSecret ? '•' : '\0',
+                };
+                textBox.LostFocus += (s, e) =>
+                {
+                    svc.Credentials[key] = textBox.Text ?? "";
+                    svc.InvalidateClient();
+                    svc.SaveSettings();
+                };
+                row.Children.Add(textBox);
+                credentialsPanel.Children.Add(row);
+            }
+        }
+
+        engineCombo.SelectionChanged += (s, e) =>
+        {
+            var idx = engineCombo.SelectedIndex;
+            if (idx >= 0 && idx < SpeechService.EngineNames.Length)
+            {
+                svc.SelectedEngine = SpeechService.EngineNames[idx];
+                svc.InvalidateClient();
+                svc.SaveSettings();
+                RebuildCredentials();
+            }
+        };
+
+        RebuildCredentials();
+
+        var engineRow = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
+        DockPanel.SetDock(engineLabel, Dock.Left);
+        engineRow.Children.Add(engineLabel);
+        engineRow.Children.Add(engineCombo);
+
+        _panel.Children.Add(engineRow);
+        _panel.Children.Add(credentialsPanel);
+
+        var sep = new Border
+        {
+            Height = 1,
+            Background = new SolidColorBrush(Color.FromRgb(0xDE, 0xE2, 0xE6)),
+            Margin = new Thickness(0, 12, 0, 8),
+        };
+        _panel.Children.Add(sep);
+
+        var voiceHeader = new StackPanel { Spacing = 6 };
+
+        var voiceBtnRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 8,
+        };
+
+        var loadVoicesBtn = new Button
+        {
+            Content = "Load Voices",
+            FontSize = 12,
+        };
+        voiceBtnRow.Children.Add(loadVoicesBtn);
+
+        var voiceCountLabel = new TextBlock
+        {
+            FontSize = 11,
+            Foreground = valueBrush,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        voiceBtnRow.Children.Add(voiceCountLabel);
+
+        var previewBtn = new Button
+        {
+            Content = "Preview",
+            FontSize = 12,
+        };
+        voiceBtnRow.Children.Add(previewBtn);
+
+        voiceHeader.Children.Add(voiceBtnRow);
+
+        var voiceCombo = new ComboBox
+        {
+            MinWidth = 250,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            FontSize = 12,
+        };
+        voiceHeader.Children.Add(voiceCombo);
+
+        var rateLabel = new TextBlock
+        {
+            Text = "Rate",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = labelBrush,
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+        voiceHeader.Children.Add(rateLabel);
+
+        var rateCombo = new ComboBox
+        {
+            MinWidth = 150,
+            FontSize = 12,
+            HorizontalAlignment = HorizontalAlignment.Left,
+        };
+        var rateNames = new[] { "Very Slow", "Slow", "Medium", "Fast", "Very Fast" };
+        var rateValues = Enum.GetValues<DotNetTtsWrapper.Models.SpeechRate>();
+        foreach (var r in rateNames)
+            rateCombo.Items.Add(r);
+        rateCombo.SelectedIndex = Array.IndexOf(rateValues, svc.SpeechRate);
+        if (rateCombo.SelectedIndex < 0) rateCombo.SelectedIndex = 2;
+        voiceHeader.Children.Add(rateCombo);
+
+        var pitchLabel = new TextBlock
+        {
+            Text = "Pitch",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = labelBrush,
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+        voiceHeader.Children.Add(pitchLabel);
+
+        var pitchCombo = new ComboBox
+        {
+            MinWidth = 150,
+            FontSize = 12,
+            HorizontalAlignment = HorizontalAlignment.Left,
+        };
+        var pitchNames = new[] { "Very Low", "Low", "Medium", "High", "Very High" };
+        var pitchValues = Enum.GetValues<DotNetTtsWrapper.Models.SpeechPitch>();
+        foreach (var p in pitchNames)
+            pitchCombo.Items.Add(p);
+        pitchCombo.SelectedIndex = Array.IndexOf(pitchValues, svc.SpeechPitch);
+        if (pitchCombo.SelectedIndex < 0) pitchCombo.SelectedIndex = 2;
+        voiceHeader.Children.Add(pitchCombo);
+
+        var volLabel = new TextBlock
+        {
+            Text = "Volume",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = labelBrush,
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+        voiceHeader.Children.Add(volLabel);
+
+        var volSlider = new Slider
+        {
+            Minimum = 0,
+            Maximum = 100,
+            Value = svc.SpeechVolume,
+            SmallChange = 5,
+            LargeChange = 10,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+        };
+        var volRow = new DockPanel();
+        var volValue = new TextBlock
+        {
+            Text = $"{svc.SpeechVolume}%",
+            FontSize = 11,
+            Foreground = valueBrush,
+            VerticalAlignment = VerticalAlignment.Center,
+            Width = 40,
+            TextAlignment = TextAlignment.Right,
+        };
+        DockPanel.SetDock(volValue, Dock.Right);
+        volRow.Children.Add(volValue);
+        volRow.Children.Add(volSlider);
+        voiceHeader.Children.Add(volRow);
+
+        _panel.Children.Add(voiceHeader);
+
+        loadVoicesBtn.Click += async (s, e) =>
+        {
+            loadVoicesBtn.IsEnabled = false;
+            voiceCountLabel.Text = "Loading...";
+            try
+            {
+                await svc.LoadVoicesAsync();
+                voiceCountLabel.Text = svc.AvailableVoices.Count > 0
+                    ? $"{svc.AvailableVoices.Count} voices"
+                    : "No voices found";
+                voiceCombo.Items.Clear();
+                voiceCombo.Items.Add("(Default)");
+                foreach (var v in svc.AvailableVoices)
+                    voiceCombo.Items.Add(v.Name);
+                if (!string.IsNullOrEmpty(svc.SelectedVoiceId))
+                {
+                    var idx = svc.AvailableVoices.FindIndex(v => v.Id == svc.SelectedVoiceId);
+                    voiceCombo.SelectedIndex = idx >= 0 ? idx + 1 : 0;
+                }
+                else voiceCombo.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                voiceCountLabel.Text = $"Error: {ex.Message}";
+            }
+            finally
+            {
+                loadVoicesBtn.IsEnabled = true;
+            }
+        };
+
+        voiceCombo.SelectionChanged += (s, e) =>
+        {
+            if (voiceCombo.SelectedIndex <= 0)
+                svc.SelectedVoiceId = null;
+            else if (voiceCombo.SelectedIndex - 1 < svc.AvailableVoices.Count)
+                svc.SelectedVoiceId = svc.AvailableVoices[voiceCombo.SelectedIndex - 1].Id;
+            svc.SaveSettings();
+        };
+
+        previewBtn.Click += (s, e) =>
+        {
+            if (svc.IsSpeaking)
+                svc.Stop();
+            else
+                _ = svc.SpeakAsync("Hello, this is a preview of the selected voice.");
+        };
+
+        rateCombo.SelectionChanged += (s, e) =>
+        {
+            if (rateCombo.SelectedIndex >= 0 && rateCombo.SelectedIndex < rateValues.Length)
+            {
+                svc.SpeechRate = rateValues[rateCombo.SelectedIndex];
+                svc.SaveSettings();
+            }
+        };
+
+        pitchCombo.SelectionChanged += (s, e) =>
+        {
+            if (pitchCombo.SelectedIndex >= 0 && pitchCombo.SelectedIndex < pitchValues.Length)
+            {
+                svc.SpeechPitch = pitchValues[pitchCombo.SelectedIndex];
+                svc.SaveSettings();
+            }
+        };
+
+        volSlider.ValueChanged += (s, e) =>
+        {
+            svc.SpeechVolume = (int)Math.Round(volSlider.Value);
+            volValue.Text = $"{svc.SpeechVolume}%";
+            svc.SaveSettings();
+        };
+
+        var sep2 = new Border
+        {
+            Height = 1,
+            Background = new SolidColorBrush(Color.FromRgb(0xDE, 0xE2, 0xE6)),
+            Margin = new Thickness(0, 12, 0, 8),
+        };
+        _panel.Children.Add(sep2);
+
+        var speakOnStopLabel = new TextBlock
+        {
+            Text = "Engine Speech Features",
+            FontSize = 13,
+            FontWeight = FontWeight.Bold,
+            Foreground = labelBrush,
+            Margin = new Thickness(0, 0, 0, 4),
+        };
+        _panel.Children.Add(speakOnStopLabel);
+
+        var speakOnStopRow = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
+        var speakOnStopLabel2 = new TextBlock
+        {
+            Text = "Speak on stop",
+            FontSize = 12,
+            Foreground = labelBrush,
+            VerticalAlignment = VerticalAlignment.Center,
+            Width = 180,
+        };
+        DockPanel.SetDock(speakOnStopLabel2, Dock.Left);
+        speakOnStopRow.Children.Add(speakOnStopLabel2);
+
+        var speakOnStopToggle = new ToggleSwitch
+        {
+            IsChecked = NativeBridge.dasher_get_bool_parameter(_handle, ParameterKeys.BP_SPEAK_ALL_ON_STOP) != 0,
+            HorizontalAlignment = HorizontalAlignment.Left,
+        };
+        speakOnStopToggle.IsCheckedChanged += (s, e) =>
+        {
+            NativeBridge.dasher_set_bool_parameter(_handle, ParameterKeys.BP_SPEAK_ALL_ON_STOP, speakOnStopToggle.IsChecked == true ? 1 : 0);
+        };
+        speakOnStopRow.Children.Add(speakOnStopToggle);
+        _panel.Children.Add(speakOnStopRow);
+
+        var speakWordsRow = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
+        var speakWordsLabel = new TextBlock
+        {
+            Text = "Speak words",
+            FontSize = 12,
+            Foreground = labelBrush,
+            VerticalAlignment = VerticalAlignment.Center,
+            Width = 180,
+        };
+        DockPanel.SetDock(speakWordsLabel, Dock.Left);
+        speakWordsRow.Children.Add(speakWordsLabel);
+
+        var speakWordsToggle = new ToggleSwitch
+        {
+            IsChecked = NativeBridge.dasher_get_bool_parameter(_handle, ParameterKeys.BP_SPEAK_WORDS) != 0,
+            HorizontalAlignment = HorizontalAlignment.Left,
+        };
+        speakWordsToggle.IsCheckedChanged += (s, e) =>
+        {
+            NativeBridge.dasher_set_bool_parameter(_handle, ParameterKeys.BP_SPEAK_WORDS, speakWordsToggle.IsChecked == true ? 1 : 0);
+        };
+        speakWordsRow.Children.Add(speakWordsToggle);
+        _panel.Children.Add(speakWordsRow);
     }
 
     protected override Size MeasureOverride(Size availableSize)

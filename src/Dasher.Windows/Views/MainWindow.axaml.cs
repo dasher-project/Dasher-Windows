@@ -13,6 +13,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Dasher.Windows.Controls;
 using Dasher.Windows.Engine;
+using Dasher.Windows.Speech;
 using Dasher.Windows.ViewModels;
 
 namespace Dasher.Windows.Views;
@@ -25,6 +26,7 @@ public partial class MainWindow : Window
     private Button[]? _prefsTabs;
     private Border? _prefsTabStrip;
     private Border? _prefsContentPanel;
+    private NativeBridge.SpeakCallback? _speakCallback;
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -88,6 +90,9 @@ public partial class MainWindow : Window
         _canvas.Initialize(coreDataDir, dataDir);
         _canvas.EngineMessage += OnEngineMessage;
         _vm.SetHandle(_canvas.GetHandle());
+
+        _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
+        NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
 
         var accessConfig = AccessConfiguration.Load();
         accessConfig.Apply(_vm.Handle);
@@ -505,12 +510,15 @@ public partial class MainWindow : Window
     private void OnQuickSpeak(object? sender, RoutedEventArgs e)
     {
         if (_vm == null || string.IsNullOrWhiteSpace(_vm.OutputText)) return;
-        try
-        {
-            dynamic synth = Activator.CreateInstance(Type.GetTypeFromProgID("SAPI.SpVoice")!)!;
-            synth.Speak(_vm.OutputText, 1 | 0);
-        }
-        catch { }
+        _ = SpeechService.Instance.SpeakAsync(_vm.OutputText);
+    }
+
+    private void OnEngineSpeak(IntPtr textPtr, int interrupt, IntPtr user_data)
+    {
+        if (textPtr == IntPtr.Zero) return;
+        var text = Marshal.PtrToStringUTF8(textPtr);
+        if (string.IsNullOrEmpty(text)) return;
+        _ = SpeechService.Instance.SpeakAsync(text, interrupt != 0);
     }
 
     [DllImport("user32.dll")] private static extern bool OpenClipboard(IntPtr hWndNewOwner);

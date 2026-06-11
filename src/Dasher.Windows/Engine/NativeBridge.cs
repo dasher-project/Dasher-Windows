@@ -201,6 +201,13 @@ public static class NativeBridge
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_set_message_callback(IntPtr ctx, MessageCallback callback, IntPtr user_data);
+
+    // Speech callback
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void SpeakCallback(IntPtr text, int interrupt, IntPtr user_data);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_set_speak_callback(IntPtr ctx, SpeakCallback callback, IntPtr user_data);
 }
 
 [StructLayout(LayoutKind.Sequential)]
