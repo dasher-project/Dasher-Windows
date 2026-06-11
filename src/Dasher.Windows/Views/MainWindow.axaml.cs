@@ -92,8 +92,6 @@ public partial class MainWindow : Window
         var accessConfig = AccessConfiguration.Load();
         accessConfig.Apply(_vm.Handle);
 
-        NativeBridge.dasher_set_string_parameter(_vm.Handle, ParameterKeys.SP_INPUT_FILTER, "Normal Control");
-
         _vm.ApplySpeed();
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
 
