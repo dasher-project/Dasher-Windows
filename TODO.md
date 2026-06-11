@@ -41,112 +41,58 @@ We are at `c74c210d`. Latest is `7b185cd6` — **31 commits behind**.
 
 ## High Priority
 
-### 1. `dasher_reset()` on New Button
-- Currently `OnNew` only clears the output text box
-- Should call `dasher_reset()` to also reset the language model state
+### 1. `dasher_reset()` on New Button ✅ DONE
+- Now calls `dasher_reset()` to reset model + output
 - Location: `MainWindow.axaml.cs` → `OnNew`
 
-### 2. Output Callback (`dasher_set_output_callback`)
-- Real-time output/delete events for Direct Mode (keyboard mode)
-- Event types: 0 = text output, 1 = text delete
-- Fires on the thread calling `dasher_frame()`
-- Needed for: keyboard mode text injection via `SendInput`
-- Apple uses this for Direct Mode where text goes into other apps
+### 2. Output Callback (`dasher_set_output_callback`) ✅ DONE
+- Registered in `DasherCanvas.Initialize()`
+- `OnOutputEvent` handles text insert/delete via `OutputText` property
+- Fires on `dasher_frame()` thread, marshals to UI thread
 
-### 3. Message Callback (`dasher_set_message_callback`)
-- Engine warnings/errors displayed as native UI (toast/banner)
-- Event types: 0 = informational (non-modal), 1 = warning (modal)
-- Apple shows a non-blocking `MessageBanner` that auto-dismisses after 5 seconds
-- We should show an Avalonia toast/notification
+### 3. Message Callback (`dasher_set_message_callback`) ✅ DONE
+- Registered in `DasherCanvas.Initialize()`
+- Fires `EngineMessage` event → MainWindow shows auto-dismissing dialog
+- 5-second auto-close for info messages
 
-### 4. LM-Aware Settings Filtering
-- Apple filters Language section params based on active language model via LMRegistry
-- PPM shows alpha/beta/max_order, Word shows word_alpha/max_order, Mixture shows all, CTW shows max_order only
-- `BP_LM_ADAPTIVE` toggle always visible regardless of model
-- Uses `dasher_get_language_model_param_count/key()` to get relevant params for active model
-- Our SettingsPanel currently shows all Language params unfiltered
+### 4. LM-Aware Settings Filtering ✅ DONE
+- `FilterByActiveLanguageModel()` in SettingsPanel uses LMRegistry API
+- Shows only params relevant to active language model
+- `BP_LM_ADAPTIVE` (key 15) always visible
 
 ---
 
 ## Medium Priority
 
-### 5. Access Settings Redesign (Input System Overhaul)
+### 5. Access Settings Redesign ✅ DONE (v1)
+- Replaced hardcoded input source dropdown with proper AccessMethod + SelectionMethod pickers
+- Compatibility matrix matching Apple's design (see `docs/ACCESS_SETTINGS_REDESIGN.md`)
+- `AccessMethod.cs` — Windows methods: Pointer, Touch, Eye Gaze, Joystick, Switches Only
+- `SelectionMethod.cs` — All 9 selection methods with `FilterName` → `SP_INPUT_FILTER` mapping
+- `AccessConfiguration.cs` — Persisted to `%APPDATA%\Dasher\access.json`, calls `dasher_set_string_parameter`
+- Updated `FilterToSubgroup` map with all DasherCore filter names (Press Mode, One Button Dynamic Mode, etc.)
 
-**Current approach**: We have a hardcoded `FilterToSubgroup` dictionary that maps input filter names to C++ class subgroup names. This is a v1 shortcut.
+**Still TODO:**
+- Switch capture UI (key capture per switch for switch-based methods)
+- SwitchProfile model (up to 4 switches, scan rate)
+- Activate eye gaze / joystick services based on selected AccessMethod
 
-**Apple's approach**: Split input into two orthogonal concerns:
-- **AccessMethod** (steering): Pointer, Touch, Eye Gaze, Tilt, Joystick, Hand Tracking, Switches Only
-- **SelectionMethod** (confirmation): Continuous, Press to Move, Click to Zoom, Dwell, 1 Switch, 2 Switches, 2 Push, Scanning, Direct Boxes
+### 6. Game Mode UI ✅ DONE
+- Game mode toggle button in toolbar (dice icon)
+- Target text bar in sidebar with correct/wrong/remaining display
+- Canvas text suppression via `dasher_game_set_canvas_text(0)`
+- State synced each frame via `SyncGameModeState()`
+- Uses `dasher_game_get_target/correct/wrong/length` APIs
 
-These are separate single-choice pickers with a compatibility matrix. See `docs/ACCESS_SETTINGS_REDESIGN.md` and `docs/INPUT_SYSTEM.md` in Dasher-Apple.
+### 7. Enum Dropdowns for Long Params ✅ VERIFIED
+- `BuildEnum` correctly handles long params with enum values
+- `BuildStringDropdown` handles string params with permitted values
+- Apple's fix was about ensuring `uiType=Enum` long params render as dropdowns — our code already does this
 
-**Windows-specific AccessMethods** (from Apple's matrix):
-| Method | Valid Selections |
-|--------|-----------------|
-| Pointer (mouse/trackpad) | All selections |
-| Eye Gaze | Continuous, Dwell, 1 Switch, 2 Switches, Scanning, Direct Boxes |
-| Joystick/Gamepad | Continuous, Press to Move, Click to Zoom, 1 Switch, 2 Switches, Scanning, Direct Boxes |
-| Switches Only | 1 Switch, 2 Switches, 2 Push, Scanning, Direct Boxes |
-
-**SelectionMethod.filterName** maps to `SP_INPUT_FILTER` string value:
-| Selection | SP_INPUT_FILTER |
-|-----------|----------------|
-| Continuous | Normal Control |
-| Press to Move | Press Mode |
-| Click to Zoom | Click Mode |
-| Dwell | Normal Control (+ BP_STOP_OUTSIDE) |
-| 1 Switch | One Button Dynamic Mode |
-| 2 Switches | Two Button Dynamic Mode |
-| 2 Push | Two Push Dynamic Mode |
-| Scanning | Menu Mode |
-| Direct Boxes | Direct Mode |
-
-**Files to create** (C# equivalents):
-1. `AccessMethod.cs` — enum with displayName, subtitle, validPlatforms, hasContinuousInput
-2. `SelectionMethod.cs` — enum with displayName, filterName, isSwitchBased, compatibility matrix
-3. `SwitchProfile.cs` — SwitchSlot + SwitchProfile models
-4. `AccessConfiguration.cs` — persisted config (method + selection + switchProfile)
-5. `AccessSettingsView.axaml` — Steering picker → Selection picker → Switch setup → Method settings
-6. `SwitchCaptureView.axaml` — "Press key or switch now..." key capture UI
-
-**Files to modify**:
-1. `SettingsPanel.cs` — replace Input Source dropdown with AccessSettingsView
-2. `MainWindow.axaml.cs` — activate input services based on AccessConfiguration
-
-**Subgroup filtering note**: Apple's `FilterToSubgroup` mapping is used to show/hide advanced Input params based on the active filter. Each `SelectionMethod.filterName` maps to a set of C++ subgroup class names. Our current dictionary covers this but needs updating:
-- `"Normal Control"` → `["CDefaultFilter", "CDynamicFilter", "CDynamicButtons"]`
-- `"Click Mode"` → `["CDefaultFilter", "CClickFilter"]`
-- `"Press Mode"` → `["CDefaultFilter", "CPressFilter"]` (missing from our map)
-- `"One Button Dynamic Mode"` → `["CDefaultFilter", "COneButtonDynamicFilter"]` (different key name)
-- etc.
-
-When we build the Access Settings UI, the `SelectionMethod.filterName` → `FilterToSubgroup` lookup replaces the raw SP_INPUT_FILTER string matching.
-
-### 6. Game Mode UI
-- Game mode toggle in toolbar
-- Target text bar with correct (green) / wrong (red) / remaining (gray) text in output pane
-- Game text file picker in settings (Game Mode category)
-- Canvas text suppression (`dasher_game_set_canvas_text(0)`) since we render native UI
-- Apple implementation: `bc9dfde` (iOS), `f22fd62` (macOS)
-
-### 7. Enum Dropdowns for Long Params
-- Apple fixed long params with `uiType=dropdown` (e.g. Language Model, Node Shape) to render as Picker dropdowns
-- Our `BuildEnum` should handle this but needs verification
-- Also: string params with `uiType=dropdown` should use `dasher_get_parameter_string_values()` for the dropdown list
-
-### 8. Auto-Speed Toggle Wiring
-- We have an `AutoSpeed` checkbox in bottom bar bound to ViewModel but not connected to `BP_AUTO_SPEEDCONTROL`
-- Need to wire the checkbox to `dasher_set_bool_parameter`
-
-### 9. Bottom Bar Cleanup
-- Apple removed palette picker and font size stepper from bottom bars (moved to settings only)
-- We should consider: keep palette in bottom bar (it's useful for quick switching) or move to settings only?
-- Speed control and auto-speed are the main bottom bar items per Apple
-
-### 10. Training Data Update
-- DasherCore replaced char-frequency training with real AAC conversational text
-- 34 languages, ~30k utterances each
-- This comes with the submodule update automatically
+### 8. Auto-Speed Toggle Wiring ✅ DONE
+- `AutoSpeed` property wired to `BP_AUTO_SPEEDCONTROL` (key 14)
+- Initialized from engine on startup
+- Uses CommunityToolkit.Mvvm `OnAutoSpeedChanged` partial method
 
 ---
 
