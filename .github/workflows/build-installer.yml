@@ -53,6 +53,7 @@ jobs:
         working-directory: installer
         run: |
           wix build dasher.wxs -o ../publish/Dasher-Windows.msi `
+            -ext WixToolset.Util.wixext `
             -d AppSource="../publish/app" `
             -d Version="0.1.0"
 

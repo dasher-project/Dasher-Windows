@@ -18,6 +18,8 @@
 
     <MediaTemplate EmbedCab="yes" />
 
+    <Icon Id="DasherIcon" SourceFile="$(var.AppSource)\Dasher.Windows.exe" />
+
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="INSTALLFOLDER" Name="Dasher">
         <Directory Id="DataFolder" Name="Data" />
@@ -30,11 +32,9 @@
 
     <StandardDirectory Id="DesktopFolder" />
 
-    <DirectoryRef Id="TARGETDIR">
-      <Directory Id="AppDataFolder">
-        <Directory Id="DasherAppData" Name="Dasher" />
-      </Directory>
-    </DirectoryRef>
+    <StandardDirectory Id="AppDataFolder">
+      <Directory Id="DasherAppData" Name="Dasher" />
+    </StandardDirectory>
 
     <Feature Id="MainFeature" Title="Dasher" Level="1">
       <ComponentGroupRef Id="AppFiles" />
@@ -60,7 +60,8 @@
 
   <Fragment>
     <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
-      <Files Include="$(var.AppSource)\**\*" Exclude="$(var.AppSource)\Data\**\*">
+      <Files Include="$(var.AppSource)\**\*">
+        <Exclude Files="$(var.AppSource)\Data\**\*" />
         <Exclude Files="$(var.AppSource)\*.pdb" />
         <Exclude Files="$(var.AppSource)\*.xml" />
       </Files>
@@ -100,7 +101,7 @@
 
   <Fragment>
     <DirectoryRef Id="DasherAppData">
-      <Component Id="AppDataFolderComponent" Guid="*">
+      <Component Id="AppDataFolderComponent" Guid="7A3C5E8B-2D4F-4A1B-9C6E-8F0A1B2C3D4E">
         <CreateFolder />
       </Component>
     </DirectoryRef>
@@ -124,6 +125,4 @@
       </RegistryKey>
     </Component>
   </Fragment>
-
-  <Icon Id="DasherIcon" SourceFile="$(var.AppSource)\Dasher.Windows.exe" />
 </Wix>
