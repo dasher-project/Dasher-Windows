@@ -27,13 +27,36 @@
     </StandardDirectory>
 
     <StandardDirectory Id="ProgramMenuFolder">
-      <Directory Id="AppStartMenuFolder" Name="Dasher" />
+      <Directory Id="AppStartMenuFolder" Name="Dasher">
+        <Component Id="StartMenuShortcut" Guid="*">
+          <Shortcut Id="StartMenuShortcutEntry"
+                    Name="Dasher"
+                    Description="Dasher - Zooming Predictive Text"
+                    Target="[INSTALLFOLDER]Dasher.Windows.exe"
+                    WorkingDirectory="INSTALLFOLDER" />
+          <RemoveFolder Id="RemoveStartMenuFolder" On="uninstall" />
+          <RegistryValue Root="HKCU" Key="SOFTWARE\Dasher\StartMenu" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+      </Directory>
     </StandardDirectory>
 
-    <StandardDirectory Id="DesktopFolder" />
+    <StandardDirectory Id="DesktopFolder">
+      <Component Id="DesktopShortcut" Guid="*">
+        <Shortcut Id="DesktopShortcutEntry"
+                  Name="Dasher"
+                  Description="Dasher - Zooming Predictive Text"
+                  Target="[INSTALLFOLDER]Dasher.Windows.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="SOFTWARE\Dasher\Desktop" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
 
     <StandardDirectory Id="AppDataFolder">
-      <Directory Id="DasherAppData" Name="Dasher" />
+      <Directory Id="DasherAppData" Name="Dasher">
+        <Component Id="AppDataFolderComponent" Guid="7A3C5E8B-2D4F-4A1B-9C6E-8F0A1B2C3D4E">
+          <CreateFolder />
+        </Component>
+      </Directory>
     </StandardDirectory>
 
     <Feature Id="MainFeature" Title="Dasher" Level="1">
@@ -48,12 +71,6 @@
     <InstallExecuteSequence>
       <RemoveExistingProducts Before="InstallInitialize" />
     </InstallExecuteSequence>
-
-    <UI>
-      <UIRef Id="WixUI_InstallDir" />
-    </UI>
-
-    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
     <util:CloseApplication CloseMessage="yes" Target="Dasher.Windows.exe" />
   </Package>
@@ -72,39 +89,6 @@
     <ComponentGroup Id="DataFiles" Directory="DataFolder">
       <Files Include="$(var.AppSource)\Data\**\*" />
     </ComponentGroup>
-  </Fragment>
-
-  <Fragment>
-    <DirectoryRef Id="AppStartMenuFolder">
-      <Component Id="StartMenuShortcut" Guid="*">
-        <Shortcut Id="StartMenuShortcutEntry"
-                  Name="Dasher"
-                  Description="Dasher - Zooming Predictive Text"
-                  Target="[INSTALLFOLDER]Dasher.Windows.exe"
-                  WorkingDirectory="INSTALLFOLDER" />
-        <RemoveFolder Id="RemoveStartMenuFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="SOFTWARE\Dasher\StartMenu" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-      </Component>
-    </DirectoryRef>
-
-    <DirectoryRef Id="DesktopFolder">
-      <Component Id="DesktopShortcut" Guid="*">
-        <Shortcut Id="DesktopShortcutEntry"
-                  Name="Dasher"
-                  Description="Dasher - Zooming Predictive Text"
-                  Target="[INSTALLFOLDER]Dasher.Windows.exe"
-                  WorkingDirectory="INSTALLFOLDER" />
-        <RegistryValue Root="HKCU" Key="SOFTWARE\Dasher\Desktop" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-      </Component>
-    </DirectoryRef>
-  </Fragment>
-
-  <Fragment>
-    <DirectoryRef Id="DasherAppData">
-      <Component Id="AppDataFolderComponent" Guid="7A3C5E8B-2D4F-4A1B-9C6E-8F0A1B2C3D4E">
-        <CreateFolder />
-      </Component>
-    </DirectoryRef>
   </Fragment>
 
   <Fragment>
