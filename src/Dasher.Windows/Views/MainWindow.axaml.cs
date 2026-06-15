@@ -27,6 +27,8 @@ public partial class MainWindow : Window
     private Border? _prefsTabStrip;
     private Border? _prefsContentPanel;
     private NativeBridge.SpeakCallback? _speakCallback;
+    private NativeBridge.ParameterCallback? _parameterCallback;
+    private int _bitrateKey;
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -93,6 +95,10 @@ public partial class MainWindow : Window
 
         _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
         NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
+
+        _bitrateKey = NativeBridge.dasher_find_parameter_key("LP_MAX_BITRATE");
+        _parameterCallback = new NativeBridge.ParameterCallback(OnParameterChanged);
+        NativeBridge.dasher_set_parameter_callback(_vm.Handle, _parameterCallback, IntPtr.Zero);
 
         var accessConfig = AccessConfiguration.Load();
         accessConfig.Apply(_vm.Handle);
@@ -519,6 +525,16 @@ public partial class MainWindow : Window
         var text = Marshal.PtrToStringUTF8(textPtr);
         if (string.IsNullOrEmpty(text)) return;
         _ = SpeechService.Instance.SpeakAsync(text, interrupt != 0);
+    }
+
+    private void OnParameterChanged(int parameterKey, IntPtr userData)
+    {
+        if (parameterKey != _bitrateKey) return;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+            _vm.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
+        });
     }
 
     [DllImport("user32.dll")] private static extern bool OpenClipboard(IntPtr hWndNewOwner);
