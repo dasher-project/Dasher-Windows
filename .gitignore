@@ -39,3 +39,6 @@ desktop.ini
 build_log.txt
 build_output.log
 test.txt
+
+## Publish / installer output
+publish/
