@@ -1,5 +1,4 @@
-<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 
   <?define UpgradeCode = "E4B7A8F0-1C2D-4E6F-9A3B-5D8C7E2F1A0B" ?>
   <?define Manufacturer = "The Dasher Project" ?>
@@ -71,8 +70,6 @@
     <InstallExecuteSequence>
       <RemoveExistingProducts Before="InstallInitialize" />
     </InstallExecuteSequence>
-
-    <util:CloseApplication CloseMessage="yes" Target="Dasher.Windows.exe" />
   </Package>
 
   <Fragment>
