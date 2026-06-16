@@ -270,8 +270,10 @@ public partial class MainWindow : Window
             {
                 // Canvas gets ~78%, pane gets ~22% via star ratio
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(7, GridUnitType.Star)));
-                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1)));
+                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(5)));
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(2, GridUnitType.Star)));
+
+                MessageSplitter.ResizeDirection = GridResizeDirection.Columns;
 
                 if (paneFirst)
                 {
@@ -290,8 +292,10 @@ public partial class MainWindow : Window
             {
                 // Canvas gets ~75%, pane gets ~25% via star ratio
                 MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(3, GridUnitType.Star)));
-                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(1)));
+                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(5)));
                 MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
+
+                MessageSplitter.ResizeDirection = GridResizeDirection.Rows;
 
                 if (paneFirst) // Top
                 {
