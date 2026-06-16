@@ -127,6 +127,11 @@ public partial class MainWindow : Window
         }
 
         ApplyOutputFontSettings();
+
+        var paneSettings = PaneSettings.Load();
+        if (Enum.TryParse<PanePosition>(paneSettings.PanePosition, out var savedPos))
+            _vm.PanePosition = savedPos;
+        _vm.IsKeyboardMode = _vm.PanePosition == PanePosition.Keyboard;
         ApplyPaneLayout();
 
         _vm.PropertyChanged += (s, args) =>
@@ -216,6 +221,7 @@ public partial class MainWindow : Window
         _vm.PanePosition = position;
         _vm.IsKeyboardMode = position == PanePosition.Keyboard;
         ApplyPaneLayout();
+        new PaneSettings { PanePosition = position.ToString() }.Save();
     }
 
     private void ApplyPaneLayout()
