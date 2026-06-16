@@ -22,20 +22,19 @@ jobs:
         shell: pwsh
         run: |
           if ($env:GITHUB_REF -match '^refs/tags/v(.+)') {
-            $ver = $Matches[1]
-            # Ensure 4-part version for MSI (x.y.z.w)
-            $parts = ($ver -split '\.').Count
-            if ($parts -lt 4) { $ver = "$ver.0" * (4 - $parts + 1) }
-            # Actually just pad to 4 parts properly
-            $vp = $ver -split '\.'
+            $tagVer = $Matches[1]
+            # Strip pre-release suffix (e.g. "0.1.0-preview3" -> "0.1.0")
+            $baseVer = ($tagVer -split '-')[0]
+            # Pad to 4 parts for MSI/MSIX (x.y.z.w)
+            $vp = $baseVer -split '\.'
             while ($vp.Count -lt 4) { $vp += '0' }
-            $ver = $vp -join '.'
-            Write-Host "MSI version: $ver"
-            echo "msi=$ver" >> $env:GITHUB_OUTPUT
-            echo "msix=$($Matches[1])" >> $env:GITHUB_OUTPUT
+            $quad = $vp -join '.'
+            Write-Host "Version: $quad (from tag $tagVer)"
+            echo "msi=$quad" >> $env:GITHUB_OUTPUT
+            echo "msix=$quad" >> $env:GITHUB_OUTPUT
           } else {
             echo "msi=0.0.1.0" >> $env:GITHUB_OUTPUT
-            echo "msix=0.0.1" >> $env:GITHUB_OUTPUT
+            echo "msix=0.0.1.0" >> $env:GITHUB_OUTPUT
           }
       - name: Checkout Dasher-Windows
         uses: actions/checkout@v4
@@ -85,7 +84,7 @@ jobs:
         run: |
           pwsh -ExecutionPolicy Bypass -File installer/build-msix.ps1 `
             -AppSource "$(pwd)/publish/app" `
-            -Version "${{ steps.version.outputs.msix }}.0" `
+            -Version "${{ steps.version.outputs.msix }}" `
             -OutputDir "$(pwd)/publish"
 
       # ── Artifacts (every build) ──────────────────────────────────────────────
