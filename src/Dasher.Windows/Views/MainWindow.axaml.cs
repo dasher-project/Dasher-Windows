@@ -122,10 +122,12 @@ public partial class MainWindow : Window
             settingsPanel.InputSourceChanged += OnInputSourceChanged;
             settingsPanel.JoystickRequested += OnJoystickRequested;
             settingsPanel.OutputFontChanged += OnOutputFontChanged;
+            settingsPanel.KeyboardOpacityChanged += OnKeyboardOpacityChanged;
             BuildPrefsTabs(settingsPanel);
         }
 
         ApplyOutputFontSettings();
+        ApplyPaneLayout();
 
         _vm.PropertyChanged += (s, args) =>
         {
@@ -196,25 +198,122 @@ public partial class MainWindow : Window
         SendInput(2, inputs, Marshal.SizeOf<INPUT>());
     }
 
-    private void OnModeRightSide(object? sender, RoutedEventArgs e)
-    {
-        if (_vm == null) return;
-        _vm.IsKeyboardMode = false;
-        ApplyMode();
-    }
-
-    private void OnModeKeyboard(object? sender, RoutedEventArgs e)
-    {
-        if (_vm == null) return;
-        _vm.IsKeyboardMode = true;
-        ApplyMode();
-    }
+    private void OnModeRightSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Right);
+    private void OnModeLeftSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Left);
+    private void OnModeBottom(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Bottom);
+    private void OnModeTop(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Top);
+    private void OnModeKeyboard(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Keyboard);
 
     private void OnToggleMode(object? sender, RoutedEventArgs e)
     {
         if (_vm == null) return;
-        _vm.IsKeyboardMode = !_vm.IsKeyboardMode;
-        ApplyMode();
+        SetPanePosition(_vm.IsKeyboardMode ? PanePosition.Right : PanePosition.Keyboard);
+    }
+
+    private void SetPanePosition(PanePosition position)
+    {
+        if (_vm == null) return;
+        _vm.PanePosition = position;
+        _vm.IsKeyboardMode = position == PanePosition.Keyboard;
+        ApplyPaneLayout();
+    }
+
+    private void ApplyPaneLayout()
+    {
+        if (_vm == null) return;
+
+        var position = _vm.PanePosition;
+        var isKeyboard = position == PanePosition.Keyboard;
+
+        var txtKeyboardLabel = this.FindControl<TextBlock>("TxtKeyboardLabel");
+
+        // Remove old children and defs
+        MainGrid.Children.Clear();
+        MainGrid.ColumnDefinitions.Clear();
+        MainGrid.RowDefinitions.Clear();
+
+        if (isKeyboard)
+        {
+            // Keyboard mode: canvas only, no message pane
+            MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
+            MainGrid.Children.Add(DasherCanvas);
+            Grid.SetColumn(DasherCanvas, 0);
+
+            Topmost = true;
+            this.Opacity = _vm.KeyboardModeOpacity;
+            TxtModeLabel.Text = "Keyboard";
+            BtnMode.Classes.Add("accent");
+            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Exit";
+            BtnKeyboard.Classes.Add("accent");
+        }
+        else
+        {
+            Topmost = false;
+            this.Opacity = 1.0;
+
+            TxtModeLabel.Text = position switch
+            {
+                PanePosition.Right => "Right side",
+                PanePosition.Left => "Left side",
+                PanePosition.Bottom => "Bottom",
+                PanePosition.Top => "Top",
+                _ => "Right side",
+            };
+            BtnMode.Classes.Remove("accent");
+            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Keyboard";
+            BtnKeyboard.Classes.Remove("accent");
+
+            bool horizontal = position == PanePosition.Right || position == PanePosition.Left;
+            bool paneFirst = position == PanePosition.Left || position == PanePosition.Top;
+
+            if (horizontal)
+            {
+                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
+                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1)));
+                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(320)));
+
+                if (paneFirst)
+                {
+                    Grid.SetColumn(MessagePane, 0);
+                    Grid.SetColumn(MessageSplitter, 1);
+                    Grid.SetColumn(DasherCanvas, 2);
+                }
+                else
+                {
+                    Grid.SetColumn(DasherCanvas, 0);
+                    Grid.SetColumn(MessageSplitter, 1);
+                    Grid.SetColumn(MessagePane, 2);
+                }
+            }
+            else
+            {
+                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
+                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(1)));
+                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(200)));
+
+                if (paneFirst) // Top
+                {
+                    Grid.SetRow(MessagePane, 0);
+                    Grid.SetRow(MessageSplitter, 1);
+                    Grid.SetRow(DasherCanvas, 2);
+                }
+                else // Bottom
+                {
+                    Grid.SetRow(DasherCanvas, 0);
+                    Grid.SetRow(MessageSplitter, 1);
+                    Grid.SetRow(MessagePane, 2);
+                }
+            }
+
+            MainGrid.Children.Add(DasherCanvas);
+            MainGrid.Children.Add(MessageSplitter);
+            MainGrid.Children.Add(MessagePane);
+
+            MessagePane.IsVisible = true;
+            MessageSplitter.IsVisible = true;
+        }
+
+        _previousOutput = _vm.OutputText;
     }
 
     private async void OnEngineMessage(object? sender, EngineMessageEventArgs e)
@@ -564,6 +663,17 @@ public partial class MainWindow : Window
     {
         var settings = OutputTextSettings.Load();
         OnOutputFontChanged(settings.FontFamily, settings.FontSize);
+        _vm.KeyboardModeOpacity = settings.KeyboardOpacity;
+    }
+
+    private void OnKeyboardOpacityChanged(double opacity)
+    {
+        if (_vm != null)
+        {
+            _vm.KeyboardModeOpacity = opacity;
+            if (_vm.IsKeyboardMode)
+                this.Opacity = opacity;
+        }
     }
 
     private bool _gameModeActive;

@@ -42,6 +42,12 @@ public partial class MainWindowViewModel : ObservableObject
     private bool _isKeyboardMode;
 
     [ObservableProperty]
+    private PanePosition _panePosition = PanePosition.Right;
+
+    [ObservableProperty]
+    private double _keyboardModeOpacity = 0.85;
+
+    [ObservableProperty]
     private bool _isPrefsVisible;
 
     [ObservableProperty]
@@ -140,4 +146,13 @@ public class PaletteInfo
     public int Color1 { get; set; }
     public int Color2 { get; set; }
     public int Color3 { get; set; }
+}
+
+public enum PanePosition
+{
+    Right,
+    Left,
+    Bottom,
+    Top,
+    Keyboard,
 }

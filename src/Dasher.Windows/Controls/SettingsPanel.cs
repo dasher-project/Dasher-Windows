@@ -155,6 +155,10 @@ public class SettingsPanel : Control
             var outputFontRow = BuildOutputFontRow();
             if (outputFontRow != null)
                 _panel.Children.Add(outputFontRow);
+
+            var transparencyRow = BuildKeyboardTransparencyRow();
+            if (transparencyRow != null)
+                _panel.Children.Add(transparencyRow);
         }
 
         if (!_groups.TryGetValue(category, out var parameters)) return;
@@ -212,6 +216,7 @@ public class SettingsPanel : Control
     public event EventHandler<(EyeGazeIntegration.TrackerType trackerType, int udpPort)>? InputSourceChanged;
     public event EventHandler? JoystickRequested;
     public event Action<string, int>? OutputFontChanged;
+    public event Action<double>? KeyboardOpacityChanged;
 
     private static readonly string[] OutputFontPresets =
     [
@@ -308,6 +313,69 @@ public class SettingsPanel : Control
                 OutputFontChanged?.Invoke(settings.FontFamily, fontSize);
             }
         };
+
+        return panel;
+    }
+
+    private Control? BuildKeyboardTransparencyRow()
+    {
+        var settings = OutputTextSettings.Load();
+        var labelBrush = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75));
+
+        var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 4, 0, 8) };
+
+        var label = new TextBlock
+        {
+            Text = "Keyboard Mode Opacity",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = labelBrush,
+        };
+        panel.Children.Add(label);
+
+        var sliderRow = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+
+        var slider = new Slider
+        {
+            Minimum = 0.2,
+            Maximum = 1.0,
+            Value = settings.KeyboardOpacity,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            MinWidth = 200,
+        };
+
+        var valueLabel = new TextBlock
+        {
+            Text = $"{(int)(settings.KeyboardOpacity * 100)}%",
+            FontSize = 12,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+            VerticalAlignment = VerticalAlignment.Center,
+            MinWidth = 40,
+        };
+
+        slider.PropertyChanged += (s, e) =>
+        {
+            if (e.Property == Slider.ValueProperty)
+            {
+                var pct = (int)(slider.Value * 100);
+                valueLabel.Text = $"{pct}%";
+                settings.KeyboardOpacity = slider.Value;
+                settings.Save();
+                KeyboardOpacityChanged?.Invoke(slider.Value);
+            }
+        };
+
+        sliderRow.Children.Add(slider);
+        sliderRow.Children.Add(valueLabel);
+        panel.Children.Add(sliderRow);
+
+        var help = new TextBlock
+        {
+            Text = "Window transparency when in Keyboard/Direct mode",
+            FontSize = 11,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
+        };
+        panel.Children.Add(help);
 
         return panel;
     }
@@ -572,20 +640,20 @@ public class SettingsPanel : Control
 
     private static readonly Dictionary<string, HashSet<string>> FilterToSubgroup = new()
     {
-        ["Normal Control"] = ["CDefaultFilter", "CDynamicFilter", "CDynamicButtons"],
-        ["Press Mode"] = ["CDefaultFilter", "CPressFilter"],
-        ["Click Mode"] = ["CDefaultFilter", "CClickFilter"],
-        ["Compass Mode"] = ["CDefaultFilter", "CCompassMode"],
-        ["Button Mode"] = ["CDefaultFilter", "CButtonMode", "CDasherButtons"],
-        ["Direct Mode"] = ["CDefaultFilter"],
-        ["Menu Mode"] = ["CDefaultFilter", "CButtonMode", "CDasherButtons"],
-        ["One Button Mode"] = ["CDefaultFilter", "COneButtonFilter", "COneButtonDynamicFilter"],
-        ["One Button Dynamic Mode"] = ["CDefaultFilter", "COneButtonDynamicFilter"],
-        ["Two Button Mode"] = ["CDefaultFilter", "CTwoButtonDynamicFilter"],
-        ["Two Button Dynamic Mode"] = ["CDefaultFilter", "CTwoButtonDynamicFilter"],
-        ["Two Push Dynamic Mode"] = ["CDefaultFilter", "CTwoPushDynamicFilter"],
-        ["Smoothing Mode"] = ["CDefaultFilter", "CSmoothingFilter"],
-        ["Stylus Control"] = ["CDefaultFilter", "CStylusFilter"],
+        ["Normal Control"] = ["CDefaultFilter", "CDynamicFilter", "CDynamicButtons", "Control"],
+        ["Press Mode"] = ["CDefaultFilter", "CPressFilter", "Control"],
+        ["Click Mode"] = ["CDefaultFilter", "CClickFilter", "Control"],
+        ["Compass Mode"] = ["CDefaultFilter", "CCompassMode", "Control"],
+        ["Button Mode"] = ["CDefaultFilter", "CButtonMode", "CDasherButtons", "Control"],
+        ["Direct Mode"] = ["CDefaultFilter", "Control"],
+        ["Menu Mode"] = ["CDefaultFilter", "CButtonMode", "CDasherButtons", "Control"],
+        ["One Button Mode"] = ["CDefaultFilter", "COneButtonFilter", "COneButtonDynamicFilter", "Control"],
+        ["One Button Dynamic Mode"] = ["CDefaultFilter", "COneButtonDynamicFilter", "Control"],
+        ["Two Button Mode"] = ["CDefaultFilter", "CTwoButtonDynamicFilter", "Control"],
+        ["Two Button Dynamic Mode"] = ["CDefaultFilter", "CTwoButtonDynamicFilter", "Control"],
+        ["Two Push Dynamic Mode"] = ["CDefaultFilter", "CTwoPushDynamicFilter", "Control"],
+        ["Smoothing Mode"] = ["CDefaultFilter", "CSmoothingFilter", "Control"],
+        ["Stylus Control"] = ["CDefaultFilter", "CStylusFilter", "Control"],
     };
 
     private List<ParameterDisplayInfo> FilterByActiveInputFilter(List<ParameterDisplayInfo> parameters)
