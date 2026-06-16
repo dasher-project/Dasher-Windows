@@ -774,20 +774,20 @@ public partial class MainWindow : Window
     {
         if (!Directory.Exists(sourceDir)) return;
 
+        Directory.CreateDirectory(targetDir);
+
+        // Copy files in this directory
+        foreach (var file in Directory.GetFiles(sourceDir, "*.*", SearchOption.TopDirectoryOnly))
+        {
+            var targetFile = Path.Combine(targetDir, Path.GetFileName(file));
+            File.Copy(file, targetFile, true);
+        }
+
+        // Recursively copy subdirectories
         foreach (var dir in Directory.GetDirectories(sourceDir, "*", SearchOption.TopDirectoryOnly))
         {
             var dirName = Path.GetFileName(dir);
-            var targetSubDir = Path.Combine(targetDir, dirName);
-            Directory.CreateDirectory(targetSubDir);
-
-            foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.TopDirectoryOnly))
-            {
-                var targetFile = Path.Combine(targetSubDir, Path.GetFileName(file));
-                if (!File.Exists(targetFile))
-                {
-                    File.Copy(file, targetFile, false);
-                }
-            }
+            CopyDataIfNeeded(dir, Path.Combine(targetDir, dirName));
         }
     }
 
