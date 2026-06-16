@@ -209,7 +209,7 @@ public class SettingsPanel : Control
     }
 
     public event EventHandler? BackRequested;
-    public event EventHandler<EyeGazeIntegration.TrackerType>? InputSourceChanged;
+    public event EventHandler<(EyeGazeIntegration.TrackerType trackerType, int udpPort)>? InputSourceChanged;
     public event EventHandler? JoystickRequested;
     public event Action<string, int>? OutputFontChanged;
 
@@ -378,6 +378,66 @@ public class SettingsPanel : Control
             Margin = new Thickness(0, 2, 0, 0),
         };
 
+        // ── Eye tracker sub-picker (visible only when EyeGaze is selected) ──────────
+        var trackerLabel = new TextBlock
+        {
+            Text = "Eye Tracker Device",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+
+        var trackerCombo = new ComboBox
+        {
+            MinWidth = 250,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            FontSize = 12,
+        };
+        trackerCombo.Items.Add("Windows Eye Tracker (native)");
+        trackerCombo.Items.Add("UDP Gaze Tracker (network)");
+        trackerCombo.SelectedIndex = config.EyeTrackerType == "UdpGaze" ? 1 : 0;
+
+        var portPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
+        var portLabel = new TextBlock
+        {
+            Text = "UDP Port",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        var portBox = new NumericUpDown
+        {
+            Value = config.UdpPort,
+            Minimum = 1,
+            Maximum = 65535,
+            Width = 100,
+            FontSize = 12,
+        };
+        portPanel.Children.Add(portLabel);
+        portPanel.Children.Add(portBox);
+
+        var trackerHelp = new TextBlock
+        {
+            FontSize = 11,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
+            Text = "UDP tracker listens for STREAM_DATA or GazePoint messages",
+            Margin = new Thickness(0, 2, 0, 0),
+        };
+
+        void UpdateTrackerVisibility()
+        {
+            var isEyeGaze = methods[methodCombo.SelectedIndex] == AccessMethod.EyeGaze;
+            trackerLabel.IsVisible = isEyeGaze;
+            trackerCombo.IsVisible = isEyeGaze;
+            var isUdp = isEyeGaze && trackerCombo.SelectedIndex == 1;
+            portPanel.IsVisible = isUdp;
+            trackerHelp.IsVisible = isUdp;
+        }
+
+        UpdateTrackerVisibility();
+
         methodCombo.SelectionChanged += (s, e) =>
         {
             var method = methods[methodCombo.SelectedIndex];
@@ -386,6 +446,7 @@ public class SettingsPanel : Control
             var sel = method.ValidFor();
             config.Selection = sel[selectionCombo.SelectedIndex];
             subtitle.Text = config.Selection.Subtitle();
+            UpdateTrackerVisibility();
             ApplyAccessConfig(config);
         };
 
@@ -401,10 +462,27 @@ public class SettingsPanel : Control
             }
         };
 
+        trackerCombo.SelectionChanged += (s, e) =>
+        {
+            config.EyeTrackerType = trackerCombo.SelectedIndex == 1 ? "UdpGaze" : "WindowsNative";
+            UpdateTrackerVisibility();
+            ApplyAccessConfig(config);
+        };
+
+        portBox.ValueChanged += (s, e) =>
+        {
+            config.UdpPort = (int)portBox.Value;
+            ApplyAccessConfig(config);
+        };
+
         panel.Children.Add(methodCombo);
         panel.Children.Add(selectionLabel);
         panel.Children.Add(selectionCombo);
         panel.Children.Add(subtitle);
+        panel.Children.Add(trackerLabel);
+        panel.Children.Add(trackerCombo);
+        panel.Children.Add(portPanel);
+        panel.Children.Add(trackerHelp);
 
         return panel;
     }
@@ -416,10 +494,14 @@ public class SettingsPanel : Control
 
         var trackerType = config.Method switch
         {
-            AccessMethod.EyeGaze => EyeGazeIntegration.TrackerType.WindowsNative,
+            AccessMethod.EyeGaze => config.EyeTrackerType switch
+            {
+                "UdpGaze" => EyeGazeIntegration.TrackerType.UdpGazeTracker,
+                _ => EyeGazeIntegration.TrackerType.WindowsNative,
+            },
             _ => EyeGazeIntegration.TrackerType.None,
         };
-        InputSourceChanged?.Invoke(this, trackerType);
+        InputSourceChanged?.Invoke(this, (trackerType, config.UdpPort));
 
         if (config.Method == AccessMethod.Joystick)
         {
@@ -722,6 +804,22 @@ public class SettingsPanel : Control
         var type = (ParameterType)info.Type;
         var uiType = (UIControlType)info.UiType;
 
+        // String parameters with Enum UI type: use string dropdown from engine values
+        if (type == ParameterType.String)
+        {
+            if (IsColourPaletteParameter(info))
+                return null; // rendered as swatch picker
+
+            if (IsFontParameter(info))
+                return BuildRowWithEditor(info, row, BuildFontDropdown(info));
+
+            if (uiType == UIControlType.Enum)
+                return BuildRowWithEditor(info, row, BuildStringDropdown(info));
+
+            return BuildRowWithEditor(info, row, BuildTextField(info));
+        }
+
+        // Bool/Long parameters
         Control? editor = uiType switch
         {
             UIControlType.Switch => BuildSwitch(info),
@@ -733,7 +831,6 @@ public class SettingsPanel : Control
             {
                 ParameterType.Bool => BuildSwitch(info),
                 ParameterType.Long => BuildStep(info),
-                ParameterType.String => BuildTextField(info),
                 _ => null,
             },
         };
@@ -744,6 +841,56 @@ public class SettingsPanel : Control
         row.Children.Add(editor);
 
         return row;
+    }
+
+    private static Control? BuildRowWithEditor(ParameterDisplayInfo info, DockPanel row, Control? editor)
+    {
+        if (editor == null) return null;
+        editor.HorizontalAlignment = HorizontalAlignment.Stretch;
+        row.Children.Add(editor);
+        return row;
+    }
+
+    private static bool IsFontParameter(ParameterDisplayInfo info)
+    {
+        return info.Name.Equals("Dasher Font", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static readonly string[] DasherFontPresets =
+    [
+        "System", "Arial", "Calibri", "Cambria", "Comic Sans MS",
+        "Consolas", "Courier New", "Georgia", "Segoe UI", "Tahoma",
+        "Times New Roman", "Trebuchet MS", "Verdana",
+    ];
+
+    private Control BuildFontDropdown(ParameterDisplayInfo info)
+    {
+        var currentPtr = NativeBridge.dasher_get_string_parameter(_handle, info.Key);
+        var current = Marshal.PtrToStringUTF8(currentPtr) ?? "";
+        var mapped = DasherFontPresets.Contains(current) ? current : "System";
+
+        var comboBox = new ComboBox
+        {
+            MinWidth = 250,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            FontSize = 12,
+        };
+
+        foreach (var font in DasherFontPresets)
+            comboBox.Items.Add(font);
+        comboBox.SelectedIndex = Array.IndexOf(DasherFontPresets, mapped);
+        if (comboBox.SelectedIndex < 0) comboBox.SelectedIndex = 0;
+
+        comboBox.SelectionChanged += (s, e) =>
+        {
+            if (comboBox.SelectedIndex >= 0 && comboBox.SelectedIndex < DasherFontPresets.Length)
+            {
+                var font = DasherFontPresets[comboBox.SelectedIndex];
+                NativeBridge.dasher_set_string_parameter(_handle, info.Key, font == "System" ? "" : font);
+            }
+        };
+
+        return comboBox;
     }
 
     private Control BuildSwitch(ParameterDisplayInfo info)
@@ -916,7 +1063,7 @@ public class SettingsPanel : Control
             var current = Marshal.PtrToStringUTF8(currentPtr) ?? "";
 
             if ((UIControlType)info.UiType == UIControlType.Enum)
-                return BuildStringDropdown(info, current);
+                return BuildStringDropdown(info);
 
             var textBox = new TextBox
             {
@@ -937,8 +1084,11 @@ public class SettingsPanel : Control
         return BuildStep(info);
     }
 
-    private Control BuildStringDropdown(ParameterDisplayInfo info, string current)
+    private Control BuildStringDropdown(ParameterDisplayInfo info)
     {
+        var currentPtr = NativeBridge.dasher_get_string_parameter(_handle, info.Key);
+        var current = Marshal.PtrToStringUTF8(currentPtr) ?? "";
+
         var comboBox = new ComboBox
         {
             MinWidth = 250,
@@ -1368,10 +1518,10 @@ internal enum ParameterType
 
 internal enum UIControlType
 {
-    None = 0,
-    Switch = 1,
+    Switch = 0,
+    TextField = 1,
     Slider = 2,
-    Step = 3,
-    Enum = 4,
-    TextField = 5,
+    Enum = 3,
+    Step = 4,
+    None = 5,
 }

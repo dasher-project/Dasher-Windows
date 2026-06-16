@@ -108,7 +108,11 @@ public partial class MainWindow : Window
         _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
 
         _vm.LoadAlphabets();
-        _vm.SelectedLanguageIndex = 0;
+
+        var currentAlphaPtr = NativeBridge.dasher_get_alphabet_id(_vm.Handle);
+        var currentAlpha = currentAlphaPtr != IntPtr.Zero
+            ? Marshal.PtrToStringUTF8(currentAlphaPtr) ?? "" : "";
+        _vm.SelectedLanguageIndex = Math.Max(0, _vm.Languages.IndexOf(currentAlpha));
 
         var settingsPanel = this.FindControl<SettingsPanel>("SettingsPanel");
         if (settingsPanel != null)
@@ -436,18 +440,18 @@ public partial class MainWindow : Window
     private void OnSpeedDown(object? sender, RoutedEventArgs e) => _vm?.DecreaseSpeed();
     private void OnSpeedUp(object? sender, RoutedEventArgs e) => _vm?.IncreaseSpeed();
 
-    private async void OnInputSourceChanged(object? sender, EyeGazeIntegration.TrackerType trackerType)
+    private async void OnInputSourceChanged(object? sender, (EyeGazeIntegration.TrackerType trackerType, int udpPort) args)
     {
         if (_canvas == null) return;
         _canvas.DisableJoystick();
 
-        if (trackerType == EyeGazeIntegration.TrackerType.None)
+        if (args.trackerType == EyeGazeIntegration.TrackerType.None)
         {
             _canvas.DisableEyeGaze();
         }
         else
         {
-            await _canvas.InitializeEyeGazeAsync(trackerType);
+            await _canvas.InitializeEyeGazeAsync(args.trackerType, args.udpPort);
         }
     }
 

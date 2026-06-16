@@ -8,6 +8,8 @@ public class AccessConfiguration
 {
     public AccessMethod Method { get; set; } = AccessMethod.Pointer;
     public SelectionMethod Selection { get; set; } = SelectionMethod.Continuous;
+    public string EyeTrackerType { get; set; } = "WindowsNative";
+    public int UdpPort { get; set; } = 5555;
 
     private static readonly string ConfigPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher", "access.json");
