@@ -45,6 +45,9 @@ public partial class MainWindowViewModel : ObservableObject
     private PanePosition _panePosition = PanePosition.Right;
 
     [ObservableProperty]
+    private bool _isStatusBarHidden;
+
+    [ObservableProperty]
     private double _keyboardModeOpacity = 0.85;
 
     [ObservableProperty]

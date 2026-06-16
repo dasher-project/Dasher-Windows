@@ -6,6 +6,7 @@ namespace Dasher.Windows.Controls;
 public class PaneSettings
 {
     public string PanePosition { get; set; } = "Right";
+    public bool StatusBarHidden { get; set; }
 
     private static readonly string SettingsPath = Path.Combine(
         System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),

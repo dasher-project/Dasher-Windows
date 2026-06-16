@@ -134,6 +134,7 @@ public partial class MainWindow : Window
         if (Enum.TryParse<PanePosition>(paneSettings.PanePosition, out var savedPos))
             _vm.PanePosition = savedPos;
         _vm.IsKeyboardMode = _vm.PanePosition == PanePosition.Keyboard;
+        _vm.IsStatusBarHidden = paneSettings.StatusBarHidden;
         ApplyPaneLayout();
 
         _vm.PropertyChanged += (s, args) =>
@@ -227,7 +228,14 @@ public partial class MainWindow : Window
         _vm.PanePosition = position;
         _vm.IsKeyboardMode = position == PanePosition.Keyboard;
         ApplyPaneLayout();
-        new PaneSettings { PanePosition = position.ToString() }.Save();
+        new PaneSettings { PanePosition = position.ToString(), StatusBarHidden = _vm.IsStatusBarHidden }.Save();
+    }
+
+    private void OnToggleStatusBar(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+        _vm.IsStatusBarHidden = !_vm.IsStatusBarHidden;
+        new PaneSettings { PanePosition = _vm.PanePosition.ToString(), StatusBarHidden = _vm.IsStatusBarHidden }.Save();
     }
 
     private void ApplyPaneLayout()
@@ -584,6 +592,11 @@ public partial class MainWindow : Window
     {
         if (_vm == null || string.IsNullOrWhiteSpace(_vm.OutputText)) return;
         _ = SpeechService.Instance.SpeakAsync(_vm.OutputText);
+    }
+
+    private void OnStopSpeak(object? sender, RoutedEventArgs e)
+    {
+        SpeechService.Instance.Stop();
     }
 
     private void OnEngineSpeak(IntPtr textPtr, int interrupt, IntPtr user_data)

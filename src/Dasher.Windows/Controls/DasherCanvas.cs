@@ -93,7 +93,11 @@ public partial class DasherCanvas : Control
         if (_handle != IntPtr.Zero)
         {
             NativeBridge.dasher_mouse_move(_handle, (float)pos.X, (float)pos.Y);
-            NativeBridge.dasher_mouse_down(_handle);
+            var props = e.GetCurrentPoint(this).Properties;
+            if (props.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
+                NativeBridge.dasher_key_event(_handle, 101, 1);
+            else
+                NativeBridge.dasher_mouse_down(_handle);
         }
     }
 
@@ -115,7 +119,11 @@ public partial class DasherCanvas : Control
         {
             var pos = e.GetPosition(this);
             NativeBridge.dasher_mouse_move(_handle, (float)pos.X, (float)pos.Y);
-            NativeBridge.dasher_mouse_up(_handle);
+            var props = e.GetCurrentPoint(this).Properties;
+            if (props.PointerUpdateKind == PointerUpdateKind.RightButtonReleased)
+                NativeBridge.dasher_key_event(_handle, 101, 0);
+            else
+                NativeBridge.dasher_mouse_up(_handle);
         }
     }
 

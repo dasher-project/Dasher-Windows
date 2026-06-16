@@ -274,7 +274,16 @@
             </Border>
         </StackPanel>
 
-        <Border Classes="bottom-bar" DockPanel.Dock="Bottom">
+        <Border x:Name="StatusBarShowBtn" DockPanel.Dock="Bottom" IsVisible="{Binding IsStatusBarHidden}"
+                Background="Transparent" Padding="4">
+            <Button Width="28" Height="20" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0"
+                    HorizontalAlignment="Center" Click="OnToggleStatusBar"
+                    ToolTip.Tip="Show status bar">
+                <PathIcon Data="M5,11H19V13H5V11M5,11" Width="14" Height="14" Foreground="{DynamicResource TextMuted}"/>
+            </Button>
+        </Border>
+
+        <Border x:Name="BottomBar" Classes="bottom-bar" DockPanel.Dock="Bottom" IsVisible="{Binding !IsStatusBarHidden}">
             <StackPanel Orientation="Horizontal" Spacing="0" VerticalAlignment="Center">
                 <Button Width="32" Height="32" CornerRadius="16" Background="#ECEFF1" BorderThickness="0"
                         VerticalAlignment="Center" Click="OnBack">
@@ -320,6 +329,14 @@
                     <TextBlock Classes="ui-nav-label" Text="Learning"/>
                     <ToggleSwitch IsChecked="{Binding Learning}" OnContent="" OffContent="" MinWidth="0" Height="26" VerticalAlignment="Center"/>
                 </StackPanel>
+
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+
+                <Button Width="28" Height="28" CornerRadius="14" Background="Transparent" BorderThickness="0"
+                        VerticalAlignment="Center" Click="OnToggleStatusBar"
+                        ToolTip.Tip="Hide/show status bar">
+                    <PathIcon Data="M19,13H5V11H19V12M19,13" Width="14" Height="14" Foreground="{DynamicResource TextMuted}"/>
+                </Button>
             </StackPanel>
         </Border>
 
@@ -348,6 +365,10 @@
 
                             <Button Classes="ui-circle-btn" Click="OnQuickSpeak">
                                 <PathIcon Data="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z" Width="16" Height="16" Foreground="#735A52"/>
+                            </Button>
+
+                            <Button Classes="ui-circle-btn" Click="OnStopSpeak">
+                                <PathIcon Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,16.5A4.5,4.5 0 0,1 7.5,12A4.5,4.5 0 0,1 12,7.5A4.5,4.5 0 0,1 16.5,12A4.5,4.5 0 0,1 12,16.5Z" Width="16" Height="16" Foreground="#735A52"/>
                             </Button>
 
                             <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
