@@ -105,12 +105,10 @@ public partial class MainWindow : Window
 
         _vm.ApplySpeed();
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
+        _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
 
         _vm.LoadAlphabets();
         _vm.SelectedLanguageIndex = 0;
-
-        _vm.LoadPalettes();
-        BuildPaletteSwatches();
 
         var settingsPanel = this.FindControl<SettingsPanel>("SettingsPanel");
         if (settingsPanel != null)
@@ -119,8 +117,11 @@ public partial class MainWindow : Window
             settingsPanel.BackRequested += OnSettingsBack;
             settingsPanel.InputSourceChanged += OnInputSourceChanged;
             settingsPanel.JoystickRequested += OnJoystickRequested;
+            settingsPanel.OutputFontChanged += OnOutputFontChanged;
             BuildPrefsTabs(settingsPanel);
         }
+
+        ApplyOutputFontSettings();
 
         _vm.PropertyChanged += (s, args) =>
         {
@@ -133,28 +134,6 @@ public partial class MainWindow : Window
     {
         _canvas?.Shutdown();
         base.OnClosing(e);
-    }
-
-    private void BuildPaletteSwatches()
-    {
-        var container = this.FindControl<UniformGrid>("PaletteContainer");
-        if (container == null || _vm == null) return;
-
-        container.Children.Clear();
-        foreach (var palette in _vm.Palettes.Take(4))
-        {
-            var btn = new Button
-            {
-                Classes = { "ui-colour-dot" },
-                Tag = palette.Name,
-                Background = ArgbToBrush(palette.Color0),
-                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-            };
-            ToolTip.SetTip(btn, palette.Name);
-            btn.Click += OnPaletteSelect;
-            container.Children.Add(btn);
-        }
     }
 
     private static SolidColorBrush ArgbToBrush(int argb)
@@ -213,6 +192,20 @@ public partial class MainWindow : Window
         SendInput(2, inputs, Marshal.SizeOf<INPUT>());
     }
 
+    private void OnModeRightSide(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+        _vm.IsKeyboardMode = false;
+        ApplyMode();
+    }
+
+    private void OnModeKeyboard(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+        _vm.IsKeyboardMode = true;
+        ApplyMode();
+    }
+
     private void OnToggleMode(object? sender, RoutedEventArgs e)
     {
         if (_vm == null) return;
@@ -246,20 +239,6 @@ public partial class MainWindow : Window
         notification.Close();
     }
 
-    private void OnModeRightSide(object? sender, RoutedEventArgs e)
-    {
-        if (_vm == null) return;
-        _vm.IsKeyboardMode = false;
-        ApplyMode();
-    }
-
-    private void OnModeKeyboard(object? sender, RoutedEventArgs e)
-    {
-        if (_vm == null) return;
-        _vm.IsKeyboardMode = true;
-        ApplyMode();
-    }
-
     private void OnBack(object? sender, RoutedEventArgs e)
     {
     }
@@ -268,6 +247,8 @@ public partial class MainWindow : Window
     {
         if (_vm == null) return;
 
+        var txtKeyboardLabel = this.FindControl<TextBlock>("TxtKeyboardLabel");
+
         if (_vm.IsKeyboardMode)
         {
             Topmost = true;
@@ -275,9 +256,9 @@ public partial class MainWindow : Window
             MessageSplitter.IsVisible = false;
             TxtModeLabel.Text = "Keyboard";
             BtnMode.Classes.Add("accent");
-
-            var oldWidth = Width;
-            Width = Math.Min(oldWidth, 600);
+            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Exit";
+            BtnKeyboard.Classes.Add("accent");
+            Width = Math.Min(Width, 600);
         }
         else
         {
@@ -286,7 +267,8 @@ public partial class MainWindow : Window
             MessageSplitter.IsVisible = true;
             TxtModeLabel.Text = "Right side";
             BtnMode.Classes.Remove("accent");
-
+            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Keyboard";
+            BtnKeyboard.Classes.Remove("accent");
             if (Width < 700) Width = 900;
         }
 
@@ -454,22 +436,6 @@ public partial class MainWindow : Window
     private void OnSpeedDown(object? sender, RoutedEventArgs e) => _vm?.DecreaseSpeed();
     private void OnSpeedUp(object? sender, RoutedEventArgs e) => _vm?.IncreaseSpeed();
 
-    private void OnPaletteSelect(object? sender, RoutedEventArgs e)
-    {
-        if (_vm == null || sender is not Button btn) return;
-        var name = btn.Tag as string;
-        if (name == null) return;
-
-        NativeBridge.dasher_set_palette(_vm.Handle, name);
-
-        foreach (var child in PaletteContainer.Children)
-        {
-            if (child is Button b)
-                b.Classes.Remove("selected");
-        }
-        btn.Classes.Add("selected");
-    }
-
     private async void OnInputSourceChanged(object? sender, EyeGazeIntegration.TrackerType trackerType)
     {
         if (_canvas == null) return;
@@ -578,6 +544,22 @@ public partial class MainWindow : Window
             return System.Text.Encoding.Unicode.GetString(bytes).TrimEnd('\0');
         }
         finally { CloseClipboard(); }
+    }
+
+    private void OnOutputFontChanged(string fontFamily, int fontSize)
+    {
+        var messageArea = this.FindControl<TextBox>("MessageArea");
+        if (messageArea != null)
+        {
+            messageArea.FontFamily = new FontFamily(fontFamily);
+            messageArea.FontSize = fontSize;
+        }
+    }
+
+    private void ApplyOutputFontSettings()
+    {
+        var settings = OutputTextSettings.Load();
+        OnOutputFontChanged(settings.FontFamily, settings.FontSize);
     }
 
     private bool _gameModeActive;
