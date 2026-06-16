@@ -1,5 +1,5 @@
 [submodule "DasherCore"]
 	path = DasherCore
 	url = https://github.com/dasher-project/DasherCore.git
-	branch = feature-CAPI
+	branch = main
 	ignore = dirty
