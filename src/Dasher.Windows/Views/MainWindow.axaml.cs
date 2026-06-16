@@ -91,7 +91,7 @@ public partial class MainWindow : Window
         var coreDataDir = FindCoreDataDir();
         CopyDataIfNeeded(coreDataDir, dataDir);
 
-        _canvas.Initialize(coreDataDir, dataDir);
+        _canvas.Initialize(dataDir, dataDir);
         _canvas.EngineMessage += OnEngineMessage;
         _vm.SetHandle(_canvas.GetHandle());
 
@@ -334,30 +334,10 @@ public partial class MainWindow : Window
         _previousOutput = _vm.OutputText;
     }
 
-    private async void OnEngineMessage(object? sender, EngineMessageEventArgs e)
+    private void OnEngineMessage(object? sender, EngineMessageEventArgs e)
     {
-        var icon = e.IsWarning ? "⚠" : "ℹ";
         var title = e.IsWarning ? "Dasher Warning" : "Dasher";
-        var notification = new Window
-        {
-            Title = title,
-            Content = new TextBlock
-            {
-                Text = $"{icon} {e.Text}",
-                TextWrapping = TextWrapping.Wrap,
-                Margin = new Thickness(16),
-                MaxWidth = 400,
-                FontSize = 13,
-            },
-            SizeToContent = SizeToContent.WidthAndHeight,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            CanResize = false,
-            ShowInTaskbar = false,
-            Background = new SolidColorBrush(Color.FromRgb(0xF4, 0xF7, 0xF6)),
-        };
-        _ = notification.ShowDialog(this);
-        await Task.Delay(5000);
-        notification.Close();
+        ToastNotifier.Show(title, e.Text, e.IsWarning);
     }
 
     private void OnBack(object? sender, RoutedEventArgs e)
