@@ -30,6 +30,9 @@ public partial class MainWindowViewModel : ObservableObject
     private bool _autoSpeed;
 
     [ObservableProperty]
+    private bool _learning;
+
+    [ObservableProperty]
     private int _selectedColourIndex;
 
     [ObservableProperty]
@@ -121,6 +124,12 @@ public partial class MainWindowViewModel : ObservableObject
     {
         if (_handle != IntPtr.Zero)
             NativeBridge.dasher_set_bool_parameter(_handle, ParameterKeys.BP_AUTO_SPEEDCONTROL, value ? 1 : 0);
+    }
+
+    partial void OnLearningChanged(bool value)
+    {
+        if (_handle != IntPtr.Zero)
+            NativeBridge.dasher_set_bool_parameter(_handle, ParameterKeys.BP_LM_ADAPTIVE, value ? 1 : 0);
     }
 }
 
