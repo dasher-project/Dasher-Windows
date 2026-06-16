@@ -24,7 +24,8 @@ public partial class DasherCanvas : Control
     private NativeBridge.OutputCallback? _outputCallback;
     private NativeBridge.MessageCallback? _messageCallback;
     private bool _callbacksRegistered;
-    private bool _screenSizeSet;
+    private int _lastScreenWidth;
+    private int _lastScreenHeight;
 
     public event EventHandler<EngineMessageEventArgs>? EngineMessage;
 
@@ -140,9 +141,13 @@ public partial class DasherCanvas : Control
 
     private void TrySetScreenSize()
     {
-        if (_screenSizeSet || _handle == IntPtr.Zero || Bounds.Width <= 0 || Bounds.Height <= 0) return;
-        NativeBridge.dasher_set_screen_size(_handle, (int)Bounds.Width, (int)Bounds.Height);
-        _screenSizeSet = true;
+        if (_handle == IntPtr.Zero || Bounds.Width <= 0 || Bounds.Height <= 0) return;
+        var w = (int)Bounds.Width;
+        var h = (int)Bounds.Height;
+        if (w == _lastScreenWidth && h == _lastScreenHeight) return;
+        NativeBridge.dasher_set_screen_size(_handle, w, h);
+        _lastScreenWidth = w;
+        _lastScreenHeight = h;
     }
 
     private void OnTick(object? sender, EventArgs e)
