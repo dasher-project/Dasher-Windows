@@ -150,6 +150,13 @@ public class SettingsPanel : Control
             return;
         }
 
+        if (category == "Output")
+        {
+            var outputFontRow = BuildOutputFontRow();
+            if (outputFontRow != null)
+                _panel.Children.Add(outputFontRow);
+        }
+
         if (!_groups.TryGetValue(category, out var parameters)) return;
 
         if (category == "Input")
@@ -181,11 +188,22 @@ public class SettingsPanel : Control
             {
                 try
                 {
+                    // Skip colour palette - rendered as swatch picker at top
+                    if (IsColourPaletteParameter(info)) continue;
+
                     var row = BuildParameterRow(info);
                     if (row != null)
                         _panel.Children.Add(row);
                 }
                 catch { }
+            }
+
+            // Add colour palette swatch picker at end of Appearance
+            if (category == "Appearance")
+            {
+                var paletteRow = BuildPaletteSwatchPicker();
+                if (paletteRow != null)
+                    _panel.Children.Insert(1, paletteRow);
             }
         }
     }
@@ -193,6 +211,106 @@ public class SettingsPanel : Control
     public event EventHandler? BackRequested;
     public event EventHandler<EyeGazeIntegration.TrackerType>? InputSourceChanged;
     public event EventHandler? JoystickRequested;
+    public event Action<string, int>? OutputFontChanged;
+
+    private static readonly string[] OutputFontPresets =
+    [
+        "Segoe UI", "Arial", "Calibri", "Cambria", "Comic Sans MS",
+        "Consolas", "Courier New", "Georgia", "Tahoma", "Times New Roman",
+        "Trebuchet MS", "Verdana",
+    ];
+
+    private Control? BuildOutputFontRow()
+    {
+        var settings = OutputTextSettings.Load();
+        var labelBrush = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75));
+
+        var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 4, 0, 8) };
+
+        var fontLabel = new TextBlock
+        {
+            Text = "Output Font",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = labelBrush,
+        };
+        panel.Children.Add(fontLabel);
+
+        var fontCombo = new ComboBox
+        {
+            MinWidth = 250,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            FontSize = 12,
+        };
+        foreach (var font in OutputFontPresets)
+        {
+            fontCombo.Items.Add(font);
+            if (font == settings.FontFamily)
+                fontCombo.SelectedIndex = fontCombo.Items.Count - 1;
+        }
+        if (fontCombo.SelectedIndex < 0) fontCombo.SelectedIndex = 0;
+
+        panel.Children.Add(fontCombo);
+
+        var sizeLabel = new TextBlock
+        {
+            Text = "Output Font Size",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = labelBrush,
+            Margin = new Thickness(0, 4, 0, 0),
+        };
+        panel.Children.Add(sizeLabel);
+
+        var sizeStack = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4 };
+
+        var sizeDown = new Button { Content = "\u2212", Width = 28, Height = 28, FontSize = 14, FontWeight = FontWeight.Bold };
+        var sizeValue = new Border
+        {
+            Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xF2, 0xF1)),
+            CornerRadius = new CornerRadius(4),
+            Padding = new Thickness(8, 4),
+            MinWidth = 50,
+            Child = new TextBlock
+            {
+                Text = settings.FontSize.ToString(),
+                FontSize = 12,
+                FontWeight = FontWeight.Medium,
+                Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+                HorizontalAlignment = HorizontalAlignment.Center,
+            },
+        };
+        var sizeUp = new Button { Content = "+", Width = 28, Height = 28, FontSize = 14, FontWeight = FontWeight.Bold };
+
+        int fontSize = settings.FontSize;
+        void UpdateFontSize()
+        {
+            (sizeValue.Child as TextBlock)!.Text = fontSize.ToString();
+            settings.FontSize = fontSize;
+            settings.Save();
+            OutputFontChanged?.Invoke(settings.FontFamily, fontSize);
+        }
+
+        sizeDown.Click += (s, e) => { fontSize = Math.Max(8, fontSize - 1); UpdateFontSize(); };
+        sizeUp.Click += (s, e) => { fontSize = Math.Min(72, fontSize + 1); UpdateFontSize(); };
+
+        sizeStack.Children.Add(sizeDown);
+        sizeStack.Children.Add(sizeValue);
+        sizeStack.Children.Add(sizeUp);
+        panel.Children.Add(sizeStack);
+
+        fontCombo.SelectionChanged += (s, e) =>
+        {
+            if (fontCombo.SelectedIndex >= 0 && fontCombo.SelectedIndex < OutputFontPresets.Length)
+            {
+                settings.FontFamily = OutputFontPresets[fontCombo.SelectedIndex];
+                settings.Save();
+                OutputFontChanged?.Invoke(settings.FontFamily, fontSize);
+            }
+        };
+
+        return panel;
+    }
 
     private Control? BuildInputSourceRow()
     {
@@ -453,6 +571,132 @@ public class SettingsPanel : Control
             }
             list.Add(info);
         }
+    }
+
+    private static bool IsColourPaletteParameter(ParameterDisplayInfo info)
+    {
+        var name = info.Name.ToLowerInvariant();
+        return name.Contains("colour") && name.Contains("palette") ||
+               name.Contains("color") && name.Contains("palette");
+    }
+
+    private Control? BuildPaletteSwatchPicker()
+    {
+        if (_handle == IntPtr.Zero) return null;
+
+        var paletteCount = NativeBridge.dasher_get_palette_count(_handle);
+        if (paletteCount == 0) return null;
+
+        var currentPalettePtr = NativeBridge.dasher_get_current_palette(_handle);
+        var currentPalette = currentPalettePtr != IntPtr.Zero
+            ? Marshal.PtrToStringUTF8(currentPalettePtr) ?? ""
+            : "";
+
+        var section = new StackPanel { Spacing = 8, Margin = new Thickness(0, 4, 0, 12) };
+
+        var header = new TextBlock
+        {
+            Text = "Colour Theme",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+        };
+        section.Children.Add(header);
+
+        var scroll = new ScrollViewer
+        {
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
+        };
+
+        var strip = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 10,
+        };
+
+        var colors = new int[4];
+        for (int i = 0; i < paletteCount; i++)
+        {
+            var namePtr = NativeBridge.dasher_get_palette_name(_handle, i);
+            var name = namePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(namePtr) ?? "" : $"Palette {i}";
+            NativeBridge.dasher_get_palette_preview_colors(_handle, i, colors);
+
+            var isSelected = name == currentPalette;
+
+            var card = new Button
+            {
+                Padding = new Thickness(0),
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                Cursor = new Cursor(StandardCursorType.Hand),
+                Tag = name,
+            };
+
+            var cardContent = new StackPanel { Spacing = 4, HorizontalAlignment = HorizontalAlignment.Center };
+
+            var swatchRow = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 2 };
+            for (int c = 0; c < 4; c++)
+            {
+                var swatch = new Border
+                {
+                    Width = 16,
+                    Height = 24,
+                    CornerRadius = new CornerRadius(2),
+                    Background = ArgbToBrush(colors[c]),
+                };
+                swatchRow.Children.Add(swatch);
+            }
+
+            var swatchContainer = new Border
+            {
+                Child = swatchRow,
+                CornerRadius = new CornerRadius(4),
+                BorderThickness = new Thickness(isSelected ? 2 : 1),
+                BorderBrush = isSelected
+                    ? new SolidColorBrush(Color.FromRgb(0x00, 0x53, 0x7F))
+                    : new SolidColorBrush(Color.FromArgb(0x4D, 0x80, 0x80, 0x80)),
+                Padding = new Thickness(1),
+            };
+            cardContent.Children.Add(swatchContainer);
+
+            var nameLabel = new TextBlock
+            {
+                Text = name,
+                FontSize = 9,
+                Foreground = isSelected
+                    ? new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75))
+                    : new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+            };
+            cardContent.Children.Add(nameLabel);
+
+            card.Content = cardContent;
+            card.Width = 80;
+
+            card.Click += (s, e) =>
+            {
+                if (s is Button b && b.Tag is string paletteName)
+                    NativeBridge.dasher_set_palette(_handle, paletteName);
+            };
+
+            strip.Children.Add(card);
+        }
+
+        scroll.Content = strip;
+        section.Children.Add(scroll);
+        return section;
+    }
+
+    private static SolidColorBrush ArgbToBrush(int argb)
+    {
+        byte a = (byte)((argb >> 24) & 0xFF);
+        byte r = (byte)((argb >> 16) & 0xFF);
+        byte g = (byte)((argb >> 8) & 0xFF);
+        byte b = (byte)(argb & 0xFF);
+        if (a == 0) a = 255;
+        return new SolidColorBrush(Color.FromArgb(a, r, g, b));
     }
 
     private Control? BuildParameterRow(ParameterDisplayInfo info)
