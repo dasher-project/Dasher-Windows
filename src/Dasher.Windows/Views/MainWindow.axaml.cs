@@ -9,10 +9,12 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Dasher.Windows.Controls;
 using Dasher.Windows.Engine;
+using Dasher.Windows.Services;
 using Dasher.Windows.Speech;
 using Dasher.Windows.ViewModels;
 
@@ -139,6 +141,10 @@ public partial class MainWindow : Window
             if (args.PropertyName == nameof(MainWindowViewModel.OutputText))
                 OnOutputTextChanged();
         };
+
+#if !STORE
+        _ = CheckForUpdatesAsync();
+#endif
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)
@@ -779,4 +785,95 @@ public partial class MainWindow : Window
             }
         }
     }
+
+#if !STORE
+    private async Task CheckForUpdatesAsync()
+    {
+        try
+        {
+            var info = await UpdateChecker.CheckAsync();
+            if (!info.IsUpdateAvailable) return;
+
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                var dialog = new Window
+                {
+                    Title = "Dasher Update Available",
+                    Background = new SolidColorBrush(Color.FromRgb(0xF4, 0xF7, 0xF6)),
+                    SizeToContent = SizeToContent.WidthAndHeight,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    CanResize = false,
+                    ShowInTaskbar = false,
+                    Content = new StackPanel
+                    {
+                        Margin = new Thickness(24),
+                        Spacing = 12,
+                        MaxWidth = 380,
+                        Children =
+                        {
+                            new TextBlock
+                            {
+                                Text = "Update Available",
+                                FontSize = 18,
+                                FontWeight = FontWeight.Bold,
+                                Foreground = new SolidColorBrush(Color.FromRgb(0x2C, 0x3E, 0x50)),
+                            },
+                            new TextBlock
+                            {
+                                Text = $"Dasher {info.LatestTag} is now available (you're running v{info.CurrentVersion}).",
+                                FontSize = 13,
+                                TextWrapping = TextWrapping.Wrap,
+                                Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x4A, 0x42)),
+                            },
+                            new StackPanel
+                            {
+                                Orientation = Orientation.Horizontal,
+                                Spacing = 8,
+                                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right,
+                                Children =
+                                {
+                                    new Button
+                                    {
+                                        Content = "Later",
+                                        Padding = new Thickness(16, 6),
+                                        Background = Brushes.Transparent,
+                                        BorderBrush = new SolidColorBrush(Color.FromRgb(0xCC, 0xCC, 0xCC)),
+                                    },
+                                    new Button
+                                    {
+                                        Content = "Download",
+                                        Padding = new Thickness(16, 6),
+                                        Background = new SolidColorBrush(Color.FromRgb(0x00, 0xA8, 0xA8)),
+                                        Foreground = Brushes.White,
+                                        BorderThickness = new Thickness(0),
+                                        Tag = info.ReleaseUrl,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                };
+
+                var buttons = ((StackPanel)dialog.Content).Children.OfType<StackPanel>().Last();
+                var laterBtn = buttons.Children.OfType<Button>().First(b => b.Content is "Later");
+                var downloadBtn = buttons.Children.OfType<Button>().First(b => b.Content is "Download");
+
+                laterBtn.Click += (_, _) => dialog.Close();
+                downloadBtn.Click += (_, _) =>
+                {
+                    if (downloadBtn.Tag is string url)
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = url,
+                            UseShellExecute = true,
+                        });
+                    dialog.Close();
+                };
+
+                dialog.ShowDialog(this);
+            });
+        }
+        catch { }
+    }
+#endif
 }

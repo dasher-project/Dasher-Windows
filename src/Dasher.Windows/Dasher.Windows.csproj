@@ -6,6 +6,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>dasher.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <InformationalVersion>$(VersionPrefix)</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>

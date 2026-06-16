@@ -32,9 +32,12 @@ jobs:
             Write-Host "Version: $quad (from tag $tagVer)"
             echo "msi=$quad" >> $env:GITHUB_OUTPUT
             echo "msix=$quad" >> $env:GITHUB_OUTPUT
+            # For dotnet publish - use base three-part version
+            echo "app=$baseVer" >> $env:GITHUB_OUTPUT
           } else {
             echo "msi=0.0.1.0" >> $env:GITHUB_OUTPUT
             echo "msix=0.0.1.0" >> $env:GITHUB_OUTPUT
+            echo "app=0.0.1" >> $env:GITHUB_OUTPUT
           }
       - name: Checkout Dasher-Windows
         uses: actions/checkout@v4
@@ -60,7 +63,7 @@ jobs:
           Copy-Item native/build/bin/dasher.dll src/Dasher.Windows/dasher.dll -Force
 
       - name: Publish app (self-contained, win-x64)
-        run: dotnet publish src/Dasher.Windows/Dasher.Windows.csproj -c Release -r win-x64 --self-contained -o publish/app
+        run: dotnet publish src/Dasher.Windows/Dasher.Windows.csproj -c Release -r win-x64 --self-contained -o publish/app -p:InformationalVersion=${{ steps.version.outputs.app }} -p:VersionPrefix=${{ steps.version.outputs.app }}
 
       - name: Copy DasherCore data files
         run: |
