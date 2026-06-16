@@ -268,9 +268,10 @@ public partial class MainWindow : Window
 
             if (horizontal)
             {
-                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
+                // Canvas gets ~78%, pane gets ~22% via star ratio
+                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(7, GridUnitType.Star)));
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1)));
-                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(320)));
+                MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(2, GridUnitType.Star)));
 
                 if (paneFirst)
                 {
@@ -287,9 +288,10 @@ public partial class MainWindow : Window
             }
             else
             {
-                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
+                // Canvas gets ~75%, pane gets ~25% via star ratio
+                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(3, GridUnitType.Star)));
                 MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(1)));
-                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(200)));
+                MainGrid.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
 
                 if (paneFirst) // Top
                 {
