@@ -29,6 +29,7 @@ public partial class MainWindow : Window
     private Border? _prefsTabStrip;
     private Border? _prefsContentPanel;
     private NativeBridge.SpeakCallback? _speakCallback;
+    private NativeBridge.ClipboardCallback? _clipboardCallback;
     private NativeBridge.ParameterCallback? _parameterCallback;
     private int _bitrateKey;
 
@@ -97,6 +98,9 @@ public partial class MainWindow : Window
 
         _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
         NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
+
+        _clipboardCallback = new NativeBridge.ClipboardCallback(OnEngineCopy);
+        NativeBridge.dasher_set_clipboard_callback(_vm.Handle, _clipboardCallback, IntPtr.Zero);
 
         _bitrateKey = NativeBridge.dasher_find_parameter_key("LP_MAX_BITRATE");
         _parameterCallback = new NativeBridge.ParameterCallback(OnParameterChanged);
@@ -605,6 +609,14 @@ public partial class MainWindow : Window
         var text = Marshal.PtrToStringUTF8(textPtr);
         if (string.IsNullOrEmpty(text)) return;
         _ = SpeechService.Instance.SpeakAsync(text, interrupt != 0);
+    }
+
+    private void OnEngineCopy(IntPtr textPtr, IntPtr user_data)
+    {
+        if (textPtr == IntPtr.Zero) return;
+        var text = Marshal.PtrToStringUTF8(textPtr);
+        if (string.IsNullOrEmpty(text)) return;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() => SetClipboardText(text));
     }
 
     private void OnParameterChanged(int parameterKey, IntPtr userData)
