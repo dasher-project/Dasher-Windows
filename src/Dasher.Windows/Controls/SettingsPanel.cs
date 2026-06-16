@@ -197,14 +197,14 @@ public class SettingsPanel : Control
                 }
                 catch { }
             }
+        }
 
-            // Add colour palette swatch picker at top of Customization
-            if (category == "Customization")
-            {
-                var paletteRow = BuildPaletteSwatchPicker();
-                if (paletteRow != null)
-                    _panel.Children.Insert(1, paletteRow);
-            }
+        // Add colour palette swatch picker at top of Customization
+        if (category == "Customization")
+        {
+            var paletteRow = BuildPaletteSwatchPicker();
+            if (paletteRow != null)
+                _panel.Children.Insert(1, paletteRow);
         }
     }
 
