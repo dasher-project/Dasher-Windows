@@ -17,6 +17,26 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Determine version
+        id: version
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF -match '^refs/tags/v(.+)') {
+            $ver = $Matches[1]
+            # Ensure 4-part version for MSI (x.y.z.w)
+            $parts = ($ver -split '\.').Count
+            if ($parts -lt 4) { $ver = "$ver.0" * (4 - $parts + 1) }
+            # Actually just pad to 4 parts properly
+            $vp = $ver -split '\.'
+            while ($vp.Count -lt 4) { $vp += '0' }
+            $ver = $vp -join '.'
+            Write-Host "MSI version: $ver"
+            echo "msi=$ver" >> $env:GITHUB_OUTPUT
+            echo "msix=$($Matches[1])" >> $env:GITHUB_OUTPUT
+          } else {
+            echo "msi=0.0.1.0" >> $env:GITHUB_OUTPUT
+            echo "msix=0.0.1" >> $env:GITHUB_OUTPUT
+          }
       - name: Checkout Dasher-Windows
         uses: actions/checkout@v4
         with:
@@ -57,7 +77,7 @@ jobs:
         run: |
           wix build dasher.wxs -o ../publish/Dasher-Windows.msi `
             -d AppSource="../publish/app" `
-            -d Version="0.1.0"
+            -d Version="${{ steps.version.outputs.msi }}"
 
       # ── MSIX (app package with self-signed cert for sideloading) ─────────────
 
@@ -65,7 +85,7 @@ jobs:
         run: |
           pwsh -ExecutionPolicy Bypass -File installer/build-msix.ps1 `
             -AppSource "$(pwd)/publish/app" `
-            -Version "0.1.0.0" `
+            -Version "${{ steps.version.outputs.msix }}.0" `
             -OutputDir "$(pwd)/publish"
 
       # ── Artifacts (every build) ──────────────────────────────────────────────

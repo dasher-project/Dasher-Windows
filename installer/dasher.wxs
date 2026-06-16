@@ -11,6 +11,8 @@
     Language="1033"
     Scope="perMachine">
 
+    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of Dasher is already installed." />
+
     <SummaryInformation
       Description="Dasher - Zooming Predictive Text Input"
       Manufacturer="$(var.Manufacturer)" />
@@ -18,6 +20,7 @@
     <MediaTemplate EmbedCab="yes" />
 
     <Icon Id="DasherIcon" SourceFile="$(var.AppSource)\Dasher.Windows.exe" />
+    <Property Id="ARPPRODUCTICON" Value="DasherIcon" />
 
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="INSTALLFOLDER" Name="Dasher">
@@ -32,7 +35,8 @@
                     Name="Dasher"
                     Description="Dasher - Zooming Predictive Text"
                     Target="[INSTALLFOLDER]Dasher.Windows.exe"
-                    WorkingDirectory="INSTALLFOLDER" />
+                    WorkingDirectory="INSTALLFOLDER"
+                    Icon="DasherIcon" />
           <RemoveFolder Id="RemoveStartMenuFolder" On="uninstall" />
           <RegistryValue Root="HKCU" Key="SOFTWARE\Dasher\StartMenu" Name="installed" Type="integer" Value="1" KeyPath="yes" />
         </Component>
@@ -45,7 +49,8 @@
                   Name="Dasher"
                   Description="Dasher - Zooming Predictive Text"
                   Target="[INSTALLFOLDER]Dasher.Windows.exe"
-                  WorkingDirectory="INSTALLFOLDER" />
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="DasherIcon" />
         <RegistryValue Root="HKCU" Key="SOFTWARE\Dasher\Desktop" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </StandardDirectory>
@@ -66,10 +71,6 @@
       <ComponentRef Id="AppDataFolderComponent" />
       <ComponentRef Id="RegistryEntries" />
     </Feature>
-
-    <InstallExecuteSequence>
-      <RemoveExistingProducts Before="InstallInitialize" />
-    </InstallExecuteSequence>
   </Package>
 
   <Fragment>
@@ -97,6 +98,7 @@
         <RegistryValue Type="string" Name="URLInfoAbout" Value="https://www.dasher.org.uk/" />
         <RegistryValue Type="integer" Name="NoModify" Value="1" />
         <RegistryValue Type="integer" Name="NoRepair" Value="1" />
+        <RegistryValue Type="string" Name="DisplayIcon" Value="[INSTALLFOLDER]Dasher.Windows.exe" />
       </RegistryKey>
 
       <RegistryKey Root="HKCU" Key="SOFTWARE\Dasher">
