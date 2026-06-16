@@ -79,9 +79,9 @@ public class SettingsPanel : Control
         {
             var order = new Dictionary<string, int>
             {
-                ["Input"] = 0, ["Language"] = 1, ["Appearance"] = 2,
+                ["Input"] = 0, ["Language"] = 1, ["Customization"] = 2,
                 ["Speed"] = 3, ["Output"] = 4, ["Speech"] = 5,
-                ["Advanced"] = 6, ["Other"] = 7,
+                ["Advanced"] = 6, ["Other"] = 7, ["Appearance"] = 8,
             };
             int oa = order.TryGetValue(a, out var va) ? va : 99;
             int ob = order.TryGetValue(b, out var vb) ? vb : 99;
@@ -198,8 +198,8 @@ public class SettingsPanel : Control
                 catch { }
             }
 
-            // Add colour palette swatch picker at end of Appearance
-            if (category == "Appearance")
+            // Add colour palette swatch picker at top of Customization
+            if (category == "Customization")
             {
                 var paletteRow = BuildPaletteSwatchPicker();
                 if (paletteRow != null)
@@ -611,6 +611,7 @@ public class SettingsPanel : Control
             lmKeys.Add(NativeBridge.dasher_get_language_model_param_key(lmId, i));
 
         lmKeys.Add(ParameterKeys.BP_LM_ADAPTIVE);
+        lmKeys.Add(NativeBridge.dasher_find_parameter_key("LP_LANGUAGE_MODEL_ID"));
 
         return parameters.Where(p =>
         {
