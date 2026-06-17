@@ -87,36 +87,6 @@
             <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
 
-        <Style Selector="Border.prefs-bar">
-            <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="Height" Value="42"/>
-            <Setter Property="Padding" Value="16,0"/>
-        </Style>
-        <Style Selector="Border.prefs-bar Button.prefs-tab">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="500"/>
-            <Setter Property="Padding" Value="10,0"/>
-            <Setter Property="MinHeight" Value="32"/>
-            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-        <Style Selector="Border.prefs-bar Button.prefs-tab:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
-        </Style>
-        <Style Selector="Border.prefs-bar Button.prefs-tab.active /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
-        </Style>
-        <Style Selector="Border.prefs-bar Button.prefs-tab.active TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-        </Style>
-
         <Style Selector="TextBlock.ui-nav-label">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="500"/>
