@@ -27,9 +27,6 @@ public partial class MainWindow : Window
     private DasherCanvas? _canvas;
     private MainWindowViewModel? _vm;
     private string _previousOutput = "";
-    private Button[]? _prefsTabs;
-    private Border? _prefsTabStrip;
-    private Border? _prefsContentPanel;
     private NativeBridge.SpeakCallback? _speakCallback;
     private NativeBridge.ParameterCallback? _parameterCallback;
     private int _bitrateKey;
@@ -132,9 +129,6 @@ public partial class MainWindow : Window
         _vm = DataContext as MainWindowViewModel;
         if (_canvas == null || _vm == null) return;
 
-        _prefsTabStrip = this.FindControl<Border>("PrefsTabStrip");
-        _prefsContentPanel = this.FindControl<Border>("PrefsContentPanel");
-
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var dataDir = Path.Combine(appData, "Dasher");
         Directory.CreateDirectory(dataDir);
@@ -179,18 +173,6 @@ public partial class MainWindow : Window
         var currentAlpha = currentAlphaPtr != IntPtr.Zero
             ? Marshal.PtrToStringUTF8(currentAlphaPtr) ?? "" : "";
         _vm.SelectedLanguageIndex = Math.Max(0, _vm.Languages.IndexOf(currentAlpha));
-
-        var settingsPanel = this.FindControl<SettingsPanel>("SettingsPanel");
-        if (settingsPanel != null)
-        {
-            settingsPanel.Initialize(_vm.Handle);
-            settingsPanel.BackRequested += OnSettingsBack;
-            settingsPanel.InputSourceChanged += OnInputSourceChanged;
-            settingsPanel.JoystickRequested += OnJoystickRequested;
-            settingsPanel.OutputFontChanged += OnOutputFontChanged;
-            settingsPanel.KeyboardOpacityChanged += OnKeyboardOpacityChanged;
-            BuildPrefsTabs(settingsPanel);
-        }
 
         ApplyOutputFontSettings();
 
@@ -544,75 +526,16 @@ public partial class MainWindow : Window
 
     private void OnTogglePrefs(object? sender, RoutedEventArgs e)
     {
-        if (_vm == null || sender is not Button btn) return;
-        _vm.IsPrefsVisible = !_vm.IsPrefsVisible;
-
-        if (_vm.IsPrefsVisible)
-            btn.Classes.Add("accent");
-        else
+        if (_vm == null) return;
+        var dialog = new SettingsWindow();
+        dialog.Initialize(_vm.Handle, new SettingsWindowCallbacks
         {
-            btn.Classes.Remove("accent");
-            if (_prefsTabStrip != null) _prefsTabStrip.IsVisible = true;
-            if (_prefsContentPanel != null) _prefsContentPanel.IsVisible = false;
-            ActivatePrefsTab(-1);
-        }
-    }
-
-    private void ActivatePrefsTab(int index)
-    {
-        if (_prefsTabs == null) return;
-        for (int i = 0; i < _prefsTabs.Length; i++)
-        {
-            if (i == index) _prefsTabs[i].Classes.Add("active");
-            else _prefsTabs[i].Classes.Remove("active");
-        }
-    }
-
-    private void BuildPrefsTabs(SettingsPanel settingsPanel)
-    {
-        var container = this.FindControl<StackPanel>("PrefsTabContainer");
-        if (container == null) return;
-
-        container.Children.Clear();
-        _prefsTabs = [];
-
-        foreach (var category in settingsPanel.GetCategoryNames())
-        {
-            var btn = new Button
-            {
-                Classes = { "prefs-tab" },
-                Content = category,
-                Tag = category,
-            };
-            btn.Click += OnPrefsTabClick;
-            container.Children.Add(btn);
-            _prefsTabs = [.. _prefsTabs, btn];
-        }
-    }
-
-    private void OnPrefsTabClick(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not Button btn || _vm == null) return;
-        var category = btn.Tag as string ?? "";
-        ActivatePrefsTab(Array.FindIndex(_prefsTabs!, t => t.Tag as string == category));
-
-        var settingsPanel = this.FindControl<SettingsPanel>("SettingsPanel");
-        if (settingsPanel != null && _prefsTabStrip != null && _prefsContentPanel != null)
-        {
-            settingsPanel.ShowCategory(category);
-            _prefsTabStrip.IsVisible = false;
-            _prefsContentPanel.IsVisible = true;
-        }
-    }
-
-    private void OnSettingsBack(object? sender, EventArgs e)
-    {
-        if (_prefsTabStrip != null && _prefsContentPanel != null)
-        {
-            _prefsTabStrip.IsVisible = true;
-            _prefsContentPanel.IsVisible = false;
-        }
-        ActivatePrefsTab(-1);
+            OutputFontChanged = OnOutputFontChanged,
+            KeyboardOpacityChanged = OnKeyboardOpacityChanged,
+            InputSourceChanged = (tracker, port) => OnInputSourceChanged(null, (tracker, port)),
+            JoystickRequested = () => OnJoystickRequested(null, EventArgs.Empty),
+        });
+        dialog.ShowDialog(this);
     }
 
     private void OnNew(object? sender, RoutedEventArgs e)

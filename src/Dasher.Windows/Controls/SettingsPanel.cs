@@ -117,19 +117,6 @@ public class SettingsPanel : Control
 
         _panel.Children.Clear();
 
-        var backBtn = new Button
-        {
-            Content = "\u2190 Back",
-            FontSize = 12,
-            FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
-            Background = Brushes.Transparent,
-            Padding = new Thickness(0, 0, 0, 6),
-            BorderThickness = new Thickness(0),
-        };
-        backBtn.Click += (s, e) => BackRequested?.Invoke(this, EventArgs.Empty);
-        _panel.Children.Add(backBtn);
-
         if (category == "Input")
         {
             var inputSourceRow = BuildInputSourceRow();
@@ -212,7 +199,6 @@ public class SettingsPanel : Control
         }
     }
 
-    public event EventHandler? BackRequested;
     public event EventHandler<(EyeGazeIntegration.TrackerType trackerType, int udpPort)>? InputSourceChanged;
     public event EventHandler? JoystickRequested;
     public event Action<string, int>? OutputFontChanged;

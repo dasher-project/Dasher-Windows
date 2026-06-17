@@ -263,19 +263,6 @@
             </Grid>
         </Border>
 
-        <StackPanel DockPanel.Dock="Top" IsVisible="{Binding IsPrefsVisible}">
-            <Border Classes="prefs-bar">
-                <Border x:Name="PrefsTabStrip" IsVisible="True">
-                    <StackPanel x:Name="PrefsTabContainer" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center"/>
-                </Border>
-            </Border>
-            <Border x:Name="PrefsContentPanel" Classes="prefs-content" IsVisible="False"
-                    Background="{DynamicResource BgLight}" BorderBrush="{DynamicResource BorderLight}" BorderThickness="0,0,0,1"
-                    MaxHeight="320">
-                <controls:SettingsPanel x:Name="SettingsPanel"/>
-            </Border>
-        </StackPanel>
-
         <Border x:Name="StatusBarShowBtn" DockPanel.Dock="Bottom" IsVisible="{Binding IsStatusBarHidden}"
                 Background="Transparent" Padding="4">
             <Button Width="28" Height="20" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0"
