@@ -676,17 +676,7 @@ public partial class MainWindow : Window
         catch { }
     }
 
-    private void OnPlay(object? sender, RoutedEventArgs e)
-    {
-        if (_vm == null) return;
-        _vm.IsPlaying = !_vm.IsPlaying;
-        TxtPlayLabel.Text = _vm.IsPlaying ? "Pause" : "Play";
-        PlayIcon.Kind = _vm.IsPlaying ? LucideIconKind.Pause : LucideIconKind.Play;
-        if (_vm.IsPlaying)
-            BtnPlay.Classes.Add("accent");
-        else
-            BtnPlay.Classes.Remove("accent");
-    }
+
 
     private void OnStats(object? sender, RoutedEventArgs e)
     {

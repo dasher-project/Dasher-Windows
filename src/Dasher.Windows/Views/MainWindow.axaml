@@ -199,15 +199,6 @@
 
                     <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
 
-                    <Button x:Name="BtnPlay" Classes="nav-btn" Click="OnPlay">
-                        <StackPanel Spacing="3">
-                            <LucideIcon x:Name="PlayIcon" Kind="{x:Static lucide:LucideIconKind.Play}" Size="20"/>
-                            <TextBlock Name="TxtPlayLabel" Text="Play" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
-                        </StackPanel>
-                    </Button>
-
-                    <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
-
                     <Button x:Name="BtnMode" Classes="nav-btn" Width="120">
                         <Button.Flyout>
                             <MenuFlyout>
