@@ -237,11 +237,14 @@ public partial class MainWindow : Window
             SyncGameModeState();
     }
 
+    private static readonly string KbLogPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher", "keyboard_debug.log");
+
     private static void KbLog(string msg)
     {
-        var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}";
-        Debug.WriteLine(line);
-        Console.WriteLine(line);
+        var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
+        Debug.Write(line);
+        try { File.AppendAllText(KbLogPath, line); } catch { }
     }
 
     private void SetNoActivate(bool enable)
