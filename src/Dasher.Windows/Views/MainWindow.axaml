@@ -174,11 +174,41 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="16"/>
         </Style>
+
+        <Style Selector="Border.kb-bar">
+            <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="4,3"/>
+            <Setter Property="BoxShadow" Value="0 2 6 0 #40000000"/>
+        </Style>
+        <Style Selector="Border.kb-bar Button">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Border.kb-bar Button:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
+        </Style>
+        <Style Selector="Border.kb-bar Button LucideIcon">
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+        </Style>
+        <Style Selector="Border.kb-bar Button.accent LucideIcon">
+            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
+        </Style>
+        <Style Selector="Border.kb-bar Button.accent">
+            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
+        </Style>
     </Window.Styles>
 
     <Grid>
     <DockPanel>
-        <Border Classes="top-bar" DockPanel.Dock="Top">
+        <Border x:Name="TopBar" Classes="top-bar" DockPanel.Dock="Top">
             <Grid ColumnDefinitions="*, Auto">
                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Button Classes="nav-btn" Click="OnNew" ToolTip.Tip="New document">
@@ -443,6 +473,22 @@
                 <controls:SettingsPanel x:Name="DockedSettingsPanel"/>
             </ScrollViewer>
         </DockPanel>
+    </Border>
+
+    <Border x:Name="KeyboardMiniBar" Classes="kb-bar" IsVisible="False"
+            HorizontalAlignment="Right" VerticalAlignment="Top"
+            Margin="8,8,8,0" ZIndex="100">
+        <StackPanel Orientation="Horizontal" Spacing="2">
+            <Button x:Name="KbControlBtn" Click="OnToggleControlMode" ToolTip.Tip="Control mode">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.MousePointerClick}" Size="18"/>
+            </Button>
+            <Button Click="OnTogglePrefs" ToolTip.Tip="Settings">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Settings}" Size="18"/>
+            </Button>
+            <Button Click="OnToggleMode" ToolTip.Tip="Exit keyboard mode">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Keyboard}" Size="18"/>
+            </Button>
+        </StackPanel>
     </Border>
     </Grid>
 </Window>

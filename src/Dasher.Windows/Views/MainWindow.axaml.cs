@@ -372,7 +372,11 @@ public partial class MainWindow : Window
 
         if (isKeyboard)
         {
-            // Keyboard mode: canvas only, no message pane
+            // Keyboard mode: hide full toolbar, show mini floating bar
+            TopBar.IsVisible = false;
+            KeyboardMiniBar.IsVisible = true;
+
+            // Canvas only, no message pane
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
             MainGrid.Children.Add(DasherCanvas);
             Grid.SetColumn(DasherCanvas, 0);
@@ -400,6 +404,9 @@ public partial class MainWindow : Window
         }
         else
         {
+            TopBar.IsVisible = true;
+            KeyboardMiniBar.IsVisible = false;
+
             Topmost = false;
             this.Opacity = 1.0;
             SetNoActivate(false);
@@ -512,6 +519,10 @@ public partial class MainWindow : Window
             InitializeSettingsPanel();
             _settingsInitialized = true;
         }
+
+        // In keyboard mode, hide mini-bar while settings are open
+        if (_vm.IsKeyboardMode)
+            KeyboardMiniBar.IsVisible = wasVisible; // show when closing settings, hide when opening
 
         // Pause/resume canvas timer when settings are open
         if (_canvas != null)
@@ -852,6 +863,12 @@ public partial class MainWindow : Window
         var label = this.FindControl<TextBlock>("TxtControlLabel");
         if (label != null)
             label.Text = _controlModeActive ? "Leave" : "Control";
+
+        // Sync mini-bar control button accent state
+        if (_controlModeActive)
+            KbControlBtn.Classes.Add("accent");
+        else
+            KbControlBtn.Classes.Remove("accent");
     }
 
     private void OnToggleGameMode(object? sender, RoutedEventArgs e)
