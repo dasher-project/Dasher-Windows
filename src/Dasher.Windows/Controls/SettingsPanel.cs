@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Dasher.Windows.Engine;
+using Dasher.Windows.Services;
 using Dasher.Windows.Speech;
 
 namespace Dasher.Windows.Controls;
@@ -74,7 +75,7 @@ public class SettingsPanel : Control
 
     public List<string> GetCategoryNames()
     {
-        var names = new List<string>(_groups.Keys) { "Speech" };
+        var names = new List<string>(_groups.Keys) { "Speech", "Privacy" };
         names.Sort((a, b) =>
         {
             var order = new Dictionary<string, int>
@@ -82,6 +83,7 @@ public class SettingsPanel : Control
                 ["Input"] = 0, ["Language"] = 1, ["Customization"] = 2,
                 ["Speed"] = 3, ["Output"] = 4, ["Speech"] = 5,
                 ["Advanced"] = 6, ["Other"] = 7, ["Appearance"] = 8,
+                ["Privacy"] = 9,
             };
             int oa = order.TryGetValue(a, out var va) ? va : 99;
             int ob = order.TryGetValue(b, out var vb) ? vb : 99;
@@ -134,6 +136,12 @@ public class SettingsPanel : Control
         if (category == "Speech")
         {
             BuildSpeechSettings();
+            return;
+        }
+
+        if (category == "Privacy")
+        {
+            BuildPrivacySettings();
             return;
         }
 
@@ -1169,6 +1177,103 @@ public class SettingsPanel : Control
         };
 
         return comboBox;
+    }
+
+    private void BuildPrivacySettings()
+    {
+        var settings = AnalyticsSettings.Load();
+
+        var section = new StackPanel { Spacing = 16 };
+
+        var titleText = Application.Current?.FindResource("TextPrimary") as IBrush ?? Brushes.Black;
+        var bodyText = Application.Current?.FindResource("TextSecondary") as IBrush ?? Brushes.Gray;
+        var mutedText = Application.Current?.FindResource("TextMuted") as IBrush ?? Brushes.LightGray;
+
+        section.Children.Add(new TextBlock
+        {
+            Text = "Analytics & Crash Reporting",
+            FontSize = 15,
+            FontWeight = FontWeight.SemiBold,
+            Foreground = titleText,
+        });
+
+        section.Children.Add(new TextBlock
+        {
+            Text = "Dasher collects anonymous usage analytics and crash reports to understand how the app is used and to fix bugs. " +
+                   "No typed text, clipboard contents, or personal information is ever collected.",
+            FontSize = 12,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = bodyText,
+        });
+
+        var toggleRow = new DockPanel { Margin = new Thickness(0, 8, 0, 0) };
+        toggleRow.Children.Add(new TextBlock
+        {
+            Text = "Send anonymous usage data",
+            FontSize = 13,
+            Foreground = titleText,
+            VerticalAlignment = VerticalAlignment.Center,
+        });
+        var optInToggle = new ToggleSwitch
+        {
+            IsChecked = settings.OptedIn,
+            HorizontalAlignment = HorizontalAlignment.Right,
+        };
+        DockPanel.SetDock(optInToggle, Dock.Right);
+        toggleRow.Children.Add(optInToggle);
+        section.Children.Add(toggleRow);
+
+        optInToggle.IsCheckedChanged += (s, e) =>
+        {
+            var isChecked = optInToggle.IsChecked ?? false;
+            AnalyticsService.SetOptIn(isChecked);
+        };
+
+        section.Children.Add(new TextBlock
+        {
+            Text = $"Anonymous ID: {AnalyticsService.AnonymousId}",
+            FontSize = 11,
+            Foreground = mutedText,
+            Margin = new Thickness(0, 4, 0, 0),
+        });
+
+        var resetBtn = new Button
+        {
+            Content = "Reset analytics ID",
+            Padding = new Thickness(16, 6),
+            FontSize = 12,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = Application.Current?.FindResource("ControlBg") as IBrush ?? Brushes.LightGray,
+            BorderThickness = new Thickness(0),
+        };
+        resetBtn.Click += (s, e) =>
+        {
+            AnalyticsService.ResetAnonymousId();
+            // Refresh the ID display
+            foreach (var child in section.Children)
+            {
+                if (child is TextBlock tb && tb.Text?.StartsWith("Anonymous ID:") == true)
+                    tb.Text = $"Anonymous ID: {AnalyticsService.AnonymousId}";
+            }
+        };
+        section.Children.Add(resetBtn);
+
+        section.Children.Add(new Border
+        {
+            BorderBrush = Application.Current?.FindResource("BorderLight") as IBrush ?? Brushes.LightGray,
+            BorderThickness = new Thickness(0, 1, 0, 0),
+            Margin = new Thickness(0, 12, 0, 0),
+        });
+
+        section.Children.Add(new TextBlock
+        {
+            Text = "Full event schema: github.com/dasher-project/Dasher-Windows/blob/main/analytics-events.json",
+            FontSize = 10,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = mutedText,
+        });
+
+        _panel.Children.Add(section);
     }
 
     private void BuildSpeechSettings()

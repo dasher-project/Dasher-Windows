@@ -546,6 +546,7 @@ public partial class MainWindow : Window
         { "Appearance", LucideIconKind.Eye },
         { "Advanced", LucideIconKind.Wrench },
         { "Other", LucideIconKind.Ellipsis },
+        { "Privacy", LucideIconKind.ShieldCheck },
     };
 
     private void InitializeSettingsPanel()
