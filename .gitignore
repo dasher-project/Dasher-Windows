@@ -42,3 +42,6 @@ test.txt
 
 ## Publish / installer output
 publish/
+
+# User-adapted training files (written at runtime)
+training_*.txt
