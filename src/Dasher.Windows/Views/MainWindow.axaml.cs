@@ -42,6 +42,15 @@ public partial class MainWindow : Window
     [DllImport("user32.dll")]
     private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
+    [DllImport("user32.dll")]
+    private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+    [DllImport("user32.dll")]
+    private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
+
+    [DllImport("kernel32.dll")]
+    private static extern uint GetCurrentThreadId();
+
     [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
     private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
 
@@ -237,17 +246,31 @@ public partial class MainWindow : Window
 
     private void SendTextToForeground(string text)
     {
-        // If WS_EX_NOACTIVATE is working, the foreground window is the target app.
-        // As a fallback, if Dasher somehow has focus, push it back to the last known target.
-        var fg = GetForegroundWindow();
         var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
-        if (fg == ourHandle && _lastTargetWindow != IntPtr.Zero)
-        {
-            SetForegroundWindow(_lastTargetWindow);
-        }
-        else if (fg != ourHandle && fg != IntPtr.Zero)
+        var fg = GetForegroundWindow();
+
+        // Track or restore the target window
+        if (fg != ourHandle && fg != IntPtr.Zero)
         {
             _lastTargetWindow = fg;
+        }
+        else if (_lastTargetWindow != IntPtr.Zero)
+        {
+            // Dasher has focus — temporarily attach our input thread to
+            // the target's thread so SetForegroundWindow succeeds, then
+            // yield focus back to the target app.
+            var targetThread = GetWindowThreadProcessId(_lastTargetWindow, out _);
+            var ourThread = GetCurrentThreadId();
+            if (targetThread != 0 && targetThread != ourThread)
+            {
+                AttachThreadInput(ourThread, targetThread, true);
+                SetForegroundWindow(_lastTargetWindow);
+                AttachThreadInput(ourThread, targetThread, false);
+            }
+            else
+            {
+                SetForegroundWindow(_lastTargetWindow);
+            }
         }
 
         foreach (char c in text)
@@ -334,8 +357,12 @@ public partial class MainWindow : Window
             BtnKeyboard.Classes.Add("accent");
 
             // Prevent Dasher from stealing focus when clicked, so keystrokes
-            // go to the target app (same technique as Windows On-Screen Keyboard)
+            // go to the target app (same technique as Windows On-Screen Keyboard).
+            // Apply now and again after render — Avalonia may overwrite the
+            // extended style when processing Topmost/Opacity changes.
             SetNoActivate(true);
+            Avalonia.Threading.Dispatcher.UIThread.Post(
+                () => SetNoActivate(true), Avalonia.Threading.DispatcherPriority.Render);
         }
         else
         {
