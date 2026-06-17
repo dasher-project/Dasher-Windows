@@ -58,7 +58,7 @@ public static class UpdateChecker
                 return new UpdateInfo { CurrentVersion = current };
 
             var release = releases[0];
-            var latestRaw = release.TagName.TrimStart('v');
+            var latestRaw = release.TagName!.TrimStart('v');
             var isUpdate = IsNewerVersion(latestRaw, current);
 
             return new UpdateInfo

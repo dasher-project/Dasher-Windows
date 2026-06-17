@@ -39,7 +39,7 @@
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
         <Style Selector="Border.top-bar Button.nav-btn:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#EAE5E3"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
         <Style Selector="Border.top-bar Button.nav-btn LucideIcon">
             <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
@@ -57,7 +57,7 @@
         <Style Selector="Button.ui-circle-btn">
             <Setter Property="Width" Value="44"/>
             <Setter Property="Height" Value="44"/>
-            <Setter Property="Background" Value="#EAE5E3"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBg}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="CornerRadius" Value="22"/>
             <Setter Property="Padding" Value="0"/>
@@ -65,7 +65,7 @@
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
         <Style Selector="Button.ui-circle-btn:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#DFDAD7"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
 
         <Style Selector="Button.ui-step-btn">
@@ -179,21 +179,21 @@
         <Border Classes="top-bar" DockPanel.Dock="Top">
             <Grid ColumnDefinitions="*, Auto">
                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <Button Classes="nav-btn" Click="OnNew">
+                    <Button Classes="nav-btn" Click="OnNew" ToolTip.Tip="New document">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.FilePlus}" Size="20"/>
                             <TextBlock Text="New" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
                     </Button>
 
-                    <Button Classes="nav-btn" Click="OnOpen">
+                    <Button Classes="nav-btn" Click="OnOpen" ToolTip.Tip="Open file">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.FolderOpen}" Size="20"/>
                             <TextBlock Text="Open" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
                     </Button>
 
-                    <Button Classes="nav-btn" Click="OnSave">
+                    <Button Classes="nav-btn" Click="OnSave" ToolTip.Tip="Save file">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.Save}" Size="20"/>
                             <TextBlock Text="Save" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
@@ -202,7 +202,7 @@
 
                     <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
 
-                    <Button x:Name="BtnMode" Classes="nav-btn" Width="120">
+                    <Button x:Name="BtnMode" Classes="nav-btn" Width="120" ToolTip.Tip="Pane position">
                         <Button.Flyout>
                             <MenuFlyout>
                                 <MenuItem Header="Right side" Click="OnModeRightSide"/>
@@ -223,7 +223,7 @@
 
                     <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
 
-                    <Button x:Name="BtnKeyboard" Classes="nav-btn" Click="OnToggleMode">
+                    <Button x:Name="BtnKeyboard" Classes="nav-btn" Click="OnToggleMode" ToolTip.Tip="Toggle keyboard mode">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.Keyboard}" Size="20"/>
                             <TextBlock x:Name="TxtKeyboardLabel" Text="Keyboard" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
@@ -232,7 +232,7 @@
 
                     <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
 
-                    <Button x:Name="BtnGameMode" Classes="nav-btn" Click="OnToggleGameMode">
+                    <Button x:Name="BtnGameMode" Classes="nav-btn" Click="OnToggleGameMode" ToolTip.Tip="Toggle game mode">
                         <StackPanel Spacing="3">
                             <LucideIcon x:Name="GameIcon" Kind="{x:Static lucide:LucideIconKind.Gamepad2}" Size="20"/>
                             <TextBlock x:Name="TxtGameLabel" Text="Game" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
@@ -241,7 +241,7 @@
 
                     <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
 
-                    <Button x:Name="BtnControlMode" Classes="nav-btn" Click="OnToggleControlMode">
+                    <Button x:Name="BtnControlMode" Classes="nav-btn" Click="OnToggleControlMode" ToolTip.Tip="Toggle control mode">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.MousePointerClick}" Size="20"/>
                             <TextBlock x:Name="TxtControlLabel" Text="Control" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
@@ -250,7 +250,7 @@
 
                     <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
 
-                    <Button x:Name="BtnPrefs" Classes="nav-btn" Click="OnTogglePrefs">
+                    <Button x:Name="BtnPrefs" Classes="nav-btn" Click="OnTogglePrefs" ToolTip.Tip="Preferences">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.Settings}" Size="20"/>
                             <TextBlock Text="Prefs" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
@@ -287,8 +287,8 @@
 
         <Border x:Name="BottomBar" Classes="bottom-bar" DockPanel.Dock="Bottom" IsVisible="{Binding !IsStatusBarHidden}">
             <StackPanel Orientation="Horizontal" Spacing="0" VerticalAlignment="Center">
-                <Button Width="32" Height="32" CornerRadius="16" Background="#ECEFF1" BorderThickness="0"
-                        VerticalAlignment="Center" Click="OnBack">
+                <Button Width="32" Height="32" CornerRadius="16" Background="{DynamicResource ControlBg}" BorderThickness="0"
+                        VerticalAlignment="Center" Click="OnBack" ToolTip.Tip="Back">
                     <LucideIcon Kind="{x:Static lucide:LucideIconKind.ChevronLeft}" Size="16" Foreground="{DynamicResource TextMuted}"/>
                 </Button>
                 <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
@@ -357,38 +357,38 @@
                 <Grid RowDefinitions="Auto, Auto, Auto, *">
                     <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                         <StackPanel Orientation="Horizontal" Spacing="8" Margin="10,6" Height="48">
-                            <Button Width="32" Height="32" CornerRadius="16" Background="#ECEFF1" BorderThickness="0" VerticalAlignment="Center">
+                            <Button Width="32" Height="32" CornerRadius="16" Background="{DynamicResource ControlBg}" BorderThickness="0" VerticalAlignment="Center" ToolTip.Tip="Back">
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.ChevronLeft}" Size="16" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
 
-                            <Button Classes="ui-circle-btn" Click="OnToggleMode">
-                                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Eye}" Size="18" Foreground="#735A52"/>
+                            <Button Classes="ui-circle-btn" Click="OnToggleMode" ToolTip.Tip="Toggle pane position">
+                                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Eye}" Size="18" Foreground="{DynamicResource TextSecondary}"/>
                             </Button>
 
-                            <Button Classes="ui-circle-btn" Click="OnQuickSpeak">
-                                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Volume2}" Size="18" Foreground="#735A52"/>
+                            <Button Classes="ui-circle-btn" Click="OnQuickSpeak" ToolTip.Tip="Quick speak">
+                                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Volume2}" Size="18" Foreground="{DynamicResource TextSecondary}"/>
                             </Button>
 
-                            <Button Classes="ui-circle-btn" Click="OnStopSpeak">
-                                <LucideIcon Kind="{x:Static lucide:LucideIconKind.CircleStop}" Size="18" Foreground="#735A52"/>
+                            <Button Classes="ui-circle-btn" Click="OnStopSpeak" ToolTip.Tip="Stop speaking">
+                                <LucideIcon Kind="{x:Static lucide:LucideIconKind.CircleStop}" Size="18" Foreground="{DynamicResource TextSecondary}"/>
                             </Button>
 
                             <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
 
                             <StackPanel Orientation="Horizontal" Spacing="6">
-                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnCopySelection">
+                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnCopySelection" ToolTip.Tip="Copy selection">
                                     <StackPanel Spacing="2" VerticalAlignment="Center">
                                         <LucideIcon Kind="{x:Static lucide:LucideIconKind.Copy}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
                                         <TextBlock Text="Copy" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
-                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnCopyAll">
+                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnCopyAll" ToolTip.Tip="Copy all text">
                                     <StackPanel Spacing="2" VerticalAlignment="Center">
                                         <LucideIcon Kind="{x:Static lucide:LucideIconKind.ClipboardCopy}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
                                         <TextBlock Text="Copy a." FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
-                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnPaste">
+                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnPaste" ToolTip.Tip="Paste">
                                     <StackPanel Spacing="2" VerticalAlignment="Center">
                                         <LucideIcon Kind="{x:Static lucide:LucideIconKind.ClipboardPaste}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
                                         <TextBlock Text="Paste" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
@@ -398,7 +398,7 @@
 
                             <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
 
-                            <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0">
+                            <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="More options">
                                 <StackPanel Spacing="2" VerticalAlignment="Center">
                                     <LucideIcon Kind="{x:Static lucide:LucideIconKind.EllipsisVertical}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
                                     <TextBlock Text="More" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>

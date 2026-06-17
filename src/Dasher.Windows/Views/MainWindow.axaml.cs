@@ -834,7 +834,7 @@ public partial class MainWindow : Window
     {
         var settings = OutputTextSettings.Load();
         OnOutputFontChanged(settings.FontFamily, settings.FontSize);
-        _vm.KeyboardModeOpacity = settings.KeyboardOpacity;
+        _vm!.KeyboardModeOpacity = settings.KeyboardOpacity;
     }
 
     private void OnKeyboardOpacityChanged(double opacity)
