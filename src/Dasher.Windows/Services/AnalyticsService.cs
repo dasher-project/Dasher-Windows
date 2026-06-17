@@ -15,6 +15,12 @@ public static class AnalyticsService
 {
     private const string ProjectToken = "phc_ubtNRuCT7Zqo4dVrVWRnJRYE9m9WqGeTyK7zVDKQ968J";
 
+    /// <summary>
+    /// Identifies which frontend this is. All Dasher frontends share the same
+    /// PostHog project, so this distinguishes Windows / macOS / iOS / Linux events.
+    /// </summary>
+    private const string Platform = "windows";
+
     private static AnalyticsSettings _settings = new();
     private static string _distinctId = "";
     private static bool _initialized;
@@ -44,7 +50,7 @@ public static class AnalyticsService
             PostHogSdk.Init(new PostHogOptions
             {
                 ProjectToken = ProjectToken,
-                HostUrl = new Uri("https://us.i.posthog.com"),
+                HostUrl = new Uri("https://eu.i.posthog.com"),
             });
         }
         catch { }
@@ -74,7 +80,23 @@ public static class AnalyticsService
     }
 
     /// <summary>
+    /// Returns the default properties appended to every event so all frontends
+    /// can be distinguished in the shared PostHog project.
+    /// </summary>
+    private static Dictionary<string, object> DefaultProperties()
+    {
+        return new Dictionary<string, object>
+        {
+            ["platform"] = Platform,
+            ["app_variant"] = "dasher-windows",
+            ["app_version"] = UpdateChecker.GetCurrentVersion(),
+            ["os_version"] = RuntimeInformation.OSDescription,
+        };
+    }
+
+    /// <summary>
     /// Capture an analytics event. No-ops if the user has not opted in.
+    /// Platform, app_variant, app_version and os_version are auto-included.
     /// NEVER pass typed text, clipboard contents, or PII as properties.
     /// </summary>
     public static void Capture(string eventName, Dictionary<string, object>? properties = null)
@@ -83,7 +105,13 @@ public static class AnalyticsService
 
         try
         {
-            PostHogSdk.Capture(_distinctId, eventName, properties);
+            var props = DefaultProperties();
+            if (properties != null)
+            {
+                foreach (var kv in properties)
+                    props[kv.Key] = kv.Value;
+            }
+            PostHogSdk.Capture(_distinctId, eventName, props);
         }
         catch { }
     }
@@ -97,11 +125,7 @@ public static class AnalyticsService
 
         try
         {
-            PostHogSdk.CaptureException(ex, _distinctId, new Dictionary<string, object>
-            {
-                ["app_version"] = UpdateChecker.GetCurrentVersion(),
-                ["os_version"] = RuntimeInformation.OSDescription,
-            }, null, false, DateTimeOffset.UtcNow);
+            PostHogSdk.CaptureException(ex, _distinctId, DefaultProperties(), null, false, DateTimeOffset.UtcNow);
         }
         catch { }
     }

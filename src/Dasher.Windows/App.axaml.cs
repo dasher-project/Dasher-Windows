@@ -48,9 +48,6 @@ public partial class App : Application
             // Fire app_launched event
             AnalyticsService.Capture("app_launched", new()
             {
-                ["platform"] = "windows",
-                ["os_version"] = RuntimeInformation.OSDescription,
-                ["app_version"] = UpdateChecker.GetCurrentVersion(),
                 ["locale"] = System.Globalization.CultureInfo.CurrentUICulture.Name,
             });
             _ = AnalyticsService.FlushAsync();
