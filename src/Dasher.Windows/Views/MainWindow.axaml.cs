@@ -108,6 +108,8 @@ public partial class MainWindow : Window
         _vm.ApplySpeed();
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
         _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
+        _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
+        UpdateControlModeLabel();
 
         _vm.LoadAlphabets();
 
@@ -609,12 +611,23 @@ public partial class MainWindow : Window
 
     private void OnParameterChanged(int parameterKey, IntPtr userData)
     {
-        if (parameterKey != _bitrateKey) return;
-        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        if (parameterKey == _bitrateKey)
         {
-            if (_vm == null || _vm.Handle == IntPtr.Zero) return;
-            _vm.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
-        });
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+                _vm.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
+            });
+        }
+        else if (parameterKey == ParameterKeys.BP_CONTROL_MODE)
+        {
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+                _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
+                UpdateControlModeLabel();
+            });
+        }
     }
 
     [DllImport("user32.dll")] private static extern bool OpenClipboard(IntPtr hWndNewOwner);
@@ -688,6 +701,24 @@ public partial class MainWindow : Window
     }
 
     private bool _gameModeActive;
+
+    private bool _controlModeActive;
+
+    private void OnToggleControlMode(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+
+        _controlModeActive = !_controlModeActive;
+        NativeBridge.dasher_set_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE, _controlModeActive ? 1 : 0);
+        UpdateControlModeLabel();
+    }
+
+    private void UpdateControlModeLabel()
+    {
+        var label = this.FindControl<TextBlock>("TxtControlLabel");
+        if (label != null)
+            label.Text = _controlModeActive ? "Leave" : "Control";
+    }
 
     private void OnToggleGameMode(object? sender, RoutedEventArgs e)
     {

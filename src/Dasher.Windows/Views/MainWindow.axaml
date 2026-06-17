@@ -248,6 +248,15 @@
 
                     <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
 
+                    <Button x:Name="BtnControlMode" Classes="nav-btn" Click="OnToggleControlMode">
+                        <StackPanel Spacing="3">
+                            <PathIcon Data="M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10M11,1H13V4H11V1M11,20H13V23H11V20M3.55,5.42L5,4L7.05,6.05L5.59,7.5L3.55,5.42M17,17.59L18.41,16L20.46,18.05L19,19.5L17,17.59M1,11H4V13H1V11M20,11H23V13H20V11M5.59,16.5L7.05,17.91L5,19.91L3.55,18.45L5.59,16.5M19,4L20.46,5.42L18.41,7.5L17,6.05L19,4Z"/>
+                            <TextBlock x:Name="TxtControlLabel" Text="Control" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="6,0"/>
+
                     <Button x:Name="BtnPrefs" Classes="nav-btn" Click="OnTogglePrefs">
                         <StackPanel Spacing="3">
                             <PathIcon Data="M12,1H10V5H12V1M12,19H10V23H12V19M16,1H14V11H16V1M16,23H14V13H16V23M8,1H6V13H8V1M8,23H6V15H8V23M13,5H9V7H13V5M17,11H13V13H17V11M9,13H5V15H9V13Z"/>

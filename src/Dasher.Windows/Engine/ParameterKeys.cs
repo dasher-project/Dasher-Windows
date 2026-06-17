@@ -10,4 +10,5 @@ public static class ParameterKeys
     public static readonly int BP_LM_ADAPTIVE = NativeBridge.dasher_find_parameter_key("BP_LM_ADAPTIVE");
     public static readonly int BP_SPEAK_ALL_ON_STOP = NativeBridge.dasher_find_parameter_key("BP_SPEAK_ALL_ON_STOP");
     public static readonly int BP_SPEAK_WORDS = NativeBridge.dasher_find_parameter_key("BP_SPEAK_WORDS");
+    public static readonly int BP_CONTROL_MODE = NativeBridge.dasher_find_parameter_key("BP_CONTROL_MODE");
 }
