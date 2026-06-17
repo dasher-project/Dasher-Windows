@@ -164,7 +164,7 @@
         </Style>
 
         <Style Selector="TextBox.message-area">
-            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceLight}"/>
             <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontFamily" Value="Arial, Segoe UI, Helvetica Neue, sans-serif"/>
