@@ -729,27 +729,20 @@ public class SettingsPanel : Control
             ? Marshal.PtrToStringUTF8(currentPalettePtr) ?? ""
             : "";
 
-        var section = new StackPanel { Spacing = 8, Margin = new Thickness(0, 4, 0, 12) };
+        var section = new StackPanel { Spacing = 10, Margin = new Thickness(0, 4, 0, 12) };
 
         var header = new TextBlock
         {
             Text = "Colour Theme",
-            FontSize = 12,
-            FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            FontSize = 13,
+            FontWeight = FontWeight.SemiBold,
+            Foreground = Application.Current?.FindResource("TextPrimary") as IBrush ?? Brushes.Black,
         };
         section.Children.Add(header);
 
-        var scroll = new ScrollViewer
-        {
-            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-            VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
-        };
-
-        var strip = new StackPanel
+        var wrap = new WrapPanel
         {
             Orientation = Orientation.Horizontal,
-            Spacing = 10,
         };
 
         var colors = new int[4];
@@ -763,23 +756,24 @@ public class SettingsPanel : Control
 
             var card = new Button
             {
-                Padding = new Thickness(0),
+                Padding = new Thickness(6),
+                Margin = new Thickness(0, 0, 8, 8),
                 Background = Brushes.Transparent,
                 BorderThickness = new Thickness(0),
                 Cursor = new Cursor(StandardCursorType.Hand),
                 Tag = name,
             };
 
-            var cardContent = new StackPanel { Spacing = 4, HorizontalAlignment = HorizontalAlignment.Center };
+            var cardContent = new StackPanel { Spacing = 6, HorizontalAlignment = HorizontalAlignment.Center };
 
             var swatchRow = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 2 };
             for (int c = 0; c < 4; c++)
             {
                 var swatch = new Border
                 {
-                    Width = 16,
-                    Height = 24,
-                    CornerRadius = new CornerRadius(2),
+                    Width = 22,
+                    Height = 28,
+                    CornerRadius = new CornerRadius(3),
                     Background = ArgbToBrush(colors[c]),
                 };
                 swatchRow.Children.Add(swatch);
@@ -788,29 +782,31 @@ public class SettingsPanel : Control
             var swatchContainer = new Border
             {
                 Child = swatchRow,
-                CornerRadius = new CornerRadius(4),
+                CornerRadius = new CornerRadius(5),
                 BorderThickness = new Thickness(isSelected ? 2 : 1),
                 BorderBrush = isSelected
-                    ? new SolidColorBrush(Color.FromRgb(0x00, 0x53, 0x7F))
+                    ? (Application.Current?.FindResource("DeepNavy") as IBrush ?? Brushes.Navy)
                     : new SolidColorBrush(Color.FromArgb(0x4D, 0x80, 0x80, 0x80)),
-                Padding = new Thickness(1),
+                Padding = new Thickness(2),
             };
             cardContent.Children.Add(swatchContainer);
 
             var nameLabel = new TextBlock
             {
                 Text = name,
-                FontSize = 9,
+                FontSize = 11,
                 Foreground = isSelected
-                    ? new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75))
-                    : new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
+                    ? (Application.Current?.FindResource("TextPrimary") as IBrush ?? Brushes.Black)
+                    : (Application.Current?.FindResource("TextSecondary") as IBrush ?? Brushes.Gray),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 TextTrimming = TextTrimming.CharacterEllipsis,
+                Width = 100,
+                TextAlignment = TextAlignment.Center,
             };
             cardContent.Children.Add(nameLabel);
 
             card.Content = cardContent;
-            card.Width = 80;
+            card.Width = 110;
 
             card.Click += (s, e) =>
             {
@@ -818,11 +814,10 @@ public class SettingsPanel : Control
                     NativeBridge.dasher_set_palette(_handle, paletteName);
             };
 
-            strip.Children.Add(card);
+            wrap.Children.Add(card);
         }
 
-        scroll.Content = strip;
-        section.Children.Add(scroll);
+        section.Children.Add(wrap);
         return section;
     }
 
