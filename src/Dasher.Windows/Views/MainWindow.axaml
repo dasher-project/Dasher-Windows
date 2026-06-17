@@ -87,6 +87,37 @@
             <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
 
+        <Style Selector="Button.settings-tab">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Margin" Value="0,0,2,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.settings-tab:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
+        </Style>
+        <Style Selector="Button.settings-tab.active /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
+        </Style>
+        <Style Selector="Button.settings-tab.active TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button.settings-tab.active LucideIcon">
+            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
+        </Style>
+        <Style Selector="Button.settings-tab TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+        <Style Selector="Button.settings-tab LucideIcon">
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+        </Style>
+
         <Style Selector="TextBlock.ui-nav-label">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="500"/>
@@ -145,6 +176,7 @@
         </Style>
     </Window.Styles>
 
+    <Grid>
     <DockPanel>
         <Border Classes="top-bar" DockPanel.Dock="Top">
             <Grid ColumnDefinitions="*, Auto">
@@ -233,6 +265,8 @@
             </Grid>
         </Border>
 
+        <Grid>
+            <DockPanel>
         <Border x:Name="StatusBarShowBtn" DockPanel.Dock="Bottom" IsVisible="{Binding IsStatusBarHidden}"
                 Background="Transparent" Padding="4">
             <Button Width="28" Height="20" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0"
@@ -382,5 +416,33 @@
                 </Grid>
             </Border>
         </Grid>
+            </DockPanel>
+        </Grid>
     </DockPanel>
+
+    <Border x:Name="SettingsDock" IsVisible="False"
+            Background="{DynamicResource SurfaceLight}">
+        <DockPanel>
+            <Border DockPanel.Dock="Top" Background="{DynamicResource BgLight}"
+                    BorderBrush="{DynamicResource BorderLight}" BorderThickness="0,0,0,1"
+                    Padding="12,8">
+                <DockPanel>
+                    <Button x:Name="SettingsCloseBtn" DockPanel.Dock="Right"
+                            Width="28" Height="28" CornerRadius="6"
+                            Background="Transparent" BorderThickness="0"
+                            VerticalAlignment="Center" Cursor="Hand"
+                            Click="OnTogglePrefs" ToolTip.Tip="Close settings">
+                        <LucideIcon Kind="{x:Static lucide:LucideIconKind.X}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
+                    </Button>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="SettingsTabContainer" Orientation="Horizontal" Spacing="2"/>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+            <ScrollViewer Padding="24,16" Background="{DynamicResource BgLight}">
+                <controls:SettingsPanel x:Name="DockedSettingsPanel"/>
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+    </Grid>
 </Window>

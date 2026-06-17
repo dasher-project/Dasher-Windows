@@ -1,14 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -27,6 +25,8 @@ public partial class MainWindow : Window
     private DasherCanvas? _canvas;
     private MainWindowViewModel? _vm;
     private string _previousOutput = "";
+    private Button[]? _settingsTabs;
+    private bool _settingsInitialized;
     private NativeBridge.SpeakCallback? _speakCallback;
     private NativeBridge.ParameterCallback? _parameterCallback;
     private int _bitrateKey;
@@ -492,50 +492,118 @@ public partial class MainWindow : Window
     {
     }
 
-    private void ApplyMode()
-    {
-        if (_vm == null) return;
-
-        var txtKeyboardLabel = this.FindControl<TextBlock>("TxtKeyboardLabel");
-
-        if (_vm.IsKeyboardMode)
-        {
-            Topmost = true;
-            MessagePane.IsVisible = false;
-            MessageSplitter.IsVisible = false;
-            TxtModeLabel.Text = "Keyboard";
-            BtnMode.Classes.Add("accent");
-            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Exit";
-            BtnKeyboard.Classes.Add("accent");
-            Width = Math.Min(Width, 600);
-        }
-        else
-        {
-            Topmost = false;
-            MessagePane.IsVisible = true;
-            MessageSplitter.IsVisible = true;
-            TxtModeLabel.Text = "Right side";
-            BtnMode.Classes.Remove("accent");
-            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Keyboard";
-            BtnKeyboard.Classes.Remove("accent");
-            if (Width < 700) Width = 900;
-        }
-
-        _previousOutput = _vm.OutputText;
-    }
-
     private void OnTogglePrefs(object? sender, RoutedEventArgs e)
     {
         if (_vm == null) return;
-        var dialog = new SettingsWindow();
-        dialog.Initialize(_vm.Handle, new SettingsWindowCallbacks
+        var dock = this.FindControl<Border>("SettingsDock");
+        if (dock == null) return;
+
+        var wasVisible = dock.IsVisible;
+        dock.IsVisible = !wasVisible;
+
+        if (sender is Button btn)
         {
-            OutputFontChanged = OnOutputFontChanged,
-            KeyboardOpacityChanged = OnKeyboardOpacityChanged,
-            InputSourceChanged = (tracker, port) => OnInputSourceChanged(null, (tracker, port)),
-            JoystickRequested = () => OnJoystickRequested(null, EventArgs.Empty),
-        });
-        dialog.ShowDialog(this);
+            if (!wasVisible) btn.Classes.Add("accent");
+            else btn.Classes.Remove("accent");
+        }
+
+        if (!wasVisible && !_settingsInitialized)
+        {
+            InitializeSettingsPanel();
+            _settingsInitialized = true;
+        }
+
+        // Pause/resume canvas timer when settings are open
+        if (_canvas != null)
+        {
+            if (!wasVisible)
+                _canvas.PauseTimer();
+            else
+                _canvas.ResumeTimer();
+        }
+    }
+
+    private static readonly Dictionary<string, LucideIconKind> SettingsTabIcons = new()
+    {
+        { "Input", LucideIconKind.MousePointerClick },
+        { "Language", LucideIconKind.Languages },
+        { "Customization", LucideIconKind.Palette },
+        { "Speed", LucideIconKind.Gauge },
+        { "Output", LucideIconKind.Type },
+        { "Speech", LucideIconKind.Volume2 },
+        { "Appearance", LucideIconKind.Eye },
+        { "Advanced", LucideIconKind.Wrench },
+        { "Other", LucideIconKind.Ellipsis },
+    };
+
+    private void InitializeSettingsPanel()
+    {
+        var panel = this.FindControl<SettingsPanel>("DockedSettingsPanel");
+        if (panel == null || _vm == null) return;
+
+        panel.Initialize(_vm.Handle);
+        panel.OutputFontChanged += OnOutputFontChanged;
+        panel.KeyboardOpacityChanged += OnKeyboardOpacityChanged;
+        panel.InputSourceChanged += OnInputSourceChanged;
+        panel.JoystickRequested += OnJoystickRequested;
+
+        BuildSettingsTabs(panel);
+    }
+
+    private void BuildSettingsTabs(SettingsPanel settingsPanel)
+    {
+        var container = this.FindControl<StackPanel>("SettingsTabContainer");
+        if (container == null) return;
+
+        container.Children.Clear();
+        _settingsTabs = [];
+
+        foreach (var category in settingsPanel.GetCategoryNames())
+        {
+            var btn = new Button
+            {
+                Classes = { "settings-tab" },
+                Tag = category,
+            };
+
+            var stack = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 6,
+            };
+            var iconKind = SettingsTabIcons.GetValueOrDefault(category, LucideIconKind.Circle);
+            stack.Children.Add(new LucideIcon { Kind = iconKind, Size = 16 });
+            stack.Children.Add(new TextBlock { Text = category });
+
+            btn.Content = stack;
+            btn.Click += OnSettingsTabClick;
+            container.Children.Add(btn);
+            _settingsTabs = [.. _settingsTabs, btn];
+        }
+
+        ActivateSettingsTab(0);
+        settingsPanel.ShowCategory(settingsPanel.GetCategoryNames().FirstOrDefault() ?? "");
+    }
+
+    private void OnSettingsTabClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button btn) return;
+        var category = btn.Tag as string ?? "";
+        var idx = Array.FindIndex(_settingsTabs!, t => t.Tag as string == category);
+        if (idx < 0) return;
+        ActivateSettingsTab(idx);
+        var panel = this.FindControl<SettingsPanel>("DockedSettingsPanel");
+        panel?.ShowCategory(category);
+    }
+
+    private void ActivateSettingsTab(int index)
+    {
+        if (_settingsTabs == null) return;
+        for (int i = 0; i < _settingsTabs.Length; i++)
+        {
+            if (i == index) _settingsTabs[i].Classes.Add("active");
+            else _settingsTabs[i].Classes.Remove("active");
+        }
     }
 
     private void OnNew(object? sender, RoutedEventArgs e)
@@ -600,10 +668,6 @@ public partial class MainWindow : Window
     }
 
 
-
-    private void OnStats(object? sender, RoutedEventArgs e)
-    {
-    }
 
     private void OnLanguageChanged(object? sender, SelectionChangedEventArgs e)
     {

@@ -48,6 +48,9 @@ public partial class DasherCanvas : Control
 
     public IntPtr GetHandle() => _handle;
 
+    public void PauseTimer() => _timer.Stop();
+    public void ResumeTimer() => _timer.Start();
+
     public void Initialize(string dataDir, string userDir)
     {
         _handle = NativeBridge.dasher_create(dataDir, userDir, out var errorPtr);
