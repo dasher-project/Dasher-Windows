@@ -197,6 +197,7 @@ public partial class MainWindow : Window
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         _canvas?.Shutdown();
+        _ = AnalyticsService.ShutdownAsync();
         base.OnClosing(e);
     }
 
@@ -605,6 +606,7 @@ public partial class MainWindow : Window
         ActivateSettingsTab(idx);
         var panel = this.FindControl<SettingsPanel>("DockedSettingsPanel");
         panel?.ShowCategory(category);
+        AnalyticsService.Capture("settings_viewed", new() { ["tab_name"] = category });
     }
 
     private void ActivateSettingsTab(int index)
@@ -685,7 +687,9 @@ public partial class MainWindow : Window
         if (_vm == null || _vm.Handle == IntPtr.Zero || _vm.SelectedLanguageIndex < 0) return;
         if (_vm.SelectedLanguageIndex < _vm.Languages.Count)
         {
-            NativeBridge.dasher_set_alphabet_id(_vm.Handle, _vm.Languages[_vm.SelectedLanguageIndex]);
+            var alphabet = _vm.Languages[_vm.SelectedLanguageIndex];
+            NativeBridge.dasher_set_alphabet_id(_vm.Handle, alphabet);
+            AnalyticsService.Capture("alphabet_selected", new() { ["alphabet_id"] = alphabet });
         }
     }
 
@@ -704,6 +708,7 @@ public partial class MainWindow : Window
         else
         {
             await _canvas.InitializeEyeGazeAsync(args.trackerType, args.udpPort);
+            AnalyticsService.Capture("input_method_changed", new() { ["method"] = "eye_gaze" });
         }
     }
 
@@ -712,6 +717,7 @@ public partial class MainWindow : Window
         if (_canvas == null) return;
         _canvas.DisableEyeGaze();
         _canvas.InitializeJoystick();
+        AnalyticsService.Capture("input_method_changed", new() { ["method"] = "joystick" });
     }
 
     private async void OnCopyAll(object? sender, RoutedEventArgs e)

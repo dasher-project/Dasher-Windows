@@ -30,5 +30,6 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
     <PackageReference Include="DotNetTtsWrapper" Version="1.1.1" />
     <PackageReference Include="Lucide.Avalonia" Version="0.2.10" />
+    <PackageReference Include="PostHog" Version="2.7.1" />
   </ItemGroup>
 </Project>
