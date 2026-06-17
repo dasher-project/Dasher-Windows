@@ -257,7 +257,6 @@ public partial class MainWindow : Window
     private static void KbLog(string msg)
     {
         var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
-        Debug.Write(line);
         try { File.AppendAllText(KbLogPath, line); } catch { }
     }
 

@@ -8,8 +8,10 @@
 //   3: Rectangle outline     (a=x1, b=y1, c=x2, d=y2, argb)
 //   4: Rectangle filled      (a=x1, b=y1, c=x2, d=y2, argb)
 //   5: Text                  (a=x, b=y, c=fontSize, d=stringIndex, argb)
+//   6: Set line width        (a=width, b,c,d unused)
 
 using System;
+using System.Globalization;
 using Avalonia;
 using Avalonia.Media;
 
@@ -17,9 +19,13 @@ namespace Dasher.Windows.Engine;
 
 public static class CommandRenderer
 {
-    public static void Render(DrawingContext context, int[] commands, string[] strings, Size surfaceSize)
+    public static void Render(DrawingContext context, int[] commands, string[] strings, Size surfaceSize, string dasherFont = "")
     {
         if (commands == null || commands.Length == 0) return;
+
+        double currentLineWidth = 1;
+        var fontFamily = string.IsNullOrWhiteSpace(dasherFont) ? "Segoe UI" : dasherFont;
+        var cachedTypeface = new Typeface(fontFamily);
 
         for (int i = 0; i + 5 < commands.Length; i += 6)
         {
@@ -31,7 +37,7 @@ public static class CommandRenderer
             int argb = commands[i + 5];
 
             byte alpha = (byte)((argb >> 24) & 0xFF);
-            if (alpha == 0) continue;
+            if (alpha == 0 && op != 6) continue;
 
             var color = Color.FromArgb(alpha, (byte)((argb >> 16) & 0xFF), (byte)((argb >> 8) & 0xFF), (byte)(argb & 0xFF));
 
@@ -50,7 +56,7 @@ public static class CommandRenderer
                     }
                     break;
                 case 2:
-                    context.DrawLine(new Pen(new SolidColorBrush(color), 1), new Point(a, b), new Point(c, d));
+                    context.DrawLine(new Pen(new SolidColorBrush(color), Math.Max(1, currentLineWidth)), new Point(a, b), new Point(c, d));
                     break;
                 case 3:
                     {
@@ -70,14 +76,17 @@ public static class CommandRenderer
                         {
                             var formatted = new FormattedText(
                                 strings[d],
-                                System.Globalization.CultureInfo.CurrentCulture,
+                                CultureInfo.CurrentCulture,
                                 FlowDirection.LeftToRight,
-                                new Typeface("Segoe UI"),
+                                cachedTypeface,
                                 c,
                                 new SolidColorBrush(color));
                             context.DrawText(formatted, new Point(a, b));
                         }
                     }
+                    break;
+                case 6:
+                    currentLineWidth = a;
                     break;
             }
         }
