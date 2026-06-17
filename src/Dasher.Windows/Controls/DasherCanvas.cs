@@ -17,6 +17,7 @@ public partial class DasherCanvas : Control
     private int[]? _commands;
     private string[]? _strings;
     private readonly DispatcherTimer _timer;
+    private string _dasherFont = "";
 
     private EyeGazeIntegration? _eyeGazeIntegration;
     private bool _useEyeGazeInput;
@@ -83,7 +84,7 @@ public partial class DasherCanvas : Control
     {
         base.Render(context);
         if (_commands != null)
-            CommandRenderer.Render(context, _commands, _strings ?? Array.Empty<string>(), Bounds.Size);
+            CommandRenderer.Render(context, _commands, _strings ?? Array.Empty<string>(), Bounds.Size, _dasherFont);
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -207,6 +208,13 @@ public partial class DasherCanvas : Control
                 if (text != OutputText)
                     OutputText = text ?? "";
             }
+        }
+        catch { }
+
+        try
+        {
+            var fontPtr = NativeBridge.dasher_get_string_parameter(_handle, ParameterKeys.SP_DASHER_FONT);
+            _dasherFont = fontPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(fontPtr) ?? "" : "";
         }
         catch { }
 

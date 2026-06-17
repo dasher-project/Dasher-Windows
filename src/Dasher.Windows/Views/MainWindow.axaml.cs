@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -31,6 +32,7 @@ public partial class MainWindow : Window
     private NativeBridge.SpeakCallback? _speakCallback;
     private NativeBridge.ParameterCallback? _parameterCallback;
     private int _bitrateKey;
+    private IntPtr _lastTargetWindow = IntPtr.Zero;
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -40,6 +42,40 @@ public partial class MainWindow : Window
 
     [DllImport("user32.dll")]
     private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
+    [DllImport("user32.dll")]
+    private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+    [DllImport("user32.dll")]
+    private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
+
+    [DllImport("kernel32.dll")]
+    private static extern uint GetCurrentThreadId();
+
+    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
+    private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
+
+    [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
+    private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+    [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
+    private static extern IntPtr GetWindowLong32(IntPtr hWnd, int nIndex);
+
+    [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
+    private static extern IntPtr SetWindowLong32(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+    private const int GWL_EXSTYLE = -20;
+    private const int WS_EX_NOACTIVATE = 0x08000000;
+
+    private static IntPtr GetWindowExStyle(IntPtr hWnd)
+    {
+        return IntPtr.Size == 8 ? GetWindowLongPtr64(hWnd, GWL_EXSTYLE) : GetWindowLong32(hWnd, GWL_EXSTYLE);
+    }
+
+    private static IntPtr SetWindowExStyle(IntPtr hWnd, IntPtr value)
+    {
+        return IntPtr.Size == 8 ? SetWindowLongPtr64(hWnd, GWL_EXSTYLE, value) : SetWindowLong32(hWnd, GWL_EXSTYLE, value);
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     private struct INPUT
@@ -51,7 +87,21 @@ public partial class MainWindow : Window
     [StructLayout(LayoutKind.Explicit)]
     private struct INPUTUNION
     {
+        // MOUSEINPUT is the largest member of the Windows union — it MUST be
+        // declared so Marshal.SizeOf<INPUT>() matches the native sizeof(INPUT).
+        [FieldOffset(0)] public MOUSEINPUT mi;
         [FieldOffset(0)] public KEYBOARDINPUT ki;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MOUSEINPUT
+    {
+        public int dx;
+        public int dy;
+        public uint mouseData;
+        public uint dwFlags;
+        public uint time;
+        public IntPtr dwExtraInfo;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -95,6 +145,17 @@ public partial class MainWindow : Window
         _canvas.EngineMessage += OnEngineMessage;
         _vm.SetHandle(_canvas.GetHandle());
 
+        this.Deactivated += (_, _) =>
+        {
+            var fg = GetForegroundWindow();
+            var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+            if (fg != ourHandle && fg != IntPtr.Zero)
+            {
+                _lastTargetWindow = fg;
+                KbLog($"Deactivated: target window = 0x{fg:X}");
+            }
+        };
+
         _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
         NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
 
@@ -108,6 +169,8 @@ public partial class MainWindow : Window
         _vm.ApplySpeed();
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
         _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
+        _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
+        UpdateControlModeLabel();
 
         _vm.LoadAlphabets();
 
@@ -174,6 +237,7 @@ public partial class MainWindow : Window
             if (current.Length > _previousOutput.Length)
             {
                 var newChars = current[_previousOutput.Length..];
+                KbLog($"OnOutputTextChanged: new chars=\"{newChars}\" (total len={current.Length})");
                 SendTextToForeground(newChars);
             }
             _previousOutput = current;
@@ -187,12 +251,81 @@ public partial class MainWindow : Window
             SyncGameModeState();
     }
 
+    private static readonly string KbLogPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher", "keyboard_debug.log");
+
+    private static void KbLog(string msg)
+    {
+        var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
+        try { File.AppendAllText(KbLogPath, line); } catch { }
+    }
+
+    private void SetNoActivate(bool enable)
+    {
+        var handle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+        if (handle == IntPtr.Zero)
+        {
+            KbLog("SetNoActivate: no HWND available!");
+            return;
+        }
+
+        var exStyle = GetWindowExStyle(handle);
+        var newStyle = enable
+            ? (IntPtr)(exStyle.ToInt64() | WS_EX_NOACTIVATE)
+            : (IntPtr)(exStyle.ToInt64() & ~WS_EX_NOACTIVATE);
+        SetWindowExStyle(handle, newStyle);
+
+        // Verify it stuck
+        var verify = GetWindowExStyle(handle);
+        var hasFlag = (verify.ToInt64() & WS_EX_NOACTIVATE) != 0;
+        KbLog($"SetNoActivate({enable}): style=0x{exStyle:X} → 0x{newStyle:X}, verified={hasFlag}");
+    }
+
     private void SendTextToForeground(string text)
     {
+        var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+        var fg = GetForegroundWindow();
+
+        KbLog($"SendTextToForeground: text=\"{text}\" fg=0x{fg:X} us=0x{ourHandle:X} lastTarget=0x{_lastTargetWindow:X}");
+
+        // Track or restore the target window
+        if (fg != ourHandle && fg != IntPtr.Zero)
+        {
+            _lastTargetWindow = fg;
+            KbLog("  → foreground is target, tracking it");
+        }
+        else if (_lastTargetWindow != IntPtr.Zero)
+        {
+            KbLog("  → Dasher has focus, restoring target...");
+            var targetThread = GetWindowThreadProcessId(_lastTargetWindow, out _);
+            var ourThread = GetCurrentThreadId();
+            KbLog($"  → targetThread={targetThread} ourThread={ourThread}");
+
+            if (targetThread != 0 && targetThread != ourThread)
+            {
+                var attached = AttachThreadInput(ourThread, targetThread, true);
+                var set = SetForegroundWindow(_lastTargetWindow);
+                AttachThreadInput(ourThread, targetThread, false);
+                KbLog($"  → AttachThreadInput={attached} SetForegroundWindow={set}");
+            }
+            else
+            {
+                var set = SetForegroundWindow(_lastTargetWindow);
+                KbLog($"  → SetForegroundWindow={set}");
+            }
+        }
+        else
+        {
+            KbLog("  → no known target window!");
+        }
+
         foreach (char c in text)
         {
             SendUnicodeChar(c);
         }
+
+        var fgAfter = GetForegroundWindow();
+        KbLog($"  → after SendInput, fg=0x{fgAfter:X}");
     }
 
     private void SendUnicodeChar(char c)
@@ -207,7 +340,9 @@ public partial class MainWindow : Window
         inputs[1].u.ki.wScan = c;
         inputs[1].u.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
 
-        SendInput(2, inputs, Marshal.SizeOf<INPUT>());
+        var cbSize = Marshal.SizeOf<INPUT>();
+        var sent = SendInput(2, inputs, cbSize);
+        KbLog($"  SendInput('{c}'): cbSize={cbSize} sent={sent} (expected 2)");
     }
 
     private void OnModeRightSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Right);
@@ -259,17 +394,32 @@ public partial class MainWindow : Window
             MainGrid.Children.Add(DasherCanvas);
             Grid.SetColumn(DasherCanvas, 0);
 
+            // Remember the window that currently has focus so we can send text to it
+            var fg = GetForegroundWindow();
+            var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+            if (fg != ourHandle && fg != IntPtr.Zero)
+                _lastTargetWindow = fg;
+
             Topmost = true;
             this.Opacity = _vm.KeyboardModeOpacity;
             TxtModeLabel.Text = "Keyboard";
             BtnMode.Classes.Add("accent");
             if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Exit";
             BtnKeyboard.Classes.Add("accent");
+
+            // Prevent Dasher from stealing focus when clicked, so keystrokes
+            // go to the target app (same technique as Windows On-Screen Keyboard).
+            // Apply now and again after render — Avalonia may overwrite the
+            // extended style when processing Topmost/Opacity changes.
+            SetNoActivate(true);
+            Avalonia.Threading.Dispatcher.UIThread.Post(
+                () => SetNoActivate(true), Avalonia.Threading.DispatcherPriority.Render);
         }
         else
         {
             Topmost = false;
             this.Opacity = 1.0;
+            SetNoActivate(false);
 
             TxtModeLabel.Text = position switch
             {
@@ -609,12 +759,23 @@ public partial class MainWindow : Window
 
     private void OnParameterChanged(int parameterKey, IntPtr userData)
     {
-        if (parameterKey != _bitrateKey) return;
-        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        if (parameterKey == _bitrateKey)
         {
-            if (_vm == null || _vm.Handle == IntPtr.Zero) return;
-            _vm.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
-        });
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+                _vm.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
+            });
+        }
+        else if (parameterKey == ParameterKeys.BP_CONTROL_MODE)
+        {
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+                _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
+                UpdateControlModeLabel();
+            });
+        }
     }
 
     [DllImport("user32.dll")] private static extern bool OpenClipboard(IntPtr hWndNewOwner);
@@ -688,6 +849,24 @@ public partial class MainWindow : Window
     }
 
     private bool _gameModeActive;
+
+    private bool _controlModeActive;
+
+    private void OnToggleControlMode(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+
+        _controlModeActive = !_controlModeActive;
+        NativeBridge.dasher_set_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE, _controlModeActive ? 1 : 0);
+        UpdateControlModeLabel();
+    }
+
+    private void UpdateControlModeLabel()
+    {
+        var label = this.FindControl<TextBlock>("TxtControlLabel");
+        if (label != null)
+            label.Text = _controlModeActive ? "Leave" : "Control";
+    }
 
     private void OnToggleGameMode(object? sender, RoutedEventArgs e)
     {
