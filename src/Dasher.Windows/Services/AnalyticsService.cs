@@ -44,6 +44,7 @@ public static class AnalyticsService
             PostHogSdk.Init(new PostHogOptions
             {
                 ProjectToken = ProjectToken,
+                HostUrl = new Uri("https://us.i.posthog.com"),
             });
         }
         catch { }

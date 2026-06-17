@@ -83,7 +83,7 @@ public class SettingsPanel : Control
                 ["Input"] = 0, ["Language"] = 1, ["Customization"] = 2,
                 ["Speed"] = 3, ["Output"] = 4, ["Speech"] = 5,
                 ["Advanced"] = 6, ["Other"] = 7, ["Appearance"] = 8,
-                ["Privacy"] = 9,
+                ["Privacy"] = 99,
             };
             int oa = order.TryGetValue(a, out var va) ? va : 99;
             int ob = order.TryGetValue(b, out var vb) ? vb : 99;

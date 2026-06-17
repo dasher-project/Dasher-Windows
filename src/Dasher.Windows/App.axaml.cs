@@ -53,6 +53,7 @@ public partial class App : Application
                 ["app_version"] = UpdateChecker.GetCurrentVersion(),
                 ["locale"] = System.Globalization.CultureInfo.CurrentUICulture.Name,
             });
+            _ = AnalyticsService.FlushAsync();
         }
 
         base.OnFrameworkInitializationCompleted();
