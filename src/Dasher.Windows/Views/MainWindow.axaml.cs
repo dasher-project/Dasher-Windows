@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -135,7 +136,10 @@ public partial class MainWindow : Window
             var fg = GetForegroundWindow();
             var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
             if (fg != ourHandle && fg != IntPtr.Zero)
+            {
                 _lastTargetWindow = fg;
+                KbLog($"Deactivated: target window = 0x{fg:X}");
+            }
         };
 
         _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
@@ -219,6 +223,7 @@ public partial class MainWindow : Window
             if (current.Length > _previousOutput.Length)
             {
                 var newChars = current[_previousOutput.Length..];
+                KbLog($"OnOutputTextChanged: new chars=\"{newChars}\" (total len={current.Length})");
                 SendTextToForeground(newChars);
             }
             _previousOutput = current;
@@ -232,16 +237,32 @@ public partial class MainWindow : Window
             SyncGameModeState();
     }
 
+    private static void KbLog(string msg)
+    {
+        var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}";
+        Debug.WriteLine(line);
+        Console.WriteLine(line);
+    }
+
     private void SetNoActivate(bool enable)
     {
         var handle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
-        if (handle == IntPtr.Zero) return;
+        if (handle == IntPtr.Zero)
+        {
+            KbLog("SetNoActivate: no HWND available!");
+            return;
+        }
 
         var exStyle = GetWindowExStyle(handle);
-        if (enable)
-            SetWindowExStyle(handle, (IntPtr)(exStyle.ToInt64() | WS_EX_NOACTIVATE));
-        else
-            SetWindowExStyle(handle, (IntPtr)(exStyle.ToInt64() & ~WS_EX_NOACTIVATE));
+        var newStyle = enable
+            ? (IntPtr)(exStyle.ToInt64() | WS_EX_NOACTIVATE)
+            : (IntPtr)(exStyle.ToInt64() & ~WS_EX_NOACTIVATE);
+        SetWindowExStyle(handle, newStyle);
+
+        // Verify it stuck
+        var verify = GetWindowExStyle(handle);
+        var hasFlag = (verify.ToInt64() & WS_EX_NOACTIVATE) != 0;
+        KbLog($"SetNoActivate({enable}): style=0x{exStyle:X} → 0x{newStyle:X}, verified={hasFlag}");
     }
 
     private void SendTextToForeground(string text)
@@ -249,34 +270,46 @@ public partial class MainWindow : Window
         var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
         var fg = GetForegroundWindow();
 
+        KbLog($"SendTextToForeground: text=\"{text}\" fg=0x{fg:X} us=0x{ourHandle:X} lastTarget=0x{_lastTargetWindow:X}");
+
         // Track or restore the target window
         if (fg != ourHandle && fg != IntPtr.Zero)
         {
             _lastTargetWindow = fg;
+            KbLog("  → foreground is target, tracking it");
         }
         else if (_lastTargetWindow != IntPtr.Zero)
         {
-            // Dasher has focus — temporarily attach our input thread to
-            // the target's thread so SetForegroundWindow succeeds, then
-            // yield focus back to the target app.
+            KbLog("  → Dasher has focus, restoring target...");
             var targetThread = GetWindowThreadProcessId(_lastTargetWindow, out _);
             var ourThread = GetCurrentThreadId();
+            KbLog($"  → targetThread={targetThread} ourThread={ourThread}");
+
             if (targetThread != 0 && targetThread != ourThread)
             {
-                AttachThreadInput(ourThread, targetThread, true);
-                SetForegroundWindow(_lastTargetWindow);
+                var attached = AttachThreadInput(ourThread, targetThread, true);
+                var set = SetForegroundWindow(_lastTargetWindow);
                 AttachThreadInput(ourThread, targetThread, false);
+                KbLog($"  → AttachThreadInput={attached} SetForegroundWindow={set}");
             }
             else
             {
-                SetForegroundWindow(_lastTargetWindow);
+                var set = SetForegroundWindow(_lastTargetWindow);
+                KbLog($"  → SetForegroundWindow={set}");
             }
+        }
+        else
+        {
+            KbLog("  → no known target window!");
         }
 
         foreach (char c in text)
         {
             SendUnicodeChar(c);
         }
+
+        var fgAfter = GetForegroundWindow();
+        KbLog($"  → after SendInput, fg=0x{fgAfter:X}");
     }
 
     private void SendUnicodeChar(char c)
