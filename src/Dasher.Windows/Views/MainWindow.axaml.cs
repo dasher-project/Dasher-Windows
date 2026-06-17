@@ -87,7 +87,21 @@ public partial class MainWindow : Window
     [StructLayout(LayoutKind.Explicit)]
     private struct INPUTUNION
     {
+        // MOUSEINPUT is the largest member of the Windows union — it MUST be
+        // declared so Marshal.SizeOf<INPUT>() matches the native sizeof(INPUT).
+        [FieldOffset(0)] public MOUSEINPUT mi;
         [FieldOffset(0)] public KEYBOARDINPUT ki;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MOUSEINPUT
+    {
+        public int dx;
+        public int dy;
+        public uint mouseData;
+        public uint dwFlags;
+        public uint time;
+        public IntPtr dwExtraInfo;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -327,7 +341,9 @@ public partial class MainWindow : Window
         inputs[1].u.ki.wScan = c;
         inputs[1].u.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
 
-        SendInput(2, inputs, Marshal.SizeOf<INPUT>());
+        var cbSize = Marshal.SizeOf<INPUT>();
+        var sent = SendInput(2, inputs, cbSize);
+        KbLog($"  SendInput('{c}'): cbSize={cbSize} sent={sent} (expected 2)");
     }
 
     private void OnModeRightSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Right);
