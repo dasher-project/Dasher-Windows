@@ -219,7 +219,7 @@
                             </MenuFlyout>
                         </Button.Flyout>
                         <StackPanel Spacing="3">
-                            <LucideIcon Kind="{x:Static lucide:LucideIconKind.FlipHorizontal2}" Size="20"/>
+                            <LucideIcon x:Name="ModeIcon" Kind="{x:Static lucide:LucideIconKind.PanelRight}" Size="20"/>
                             <StackPanel Orientation="Horizontal" Spacing="2" HorizontalAlignment="Center">
                                 <TextBlock Name="TxtModeLabel" Text="Right side" FontSize="11" FontWeight="Medium" Foreground="{DynamicResource TextSecondary}"/>
                                 <TextBlock Text="▾" FontSize="11" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
@@ -240,7 +240,7 @@
 
                     <Button x:Name="BtnGameMode" Classes="nav-btn" Click="OnToggleGameMode">
                         <StackPanel Spacing="3">
-                            <LucideIcon Kind="{x:Static lucide:LucideIconKind.Gamepad2}" Size="20"/>
+                            <LucideIcon x:Name="GameIcon" Kind="{x:Static lucide:LucideIconKind.Gamepad2}" Size="20"/>
                             <TextBlock x:Name="TxtGameLabel" Text="Game" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
                         </StackPanel>
                     </Button>

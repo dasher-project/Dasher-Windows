@@ -430,6 +430,13 @@ public partial class MainWindow : Window
                 PanePosition.Top => "Top",
                 _ => "Right side",
             };
+            ModeIcon.Kind = position switch
+            {
+                PanePosition.Left => LucideIconKind.PanelLeft,
+                PanePosition.Bottom => LucideIconKind.PanelBottom,
+                PanePosition.Top => LucideIconKind.PanelTop,
+                _ => LucideIconKind.PanelRight,
+            };
             BtnMode.Classes.Remove("accent");
             if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Keyboard";
             BtnKeyboard.Classes.Remove("accent");
@@ -879,8 +886,8 @@ public partial class MainWindow : Window
             NativeBridge.dasher_leave_game_mode(_vm.Handle);
             _gameModeActive = false;
             NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 1);
-            var txtGameLabel = this.FindControl<TextBlock>("TxtGameLabel");
-            if (txtGameLabel != null) txtGameLabel.Text = "Game";
+            GameIcon.Kind = LucideIconKind.Gamepad2;
+            TxtGameLabel.Text = "Game";
             var gameBar = this.FindControl<Border>("GameTargetBar");
             if (gameBar != null) gameBar.IsVisible = false;
         }
@@ -891,8 +898,8 @@ public partial class MainWindow : Window
             {
                 _gameModeActive = true;
                 NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 0);
-                var txtGameLabel = this.FindControl<TextBlock>("TxtGameLabel");
-                if (txtGameLabel != null) txtGameLabel.Text = "Leave";
+                GameIcon.Kind = LucideIconKind.Pause;
+                TxtGameLabel.Text = "Leave";
                 var gameBar = this.FindControl<Border>("GameTargetBar");
                 if (gameBar != null) gameBar.IsVisible = true;
             }
