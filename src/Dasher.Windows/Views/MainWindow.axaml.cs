@@ -18,6 +18,7 @@ using Dasher.Windows.Engine;
 using Dasher.Windows.Services;
 using Dasher.Windows.Speech;
 using Dasher.Windows.ViewModels;
+using Lucide.Avalonia;
 
 namespace Dasher.Windows.Views;
 
@@ -673,6 +674,7 @@ public partial class MainWindow : Window
         if (_vm == null) return;
         _vm.IsPlaying = !_vm.IsPlaying;
         TxtPlayLabel.Text = _vm.IsPlaying ? "Pause" : "Play";
+        PlayIcon.Kind = _vm.IsPlaying ? LucideIconKind.Pause : LucideIconKind.Play;
         if (_vm.IsPlaying)
             BtnPlay.Classes.Add("accent");
         else
