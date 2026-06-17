@@ -31,6 +31,7 @@ public partial class MainWindow : Window
     private NativeBridge.SpeakCallback? _speakCallback;
     private NativeBridge.ParameterCallback? _parameterCallback;
     private int _bitrateKey;
+    private IntPtr _lastTargetWindow = IntPtr.Zero;
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -40,6 +41,31 @@ public partial class MainWindow : Window
 
     [DllImport("user32.dll")]
     private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
+    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
+    private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
+
+    [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
+    private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+    [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
+    private static extern IntPtr GetWindowLong32(IntPtr hWnd, int nIndex);
+
+    [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
+    private static extern IntPtr SetWindowLong32(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+    private const int GWL_EXSTYLE = -20;
+    private const int WS_EX_NOACTIVATE = 0x08000000;
+
+    private static IntPtr GetWindowExStyle(IntPtr hWnd)
+    {
+        return IntPtr.Size == 8 ? GetWindowLongPtr64(hWnd, GWL_EXSTYLE) : GetWindowLong32(hWnd, GWL_EXSTYLE);
+    }
+
+    private static IntPtr SetWindowExStyle(IntPtr hWnd, IntPtr value)
+    {
+        return IntPtr.Size == 8 ? SetWindowLongPtr64(hWnd, GWL_EXSTYLE, value) : SetWindowLong32(hWnd, GWL_EXSTYLE, value);
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     private struct INPUT
@@ -94,6 +120,14 @@ public partial class MainWindow : Window
         _canvas.Initialize(dataDir, dataDir);
         _canvas.EngineMessage += OnEngineMessage;
         _vm.SetHandle(_canvas.GetHandle());
+
+        this.Deactivated += (_, _) =>
+        {
+            var fg = GetForegroundWindow();
+            var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+            if (fg != ourHandle && fg != IntPtr.Zero)
+                _lastTargetWindow = fg;
+        };
 
         _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
         NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
@@ -189,8 +223,33 @@ public partial class MainWindow : Window
             SyncGameModeState();
     }
 
+    private void SetNoActivate(bool enable)
+    {
+        var handle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+        if (handle == IntPtr.Zero) return;
+
+        var exStyle = GetWindowExStyle(handle);
+        if (enable)
+            SetWindowExStyle(handle, (IntPtr)(exStyle.ToInt64() | WS_EX_NOACTIVATE));
+        else
+            SetWindowExStyle(handle, (IntPtr)(exStyle.ToInt64() & ~WS_EX_NOACTIVATE));
+    }
+
     private void SendTextToForeground(string text)
     {
+        // If WS_EX_NOACTIVATE is working, the foreground window is the target app.
+        // As a fallback, if Dasher somehow has focus, push it back to the last known target.
+        var fg = GetForegroundWindow();
+        var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+        if (fg == ourHandle && _lastTargetWindow != IntPtr.Zero)
+        {
+            SetForegroundWindow(_lastTargetWindow);
+        }
+        else if (fg != ourHandle && fg != IntPtr.Zero)
+        {
+            _lastTargetWindow = fg;
+        }
+
         foreach (char c in text)
         {
             SendUnicodeChar(c);
@@ -261,17 +320,28 @@ public partial class MainWindow : Window
             MainGrid.Children.Add(DasherCanvas);
             Grid.SetColumn(DasherCanvas, 0);
 
+            // Remember the window that currently has focus so we can send text to it
+            var fg = GetForegroundWindow();
+            var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+            if (fg != ourHandle && fg != IntPtr.Zero)
+                _lastTargetWindow = fg;
+
             Topmost = true;
             this.Opacity = _vm.KeyboardModeOpacity;
             TxtModeLabel.Text = "Keyboard";
             BtnMode.Classes.Add("accent");
             if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Exit";
             BtnKeyboard.Classes.Add("accent");
+
+            // Prevent Dasher from stealing focus when clicked, so keystrokes
+            // go to the target app (same technique as Windows On-Screen Keyboard)
+            SetNoActivate(true);
         }
         else
         {
             Topmost = false;
             this.Opacity = 1.0;
+            SetNoActivate(false);
 
             TxtModeLabel.Text = position switch
             {
