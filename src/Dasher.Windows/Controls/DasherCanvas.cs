@@ -22,7 +22,6 @@ public partial class DasherCanvas : Control
     private EyeGazeIntegration? _eyeGazeIntegration;
     private bool _useEyeGazeInput;
 
-    private NativeBridge.OutputCallback? _outputCallback;
     private NativeBridge.MessageCallback? _messageCallback;
     private bool _callbacksRegistered;
     private int _lastScreenWidth;
@@ -138,13 +137,6 @@ public partial class DasherCanvas : Control
 
         try
         {
-            _outputCallback = new NativeBridge.OutputCallback(OnOutputEvent);
-            NativeBridge.dasher_set_output_callback(_handle, _outputCallback, IntPtr.Zero);
-        }
-        catch { }
-
-        try
-        {
             _messageCallback = new NativeBridge.MessageCallback(OnEngineMessage);
             NativeBridge.dasher_set_message_callback(_handle, _messageCallback, IntPtr.Zero);
         }
@@ -222,18 +214,6 @@ public partial class DasherCanvas : Control
         catch { }
 
         InvalidateVisual();
-    }
-
-    private void OnOutputEvent(int eventType, IntPtr textPtr, IntPtr userData)
-    {
-        var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (eventType == 0)
-                OutputText += text;
-            else if (eventType == 1 && OutputText.Length >= text.Length)
-                OutputText = OutputText[..^text.Length];
-        });
     }
 
     private void OnEngineMessage(int messageType, IntPtr textPtr, IntPtr userData)
