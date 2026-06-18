@@ -64,6 +64,7 @@ public partial class MainWindow : Window
 
     private const int GWL_EXSTYLE = -20;
     private const int WS_EX_NOACTIVATE = 0x08000000;
+    private const int WS_EX_LAYERED = 0x00080000;
 
     private static IntPtr GetWindowExStyle(IntPtr hWnd)
     {
@@ -401,15 +402,24 @@ public partial class MainWindow : Window
         }
 
         var exStyle = GetWindowExStyle(handle);
-        var newStyle = enable
-            ? (IntPtr)(exStyle.ToInt64() | WS_EX_NOACTIVATE)
-            : (IntPtr)(exStyle.ToInt64() & ~WS_EX_NOACTIVATE);
-        SetWindowExStyle(handle, newStyle);
+        long newStyle;
+        if (enable)
+        {
+            // Add both WS_EX_NOACTIVATE and WS_EX_LAYERED (layered is required
+            // for Window.Opacity to work — Avalonia may not set it in time)
+            newStyle = exStyle.ToInt64() | WS_EX_NOACTIVATE | WS_EX_LAYERED;
+        }
+        else
+        {
+            newStyle = exStyle.ToInt64() & ~WS_EX_NOACTIVATE;
+        }
+        SetWindowExStyle(handle, (IntPtr)newStyle);
 
         // Verify it stuck
         var verify = GetWindowExStyle(handle);
         var hasFlag = (verify.ToInt64() & WS_EX_NOACTIVATE) != 0;
-        KbLog($"SetNoActivate({enable}): style=0x{exStyle:X} → 0x{newStyle:X}, verified={hasFlag}");
+        var hasLayered = (verify.ToInt64() & WS_EX_LAYERED) != 0;
+        KbLog($"SetNoActivate({enable}): style=0x{exStyle:X} → 0x{newStyle:X}, noActivate={hasFlag}, layered={hasLayered}");
     }
 
     private void SendTextToForeground(string text)
@@ -520,9 +530,11 @@ public partial class MainWindow : Window
 
         if (isKeyboard)
         {
-            // Keyboard mode: hide full toolbar, show mini floating bar
+            // Keyboard mode: hide full toolbar + status bar, show mini floating bar
             TopBar.IsVisible = false;
             KeyboardMiniBar.IsVisible = true;
+            StatusBarShowBtn.IsVisible = false;
+            BottomBar.IsVisible = false;
 
             // Canvas only, no message pane
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
@@ -554,6 +566,8 @@ public partial class MainWindow : Window
         {
             TopBar.IsVisible = true;
             KeyboardMiniBar.IsVisible = false;
+            StatusBarShowBtn.IsVisible = _vm.IsStatusBarHidden;
+            BottomBar.IsVisible = !_vm.IsStatusBarHidden;
 
             Topmost = false;
             this.Opacity = 1.0;
