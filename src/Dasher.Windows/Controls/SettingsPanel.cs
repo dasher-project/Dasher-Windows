@@ -210,6 +210,7 @@ public class SettingsPanel : Control
     public event EventHandler<(EyeGazeIntegration.TrackerType trackerType, int udpPort)>? InputSourceChanged;
     public event EventHandler? JoystickRequested;
     public event Action<string, int>? OutputFontChanged;
+    public event Action? ResetSettingsRequested;
     public event Action<double>? KeyboardOpacityChanged;
 
     private static readonly string[] OutputFontPresets =
@@ -1390,11 +1391,13 @@ public class SettingsPanel : Control
         };
         resetSettingsBtn.Click += (s, e) =>
         {
-            // Delete settings file so engine loads defaults on next launch
-            var settingsPath = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "Dasher", "dasher_settings.xml");
-            try { if (System.IO.File.Exists(settingsPath)) System.IO.File.Delete(settingsPath); } catch { }
+            var btn = s as Button;
+            if (btn != null)
+            {
+                btn.Content = "Restarting engine...";
+                btn.IsEnabled = false;
+            }
+            ResetSettingsRequested?.Invoke();
         };
         section.Children.Add(resetSettingsBtn);
 

@@ -133,6 +133,15 @@ public partial class MainWindow : Window
         var dataDir = Path.Combine(appData, "Dasher");
         Directory.CreateDirectory(dataDir);
 
+        // Check for reset-to-defaults flag (written by Settings > Privacy > Reset)
+        var resetFlag = Path.Combine(dataDir, "reset_settings_pending");
+        if (File.Exists(resetFlag))
+        {
+            var settingsFile = Path.Combine(dataDir, "dasher_settings.xml");
+            try { if (File.Exists(settingsFile)) File.Delete(settingsFile); } catch { }
+            try { File.Delete(resetFlag); } catch { }
+        }
+
         var coreDataDir = FindCoreDataDir();
         CopyDataIfNeeded(coreDataDir, dataDir);
 
@@ -697,8 +706,66 @@ public partial class MainWindow : Window
         panel.KeyboardOpacityChanged += OnKeyboardOpacityChanged;
         panel.InputSourceChanged += OnInputSourceChanged;
         panel.JoystickRequested += OnJoystickRequested;
+        panel.ResetSettingsRequested += OnResetSettingsRequested;
 
         BuildSettingsTabs(panel);
+    }
+
+    private void OnResetSettingsRequested()
+    {
+        if (_canvas == null || _vm == null) return;
+
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var dataDir = Path.Combine(appData, "Dasher");
+
+        // Destroy engine (this saves current settings to file)
+        _canvas.Shutdown();
+
+        // Delete the saved settings so defaults load
+        var settingsFile = Path.Combine(dataDir, "dasher_settings.xml");
+        try { if (File.Exists(settingsFile)) File.Delete(settingsFile); } catch { }
+
+        // Recreate engine with defaults
+        _canvas.Initialize(dataDir, dataDir);
+        _canvas.EngineMessage += OnEngineMessage;
+        _vm.SetHandle(_canvas.GetHandle());
+
+        // Re-wire callbacks
+        if (_speakCallback != null)
+            NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
+        if (_parameterCallback != null)
+            NativeBridge.dasher_set_parameter_callback(_vm.Handle, _parameterCallback, IntPtr.Zero);
+
+        var accessConfig = AccessConfiguration.Load();
+        accessConfig.Apply(_vm.Handle);
+
+        // Start engine
+        _canvas.StartEngine();
+
+        // Refresh UI state
+        _vm.ApplySpeed();
+        _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
+        _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
+        _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
+        UpdateControlModeLabel();
+        _vm.LoadAlphabets();
+        var currentAlphaPtr = NativeBridge.dasher_get_alphabet_id(_vm.Handle);
+        var currentAlpha = currentAlphaPtr != IntPtr.Zero
+            ? Marshal.PtrToStringUTF8(currentAlphaPtr) ?? "" : "";
+        _vm.SelectedLanguageIndex = Math.Max(0, _vm.Languages.IndexOf(currentAlpha));
+
+        // Re-initialize settings panel with new handle
+        _settingsInitialized = false;
+        var panel = this.FindControl<SettingsPanel>("DockedSettingsPanel");
+        if (panel != null)
+        {
+            panel.Initialize(_vm.Handle);
+            panel.ShowCategory("Privacy");
+        }
+
+        // Clear output
+        _vm.OutputText = "";
+        _previousOutput = "";
     }
 
     private void BuildSettingsTabs(SettingsPanel settingsPanel)
