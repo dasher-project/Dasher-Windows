@@ -1271,6 +1271,11 @@ public partial class MainWindow : Window
                     dialog.Close();
                 };
 
+                // Temporarily disable Topmost so dialog isn't trapped behind
+                // the keyboard mode window
+                var wasTopmost = this.Topmost;
+                this.Topmost = false;
+                dialog.Closed += (_, _) => { if (wasTopmost) this.Topmost = true; };
                 dialog.ShowDialog(this);
             });
         }
