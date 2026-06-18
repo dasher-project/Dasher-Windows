@@ -274,7 +274,8 @@ public partial class MainWindow : Window
         panel.Children.Add(btnRow);
 
         dialog.Content = panel;
-        dialog.Closed += (_, _) => CompleteStartup(migrationResult);
+        dialog.Closed += (_, _) =>
+            Avalonia.Threading.Dispatcher.UIThread.Post(() => CompleteStartup(migrationResult));
         dialog.ShowDialog(this);
     }
 

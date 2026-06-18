@@ -1273,6 +1273,131 @@ public class SettingsPanel : Control
             Foreground = mutedText,
         });
 
+        // ── Dasher 5 Import section ──
+        section.Children.Add(new Border
+        {
+            BorderBrush = Application.Current?.FindResource("BorderLight") as IBrush ?? Brushes.LightGray,
+            BorderThickness = new Thickness(0, 1, 0, 0),
+            Margin = new Thickness(0, 24, 0, 0),
+        });
+
+        section.Children.Add(new TextBlock
+        {
+            Text = "Dasher 5 Import",
+            FontSize = 15,
+            FontWeight = FontWeight.SemiBold,
+            Foreground = titleText,
+        });
+
+        if (V5MigrationService.HasV5Data)
+        {
+            var scan = V5MigrationService.Scan();
+
+            var statusText = V5MigrationService.HasBeenOffered
+                ? "Status: Imported"
+                : "Status: Not imported (Dasher 5 data detected)";
+
+            section.Children.Add(new TextBlock
+            {
+                Text = statusText,
+                FontSize = 12,
+                Foreground = bodyText,
+            });
+
+            if (!string.IsNullOrEmpty(scan.Alphabet))
+                section.Children.Add(new TextBlock { Text = $"  Alphabet: {scan.Alphabet}", FontSize = 11, Foreground = mutedText });
+            if (!string.IsNullOrEmpty(scan.Colour))
+                section.Children.Add(new TextBlock { Text = $"  Colour: {scan.Colour}", FontSize = 11, Foreground = mutedText });
+            if (!string.IsNullOrEmpty(scan.Speed))
+                section.Children.Add(new TextBlock { Text = $"  Speed: {scan.Speed}", FontSize = 11, Foreground = mutedText });
+            if (scan.ControlMode)
+                section.Children.Add(new TextBlock { Text = "  Control mode: enabled", FontSize = 11, Foreground = mutedText });
+            if (scan.CustomFileCount > 0)
+                section.Children.Add(new TextBlock { Text = $"  {scan.CustomFileCount} custom file(s)", FontSize = 11, Foreground = mutedText });
+
+            var importBtn = new Button
+            {
+                Content = "Import from Dasher 5",
+                Padding = new Thickness(16, 6),
+                FontSize = 12,
+                Margin = new Thickness(0, 8, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Background = Application.Current?.FindResource("ControlBg") as IBrush ?? Brushes.LightGray,
+                BorderThickness = new Thickness(0),
+            };
+            importBtn.Click += (s, e) =>
+            {
+                var result = V5MigrationService.Import(_handle);
+                // Apply deferred params immediately (engine is already realized)
+                foreach (var (key, value) in result.DeferredParameters)
+                {
+                    if (value == "true" || value == "false")
+                        NativeBridge.dasher_set_bool_parameter(_handle, key, value == "true" ? 1 : 0);
+                    else if (int.TryParse(value, out var intVal))
+                        NativeBridge.dasher_set_long_parameter(_handle, key, intVal);
+                    else
+                        NativeBridge.dasher_set_string_parameter(_handle, key, value);
+                }
+                // Refresh the panel
+                ShowCategory("Privacy");
+            };
+            section.Children.Add(importBtn);
+        }
+        else
+        {
+            section.Children.Add(new TextBlock
+            {
+                Text = "No Dasher 5 data found on this computer.",
+                FontSize = 12,
+                Foreground = mutedText,
+            });
+        }
+
+        // ── Reset to defaults ──
+        section.Children.Add(new Border
+        {
+            BorderBrush = Application.Current?.FindResource("BorderLight") as IBrush ?? Brushes.LightGray,
+            BorderThickness = new Thickness(0, 1, 0, 0),
+            Margin = new Thickness(0, 24, 0, 0),
+        });
+
+        section.Children.Add(new TextBlock
+        {
+            Text = "Reset Settings",
+            FontSize = 15,
+            FontWeight = FontWeight.SemiBold,
+            Foreground = titleText,
+        });
+
+        section.Children.Add(new TextBlock
+        {
+            Text = "Restore all Dasher settings to their default values. This cannot be undone.",
+            FontSize = 12,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = bodyText,
+        });
+
+        var resetSettingsBtn = new Button
+        {
+            Content = "Reset to defaults",
+            Padding = new Thickness(16, 6),
+            FontSize = 12,
+            Margin = new Thickness(0, 8, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = new SolidColorBrush(Color.FromRgb(0xEB, 0x5B, 0x5C)),
+            Foreground = Brushes.White,
+            BorderThickness = new Thickness(0),
+        };
+        resetSettingsBtn.Click += (s, e) =>
+        {
+            // Delete settings file so engine loads defaults on next launch
+            var settingsPath = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Dasher", "dasher_settings.xml");
+            try { if (System.IO.File.Exists(settingsPath)) System.IO.File.Delete(settingsPath); } catch { }
+        };
+        section.Children.Add(resetSettingsBtn);
+
         _panel.Children.Add(section);
     }
 

@@ -67,11 +67,10 @@ public static class V5MigrationService
         ["SlowControlBox"] = "BP_SLOW_CONTROL_BOX",
     };
 
-    // Parameters that must be deferred until after Realize()
-    private static readonly HashSet<string> DeferredEnums = new()
-    {
-        "BP_CONTROL_MODE", "SP_INPUT_FILTER", "SP_ALPHABET_ID"
-    };
+    // All parameters must be deferred until after Realize() — some trigger
+    // handlers that dereference m_pDasherModel/m_pNCManager which are null
+    // before Realize. Deferring everything is safest.
+    // (Previously only 3 were deferred, but LP_NODE_BUDGET etc. also crash.)
 
     // v5 regName → v6 enum name for long parameters
     private static readonly Dictionary<string, string> LongMappings = new()
@@ -286,16 +285,8 @@ public static class V5MigrationService
         var key = NativeBridge.dasher_find_parameter_key(enumName);
         if (key < 0) { result.Skipped.Add(regName); return; }
 
-        if (DeferredEnums.Contains(enumName))
-        {
-            result.DeferredParameters.Add((key, value ? "true" : "false"));
-            result.Imported.Add($"{regName} = {value}");
-        }
-        else
-        {
-            NativeBridge.dasher_set_bool_parameter(handle, key, value ? 1 : 0);
-            result.Imported.Add($"{regName} = {value}");
-        }
+        result.DeferredParameters.Add((key, value ? "true" : "false"));
+        result.Imported.Add($"{regName} = {value}");
     }
 
     private static void ImportLong(IntPtr handle, V5MigrationResult result, string enumName, string valueStr, string regName)
@@ -304,7 +295,7 @@ public static class V5MigrationService
         var key = NativeBridge.dasher_find_parameter_key(enumName);
         if (key < 0) { result.Skipped.Add(regName); return; }
 
-        NativeBridge.dasher_set_long_parameter(handle, key, value);
+        result.DeferredParameters.Add((key, value.ToString()));
         result.Imported.Add($"{regName} = {value}");
     }
 
@@ -313,16 +304,8 @@ public static class V5MigrationService
         var key = NativeBridge.dasher_find_parameter_key(enumName);
         if (key < 0) { result.Skipped.Add(regName); return; }
 
-        if (DeferredEnums.Contains(enumName))
-        {
-            result.DeferredParameters.Add((key, value));
-            result.Imported.Add($"{regName} = \"{value}\"");
-        }
-        else
-        {
-            NativeBridge.dasher_set_string_parameter(handle, key, value);
-            result.Imported.Add($"{regName} = \"{value}\"");
-        }
+        result.DeferredParameters.Add((key, value));
+        result.Imported.Add($"{regName} = \"{value}\"");
     }
 
     private static void ImportFontSize(IntPtr handle, V5MigrationResult result, string valueStr)
@@ -336,7 +319,7 @@ public static class V5MigrationService
         var key = NativeBridge.dasher_find_parameter_key("LP_DASHER_FONTSIZE");
         if (key >= 0)
         {
-            NativeBridge.dasher_set_long_parameter(handle, key, points);
+            result.DeferredParameters.Add((key, points.ToString()));
             result.Imported.Add($"DasherFontSize: index {index} → {points}pt");
         }
     }
@@ -346,7 +329,7 @@ public static class V5MigrationService
         var key = NativeBridge.dasher_find_parameter_key("LP_START_MODE");
         if (key >= 0)
         {
-            NativeBridge.dasher_set_long_parameter(handle, key, mode);
+            result.DeferredParameters.Add((key, mode.ToString()));
             result.Imported.Add($"StartMode = {mode}");
         }
     }
@@ -356,7 +339,7 @@ public static class V5MigrationService
         var key = NativeBridge.dasher_find_parameter_key("SP_COLOUR_ID");
         if (key >= 0)
         {
-            NativeBridge.dasher_set_string_parameter(handle, key, value);
+            result.DeferredParameters.Add((key, value));
             result.Imported.Add($"ColourID = \"{value}\"");
         }
     }
