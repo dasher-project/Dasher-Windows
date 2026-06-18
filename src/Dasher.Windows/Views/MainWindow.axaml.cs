@@ -136,6 +136,7 @@ public partial class MainWindow : Window
         var coreDataDir = FindCoreDataDir();
         CopyDataIfNeeded(coreDataDir, dataDir);
 
+        // Phase 1: Create engine (but don't start it yet)
         _canvas.Initialize(dataDir, dataDir);
         _canvas.EngineMessage += OnEngineMessage;
         _vm.SetHandle(_canvas.GetHandle());
@@ -161,7 +162,143 @@ public partial class MainWindow : Window
         var accessConfig = AccessConfiguration.Load();
         accessConfig.Apply(_vm.Handle);
 
-        _vm.ApplySpeed();
+        // Phase 2: Check for v5 migration BEFORE starting engine
+        if (V5MigrationService.HasV5Data && !V5MigrationService.HasBeenOffered)
+        {
+            ShowV5MigrationPrompt();
+        }
+        else
+        {
+            CompleteStartup(null);
+        }
+    }
+
+    private void ShowV5MigrationPrompt()
+    {
+        var scan = V5MigrationService.Scan();
+
+        var dialog = new Window
+        {
+            Title = "Dasher 5 settings found",
+            Width = 460,
+            Height = 400,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            CanResize = false,
+            ShowInTaskbar = false,
+        };
+
+        var panel = new StackPanel
+        {
+            Margin = new Thickness(24),
+            Spacing = 12,
+        };
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = "We found your Dasher 5 configuration",
+            FontSize = 16,
+            FontWeight = FontWeight.Bold,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+        });
+
+        var summary = new System.Text.StringBuilder();
+        if (!string.IsNullOrEmpty(scan.Alphabet))
+            summary.AppendLine($"  Alphabet: {scan.Alphabet}");
+        if (!string.IsNullOrEmpty(scan.Colour))
+            summary.AppendLine($"  Colour palette: {scan.Colour}");
+        if (!string.IsNullOrEmpty(scan.Speed))
+            summary.AppendLine($"  Speed: {scan.Speed}");
+        if (scan.ControlMode)
+            summary.AppendLine("  Control mode: enabled");
+        if (scan.CustomFileCount > 0)
+            summary.AppendLine($"  {scan.CustomFileCount} custom file(s)");
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = summary.ToString().TrimEnd(),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+        });
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = "Would you like to import these settings into Dasher 6?",
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+        });
+
+        var btnRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 12,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+
+        var laterBtn = new Button
+        {
+            Content = "Start fresh",
+            Padding = new Thickness(20, 8),
+            Background = Brushes.Transparent,
+            BorderBrush = new SolidColorBrush(Color.FromRgb(0xE0, 0xE6, 0xE8)),
+        };
+
+        var importBtn = new Button
+        {
+            Content = "Import settings",
+            Padding = new Thickness(20, 8),
+            Background = new SolidColorBrush(Color.FromRgb(0x99, 0xD4, 0xCD)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            FontWeight = FontWeight.SemiBold,
+            BorderThickness = new Thickness(0),
+        };
+
+        V5MigrationResult? migrationResult = null;
+
+        laterBtn.Click += (_, _) =>
+        {
+            V5MigrationService.MarkCompleted();
+            dialog.Close();
+        };
+
+        importBtn.Click += (_, _) =>
+        {
+            migrationResult = V5MigrationService.Import(_vm!.Handle);
+            dialog.Close();
+        };
+
+        btnRow.Children.Add(laterBtn);
+        btnRow.Children.Add(importBtn);
+        panel.Children.Add(btnRow);
+
+        dialog.Content = panel;
+        dialog.Closed += (_, _) => CompleteStartup(migrationResult);
+        dialog.ShowDialog(this);
+    }
+
+    private void CompleteStartup(V5MigrationResult? migrationResult)
+    {
+        // Phase 3: Start engine (triggers Realize)
+        _canvas!.StartEngine();
+
+        // Phase 4: Apply deferred parameters (must be after Realize)
+        if (migrationResult != null)
+        {
+            foreach (var (key, value) in migrationResult.DeferredParameters)
+            {
+                if (value == "true" || value == "false")
+                    NativeBridge.dasher_set_bool_parameter(_vm!.Handle, key, value == "true" ? 1 : 0);
+                else if (int.TryParse(value, out var intVal))
+                    NativeBridge.dasher_set_long_parameter(_vm!.Handle, key, intVal);
+                else
+                    NativeBridge.dasher_set_string_parameter(_vm!.Handle, key, value);
+            }
+        }
+
+        // Phase 5: Continue with UI setup
+        _vm!.ApplySpeed();
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
         _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
         _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
