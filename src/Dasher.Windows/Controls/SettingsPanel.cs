@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -1494,7 +1495,9 @@ public class SettingsPanel : Control
             }
         }
 
-        engineCombo.SelectionChanged += (s, e) =>
+        Func<Task>? autoLoadVoices = null;
+
+        engineCombo.SelectionChanged += async (s, e) =>
         {
             var idx = engineCombo.SelectedIndex;
             if (idx >= 0 && idx < SpeechService.EngineNames.Length)
@@ -1503,6 +1506,8 @@ public class SettingsPanel : Control
                 svc.InvalidateClient();
                 svc.SaveSettings();
                 RebuildCredentials();
+                if (autoLoadVoices != null)
+                    await autoLoadVoices();
             }
         };
 
@@ -1648,7 +1653,8 @@ public class SettingsPanel : Control
 
         _panel.Children.Add(voiceHeader);
 
-        loadVoicesBtn.Click += async (s, e) =>
+        // Voice loading logic — used by button click AND auto-load on engine change
+        async Task LoadVoicesIntoCombo()
         {
             loadVoicesBtn.IsEnabled = false;
             voiceCountLabel.Text = "Loading...";
@@ -1677,7 +1683,9 @@ public class SettingsPanel : Control
             {
                 loadVoicesBtn.IsEnabled = true;
             }
-        };
+        }
+
+        loadVoicesBtn.Click += async (s, e) => await LoadVoicesIntoCombo();
 
         voiceCombo.SelectionChanged += (s, e) =>
         {
@@ -1720,6 +1728,10 @@ public class SettingsPanel : Control
             volValue.Text = $"{svc.SpeechVolume}%";
             svc.SaveSettings();
         };
+
+        // Auto-load voices on initial show
+        autoLoadVoices = LoadVoicesIntoCombo;
+        _ = LoadVoicesIntoCombo();
 
         var sep2 = new Border
         {
