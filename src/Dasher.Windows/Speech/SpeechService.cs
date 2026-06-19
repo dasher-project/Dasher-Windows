@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Speech.Synthesis;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml;
 using DotNetTtsWrapper.Models;
 
 namespace Dasher.Windows.Speech;
@@ -90,6 +92,7 @@ public sealed class SpeechService : IDisposable
 
     private AbstractTtsClient? _client;
     private bool _needsRecreate = true;
+    private SpeechSynthesizer? _sapiSynth;
 
     private SpeechService()
     {
@@ -102,14 +105,34 @@ public sealed class SpeechService : IDisposable
         ErrorMessage = null;
         try
         {
-            var client = GetOrCreateClient();
-            if (client == null)
+            if (SelectedEngine == "sapi")
             {
-                AvailableVoices = [];
-                return;
+                _sapiSynth?.Dispose();
+                _sapiSynth = new SpeechSynthesizer();
+                var installed = _sapiSynth.GetInstalledVoices();
+                AvailableVoices = installed
+                    .Where(v => v.Enabled)
+                    .Select(v => new TtsVoice
+                    {
+                        Id = v.VoiceInfo.Name,
+                        Name = v.VoiceInfo.Name,
+                        LanguageCodes =
+                        [
+                            new() { Bcp47 = v.VoiceInfo.Culture?.Name ?? "", Display = v.VoiceInfo.Culture?.DisplayName ?? "" }
+                        ]
+                    })
+                    .ToList();
             }
-            var voices = await client.GetVoicesAsync();
-            AvailableVoices = voices;
+            else
+            {
+                var client = GetOrCreateClient();
+                if (client == null)
+                {
+                    AvailableVoices = [];
+                    return;
+                }
+                AvailableVoices = await client.GetVoicesAsync();
+            }
             if (SelectedVoiceId != null && !AvailableVoices.Any(v => v.Id == SelectedVoiceId))
                 SelectedVoiceId = AvailableVoices.FirstOrDefault()?.Id;
         }
@@ -131,6 +154,12 @@ public sealed class SpeechService : IDisposable
         ErrorMessage = null;
         try
         {
+            if (SelectedEngine == "sapi")
+            {
+                await SpeakSapiAsync(text, interrupt);
+                return;
+            }
+
             var client = GetOrCreateClient();
             if (client == null) return;
             if (!string.IsNullOrEmpty(SelectedVoiceId))
@@ -155,10 +184,79 @@ public sealed class SpeechService : IDisposable
         }
     }
 
+    private async Task SpeakSapiAsync(string text, bool interrupt)
+    {
+        var synth = _sapiSynth ??= new SpeechSynthesizer();
+
+        if (interrupt)
+            synth.SpeakAsyncCancelAll();
+
+        // Select voice
+        if (!string.IsNullOrEmpty(SelectedVoiceId))
+        {
+            try { synth.SelectVoice(SelectedVoiceId); } catch { }
+        }
+
+        // Apply Rate (-10 to 10)
+        synth.Rate = SpeechRate switch
+        {
+            SpeechRate.XSlow => -5,
+            SpeechRate.Slow => -2,
+            SpeechRate.Medium => 0,
+            SpeechRate.Fast => 3,
+            SpeechRate.XFast => 6,
+            _ => 0
+        };
+
+        // Apply Volume (0-100)
+        synth.Volume = Math.Clamp(SpeechVolume, 0, 100);
+
+        // Build SSML for pitch support (SpeechSynthesizer has no Pitch property)
+        var pitchStr = SpeechPitch switch
+        {
+            SpeechPitch.XLow => "x-low",
+            SpeechPitch.Low => "low",
+            SpeechPitch.Medium => "medium",
+            SpeechPitch.High => "high",
+            SpeechPitch.XHigh => "x-high",
+            _ => "medium"
+        };
+
+        var escapedText = XmlEncode(text);
+        var culture = "en-US";
+        try { culture = synth.GetInstalledVoices().FirstOrDefault(v => v.VoiceInfo.Name == SelectedVoiceId)?.VoiceInfo.Culture?.Name ?? "en-US"; } catch { }
+
+        var ssml = $"<speak version=\"1.0\" xml:lang=\"{culture}\">" +
+                   $"<prosody pitch=\"{pitchStr}\">{escapedText}</prosody>" +
+                   $"</speak>";
+
+        synth.SetOutputToDefaultAudioDevice();
+        await Task.Run(() => synth.SpeakSsml(ssml));
+    }
+
+    private static string XmlEncode(string text)
+    {
+        var sb = new System.Text.StringBuilder(text.Length + 20);
+        foreach (var c in text)
+        {
+            switch (c)
+            {
+                case '<': sb.Append("&lt;"); break;
+                case '>': sb.Append("&gt;"); break;
+                case '&': sb.Append("&amp;"); break;
+                case '\'': sb.Append("&apos;"); break;
+                case '"': sb.Append("&quot;"); break;
+                default: sb.Append(c); break;
+            }
+        }
+        return sb.ToString();
+    }
+
     public void Stop()
     {
         try
         {
+            _sapiSynth?.SpeakAsyncCancelAll();
             _client?.Stop();
         }
         catch { }
@@ -332,6 +430,8 @@ public sealed class SpeechService : IDisposable
 
     public void Dispose()
     {
+        _sapiSynth?.Dispose();
+        _sapiSynth = null;
         _client?.Dispose();
         _client = null;
     }
