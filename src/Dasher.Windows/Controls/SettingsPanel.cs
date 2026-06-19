@@ -177,7 +177,7 @@ public class SettingsPanel : Control
                     Text = group.Key,
                     FontSize = 13,
                     FontWeight = FontWeight.Bold,
-                    Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
                     Margin = new Thickness(0, 10, 0, 4),
                 };
                 _panel.Children.Add(header);
@@ -223,7 +223,7 @@ public class SettingsPanel : Control
     private Control? BuildOutputFontRow()
     {
         var settings = OutputTextSettings.Load();
-        var labelBrush = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75));
+        var labelBrush = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30));
 
         var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 4, 0, 8) };
 
@@ -315,7 +315,7 @@ public class SettingsPanel : Control
     private Control? BuildKeyboardTransparencyRow()
     {
         var settings = OutputTextSettings.Load();
-        var labelBrush = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75));
+        var labelBrush = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30));
 
         var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 4, 0, 8) };
 
@@ -386,7 +386,7 @@ public class SettingsPanel : Control
             Text = "Steering Method",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
         };
         panel.Children.Add(methodLabel);
 
@@ -408,7 +408,7 @@ public class SettingsPanel : Control
             Text = "Selection Method",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
             Margin = new Thickness(0, 8, 0, 0),
         };
 
@@ -447,7 +447,7 @@ public class SettingsPanel : Control
             Text = "Eye Tracker Device",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
             Margin = new Thickness(0, 8, 0, 0),
         };
 
@@ -467,7 +467,7 @@ public class SettingsPanel : Control
             Text = "UDP Port",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
             VerticalAlignment = VerticalAlignment.Center,
         };
         var portBox = new NumericUpDown
@@ -595,7 +595,7 @@ public class SettingsPanel : Control
             Text = "App Language",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
             VerticalAlignment = VerticalAlignment.Center,
             Width = 180,
         };
@@ -851,7 +851,7 @@ public class SettingsPanel : Control
             Text = labelText,
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
             VerticalAlignment = VerticalAlignment.Center,
             Width = 180,
             TextTrimming = TextTrimming.CharacterEllipsis,
@@ -1407,7 +1407,7 @@ public class SettingsPanel : Control
     private void BuildSpeechSettings()
     {
         var svc = SpeechService.Instance;
-        var labelBrush = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75));
+        var labelBrush = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30));
         var valueBrush = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70));
 
         var engineLabel = new TextBlock

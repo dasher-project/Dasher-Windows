@@ -23,7 +23,7 @@
                     <SolidColorBrush x:Key="BorderLight" Color="#E0E6E8"/>
                     <SolidColorBrush x:Key="HighlightLight" Color="#E9F2F1"/>
 
-                    <SolidColorBrush x:Key="TextPrimary" Color="#0F4B75"/>
+                    <SolidColorBrush x:Key="TextPrimary" Color="#1A2530"/>
                     <SolidColorBrush x:Key="TextSecondary" Color="#5A6270"/>
                     <SolidColorBrush x:Key="TextMuted" Color="#8B929A"/>
 
@@ -44,7 +44,7 @@
                     <SolidColorBrush x:Key="BorderLight" Color="#3A3F44"/>
                     <SolidColorBrush x:Key="HighlightLight" Color="#1E3331"/>
 
-                    <SolidColorBrush x:Key="TextPrimary" Color="#E0E6E8"/>
+                    <SolidColorBrush x:Key="TextPrimary" Color="#D0D6DA"/>
                     <SolidColorBrush x:Key="TextSecondary" Color="#9CA3AF"/>
                     <SolidColorBrush x:Key="TextMuted" Color="#6B7280"/>
 

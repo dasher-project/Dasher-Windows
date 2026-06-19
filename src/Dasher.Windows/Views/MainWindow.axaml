@@ -41,6 +41,9 @@
         <Style Selector="Border.top-bar Button.nav-btn:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
         </Style>
+        <Style Selector="Border.top-bar Button.nav-btn TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+        </Style>
         <Style Selector="Border.top-bar Button.nav-btn LucideIcon">
             <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
         </Style>
@@ -214,21 +217,21 @@
                     <Button Classes="nav-btn" Click="OnNew" ToolTip.Tip="New document">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.FilePlus}" Size="20"/>
-                            <TextBlock Text="New" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock Text="New" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
                     <Button Classes="nav-btn" Click="OnOpen" ToolTip.Tip="Open file">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.FolderOpen}" Size="20"/>
-                            <TextBlock Text="Open" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock Text="Open" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
                     <Button Classes="nav-btn" Click="OnSave" ToolTip.Tip="Save file">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.Save}" Size="20"/>
-                            <TextBlock Text="Save" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock Text="Save" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -247,8 +250,8 @@
                         <StackPanel Spacing="3">
                             <LucideIcon x:Name="ModeIcon" Kind="{x:Static lucide:LucideIconKind.PanelRight}" Size="20"/>
                             <StackPanel Orientation="Horizontal" Spacing="2" HorizontalAlignment="Center">
-                                <TextBlock Name="TxtModeLabel" Text="Right side" FontSize="11" FontWeight="Medium" Foreground="{DynamicResource TextSecondary}"/>
-                                <TextBlock Text="▾" FontSize="11" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                                <TextBlock Name="TxtModeLabel" Text="Right side" FontSize="11" FontWeight="Medium"/>
+                                <TextBlock Text="▾" FontSize="11" VerticalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
                     </Button>
@@ -258,7 +261,7 @@
                     <Button x:Name="BtnKeyboard" Classes="nav-btn" Click="OnToggleMode" ToolTip.Tip="Toggle keyboard mode">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.Keyboard}" Size="20"/>
-                            <TextBlock x:Name="TxtKeyboardLabel" Text="Keyboard" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock x:Name="TxtKeyboardLabel" Text="Keyboard" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -267,7 +270,7 @@
                     <Button x:Name="BtnGameMode" Classes="nav-btn" Click="OnToggleGameMode" ToolTip.Tip="Toggle game mode">
                         <StackPanel Spacing="3">
                             <LucideIcon x:Name="GameIcon" Kind="{x:Static lucide:LucideIconKind.Gamepad2}" Size="20"/>
-                            <TextBlock x:Name="TxtGameLabel" Text="Game" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock x:Name="TxtGameLabel" Text="Game" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -276,7 +279,7 @@
                     <Button x:Name="BtnControlMode" Classes="nav-btn" Click="OnToggleControlMode" ToolTip.Tip="Toggle control mode">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.MousePointerClick}" Size="20"/>
-                            <TextBlock x:Name="TxtControlLabel" Text="Control" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock x:Name="TxtControlLabel" Text="Control" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -285,7 +288,7 @@
                     <Button x:Name="BtnPrefs" Classes="nav-btn" Click="OnTogglePrefs" ToolTip.Tip="Preferences">
                         <StackPanel Spacing="3">
                             <LucideIcon Kind="{x:Static lucide:LucideIconKind.Settings}" Size="20"/>
-                            <TextBlock Text="Prefs" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock Text="Prefs" FontSize="11" FontWeight="Medium" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
