@@ -94,7 +94,7 @@ public partial class App : Application
             Text = "Help improve Dasher",
             FontSize = 18,
             FontWeight = FontWeight.Bold,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = ThemeBrushes.TextPrimary,
         });
 
         panel.Children.Add(new TextBlock
@@ -104,7 +104,7 @@ public partial class App : Application
                    "You can change this anytime in Settings > Privacy.",
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+            Foreground = ThemeBrushes.TextSecondary,
         });
 
         var btnRow = new StackPanel
@@ -119,8 +119,8 @@ public partial class App : Application
             Content = "Not now",
             Padding = new Thickness(20, 8),
             Background = Brushes.Transparent,
-            BorderBrush = new SolidColorBrush(Color.FromRgb(0xE0, 0xE6, 0xE8)),
-            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+            BorderBrush = (IBrush)(Application.Current?.FindResource("BorderLight") ?? Brushes.LightGray),
+            Foreground = ThemeBrushes.TextSecondary,
         };
 
         var helpBtn = new Button
@@ -128,7 +128,7 @@ public partial class App : Application
             Content = "Help improve Dasher",
             Padding = new Thickness(20, 8),
             Background = new SolidColorBrush(Color.FromRgb(0x99, 0xD4, 0xCD)),
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = ThemeBrushes.TextPrimary,
             FontWeight = FontWeight.SemiBold,
             BorderThickness = new Thickness(0),
         };

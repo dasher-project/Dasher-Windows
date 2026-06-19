@@ -51,10 +51,10 @@
             <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
         </Style>
         <Style Selector="Border.top-bar Button.nav-btn.accent TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
+            <Setter Property="Foreground" Value="{DynamicResource OnAccent}"/>
         </Style>
         <Style Selector="Border.top-bar Button.nav-btn.accent LucideIcon">
-            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
+            <Setter Property="Foreground" Value="{DynamicResource OnAccent}"/>
         </Style>
 
         <Style Selector="Button.ui-circle-btn">
@@ -99,19 +99,6 @@
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        <Style Selector="Button.settings-tab:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
-        </Style>
-        <Style Selector="Button.settings-tab.active /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
-        </Style>
-        <Style Selector="Button.settings-tab.active TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-        </Style>
-        <Style Selector="Button.settings-tab.active LucideIcon">
-            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
-        </Style>
         <Style Selector="Button.settings-tab TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
             <Setter Property="FontSize" Value="12"/>
@@ -119,6 +106,19 @@
         </Style>
         <Style Selector="Button.settings-tab LucideIcon">
             <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+        </Style>
+        <Style Selector="Button.settings-tab:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ControlBgHover}"/>
+        </Style>
+        <Style Selector="Button.settings-tab.active /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>
+        </Style>
+        <Style Selector="Button.settings-tab.active TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource OnAccent}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button.settings-tab.active LucideIcon">
+            <Setter Property="Foreground" Value="{DynamicResource OnAccent}"/>
         </Style>
 
         <Style Selector="TextBlock.ui-nav-label">
@@ -202,7 +202,7 @@
             <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
         </Style>
         <Style Selector="Border.kb-bar Button.accent LucideIcon">
-            <Setter Property="Foreground" Value="{DynamicResource DeepNavy}"/>
+            <Setter Property="Foreground" Value="{DynamicResource OnAccent}"/>
         </Style>
         <Style Selector="Border.kb-bar Button.accent">
             <Setter Property="Background" Value="{DynamicResource DasherTeal}"/>

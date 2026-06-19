@@ -123,6 +123,18 @@ public partial class DasherCanvas : Control
         }
     }
 
+    protected override void OnPointerExited(PointerEventArgs e)
+    {
+        base.OnPointerExited(e);
+        if (_useEyeGazeInput) return;
+        if (_handle != IntPtr.Zero)
+        {
+            // Send pointer far outside canvas so BP_STOP_OUTSIDE can detect it
+            // and DefaultFilter can stop Dasher when the pointer leaves
+            NativeBridge.dasher_mouse_move(_handle, -10000f, -10000f);
+        }
+    }
+
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);

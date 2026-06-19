@@ -130,6 +130,8 @@ public partial class MainWindow : Window
         _vm = DataContext as MainWindowViewModel;
         if (_canvas == null || _vm == null) return;
 
+        ThemeBrushes.Initialize(this);
+
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var dataDir = Path.Combine(appData, "Dasher");
         Directory.CreateDirectory(dataDir);
@@ -208,7 +210,7 @@ public partial class MainWindow : Window
             Text = "We found your Dasher 5 configuration",
             FontSize = 16,
             FontWeight = FontWeight.Bold,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = ThemeBrushes.TextPrimary,
         });
 
         var summary = new System.Text.StringBuilder();
@@ -228,7 +230,7 @@ public partial class MainWindow : Window
             Text = summary.ToString().TrimEnd(),
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+            Foreground = ThemeBrushes.TextSecondary,
         });
 
         panel.Children.Add(new TextBlock
@@ -236,7 +238,7 @@ public partial class MainWindow : Window
             Text = "Would you like to import these settings into Dasher 6?",
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+            Foreground = ThemeBrushes.TextSecondary,
         });
 
         var btnRow = new StackPanel
@@ -260,7 +262,7 @@ public partial class MainWindow : Window
             Content = "Import settings",
             Padding = new Thickness(20, 8),
             Background = new SolidColorBrush(Color.FromRgb(0x99, 0xD4, 0xCD)),
-            Foreground = new SolidColorBrush(Color.FromRgb(0x0F, 0x4B, 0x75)),
+            Foreground = ThemeBrushes.TextPrimary,
             FontWeight = FontWeight.SemiBold,
             BorderThickness = new Thickness(0),
         };
@@ -832,10 +834,22 @@ public partial class MainWindow : Window
     private void ActivateSettingsTab(int index)
     {
         if (_settingsTabs == null) return;
+        var onAccent = Application.Current?.FindResource("OnAccent") as IBrush;
+        var textSecondary = Application.Current?.FindResource("TextSecondary") as IBrush;
+
         for (int i = 0; i < _settingsTabs.Length; i++)
         {
-            if (i == index) _settingsTabs[i].Classes.Add("active");
-            else _settingsTabs[i].Classes.Remove("active");
+            var isActive = i == index;
+            if (isActive)
+            {
+                _settingsTabs[i].Classes.Add("active");
+                _settingsTabs[i].Foreground = onAccent ?? Brushes.Black;
+            }
+            else
+            {
+                _settingsTabs[i].Classes.Remove("active");
+                _settingsTabs[i].Foreground = textSecondary ?? Brushes.Gray;
+            }
         }
     }
 
@@ -1200,7 +1214,7 @@ public partial class MainWindow : Window
                 var dialog = new Window
                 {
                     Title = "Dasher Update Available",
-                    Background = new SolidColorBrush(Color.FromRgb(0xF4, 0xF7, 0xF6)),
+                    Background = (IBrush)(Application.Current?.FindResource("BgLight") ?? Brushes.White),
                     SizeToContent = SizeToContent.WidthAndHeight,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     CanResize = false,
@@ -1217,14 +1231,14 @@ public partial class MainWindow : Window
                                 Text = "Update Available",
                                 FontSize = 18,
                                 FontWeight = FontWeight.Bold,
-                                Foreground = new SolidColorBrush(Color.FromRgb(0x2C, 0x3E, 0x50)),
+                                Foreground = ThemeBrushes.TextPrimary,
                             },
                             new TextBlock
                             {
                                 Text = $"Dasher {info.LatestTag} is now available (you're running v{info.CurrentVersion}).",
                                 FontSize = 13,
                                 TextWrapping = TextWrapping.Wrap,
-                                Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x4A, 0x42)),
+                                Foreground = ThemeBrushes.TextSecondary,
                             },
                             new StackPanel
                             {
@@ -1238,14 +1252,15 @@ public partial class MainWindow : Window
                                         Content = "Later",
                                         Padding = new Thickness(16, 6),
                                         Background = Brushes.Transparent,
-                                        BorderBrush = new SolidColorBrush(Color.FromRgb(0xCC, 0xCC, 0xCC)),
+                                        Foreground = ThemeBrushes.TextSecondary,
+                                        BorderBrush = (IBrush)(Application.Current?.FindResource("BorderLight") ?? Brushes.Gray),
                                     },
                                     new Button
                                     {
                                         Content = "Download",
                                         Padding = new Thickness(16, 6),
-                                        Background = new SolidColorBrush(Color.FromRgb(0x00, 0xA8, 0xA8)),
-                                        Foreground = Brushes.White,
+                                        Background = (IBrush)(Application.Current?.FindResource("DasherTeal") ?? Brushes.Teal),
+                                        Foreground = (IBrush)(Application.Current?.FindResource("OnAccent") ?? Brushes.Black),
                                         BorderThickness = new Thickness(0),
                                         Tag = info.ReleaseUrl,
                                     },

@@ -9,6 +9,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Dasher.Windows.Engine;
 using Dasher.Windows.Services;
 using Dasher.Windows.Speech;
@@ -37,6 +38,17 @@ public class SettingsPanel : Control
     private readonly ScrollViewer _scrollViewer;
     private string _currentCategory = "";
     private readonly Dictionary<string, List<ParameterDisplayInfo>> _groups = new();
+
+    // Theme-aware brushes — read ActualThemeVariant directly instead of relying
+    // on FindResource (which doesn't resolve ThemeDictionaries reliably)
+    private bool IsDark => ActualThemeVariant == ThemeVariant.Dark;
+    private IBrush BrushLabel => IsDark ? Brushes.White : new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30));
+    private IBrush BrushValue => IsDark ? new SolidColorBrush(Color.FromRgb(0xC0, 0xC8, 0xD0)) : new SolidColorBrush(Color.FromRgb(0x3D, 0x43, 0x50));
+    private IBrush BrushMuted => IsDark ? new SolidColorBrush(Color.FromRgb(0x8A, 0x92, 0x9C)) : new SolidColorBrush(Color.FromRgb(0x5C, 0x63, 0x6F));
+    private IBrush BrushControlBg => IsDark ? new SolidColorBrush(Color.FromRgb(0x2A, 0x35, 0x3D)) : new SolidColorBrush(Color.FromRgb(0xEC, 0xEC, 0xED));
+    private IBrush BrushBorder => IsDark ? new SolidColorBrush(Color.FromRgb(0x2A, 0x35, 0x3D)) : new SolidColorBrush(Color.FromRgb(0xE0, 0xE6, 0xE8));
+    private IBrush BrushHighlight => IsDark ? new SolidColorBrush(Color.FromRgb(0x1D, 0x2D, 0x35)) : new SolidColorBrush(Color.FromRgb(0xE9, 0xF2, 0xF1));
+    private IBrush BrushOnAccent => new SolidColorBrush(Color.FromRgb(0x0A, 0x2A, 0x3D));
 
     public static readonly StyledProperty<string> TitleProperty =
         AvaloniaProperty.Register<SettingsPanel, string>(nameof(Title));
@@ -177,7 +189,7 @@ public class SettingsPanel : Control
                     Text = group.Key,
                     FontSize = 13,
                     FontWeight = FontWeight.Bold,
-                    Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
+                    Foreground = BrushLabel,
                     Margin = new Thickness(0, 10, 0, 4),
                 };
                 _panel.Children.Add(header);
@@ -223,7 +235,6 @@ public class SettingsPanel : Control
     private Control? BuildOutputFontRow()
     {
         var settings = OutputTextSettings.Load();
-        var labelBrush = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30));
 
         var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 4, 0, 8) };
 
@@ -232,7 +243,7 @@ public class SettingsPanel : Control
             Text = "Output Font",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
         };
         panel.Children.Add(fontLabel);
 
@@ -257,7 +268,7 @@ public class SettingsPanel : Control
             Text = "Output Font Size",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
             Margin = new Thickness(0, 4, 0, 0),
         };
         panel.Children.Add(sizeLabel);
@@ -267,7 +278,7 @@ public class SettingsPanel : Control
         var sizeDown = new Button { Content = "\u2212", Width = 28, Height = 28, FontSize = 14, FontWeight = FontWeight.Bold };
         var sizeValue = new Border
         {
-            Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xF2, 0xF1)),
+            Background = BrushHighlight,
             CornerRadius = new CornerRadius(4),
             Padding = new Thickness(8, 4),
             MinWidth = 50,
@@ -276,7 +287,7 @@ public class SettingsPanel : Control
                 Text = settings.FontSize.ToString(),
                 FontSize = 12,
                 FontWeight = FontWeight.Medium,
-                Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+                Foreground = BrushValue,
                 HorizontalAlignment = HorizontalAlignment.Center,
             },
         };
@@ -315,7 +326,6 @@ public class SettingsPanel : Control
     private Control? BuildKeyboardTransparencyRow()
     {
         var settings = OutputTextSettings.Load();
-        var labelBrush = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30));
 
         var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 4, 0, 8) };
 
@@ -324,7 +334,7 @@ public class SettingsPanel : Control
             Text = "Keyboard Mode Opacity",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
         };
         panel.Children.Add(label);
 
@@ -343,7 +353,7 @@ public class SettingsPanel : Control
         {
             Text = $"{(int)(settings.KeyboardOpacity * 100)}%",
             FontSize = 12,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+            Foreground = BrushValue,
             VerticalAlignment = VerticalAlignment.Center,
             MinWidth = 40,
         };
@@ -368,7 +378,7 @@ public class SettingsPanel : Control
         {
             Text = "Window transparency when in Keyboard/Direct mode",
             FontSize = 11,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
+            Foreground = BrushMuted,
         };
         panel.Children.Add(help);
 
@@ -386,7 +396,7 @@ public class SettingsPanel : Control
             Text = "Steering Method",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
+            Foreground = BrushLabel,
         };
         panel.Children.Add(methodLabel);
 
@@ -408,7 +418,7 @@ public class SettingsPanel : Control
             Text = "Selection Method",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
+            Foreground = BrushLabel,
             Margin = new Thickness(0, 8, 0, 0),
         };
 
@@ -436,7 +446,7 @@ public class SettingsPanel : Control
         var subtitle = new TextBlock
         {
             FontSize = 11,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
+            Foreground = BrushMuted,
             Text = config.Selection.Subtitle(),
             Margin = new Thickness(0, 2, 0, 0),
         };
@@ -447,7 +457,7 @@ public class SettingsPanel : Control
             Text = "Eye Tracker Device",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
+            Foreground = BrushLabel,
             Margin = new Thickness(0, 8, 0, 0),
         };
 
@@ -467,7 +477,7 @@ public class SettingsPanel : Control
             Text = "UDP Port",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
+            Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
         };
         var portBox = new NumericUpDown
@@ -484,7 +494,7 @@ public class SettingsPanel : Control
         var trackerHelp = new TextBlock
         {
             FontSize = 11,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x92, 0x9A)),
+            Foreground = BrushMuted,
             Text = "UDP tracker listens for STREAM_DATA or GazePoint messages",
             Margin = new Thickness(0, 2, 0, 0),
         };
@@ -595,7 +605,7 @@ public class SettingsPanel : Control
             Text = "App Language",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
+            Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
             Width = 180,
         };
@@ -745,7 +755,7 @@ public class SettingsPanel : Control
             Text = "Colour Theme",
             FontSize = 13,
             FontWeight = FontWeight.SemiBold,
-            Foreground = Application.Current?.FindResource("TextPrimary") as IBrush ?? Brushes.Black,
+            Foreground = BrushLabel,
         };
         section.Children.Add(header);
 
@@ -794,7 +804,7 @@ public class SettingsPanel : Control
                 CornerRadius = new CornerRadius(5),
                 BorderThickness = new Thickness(isSelected ? 2 : 1),
                 BorderBrush = isSelected
-                    ? (Application.Current?.FindResource("DeepNavy") as IBrush ?? Brushes.Navy)
+                    ? ((this.FindResource("OnAccent") as IBrush) ?? Brushes.Navy)
                     : new SolidColorBrush(Color.FromArgb(0x4D, 0x80, 0x80, 0x80)),
                 Padding = new Thickness(2),
             };
@@ -805,8 +815,8 @@ public class SettingsPanel : Control
                 Text = name,
                 FontSize = 11,
                 Foreground = isSelected
-                    ? (Application.Current?.FindResource("TextPrimary") as IBrush ?? Brushes.Black)
-                    : (Application.Current?.FindResource("TextSecondary") as IBrush ?? Brushes.Gray),
+                    ? (BrushLabel)
+                    : (BrushValue),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 Width = 100,
@@ -851,7 +861,7 @@ public class SettingsPanel : Control
             Text = labelText,
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30)),
+            Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
             Width = 180,
             TextTrimming = TextTrimming.CharacterEllipsis,
@@ -992,7 +1002,7 @@ public class SettingsPanel : Control
         {
             Text = current.ToString(),
             FontSize = 11,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+            Foreground = BrushValue,
             VerticalAlignment = VerticalAlignment.Center,
             Width = 48,
             TextAlignment = TextAlignment.Center,
@@ -1029,7 +1039,7 @@ public class SettingsPanel : Control
 
         var valueBorder = new Border
         {
-            Background = new SolidColorBrush(Color.FromRgb(0xE9, 0xF2, 0xF1)),
+            Background = BrushHighlight,
             CornerRadius = new CornerRadius(4),
             Padding = new Thickness(8, 4),
             MinWidth = 50,
@@ -1039,7 +1049,7 @@ public class SettingsPanel : Control
                 Text = current.ToString(),
                 FontSize = 12,
                 FontWeight = FontWeight.Medium,
-                Foreground = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70)),
+                Foreground = BrushValue,
                 HorizontalAlignment = HorizontalAlignment.Center,
             },
         };
@@ -1186,16 +1196,16 @@ public class SettingsPanel : Control
 
         var section = new StackPanel { Spacing = 16 };
 
-        var titleText = Application.Current?.FindResource("TextPrimary") as IBrush ?? Brushes.Black;
-        var bodyText = Application.Current?.FindResource("TextSecondary") as IBrush ?? Brushes.Gray;
-        var mutedText = Application.Current?.FindResource("TextMuted") as IBrush ?? Brushes.LightGray;
+        /* BrushLabel inlined */
+        /* BrushValue inlined */
+        /* BrushMuted inlined */
 
         section.Children.Add(new TextBlock
         {
             Text = "Analytics & Crash Reporting",
             FontSize = 15,
             FontWeight = FontWeight.SemiBold,
-            Foreground = titleText,
+            Foreground = BrushLabel,
         });
 
         section.Children.Add(new TextBlock
@@ -1204,7 +1214,7 @@ public class SettingsPanel : Control
                    "No typed text, clipboard contents, or personal information is ever collected.",
             FontSize = 12,
             TextWrapping = TextWrapping.Wrap,
-            Foreground = bodyText,
+            Foreground = BrushValue,
         });
 
         var toggleRow = new DockPanel { Margin = new Thickness(0, 8, 0, 0) };
@@ -1212,7 +1222,7 @@ public class SettingsPanel : Control
         {
             Text = "Send anonymous usage data",
             FontSize = 13,
-            Foreground = titleText,
+            Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
         });
         var optInToggle = new ToggleSwitch
@@ -1234,7 +1244,7 @@ public class SettingsPanel : Control
         {
             Text = $"Anonymous ID: {AnalyticsService.AnonymousId}",
             FontSize = 11,
-            Foreground = mutedText,
+            Foreground = BrushMuted,
             Margin = new Thickness(0, 4, 0, 0),
         });
 
@@ -1244,7 +1254,8 @@ public class SettingsPanel : Control
             Padding = new Thickness(16, 6),
             FontSize = 12,
             HorizontalAlignment = HorizontalAlignment.Left,
-            Background = Application.Current?.FindResource("ControlBg") as IBrush ?? Brushes.LightGray,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
             BorderThickness = new Thickness(0),
         };
         resetBtn.Click += (s, e) =>
@@ -1261,7 +1272,7 @@ public class SettingsPanel : Control
 
         section.Children.Add(new Border
         {
-            BorderBrush = Application.Current?.FindResource("BorderLight") as IBrush ?? Brushes.LightGray,
+            BorderBrush = BrushBorder,
             BorderThickness = new Thickness(0, 1, 0, 0),
             Margin = new Thickness(0, 12, 0, 0),
         });
@@ -1271,13 +1282,13 @@ public class SettingsPanel : Control
             Text = "Full event schema: github.com/dasher-project/Dasher-Windows/blob/main/analytics-events.json",
             FontSize = 10,
             TextWrapping = TextWrapping.Wrap,
-            Foreground = mutedText,
+            Foreground = BrushMuted,
         });
 
         // ── Dasher 5 Import section ──
         section.Children.Add(new Border
         {
-            BorderBrush = Application.Current?.FindResource("BorderLight") as IBrush ?? Brushes.LightGray,
+            BorderBrush = BrushBorder,
             BorderThickness = new Thickness(0, 1, 0, 0),
             Margin = new Thickness(0, 24, 0, 0),
         });
@@ -1287,7 +1298,7 @@ public class SettingsPanel : Control
             Text = "Dasher 5 Import",
             FontSize = 15,
             FontWeight = FontWeight.SemiBold,
-            Foreground = titleText,
+            Foreground = BrushLabel,
         });
 
         if (V5MigrationService.HasV5Data)
@@ -1302,19 +1313,19 @@ public class SettingsPanel : Control
             {
                 Text = statusText,
                 FontSize = 12,
-                Foreground = bodyText,
+                Foreground = BrushValue,
             });
 
             if (!string.IsNullOrEmpty(scan.Alphabet))
-                section.Children.Add(new TextBlock { Text = $"  Alphabet: {scan.Alphabet}", FontSize = 11, Foreground = mutedText });
+                section.Children.Add(new TextBlock { Text = $"  Alphabet: {scan.Alphabet}", FontSize = 11, Foreground = BrushMuted });
             if (!string.IsNullOrEmpty(scan.Colour))
-                section.Children.Add(new TextBlock { Text = $"  Colour: {scan.Colour}", FontSize = 11, Foreground = mutedText });
+                section.Children.Add(new TextBlock { Text = $"  Colour: {scan.Colour}", FontSize = 11, Foreground = BrushMuted });
             if (!string.IsNullOrEmpty(scan.Speed))
-                section.Children.Add(new TextBlock { Text = $"  Speed: {scan.Speed}", FontSize = 11, Foreground = mutedText });
+                section.Children.Add(new TextBlock { Text = $"  Speed: {scan.Speed}", FontSize = 11, Foreground = BrushMuted });
             if (scan.ControlMode)
-                section.Children.Add(new TextBlock { Text = "  Control mode: enabled", FontSize = 11, Foreground = mutedText });
+                section.Children.Add(new TextBlock { Text = "  Control mode: enabled", FontSize = 11, Foreground = BrushMuted });
             if (scan.CustomFileCount > 0)
-                section.Children.Add(new TextBlock { Text = $"  {scan.CustomFileCount} custom file(s)", FontSize = 11, Foreground = mutedText });
+                section.Children.Add(new TextBlock { Text = $"  {scan.CustomFileCount} custom file(s)", FontSize = 11, Foreground = BrushMuted });
 
             var importBtn = new Button
             {
@@ -1323,7 +1334,8 @@ public class SettingsPanel : Control
                 FontSize = 12,
                 Margin = new Thickness(0, 8, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Background = Application.Current?.FindResource("ControlBg") as IBrush ?? Brushes.LightGray,
+                Background = BrushControlBg,
+            Foreground = BrushLabel,
                 BorderThickness = new Thickness(0),
             };
             importBtn.Click += (s, e) =>
@@ -1350,14 +1362,14 @@ public class SettingsPanel : Control
             {
                 Text = "No Dasher 5 data found on this computer.",
                 FontSize = 12,
-                Foreground = mutedText,
+                Foreground = BrushMuted,
             });
         }
 
         // ── Reset to defaults ──
         section.Children.Add(new Border
         {
-            BorderBrush = Application.Current?.FindResource("BorderLight") as IBrush ?? Brushes.LightGray,
+            BorderBrush = BrushBorder,
             BorderThickness = new Thickness(0, 1, 0, 0),
             Margin = new Thickness(0, 24, 0, 0),
         });
@@ -1367,7 +1379,7 @@ public class SettingsPanel : Control
             Text = "Reset Settings",
             FontSize = 15,
             FontWeight = FontWeight.SemiBold,
-            Foreground = titleText,
+            Foreground = BrushLabel,
         });
 
         section.Children.Add(new TextBlock
@@ -1375,7 +1387,7 @@ public class SettingsPanel : Control
             Text = "Restore all Dasher settings to their default values. This cannot be undone.",
             FontSize = 12,
             TextWrapping = TextWrapping.Wrap,
-            Foreground = bodyText,
+            Foreground = BrushValue,
         });
 
         var resetSettingsBtn = new Button
@@ -1407,15 +1419,13 @@ public class SettingsPanel : Control
     private void BuildSpeechSettings()
     {
         var svc = SpeechService.Instance;
-        var labelBrush = new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30));
-        var valueBrush = new SolidColorBrush(Color.FromRgb(0x5A, 0x62, 0x70));
 
         var engineLabel = new TextBlock
         {
             Text = "TTS Engine",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
         };
 
@@ -1442,7 +1452,7 @@ public class SettingsPanel : Control
                 {
                     Text = "No credentials required",
                     FontSize = 11,
-                    Foreground = valueBrush,
+                    Foreground = BrushValue,
                 });
                 return;
             }
@@ -1454,7 +1464,7 @@ public class SettingsPanel : Control
                 {
                     Text = key,
                     FontSize = 12,
-                    Foreground = labelBrush,
+                    Foreground = BrushLabel,
                     VerticalAlignment = VerticalAlignment.Center,
                     Width = 140,
                 };
@@ -1509,7 +1519,7 @@ public class SettingsPanel : Control
         var sep = new Border
         {
             Height = 1,
-            Background = new SolidColorBrush(Color.FromRgb(0xDE, 0xE2, 0xE6)),
+            Background = BrushControlBg,
             Margin = new Thickness(0, 12, 0, 8),
         };
         _panel.Children.Add(sep);
@@ -1532,7 +1542,7 @@ public class SettingsPanel : Control
         var voiceCountLabel = new TextBlock
         {
             FontSize = 11,
-            Foreground = valueBrush,
+            Foreground = BrushValue,
             VerticalAlignment = VerticalAlignment.Center,
         };
         voiceBtnRow.Children.Add(voiceCountLabel);
@@ -1559,7 +1569,7 @@ public class SettingsPanel : Control
             Text = "Rate",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
             Margin = new Thickness(0, 8, 0, 0),
         };
         voiceHeader.Children.Add(rateLabel);
@@ -1583,7 +1593,7 @@ public class SettingsPanel : Control
             Text = "Pitch",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
             Margin = new Thickness(0, 8, 0, 0),
         };
         voiceHeader.Children.Add(pitchLabel);
@@ -1607,7 +1617,7 @@ public class SettingsPanel : Control
             Text = "Volume",
             FontSize = 12,
             FontWeight = FontWeight.Medium,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
             Margin = new Thickness(0, 8, 0, 0),
         };
         voiceHeader.Children.Add(volLabel);
@@ -1626,7 +1636,7 @@ public class SettingsPanel : Control
         {
             Text = $"{svc.SpeechVolume}%",
             FontSize = 11,
-            Foreground = valueBrush,
+            Foreground = BrushValue,
             VerticalAlignment = VerticalAlignment.Center,
             Width = 40,
             TextAlignment = TextAlignment.Right,
@@ -1714,7 +1724,7 @@ public class SettingsPanel : Control
         var sep2 = new Border
         {
             Height = 1,
-            Background = new SolidColorBrush(Color.FromRgb(0xDE, 0xE2, 0xE6)),
+            Background = BrushControlBg,
             Margin = new Thickness(0, 12, 0, 8),
         };
         _panel.Children.Add(sep2);
@@ -1724,7 +1734,7 @@ public class SettingsPanel : Control
             Text = "Engine Speech Features",
             FontSize = 13,
             FontWeight = FontWeight.Bold,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
             Margin = new Thickness(0, 0, 0, 4),
         };
         _panel.Children.Add(speakOnStopLabel);
@@ -1734,7 +1744,7 @@ public class SettingsPanel : Control
         {
             Text = "Speak on stop",
             FontSize = 12,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
             Width = 180,
         };
@@ -1758,7 +1768,7 @@ public class SettingsPanel : Control
         {
             Text = "Speak words",
             FontSize = 12,
-            Foreground = labelBrush,
+            Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
             Width = 180,
         };
