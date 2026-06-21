@@ -31,12 +31,37 @@ public static class V5MigrationService
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "dasher.rc");
     private static readonly string V5SettingsFile = Path.Combine(V5Dir, "settings.xml");
 
+    // v5 system directory — custom alphabets/colours/controls may be installed here
+    private static readonly string[] V5SystemDirs =
+    [
+        @"C:\Program Files (x86)\Dasher\Dasher 5.00\system.rc",
+        @"C:\Program Files\Dasher\Dasher 5.00\system.rc",
+        @"C:\Program Files (x86)\Dasher\Dasher 5.0\system.rc",
+    ];
+
     private static readonly string V6Dir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher");
 
     private static readonly string MigrationFlagFile = Path.Combine(V6Dir, "v5_migration_completed");
 
-    public static bool HasBeenOffered => File.Exists(MigrationFlagFile);
+    /// <summary>
+    /// Only re-offer if the app version changed since last migration.
+    /// This ensures users who ran a broken migration get re-prompted on update.
+    /// </summary>
+    public static bool HasBeenOffered
+    {
+        get
+        {
+            if (!File.Exists(MigrationFlagFile)) return false;
+            try
+            {
+                var flagVersion = File.ReadAllText(MigrationFlagFile).Trim();
+                var currentVersion = UpdateChecker.GetCurrentVersion();
+                return flagVersion == currentVersion;
+            }
+            catch { return false; }
+        }
+    }
     public static bool HasV5Data => File.Exists(V5SettingsFile);
 
     // v5 regName → v6 enum name for bool parameters
@@ -186,19 +211,28 @@ public static class V5MigrationService
 
     private static int CountCustomFiles()
     {
+        var dirs = new List<string> { V5Dir };
+        foreach (var sysDir in V5SystemDirs)
+            if (Directory.Exists(sysDir)) dirs.Add(sysDir);
+
         int count = 0;
-        try
+        var seen = new HashSet<string>();
+        foreach (var dir in dirs)
         {
-            foreach (var f in Directory.GetFiles(V5Dir, "*.*", SearchOption.TopDirectoryOnly))
+            try
             {
-                var name = Path.GetFileName(f);
-                if (name.StartsWith("alphabet.") || name.StartsWith("colour.") ||
-                    name.StartsWith("color.") || name.StartsWith("control.") ||
-                    name.StartsWith("training_"))
-                    count++;
+                if (!Directory.Exists(dir)) continue;
+                foreach (var f in Directory.GetFiles(dir, "*.*", SearchOption.TopDirectoryOnly))
+                {
+                    var name = Path.GetFileName(f);
+                    if ((name.StartsWith("alphabet.") || name.StartsWith("colour.") ||
+                         name.StartsWith("color.") || name.StartsWith("control.") ||
+                         name.StartsWith("training_")) && seen.Add(name))
+                        count++;
+                }
             }
+            catch { }
         }
-        catch { }
         return count;
     }
 
@@ -346,38 +380,61 @@ public static class V5MigrationService
 
     private static void CopyUserDataFiles(V5MigrationResult result)
     {
-        try
+        // Scan both user dir and system dirs for custom files
+        var sourceDirs = new List<string> { V5Dir };
+        foreach (var sysDir in V5SystemDirs)
         {
-            Directory.CreateDirectory(V6Dir);
+            if (Directory.Exists(sysDir))
+                sourceDirs.Add(sysDir);
+        }
 
-            foreach (var f in Directory.GetFiles(V5Dir, "*.*", SearchOption.TopDirectoryOnly))
+        foreach (var sourceDir in sourceDirs)
+        {
+            try
             {
-                var name = Path.GetFileName(f);
-                var shouldCopy = name.StartsWith("alphabet.") ||
-                                 name.StartsWith("colour.") ||
-                                 name.StartsWith("color.") ||
-                                 name.StartsWith("control.") ||
-                                 name.StartsWith("training_");
-                if (!shouldCopy) continue;
+                if (!Directory.Exists(sourceDir)) continue;
 
-                var dest = Path.Combine(V6Dir, name);
-                if (File.Exists(dest))
+                foreach (var f in Directory.GetFiles(sourceDir, "*.*", SearchOption.TopDirectoryOnly))
                 {
-                    result.Skipped.Add($"File: {name} (already exists)");
-                }
-                else
-                {
-                    File.Copy(f, dest);
-                    result.CopiedFiles.Add(name);
+                    var name = Path.GetFileName(f);
+                    string? destSubdir = null;
+
+                    if (name.StartsWith("alphabet."))
+                        destSubdir = "alphabets";
+                    else if (name.StartsWith("colour.") || name.StartsWith("color."))
+                        destSubdir = "colours";
+                    else if (name.StartsWith("control."))
+                        destSubdir = "control";
+                    else if (name.StartsWith("training_"))
+                        destSubdir = "training";
+                    else
+                        continue;
+
+                    var destDir = destSubdir != null ? Path.Combine(V6Dir, destSubdir) : V6Dir;
+                    Directory.CreateDirectory(destDir);
+                    var dest = Path.Combine(destDir, name);
+
+                    var overwrite = name.Equals("control.xml", StringComparison.OrdinalIgnoreCase);
+
+                    if (File.Exists(dest) && !overwrite)
+                    {
+                        // Already exists — skip silently (user dir checked first, wins)
+                    }
+                    else
+                    {
+                        File.Copy(f, dest, overwrite);
+                        if (!result.CopiedFiles.Contains(name))
+                            result.CopiedFiles.Add(name);
+                    }
                 }
             }
+            catch { }
         }
-        catch { }
     }
 
     public static void MarkCompleted()
     {
-        try { File.WriteAllText(MigrationFlagFile, DateTime.UtcNow.ToString("o")); }
+        try { File.WriteAllText(MigrationFlagFile, UpdateChecker.GetCurrentVersion()); }
         catch { }
     }
 }

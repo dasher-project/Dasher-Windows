@@ -45,7 +45,7 @@ public class SettingsPanel : Control
     private bool IsDark => ActualThemeVariant == ThemeVariant.Dark;
     private IBrush BrushLabel => IsDark ? Brushes.White : new SolidColorBrush(Color.FromRgb(0x1A, 0x25, 0x30));
     private IBrush BrushValue => IsDark ? new SolidColorBrush(Color.FromRgb(0xC0, 0xC8, 0xD0)) : new SolidColorBrush(Color.FromRgb(0x3D, 0x43, 0x50));
-    private IBrush BrushMuted => IsDark ? new SolidColorBrush(Color.FromRgb(0x8A, 0x92, 0x9C)) : new SolidColorBrush(Color.FromRgb(0x5C, 0x63, 0x6F));
+    private IBrush BrushMuted => IsDark ? new SolidColorBrush(Color.FromRgb(0xA8, 0xB2, 0xBC)) : new SolidColorBrush(Color.FromRgb(0x5C, 0x63, 0x6F));
     private IBrush BrushControlBg => IsDark ? new SolidColorBrush(Color.FromRgb(0x2A, 0x35, 0x3D)) : new SolidColorBrush(Color.FromRgb(0xEC, 0xEC, 0xED));
     private IBrush BrushBorder => IsDark ? new SolidColorBrush(Color.FromRgb(0x2A, 0x35, 0x3D)) : new SolidColorBrush(Color.FromRgb(0xE0, 0xE6, 0xE8));
     private IBrush BrushHighlight => IsDark ? new SolidColorBrush(Color.FromRgb(0x1D, 0x2D, 0x35)) : new SolidColorBrush(Color.FromRgb(0xE9, 0xF2, 0xF1));
