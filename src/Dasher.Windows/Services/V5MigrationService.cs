@@ -44,7 +44,24 @@ public static class V5MigrationService
 
     private static readonly string MigrationFlagFile = Path.Combine(V6Dir, "v5_migration_completed");
 
-    public static bool HasBeenOffered => File.Exists(MigrationFlagFile);
+    /// <summary>
+    /// Only re-offer if the app version changed since last migration.
+    /// This ensures users who ran a broken migration get re-prompted on update.
+    /// </summary>
+    public static bool HasBeenOffered
+    {
+        get
+        {
+            if (!File.Exists(MigrationFlagFile)) return false;
+            try
+            {
+                var flagVersion = File.ReadAllText(MigrationFlagFile).Trim();
+                var currentVersion = UpdateChecker.GetCurrentVersion();
+                return flagVersion == currentVersion;
+            }
+            catch { return false; }
+        }
+    }
     public static bool HasV5Data => File.Exists(V5SettingsFile);
 
     // v5 regName → v6 enum name for bool parameters
@@ -417,7 +434,7 @@ public static class V5MigrationService
 
     public static void MarkCompleted()
     {
-        try { File.WriteAllText(MigrationFlagFile, DateTime.UtcNow.ToString("o")); }
+        try { File.WriteAllText(MigrationFlagFile, UpdateChecker.GetCurrentVersion()); }
         catch { }
     }
 }
