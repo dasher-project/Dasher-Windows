@@ -189,6 +189,7 @@ public static class V5MigrationService
         int count = 0;
         try
         {
+            if (!Directory.Exists(V5Dir)) return 0;
             foreach (var f in Directory.GetFiles(V5Dir, "*.*", SearchOption.TopDirectoryOnly))
             {
                 var name = Path.GetFileName(f);
@@ -353,21 +354,34 @@ public static class V5MigrationService
             foreach (var f in Directory.GetFiles(V5Dir, "*.*", SearchOption.TopDirectoryOnly))
             {
                 var name = Path.GetFileName(f);
-                var shouldCopy = name.StartsWith("alphabet.") ||
-                                 name.StartsWith("colour.") ||
-                                 name.StartsWith("color.") ||
-                                 name.StartsWith("control.") ||
-                                 name.StartsWith("training_");
-                if (!shouldCopy) continue;
+                string? destSubdir = null;
 
-                var dest = Path.Combine(V6Dir, name);
-                if (File.Exists(dest))
+                if (name.StartsWith("alphabet."))
+                    destSubdir = "alphabets";
+                else if (name.StartsWith("colour.") || name.StartsWith("color."))
+                    destSubdir = "colours";
+                else if (name.StartsWith("control."))
+                    destSubdir = "control";
+                else if (name.StartsWith("training_"))
+                    destSubdir = "training";
+                else
+                    continue;
+
+                // Copy to the correct subdirectory to match v6 structure
+                var destDir = destSubdir != null ? Path.Combine(V6Dir, destSubdir) : V6Dir;
+                Directory.CreateDirectory(destDir);
+                var dest = Path.Combine(destDir, name);
+
+                // control.xml should OVERWRITE the default — user's custom tree wins
+                var overwrite = name.Equals("control.xml", StringComparison.OrdinalIgnoreCase);
+
+                if (File.Exists(dest) && !overwrite)
                 {
                     result.Skipped.Add($"File: {name} (already exists)");
                 }
                 else
                 {
-                    File.Copy(f, dest);
+                    File.Copy(f, dest, overwrite);
                     result.CopiedFiles.Add(name);
                 }
             }
