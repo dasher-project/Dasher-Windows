@@ -339,6 +339,14 @@ public partial class MainWindow : Window
                 OnOutputTextChanged();
         };
 
+        // Wire speech volume slider to SpeechService
+        var volSlider = this.FindControl<Avalonia.Controls.Slider>("SpeakVolumeSlider");
+        if (volSlider != null)
+        {
+            volSlider.Value = SpeechService.Instance.SpeechVolume;
+            volSlider.ValueChanged += OnSpeakVolumeChanged;
+        }
+
 #if !STORE
         _ = CheckForUpdatesAsync();
 #endif
@@ -984,6 +992,12 @@ public partial class MainWindow : Window
     private void OnStopSpeak(object? sender, RoutedEventArgs e)
     {
         SpeechService.Instance.Stop();
+    }
+
+    private void OnSpeakVolumeChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+    {
+        SpeechService.Instance.SpeechVolume = (int)Math.Round(e.NewValue);
+        SpeechService.Instance.SaveSettings();
     }
 
     private void OnEngineSpeak(IntPtr textPtr, int interrupt, IntPtr user_data)
