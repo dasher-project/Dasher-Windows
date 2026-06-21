@@ -397,6 +397,14 @@
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.CircleStop}" Size="18" Foreground="{DynamicResource TextSecondary}"/>
                             </Button>
 
+                            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" ToolTip.Tip="Speech volume">
+                                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Volume1}" Size="14" Foreground="{DynamicResource TextMuted}"/>
+                                <Slider x:Name="SpeakVolumeSlider" Minimum="0" Maximum="100" Width="60"
+                                        VerticalAlignment="Center"
+                                        Value="80"
+                                        ToolTip.Tip="Speech volume"/>
+                            </StackPanel>
+
                             <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
 
                             <StackPanel Orientation="Horizontal" Spacing="6">

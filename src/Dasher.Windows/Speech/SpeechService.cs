@@ -197,21 +197,20 @@ public sealed class SpeechService : IDisposable
             try { synth.SelectVoice(SelectedVoiceId); } catch { }
         }
 
-        // Apply Rate (-10 to 10)
-        synth.Rate = SpeechRate switch
+        // Build SSML with ALL prosody attributes in one element.
+        // When using SpeakSsml(), the synthesizer's native Rate/Volume
+        // properties are IGNORED — only the SSML prosody values matter.
+        // So we must include rate, pitch, AND volume here.
+        var rateStr = SpeechRate switch
         {
-            SpeechRate.XSlow => -5,
-            SpeechRate.Slow => -2,
-            SpeechRate.Medium => 0,
-            SpeechRate.Fast => 3,
-            SpeechRate.XFast => 6,
-            _ => 0
+            SpeechRate.XSlow => "x-slow",
+            SpeechRate.Slow => "slow",
+            SpeechRate.Medium => "medium",
+            SpeechRate.Fast => "fast",
+            SpeechRate.XFast => "x-fast",
+            _ => "medium"
         };
 
-        // Apply Volume (0-100)
-        synth.Volume = Math.Clamp(SpeechVolume, 0, 100);
-
-        // Build SSML for pitch support (SpeechSynthesizer has no Pitch property)
         var pitchStr = SpeechPitch switch
         {
             SpeechPitch.XLow => "x-low",
@@ -222,12 +221,14 @@ public sealed class SpeechService : IDisposable
             _ => "medium"
         };
 
+        var volumeStr = Math.Clamp(SpeechVolume, 0, 100).ToString();
+
         var escapedText = XmlEncode(text);
         var culture = "en-US";
         try { culture = synth.GetInstalledVoices().FirstOrDefault(v => v.VoiceInfo.Name == SelectedVoiceId)?.VoiceInfo.Culture?.Name ?? "en-US"; } catch { }
 
         var ssml = $"<speak version=\"1.0\" xml:lang=\"{culture}\">" +
-                   $"<prosody pitch=\"{pitchStr}\">{escapedText}</prosody>" +
+                   $"<prosody rate=\"{rateStr}\" pitch=\"{pitchStr}\" volume=\"{volumeStr}\">{escapedText}</prosody>" +
                    $"</speak>";
 
         synth.SetOutputToDefaultAudioDevice();
