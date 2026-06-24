@@ -23,6 +23,7 @@ public partial class DasherCanvas : Control
     private bool _useEyeGazeInput;
 
     private NativeBridge.MessageCallback? _messageCallback;
+    private NativeBridge.LogCallback? _logCallback;
     private bool _callbacksRegistered;
     private int _lastScreenWidth;
     private int _lastScreenHeight;
@@ -159,6 +160,29 @@ public partial class DasherCanvas : Control
         {
             _messageCallback = new NativeBridge.MessageCallback(OnEngineMessage);
             NativeBridge.dasher_set_message_callback(_handle, _messageCallback, IntPtr.Zero);
+        }
+        catch { }
+
+        try
+        {
+            _logCallback = new NativeBridge.LogCallback(OnEngineLog);
+            NativeBridge.dasher_set_log_callback(_handle, _logCallback, IntPtr.Zero, 0);
+        }
+        catch { }
+    }
+
+    private static void OnEngineLog(int level, IntPtr messagePtr, IntPtr userData)
+    {
+        if (messagePtr == IntPtr.Zero) return;
+        var msg = Marshal.PtrToStringUTF8(messagePtr) ?? "";
+        var line = $"[DasherCore:{level}] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
+        System.Diagnostics.Debug.Write(line);
+        try
+        {
+            var logPath = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Dasher", "engine.log");
+            System.IO.File.AppendAllText(logPath, line);
         }
         catch { }
     }
