@@ -215,6 +215,13 @@ public static class NativeBridge
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_set_parameter_callback(IntPtr ctx, ParameterCallback callback, IntPtr user_data);
+
+    // Engine log callback
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void LogCallback(int level, IntPtr message, IntPtr user_data);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_set_log_callback(IntPtr ctx, LogCallback callback, IntPtr user_data, int min_level);
 }
 
 [StructLayout(LayoutKind.Sequential)]
