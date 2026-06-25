@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using Dasher.Windows.Engine;
@@ -423,16 +422,7 @@ public static class V5MigrationService
                     }
                     else
                     {
-                        // Convert v5 alphabet XML to v6 format if needed
-                        if (name.StartsWith("alphabet.") && name.EndsWith(".xml"))
-                        {
-                            var converted = ConvertV5AlphabetToV6(f);
-                            File.WriteAllText(dest, converted);
-                        }
-                        else
-                        {
-                            File.Copy(f, dest, overwrite);
-                        }
+                        File.Copy(f, dest, overwrite);
                         if (!result.CopiedFiles.Contains(name))
                             result.CopiedFiles.Add(name);
                     }
@@ -446,122 +436,5 @@ public static class V5MigrationService
     {
         try { File.WriteAllText(MigrationFlagFile, UpdateChecker.GetCurrentVersion()); }
         catch { }
-    }
-
-    /// <summary>
-    /// Converts a v5 alphabet XML file to v6 format.
-    /// v5: <alphabets> root, <s d="a" t="a" b="10"/> symbols, <train>/<palette>/<orientation> children
-    /// v6: <alphabet> root, <node label="a"><textCharAction/></node> symbols, attributes for metadata
-    /// </summary>
-    private static string ConvertV5AlphabetToV6(string sourcePath)
-    {
-        var content = File.ReadAllText(sourcePath);
-
-        // If already v6 format (<alphabet> root), return as-is
-        if (content.Contains("<alphabet ") && !content.Contains("<alphabets"))
-            return content;
-
-        try
-        {
-            var doc = System.Xml.Linq.XDocument.Parse(content);
-            var root = doc.Root;
-
-            // Find the first <alphabet> child (v5 uses <alphabets> wrapper)
-            var alphNode = root?.Name == "alphabets"
-                ? root.Element("alphabet")
-                : (root?.Name == "alphabet" ? root : null);
-
-            if (alphNode == null) return content; // can't parse, return original
-
-            // Build v6 alphabet element
-            var v6 = new System.Xml.Linq.XElement("alphabet");
-
-            // Name attribute
-            var name = alphNode.Attribute("name")?.Value ?? "Imported";
-            v6.SetAttributeValue("name", name);
-
-            // Training file — from <train> child or trainingFilename attribute
-            var train = alphNode.Element("train")?.Value ?? alphNode.Attribute("trainingFilename")?.Value ?? "";
-            if (!string.IsNullOrEmpty(train))
-                v6.SetAttributeValue("trainingFilename", train);
-
-            // Colour palette — from <palette> child or colorsName attribute
-            var palette = alphNode.Element("palette")?.Value ?? alphNode.Attribute("colorsName")?.Value ?? "";
-            if (!string.IsNullOrEmpty(palette))
-                v6.SetAttributeValue("colorsName", palette);
-
-            // Orientation — from <orientation type="LR"/> child or attribute
-            var orient = alphNode.Element("orientation")?.Attribute("type")?.Value
-                         ?? alphNode.Attribute("orientation")?.Value ?? "LR";
-            v6.SetAttributeValue("orientation", orient);
-
-            // Convert <s> elements inside <group> elements to <node> elements
-            foreach (var group in alphNode.Elements("group"))
-            {
-                var v6Group = new System.Xml.Linq.XElement("group");
-                v6Group.SetAttributeValue("name", group.Attribute("name")?.Value ?? "");
-                v6Group.SetAttributeValue("colorInfoName", group.Attribute("colorInfoName")?.Value
-                    ?? (group.Attribute("b")?.Value != null ? "lowercase" : "lowercase"));
-
-                foreach (var s in group.Elements("s"))
-                {
-                    var display = s.Attribute("d")?.Value ?? "";
-                    var text = s.Attribute("t")?.Value ?? display;
-
-                    var node = new System.Xml.Linq.XElement("node");
-                    node.SetAttributeValue("label", display);
-                    if (text != display)
-                        node.SetAttributeValue("text", text);
-
-                    var action = new System.Xml.Linq.XElement("textCharAction");
-                    node.Add(action);
-                    v6Group.Add(node);
-                }
-
-                if (v6Group.HasElements)
-                    v6.Add(v6Group);
-            }
-
-            // Handle <space>, <paragraph> elements (v5 special characters)
-            ConvertSpecialChar(alphNode, v6, "space", "□", " ");
-            ConvertSpecialChar(alphNode, v6, "paragraph", "¶", "\n");
-
-            var result = new System.Xml.Linq.XDocument(
-                new System.Xml.Linq.XDeclaration("1.0", "UTF-8", null),
-                v6);
-            return result.ToString();
-        }
-        catch
-        {
-            return content; // conversion failed, return original
-        }
-    }
-
-    private static void ConvertSpecialChar(System.Xml.Linq.XElement v5Alphabet,
-        System.Xml.Linq.XElement v6Alphabet, string elementName, string defaultDisplay, string defaultText)
-    {
-        var el = v5Alphabet.Element(elementName);
-        if (el == null) return;
-
-        var display = el.Attribute("d")?.Value ?? defaultDisplay;
-        var text = el.Attribute("t")?.Value ?? defaultText;
-
-        // Find or create a paragraphSpace group
-        var group = v6Alphabet.Elements("group").FirstOrDefault(g =>
-            g.Attribute("name")?.Value == "paragraphSpace");
-        if (group == null)
-        {
-            group = new System.Xml.Linq.XElement("group");
-            group.SetAttributeValue("name", "paragraphSpace");
-            group.SetAttributeValue("colorInfoName", "paragraphSpace");
-            v6Alphabet.Add(group);
-        }
-
-        var node = new System.Xml.Linq.XElement("node");
-        node.SetAttributeValue("label", display);
-        if (text != display)
-            node.SetAttributeValue("text", text);
-        node.Add(new System.Xml.Linq.XElement("textCharAction"));
-        group.Add(node);
     }
 }
