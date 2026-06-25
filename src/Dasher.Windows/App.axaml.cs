@@ -119,7 +119,7 @@ public partial class App : Application
             Content = "Not now",
             Padding = new Thickness(20, 8),
             Background = Brushes.Transparent,
-            BorderBrush = (IBrush)(Application.Current?.FindResource("BorderLight") ?? Brushes.LightGray),
+            BorderBrush = (Application.Current?.FindResource("BorderLight") as IBrush) ?? Brushes.LightGray,
             Foreground = ThemeBrushes.TextSecondary,
         };
 
