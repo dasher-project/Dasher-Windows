@@ -659,7 +659,7 @@ public class SettingsPanel : Control
 
         panel.Children.Add(new TextBlock
         {
-            Text = "Import a text file to improve prediction accuracy, or export your accumulated training data for backup or transfer.",
+            Text = "Import adds text to the language model (appends to existing learning). Export saves your accumulated training data for backup or transfer.",
             FontSize = 11,
             TextWrapping = TextWrapping.Wrap,
             Foreground = BrushValue,
