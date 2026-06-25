@@ -222,6 +222,10 @@ public static class NativeBridge
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_set_log_callback(IntPtr ctx, LogCallback callback, IntPtr user_data, int min_level);
+
+    // Training
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_import_training_text(IntPtr ctx, [MarshalAs(UnmanagedType.LPStr)] string text);
 }
 
 [StructLayout(LayoutKind.Sequential)]

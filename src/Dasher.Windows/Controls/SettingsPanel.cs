@@ -144,6 +144,7 @@ public class SettingsPanel : Control
             var localeRow = BuildLocaleRow();
             if (localeRow != null)
                 _panel.Children.Add(localeRow);
+            _panel.Children.Add(BuildTrainingSection());
         }
 
         if (category == "Speech")
@@ -642,6 +643,125 @@ public class SettingsPanel : Control
 
         row.Children.Add(combo);
         return row;
+    }
+
+    private Control BuildTrainingSection()
+    {
+        var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 12, 0, 0) };
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = "Training Data",
+            FontSize = 13,
+            FontWeight = FontWeight.SemiBold,
+            Foreground = BrushLabel,
+        });
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = "Import a text file to improve prediction accuracy, or export your accumulated training data for backup or transfer.",
+            FontSize = 11,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = BrushValue,
+        });
+
+        var btnRow = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Margin = new Thickness(0, 4, 0, 0) };
+
+        var importBtn = new Button
+        {
+            Content = "Import Training Text",
+            Padding = new Thickness(12, 6),
+            FontSize = 12,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+        };
+
+        var exportBtn = new Button
+        {
+            Content = "Export Training Data",
+            Padding = new Thickness(12, 6),
+            FontSize = 12,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+        };
+
+        var statusText = new TextBlock
+        {
+            FontSize = 11,
+            Foreground = BrushMuted,
+            Margin = new Thickness(0, 4, 0, 0),
+        };
+
+        // Show current training file size
+        var trainingFile = System.IO.Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Dasher", "training", "training_english_GB.txt");
+        if (System.IO.File.Exists(trainingFile))
+        {
+            var sizeKB = new System.IO.FileInfo(trainingFile).Length / 1024;
+            statusText.Text = $"Current training data: {sizeKB} KB";
+        }
+        else
+        {
+            statusText.Text = "No user training data yet";
+        }
+
+        importBtn.Click += async (s, e) =>
+        {
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel == null) return;
+            var storageProvider = topLevel.StorageProvider;
+            var result = await storageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
+            {
+                Title = "Import Training Text",
+                FileTypeFilter = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
+                AllowMultiple = false,
+            });
+            if (result.Count == 0) return;
+            try
+            {
+                var text = await System.IO.File.ReadAllTextAsync(result[0].Path.LocalPath);
+                NativeBridge.dasher_import_training_text(_handle, text);
+                statusText.Text = $"Imported {text.Length / 1024} KB of training text";
+            }
+            catch (Exception ex)
+            {
+                statusText.Text = $"Import failed: {ex.Message}";
+            }
+        };
+
+        exportBtn.Click += async (s, e) =>
+        {
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel == null) return;
+            var storageProvider = topLevel.StorageProvider;
+            var result = await storageProvider.SaveFilePickerAsync(new Avalonia.Platform.Storage.FilePickerSaveOptions
+            {
+                Title = "Export Training Data",
+                DefaultExtension = "txt",
+                SuggestedFileName = "dasher_training_export.txt",
+                FileTypeChoices = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
+            });
+            if (result == null) return;
+            try
+            {
+                await System.IO.File.WriteAllTextAsync(result.Path.LocalPath, System.IO.File.ReadAllText(trainingFile));
+                statusText.Text = $"Exported to {result.Name}";
+            }
+            catch (Exception ex)
+            {
+                statusText.Text = $"Export failed: {ex.Message}";
+            }
+        };
+
+        btnRow.Children.Add(importBtn);
+        btnRow.Children.Add(exportBtn);
+        panel.Children.Add(btnRow);
+        panel.Children.Add(statusText);
+
+        return panel;
     }
 
     private static readonly Dictionary<string, HashSet<string>> FilterToSubgroup = new()
