@@ -923,10 +923,10 @@ public class SettingsPanel : Control
             {
                 Child = swatchRow,
                 CornerRadius = new CornerRadius(5),
-                BorderThickness = new Thickness(isSelected ? 2 : 1),
+                BorderThickness = new Thickness(isSelected ? 3 : 0),
                 BorderBrush = isSelected
                     ? ((this.FindResource("OnAccent") as IBrush) ?? Brushes.Navy)
-                    : new SolidColorBrush(Color.FromArgb(0x4D, 0x80, 0x80, 0x80)),
+                    : Brushes.Transparent,
                 Padding = new Thickness(2),
             };
             cardContent.Children.Add(swatchContainer);
@@ -942,6 +942,7 @@ public class SettingsPanel : Control
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 Width = 100,
                 TextAlignment = TextAlignment.Center,
+                FontWeight = isSelected ? FontWeight.SemiBold : FontWeight.Normal,
             };
             cardContent.Children.Add(nameLabel);
 
@@ -951,7 +952,11 @@ public class SettingsPanel : Control
             card.Click += (s, e) =>
             {
                 if (s is Button b && b.Tag is string paletteName)
+                {
                     NativeBridge.dasher_set_palette(_handle, paletteName);
+                    // Refresh the customization section to show the new theme selection
+                    ShowCategory("Customization");
+                }
             };
 
             wrap.Children.Add(card);
