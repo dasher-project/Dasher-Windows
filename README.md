@@ -1,40 +1,90 @@
-# Dasher-Windows
+# Dasher for Windows
 
-> **Work in Progress** — Early development. Not ready for production use.
+[![Build](https://github.com/dasher-project/Dasher-Windows/actions/workflows/build-installer.yml/badge.svg)](https://github.com/dasher-project/Dasher-Windows/actions/workflows/build-installer.yml)
+[![Release](https://img.shields.io/github/v/release/dasher-project/Dasher-Windows?include_prereleases)](https://github.com/dasher-project/Dasher-Windows/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-Native Windows Dasher application built with Avalonia UI.
+Dasher is an information-efficient text-entry interface, driven by continuous
+pointing gestures. It lets you write using eye gaze, a mouse, a switch, a
+joystick, or touch — designed for accessibility and augmentative communication
+(AAC).
 
-Uses the MIT-licensed [DasherCore](https://github.com/dasher-project/DasherCore) engine via a native C++ DLL with a command-buffer rendering bridge to C#.
+This is the **Windows** frontend, built on the shared
+[DasherCore](https://github.com/dasher-project/DasherCore) engine.
+
+> **[dasher.at](https://dasher.at)** — downloads, user docs, and live demo
+> **[Feature status](https://dasher.at/status/)** — what each platform supports
+> **[All repos](https://github.com/dasher-project)** — engine, frontends, design guide
+
+## Status
+
+> **Preview** — actively developed. Download the latest build from
+> [Releases](../../releases). See the [feature matrix](https://dasher.at/status/)
+> for what's implemented.
+
+## Install
+
+Download the latest MSI or portable ZIP from
+[Releases](../../releases). Run the installer or extract and run
+`Dasher.Windows.exe`.
+
+## Build
+
+### Prerequisites
+
+- .NET 10 SDK
+- CMake 3.20+
+- Visual Studio 2026 Community (with C++ desktop development workload, CMake tools, and Windows SDK)
+- Git (with submodules)
+
+### Steps
+
+```powershell
+git clone --recurse-submodules https://github.com/dasher-project/Dasher-Windows.git
+cd Dasher-Windows
+```
+
+**1. Build the native DLL** (from a Developer Command Prompt for VS):
+
+```powershell
+cd native
+.\build.ps1
+```
+
+Produces `build/bin/dasher.dll`. Copy it to the app directory:
+
+```powershell
+copy .\build\bin\dasher.dll ..\src\Dasher.Windows\
+```
+
+**2. Build and run the Avalonia app:**
+
+```powershell
+cd ..\src\Dasher.Windows
+dotnet run
+```
 
 ## Architecture
 
-### Why a command buffer?
+DasherCore is a pure C++ engine. It computes the full zooming tree layout and
+renders through an abstract `CDasherScreen` interface. This frontend implements
+`CDasherScreen` inside the native DLL (via DasherCore's C API), serialising each
+draw call into a flat `int[]` command buffer. C# reads this buffer via P/Invoke
+and replays the draw calls into Avalonia's `DrawingContext`.
 
-DasherCore is a pure C++ engine. It computes the full zooming tree layout — box positions, sizes, colours, text labels — and renders through an abstract `CDasherScreen` interface with methods like `DrawRectangle()`, `DrawString()`, `DrawCircle()`.
-
-Because DasherCore is C++ and Avalonia is C#, we can't subclass `CDasherScreen` directly from C#. Instead, a thin C++ layer inside the native DLL implements `CDasherScreen` and serialises each draw call into a flat `int[]` buffer. C# reads this buffer via P/Invoke and replays the draw calls into Avalonia's `DrawingContext`. This uses Avalonia's native Skia rendering pipeline — we get DPI scaling, anti-aliasing, and composition for free.
-
+```mermaid
+graph LR
+    subgraph "DasherCore C++ DLL"
+        A[CDasherScreen interface] --> B[CommandScreen<br/>serialises to int buffer]
+    end
+    subgraph "Avalonia C# App"
+        B -->|P/Invoke<br/>int buffer| C[CommandRenderer.cs<br/>decodes ops]
+        C --> D[DrawingContext<br/>Skia rendering]
+        E[DasherCanvas.cs<br/>frame loop + pointer input] --> C
+        E -->|dasher_frame| B
+    end
+    B -.->|dasher.dll| A
 ```
-DasherCore (C++)                    Avalonia (C#)
-┌──────────────────────┐            ┌─────────────────────────┐
-│ CDasherScreen        │            │ CommandRenderer.cs      │
-│  DrawRectangle()     │            │   decodes [op,a,b,c,d]  │
-│  DrawString()        │──int[]────►│   → DrawingContext      │
-│  DrawCircle()        │  P/Invoke  │   .DrawRectangle()      │
-│                      │            │   .DrawText()           │
-│ WinCommandScreen     │            │   .DrawEllipse()        │
-│  implements the      │            │                         │
-│  abstract interface  │            │ DasherCanvas.cs         │
-│  and serialises each │            │   hosts the renderer,   │
-│  draw call into:     │            │   handles pointer input,│
-│  [opcode,a,b,c,d,   │            │   drives the frame loop │
-│   argb]              │            │                         │
-└──────────────────────┘            └─────────────────────────┘
-```
-
-This is the same pattern used by [Dasher-Android](https://github.com/dasher-project/Dasher-Android) (JNI + Canvas).
-
-### Command protocol
 
 Each command is 6 ints: `[opcode, a, b, c, d, argb]`
 
@@ -46,88 +96,26 @@ Each command is 6 ints: `[opcode, a, b, c, d, argb]`
 | 3 | Rectangle outline | a=x1, b=y1, c=x2, d=y2 |
 | 4 | Rectangle filled | a=x1, b=y1, c=x2, d=y2 |
 | 5 | Text | a=x, b=y, c=fontSize, d=stringIndex |
+| 6 | Set line width | a=width |
 
-The native layer returns a `FrameData` struct with pointers into its internal buffers. No heap allocations per frame. C# copies the data out via `Marshal.Copy`. The pointers are valid until the next `dasher_frame()` call.
+See [DasherCore's C API](https://github.com/dasher-project/DasherCore/blob/main/docs/C_API.md) for the engine contract.
 
-### Component map
+## Repository layout
 
-| Layer | Files | Purpose |
-|---|---|---|
-| Native C API | `DasherCore/src/CAPI.cpp` (submodule) | Exported C API for P/Invoke, `CDasherScreen` command-buffer serialisation, engine lifecycle |
-| Native build glue | `native/CMakeLists.txt` | Builds DasherCore with `BUILD_CAPI ON` into `dasher.dll` |
-| P/Invoke | `src/.../Engine/NativeBridge.cs` | C# declarations for the native DLL |
-| Command renderer | `src/.../Engine/CommandRenderer.cs` | Decodes command buffer → Avalonia `DrawingContext` |
-| Canvas control | `src/.../Controls/DasherCanvas.cs` | Frame loop, pointer input, rendering |
-| Main window | `src/.../Views/MainWindow.axaml` | Top nav, bottom nav, canvas + message pane |
+| Path | Purpose |
+|---|---|
+| `DasherCore/` | DasherCore submodule (do not edit here — PR upstream) |
+| `native/` | CMake build glue: builds DasherCore CAPI into `dasher.dll` |
+| `src/Dasher.Windows/Engine/` | P/Invoke bridge, command renderer, parameter keys |
+| `src/Dasher.Windows/Controls/` | DasherCanvas (frame loop, input), SettingsPanel |
+| `src/Dasher.Windows/Views/` | MainWindow (toolbars, canvas, message pane, settings overlay) |
+| `src/Dasher.Windows/Services/` | Analytics, migration, speech, update checker |
+| `tests/Dasher.Windows.Tests/` | xUnit tests (crash reporting, PII scrubbing) |
 
-## Plan
+## Contributing
 
-- Migrate v5 core features to this new architecture
-- Implement both standalone app and on-screen keyboard mode
-- Use SAPI for TTS
-
-## Prerequisites
-
-- .NET 10 SDK
-- CMake 3.20+
-- Visual Studio 2026 Community (with C++ desktop development workload, CMake tools, and Windows SDK)
-
-### PATH setup
-
-Add these to your system PATH (or use a Developer Command Prompt):
-
-```
-C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin
-C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja
-```
-
-## Building
-
-### 1. Build the native DLL
-
-From a Developer Command Prompt for VS, or if you've added the PATH entries above:
-
-```powershell
-cd native
-.\build.ps1
-```
-
-This runs CMake configure + build using Ninja + MSVC. Produces `build/bin/dasher.dll`.
-
-### 2. Build and run the Avalonia app
-
-```batch
-cd src\Dasher.Windows
-dotnet run
-```
-
-The native DLL must be in the application output directory. The build doesn't automate this yet, so copy it manually:
-
-```batch
-copy ..\..\native\build\bin\dasher.dll .
-```
-
-## Project Structure
-
-```
-Dasher-Windows/
-  DasherCore/                    Git submodule (MIT DasherCore engine)
-  native/                        Native build glue (DasherCore CAPI -> dasher.dll)
-    CMakeLists.txt               CMake build for dasher.dll (BUILD_CAPI ON)
-    build.ps1                    One-command build (sets up MSVC env)
-  src/
-    Dasher.Windows/              Avalonia MVVM application
-      Engine/
-        NativeBridge.cs          P/Invoke declarations
-        CommandRenderer.cs       Decodes command buffer → Avalonia draw calls
-      Controls/
-        DasherCanvas.cs          Custom control (rendering + input + frame loop)
-      Views/
-        MainWindow.axaml/.cs     Main window (nav bars + canvas + message pane)
-      ViewModels/
-        MainWindowViewModel.cs   MVVM view model (language, speed, colours)
-```
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for build details, code style, and DCO sign-off. For project-wide conventions (code of conduct, RFCs, security), see the [org contributing guide](https://github.com/dasher-project/.github/blob/main/CONTRIBUTING.md).
 
 ## License
 
-MIT
+MIT — see [LICENSE](https://github.com/dasher-project/.github/blob/main/LICENSE).
