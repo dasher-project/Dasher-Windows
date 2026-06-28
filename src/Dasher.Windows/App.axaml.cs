@@ -59,13 +59,17 @@ public partial class App : Application
     private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
         if (e.ExceptionObject is Exception ex)
-            AnalyticsService.CaptureCrash(ex);
+        {
+            // RFC 0009: write crash file with engine log tail, flush on next launch
+            AnalyticsService.WriteCrashFile(ex, "AppDomain.UnhandledException");
+        }
         _ = AnalyticsService.ShutdownAsync();
     }
 
     private static void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
     {
-        AnalyticsService.CaptureCrash(e.Exception);
+        // RFC 0009: write crash file for unobserved task exceptions
+        AnalyticsService.WriteCrashFile(e.Exception, "TaskScheduler.UnobservedTaskException");
         e.SetObserved();
     }
 
