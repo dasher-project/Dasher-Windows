@@ -78,7 +78,7 @@ graph LR
         A[CDasherScreen interface] --> B[CommandScreen<br/>serialises to int buffer]
     end
     subgraph "Avalonia C# App"
-        B -->|P/Invoke<br/>int[] commands| C[CommandRenderer.cs<br/>decodes ops]
+        B -->|P/Invoke<br/>int buffer| C[CommandRenderer.cs<br/>decodes ops]
         C --> D[DrawingContext<br/>Skia rendering]
         E[DasherCanvas.cs<br/>frame loop + pointer input] --> C
         E -->|dasher_frame| B
