@@ -17,7 +17,7 @@ Requirements:
 
 - **.NET 10 SDK** (preview)
 - **Windows 10 18362+** (TargetFramework is `net10.0-windows10.0.18362.0`)
-- **Visual Studio 2022** or **Rider** (optional, for IDE support)
+- **Visual Studio 2026** or **Rider** (optional, for IDE support)
 
 ## What lives where
 

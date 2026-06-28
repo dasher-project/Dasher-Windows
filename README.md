@@ -53,10 +53,8 @@ The native layer returns a `FrameData` struct with pointers into its internal bu
 
 | Layer | Files | Purpose |
 |---|---|---|
-| Native bridge | `native/WinBridge.cpp` | Exported C API for P/Invoke |
-| Native screen | `native/WinCommandScreen.cpp/.h` | `CDasherScreen` → command buffer serialisation |
-| Native interface | `native/WinDasherInterface.cpp/.h` | Engine lifecycle, settings, frame rendering |
-| Native file utils | `native/WinFileUtils.cpp` | Windows filesystem for DasherCore |
+| Native C API | `DasherCore/src/CAPI.cpp` (submodule) | Exported C API for P/Invoke, `CDasherScreen` command-buffer serialisation, engine lifecycle |
+| Native build glue | `native/CMakeLists.txt` | Builds DasherCore with `BUILD_CAPI ON` into `dasher.dll` |
 | P/Invoke | `src/.../Engine/NativeBridge.cs` | C# declarations for the native DLL |
 | Command renderer | `src/.../Engine/CommandRenderer.cs` | Decodes command buffer → Avalonia `DrawingContext` |
 | Canvas control | `src/.../Controls/DasherCanvas.cs` | Frame loop, pointer input, rendering |
@@ -89,12 +87,12 @@ C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensio
 
 From a Developer Command Prompt for VS, or if you've added the PATH entries above:
 
-```batch
+```powershell
 cd native
-build.cmd
+.\build.ps1
 ```
 
-This runs CMake configure + build using Ninja + MSVC. Produces `build/bin/dasher_native.dll`.
+This runs CMake configure + build using Ninja + MSVC. Produces `build/bin/dasher.dll`.
 
 ### 2. Build and run the Avalonia app
 
@@ -103,10 +101,10 @@ cd src\Dasher.Windows
 dotnet run
 ```
 
-The native DLL must be in the application output directory. The build doesn't automate this yet — copy it manually:
+The native DLL must be in the application output directory. The build doesn't automate this yet, so copy it manually:
 
 ```batch
-copy ..\..\native\build\bin\dasher_native.dll .
+copy ..\..\native\build\bin\dasher.dll .
 ```
 
 ## Project Structure
@@ -114,13 +112,9 @@ copy ..\..\native\build\bin\dasher_native.dll .
 ```
 Dasher-Windows/
   DasherCore/                    Git submodule (MIT DasherCore engine)
-  native/                        C++ native bridge
-    CMakeLists.txt               CMake build for dasher_native.dll
-    build.cmd                    One-command build (sets up MSVC env)
-    WinCommandScreen.cpp/.h      CDasherScreen → command buffer
-    WinDasherInterface.cpp/.h    Engine lifecycle and settings
-    WinFileUtils.cpp             Windows filesystem
-    WinBridge.cpp                Exported C API for P/Invoke
+  native/                        Native build glue (DasherCore CAPI -> dasher.dll)
+    CMakeLists.txt               CMake build for dasher.dll (BUILD_CAPI ON)
+    build.ps1                    One-command build (sets up MSVC env)
   src/
     Dasher.Windows/              Avalonia MVVM application
       Engine/
