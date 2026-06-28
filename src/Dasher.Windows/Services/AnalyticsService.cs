@@ -31,11 +31,7 @@ public static class AnalyticsService
     private static bool _initialized;
 
     // ── Engine log ring buffer (RFC 0009) ──────────────────────────────────────
-    private const int EngineLogMaxLines = 64;
-    private const int EngineLogMaxBytes = 8 * 1024;
-    private static readonly object _logLock = new();
-    private static readonly LinkedList<string> _engineLog = new();
-    private static int _engineLogBytes;
+    private static readonly EngineLogRingBuffer _engineLog = new();
 
     // ── Crash file (RFC 0009) ──────────────────────────────────────────────────
     private static readonly string CrashFilePath = Path.Combine(
@@ -145,36 +141,12 @@ public static class AnalyticsService
     /// </summary>
     public static void AppendEngineLog(int level, string message)
     {
-        var prefix = level switch { 0 => "[D]", 1 => "[I]", 2 => "[W]", 3 => "[E]", _ => "[X]" };
-        var line = $"{prefix} {message}";
-
-        lock (_logLock)
-        {
-            _engineLog.AddLast(line);
-            _engineLogBytes += line.Length;
-
-            while (_engineLog.Count > EngineLogMaxLines)
-            {
-                _engineLogBytes -= _engineLog.First!.Value.Length;
-                _engineLog.RemoveFirst();
-            }
-            while (_engineLogBytes > EngineLogMaxBytes && _engineLog.Count > 1)
-            {
-                _engineLogBytes -= _engineLog.First!.Value.Length;
-                _engineLog.RemoveFirst();
-            }
-        }
+        _engineLog.Append(level, message);
     }
 
-    /// <summary>
-    /// Snapshot the ring buffer for inclusion in a crash report.
-    /// </summary>
     private static string SnapshotEngineLog()
     {
-        lock (_logLock)
-        {
-            return string.Join("\n", _engineLog);
-        }
+        return _engineLog.Snapshot();
     }
 
     // ── Crash reporting (RFC 0009) ─────────────────────────────────────────────
@@ -187,11 +159,11 @@ public static class AnalyticsService
     {
         try
         {
-            var stack = Scrub(ex.ToString());
+            var stack = PiiScrubber.Scrub(ex.ToString());
             if (stack.Length > 16 * 1024) stack = stack[..(16 * 1024)];
 
-            var engineTail = Scrub(SnapshotEngineLog());
-            if (engineTail.Length > EngineLogMaxBytes) engineTail = engineTail[..EngineLogMaxBytes];
+            var engineTail = PiiScrubber.Scrub(SnapshotEngineLog());
+            if (engineTail.Length > 8 * 1024) engineTail = engineTail[..(8 * 1024)];
 
             var sb = new StringBuilder();
             // Header (key=value lines)
@@ -251,23 +223,6 @@ public static class AnalyticsService
             File.Delete(CrashFilePath);
         }
         catch { }
-    }
-
-    /// <summary>
-    /// Scrub home-directory path segments and emails (RFC 0009 PII scrubbing).
-    /// </summary>
-    private static string Scrub(string s)
-    {
-        if (string.IsNullOrEmpty(s)) return s;
-
-        // /Users/<name>/ or /home/<name>/
-        s = Regex.Replace(s, @"(/Users/|/home/)([^/\\]+)", "$1<user>");
-        // C:\Users\<name>\
-        s = Regex.Replace(s, @"C:\\Users\\([^\\]+)", @"C:\Users\<user>");
-        // Emails
-        s = Regex.Replace(s, @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", "<email>");
-
-        return s;
     }
 
     /// <summary>
