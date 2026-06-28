@@ -175,16 +175,12 @@ public partial class DasherCanvas : Control
     {
         if (messagePtr == IntPtr.Zero) return;
         var msg = Marshal.PtrToStringUTF8(messagePtr) ?? "";
-        var line = $"[DasherCore:{level}] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
-        System.Diagnostics.Debug.Write(line);
-        try
-        {
-            var logPath = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "Dasher", "engine.log");
-            System.IO.File.AppendAllText(logPath, line);
-        }
-        catch { }
+
+        // RFC 0009: feed engine log ring buffer for crash reports (info+ only)
+        if (level >= 1)
+            Services.AnalyticsService.AppendEngineLog(level, msg);
+
+        System.Diagnostics.Debug.WriteLine($"[DasherCore:{level}] {msg}");
     }
 
     private void TrySetScreenSize()

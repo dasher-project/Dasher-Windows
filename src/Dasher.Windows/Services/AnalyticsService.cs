@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using PostHog;
 using PostHog.Sdk;
@@ -10,6 +14,7 @@ namespace Dasher.Windows.Services;
 /// <summary>
 /// Privacy-preserving analytics wrapper around PostHog.
 /// All events are opt-in. No typed text, clipboard, or PII is ever sent.
+/// Implements RFC 0009 crash reporting with engine log ring buffer.
 /// </summary>
 public static class AnalyticsService
 {
@@ -25,6 +30,15 @@ public static class AnalyticsService
     private static string _distinctId = "";
     private static bool _initialized;
 
+    // ── Engine log ring buffer (RFC 0009) ──────────────────────────────────────
+    private static readonly EngineLogRingBuffer _engineLog = new();
+
+    // ── Crash file (RFC 0009) ──────────────────────────────────────────────────
+    private static readonly string CrashFilePath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "Dasher", "pending_crash.txt");
+    private static readonly TimeSpan CrashMaxAge = TimeSpan.FromDays(7);
+
     public static bool IsOptedIn => _settings.OptedIn;
     public static bool HasPrompted => _settings.PromptShown;
     public static string AnonymousId => _distinctId;
@@ -33,6 +47,9 @@ public static class AnalyticsService
     {
         _settings = AnalyticsSettings.Load();
         _distinctId = _settings.GetOrCreateAnonymousId();
+
+        // Flush any pending crash from a previous session (RFC 0009)
+        FlushPendingCrash();
 
         if (!_settings.OptedIn)
             return;
@@ -116,8 +133,101 @@ public static class AnalyticsService
         catch { }
     }
 
+    // ── Engine log ring buffer (RFC 0009) ──────────────────────────────────────
+
     /// <summary>
-    /// Capture a crash/exception. Called from unhandled exception handlers.
+    /// Append an engine log line to the ring buffer.
+    /// Called from the dasher_set_log_callback dispatch in DasherCanvas.
+    /// </summary>
+    public static void AppendEngineLog(int level, string message)
+    {
+        _engineLog.Append(level, message);
+    }
+
+    private static string SnapshotEngineLog()
+    {
+        return _engineLog.Snapshot();
+    }
+
+    // ── Crash reporting (RFC 0009) ─────────────────────────────────────────────
+
+    /// <summary>
+    /// Write a crash file to disk. Called from the unhandled-exception handler.
+    /// The file is flushed to PostHog on next launch if the user has opted in.
+    /// </summary>
+    public static void WriteCrashFile(Exception ex, string? source = null)
+    {
+        try
+        {
+            var stack = PiiScrubber.Scrub(ex.ToString());
+            if (stack.Length > 16 * 1024) stack = stack[..(16 * 1024)];
+
+            var engineTail = PiiScrubber.Scrub(SnapshotEngineLog());
+            if (engineTail.Length > 8 * 1024) engineTail = engineTail[..(8 * 1024)];
+
+            var sb = new StringBuilder();
+            // Header (key=value lines)
+            sb.Append("exception_type=").Append(ex.GetType().FullName).Append('\n');
+            sb.Append("source=").Append(source ?? "AppDomain.UnhandledException").Append('\n');
+            sb.Append("app_version=").Append(UpdateChecker.GetCurrentVersion()).Append('\n');
+            sb.Append("os_version=").Append(RuntimeInformation.OSDescription).Append('\n');
+            sb.Append("\n\n");
+            // Body: stack trace + engine log tail
+            sb.Append(stack);
+            if (!string.IsNullOrWhiteSpace(engineTail))
+                sb.Append("\n--- engine log ---\n").Append(engineTail);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(CrashFilePath)!);
+            File.WriteAllText(CrashFilePath, sb.ToString());
+        }
+        catch { /* never throw in a crash handler */ }
+    }
+
+    /// <summary>
+    /// On launch: if a pending crash file exists, send it (only if opted in)
+    /// and delete it. Crash files older than 7 days are discarded.
+    /// </summary>
+    private static void FlushPendingCrash()
+    {
+        try
+        {
+            if (!File.Exists(CrashFilePath)) return;
+
+            var age = DateTime.Now - File.GetLastWriteTime(CrashFilePath);
+            if (age > CrashMaxAge)
+            {
+                File.Delete(CrashFilePath);
+                return;
+            }
+
+            if (_settings.OptedIn && _initialized)
+            {
+                var content = File.ReadAllText(CrashFilePath);
+                var splitIdx = content.IndexOf("\n\n");
+                var header = splitIdx > 0 ? content[..splitIdx] : "";
+                var body = splitIdx > 0 ? content[(splitIdx + 2)..] : content;
+
+                var props = new Dictionary<string, object>();
+                foreach (var line in header.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var eq = line.IndexOf('=');
+                    if (eq > 0)
+                        props[line[..eq]] = line[(eq + 1)..];
+                }
+                if (!string.IsNullOrWhiteSpace(body))
+                    props["stack_trace"] = body;
+
+                Capture("crash", props);
+            }
+
+            File.Delete(CrashFilePath);
+        }
+        catch { }
+    }
+
+    /// <summary>
+    /// Capture a crash/exception directly to PostHog (for non-fatal exceptions).
+    /// For fatal crashes, use WriteCrashFile instead.
     /// </summary>
     public static void CaptureCrash(Exception ex)
     {
