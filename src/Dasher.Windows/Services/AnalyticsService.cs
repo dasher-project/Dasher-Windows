@@ -152,11 +152,28 @@ public static class AnalyticsService
     // ── Crash reporting (RFC 0009) ─────────────────────────────────────────────
 
     /// <summary>
-    /// Write a crash file to disk. Called from the unhandled-exception handler.
-    /// The file is flushed to PostHog on next launch if the user has opted in.
+    /// Write a crash file to disk AND attempt immediate CaptureException if PostHog is live.
+    /// Called from the unhandled-exception handler.
     /// </summary>
     public static void WriteCrashFile(Exception ex, string? source = null)
     {
+        // Attempt immediate send — the app may live long enough to flush before dying.
+        if (_settings.OptedIn && _initialized)
+        {
+            try
+            {
+                var crashProps = DefaultProperties();
+                crashProps["source"] = source ?? "AppDomain.UnhandledException";
+                var engineTail = PiiScrubber.Scrub(SnapshotEngineLog());
+                if (!string.IsNullOrWhiteSpace(engineTail))
+                    crashProps["engine_log_tail"] = engineTail;
+                PostHogSdk.CaptureException(ex, _distinctId, crashProps, null, false, DateTimeOffset.UtcNow);
+                _ = PostHogSdk.FlushAsync();
+            }
+            catch { /* never throw in a crash handler */ }
+        }
+
+        // Always write the crash file in case the immediate send doesn't flush in time
         try
         {
             var stack = PiiScrubber.Scrub(ex.ToString());
@@ -166,13 +183,11 @@ public static class AnalyticsService
             if (engineTail.Length > 8 * 1024) engineTail = engineTail[..(8 * 1024)];
 
             var sb = new StringBuilder();
-            // Header (key=value lines)
             sb.Append("exception_type=").Append(ex.GetType().FullName).Append('\n');
             sb.Append("source=").Append(source ?? "AppDomain.UnhandledException").Append('\n');
             sb.Append("app_version=").Append(UpdateChecker.GetCurrentVersion()).Append('\n');
             sb.Append("os_version=").Append(RuntimeInformation.OSDescription).Append('\n');
             sb.Append("\n\n");
-            // Body: stack trace + engine log tail
             sb.Append(stack);
             if (!string.IsNullOrWhiteSpace(engineTail))
                 sb.Append("\n--- engine log ---\n").Append(engineTail);
@@ -184,8 +199,9 @@ public static class AnalyticsService
     }
 
     /// <summary>
-    /// On launch: if a pending crash file exists, send it (only if opted in)
-    /// and delete it. Crash files older than 7 days are discarded.
+    /// On launch: if a pending crash file exists, send it as a $exception event
+    /// via CaptureException (so it lands in PostHog Error Tracking) if opted in,
+    /// then delete it. Crash files older than 7 days are discarded.
     /// </summary>
     private static void FlushPendingCrash()
     {
@@ -207,17 +223,32 @@ public static class AnalyticsService
                 var header = splitIdx > 0 ? content[..splitIdx] : "";
                 var body = splitIdx > 0 ? content[(splitIdx + 2)..] : content;
 
-                var props = new Dictionary<string, object>();
+                // Parse header for metadata
+                var crashProps = DefaultProperties();
+                string exceptionType = "System.Exception";
                 foreach (var line in header.Split('\n', StringSplitOptions.RemoveEmptyEntries))
                 {
                     var eq = line.IndexOf('=');
                     if (eq > 0)
-                        props[line[..eq]] = line[(eq + 1)..];
+                    {
+                        var key = line[..eq];
+                        var val = line[(eq + 1)..];
+                        if (key == "exception_type") exceptionType = val;
+                        else if (key == "source") crashProps["source"] = val;
+                    }
                 }
-                if (!string.IsNullOrWhiteSpace(body))
-                    props["stack_trace"] = body;
 
-                Capture("crash", props);
+                // Reconstruct an exception with the saved stack trace so
+                // CaptureException produces a $exception event for Error Tracking
+                var bodyLines = body.Split("\n--- engine log ---", 2, StringSplitOptions.None);
+                var stackTrace = bodyLines[0].Trim();
+                if (!string.IsNullOrWhiteSpace(stackTrace))
+                    crashProps["stack_trace"] = stackTrace;
+                if (bodyLines.Length > 1 && !string.IsNullOrWhiteSpace(bodyLines[1]))
+                    crashProps["engine_log_tail"] = bodyLines[1].Trim();
+
+                var reconstructedException = new SavedCrashException(exceptionType, stackTrace);
+                PostHogSdk.CaptureException(reconstructedException, _distinctId, crashProps, null, false, DateTimeOffset.UtcNow);
             }
 
             File.Delete(CrashFilePath);
@@ -250,5 +281,27 @@ public static class AnalyticsService
     {
         if (!_initialized) return;
         try { await PostHogSdk.ShutdownAsync(); } catch { }
+    }
+}
+
+/// <summary>
+/// Reconstructed exception for deferred crash reporting (RFC 0009).
+/// Carries the original exception type name and saved stack trace so
+/// PostHogSdk.CaptureException produces a proper $exception event.
+/// </summary>
+internal sealed class SavedCrashException : Exception
+{
+    private readonly string _savedStackTrace;
+
+    public SavedCrashException(string originalTypeName, string savedStackTrace)
+        : base($"Deferred crash: {originalTypeName}")
+    {
+        _savedStackTrace = savedStackTrace;
+        Source = originalTypeName;
+    }
+
+    public override string ToString()
+    {
+        return _savedStackTrace;
     }
 }
