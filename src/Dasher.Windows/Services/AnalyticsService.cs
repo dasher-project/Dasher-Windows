@@ -48,13 +48,15 @@ public static class AnalyticsService
         _settings = AnalyticsSettings.Load();
         _distinctId = _settings.GetOrCreateAnonymousId();
 
+        if (_settings.OptedIn)
+            StartPostHog();
+
         // Flush any pending crash from a previous session (RFC 0009)
+        // Must run AFTER StartPostHog so the SDK is ready to send
         FlushPendingCrash();
 
         if (!_settings.OptedIn)
             return;
-
-        StartPostHog();
     }
 
     private static void StartPostHog()
@@ -207,17 +209,35 @@ public static class AnalyticsService
                 var header = splitIdx > 0 ? content[..splitIdx] : "";
                 var body = splitIdx > 0 ? content[(splitIdx + 2)..] : content;
 
-                var props = new Dictionary<string, object>();
+                // Parse header
+                var crashProps = DefaultProperties();
+                string exceptionType = "System.Exception";
+                string source = "unknown";
                 foreach (var line in header.Split('\n', StringSplitOptions.RemoveEmptyEntries))
                 {
                     var eq = line.IndexOf('=');
                     if (eq > 0)
-                        props[line[..eq]] = line[(eq + 1)..];
+                    {
+                        var key = line[..eq];
+                        var val = line[(eq + 1)..];
+                        if (key == "exception_type") exceptionType = val;
+                        else if (key == "source") source = val;
+                    }
                 }
-                if (!string.IsNullOrWhiteSpace(body))
-                    props["stack_trace"] = body;
 
-                Capture("crash", props);
+                // Split body into stack trace and engine log tail
+                var bodyParts = body.Split("\n--- engine log ---", 2, StringSplitOptions.None);
+                var stackTrace = bodyParts[0].Trim();
+                if (!string.IsNullOrWhiteSpace(stackTrace))
+                    crashProps["stack_trace"] = stackTrace;
+                if (bodyParts.Length > 1 && !string.IsNullOrWhiteSpace(bodyParts[1]))
+                    crashProps["engine_log_tail"] = bodyParts[1].Trim();
+                crashProps["source"] = source;
+
+                // Use CaptureException so PostHog Error Tracking sees it as $exception
+                var ex = new SavedCrashException(exceptionType, stackTrace);
+                PostHogSdk.CaptureException(ex, _distinctId, crashProps, null, false, DateTimeOffset.UtcNow);
+                PostHogSdk.FlushAsync().Wait(TimeSpan.FromSeconds(5));
             }
 
             File.Delete(CrashFilePath);
@@ -250,5 +270,27 @@ public static class AnalyticsService
     {
         if (!_initialized) return;
         try { await PostHogSdk.ShutdownAsync(); } catch { }
+    }
+}
+
+/// <summary>
+/// Reconstructed exception for deferred crash reporting (RFC 0009).
+/// Carries the original exception type name and saved stack trace so
+/// PostHogSdk.CaptureException produces a proper $exception event.
+/// </summary>
+internal sealed class SavedCrashException : Exception
+{
+    private readonly string _savedStackTrace;
+
+    public SavedCrashException(string originalTypeName, string savedStackTrace)
+        : base($"Deferred crash: {originalTypeName}")
+    {
+        _savedStackTrace = savedStackTrace;
+        Source = originalTypeName;
+    }
+
+    public override string ToString()
+    {
+        return _savedStackTrace;
     }
 }

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -151,6 +152,7 @@ public partial class MainWindow : Window
         // Phase 1: Create engine (but don't start it yet)
         _canvas.Initialize(dataDir, dataDir);
         _canvas.EngineMessage += OnEngineMessage;
+        _canvas.EngineFaultDetected += OnEngineFault;
         _vm.SetHandle(_canvas.GetHandle());
 
         this.Deactivated += (_, _) =>
@@ -671,13 +673,60 @@ public partial class MainWindow : Window
     {
         // RFC 0009 A2: engine caught a C++ exception internally and latched the error flag.
         // The ring buffer already captured the fault message via the log callback.
-        // Show a user-facing message and offer restart.
+        // Write crash file so PostHog gets it on next launch (or immediate send if alive).
+        try
+        {
+            AnalyticsService.WriteCrashFile(
+                new Exception("Dasher engine fault — internal exception caught by C API boundary"),
+                "EngineFaultDetected");
+        }
+        catch { }
+
+        // Show dialog on UI thread
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            ToastNotifier.Show("Dasher Engine Error",
-                "The Dasher engine encountered an internal error and has stopped. " +
-                "Please restart Dasher. If this keeps happening, please report it.",
-                isWarning: true);
+            try
+            {
+                var btn = new Button { Content = "OK", Padding = new Thickness(24, 6), HorizontalAlignment = HorizontalAlignment.Right };
+                var dialog = new Window
+                {
+                    Title = "Dasher Engine Error",
+                    Width = 400,
+                    Height = 180,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    CanResize = false,
+                    ShowInTaskbar = false,
+                    Background = new SolidColorBrush(Color.FromRgb(0xFE, 0xF3, 0xF2)),
+                    Content = new Border
+                    {
+                        Padding = new Thickness(24),
+                        Child = new StackPanel
+                        {
+                            Spacing = 16,
+                            Children =
+                            {
+                                new TextBlock
+                                {
+                                    Text = "Engine Error",
+                                    FontSize = 16,
+                                    FontWeight = FontWeight.Bold,
+                                    Foreground = new SolidColorBrush(Color.FromRgb(0xC0, 0x39, 0x2B)),
+                                },
+                                new TextBlock
+                                {
+                                    Text = "The Dasher engine encountered an internal error and has stopped. Please restart Dasher.",
+                                    FontSize = 13,
+                                    TextWrapping = TextWrapping.Wrap,
+                                },
+                                btn,
+                            },
+                        },
+                    },
+                };
+                btn.Click += (_, _) => dialog.Close();
+                dialog.ShowDialog(this);
+            }
+            catch { }
         });
     }
 
