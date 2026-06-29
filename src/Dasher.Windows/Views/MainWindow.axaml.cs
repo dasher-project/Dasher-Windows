@@ -667,6 +667,20 @@ public partial class MainWindow : Window
         ToastNotifier.Show(title, e.Text, e.IsWarning);
     }
 
+    private void OnEngineFault(object? sender, EventArgs e)
+    {
+        // RFC 0009 A2: engine caught a C++ exception internally and latched the error flag.
+        // The ring buffer already captured the fault message via the log callback.
+        // Show a user-facing message and offer restart.
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            ToastNotifier.Show("Dasher Engine Error",
+                "The Dasher engine encountered an internal error and has stopped. " +
+                "Please restart Dasher. If this keeps happening, please report it.",
+                isWarning: true);
+        });
+    }
+
     private void OnBack(object? sender, RoutedEventArgs e)
     {
     }
@@ -752,6 +766,7 @@ public partial class MainWindow : Window
         // Recreate engine with defaults
         _canvas.Initialize(dataDir, dataDir);
         _canvas.EngineMessage += OnEngineMessage;
+        _canvas.EngineFaultDetected += OnEngineFault;
         _vm.SetHandle(_canvas.GetHandle());
 
         // Re-wire callbacks

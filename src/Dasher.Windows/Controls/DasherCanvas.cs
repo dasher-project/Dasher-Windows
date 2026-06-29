@@ -29,6 +29,7 @@ public partial class DasherCanvas : Control
     private int _lastScreenHeight;
 
     public event EventHandler<EngineMessageEventArgs>? EngineMessage;
+    public event EventHandler? EngineFaultDetected;
 
     public static readonly StyledProperty<string> OutputTextProperty =
         AvaloniaProperty.Register<DasherCanvas, string>(nameof(OutputText));
@@ -197,6 +198,14 @@ public partial class DasherCanvas : Control
     private void OnTick(object? sender, EventArgs e)
     {
         if (_handle == IntPtr.Zero) return;
+
+        // RFC 0009 A2: check engine error flag — if set, stop driving the engine
+        if (NativeBridge.dasher_has_engine_error(_handle) != 0)
+        {
+            _timer.Stop();
+            EngineFaultDetected?.Invoke(this, EventArgs.Empty);
+            return;
+        }
 
         EnsureCallbacksRegistered();
         TrySetScreenSize();
