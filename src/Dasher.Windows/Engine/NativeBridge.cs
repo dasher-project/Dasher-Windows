@@ -226,6 +226,10 @@ public static class NativeBridge
     // Training
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_import_training_text(IntPtr ctx, [MarshalAs(UnmanagedType.LPStr)] string text);
+
+    // Engine error flag (RFC 0009 A2)
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_has_engine_error(IntPtr ctx);
 }
 
 [StructLayout(LayoutKind.Sequential)]
