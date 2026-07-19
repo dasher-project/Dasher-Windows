@@ -531,10 +531,12 @@ public class SettingsPanel : Control
         trackerCombo.Items.Add("Windows Eye Tracker (native)");
         trackerCombo.Items.Add("UDP Gaze Tracker (network)");
         trackerCombo.Items.Add("eyetuitive");
+        trackerCombo.Items.Add("Tobii (Stream Engine)");
         trackerCombo.SelectedIndex = config.EyeTrackerType switch
         {
             "UdpGaze" => 1,
             "Eyetuitive" => 2,
+            "Tobii" => 3,
             _ => 0,
         };
 
@@ -573,14 +575,32 @@ public class SettingsPanel : Control
             trackerCombo.IsVisible = isEyeGaze;
             var isUdp = isEyeGaze && trackerCombo.SelectedIndex == 1;
             portPanel.IsVisible = isUdp;
-            trackerHelp.IsVisible = isUdp;
-            // Show eyetuitive USB status hint
-            if (isEyeGaze && trackerCombo.SelectedIndex == 2)
+            trackerHelp.IsVisible = false;
+
+            if (!isEyeGaze) return;
+
+            if (trackerCombo.SelectedIndex == 1)
             {
+                // UDP
+                trackerHelp.Text = "UDP tracker listens for STREAM_DATA or GazePoint messages";
+                trackerHelp.IsVisible = true;
+            }
+            else if (trackerCombo.SelectedIndex == 2)
+            {
+                // eyetuitive
                 var available = EyetuitiveTracker.IsAvailable();
                 trackerHelp.Text = available
                     ? "eyetuitive device detected"
                     : "No eyetuitive device detected — connect via USB and ensure service is running";
+                trackerHelp.IsVisible = true;
+            }
+            else if (trackerCombo.SelectedIndex == 3)
+            {
+                // Tobii Stream Engine
+                var available = TobiiStreamEngineTracker.IsAvailable();
+                trackerHelp.Text = available
+                    ? "Tobii Stream Engine DLL detected"
+                    : "tobii_stream_engine.dll not found. Download it from developer.tobii.com and place next to Dasher.Windows.exe";
                 trackerHelp.IsVisible = true;
             }
         }
@@ -617,6 +637,7 @@ public class SettingsPanel : Control
             {
                 1 => "UdpGaze",
                 2 => "Eyetuitive",
+                3 => "Tobii",
                 _ => "WindowsNative",
             };
             UpdateTrackerVisibility();
@@ -652,6 +673,7 @@ public class SettingsPanel : Control
             {
                 "UdpGaze" => EyeGazeIntegration.TrackerType.UdpGazeTracker,
                 "Eyetuitive" => EyeGazeIntegration.TrackerType.Eyetuitive,
+                "Tobii" => EyeGazeIntegration.TrackerType.TobiiStreamEngine,
                 _ => EyeGazeIntegration.TrackerType.WindowsNative,
             },
             _ => EyeGazeIntegration.TrackerType.None,
