@@ -10,14 +10,14 @@ namespace Dasher.Windows.Controls
 {
     public partial class DasherCanvas
     {
-        private bool _eyeTrackActive;
-        private DateTimeOffset _lastGazeTime = DateTimeOffset.MinValue;
+        private volatile bool _eyeTrackActive;
+        private long _lastGazeTicks;
         private static readonly TimeSpan GazeTimeout = TimeSpan.FromMilliseconds(500);
 
         public bool IsEyeTracking => _useEyeGazeInput;
         public bool IsEyeTrackActive => _eyeTrackActive;
 
-        public async Task InitializeEyeGazeAsync(EyeGazeIntegration.TrackerType trackerType, int udpPort = 5555)
+        public async Task<bool> InitializeEyeGazeAsync(EyeGazeIntegration.TrackerType trackerType, int udpPort = 5555)
         {
             var settings = new EyeGazeIntegration.Settings
             {
@@ -33,6 +33,7 @@ namespace Dasher.Windows.Controls
                 _useEyeGazeInput = true;
                 _eyeGazeIntegration.GazePositionChanged += OnEyeGazePositionChanged;
             }
+            return ok;
         }
 
         public void DisableEyeGaze()
@@ -51,7 +52,7 @@ namespace Dasher.Windows.Controls
         {
             if (!_useEyeGazeInput || _handle == IntPtr.Zero) return;
 
-            _lastGazeTime = DateTimeOffset.UtcNow;
+            _lastGazeTicks = DateTimeOffset.UtcNow.Ticks;
             _eyeTrackActive = true;
 
             float x = gazePoint.X;
@@ -74,7 +75,8 @@ namespace Dasher.Windows.Controls
             if (!_useEyeGazeInput) return;
 
             // Check for stale data — no gaze received in 500ms = lost tracking
-            if (DateTimeOffset.UtcNow - _lastGazeTime > GazeTimeout)
+            var lastTime = new DateTimeOffset(_lastGazeTicks, TimeSpan.Zero);
+            if (_lastGazeTicks == 0 || DateTimeOffset.UtcNow - lastTime > GazeTimeout)
                 _eyeTrackActive = false;
 
             // Draw in top-right corner: green dot (tracking) or red dot (lost)
