@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -198,30 +199,37 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     }
 
     /// <summary>
-    /// Check if the Tobii Stream Engine DLL is available at all.
+    /// Check if the Tobii Stream Engine DLL is available.
+    /// Searches: app directory, %APPDATA%\Dasher\, system PATH.
     /// </summary>
     public static bool IsAvailable()
     {
-        try
+        // Check standard load path (system PATH + app directory)
+        if (NativeLibrary.TryLoad(DllName, out var lib))
         {
-            // Try to load the DLL
-            var lib = LoadLibrary(DllName);
-            if (lib != IntPtr.Zero)
+            NativeLibrary.Free(lib);
+            return true;
+        }
+        // Check common user locations
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var candidates = new[]
+        {
+            Path.Combine(appData, "Dasher", "tobii_stream_engine.dll"),
+            Path.Combine(AppContext.BaseDirectory, "tobii_stream_engine.dll"),
+        };
+        foreach (var path in candidates)
+        {
+            if (File.Exists(path))
             {
-                FreeLibrary(lib);
-                return true;
+                if (NativeLibrary.TryLoad(path, out var lib2))
+                {
+                    NativeLibrary.Free(lib2);
+                    return true;
+                }
             }
         }
-        catch { }
         return false;
     }
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr LoadLibrary(string lpFileName);
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool FreeLibrary(IntPtr hModule);
 
     // ── Private methods ───────────────────────────────────────────────────────
 

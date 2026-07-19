@@ -26,9 +26,17 @@ Dasher because the zooming inference engine handles noise naturally.
 1. Install Tobii drivers (usually automatic when you connect the device)
 2. Download `tobii_stream_engine.dll` from
    [Tobii Developer](https://developer.tobii.com/consumer-eye-trackers/streams-and-apis/)
-3. Place the DLL next to `Dasher.Windows.exe` (or in a directory on your PATH)
+3. Place the DLL in one of these locations:
+   - **Installed app:** `C:\Program Files\Dasher\tobii_stream_engine.dll`
+   - **User data (no admin needed):** `%APPDATA%\Dasher\tobii_stream_engine.dll`
+   - **Portable/ZIP:** Next to `Dasher.Windows.exe`
+   - **System-wide:** Any directory on your `PATH`
 4. In Settings > Input, select **Tobii (Stream Engine)**
 5. Calibrate using Tobii's own software (Gaze Point or Tobii Computer Control)
+
+**To find the exact install path:**
+- Open File Explorer, type `%APPDATA%\Dasher` for the user data location
+- For MSI installs, the app is at `C:\Program Files\Dasher\`
 
 **Notes:**
 - No Tobii Computer Control software required
