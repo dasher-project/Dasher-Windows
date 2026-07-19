@@ -678,6 +678,10 @@ public partial class MainWindow : Window
     {
         if (_vm == null) return;
         _vm.UpdateTypingStats();
+
+        var settings = Controls.OutputTextSettings.Load();
+        if (!settings.ShowTypingRate) return;
+
         var label = this.FindControl<TextBlock>("WpmLabel");
         if (label != null)
         {
@@ -685,6 +689,33 @@ public partial class MainWindow : Window
                 ? $"{(int)_vm.CurrentWpm} wpm  max {(int)_vm.MaxWpm}  avg {(int)_vm.AvgWpm}"
                 : $"{(int)_vm.CurrentWpm} wpm";
         }
+
+        // Game mode: show WPM in game target bar
+        if (_gameModeActive)
+        {
+            var gameText = this.FindControl<TextBlock>("GameTargetText");
+            if (gameText != null && !string.IsNullOrEmpty(gameText.Text))
+            {
+                SyncGameModeState();
+            }
+        }
+    }
+
+    private void OnTypingRateVisibilityChanged(bool visible)
+    {
+        var label = this.FindControl<TextBlock>("WpmLabel");
+        if (label != null)
+        {
+            label.IsVisible = visible;
+            if (!visible) label.Text = "";
+        }
+    }
+
+    private void OnResetTypingStats()
+    {
+        _vm?.ResetTypingStats();
+        var label = this.FindControl<TextBlock>("WpmLabel");
+        if (label != null) label.Text = "0 wpm";
     }
 
     private void OnEngineFault(object? sender, EventArgs e)
@@ -812,6 +843,8 @@ public partial class MainWindow : Window
         panel.InputSourceChanged += OnInputSourceChanged;
         panel.JoystickRequested += OnJoystickRequested;
         panel.ResetSettingsRequested += OnResetSettingsRequested;
+        panel.TypingRateVisibilityChanged += OnTypingRateVisibilityChanged;
+        panel.ResetTypingStatsRequested += OnResetTypingStats;
 
         BuildSettingsTabs(panel);
     }
@@ -1256,7 +1289,8 @@ public partial class MainWindow : Window
         var correctText = correct > 0 ? target[..Math.Min(correct, target.Length)] : "";
         var remaining = correct < target.Length ? target[Math.Min(correct, target.Length)..] : "";
 
-        gameTarget.Text = $"{correctText}[{wrong}]{remaining}";
+        gameTarget.Text = $"{correctText}[{wrong}]{remaining}\n{(int)_vm.CurrentWpm} wpm" + 
+            (_vm.MaxWpm > 0 ? $"  max {(int)_vm.MaxWpm}" : "");
     }
 
     private static string FindCoreDataDir()
