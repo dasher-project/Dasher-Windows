@@ -97,6 +97,7 @@ public partial class DasherCanvas : Control
         base.Render(context);
         if (_commands != null)
             CommandRenderer.Render(context, _commands, _strings ?? Array.Empty<string>(), Bounds.Size, _dasherFont);
+        DrawEyeTrackIndicator(context);
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
