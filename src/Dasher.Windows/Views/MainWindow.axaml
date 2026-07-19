@@ -358,6 +358,10 @@
 
                 <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
 
+                <TextBlock x:Name="WpmLabel" Classes="ui-nav-label" Text="" VerticalAlignment="Center" MinWidth="80"/>
+
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+
                 <Button Width="28" Height="28" CornerRadius="14" Background="Transparent" BorderThickness="0"
                         VerticalAlignment="Center" Click="OnToggleStatusBar"
                         ToolTip.Tip="Hide/show status bar">

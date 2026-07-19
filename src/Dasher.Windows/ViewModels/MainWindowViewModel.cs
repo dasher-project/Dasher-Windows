@@ -59,6 +59,41 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private AvaloniaList<PaletteInfo> _palettes = [];
 
+    // WPM tracking (RFC 0012)
+    [ObservableProperty]
+    private double _currentWpm;
+
+    [ObservableProperty]
+    private double _maxWpm;
+
+    [ObservableProperty]
+    private double _avgWpm;
+
+    private double _wpmSum;
+    private int _wpmCount;
+
+    public void UpdateTypingStats()
+    {
+        if (_handle == IntPtr.Zero) return;
+        CurrentWpm = NativeBridge.dasher_get_wpm(_handle);
+        if (CurrentWpm > 0)
+        {
+            MaxWpm = Math.Max(MaxWpm, CurrentWpm);
+            _wpmSum += CurrentWpm;
+            _wpmCount++;
+            AvgWpm = _wpmSum / _wpmCount;
+        }
+    }
+
+    public void ResetTypingStats()
+    {
+        MaxWpm = 0;
+        _wpmSum = 0;
+        _wpmCount = 0;
+        AvgWpm = 0;
+        CurrentWpm = 0;
+    }
+
     public IntPtr Handle => _handle;
 
     public void SetHandle(IntPtr handle)
