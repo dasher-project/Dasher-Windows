@@ -131,9 +131,12 @@ public partial class DasherCanvas : Control
         if (_useEyeGazeInput) return;
         if (_handle != IntPtr.Zero)
         {
-            // Send pointer far outside canvas so BP_STOP_OUTSIDE can detect it
-            // and DefaultFilter can stop Dasher when the pointer leaves
-            NativeBridge.dasher_mouse_move(_handle, -10000f, -10000f);
+            // Only send out-of-bounds coordinates if BP_STOP_OUTSIDE is enabled.
+            // Without it, the engine should keep using the last known position
+            // (which is inside the canvas — normal continuous zooming).
+            var stopOutsideKey = NativeBridge.dasher_find_parameter_key("BP_STOP_OUTSIDE");
+            if (stopOutsideKey >= 0 && NativeBridge.dasher_get_bool_parameter(_handle, stopOutsideKey) != 0)
+                NativeBridge.dasher_mouse_move(_handle, -10000f, -10000f);
         }
     }
 
@@ -262,8 +265,16 @@ public partial class DasherCanvas : Control
         }
         catch { }
 
+        // Update WPM stats (RFC 0012) — throttled to once per second
+        if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % 1000 < 16)
+        {
+            WpmUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
         InvalidateVisual();
     }
+
+    public event EventHandler? WpmUpdated;
 
     private void OnEngineMessage(int messageType, IntPtr textPtr, IntPtr userData)
     {

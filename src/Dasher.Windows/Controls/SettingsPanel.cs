@@ -168,6 +168,8 @@ public class SettingsPanel : Control
             var transparencyRow = BuildKeyboardTransparencyRow();
             if (transparencyRow != null)
                 _panel.Children.Add(transparencyRow);
+
+            _panel.Children.Add(BuildTypingRateSection());
         }
 
         if (!_groups.TryGetValue(category, out var parameters)) return;
@@ -386,6 +388,62 @@ public class SettingsPanel : Control
 
         return panel;
     }
+
+    private Control BuildTypingRateSection()
+    {
+        var settings = OutputTextSettings.Load();
+        var panel = new StackPanel { Spacing = 10, Margin = new Thickness(0, 8, 0, 0) };
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = "Typing Rate",
+            FontSize = 13,
+            FontWeight = FontWeight.SemiBold,
+            Foreground = BrushLabel,
+        });
+
+        var toggleRow = new DockPanel { Margin = new Thickness(0, 4, 0, 0) };
+        toggleRow.Children.Add(new TextBlock
+        {
+            Text = "Show WPM in status bar",
+            FontSize = 13,
+            Foreground = BrushLabel,
+            VerticalAlignment = VerticalAlignment.Center,
+        });
+        var toggle = new ToggleSwitch
+        {
+            IsChecked = settings.ShowTypingRate,
+            HorizontalAlignment = HorizontalAlignment.Right,
+        };
+        DockPanel.SetDock(toggle, Dock.Right);
+        toggleRow.Children.Add(toggle);
+        panel.Children.Add(toggleRow);
+
+        toggle.IsCheckedChanged += (s, e) =>
+        {
+            settings.ShowTypingRate = toggle.IsChecked ?? true;
+            settings.Save();
+            TypingRateVisibilityChanged?.Invoke(settings.ShowTypingRate);
+        };
+
+        var resetBtn = new Button
+        {
+            Content = "Reset WPM averages",
+            Padding = new Thickness(12, 6),
+            FontSize = 12,
+            Margin = new Thickness(0, 4, 0, 0),
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+        };
+        resetBtn.Click += (s, e) => ResetTypingStatsRequested?.Invoke();
+        panel.Children.Add(resetBtn);
+
+        return panel;
+    }
+
+    public event Action<bool>? TypingRateVisibilityChanged;
+    public event Action? ResetTypingStatsRequested;
 
     private Control? BuildInputSourceRow()
     {

@@ -230,6 +230,13 @@ public static class NativeBridge
     // Engine error flag (RFC 0009 A2)
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_has_engine_error(IntPtr ctx);
+
+    // Typing rate (RFC 0012)
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern double dasher_get_cps(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern double dasher_get_wpm(IntPtr ctx);
 }
 
 [StructLayout(LayoutKind.Sequential)]

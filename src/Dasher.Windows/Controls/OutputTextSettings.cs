@@ -8,6 +8,7 @@ public class OutputTextSettings
     public string FontFamily { get; set; } = "Segoe UI";
     public int FontSize { get; set; } = 18;
     public double KeyboardOpacity { get; set; } = 0.85;
+    public bool ShowTypingRate { get; set; } = true;
 
     private static readonly string SettingsPath = Path.Combine(
         System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
