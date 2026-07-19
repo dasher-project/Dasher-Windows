@@ -12,6 +12,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Dasher.Windows.Engine;
+using Dasher.Windows.EyeGaze;
 using Dasher.Windows.Services;
 using Dasher.Windows.Speech;
 
@@ -529,7 +530,13 @@ public class SettingsPanel : Control
         };
         trackerCombo.Items.Add("Windows Eye Tracker (native)");
         trackerCombo.Items.Add("UDP Gaze Tracker (network)");
-        trackerCombo.SelectedIndex = config.EyeTrackerType == "UdpGaze" ? 1 : 0;
+        trackerCombo.Items.Add("eyetuitive");
+        trackerCombo.SelectedIndex = config.EyeTrackerType switch
+        {
+            "UdpGaze" => 1,
+            "Eyetuitive" => 2,
+            _ => 0,
+        };
 
         var portPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
         var portLabel = new TextBlock
@@ -567,6 +574,15 @@ public class SettingsPanel : Control
             var isUdp = isEyeGaze && trackerCombo.SelectedIndex == 1;
             portPanel.IsVisible = isUdp;
             trackerHelp.IsVisible = isUdp;
+            // Show eyetuitive USB status hint
+            if (isEyeGaze && trackerCombo.SelectedIndex == 2)
+            {
+                var available = EyetuitiveTracker.IsAvailable();
+                trackerHelp.Text = available
+                    ? "eyetuitive device detected"
+                    : "No eyetuitive device detected — connect via USB and ensure service is running";
+                trackerHelp.IsVisible = true;
+            }
         }
 
         UpdateTrackerVisibility();
@@ -597,7 +613,12 @@ public class SettingsPanel : Control
 
         trackerCombo.SelectionChanged += (s, e) =>
         {
-            config.EyeTrackerType = trackerCombo.SelectedIndex == 1 ? "UdpGaze" : "WindowsNative";
+            config.EyeTrackerType = trackerCombo.SelectedIndex switch
+            {
+                1 => "UdpGaze",
+                2 => "Eyetuitive",
+                _ => "WindowsNative",
+            };
             UpdateTrackerVisibility();
             ApplyAccessConfig(config);
         };
@@ -630,6 +651,7 @@ public class SettingsPanel : Control
             AccessMethod.EyeGaze => config.EyeTrackerType switch
             {
                 "UdpGaze" => EyeGazeIntegration.TrackerType.UdpGazeTracker,
+                "Eyetuitive" => EyeGazeIntegration.TrackerType.Eyetuitive,
                 _ => EyeGazeIntegration.TrackerType.WindowsNative,
             },
             _ => EyeGazeIntegration.TrackerType.None,

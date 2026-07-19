@@ -13,6 +13,7 @@ namespace Dasher.Windows.Engine
             None,
             WindowsNative,
             UdpGazeTracker,
+            Eyetuitive,
             Custom
         }
 
@@ -70,6 +71,7 @@ namespace Dasher.Windows.Engine
             {
                 TrackerType.WindowsNative => new WindowsGazeTracker(),
                 TrackerType.UdpGazeTracker => new UdpGazeTracker { UdpPort = s.UdpPort },
+                TrackerType.Eyetuitive => new EyetuitiveTracker(),
                 TrackerType.Custom => s.CustomTracker,
                 _ => null
             };
