@@ -237,6 +237,9 @@ public static class NativeBridge
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern double dasher_get_wpm(IntPtr ctx);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_reset_cps(IntPtr ctx);
 }
 
 [StructLayout(LayoutKind.Sequential)]

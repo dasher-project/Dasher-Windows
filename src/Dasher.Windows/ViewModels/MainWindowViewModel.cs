@@ -92,6 +92,9 @@ public partial class MainWindowViewModel : ObservableObject
         _wpmCount = 0;
         AvgWpm = 0;
         CurrentWpm = 0;
+        // Also clear the engine's rolling 5-second window (v0.1.9, RFC 0012).
+        if (_handle != IntPtr.Zero)
+            NativeBridge.dasher_reset_cps(_handle);
     }
 
     public IntPtr Handle => _handle;
