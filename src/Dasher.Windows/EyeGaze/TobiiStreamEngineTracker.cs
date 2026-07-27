@@ -60,9 +60,6 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     private static extern int tobii_device_process_callbacks(IntPtr device);
 
-    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-    private static extern int tobii_device_get_status(IntPtr device, out int status);
-
     // ── State ─────────────────────────────────────────────────────────────────
 
     private IntPtr _api;
@@ -97,6 +94,9 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
         {
             try
             {
+                // Resolve DLL from custom search paths before any P/Invoke call
+                EnsureDllLoaded();
+
                 // Create API instance
                 int result = tobii_api_create(out _api, IntPtr.Zero, IntPtr.Zero);
                 if (result != 0 || _api == IntPtr.Zero)
@@ -232,6 +232,47 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     }
 
     // ── Private methods ───────────────────────────────────────────────────────
+
+    private static bool _dllResolved;
+
+    /// <summary>
+    /// Registers a DLL import resolver so [DllImport("tobii_stream_engine")]
+    /// can find the DLL in user directories, not just the system PATH.
+    /// Must be called before any Tobii P/Invoke.
+    /// </summary>
+    private static void EnsureDllLoaded()
+    {
+        if (_dllResolved) return;
+
+        var searchPaths = new[]
+        {
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher"),
+            AppContext.BaseDirectory,
+        };
+
+        var assembly = typeof(TobiiStreamEngineTracker).Assembly;
+        NativeLibrary.SetDllImportResolver(assembly, (name, assembly2, path) =>
+        {
+            if (name != "tobii_stream_engine")
+                return IntPtr.Zero;
+
+            // Try system PATH first
+            if (NativeLibrary.TryLoad(name, out var handle))
+                return handle;
+
+            // Try custom search paths
+            foreach (var dir in searchPaths)
+            {
+                var fullPath = Path.Combine(dir, "tobii_stream_engine.dll");
+                if (File.Exists(fullPath) && NativeLibrary.TryLoad(fullPath, out handle))
+                    return handle;
+            }
+
+            return IntPtr.Zero;
+        });
+
+        _dllResolved = true;
+    }
 
     private void ProcessCallbacks(CancellationToken ct)
     {
