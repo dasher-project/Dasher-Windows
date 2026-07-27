@@ -3,6 +3,29 @@
 Dasher supports eye gaze input from multiple tracker hardware. This guide
 covers setup for each supported device.
 
+## Design assumptions
+
+Dasher is a **text-entry consumer of gaze data**, not an eye tracker itself.
+The following responsibilities belong to your tracker's own software, not
+Dasher:
+
+| Responsibility | Owner | Notes |
+|---|---|---|
+| **Calibration** | Tracker software | Tobii Gaze Point, GazeFirst app, etc. — each manufacturer has proprietary algorithms tuned to their hardware. Dasher cannot recalibrate your tracker. |
+| **Camera configuration** | Tracker driver | Mounting angle, exposure, illumination — handled by the device driver. |
+| **Track status / signal quality** | Both | Dasher shows a green/red dot when gaze data is flowing or lost (see [Tracking Status Indicator](#tracking-status-indicator)), but **diagnosing** poor tracking (e.g. dirty lens, sunlight interference) requires the tracker's own diagnostics. |
+| **Gaze data** | Tracker → Dasher | Dasher receives raw (x, y) coordinates and feeds them to the zooming inference engine, which handles noise naturally. |
+
+**Why this split?** Eye tracker calibration requires showing specific visual
+patterns, processing camera frames, and running hardware-specific algorithms.
+It is fundamentally a hardware concern. Dasher focuses on turning gaze
+coordinates into text efficiently — and works with any tracker that can
+deliver calibrated gaze data.
+
+If your tracker has no working calibration, **Dasher will not work well**
+regardless of which input option you pick. Always calibrate first using your
+tracker's own software, then come back to Dasher.
+
 ## Quick Start
 
 1. Open **Settings** (gear icon in toolbar)
