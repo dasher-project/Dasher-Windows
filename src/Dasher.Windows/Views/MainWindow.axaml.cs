@@ -1065,8 +1065,31 @@ public partial class MainWindow : Window
         }
         else
         {
-            await _canvas.InitializeEyeGazeAsync(args.trackerType, args.udpPort);
-            AnalyticsService.Capture("input_method_changed", new() { ["method"] = "eye_gaze" });
+            var ok = await _canvas.InitializeEyeGazeAsync(args.trackerType, args.udpPort);
+            if (!ok)
+            {
+                var trackerName = args.trackerType switch
+                {
+                    EyeGazeIntegration.TrackerType.TobiiStreamEngine => "Tobii Stream Engine",
+                    EyeGazeIntegration.TrackerType.Eyetuitive => "eyetuitive",
+                    EyeGazeIntegration.TrackerType.UdpGazeTracker => "UDP Gaze Tracker",
+                    _ => "Eye tracker",
+                };
+                ToastNotifier.Show("Eye Tracker Error",
+                    $"Could not connect to {trackerName}. " +
+                    (args.trackerType == EyeGazeIntegration.TrackerType.TobiiStreamEngine
+                        ? "Make sure tobii_stream_engine.dll is installed and a Tobii device is connected."
+                        : "Check the device is connected and drivers are installed."),
+                    isWarning: true);
+            }
+            var methodName = args.trackerType switch
+            {
+                EyeGazeIntegration.TrackerType.TobiiStreamEngine => "eye_gaze_tobii",
+                EyeGazeIntegration.TrackerType.Eyetuitive => "eye_gaze_eyetuitive",
+                EyeGazeIntegration.TrackerType.UdpGazeTracker => "eye_gaze_udp",
+                _ => "eye_gaze_native",
+            };
+            AnalyticsService.Capture("input_method_changed", new() { ["method"] = methodName });
         }
     }
 
