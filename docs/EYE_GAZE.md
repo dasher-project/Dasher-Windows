@@ -3,6 +3,29 @@
 Dasher supports eye gaze input from multiple tracker hardware. This guide
 covers setup for each supported device.
 
+## Design assumptions
+
+Dasher is a **text-entry consumer of gaze data**, not an eye tracker itself.
+The following responsibilities belong to your tracker's own software, not
+Dasher:
+
+| Responsibility | Owner | Notes |
+|---|---|---|
+| **Calibration** | Tracker software | Tobii Gaze Point, GazeFirst app, etc. — each manufacturer has proprietary algorithms tuned to their hardware. Dasher cannot recalibrate your tracker. |
+| **Camera configuration** | Tracker driver | Mounting angle, exposure, illumination — handled by the device driver. |
+| **Track status / signal quality** | Both | Dasher shows a green/red dot when gaze data is flowing or lost (see [Tracking Status Indicator](#tracking-status-indicator)), but **diagnosing** poor tracking (e.g. dirty lens, sunlight interference) requires the tracker's own diagnostics. |
+| **Gaze data** | Tracker → Dasher | Dasher receives raw (x, y) coordinates and feeds them to the zooming inference engine, which handles noise naturally. |
+
+**Why this split?** Eye tracker calibration requires showing specific visual
+patterns, processing camera frames, and running hardware-specific algorithms.
+It is fundamentally a hardware concern. Dasher focuses on turning gaze
+coordinates into text efficiently — and works with any tracker that can
+deliver calibrated gaze data.
+
+If your tracker has no working calibration, **Dasher will not work well**
+regardless of which input option you pick. Always calibrate first using your
+tracker's own software, then come back to Dasher.
+
 ## Quick Start
 
 1. Open **Settings** (gear icon in toolbar)
@@ -21,11 +44,19 @@ covers setup for each supported device.
 Gives **raw, unfiltered gaze data** directly from Tobii hardware — best for
 Dasher because the zooming inference engine handles noise naturally.
 
+> **Licensing:** Dasher's Tobii Stream Engine integration uses Tobii's
+> `tobii_stream_engine.dll`. The right to use this DLL with your Tobii
+> hardware is governed by **TobiiDynavox's software licence and SDK terms**,
+> not by Dasher. Dasher does not bundle or redistribute the DLL — it must be
+> obtained separately. Whether you are permitted to use it in your setup is a
+> matter between you and TobiiDynavox. Dasher only provides the integration
+> code that consumes the DLL once it is present.
+
 **Setup:**
 
 1. Install Tobii drivers (usually automatic when you connect the device)
-2. Download `tobii_stream_engine.dll` from
-   [Tobii Developer](https://developer.tobii.com/consumer-eye-trackers/streams-and-apis/)
+2. Obtain `tobii_stream_engine.dll` — this is **your responsibility** to
+   source in accordance with Tobii's licensing terms
 3. Place the DLL in one of these locations:
    - **Installed app:** `C:\Program Files\Dasher\tobii_stream_engine.dll`
    - **User data (no admin needed):** `%APPDATA%\Dasher\tobii_stream_engine.dll`
@@ -34,15 +65,9 @@ Dasher because the zooming inference engine handles noise naturally.
 4. In Settings > Input, select **Tobii (Stream Engine)**
 5. Calibrate using Tobii's own software (Gaze Point or Tobii Computer Control)
 
-**To find the exact install path:**
-- Open File Explorer, type `%APPDATA%\Dasher` for the user data location
-- For MSI installs, the app is at `C:\Program Files\Dasher\`
-
 **Notes:**
-- No Tobii Computer Control software required
-- No licence key needed — the Stream Engine SDK is free for Tobii hardware
-- We cannot redistribute the DLL — you must download it yourself
 - Settings shows "Tobii Stream Engine DLL detected" when the DLL is found
+- Calibration is handled by Tobii's own software, not Dasher
 
 ### eyetuitive (GazeFirst)
 
@@ -112,7 +137,7 @@ Dasher canvas:
 
 **"Could not connect to [tracker]" toast notification:**
 - Check the device is connected and powered on
-- For Tobii: verify `tobii_stream_engine.dll` is in the right location
+- For Tobii: verify `tobii_stream_engine.dll` is present and detected
 - For eyetuitive: verify USB connection and service status
 - For Windows Native: verify Eye Control is enabled in Windows Settings
 

@@ -178,6 +178,9 @@ public class SettingsPanel : Control
         if (category == "Input")
             parameters = FilterByActiveInputFilter(parameters);
 
+        // Filter out parameters that belong in other tabs or should be hidden
+        parameters = parameters.Where(p => !ShouldHideParameter(p, category)).ToList();
+
         if (category == "Language")
             parameters = FilterByActiveLanguageModel(parameters);
 
@@ -957,6 +960,15 @@ public class SettingsPanel : Control
         var name = info.Name.ToLowerInvariant();
         return name.Contains("colour") && name.Contains("palette") ||
                name.Contains("color") && name.Contains("palette");
+    }
+
+    private static bool ShouldHideParameter(ParameterDisplayInfo info, string category)
+    {
+        if (info.Name == "Control Mode" && category == "Input")
+            return true;
+        if (info.Name == "Simulate Transparency")
+            return true;
+        return false;
     }
 
     private Control? BuildPaletteSwatchPicker()
