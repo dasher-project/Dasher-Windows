@@ -19,6 +19,8 @@ namespace Dasher.Windows.Controls
 
         public async Task<bool> InitializeEyeGazeAsync(EyeGazeIntegration.TrackerType trackerType, int udpPort = 5555)
         {
+            EyeGazeLogger.Log($"=== InitializeEyeGazeAsync: {trackerType} (UDP port {udpPort}) ===");
+
             var settings = new EyeGazeIntegration.Settings
             {
                 Type = trackerType,
@@ -28,10 +30,13 @@ namespace Dasher.Windows.Controls
             _eyeGazeIntegration = new EyeGazeIntegration();
             var ok = await _eyeGazeIntegration.InitializeAsync(settings);
 
+            EyeGazeLogger.Log($"InitializeEyeGazeAsync result: {ok}");
+
             if (ok)
             {
                 _useEyeGazeInput = true;
                 _eyeGazeIntegration.GazePositionChanged += OnEyeGazePositionChanged;
+                EyeGazeLogger.Log("Eye gaze input active — indicator should appear (green/red dot top-right)");
             }
             return ok;
         }

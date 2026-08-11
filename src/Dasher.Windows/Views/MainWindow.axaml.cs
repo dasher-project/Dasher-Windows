@@ -14,6 +14,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Dasher.Windows.Controls;
 using Dasher.Windows.Engine;
+using Dasher.Windows.EyeGaze;
 using Dasher.Windows.Services;
 using Dasher.Windows.Speech;
 using Dasher.Windows.ViewModels;
@@ -353,6 +354,42 @@ public partial class MainWindow : Window
 #if !STORE
         _ = CheckForUpdatesAsync();
 #endif
+
+        RestoreEyeGazeFromConfig();
+    }
+
+    private async void RestoreEyeGazeFromConfig()
+    {
+        try
+        {
+            var config = AccessConfiguration.Load();
+            if (config.Method != AccessMethod.EyeGaze) return;
+
+            var trackerType = config.EyeTrackerType switch
+            {
+                "UdpGaze" => EyeGazeIntegration.TrackerType.UdpGazeTracker,
+                "Eyetuitive" => EyeGazeIntegration.TrackerType.Eyetuitive,
+                "Tobii" => EyeGazeIntegration.TrackerType.TobiiStreamEngine,
+                _ => EyeGazeIntegration.TrackerType.WindowsNative,
+            };
+
+            EyeGazeLogger.Log($"=== Startup: restoring eye gaze ({config.EyeTrackerType}) ===");
+
+            if (_canvas == null) return;
+            _canvas.DisableJoystick();
+
+            var ok = await _canvas.InitializeEyeGazeAsync(trackerType, config.UdpPort);
+            if (!ok)
+            {
+                ToastNotifier.Show("Eye Tracker Error",
+                    $"Could not connect to eye tracker on startup. Check the device and try re-selecting it in Settings > Input.",
+                    isWarning: true);
+            }
+        }
+        catch (Exception ex)
+        {
+            EyeGazeLogger.Log($"RestoreEyeGazeFromConfig exception: {ex}");
+        }
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)

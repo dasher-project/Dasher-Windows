@@ -94,18 +94,19 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
         {
             try
             {
-                // Resolve DLL from custom search paths before any P/Invoke call
-                EnsureDllLoaded();
+                EyeGazeLogger.Log("Tobii: ConnectAsync starting");
 
-                // Create API instance
+                EnsureDllLoaded();
+                EyeGazeLogger.Log("Tobii: DLL resolved");
+
                 int result = tobii_api_create(out _api, IntPtr.Zero, IntPtr.Zero);
                 if (result != 0 || _api == IntPtr.Zero)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Tobii] tobii_api_create failed: {result}");
+                    EyeGazeLogger.Log($"Tobii: tobii_api_create failed (code {result})");
                     return false;
                 }
+                EyeGazeLogger.Log("Tobii: API created");
 
-                // Enumerate devices
                 var deviceUrls = new string[1];
                 var handle = GCHandle.Alloc(deviceUrls);
                 try
@@ -120,26 +121,25 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
                 if (string.IsNullOrEmpty(deviceUrls[0]))
                 {
-                    System.Diagnostics.Debug.WriteLine("[Tobii] No Tobii devices found");
+                    EyeGazeLogger.Log("Tobii: No Tobii devices found — ensure device is connected and drivers are installed");
                     return false;
                 }
+                EyeGazeLogger.Log($"Tobii: Device found: {deviceUrls[0]}");
 
-                // Create device connection
                 result = tobii_device_create(_api, deviceUrls[0], out _device);
                 if (result != 0 || _device == IntPtr.Zero)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Tobii] tobii_device_create failed: {result}");
+                    EyeGazeLogger.Log($"Tobii: tobii_device_create failed (code {result})");
                     return false;
                 }
 
                 IsConnected = true;
-                System.Diagnostics.Debug.WriteLine($"[Tobii] Connected to: {deviceUrls[0]}");
+                EyeGazeLogger.Log($"Tobii: Connected to {deviceUrls[0]}");
                 return true;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Tobii] Connect failed: {ex.Message}");
-                // Likely DLL not found
+                EyeGazeLogger.Log($"Tobii: ConnectAsync exception: {ex}");
                 return false;
             }
         });
@@ -147,15 +147,20 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     public void StartTracking()
     {
-        if (_device == IntPtr.Zero || !IsConnected) return;
+        if (_device == IntPtr.Zero || !IsConnected)
+        {
+            EyeGazeLogger.Log("Tobii: StartTracking called but device not connected");
+            return;
+        }
 
         _callback = OnGazePoint;
         int result = tobii_gaze_point_subscribe(_device, _callback, IntPtr.Zero);
         if (result != 0)
         {
-            System.Diagnostics.Debug.WriteLine($"[Tobii] Subscribe failed: {result}");
+            EyeGazeLogger.Log($"Tobii: gaze_point_subscribe failed (code {result})");
             return;
         }
+        EyeGazeLogger.Log("Tobii: Gaze point subscription active");
 
         // Start callback processing thread
         _cts = new CancellationTokenSource();
@@ -281,9 +286,9 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
             try
             {
                 int result = tobii_device_process_callbacks(_device);
-                if (result != 0 && result != 5) // 5 = TOBII_ERROR_CONNECTION_TIMED_OUT (retryable)
+                if (result != 0 && result != 5)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Tobii] process_callbacks error: {result}");
+                    EyeGazeLogger.Log($"Tobii: process_callbacks error (code {result})");
                     break;
                 }
             }
@@ -297,9 +302,13 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     private void OnGazePoint(ref tobii_gaze_point_t gaze_point, IntPtr user_data)
     {
-        // Gaze coordinates from Stream Engine are in screen pixels (not normalized).
-        // Only forward valid data (x/y != -1 when tracking is lost)
-        if (gaze_point.x < 0 || gaze_point.y < 0) return;
+        if (gaze_point.x < 0 || gaze_point.y < 0)
+        {
+            EyeGazeLogger.LogGazeData(gaze_point.x, gaze_point.y, valid: false);
+            return;
+        }
+
+        EyeGazeLogger.LogGazeData(gaze_point.x, gaze_point.y, valid: true);
 
         GazeDataReceived?.Invoke(this, new GazePoint(
             gaze_point.x,
