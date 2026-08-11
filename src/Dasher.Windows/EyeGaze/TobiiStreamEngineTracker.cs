@@ -43,7 +43,7 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     private static extern void tobii_api_destroy(IntPtr api);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-    private static extern int tobii_api_get_devices(IntPtr api, IntPtr urls_receiver, IntPtr user_data);
+    private static extern int tobii_enumerate_local_device_urls(IntPtr api, urls_callback receiver, IntPtr user_data);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     private static extern int tobii_device_create(IntPtr api, [MarshalAs(UnmanagedType.LPStr)] string url, out IntPtr device);
@@ -111,8 +111,8 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
                 var handle = GCHandle.Alloc(deviceUrls);
                 try
                 {
-                    tobii_api_get_devices(_api, Marshal.GetFunctionPointerForDelegate(
-                        new urls_callback(DeviceUrlCallback)), GCHandle.ToIntPtr(handle));
+                    var cb = new urls_callback(DeviceUrlCallback);
+                    tobii_enumerate_local_device_urls(_api, cb, GCHandle.ToIntPtr(handle));
                 }
                 finally
                 {
