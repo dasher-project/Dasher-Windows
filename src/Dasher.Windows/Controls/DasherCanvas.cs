@@ -74,7 +74,7 @@ public partial class DasherCanvas : Control
 
     public void Shutdown()
     {
-        DisableEyeGaze();
+        DisableEyeGazeNonBlocking();
         DisableJoystick();
         _timer.Stop();
         if (_handle != IntPtr.Zero)
@@ -97,6 +97,17 @@ public partial class DasherCanvas : Control
         base.Render(context);
         if (_commands != null)
             CommandRenderer.Render(context, _commands, _strings ?? Array.Empty<string>(), Bounds.Size, _dasherFont);
+
+        // Cache canvas screen origin for the gaze callback thread (avoids
+        // calling Avalonia APIs from a non-UI thread)
+        if (_useEyeGazeInput)
+        {
+            var origin = Avalonia.VisualExtensions.PointToScreen(this, new Point(0, 0));
+            var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
+            _cachedOriginX = (float)(origin.X / scaling);
+            _cachedOriginY = (float)(origin.Y / scaling);
+        }
+
         DrawEyeTrackIndicator(context);
     }
 

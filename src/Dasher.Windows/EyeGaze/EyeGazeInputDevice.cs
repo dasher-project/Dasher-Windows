@@ -17,19 +17,23 @@ namespace Dasher.Windows.EyeGaze
             try
             {
                 _tracker = tracker;
+                EyeGazeLogger.Log($"EyeGazeInputDevice: connecting to {_tracker.GetType().Name}...");
                 var connected = await tracker.ConnectAsync();
-                if (connected)
+                if (!connected)
                 {
-                    tracker.GazeDataReceived += OnGazeData;
-                    tracker.StartTracking();
-                    IsEnabled = true;
-                    return true;
+                    EyeGazeLogger.Log("EyeGazeInputDevice: ConnectAsync returned false");
+                    return false;
                 }
-                return false;
+                EyeGazeLogger.Log("EyeGazeInputDevice: connected, starting tracking");
+                tracker.GazeDataReceived += OnGazeData;
+                tracker.StartTracking();
+                IsEnabled = true;
+                EyeGazeLogger.Log("EyeGazeInputDevice: tracking started");
+                return true;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Eye tracker init failed: {ex.Message}");
+                EyeGazeLogger.Log($"EyeGazeInputDevice init exception: {ex}");
                 return false;
             }
         }
@@ -39,13 +43,18 @@ namespace Dasher.Windows.EyeGaze
             get { lock (_lock) { return _lastPosition; } }
         }
 
-        public void Shutdown()
+        public void Shutdown() => Shutdown(blocking: true);
+
+        public void Shutdown(bool blocking)
         {
             IsEnabled = false;
             if (_tracker != null)
             {
                 _tracker.GazeDataReceived -= OnGazeData;
-                _tracker.Dispose();
+                if (_tracker is TobiiStreamEngineTracker tobii)
+                    tobii.Dispose(blocking);
+                else
+                    _tracker.Dispose();
                 _tracker = null;
             }
         }

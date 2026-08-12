@@ -13,6 +13,10 @@ native/build/
 *.exe
 *.lib
 *.exp
+
+# Exception: Tobii Stream Engine v2.2.2.363 (publicly distributed on NuGet
+# in 2017 with perpetual SDK license — required for PCEye eye tracker support)
+!src/Dasher.Windows/native/tobii_stream_engine.dll
 *.ilk
 *.obj
 *.o

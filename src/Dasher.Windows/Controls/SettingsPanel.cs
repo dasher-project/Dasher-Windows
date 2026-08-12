@@ -610,6 +610,59 @@ public class SettingsPanel : Control
 
         UpdateTrackerVisibility();
 
+        // ── Dasher Input Filter (smoothing mode etc.) ─────────────────────────────
+        var filterLabel = new TextBlock
+        {
+            Text = "Input Processing",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = BrushLabel,
+            Margin = new Thickness(0, 12, 0, 0),
+        };
+
+        var filterCombo = new ComboBox
+        {
+            MinWidth = 250,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            FontSize = 12,
+        };
+
+        // Curated subset of filters most useful for accessibility users
+        var filterOptions = new[]
+        {
+            ("Normal Control", "Standard continuous control (default)"),
+            ("Smoothing Mode", "Input smoothing — reduces jitter for noisy input (eye gaze, head tracking)"),
+            ("Direct Mode", "Direct pointer — minimal processing"),
+        };
+
+        var currentFilterPtr = NativeBridge.dasher_get_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER);
+        var currentFilter = currentFilterPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(currentFilterPtr) ?? "Normal Control" : "Normal Control";
+
+        foreach (var (name, _) in filterOptions)
+            filterCombo.Items.Add(name);
+        filterCombo.SelectedIndex = Array.FindIndex(filterOptions, f => f.Item1 == currentFilter);
+        if (filterCombo.SelectedIndex < 0) filterCombo.SelectedIndex = 0;
+
+        var filterHelp = new TextBlock
+        {
+            FontSize = 11,
+            Foreground = BrushMuted,
+            Text = filterOptions[filterCombo.SelectedIndex].Item2,
+            Margin = new Thickness(0, 2, 0, 0),
+            TextWrapping = TextWrapping.Wrap,
+        };
+
+        filterCombo.SelectionChanged += (s, e) =>
+        {
+            var idx = filterCombo.SelectedIndex;
+            if (idx < 0 || idx >= filterOptions.Length) return;
+            var newFilter = filterOptions[idx].Item1;
+            filterHelp.Text = filterOptions[idx].Item2;
+            NativeBridge.dasher_set_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER, newFilter);
+            // Rebuild the Input tab to show/hide filter-specific parameters
+            ShowCategory(_currentCategory);
+        };
+
         methodCombo.SelectionChanged += (s, e) =>
         {
             var method = methods[methodCombo.SelectedIndex];
@@ -661,6 +714,9 @@ public class SettingsPanel : Control
         panel.Children.Add(trackerCombo);
         panel.Children.Add(portPanel);
         panel.Children.Add(trackerHelp);
+        panel.Children.Add(filterLabel);
+        panel.Children.Add(filterCombo);
+        panel.Children.Add(filterHelp);
 
         return panel;
     }

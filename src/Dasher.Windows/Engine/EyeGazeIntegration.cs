@@ -32,31 +32,41 @@ namespace Dasher.Windows.Engine
         {
             try
             {
+                EyeGazeLogger.Log($"InitializeAsync: tracker type = {settings.Type}");
+
                 var tracker = CreateTracker(settings.Type, settings);
-                if (tracker == null) return false;
+                if (tracker == null)
+                {
+                    EyeGazeLogger.Log("InitializeAsync: CreateTracker returned null");
+                    return false;
+                }
 
                 _device = new EyeGazeInputDevice();
                 var ok = await _device.InitializeAsync(tracker);
                 if (ok)
                 {
                     _device.GazePositionChanged += OnGaze;
+                    EyeGazeLogger.Log("InitializeAsync: success — eye gaze active");
                     return true;
                 }
+                EyeGazeLogger.Log("InitializeAsync: device initialization failed");
                 return false;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Eye gaze init failed: {ex.Message}");
+                EyeGazeLogger.Log($"InitializeAsync exception: {ex}");
                 return false;
             }
         }
 
-        public void Shutdown()
+        public void Shutdown() => Shutdown(blocking: true);
+
+        public void Shutdown(bool blocking)
         {
             if (_device != null)
             {
                 _device.GazePositionChanged -= OnGaze;
-                _device.Shutdown();
+                _device.Shutdown(blocking);
                 _device = null;
             }
         }

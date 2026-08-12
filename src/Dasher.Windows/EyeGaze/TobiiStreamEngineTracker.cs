@@ -28,13 +28,14 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     [StructLayout(LayoutKind.Sequential)]
     private struct tobii_gaze_point_t
     {
-        public float timestamp_s;
+        public long timestamp_us;
+        public int validity;
         public float x;
         public float y;
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate void gaze_point_callback(ref tobii_gaze_point_t gaze_point, IntPtr user_data);
+    private delegate void gaze_point_callback(ref tobii_gaze_point_t gaze_point);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     private static extern int tobii_api_create(out IntPtr api, IntPtr allocator, IntPtr custom_log);
@@ -43,16 +44,16 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     private static extern void tobii_api_destroy(IntPtr api);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-    private static extern int tobii_api_get_devices(IntPtr api, IntPtr urls_receiver, IntPtr user_data);
+    private static extern int tobii_enumerate_local_device_urls(IntPtr api, urls_callback receiver, IntPtr user_data);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-    private static extern int tobii_device_create(IntPtr api, [MarshalAs(UnmanagedType.LPStr)] string url, out IntPtr device);
+    private static extern int tobii_device_create(IntPtr api, IntPtr url, out IntPtr device);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     private static extern int tobii_device_destroy(IntPtr device);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-    private static extern int tobii_gaze_point_subscribe(IntPtr device, gaze_point_callback callback, IntPtr user_data);
+    private static extern int tobii_gaze_point_subscribe(IntPtr device, gaze_point_callback callback);
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     private static extern int tobii_gaze_point_unsubscribe(IntPtr device);
@@ -60,10 +61,45 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     private static extern int tobii_device_process_callbacks(IntPtr device);
 
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    private static extern int tobii_device_reconnect(IntPtr device);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    private static extern int tobii_engine_create(IntPtr api, out IntPtr engine);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    private static extern int tobii_engine_destroy(IntPtr engine);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    private static extern int tobii_wait_for_callbacks(IntPtr engine, int device_count, IntPtr[] devices);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr tobii_error_message(int error);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    private static extern int tobii_get_feature_group(IntPtr device, out int feature_group);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    private static extern int tobii_stream_supported(IntPtr device, int stream, out bool supported);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    private static extern int tobii_resume_device(IntPtr device);
+
+    private static string GetTobiiError(int code)
+    {
+        try
+        {
+            var ptr = tobii_error_message(code);
+            return ptr != IntPtr.Zero ? Marshal.PtrToStringUTF8(ptr) ?? $"code {code}" : $"code {code}";
+        }
+        catch { return $"code {code}"; }
+    }
+
     // ── State ─────────────────────────────────────────────────────────────────
 
     private IntPtr _api;
     private IntPtr _device;
+    private IntPtr _engine;
     private gaze_point_callback? _callback; // prevent GC
     private Thread? _callbackThread;
     private CancellationTokenSource? _cts;
@@ -94,24 +130,25 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
         {
             try
             {
-                // Resolve DLL from custom search paths before any P/Invoke call
-                EnsureDllLoaded();
+                EyeGazeLogger.Log("Tobii: ConnectAsync starting");
 
-                // Create API instance
+                EnsureDllLoaded();
+                EyeGazeLogger.Log("Tobii: DLL resolved");
+
                 int result = tobii_api_create(out _api, IntPtr.Zero, IntPtr.Zero);
                 if (result != 0 || _api == IntPtr.Zero)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Tobii] tobii_api_create failed: {result}");
+                    EyeGazeLogger.Log($"Tobii: tobii_api_create failed (code {result}: {GetTobiiError(result)})");
                     return false;
                 }
+                EyeGazeLogger.Log("Tobii: API created");
 
-                // Enumerate devices
                 var deviceUrls = new string[1];
                 var handle = GCHandle.Alloc(deviceUrls);
                 try
                 {
-                    tobii_api_get_devices(_api, Marshal.GetFunctionPointerForDelegate(
-                        new urls_callback(DeviceUrlCallback)), GCHandle.ToIntPtr(handle));
+                    var cb = new urls_callback(DeviceUrlCallback);
+                    tobii_enumerate_local_device_urls(_api, cb, GCHandle.ToIntPtr(handle));
                 }
                 finally
                 {
@@ -120,26 +157,66 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
                 if (string.IsNullOrEmpty(deviceUrls[0]))
                 {
-                    System.Diagnostics.Debug.WriteLine("[Tobii] No Tobii devices found");
+                    EyeGazeLogger.Log("Tobii: No Tobii devices found — ensure device is connected and drivers are installed");
                     return false;
                 }
+                EyeGazeLogger.Log($"Tobii: Device found: {deviceUrls[0]}");
 
-                // Create device connection
-                result = tobii_device_create(_api, deviceUrls[0], out _device);
-                if (result != 0 || _device == IntPtr.Zero)
+                var urlPtr = Marshal.StringToHGlobalAnsi(deviceUrls[0]);
+                try
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Tobii] tobii_device_create failed: {result}");
-                    return false;
+                    result = tobii_device_create(_api, urlPtr, out _device);
+                    if (result != 0 || _device == IntPtr.Zero)
+                    {
+                        EyeGazeLogger.Log($"Tobii: tobii_device_create failed (code {result}: {GetTobiiError(result)})");
+                        return false;
+                    }
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(urlPtr);
                 }
 
                 IsConnected = true;
-                System.Diagnostics.Debug.WriteLine($"[Tobii] Connected to: {deviceUrls[0]}");
+                EyeGazeLogger.Log($"Tobii: Connected to {deviceUrls[0]}");
+
+                // Create engine (required by v2.x for wait_for_callbacks polling pattern)
+                int engResult = tobii_engine_create(_api, out _engine);
+                if (engResult != 0 || _engine == IntPtr.Zero)
+                {
+                    EyeGazeLogger.Log($"Tobii: engine_create failed (code {engResult}: {GetTobiiError(engResult)}) — continuing without engine");
+                    _engine = IntPtr.Zero;
+                }
+                else
+                {
+                    EyeGazeLogger.Log("Tobii: Engine created");
+                }
+
+                // Check feature group (licensing level)
+                int fgResult = tobii_get_feature_group(_device, out int featureGroup);
+                var fgName = featureGroup switch
+                {
+                    0 => "BLOCKED",
+                    1 => "CONSUMER",
+                    2 => "CONFIG",
+                    3 => "PROFESSIONAL",
+                    4 => "INTERNAL",
+                    _ => $"UNKNOWN({featureGroup})",
+                };
+                EyeGazeLogger.Log($"Tobii: Feature group = {fgName} (result code {fgResult})");
+
+                // Check if gaze point stream is supported on this device
+                int ssResult = tobii_stream_supported(_device, 0, out bool gazeSupported);
+                EyeGazeLogger.Log($"Tobii: Gaze point stream supported = {gazeSupported} (result code {ssResult})");
+
+                // Resume device in case it's paused
+                int rdResult = tobii_resume_device(_device);
+                EyeGazeLogger.Log($"Tobii: resume_device result = {rdResult}{(rdResult != 0 ? $": {GetTobiiError(rdResult)}" : "")}");
                 return true;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Tobii] Connect failed: {ex.Message}");
-                // Likely DLL not found
+                EyeGazeLogger.Log($"Tobii: ConnectAsync exception: {ex}");
                 return false;
             }
         });
@@ -147,15 +224,20 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     public void StartTracking()
     {
-        if (_device == IntPtr.Zero || !IsConnected) return;
-
-        _callback = OnGazePoint;
-        int result = tobii_gaze_point_subscribe(_device, _callback, IntPtr.Zero);
-        if (result != 0)
+        if (_device == IntPtr.Zero || !IsConnected)
         {
-            System.Diagnostics.Debug.WriteLine($"[Tobii] Subscribe failed: {result}");
+            EyeGazeLogger.Log("Tobii: StartTracking called but device not connected");
             return;
         }
+
+        _callback = OnGazePoint;
+        int result = tobii_gaze_point_subscribe(_device, _callback);
+        if (result != 0)
+        {
+            EyeGazeLogger.Log($"Tobii: gaze_point_subscribe failed (code {result}: {GetTobiiError(result)})");
+            return;
+        }
+        EyeGazeLogger.Log("Tobii: Gaze point subscription active");
 
         // Start callback processing thread
         _cts = new CancellationTokenSource();
@@ -167,35 +249,73 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
         _callbackThread.Start();
     }
 
-    public void StopTracking()
+    public void StopTracking() => StopTracking(blocking: true);
+
+    public void StopTracking(bool blocking)
     {
+        EyeGazeLogger.Log($"Tobii: StopTracking (blocking={blocking}) — cancelling callback thread");
         _cts?.Cancel();
-        if (_device != IntPtr.Zero)
+
+        if (blocking)
         {
-            try { tobii_gaze_point_unsubscribe(_device); } catch { }
+            _callbackThread?.Join(TimeSpan.FromSeconds(2));
+            EyeGazeLogger.Log("Tobii: StopTracking — callback thread joined");
+            _callbackThread = null;
+
+            if (_device != IntPtr.Zero)
+            {
+                EyeGazeLogger.Log("Tobii: StopTracking — unsubscribing gaze point");
+                try { tobii_gaze_point_unsubscribe(_device); } catch (Exception ex) { EyeGazeLogger.Log($"Tobii: unsubscribe exception: {ex.Message}"); }
+            }
         }
-        _callbackThread?.Join(TimeSpan.FromSeconds(1));
+        else
+        {
+            // Non-blocking (app exit): skip ALL native calls — they can deadlock.
+            // The process is exiting; Windows reclaims native resources.
+            EyeGazeLogger.Log("Tobii: StopTracking — non-blocking, skipping all native cleanup");
+        }
     }
 
-    public void Dispose()
+    public void Dispose() => Dispose(blocking: true);
+
+    public void Dispose(bool blocking)
     {
         if (_disposed) return;
         _disposed = true;
 
-        StopTracking();
+        EyeGazeLogger.Log($"Tobii: Dispose starting (blocking={blocking})");
+        StopTracking(blocking);
 
-        if (_device != IntPtr.Zero)
+        if (blocking)
         {
-            try { tobii_device_destroy(_device); } catch { }
-            _device = IntPtr.Zero;
+            if (_engine != IntPtr.Zero)
+            {
+                EyeGazeLogger.Log("Tobii: Dispose — destroying engine");
+                try { tobii_engine_destroy(_engine); } catch { }
+                _engine = IntPtr.Zero;
+            }
+            if (_device != IntPtr.Zero)
+            {
+                EyeGazeLogger.Log("Tobii: Dispose — destroying device");
+                try { tobii_device_destroy(_device); } catch (Exception ex) { EyeGazeLogger.Log($"Tobii: device_destroy exception: {ex.Message}"); }
+                _device = IntPtr.Zero;
+            }
+            if (_api != IntPtr.Zero)
+            {
+                EyeGazeLogger.Log("Tobii: Dispose — destroying API");
+                try { tobii_api_destroy(_api); } catch (Exception ex) { EyeGazeLogger.Log($"Tobii: api_destroy exception: {ex.Message}"); }
+                _api = IntPtr.Zero;
+            }
         }
-        if (_api != IntPtr.Zero)
+        else
         {
-            try { tobii_api_destroy(_api); } catch { }
-            _api = IntPtr.Zero;
+            // Non-blocking (app exit): skip native destroy — it can deadlock.
+            // The process is exiting; Windows will clean up native resources.
+            EyeGazeLogger.Log("Tobii: Dispose — skipping native destroy (non-blocking exit)");
         }
         _cts?.Dispose();
         IsConnected = false;
+        EyeGazeLogger.Log("Tobii: Dispose complete");
     }
 
     /// <summary>
@@ -234,40 +354,42 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     // ── Private methods ───────────────────────────────────────────────────────
 
     private static bool _dllResolved;
+    private static IntPtr _cachedDllHandle;
 
-    /// <summary>
-    /// Registers a DLL import resolver so [DllImport("tobii_stream_engine")]
-    /// can find the DLL in user directories, not just the system PATH.
-    /// Must be called before any Tobii P/Invoke.
-    /// </summary>
     private static void EnsureDllLoaded()
     {
         if (_dllResolved) return;
 
         var searchPaths = new[]
         {
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher"),
             AppContext.BaseDirectory,
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher"),
         };
 
+        // Resolve once: find and load the DLL, cache the handle
+        foreach (var dir in searchPaths)
+        {
+            var fullPath = Path.Combine(dir, "tobii_stream_engine.dll");
+            if (File.Exists(fullPath) && NativeLibrary.TryLoad(fullPath, out _cachedDllHandle))
+            {
+                var ver = System.Diagnostics.FileVersionInfo.GetVersionInfo(fullPath);
+                EyeGazeLogger.Log($"Tobii: Loaded DLL from {fullPath} v{ver.ProductVersion}");
+                break;
+            }
+        }
+
+        if (_cachedDllHandle == IntPtr.Zero)
+        {
+            if (NativeLibrary.TryLoad("tobii_stream_engine", out _cachedDllHandle))
+                EyeGazeLogger.Log("Tobii: Loaded DLL from system PATH (fallback)");
+        }
+
+        // Register a resolver that just returns the cached handle — no file I/O per call
         var assembly = typeof(TobiiStreamEngineTracker).Assembly;
         NativeLibrary.SetDllImportResolver(assembly, (name, assembly2, path) =>
         {
-            if (name != "tobii_stream_engine")
-                return IntPtr.Zero;
-
-            // Try system PATH first
-            if (NativeLibrary.TryLoad(name, out var handle))
-                return handle;
-
-            // Try custom search paths
-            foreach (var dir in searchPaths)
-            {
-                var fullPath = Path.Combine(dir, "tobii_stream_engine.dll");
-                if (File.Exists(fullPath) && NativeLibrary.TryLoad(fullPath, out handle))
-                    return handle;
-            }
-
+            if (name == "tobii_stream_engine" && _cachedDllHandle != IntPtr.Zero)
+                return _cachedDllHandle;
             return IntPtr.Zero;
         });
 
@@ -276,36 +398,113 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     private void ProcessCallbacks(CancellationToken ct)
     {
+        EyeGazeLogger.Log("Tobii: Callback thread started");
+        var deviceArray = new[] { _device };
+        long sampleCount = 0;
+        var lastHeartbeat = DateTime.UtcNow;
+
         while (!ct.IsCancellationRequested && _device != IntPtr.Zero)
         {
             try
             {
-                int result = tobii_device_process_callbacks(_device);
-                if (result != 0 && result != 5) // 5 = TOBII_ERROR_CONNECTION_TIMED_OUT (retryable)
+                if (_engine != IntPtr.Zero)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Tobii] process_callbacks error: {result}");
-                    break;
+                    int waitResult = tobii_wait_for_callbacks(_engine, 1, deviceArray);
+                    if (waitResult != 0 && waitResult != 5)
+                    {
+                        EyeGazeLogger.Log($"Tobii: wait_for_callbacks error (code {waitResult}: {GetTobiiError(waitResult)})");
+                        Thread.Sleep(100);
+                        continue;
+                    }
+                }
+
+                int result = tobii_device_process_callbacks(_device);
+                sampleCount++;
+                if (result != 0 && result != 5)
+                {
+                    EyeGazeLogger.Log($"Tobii: process_callbacks error (code {result}: {GetTobiiError(result)}) — attempting reconnect");
+                    try { tobii_device_reconnect(_device); } catch { }
+                    Thread.Sleep(500);
+                    continue;
+                }
+
+                // Heartbeat every 5 seconds
+                var now = DateTime.UtcNow;
+                if (now - lastHeartbeat >= TimeSpan.FromSeconds(5))
+                {
+                    EyeGazeLogger.Log($"Tobii: Heartbeat — {sampleCount} callbacks processed, {_validCount} valid, {_invalidCount} invalid");
+                    lastHeartbeat = now;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                break;
+                EyeGazeLogger.Log($"Tobii: ProcessCallbacks exception: {ex}");
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(1); // ~1000Hz max, reduce CPU
+            Thread.Sleep(1);
         }
+
+        EyeGazeLogger.Log($"Tobii: Callback thread exiting (cancelled={ct.IsCancellationRequested}, device={_device != IntPtr.Zero})");
     }
 
-    private void OnGazePoint(ref tobii_gaze_point_t gaze_point, IntPtr user_data)
+    private long _validCount;
+    private long _invalidCount;
+
+    private long _rawDumpCount;
+    private const int MaxRawDumps = 5;
+
+    private void OnGazePoint(ref tobii_gaze_point_t gaze_point)
     {
-        // Gaze coordinates from Stream Engine are in screen pixels (not normalized).
-        // Only forward valid data (x/y != -1 when tracking is lost)
-        if (gaze_point.x < 0 || gaze_point.y < 0) return;
+        // Dump raw struct bytes for the first few samples to verify layout
+        var dumpIdx = Interlocked.Increment(ref _rawDumpCount);
+        if (dumpIdx <= MaxRawDumps)
+        {
+            EyeGazeLogger.Log($"Tobii: RAW gaze #{dumpIdx}: ts={gaze_point.timestamp_us} validity={gaze_point.validity} x={gaze_point.x:F6} y={gaze_point.y:F6}");
+            EyeGazeLogger.Log($"  raw floats: ts_hex={BitConverter.DoubleToInt64Bits(gaze_point.timestamp_us):X16} x_bits={BitConverter.SingleToInt32Bits(gaze_point.x):X8} y_bits={BitConverter.SingleToInt32Bits(gaze_point.y):X8}");
+        }
+
+        if (gaze_point.validity == 0)
+        {
+            Interlocked.Increment(ref _invalidCount);
+            EyeGazeLogger.LogGazeData(gaze_point.x, gaze_point.y, valid: false);
+            return;
+        }
+
+        Interlocked.Increment(ref _validCount);
+
+        // v2.x Stream Engine returns NORMALIZED coordinates (0.0–1.0).
+        // Convert to screen pixels for the rest of the pipeline.
+        float pixelX = gaze_point.x * ScreenWidth;
+        float pixelY = gaze_point.y * ScreenHeight;
+
+        EyeGazeLogger.LogGazeData(pixelX, pixelY, valid: true);
 
         GazeDataReceived?.Invoke(this, new GazePoint(
-            gaze_point.x,
-            gaze_point.y,
+            pixelX,
+            pixelY,
             DateTimeOffset.UtcNow,
             isValid: true,
             isScreenCoordinates: true));
+    }
+
+    [DllImport("user32.dll")]
+    private static extern int GetSystemMetrics(int nIndex);
+
+    private static float ScreenWidth
+    {
+        get
+        {
+            try { return GetSystemMetrics(0); }
+            catch { return 1920; }
+        }
+    }
+
+    private static float ScreenHeight
+    {
+        get
+        {
+            try { return GetSystemMetrics(1); }
+            catch { return 1080; }
+        }
     }
 }

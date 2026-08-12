@@ -19,6 +19,15 @@ namespace Dasher.Windows.Controls
 
         public async Task<bool> InitializeEyeGazeAsync(EyeGazeIntegration.TrackerType trackerType, int udpPort = 5555)
         {
+            EyeGazeLogger.Log($"=== InitializeEyeGazeAsync: {trackerType} (UDP port {udpPort}) ===");
+
+            // Shut down any existing eye gaze integration first (prevents double-init conflict)
+            if (_useEyeGazeInput)
+            {
+                EyeGazeLogger.Log("InitializeEyeGazeAsync: shutting down existing eye gaze first");
+                DisableEyeGaze();
+            }
+
             var settings = new EyeGazeIntegration.Settings
             {
                 Type = trackerType,
@@ -28,25 +37,43 @@ namespace Dasher.Windows.Controls
             _eyeGazeIntegration = new EyeGazeIntegration();
             var ok = await _eyeGazeIntegration.InitializeAsync(settings);
 
+            EyeGazeLogger.Log($"InitializeEyeGazeAsync result: {ok}");
+
             if (ok)
             {
                 _useEyeGazeInput = true;
                 _eyeGazeIntegration.GazePositionChanged += OnEyeGazePositionChanged;
+                EyeGazeLogger.Log("Eye gaze input active — indicator should appear (green/red dot top-right)");
             }
             return ok;
         }
 
         public void DisableEyeGaze()
         {
+            DisableEyeGaze(blocking: true);
+        }
+
+        public void DisableEyeGazeNonBlocking()
+        {
+            DisableEyeGaze(blocking: false);
+        }
+
+        private void DisableEyeGaze(bool blocking)
+        {
             _useEyeGazeInput = false;
             _eyeTrackActive = false;
             if (_eyeGazeIntegration != null)
             {
                 _eyeGazeIntegration.GazePositionChanged -= OnEyeGazePositionChanged;
-                _eyeGazeIntegration.Shutdown();
+                _eyeGazeIntegration.Shutdown(blocking);
                 _eyeGazeIntegration = null;
             }
         }
+
+        // Cached on the UI thread (Render) so the gaze callback (background thread)
+        // can convert screen pixels to canvas-local DIPs without calling Avalonia APIs.
+        private float _cachedOriginX;
+        private float _cachedOriginY;
 
         private void OnEyeGazePositionChanged(object? sender, GazePoint gazePoint)
         {
@@ -60,11 +87,8 @@ namespace Dasher.Windows.Controls
 
             if (gazePoint.IsScreenCoordinates)
             {
-                var screenOriginPx = Avalonia.VisualExtensions.PointToScreen(this, new Point(0, 0));
-                var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
-                var originDips = new Point(screenOriginPx.X / scaling, screenOriginPx.Y / scaling);
-                x = (float)(gazePoint.X - originDips.X);
-                y = (float)(gazePoint.Y - originDips.Y);
+                x = (float)(gazePoint.X - _cachedOriginX);
+                y = (float)(gazePoint.Y - _cachedOriginY);
             }
 
             NativeBridge.dasher_mouse_move(_handle, x, y);
