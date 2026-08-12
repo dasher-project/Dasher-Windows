@@ -43,13 +43,18 @@ namespace Dasher.Windows.EyeGaze
             get { lock (_lock) { return _lastPosition; } }
         }
 
-        public void Shutdown()
+        public void Shutdown() => Shutdown(blocking: true);
+
+        public void Shutdown(bool blocking)
         {
             IsEnabled = false;
             if (_tracker != null)
             {
                 _tracker.GazeDataReceived -= OnGazeData;
-                _tracker.Dispose();
+                if (_tracker is TobiiStreamEngineTracker tobii)
+                    tobii.Dispose(blocking);
+                else
+                    _tracker.Dispose();
                 _tracker = null;
             }
         }

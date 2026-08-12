@@ -21,6 +21,13 @@ namespace Dasher.Windows.Controls
         {
             EyeGazeLogger.Log($"=== InitializeEyeGazeAsync: {trackerType} (UDP port {udpPort}) ===");
 
+            // Shut down any existing eye gaze integration first (prevents double-init conflict)
+            if (_useEyeGazeInput)
+            {
+                EyeGazeLogger.Log("InitializeEyeGazeAsync: shutting down existing eye gaze first");
+                DisableEyeGaze();
+            }
+
             var settings = new EyeGazeIntegration.Settings
             {
                 Type = trackerType,
@@ -43,12 +50,22 @@ namespace Dasher.Windows.Controls
 
         public void DisableEyeGaze()
         {
+            DisableEyeGaze(blocking: true);
+        }
+
+        public void DisableEyeGazeNonBlocking()
+        {
+            DisableEyeGaze(blocking: false);
+        }
+
+        private void DisableEyeGaze(bool blocking)
+        {
             _useEyeGazeInput = false;
             _eyeTrackActive = false;
             if (_eyeGazeIntegration != null)
             {
                 _eyeGazeIntegration.GazePositionChanged -= OnEyeGazePositionChanged;
-                _eyeGazeIntegration.Shutdown();
+                _eyeGazeIntegration.Shutdown(blocking);
                 _eyeGazeIntegration = null;
             }
         }

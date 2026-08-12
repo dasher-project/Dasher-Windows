@@ -59,12 +59,14 @@ namespace Dasher.Windows.Engine
             }
         }
 
-        public void Shutdown()
+        public void Shutdown() => Shutdown(blocking: true);
+
+        public void Shutdown(bool blocking)
         {
             if (_device != null)
             {
                 _device.GazePositionChanged -= OnGaze;
-                _device.Shutdown();
+                _device.Shutdown(blocking);
                 _device = null;
             }
         }

@@ -74,7 +74,7 @@ public partial class DasherCanvas : Control
 
     public void Shutdown()
     {
-        DisableEyeGaze();
+        DisableEyeGazeNonBlocking();
         DisableJoystick();
         _timer.Stop();
         if (_handle != IntPtr.Zero)
