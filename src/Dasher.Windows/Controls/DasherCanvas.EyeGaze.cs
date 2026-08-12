@@ -70,6 +70,11 @@ namespace Dasher.Windows.Controls
             }
         }
 
+        // Cached on the UI thread (Render) so the gaze callback (background thread)
+        // can convert screen pixels to canvas-local DIPs without calling Avalonia APIs.
+        private float _cachedOriginX;
+        private float _cachedOriginY;
+
         private void OnEyeGazePositionChanged(object? sender, GazePoint gazePoint)
         {
             if (!_useEyeGazeInput || _handle == IntPtr.Zero) return;
@@ -82,11 +87,8 @@ namespace Dasher.Windows.Controls
 
             if (gazePoint.IsScreenCoordinates)
             {
-                var screenOriginPx = Avalonia.VisualExtensions.PointToScreen(this, new Point(0, 0));
-                var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
-                var originDips = new Point(screenOriginPx.X / scaling, screenOriginPx.Y / scaling);
-                x = (float)(gazePoint.X - originDips.X);
-                y = (float)(gazePoint.Y - originDips.Y);
+                x = (float)(gazePoint.X - _cachedOriginX);
+                y = (float)(gazePoint.Y - _cachedOriginY);
             }
 
             NativeBridge.dasher_mouse_move(_handle, x, y);
