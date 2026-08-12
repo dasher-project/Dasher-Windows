@@ -34,4 +34,13 @@
     <PackageReference Include="PostHog" Version="2.7.1" />
     <PackageReference Include="System.Speech" Version="10.0.9" />
   </ItemGroup>
+
+  <Target Name="CopyTobiiDll" AfterTargets="Build;Publish">
+    <Copy SourceFiles="native\tobii_stream_engine.dll"
+          DestinationFolder="$(OutputPath)"
+          Condition="Exists('native\tobii_stream_engine.dll')" />
+    <Copy SourceFiles="native\tobii_stream_engine.dll"
+          DestinationFolder="$(PublishDir)"
+          Condition="Exists('native\tobii_stream_engine.dll') And '$(PublishDir)' != ''" />
+  </Target>
 </Project>
