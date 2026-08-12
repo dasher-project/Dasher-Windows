@@ -74,14 +74,13 @@ namespace Dasher.Windows.Controls
         // can convert screen pixels to canvas-local DIPs without calling Avalonia APIs.
         private float _cachedOriginX;
         private float _cachedOriginY;
-        private float _cachedWidth;
-        private float _cachedHeight;
 
         private void OnEyeGazePositionChanged(object? sender, GazePoint gazePoint)
         {
             if (!_useEyeGazeInput || _handle == IntPtr.Zero) return;
 
             _lastGazeTicks = DateTimeOffset.UtcNow.Ticks;
+            _eyeTrackActive = true;
 
             float x = gazePoint.X;
             float y = gazePoint.Y;
@@ -92,16 +91,6 @@ namespace Dasher.Windows.Controls
                 y = (float)(gazePoint.Y - _cachedOriginY);
             }
 
-            // Ignore gaze outside the canvas — user has looked away
-            const float margin = 20f;
-            if (x < -margin || x > _cachedWidth + margin ||
-                y < -margin || y > _cachedHeight + margin)
-            {
-                _eyeTrackActive = false;
-                return;
-            }
-
-            _eyeTrackActive = true;
             NativeBridge.dasher_mouse_move(_handle, x, y);
         }
 
