@@ -315,7 +315,9 @@ public partial class MainWindow : Window
         }
 
         // Phase 5: Continue with UI setup
-        _vm!.ApplySpeed();
+        // Read the speed from the engine (which loaded from dasher_settings.xml)
+        // rather than pushing the ViewModel default (1.0) which overwrites saved settings.
+        _vm!.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
         _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
         _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
@@ -919,8 +921,8 @@ public partial class MainWindow : Window
         // Start engine
         _canvas.StartEngine();
 
-        // Refresh UI state
-        _vm.ApplySpeed();
+        // Refresh UI state — read from engine defaults
+        _vm.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
         _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
         _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
