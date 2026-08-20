@@ -110,6 +110,14 @@ public static class AnalyticsService
             ["app_variant"] = "dasher-windows",
             ["app_version"] = UpdateChecker.GetCurrentVersion(),
             ["os_version"] = RuntimeInformation.OSDescription,
+            // posthog-dotnet sends no $os SDK context, so OS breakdowns/filters in
+            // PostHog were empty for Windows events. Supply it for parity with the
+            // Apple/Android SDKs (which auto-send $os).
+            ["$os"] = "Windows",
+            // RFC 0001 promises no location data. PostHog Cloud derives $geoip_*
+            // (city, postal code, lat/lon) from the client IP even with project IP
+            // anonymisation on — this per-event flag is the only way to stop it.
+            ["$geoip_disable"] = true,
         };
     }
 
