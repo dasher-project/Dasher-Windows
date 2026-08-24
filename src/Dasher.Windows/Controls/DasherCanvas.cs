@@ -18,6 +18,7 @@ public partial class DasherCanvas : Control
     private string[]? _strings;
     private readonly DispatcherTimer _timer;
     private string _dasherFont = "";
+    private string _lastTextMetricsFont = "";
 
     private EyeGazeIntegration? _eyeGazeIntegration;
     private bool _useEyeGazeInput;
@@ -25,6 +26,7 @@ public partial class DasherCanvas : Control
     private NativeBridge.MessageCallback? _messageCallback;
     private NativeBridge.LogCallback? _logCallback;
     private NativeBridge.OutputCallback? _outputCallback;
+    private NativeBridge.TextSizeCallback? _textSizeCallback;
     private bool _callbacksRegistered;
     private int _lastScreenWidth;
     private int _lastScreenHeight;
@@ -204,6 +206,50 @@ public partial class DasherCanvas : Control
             NativeBridge.dasher_set_output_callback(_handle, _outputCallback, IntPtr.Zero);
         }
         catch { }
+
+        try
+        {
+            // DasherCore v0.2.4: real label measurements instead of the
+            // engine's glyphs-x-fontSize/2 estimate, which under-measured
+            // wide Segoe UI glyphs and compounded into the jumbled right
+            // edge at deep zoom (#28 / DasherCore #56). Fires on the UI
+            // thread (the dasher_frame caller) so FormattedText is safe.
+            _textSizeCallback = new NativeBridge.TextSizeCallback(OnTextSize);
+            NativeBridge.dasher_set_text_size_callback(_handle, _textSizeCallback, IntPtr.Zero);
+        }
+        catch { }
+    }
+
+    private int OnTextSize(IntPtr textPtr, int fontSize, IntPtr outWidth, IntPtr outHeight, IntPtr userData)
+    {
+        try
+        {
+            if (textPtr == IntPtr.Zero || fontSize <= 0 || outWidth == IntPtr.Zero || outHeight == IntPtr.Zero)
+                return 0;
+
+            var text = Marshal.PtrToStringUTF8(textPtr);
+            if (string.IsNullOrEmpty(text)) return 0;
+
+            // Same font the canvas draws opcode-5 text with (user-selected
+            // Dasher font, or Segoe UI), so layout matches rendering.
+            var formatted = new FormattedText(
+                text,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                CommandRenderer.ResolveTypeface(_dasherFont),
+                fontSize,
+                Brushes.Black);
+
+            Marshal.WriteInt32(outWidth, (int)Math.Ceiling(formatted.Width));
+            Marshal.WriteInt32(outHeight, (int)Math.Ceiling(formatted.Height));
+            return 1;
+        }
+        catch
+        {
+            // Not-yet-ready font system etc. — the engine falls back to its
+            // estimate without caching, and retries next frame.
+            return 0;
+        }
     }
 
     private static void OnEngineLog(int level, IntPtr messagePtr, IntPtr userData)
@@ -243,6 +289,28 @@ public partial class DasherCanvas : Control
 
         EnsureCallbacksRegistered();
         TrySetScreenSize();
+
+        // Refresh the canvas font BEFORE the frame: dasher_frame() measures
+        // labels through the text-size callback using _dasherFont, and the
+        // commands it returns are drawn with the same value — reading it
+        // after the frame left measurement one font behind rendering for a
+        // transient frame after every font change.
+        try
+        {
+            var fontPtr = NativeBridge.dasher_get_string_parameter(_handle, ParameterKeys.SP_DASHER_FONT);
+            _dasherFont = fontPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(fontPtr) ?? "" : "";
+        }
+        catch { }
+
+        // Invalidate the engine's cached label measurements whenever the
+        // font actually being drawn changes (font-picker, settings import),
+        // so the upcoming frame re-measures via the text-size callback.
+        if (_dasherFont != _lastTextMetricsFont)
+        {
+            _lastTextMetricsFont = _dasherFont;
+            try { NativeBridge.dasher_text_metrics_changed(_handle); }
+            catch { }
+        }
 
         var timeMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
@@ -286,13 +354,6 @@ public partial class DasherCanvas : Control
                 if (text != OutputText)
                     OutputText = text ?? "";
             }
-        }
-        catch { }
-
-        try
-        {
-            var fontPtr = NativeBridge.dasher_get_string_parameter(_handle, ParameterKeys.SP_DASHER_FONT);
-            _dasherFont = fontPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(fontPtr) ?? "" : "";
         }
         catch { }
 

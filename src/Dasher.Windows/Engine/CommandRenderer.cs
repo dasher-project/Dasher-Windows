@@ -19,13 +19,24 @@ namespace Dasher.Windows.Engine;
 
 public static class CommandRenderer
 {
+    /// <summary>
+    /// The typeface opcode-5 text is drawn with. Also used by the canvas
+    /// text-measurement callback (DasherCore v0.2.4) so the engine lays out
+    /// labels with the widths it will actually render at — measuring and
+    /// drawing must never resolve different fonts.
+    /// </summary>
+    public static Typeface ResolveTypeface(string dasherFont)
+    {
+        var fontFamily = string.IsNullOrWhiteSpace(dasherFont) ? "Segoe UI" : dasherFont;
+        return new Typeface(fontFamily);
+    }
+
     public static void Render(DrawingContext context, int[] commands, string[] strings, Size surfaceSize, string dasherFont = "")
     {
         if (commands == null || commands.Length == 0) return;
 
         double currentLineWidth = 1;
-        var fontFamily = string.IsNullOrWhiteSpace(dasherFont) ? "Segoe UI" : dasherFont;
-        var cachedTypeface = new Typeface(fontFamily);
+        var cachedTypeface = ResolveTypeface(dasherFont);
 
         for (int i = 0; i + 5 < commands.Length; i += 6)
         {
