@@ -24,12 +24,14 @@ public partial class DasherCanvas : Control
 
     private NativeBridge.MessageCallback? _messageCallback;
     private NativeBridge.LogCallback? _logCallback;
+    private NativeBridge.OutputCallback? _outputCallback;
     private bool _callbacksRegistered;
     private int _lastScreenWidth;
     private int _lastScreenHeight;
 
     public event EventHandler<EngineMessageEventArgs>? EngineMessage;
     public event EventHandler? EngineFaultDetected;
+    public event EventHandler<EngineOutputEventArgs>? EngineOutput;
 
     public static readonly StyledProperty<string> OutputTextProperty =
         AvaloniaProperty.Register<DasherCanvas, string>(nameof(OutputText));
@@ -60,6 +62,14 @@ public partial class DasherCanvas : Control
             var errorMsg = errorPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(errorPtr) ?? "Unknown error" : "Unknown error";
             throw new InvalidOperationException($"Failed to create Dasher session: {errorMsg}");
         }
+
+        // Per-handle state must not survive handle replacement (Settings >
+        // Reset calls Shutdown + Initialize on the same canvas): without
+        // this, EnsureCallbacksRegistered skips the new handle and the
+        // output/message/log callbacks are never attached to it.
+        _callbacksRegistered = false;
+        _lastScreenWidth = 0;
+        _lastScreenHeight = 0;
     }
 
     /// <summary>
@@ -185,6 +195,15 @@ public partial class DasherCanvas : Control
             NativeBridge.dasher_set_log_callback(_handle, _logCallback, IntPtr.Zero, 0);
         }
         catch { }
+
+        try
+        {
+            // RFC 0015 §7: keyboard-mode injection consumes output-callback
+            // events (0 insert / 1 delete / 2 buffer clear), not text diffs.
+            _outputCallback = new NativeBridge.OutputCallback(OnEngineOutputEvent);
+            NativeBridge.dasher_set_output_callback(_handle, _outputCallback, IntPtr.Zero);
+        }
+        catch { }
     }
 
     private static void OnEngineLog(int level, IntPtr messagePtr, IntPtr userData)
@@ -297,6 +316,18 @@ public partial class DasherCanvas : Control
             EngineMessage?.Invoke(this, new EngineMessageEventArgs(text, isWarning));
         });
     }
+
+    private void OnEngineOutputEvent(int eventType, IntPtr textPtr, IntPtr userData)
+    {
+        var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
+        // Events normally fire on the dasher_frame() thread; buffer-clear
+        // events may fire on the thread calling the reset function itself.
+        // Marshal to the UI thread preserving order.
+        Dispatcher.UIThread.Post(() =>
+        {
+            EngineOutput?.Invoke(this, new EngineOutputEventArgs(eventType, text));
+        });
+    }
 }
 
 public class EngineMessageEventArgs : EventArgs
@@ -304,4 +335,15 @@ public class EngineMessageEventArgs : EventArgs
     public string Text { get; }
     public bool IsWarning { get; }
     public EngineMessageEventArgs(string text, bool isWarning) { Text = text; IsWarning = isWarning; }
+}
+
+public class EngineOutputEventArgs : EventArgs
+{
+    public const int EventInsert = 0;
+    public const int EventDelete = 1;
+    public const int EventBufferCleared = 2;
+
+    public int EventType { get; }
+    public string Text { get; }
+    public EngineOutputEventArgs(int eventType, string text) { EventType = eventType; Text = text; }
 }

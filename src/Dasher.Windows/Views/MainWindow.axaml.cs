@@ -26,7 +26,6 @@ public partial class MainWindow : Window
 {
     private DasherCanvas? _canvas;
     private MainWindowViewModel? _vm;
-    private string _previousOutput = "";
     private Button[]? _settingsTabs;
     private bool _settingsInitialized;
     private NativeBridge.SpeakCallback? _speakCallback;
@@ -118,6 +117,7 @@ public partial class MainWindow : Window
     private const uint INPUT_KEYBOARD = 1;
     private const uint KEYEVENTF_UNICODE = 0x0004;
     private const uint KEYEVENTF_KEYUP = 0x0002;
+    private const ushort VK_BACK = 0x08;
 
     public MainWindow()
     {
@@ -155,6 +155,7 @@ public partial class MainWindow : Window
         _canvas.EngineMessage += OnEngineMessage;
         _canvas.EngineFaultDetected += OnEngineFault;
         _canvas.WpmUpdated += OnWpmUpdated;
+        _canvas.EngineOutput += OnEngineOutput;
         _vm.SetHandle(_canvas.GetHandle());
 
         this.Deactivated += (_, _) =>
@@ -415,22 +416,8 @@ public partial class MainWindow : Window
     {
         if (_vm == null) return;
 
-        if (_vm.IsKeyboardMode)
-        {
-            var current = _vm.OutputText;
-            if (current.Length > _previousOutput.Length)
-            {
-                var newChars = current[_previousOutput.Length..];
-                KbLog($"OnOutputTextChanged: new chars=\"{newChars}\" (total len={current.Length})");
-                SendTextToForeground(newChars);
-            }
-            _previousOutput = current;
-        }
-        else
-        {
-            _previousOutput = _vm.OutputText;
-        }
-
+        // Keyboard-mode injection is driven by engine output events
+        // (OnEngineOutput, RFC 0015 §7), not by diffing OutputText.
         if (_gameModeActive)
             SyncGameModeState();
     }
@@ -474,12 +461,68 @@ public partial class MainWindow : Window
         KbLog($"SetNoActivate({enable}): style=0x{exStyle:X} → 0x{newStyle:X}, noActivate={hasFlag}, layered={hasLayered}");
     }
 
+    private void OnEngineOutput(object? sender, EngineOutputEventArgs e)
+    {
+        if (_vm == null || !_vm.IsKeyboardMode) return;
+
+        switch (e.EventType)
+        {
+            case EngineOutputEventArgs.EventInsert:
+                KbLog($"EngineOutput insert: \"{e.Text}\"");
+                SendTextToForeground(e.Text);
+                break;
+            case EngineOutputEventArgs.EventDelete:
+                // One backspace per code point, never per byte or UTF-16
+                // unit (RFC 0015 §5 — "é" and emoji delete exactly once).
+                var count = TextUnits.CountCodePoints(e.Text);
+                KbLog($"EngineOutput delete: \"{e.Text}\" ({count} code point(s))");
+                SendBackspaces(count);
+                break;
+            case EngineOutputEventArgs.EventBufferCleared:
+                // Wholesale buffer clear (reset, alphabet change): resync
+                // without injecting — backspacing the whole buffer into the
+                // target document would destroy the user's text.
+                KbLog("EngineOutput buffer cleared (no injection)");
+                break;
+        }
+    }
+
     private void SendTextToForeground(string text)
+    {
+        EnsureTargetForeground();
+
+        foreach (char c in text)
+        {
+            SendUnicodeChar(c);
+        }
+
+        var fgAfter = GetForegroundWindow();
+        KbLog($"  → after SendInput, fg=0x{fgAfter:X}");
+    }
+
+    private void SendBackspaces(int count)
+    {
+        if (count <= 0) return;
+
+        EnsureTargetForeground();
+
+        for (var i = 0; i < count; i++)
+            SendVirtualKey(VK_BACK);
+
+        var fgAfter = GetForegroundWindow();
+        KbLog($"  → after SendInput ({count} backspace(s)), fg=0x{fgAfter:X}");
+    }
+
+    /// <summary>
+    /// Tracks or restores the injection target so keystrokes always land in
+    /// the user's application, never in Dasher itself.
+    /// </summary>
+    private void EnsureTargetForeground()
     {
         var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
         var fg = GetForegroundWindow();
 
-        KbLog($"SendTextToForeground: text=\"{text}\" fg=0x{fg:X} us=0x{ourHandle:X} lastTarget=0x{_lastTargetWindow:X}");
+        KbLog($"EnsureTargetForeground: fg=0x{fg:X} us=0x{ourHandle:X} lastTarget=0x{_lastTargetWindow:X}");
 
         // Track or restore the target window
         if (fg != ourHandle && fg != IntPtr.Zero)
@@ -511,14 +554,6 @@ public partial class MainWindow : Window
         {
             KbLog("  → no known target window!");
         }
-
-        foreach (char c in text)
-        {
-            SendUnicodeChar(c);
-        }
-
-        var fgAfter = GetForegroundWindow();
-        KbLog($"  → after SendInput, fg=0x{fgAfter:X}");
     }
 
     private void SendUnicodeChar(char c)
@@ -536,6 +571,22 @@ public partial class MainWindow : Window
         var cbSize = Marshal.SizeOf<INPUT>();
         var sent = SendInput(2, inputs, cbSize);
         KbLog($"  SendInput('{c}'): cbSize={cbSize} sent={sent} (expected 2)");
+    }
+
+    private void SendVirtualKey(ushort vk)
+    {
+        var inputs = new INPUT[2];
+
+        inputs[0].type = INPUT_KEYBOARD;
+        inputs[0].u.ki.wVk = vk;
+
+        inputs[1].type = INPUT_KEYBOARD;
+        inputs[1].u.ki.wVk = vk;
+        inputs[1].u.ki.dwFlags = KEYEVENTF_KEYUP;
+
+        var cbSize = Marshal.SizeOf<INPUT>();
+        var sent = SendInput(2, inputs, cbSize);
+        KbLog($"  SendInput(VK 0x{vk:X}): cbSize={cbSize} sent={sent} (expected 2)");
     }
 
     private void OnModeRightSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Right);
@@ -703,8 +754,6 @@ public partial class MainWindow : Window
             MessagePane.IsVisible = true;
             MessageSplitter.IsVisible = true;
         }
-
-        _previousOutput = _vm.OutputText;
     }
 
     private void OnEngineMessage(object? sender, EngineMessageEventArgs e)
@@ -902,11 +951,13 @@ public partial class MainWindow : Window
         var settingsFile = Path.Combine(dataDir, "dasher_settings.xml");
         try { if (File.Exists(settingsFile)) File.Delete(settingsFile); } catch { }
 
-        // Recreate engine with defaults
+        // Recreate engine with defaults. The canvas's C# events (EngineMessage,
+        // EngineFaultDetected, WpmUpdated, EngineOutput) stay wired from OnOpened
+        // — the canvas object survives Shutdown/Initialize, so re-subscribing here
+        // would run each handler once per reset (duplicate toasts, and double
+        // keyboard-mode injection). Native callbacks are re-registered on the
+        // first tick after Initialize (per-handle state is reset there).
         _canvas.Initialize(dataDir, dataDir);
-        _canvas.EngineMessage += OnEngineMessage;
-        _canvas.EngineFaultDetected += OnEngineFault;
-        _canvas.WpmUpdated += OnWpmUpdated;
         _vm.SetHandle(_canvas.GetHandle());
 
         // Re-wire callbacks
@@ -944,7 +995,6 @@ public partial class MainWindow : Window
 
         // Clear output
         _vm.OutputText = "";
-        _previousOutput = "";
     }
 
     private void BuildSettingsTabs(SettingsPanel settingsPanel)
@@ -1021,7 +1071,6 @@ public partial class MainWindow : Window
         if (_canvas == null || _vm == null) return;
         NativeBridge.dasher_reset(_vm.Handle);
         _vm.OutputText = "";
-        _previousOutput = "";
     }
 
     private async void OnOpen(object? sender, RoutedEventArgs e)
@@ -1048,7 +1097,6 @@ public partial class MainWindow : Window
             var text = await reader.ReadToEndAsync();
             NativeBridge.dasher_reset_output_text(_vm.Handle);
             _vm.OutputText = text;
-            _previousOutput = text;
         }
         catch { }
     }
