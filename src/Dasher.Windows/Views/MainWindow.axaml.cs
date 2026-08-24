@@ -951,12 +951,13 @@ public partial class MainWindow : Window
         var settingsFile = Path.Combine(dataDir, "dasher_settings.xml");
         try { if (File.Exists(settingsFile)) File.Delete(settingsFile); } catch { }
 
-        // Recreate engine with defaults
+        // Recreate engine with defaults. The canvas's C# events (EngineMessage,
+        // EngineFaultDetected, WpmUpdated, EngineOutput) stay wired from OnOpened
+        // — the canvas object survives Shutdown/Initialize, so re-subscribing here
+        // would run each handler once per reset (duplicate toasts, and double
+        // keyboard-mode injection). Native callbacks are re-registered on the
+        // first tick after Initialize (per-handle state is reset there).
         _canvas.Initialize(dataDir, dataDir);
-        _canvas.EngineMessage += OnEngineMessage;
-        _canvas.EngineFaultDetected += OnEngineFault;
-        _canvas.WpmUpdated += OnWpmUpdated;
-        _canvas.EngineOutput += OnEngineOutput;
         _vm.SetHandle(_canvas.GetHandle());
 
         // Re-wire callbacks

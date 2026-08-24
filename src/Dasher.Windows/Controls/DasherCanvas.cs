@@ -62,6 +62,14 @@ public partial class DasherCanvas : Control
             var errorMsg = errorPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(errorPtr) ?? "Unknown error" : "Unknown error";
             throw new InvalidOperationException($"Failed to create Dasher session: {errorMsg}");
         }
+
+        // Per-handle state must not survive handle replacement (Settings >
+        // Reset calls Shutdown + Initialize on the same canvas): without
+        // this, EnsureCallbacksRegistered skips the new handle and the
+        // output/message/log callbacks are never attached to it.
+        _callbacksRegistered = false;
+        _lastScreenWidth = 0;
+        _lastScreenHeight = 0;
     }
 
     /// <summary>
