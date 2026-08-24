@@ -30,7 +30,6 @@ public partial class MainWindow : Window
     private bool _settingsInitialized;
     private NativeBridge.SpeakCallback? _speakCallback;
     private NativeBridge.ParameterCallback? _parameterCallback;
-    private int _bitrateKey;
     private IntPtr _lastTargetWindow = IntPtr.Zero;
 
     [DllImport("user32.dll")]
@@ -172,7 +171,6 @@ public partial class MainWindow : Window
         _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
         NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
 
-        _bitrateKey = NativeBridge.dasher_find_parameter_key("LP_MAX_BITRATE");
         _parameterCallback = new NativeBridge.ParameterCallback(OnParameterChanged);
         NativeBridge.dasher_set_parameter_callback(_vm.Handle, _parameterCallback, IntPtr.Zero);
 
@@ -318,7 +316,11 @@ public partial class MainWindow : Window
         // Phase 5: Continue with UI setup
         // Read the speed from the engine (which loaded from dasher_settings.xml)
         // rather than pushing the ViewModel default (1.0) which overwrites saved settings.
-        _vm!.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
+        // Speed is displayed and set in v5 units (raw LP_MAX_BITRATE / 100), with
+        // bounds from the engine manifest - the old percent helper clamped the
+        // display to 4.0x and the steppers to 5.0x, below v5's 8.0 range.
+        _vm!.LoadSpeedBounds();
+        _vm.LoadSpeedFromEngine();
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
         _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
         _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
@@ -973,7 +975,8 @@ public partial class MainWindow : Window
         _canvas.StartEngine();
 
         // Refresh UI state — read from engine defaults
-        _vm.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
+        _vm.LoadSpeedBounds();
+        _vm.LoadSpeedFromEngine();
         _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
         _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
         _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
@@ -1236,12 +1239,12 @@ public partial class MainWindow : Window
 
     private void OnParameterChanged(int parameterKey, IntPtr userData)
     {
-        if (parameterKey == _bitrateKey)
+        if (parameterKey == ParameterKeys.LP_MAX_BITRATE)
         {
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
                 if (_vm == null || _vm.Handle == IntPtr.Zero) return;
-                _vm.Speed = NativeBridge.dasher_get_speed_percent(_vm.Handle) / 100.0;
+                _vm.LoadSpeedFromEngine();
             });
         }
         else if (parameterKey == ParameterKeys.BP_CONTROL_MODE)
