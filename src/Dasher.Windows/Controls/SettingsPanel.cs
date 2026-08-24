@@ -1709,6 +1709,18 @@ public class SettingsPanel : Control
         };
         section.Children.Add(resetSettingsBtn);
 
+        // RFC 0016: app version at the bottom of the Privacy tab. Same
+        // constant analytics/crash events report (UpdateChecker), so the UI
+        // can never disagree with telemetry. Interim until RFC 0006's About
+        // section exists.
+        section.Children.Add(new TextBlock
+        {
+            Text = $"Dasher {UpdateChecker.GetCurrentVersion()}",
+            FontSize = 11,
+            Foreground = BrushMuted,
+            Margin = new Thickness(0, 24, 0, 0),
+        });
+
         _panel.Children.Add(section);
     }
 
