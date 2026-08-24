@@ -231,6 +231,20 @@ public static class NativeBridge
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_has_engine_error(IntPtr ctx);
 
+    // Frontend-supplied text measurement (DasherCore v0.2.4). The engine
+    // calls back to measure labels with the font the frontend actually
+    // draws with; results are cached per label x font size. Return
+    // non-zero on success, 0 to fall back to the engine's estimate.
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate int TextSizeCallback(IntPtr text, int font_size, IntPtr out_width, IntPtr out_height, IntPtr user_data);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_set_text_size_callback(IntPtr ctx, TextSizeCallback callback, IntPtr user_data);
+
+    // Invalidate cached text measurements after the canvas font changes.
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_text_metrics_changed(IntPtr ctx);
+
     // Typing rate (RFC 0012)
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern double dasher_get_cps(IntPtr ctx);
