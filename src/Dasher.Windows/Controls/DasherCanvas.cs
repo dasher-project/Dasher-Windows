@@ -34,11 +34,7 @@ public partial class DasherCanvas : Control
 
     private string _dasherFont = "";
     private string _lastTextMetricsFont = "";
-
-    // Measurement results for the engine's text-size callback, keyed by
-    // (text, font, size). The engine caches per label object, but a fresh
-    // label (new node entering the view) re-asks; this keeps repeats cheap.
-    private readonly System.Collections.Generic.Dictionary<(string text, string font, int size), (int w, int h)> _measureCache = new();
+    private readonly Engine.TextMeasurer _textMeasurer = new();
 
     private EyeGazeIntegration? _eyeGazeIntegration;
     private bool _useEyeGazeInput;
@@ -165,7 +161,7 @@ public partial class DasherCanvas : Control
         // Clamp the engine timeline: real deltas while running; bounded
         // steps after pauses/resumes so the engine never sees multi-second
         // jumps (it consumes raw deltas as zoom amount).
-        _engineTimeMs += (long)Math.Clamp(delta, 1, 50);
+        _engineTimeMs += EngineTimeline.StepFor(delta);
 
         Tick(_engineTimeMs);
     }
@@ -314,33 +310,18 @@ public partial class DasherCanvas : Control
         // success; return non-zero to fall back to the engine's estimate.
         try
         {
-            if (textPtr == IntPtr.Zero || fontSize <= 0 || outWidth == IntPtr.Zero || outHeight == IntPtr.Zero)
+            if (textPtr == IntPtr.Zero)
                 return 1;
 
             var text = Marshal.PtrToStringUTF8(textPtr);
-            if (string.IsNullOrEmpty(text)) return 1;
-
-            var key = (text, _dasherFont, fontSize);
-            if (!_measureCache.TryGetValue(key, out var size2))
+            var rc = _textMeasurer.Measure(text, _dasherFont, fontSize, out var w, out var h);
+            if (rc == 0)
             {
-                // Same font the canvas draws opcode-5 text with (user-selected
-                // Dasher font, or Segoe UI), so layout matches rendering.
-                var formatted = new FormattedText(
-                    text,
-                    CultureInfo.CurrentCulture,
-                    FlowDirection.LeftToRight,
-                    CommandRenderer.ResolveTypeface(_dasherFont),
-                    fontSize,
-                    Brushes.Black);
-
-                size2 = ((int)Math.Ceiling(formatted.Width), (int)Math.Ceiling(formatted.Height));
-                if (_measureCache.Count > 4096) _measureCache.Clear();
-                _measureCache[key] = size2;
+                if (outWidth == IntPtr.Zero || outHeight == IntPtr.Zero) return 1;
+                Marshal.WriteInt32(outWidth, w);
+                Marshal.WriteInt32(outHeight, h);
             }
-
-            Marshal.WriteInt32(outWidth, size2.w);
-            Marshal.WriteInt32(outHeight, size2.h);
-            return 0;
+            return rc;
         }
         catch
         {
@@ -411,7 +392,7 @@ public partial class DasherCanvas : Control
             if (_dasherFont != _lastTextMetricsFont)
             {
                 _lastTextMetricsFont = _dasherFont;
-                _measureCache.Clear();
+                _textMeasurer.Invalidate();
                 try { NativeBridge.dasher_text_metrics_changed(_handle); }
                 catch { }
             }

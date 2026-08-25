@@ -62,6 +62,9 @@ jobs:
         run: |
           Copy-Item native/build/bin/dasher.dll src/Dasher.Windows/dasher.dll -Force
 
+      - name: Run tests
+        run: dotnet test tests/Dasher.Windows.Tests/Dasher.Windows.Tests.csproj --nologo -v minimal
+
       - name: Publish app (self-contained, win-x64)
         run: dotnet publish src/Dasher.Windows/Dasher.Windows.csproj -c Release -r win-x64 --self-contained -o publish/app -p:InformationalVersion=${{ steps.version.outputs.app }} -p:VersionPrefix=${{ steps.version.outputs.app }}
 
