@@ -17,6 +17,7 @@ public partial class DasherCanvas : Control
     private readonly DispatcherTimer? _fallbackTimer;
     private bool _frameLoopRunning;
     private bool _paused;
+    private int _frameLoopGeneration;
     private double _lastWallMs = -1;
     private long _engineTimeMs;
     private long _lastWpmTimeMs = -1000;
@@ -117,6 +118,13 @@ public partial class DasherCanvas : Control
         _frameLoopRunning = true;
         _lastWallMs = -1;
 
+        // Generation token: a compositor callback queued before Shutdown()
+        // (e.g. Settings > Reset destroying and recreating the engine on this
+        // same canvas) must not revive itself alongside the new loop after
+        // the restart - it would double-step the engine every frame.
+        _frameLoopGeneration++;
+        var generation = _frameLoopGeneration;
+
         // Drive the engine from the compositor's frame clock (RequestAnimationFrame)
         // so engine steps, invalidation and presentation share one cadence. A
         // free-running 16 ms DispatcherTimer drifts against the display refresh
@@ -127,7 +135,7 @@ public partial class DasherCanvas : Control
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel != null)
         {
-            topLevel.RequestAnimationFrame(OnAnimationFrame);
+            topLevel.RequestAnimationFrame(ts => OnAnimationFrame(ts, generation));
         }
         else
         {
@@ -135,14 +143,14 @@ public partial class DasherCanvas : Control
         }
     }
 
-    private void OnAnimationFrame(TimeSpan timestamp)
+    private void OnAnimationFrame(TimeSpan timestamp, int generation)
     {
-        if (!_frameLoopRunning) return;
+        if (!_frameLoopRunning || generation != _frameLoopGeneration) return;
 
         StepFrame();
 
-        if (_frameLoopRunning)
-            TopLevel.GetTopLevel(this)?.RequestAnimationFrame(OnAnimationFrame);
+        if (_frameLoopRunning && generation == _frameLoopGeneration)
+            TopLevel.GetTopLevel(this)?.RequestAnimationFrame(ts => OnAnimationFrame(ts, generation));
     }
 
     private void StepFrame()
@@ -167,6 +175,7 @@ public partial class DasherCanvas : Control
         DisableEyeGazeNonBlocking();
         DisableJoystick();
         _frameLoopRunning = false;
+        _frameLoopGeneration++; // invalidate any still-queued compositor callback
         _fallbackTimer?.Stop();
         if (_handle != IntPtr.Zero)
         {
@@ -372,6 +381,7 @@ public partial class DasherCanvas : Control
         if (NativeBridge.dasher_has_engine_error(_handle) != 0)
         {
             _frameLoopRunning = false;
+            _frameLoopGeneration++; // invalidate any still-queued compositor callback
             _fallbackTimer?.Stop();
             EngineFaultDetected?.Invoke(this, EventArgs.Empty);
             return;
