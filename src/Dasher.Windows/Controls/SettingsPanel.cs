@@ -37,7 +37,6 @@ public class SettingsPanel : Control
 {
     private IntPtr _handle;
     private readonly StackPanel _panel;
-    private readonly ScrollViewer _scrollViewer;
     private string _currentCategory = "";
     private readonly Dictionary<string, List<ParameterDisplayInfo>> _groups = new();
 
@@ -70,15 +69,13 @@ public class SettingsPanel : Control
             Margin = new Thickness(16, 10, 16, 10),
         };
 
-        _scrollViewer = new ScrollViewer
-        {
-            Content = _panel,
-            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-            HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
-        };
-
-        VisualChildren.Add(_scrollViewer);
-        LogicalChildren.Add(_scrollViewer);
+        // No inner ScrollViewer: the docked settings host in MainWindow.axaml
+        // already wraps this panel in a ScrollViewer. Nesting ScrollViewers
+        // caused the bottom of long tabs (e.g. Privacy) to be clipped —
+        // the inner viewer never scrolled because it was measured with
+        // infinite height, while the outer one clipped at its viewport.
+        VisualChildren.Add(_panel);
+        LogicalChildren.Add(_panel);
     }
 
     public void Initialize(IntPtr handle)
@@ -2101,13 +2098,13 @@ public class SettingsPanel : Control
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        _scrollViewer.Measure(availableSize);
-        return _scrollViewer.DesiredSize;
+        _panel.Measure(availableSize);
+        return _panel.DesiredSize;
     }
 
     protected override Size ArrangeOverride(Size finalSize)
     {
-        _scrollViewer.Arrange(new Rect(finalSize));
+        _panel.Arrange(new Rect(finalSize));
         return finalSize;
     }
 }
