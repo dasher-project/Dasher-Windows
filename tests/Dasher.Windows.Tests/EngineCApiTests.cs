@@ -29,23 +29,44 @@ public class EngineCApiTests
         InitFailed,       // artifacts present but the engine failed — must fail, not skip
     }
 
+    private static string? _initError;
+
+    private static bool RequireEngine =>
+        Environment.GetEnvironmentVariable("DASHER_TESTS_REQUIRE_ENGINE") == "1";
+
     private static EngineAvailability TryCreateEngine(out IntPtr handle)
     {
         handle = IntPtr.Zero;
+        _initError = null;
         var dataDir = FindDataDir();
-        if (dataDir == null) return EngineAvailability.ArtifactsMissing;
+        if (dataDir == null)
+            return FailIfRequired("DasherCore/Data not found (walked up from " + AppContext.BaseDirectory + ")");
 
         try
         {
             var userDir = Path.Combine(Path.GetTempPath(), "dasher-tests", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(userDir);
-            handle = NativeBridge.dasher_create(dataDir, userDir, out _);
-            if (handle == IntPtr.Zero) return EngineAvailability.InitFailed;
+            handle = NativeBridge.dasher_create(dataDir, userDir, out var errorPtr);
+            if (handle == IntPtr.Zero)
+            {
+                _initError = errorPtr != IntPtr.Zero
+                    ? System.Runtime.InteropServices.Marshal.PtrToStringUTF8(errorPtr)
+                    : "dasher_create returned null without an error message";
+                return EngineAvailability.InitFailed;
+            }
             NativeBridge.dasher_set_screen_size(handle, 800, 600);
             return EngineAvailability.Ready;
         }
-        catch (DllNotFoundException) { return EngineAvailability.ArtifactsMissing; }
-        catch (BadImageFormatException) { return EngineAvailability.ArtifactsMissing; }
+        catch (DllNotFoundException e) { return FailIfRequired(e.Message); }
+        catch (BadImageFormatException e) { return FailIfRequired(e.Message); }
+    }
+
+    private static EngineAvailability FailIfRequired(string reason)
+    {
+        _initError = reason;
+        // CI sets DASHER_TESTS_REQUIRE_ENGINE=1 after building dasher.dll:
+        // a vacuous skip there would let ABI regressions through unnoticed.
+        return RequireEngine ? EngineAvailability.InitFailed : EngineAvailability.ArtifactsMissing;
     }
 
     [Fact]
@@ -56,7 +77,7 @@ public class EngineCApiTests
         // dropdowns rely on this — the old fixed 200-slot buffer truncated
         // the 622-alphabet list, and the pre-v0.2.5 probe returned 0.
         if (TryCreateEngine(out var handle) == EngineAvailability.ArtifactsMissing) return;
-        Assert.NotEqual(IntPtr.Zero, handle);
+        Assert.False(handle == IntPtr.Zero, $"dasher_create failed: {_initError}");
         try
         {
             var key = NativeBridge.dasher_find_parameter_key("SP_ALPHABET_ID");
@@ -84,7 +105,7 @@ public class EngineCApiTests
         // ABI), it re-measures every visible label every frame — measured
         // ~2,500 callbacks/sec before the fix, 0 after warm-up.
         if (TryCreateEngine(out var handle) == EngineAvailability.ArtifactsMissing) return;
-        Assert.NotEqual(IntPtr.Zero, handle);
+        Assert.False(handle == IntPtr.Zero, $"dasher_create failed: {_initError}");
         long calls = 0;
         NativeBridge.TextSizeCallback? cb = (text, fontSize, outW, outH, _) =>
         {
@@ -131,3 +152,4 @@ public class EngineCApiTests
         }
     }
 }
+
