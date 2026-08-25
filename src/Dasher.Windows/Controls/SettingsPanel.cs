@@ -1475,17 +1475,22 @@ public class SettingsPanel : Decorator
         };
 
         var names = new List<string>();
-        const int maxValues = 200;
-        var ptrs = new IntPtr[maxValues];
-        int count = NativeBridge.dasher_get_parameter_string_values(_handle, info.Key, ptrs, maxValues);
-
         int selectedIndex = -1;
-        for (int i = 0; i < count; i++)
+        // Probe-then-fetch (needs DasherCore v0.2.5: the probe call used to
+        // return 0 before querying, and a fixed 200-slot buffer truncated the
+        // full alphabet list).
+        int count = NativeBridge.dasher_get_parameter_string_values(_handle, info.Key, null!, 0);
+        if (count > 0)
         {
-            var name = Marshal.PtrToStringUTF8(ptrs[i]) ?? "";
-            names.Add(name);
-            comboBox.Items.Add(name);
-            if (name == current) selectedIndex = i;
+            var ptrs = new IntPtr[count];
+            count = Math.Min(count, NativeBridge.dasher_get_parameter_string_values(_handle, info.Key, ptrs, count));
+            for (int i = 0; i < count; i++)
+            {
+                var name = Marshal.PtrToStringUTF8(ptrs[i]) ?? "";
+                names.Add(name);
+                comboBox.Items.Add(name);
+                if (name == current) selectedIndex = i;
+            }
         }
 
         if (selectedIndex >= 0) comboBox.SelectedIndex = selectedIndex;
