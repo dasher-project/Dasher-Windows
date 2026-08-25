@@ -1573,12 +1573,16 @@ public class SettingsPanel : Control
             Margin = new Thickness(0, 12, 0, 0),
         });
 
+        // RFC 0016: app version, shown prominently after the analytics section.
+        // Same constant analytics/crash events report (UpdateChecker), so the UI
+        // can never disagree with telemetry. Interim until RFC 0006's About
+        // section exists.
         section.Children.Add(new TextBlock
         {
-            Text = "Full event schema: github.com/dasher-project/Dasher-Windows/blob/main/analytics-events.json",
-            FontSize = 10,
-            TextWrapping = TextWrapping.Wrap,
+            Text = $"Dasher {UpdateChecker.GetCurrentVersion()}",
+            FontSize = 11,
             Foreground = BrushMuted,
+            Margin = new Thickness(0, 8, 0, 0),
         });
 
         // ── Dasher 5 Import section ──
@@ -1708,18 +1712,6 @@ public class SettingsPanel : Control
             ResetSettingsRequested?.Invoke();
         };
         section.Children.Add(resetSettingsBtn);
-
-        // RFC 0016: app version at the bottom of the Privacy tab. Same
-        // constant analytics/crash events report (UpdateChecker), so the UI
-        // can never disagree with telemetry. Interim until RFC 0006's About
-        // section exists.
-        section.Children.Add(new TextBlock
-        {
-            Text = $"Dasher {UpdateChecker.GetCurrentVersion()}",
-            FontSize = 11,
-            Foreground = BrushMuted,
-            Margin = new Thickness(0, 24, 0, 0),
-        });
 
         _panel.Children.Add(section);
     }
