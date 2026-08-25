@@ -33,7 +33,7 @@ public class ParameterDisplayInfo
     public string Subgroup = "";
 }
 
-public class SettingsPanel : Control
+public class SettingsPanel : Decorator
 {
     private IntPtr _handle;
     private readonly StackPanel _panel;
@@ -69,13 +69,10 @@ public class SettingsPanel : Control
             Margin = new Thickness(16, 10, 16, 10),
         };
 
-        // No inner ScrollViewer: the docked settings host in MainWindow.axaml
-        // already wraps this panel in a ScrollViewer. Nesting ScrollViewers
-        // caused the bottom of long tabs (e.g. Privacy) to be clipped —
-        // the inner viewer never scrolled because it was measured with
-        // infinite height, while the outer one clipped at its viewport.
-        VisualChildren.Add(_panel);
-        LogicalChildren.Add(_panel);
+        // Decorator hosts a single child with framework-owned measure/arrange —
+        // no custom layout code. Scrolling is owned entirely by the ScrollViewer
+        // that wraps this panel in MainWindow.axaml.
+        Child = _panel;
     }
 
     public void Initialize(IntPtr handle)
@@ -2095,18 +2092,6 @@ public class SettingsPanel : Control
         };
         speakWordsRow.Children.Add(speakWordsToggle);
         _panel.Children.Add(speakWordsRow);
-    }
-
-    protected override Size MeasureOverride(Size availableSize)
-    {
-        _panel.Measure(availableSize);
-        return _panel.DesiredSize;
-    }
-
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        _panel.Arrange(new Rect(finalSize));
-        return finalSize;
     }
 }
 

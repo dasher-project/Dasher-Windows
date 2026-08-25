@@ -484,7 +484,8 @@
                     </ScrollViewer>
                 </DockPanel>
             </Border>
-            <ScrollViewer Padding="24,16" Background="{DynamicResource BgLight}">
+            <ScrollViewer Padding="24,16" Background="{DynamicResource BgLight}"
+                          VerticalScrollBarVisibility="Visible">
                 <controls:SettingsPanel x:Name="DockedSettingsPanel"/>
             </ScrollViewer>
         </DockPanel>
