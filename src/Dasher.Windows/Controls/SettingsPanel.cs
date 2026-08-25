@@ -33,11 +33,10 @@ public class ParameterDisplayInfo
     public string Subgroup = "";
 }
 
-public class SettingsPanel : Control
+public class SettingsPanel : Decorator
 {
     private IntPtr _handle;
     private readonly StackPanel _panel;
-    private readonly ScrollViewer _scrollViewer;
     private string _currentCategory = "";
     private readonly Dictionary<string, List<ParameterDisplayInfo>> _groups = new();
 
@@ -70,15 +69,10 @@ public class SettingsPanel : Control
             Margin = new Thickness(16, 10, 16, 10),
         };
 
-        _scrollViewer = new ScrollViewer
-        {
-            Content = _panel,
-            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-            HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
-        };
-
-        VisualChildren.Add(_scrollViewer);
-        LogicalChildren.Add(_scrollViewer);
+        // Decorator hosts a single child with framework-owned measure/arrange —
+        // no custom layout code. Scrolling is owned entirely by the ScrollViewer
+        // that wraps this panel in MainWindow.axaml.
+        Child = _panel;
     }
 
     public void Initialize(IntPtr handle)
@@ -406,29 +400,14 @@ public class SettingsPanel : Control
             Foreground = BrushLabel,
         });
 
-        var toggleRow = new DockPanel { Margin = new Thickness(0, 4, 0, 0) };
-        toggleRow.Children.Add(new TextBlock
+        var toggleRow = BuildToggleRow("Show WPM in status bar", settings.ShowTypingRate, isChecked =>
         {
-            Text = "Show WPM in status bar",
-            FontSize = 13,
-            Foreground = BrushLabel,
-            VerticalAlignment = VerticalAlignment.Center,
-        });
-        var toggle = new ToggleSwitch
-        {
-            IsChecked = settings.ShowTypingRate,
-            HorizontalAlignment = HorizontalAlignment.Right,
-        };
-        DockPanel.SetDock(toggle, Dock.Right);
-        toggleRow.Children.Add(toggle);
-        panel.Children.Add(toggleRow);
-
-        toggle.IsCheckedChanged += (s, e) =>
-        {
-            settings.ShowTypingRate = toggle.IsChecked ?? true;
+            settings.ShowTypingRate = isChecked;
             settings.Save();
             TypingRateVisibilityChanged?.Invoke(settings.ShowTypingRate);
-        };
+        });
+        toggleRow.Margin = new Thickness(0, 4, 0, 0);
+        panel.Children.Add(toggleRow);
 
         var resetBtn = new Button
         {
@@ -1274,6 +1253,40 @@ public class SettingsPanel : Control
         return toggle;
     }
 
+    /// <summary>
+    /// Label + toggle row matching the parameter-row layout: label docked left
+    /// with fixed width, toggle immediately beside it. Never right-aligns the
+    /// toggle — in a wide window that puts it far from its label.
+    /// </summary>
+    private Control BuildToggleRow(string label, bool isChecked, Action<bool> onChanged)
+    {
+        var row = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
+
+        var text = new TextBlock
+        {
+            Text = label,
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = BrushLabel,
+            VerticalAlignment = VerticalAlignment.Center,
+            Width = 180,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+        };
+        ToolTip.SetTip(text, label);
+        DockPanel.SetDock(text, Dock.Left);
+        row.Children.Add(text);
+
+        var toggle = new ToggleSwitch
+        {
+            IsChecked = isChecked,
+            HorizontalAlignment = HorizontalAlignment.Left,
+        };
+        toggle.IsCheckedChanged += (s, e) => onChanged(toggle.IsChecked == true);
+        row.Children.Add(toggle);
+
+        return row;
+    }
+
     private Control BuildSlider(ParameterDisplayInfo info)
     {
         var current = NativeBridge.dasher_get_long_parameter(_handle, info.Key);
@@ -1513,28 +1526,10 @@ public class SettingsPanel : Control
             Foreground = BrushValue,
         });
 
-        var toggleRow = new DockPanel { Margin = new Thickness(0, 8, 0, 0) };
-        toggleRow.Children.Add(new TextBlock
-        {
-            Text = "Send anonymous usage data",
-            FontSize = 13,
-            Foreground = BrushLabel,
-            VerticalAlignment = VerticalAlignment.Center,
-        });
-        var optInToggle = new ToggleSwitch
-        {
-            IsChecked = settings.OptedIn,
-            HorizontalAlignment = HorizontalAlignment.Right,
-        };
-        DockPanel.SetDock(optInToggle, Dock.Right);
-        toggleRow.Children.Add(optInToggle);
+        var toggleRow = BuildToggleRow("Send anonymous usage data", settings.OptedIn, isChecked =>
+            AnalyticsService.SetOptIn(isChecked));
+        toggleRow.Margin = new Thickness(0, 8, 0, 0);
         section.Children.Add(toggleRow);
-
-        optInToggle.IsCheckedChanged += (s, e) =>
-        {
-            var isChecked = optInToggle.IsChecked ?? false;
-            AnalyticsService.SetOptIn(isChecked);
-        };
 
         section.Children.Add(new TextBlock
         {
@@ -1573,12 +1568,16 @@ public class SettingsPanel : Control
             Margin = new Thickness(0, 12, 0, 0),
         });
 
+        // RFC 0016: app version, shown prominently after the analytics section.
+        // Same constant analytics/crash events report (UpdateChecker), so the UI
+        // can never disagree with telemetry. Interim until RFC 0006's About
+        // section exists.
         section.Children.Add(new TextBlock
         {
-            Text = "Full event schema: github.com/dasher-project/Dasher-Windows/blob/main/analytics-events.json",
-            FontSize = 10,
-            TextWrapping = TextWrapping.Wrap,
+            Text = $"Dasher {UpdateChecker.GetCurrentVersion()}",
+            FontSize = 11,
             Foreground = BrushMuted,
+            Margin = new Thickness(0, 8, 0, 0),
         });
 
         // ── Dasher 5 Import section ──
@@ -1708,18 +1707,6 @@ public class SettingsPanel : Control
             ResetSettingsRequested?.Invoke();
         };
         section.Children.Add(resetSettingsBtn);
-
-        // RFC 0016: app version at the bottom of the Privacy tab. Same
-        // constant analytics/crash events report (UpdateChecker), so the UI
-        // can never disagree with telemetry. Interim until RFC 0006's About
-        // section exists.
-        section.Children.Add(new TextBlock
-        {
-            Text = $"Dasher {UpdateChecker.GetCurrentVersion()}",
-            FontSize = 11,
-            Foreground = BrushMuted,
-            Margin = new Thickness(0, 24, 0, 0),
-        });
 
         _panel.Children.Add(section);
     }
@@ -2105,18 +2092,6 @@ public class SettingsPanel : Control
         };
         speakWordsRow.Children.Add(speakWordsToggle);
         _panel.Children.Add(speakWordsRow);
-    }
-
-    protected override Size MeasureOverride(Size availableSize)
-    {
-        _scrollViewer.Measure(availableSize);
-        return _scrollViewer.DesiredSize;
-    }
-
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        _scrollViewer.Arrange(new Rect(finalSize));
-        return finalSize;
     }
 }
 
