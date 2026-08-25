@@ -403,29 +403,14 @@ public class SettingsPanel : Control
             Foreground = BrushLabel,
         });
 
-        var toggleRow = new DockPanel { Margin = new Thickness(0, 4, 0, 0) };
-        toggleRow.Children.Add(new TextBlock
+        var toggleRow = BuildToggleRow("Show WPM in status bar", settings.ShowTypingRate, isChecked =>
         {
-            Text = "Show WPM in status bar",
-            FontSize = 13,
-            Foreground = BrushLabel,
-            VerticalAlignment = VerticalAlignment.Center,
-        });
-        var toggle = new ToggleSwitch
-        {
-            IsChecked = settings.ShowTypingRate,
-            HorizontalAlignment = HorizontalAlignment.Right,
-        };
-        DockPanel.SetDock(toggle, Dock.Right);
-        toggleRow.Children.Add(toggle);
-        panel.Children.Add(toggleRow);
-
-        toggle.IsCheckedChanged += (s, e) =>
-        {
-            settings.ShowTypingRate = toggle.IsChecked ?? true;
+            settings.ShowTypingRate = isChecked;
             settings.Save();
             TypingRateVisibilityChanged?.Invoke(settings.ShowTypingRate);
-        };
+        });
+        toggleRow.Margin = new Thickness(0, 4, 0, 0);
+        panel.Children.Add(toggleRow);
 
         var resetBtn = new Button
         {
@@ -1271,6 +1256,40 @@ public class SettingsPanel : Control
         return toggle;
     }
 
+    /// <summary>
+    /// Label + toggle row matching the parameter-row layout: label docked left
+    /// with fixed width, toggle immediately beside it. Never right-aligns the
+    /// toggle — in a wide window that puts it far from its label.
+    /// </summary>
+    private Control BuildToggleRow(string label, bool isChecked, Action<bool> onChanged)
+    {
+        var row = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
+
+        var text = new TextBlock
+        {
+            Text = label,
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = BrushLabel,
+            VerticalAlignment = VerticalAlignment.Center,
+            Width = 180,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+        };
+        ToolTip.SetTip(text, label);
+        DockPanel.SetDock(text, Dock.Left);
+        row.Children.Add(text);
+
+        var toggle = new ToggleSwitch
+        {
+            IsChecked = isChecked,
+            HorizontalAlignment = HorizontalAlignment.Left,
+        };
+        toggle.IsCheckedChanged += (s, e) => onChanged(toggle.IsChecked == true);
+        row.Children.Add(toggle);
+
+        return row;
+    }
+
     private Control BuildSlider(ParameterDisplayInfo info)
     {
         var current = NativeBridge.dasher_get_long_parameter(_handle, info.Key);
@@ -1510,28 +1529,10 @@ public class SettingsPanel : Control
             Foreground = BrushValue,
         });
 
-        var toggleRow = new DockPanel { Margin = new Thickness(0, 8, 0, 0) };
-        toggleRow.Children.Add(new TextBlock
-        {
-            Text = "Send anonymous usage data",
-            FontSize = 13,
-            Foreground = BrushLabel,
-            VerticalAlignment = VerticalAlignment.Center,
-        });
-        var optInToggle = new ToggleSwitch
-        {
-            IsChecked = settings.OptedIn,
-            HorizontalAlignment = HorizontalAlignment.Right,
-        };
-        DockPanel.SetDock(optInToggle, Dock.Right);
-        toggleRow.Children.Add(optInToggle);
+        var toggleRow = BuildToggleRow("Send anonymous usage data", settings.OptedIn, isChecked =>
+            AnalyticsService.SetOptIn(isChecked));
+        toggleRow.Margin = new Thickness(0, 8, 0, 0);
         section.Children.Add(toggleRow);
-
-        optInToggle.IsCheckedChanged += (s, e) =>
-        {
-            var isChecked = optInToggle.IsChecked ?? false;
-            AnalyticsService.SetOptIn(isChecked);
-        };
 
         section.Children.Add(new TextBlock
         {
