@@ -22,23 +22,30 @@ public class EngineCApiTests
         return null;
     }
 
-    private static bool TryCreateEngine(out IntPtr handle)
+    private enum EngineAvailability
+    {
+        Ready,
+        ArtifactsMissing, // dasher.dll / DasherCore/Data absent — legit local skip
+        InitFailed,       // artifacts present but the engine failed — must fail, not skip
+    }
+
+    private static EngineAvailability TryCreateEngine(out IntPtr handle)
     {
         handle = IntPtr.Zero;
         var dataDir = FindDataDir();
-        if (dataDir == null) return false;
+        if (dataDir == null) return EngineAvailability.ArtifactsMissing;
 
         try
         {
             var userDir = Path.Combine(Path.GetTempPath(), "dasher-tests", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(userDir);
             handle = NativeBridge.dasher_create(dataDir, userDir, out _);
-            if (handle == IntPtr.Zero) return false;
+            if (handle == IntPtr.Zero) return EngineAvailability.InitFailed;
             NativeBridge.dasher_set_screen_size(handle, 800, 600);
-            return true;
+            return EngineAvailability.Ready;
         }
-        catch (DllNotFoundException) { return false; }
-        catch (BadImageFormatException) { return false; }
+        catch (DllNotFoundException) { return EngineAvailability.ArtifactsMissing; }
+        catch (BadImageFormatException) { return EngineAvailability.ArtifactsMissing; }
     }
 
     [Fact]
@@ -48,7 +55,8 @@ public class EngineCApiTests
         // the full count so callers can size and re-fetch. The settings
         // dropdowns rely on this — the old fixed 200-slot buffer truncated
         // the 622-alphabet list, and the pre-v0.2.5 probe returned 0.
-        if (!TryCreateEngine(out var handle)) return;
+        if (TryCreateEngine(out var handle) == EngineAvailability.ArtifactsMissing) return;
+        Assert.NotEqual(IntPtr.Zero, handle);
         try
         {
             var key = NativeBridge.dasher_find_parameter_key("SP_ALPHABET_ID");
@@ -75,7 +83,8 @@ public class EngineCApiTests
         // measurements (e.g. an inverted success code on either side of the
         // ABI), it re-measures every visible label every frame — measured
         // ~2,500 callbacks/sec before the fix, 0 after warm-up.
-        if (!TryCreateEngine(out var handle)) return;
+        if (TryCreateEngine(out var handle) == EngineAvailability.ArtifactsMissing) return;
+        Assert.NotEqual(IntPtr.Zero, handle);
         long calls = 0;
         NativeBridge.TextSizeCallback? cb = (text, fontSize, outW, outH, _) =>
         {
