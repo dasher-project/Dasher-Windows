@@ -1184,6 +1184,33 @@ public class SettingsPanel : Decorator
         editor.HorizontalAlignment = HorizontalAlignment.Stretch;
         row.Children.Add(editor);
 
+        // The target-calibration offset learns while auto-calibration runs
+        // (eye-gaze) and is invisible state to the user — offer an explicit
+        // reset beside it (DasherCore #64).
+        if (info.Key == ParameterKeys.LP_TARGET_OFFSET)
+        {
+            var reset = new Button
+            {
+                Content = "Reset",
+                Padding = new Thickness(12, 4),
+                FontSize = 11,
+                Margin = new Thickness(8, 0, 0, 0),
+                VerticalAlignment = VerticalAlignment.Center,
+                Background = BrushControlBg,
+                Foreground = BrushLabel,
+                BorderThickness = new Thickness(0),
+            };
+            reset.Click += (s, e) =>
+            {
+                NativeBridge.dasher_set_long_parameter(_handle, ParameterKeys.LP_TARGET_OFFSET, 0);
+                // BuildStep's editor: StackPanel > Border > TextBlock value.
+                if (editor is StackPanel sp && sp.Children.OfType<Border>().FirstOrDefault() is { } border &&
+                    border.Child is TextBlock value)
+                    value.Text = "0";
+            };
+            row.Children.Add(reset);
+        }
+
         return row;
     }
 
