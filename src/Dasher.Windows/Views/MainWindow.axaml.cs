@@ -641,6 +641,11 @@ public partial class MainWindow : Window
             StatusBarShowBtn.IsVisible = false;
             BottomBar.IsVisible = false;
 
+            // Mini-bar WPM follows the typing-rate setting (RFC 0012)
+            var miniBarWpm = this.FindControl<TextBlock>("MiniBarWpm");
+            if (miniBarWpm != null)
+                miniBarWpm.IsVisible = Controls.OutputTextSettings.Load().ShowTypingRate;
+
             // Canvas only, no message pane
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
             MainGrid.Children.Add(DasherCanvas);
@@ -780,6 +785,12 @@ public partial class MainWindow : Window
                 : $"{(int)_vm.CurrentWpm} wpm";
         }
 
+        // Direct Mode: live WPM in the mini-bar (RFC 0012) — compact form,
+        // the mini-bar has no room for max/avg.
+        var miniBarWpm = this.FindControl<TextBlock>("MiniBarWpm");
+        if (miniBarWpm != null && _vm.IsKeyboardMode)
+            miniBarWpm.Text = $"{(int)_vm.CurrentWpm} wpm";
+
         // Game mode: show WPM in game target bar
         if (_gameModeActive)
         {
@@ -798,6 +809,14 @@ public partial class MainWindow : Window
         {
             label.IsVisible = visible;
             if (!visible) label.Text = "";
+        }
+
+        // Direct Mode mini-bar WPM follows the same setting (RFC 0012).
+        var miniBarWpm = this.FindControl<TextBlock>("MiniBarWpm");
+        if (miniBarWpm != null)
+        {
+            miniBarWpm.IsVisible = visible && _vm?.IsKeyboardMode == true;
+            if (!visible) miniBarWpm.Text = "";
         }
     }
 
