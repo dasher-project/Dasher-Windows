@@ -322,7 +322,18 @@ public partial class MainWindow : Window
             // import can carry Autocalibrate=true, which would re-enable
             // pointer drift for non-gaze users (DasherCore #64). The access
             // method — not the old file — decides.
-            AccessConfiguration.Load().Apply(_vm.Handle);
+            var migratedConfig = AccessConfiguration.Load();
+            // But a migrated InputFilter must survive the gate: apply() sets it
+            // from access.json, so adopt whatever the deferred params (v5
+            // InputFilter, or the engine's own persisted value) left active.
+            var filterPtr = NativeBridge.dasher_get_string_parameter(_vm.Handle, ParameterKeys.SP_INPUT_FILTER);
+            var activeFilter = filterPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(filterPtr) : null;
+            if (!string.IsNullOrEmpty(activeFilter))
+            {
+                migratedConfig.InputFilter = activeFilter;
+                migratedConfig.Save();
+            }
+            migratedConfig.Apply(_vm.Handle);
         }
 
         // Phase 5: Continue with UI setup

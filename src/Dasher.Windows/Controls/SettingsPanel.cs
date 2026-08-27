@@ -646,6 +646,11 @@ public class SettingsPanel : Decorator
             if (idx < 0 || idx >= filterOptions.Length) return;
             var newFilter = filterOptions[idx].Item1;
             filterHelp.Text = filterOptions[idx].Item2;
+            // Persist the choice in access.json so startup doesn't reset it
+            // (the engine also saves immediately, but access.json Apply()
+            // runs after the engine loads — it must agree, not clobber).
+            config.InputFilter = newFilter;
+            config.Save();
             NativeBridge.dasher_set_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER, newFilter);
             // Rebuild the Input tab to show/hide filter-specific parameters
             ShowCategory(_currentCategory);
@@ -659,6 +664,7 @@ public class SettingsPanel : Decorator
             var sel = method.ValidFor();
             config.Selection = sel[selectionCombo.SelectedIndex];
             subtitle.Text = config.Selection.Subtitle();
+            config.InputFilter = config.Selection.FilterName();
             UpdateTrackerVisibility();
             ApplyAccessConfig(config);
         };
@@ -671,6 +677,9 @@ public class SettingsPanel : Decorator
             {
                 config.Selection = valid[selectionCombo.SelectedIndex];
                 subtitle.Text = config.Selection.Subtitle();
+                // Keep the persisted input filter in step with the selection
+                // choice (Apply no longer derives it).
+                config.InputFilter = config.Selection.FilterName();
                 ApplyAccessConfig(config);
             }
         };
