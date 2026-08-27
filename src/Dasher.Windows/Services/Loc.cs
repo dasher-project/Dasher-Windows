@@ -62,13 +62,9 @@ public static class Loc
     /// </summary>
     public static void InitializeFromSystem(IntPtr engineHandle)
     {
-        var culture = CultureInfo.CurrentUICulture;
-        if (culture.IsNeutralCulture == false)
-            culture = culture.Parent; // e.g. en-GB -> en, pt-BR -> pt
-
-        var code = CatalogueLocales.FirstOrDefault(l => l == culture.Name)
-                   ?? CatalogueLocales.FirstOrDefault(l => l == culture.TwoLetterISOLanguageName)
-                   ?? "en";
+        // Resolve against the ORIGINAL UI culture — the ResourceManager uses
+        // it verbatim, so the engine must match it, not a reduced form.
+        var code = ResolveCatalogueLocale(CultureInfo.CurrentUICulture);
 
         _locale = code;
 
@@ -77,5 +73,21 @@ public static class Loc
             try { NativeBridge.dasher_set_locale(engineHandle, code); }
             catch { }
         }
+    }
+
+    /// <summary>
+    /// Map a culture to a catalogue locale: exact specific-culture matches win
+    /// first (zh-CN and pt-PT are catalogue entries in their own right, and the
+    /// ResourceManager will pick their satellite assemblies verbatim), then the
+    /// parent chain narrows (en-GB → en, fr-CA → fr). English otherwise.
+    /// </summary>
+    public static string ResolveCatalogueLocale(CultureInfo culture)
+    {
+        for (var c = culture; !string.IsNullOrEmpty(c?.Name); c = c.Parent)
+        {
+            if (CatalogueLocales.Contains(c.Name))
+                return c.Name;
+        }
+        return "en";
     }
 }
