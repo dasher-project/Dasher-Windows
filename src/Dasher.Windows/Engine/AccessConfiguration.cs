@@ -11,6 +11,16 @@ public class AccessConfiguration
     public string EyeTrackerType { get; set; } = "WindowsNative";
     public int UdpPort { get; set; } = 5555;
 
+    /// <summary>
+    /// The engine input filter (SP_INPUT_FILTER). Persisted explicitly rather
+    /// than derived from Selection: deriving clobbered the user's choice every
+    /// startup (e.g. Stylus Control reset to Normal Control) and, because the
+    /// engine saves settings immediately, destroyed the saved value too.
+    /// Null (absent in older access.json files) means "whatever the engine
+    /// persisted" — Apply leaves the filter untouched until the user chooses.
+    /// </summary>
+    public string? InputFilter { get; set; }
+
     private static readonly string ConfigPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher", "access.json");
 
@@ -18,8 +28,9 @@ public class AccessConfiguration
     {
         try
         {
-            NativeBridge.dasher_set_string_parameter(handle, ParameterKeys.SP_INPUT_FILTER,
-                Selection.FilterName());
+            if (!string.IsNullOrEmpty(InputFilter))
+                NativeBridge.dasher_set_string_parameter(handle, ParameterKeys.SP_INPUT_FILTER,
+                    InputFilter);
 
             if (Selection == SelectionMethod.Dwell)
                 NativeBridge.dasher_set_bool_parameter(handle, 17, 1);

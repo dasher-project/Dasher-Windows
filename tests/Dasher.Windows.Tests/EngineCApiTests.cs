@@ -98,6 +98,59 @@ public class EngineCApiTests
     }
 
     [Fact]
+    public void Input_filter_persists_across_engine_restart()
+    {
+        // The "input filter not remembered" report: the engine must round-trip
+        // SP_INPUT_FILTER through dasher_settings.xml (PERSISTENT +
+        // SAVE_IMMEDIATELY). The frontend fix (access.json no longer derives
+        // the filter) relies on this property — this pins it.
+        var dataDir = FindDataDir();
+        if (dataDir == null) { if (RequireEngine) Assert.Fail("DasherCore/Data not found"); return; }
+
+        // Invocation-unique (concurrent test processes must not stomp each
+        // other's settings files) but shared by BOTH engines below — the
+        // point is that the second engine restores what the first saved.
+        var sharedDir = Path.Combine(Path.GetTempPath(), "dasher-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(sharedDir);
+
+        var key = NativeBridge.dasher_find_parameter_key("SP_INPUT_FILTER");
+        Assert.True(key >= 0);
+
+        var handle = NativeBridge.dasher_create(dataDir, sharedDir, out var err);
+        Assert.False(handle == IntPtr.Zero,
+            err != IntPtr.Zero ? "dasher_create: " + Marshal.PtrToStringUTF8(err) : "dasher_create failed");
+        try
+        {
+            NativeBridge.dasher_set_screen_size(handle, 800, 600);
+            NativeBridge.dasher_set_string_parameter(handle, key, "Stylus Control");
+            Assert.Equal("Stylus Control", ReadFilter(handle, key));
+        }
+        finally
+        {
+            NativeBridge.dasher_destroy(handle);
+        }
+
+        // Second engine, SAME user dir: the persisted settings must restore it.
+        var handle2 = NativeBridge.dasher_create(dataDir, sharedDir, out _);
+        Assert.False(handle2 == IntPtr.Zero, "second dasher_create failed");
+        try
+        {
+            Assert.Equal("Stylus Control", ReadFilter(handle2, key));
+        }
+        finally
+        {
+            NativeBridge.dasher_destroy(handle2);
+            try { Directory.Delete(sharedDir, recursive: true); } catch { }
+        }
+    }
+
+    private static string? ReadFilter(IntPtr handle, int key)
+    {
+        var ptr = NativeBridge.dasher_get_string_parameter(handle, key);
+        return ptr != IntPtr.Zero ? Marshal.PtrToStringUTF8(ptr) : null;
+    }
+
+    [Fact]
     public void Autocalibrate_off_by_default_and_no_offset_drift()
     {
         // DasherCore #64 (the recurring restart drift): BP_AUTOCALIBRATE is
