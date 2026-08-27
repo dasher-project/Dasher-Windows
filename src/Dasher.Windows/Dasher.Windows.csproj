@@ -43,4 +43,24 @@
           DestinationFolder="$(PublishDir)"
           Condition="Exists('native\tobii_stream_engine.dll') And '$(PublishDir)' != ''" />
   </Target>
+
+  <!-- i18n: regenerate Resources/Strings*.resx from the shared catalogue
+       (shared-resources/ui-strings.json) whenever the catalogue is newer.
+       Incremental via Inputs/Outputs; best-effort — warns (not errors) when
+       Python is unavailable, so machines without it still build. CI additionally
+       verifies the committed files are fresh. -->
+  <PropertyGroup>
+    <SharedCatalogue>$(MSBuildThisFileDirectory)..\..\shared-resources\ui-strings.json</SharedCatalogue>
+    <GenTranslationsScript>$(MSBuildThisFileDirectory)..\..\Scripts\gen-translations.py</GenTranslationsScript>
+  </PropertyGroup>
+  <Target Name="GenerateStringsResx"
+          Inputs="$(SharedCatalogue)"
+          Outputs="$(MSBuildThisFileDirectory)Resources\Strings.resx"
+          BeforeTargets="BeforeBuild">
+    <Warning Text="shared-resources submodule missing — run 'git submodule update --init' to localise UI strings."
+             Condition="!Exists('$(SharedCatalogue)')" />
+    <Exec Command="python -X utf8 &quot;$(GenTranslationsScript)&quot; || py -3 -X utf8 &quot;$(GenTranslationsScript)&quot;"
+          Condition="Exists('$(SharedCatalogue)')"
+          ContinueOnError="WarnAndContinue" />
+  </Target>
 </Project>
