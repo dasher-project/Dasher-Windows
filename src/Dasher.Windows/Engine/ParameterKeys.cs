@@ -13,4 +13,6 @@ public static class ParameterKeys
     public static readonly int BP_CONTROL_MODE = NativeBridge.dasher_find_parameter_key("BP_CONTROL_MODE");
     public static readonly int SP_DASHER_FONT = NativeBridge.dasher_find_parameter_key("SP_DASHER_FONT");
     public static readonly int LP_MAX_BITRATE = NativeBridge.dasher_find_parameter_key("LP_MAX_BITRATE");
+    public static readonly int BP_AUTOCALIBRATE = NativeBridge.dasher_find_parameter_key("BP_AUTOCALIBRATE");
+    public static readonly int LP_TARGET_OFFSET = NativeBridge.dasher_find_parameter_key("LP_TARGET_OFFSET");
 }

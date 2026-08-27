@@ -23,6 +23,15 @@ public class AccessConfiguration
 
             if (Selection == SelectionMethod.Dwell)
                 NativeBridge.dasher_set_bool_parameter(handle, 17, 1);
+
+            // Auto-calibration is Dasher's 2004 "enhanced eyetracking mode" —
+            // it corrects systematic eye-tracker Y error, and only belongs on
+            // for gaze access: for pointers, deliberate off-centre steering
+            // reads as bias and drifts the target offset (DasherCore #64).
+            // Enabled per access method every startup, which also migrates
+            // the old persisted default-true for pointer users.
+            NativeBridge.dasher_set_bool_parameter(handle, ParameterKeys.BP_AUTOCALIBRATE,
+                Method == AccessMethod.EyeGaze ? 1 : 0);
         }
         catch { }
     }

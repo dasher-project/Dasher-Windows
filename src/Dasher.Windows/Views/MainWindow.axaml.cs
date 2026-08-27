@@ -311,6 +311,12 @@ public partial class MainWindow : Window
                 else
                     NativeBridge.dasher_set_string_parameter(_vm!.Handle, key, value);
             }
+
+            // The access-method gate must win over migrated values: a v5
+            // import can carry Autocalibrate=true, which would re-enable
+            // pointer drift for non-gaze users (DasherCore #64). The access
+            // method — not the old file — decides.
+            AccessConfiguration.Load().Apply(_vm.Handle);
         }
 
         // Phase 5: Continue with UI setup

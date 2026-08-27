@@ -98,6 +98,42 @@ public class EngineCApiTests
     }
 
     [Fact]
+    public void Autocalibrate_off_by_default_and_no_offset_drift()
+    {
+        // DasherCore #64 (the recurring restart drift): BP_AUTOCALIBRATE is
+        // Dasher's 2004 eye-tracker correction and must be off by default
+        // (v5 parity, restored in DasherCore v0.2.9). With defaults, dwelling
+        // above centre is steering, not bias, and must not move
+        // LP_TARGET_OFFSET (measured pre-fix: 0 -> -68 over five cycles).
+        if (TryCreateEngine(out var handle) == EngineAvailability.ArtifactsMissing) return;
+        Assert.False(handle == IntPtr.Zero, $"dasher_create failed: {_initError}");
+        try
+        {
+            var acKey = NativeBridge.dasher_find_parameter_key("BP_AUTOCALIBRATE");
+            var offKey = NativeBridge.dasher_find_parameter_key("LP_TARGET_OFFSET");
+            Assert.True(acKey >= 0 && offKey >= 0);
+
+            Assert.Equal(0, NativeBridge.dasher_get_bool_parameter(handle, acKey));
+
+            // Start zooming and dwell above the crosshair (y=260 on 800x600).
+            NativeBridge.dasher_mouse_down(handle);
+            long clock = 1000;
+            for (int i = 0; i < 150; i++)
+            {
+                NativeBridge.dasher_mouse_move(handle, 640f, 260f);
+                NativeBridge.dasher_frame(handle, clock += 16, out _, out _, out _, out _);
+            }
+            NativeBridge.dasher_mouse_up(handle);
+
+            Assert.Equal(0, NativeBridge.dasher_get_long_parameter(handle, offKey));
+        }
+        finally
+        {
+            NativeBridge.dasher_destroy(handle);
+        }
+    }
+
+    [Fact]
     public void Text_size_callback_hits_engine_cache_in_steady_state()
     {
         // The #36 regression shape: if the engine never accepts/caches
