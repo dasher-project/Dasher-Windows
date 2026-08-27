@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (pt-PT). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$,1f cps · %2$d ppm</value>
+  </data>
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>Um relatório de falha foi salvo em ~/Library/Logs/DiagnosticReports/Dasher-*.ips. Se você puder compartilhá-lo em uma issue no GitHub, isso nos ajudará a corrigir o bug.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>Aceita eventos de passar o cursor/ponteiro como entrada do Dasher. Habilite para rastreamento ocular ou ponteiros externos.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>Acesso</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>É necessária permissão de acessibilidade.</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>Adaptar a velocidade automaticamente</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>Configurações avançadas</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>Todas as configurações do Dasher serão restauradas aos valores padrão. Essa ação é irreversível.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>Alfabeto</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>Ajude a melhorar o Dasher</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>Agora não</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>Partilhe análises anónimas e relatórios de falhas.</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>Redefinir ID de análise</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>Análises de uso anônimas</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>A análise anónima de utilização ajuda-nos a compreender como o Dasher é utilizado e a corrigir falhas. Nenhum texto digitado, conteúdo da área de transferência ou informação pessoal é recolhido. Pode desativar esta opção a qualquer momento em Definições → Privacidade.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>Tempo de permanência no nível do aplicativo para selecionar</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>Centro Automotivo Target</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>Seleção automática após fixação. Ative somente se o modo de permanência do sistema operacional estiver desativado.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>Seleção automática após fixar o olhar durante o gesto de pinça. Ative somente se a permanência do sistema operacional estiver desativada.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>Verifique novamente</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>Escolher...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>Selecione Arquivo...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>Clique para configurar o modo de teclado (requer ydotool)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Perto</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>Tema de cores</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>Copiado para a área de transferência.</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>Cópia</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>Copiar tudo</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>Copiar tudo</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>Copiar comandos</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>Calibração atual</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>Personalização</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Escuro</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>Dasher</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>Dados do Dasher 5 detectados neste Mac.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>As configurações do Dasher 5 foram importadas com sucesso.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>O Dasher também funciona como um teclado do sistema, permitindo que você escreva em qualquer aplicativo. Basta ativá-lo nas Configurações.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>O Dasher coleta dados analíticos anônimos para entender o uso e corrigir falhas. Nenhum texto digitado, área de transferência ou informação pessoal é coletado. Consulte o esquema de eventos aberto em github.com/dasher-project/Dasher-Apple.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>O Dasher coleta dados analíticos anônimos e que respeitam a privacidade para entender os padrões de uso e corrigir falhas. Nenhum texto digitado, conteúdo da área de transferência ou informação pessoal é coletado.
+
+Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>Teclado Dasher</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>Teclado Dasher</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>Dasher precisa de permissão de acessibilidade para enviar mensagens de texto para outros aplicativos.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Preferências do Dasher</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>Dasher pediu demissão inesperadamente.</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>Diminuir a velocidade</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Padrão</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>Diagnóstico</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>Modo direto</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>Feito</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>Aguarde para clicar</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>Ative o Dasher em Configurações → Geral → Teclado → Teclados e, em seguida, habilite "Permitir acesso total" para que o Dasher possa falar e aprender.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>Primeiro, habilite a entrada de inclinação para acessar a calibração.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>Texto de treinamento para exportação</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>Contato visual</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>Não foi possível abrir:</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>Falha ao guardar:</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>Rápido</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>O Acesso Total permite que o Dasher leia o que você escreve e memorize seu treinamento. O teclado ainda funciona para digitação básica sem ele.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>Modo de jogo</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>Modo de jogo</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>Arquivo de texto do jogo</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>Entendi</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>Edição GTK</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>A opção Importar adiciona texto ao modelo de linguagem (anexando-o ao aprendizado existente). A opção Exportar salva seus dados de treinamento acumulados para backup ou transferência. A opção Redefinir exclui os dados de treinamento personalizados — o modelo retorna às suas configurações padrão na próxima execução.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>Importar do Dasher 5</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>Importar configurações</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>Importar texto de treinamento</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>Aumentar a velocidade</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Entrada</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>Joystick/gamepad (utilizar um joystick para controlar a direção)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>Inclinar (segure o dispositivo e incline-o para conduzir)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>Método de entrada</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>Toque (arraste no ecrã)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;Instale o ydotool para utilizar o modo de teclado&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>Não está instalado. Execute estes comandos e prima Tentar novamente:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>_Teclado</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>Sair do modo de teclado</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;O modo teclado não está disponível nesta versão&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>opacidade do modo de teclado</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>O modo de teclado foi interrompido: o ydotool não conseguiu introduzir texto. O ydotool está...</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>Ativar o modo de teclado</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;Língua / Localidade&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>Fundo</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>Posição do painel e modo de entrada direta</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>Teclado</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>Lado esquerdo</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>Lado direito</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>Principal</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>Aprendizado</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>Sair do modo de jogo</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>Luz</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>Linguagem</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>Localidade</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>Migração</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>Mova os olhos enquanto usa o gesto de pinça para direcionar a câmera.</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Novo</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>Nova mensagem</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>Nenhum dado do Dasher 5 foi encontrado neste Mac.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>Não existem definições disponíveis para esta secção.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>Nada a salvar</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>Nada a partilhar</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>No visionOS, faça um gesto de pinça na tela para começar a escrever, olhe ao redor enquanto mantém o gesto de pinça pressionado para direcionar a escrita e solte para pausar. O modelo de entrada é de pinça e olhar.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Aberto</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>Abrir...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>Falha ao abrir</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>Abra as configurações do teclado.</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>Abra as configurações</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>Abra as configurações do sistema</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>Abrir ficheiro de texto</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>Saída</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>Tamanho da fonte de saída</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>Toque no ecrã para começar a escrever.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>Colar</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>Pausa</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>Faça uma pausa ao desviar o olhar.</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>Para começar, faça um gesto de pinça e segure em qualquer lugar da tela.</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>Pinçar e olhar para escrever</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>Brincadeira</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>Entrada de ponteiro ao passar o cursor</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>Preferências</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>Privacidade</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;Privacidade&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>Reimportar do Dasher 5</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>Ler</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>Solte a pinça para pausar</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>Reiniciar</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>Redefinir todas as configurações para os padrões de fábrica</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>Restaurar todas as configurações para os valores padrão?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>Redefinir ID anônimo</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>Repor as definições do motor para os padrões de fábrica</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>Redefinir configurações</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>Restaurar padrões de fábrica</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>Redefinir dados de treinamento</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>Reiniciar dados de treinamento?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>Restaure todas as configurações do Dasher aos valores padrão. Esta ação é irreversível.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>Tentar novamente</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>Salvar...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>Falha ao guardar</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>Guardar ficheiro de texto</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>Salvo</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>Salvo:</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>Velocidade de digitalização</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>Configurações...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>Repor todas as definições para os padrões de fábrica</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>Redefinição de definições</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>Repor todas as definições do motor para os valores padrão de fábrica?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>Configurações (velocidade, cores, modo de controle, modelo de idioma)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>Partilhar</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>Exibir sobreposição de depuração de entrada</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>Mostrar velocidade de digitação (palavras por minuto)</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>Tamanho</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>Arquivos ignorados</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>Lento</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>Discurso</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>Discurso encerrado</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>Discurso sobre</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;Definições de fala&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>Velocidade</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>Velocidade </value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>Iniciar Calibração</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>Comece do zero</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>Parar</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>Sistema</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>texto</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>Arquivos de texto</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>A sobreposição de depuração desenha um painel verde no canto superior esquerdo da tela, mostrando a contagem de eventos de toque em tempo real e a última coordenada (x, y) registrada. Ao fazer o gesto de pinça e segurar, você verá `touch.began` e, em seguida, `touch.moved`, com as coordenadas mudando conforme você olha ao redor.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>Isso apagará seus dados de treinamento acumulados. O modelo de linguagem retornará às configurações padrão na próxima inicialização. Essa ação é irreversível.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>Calibração de inclinação</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>Incline seu dispositivo agora...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>Durante a calibração, incline o dispositivo em toda a sua amplitude de movimento.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>Saída nova/limpa</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>Abrir ficheiro</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>Guardar em arquivo</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>Partilhar texto</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>Treinamento</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>Dados de treinamento</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>Taxa de digitação</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>Use o Dasher como seu teclado.</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>Encontramos sua configuração do Dasher 5 neste Mac. Seu alfabeto, cores, configurações de velocidade e arquivos personalizados podem ser importados para o Dasher 6.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>O que foi encontrado</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>Intervalo X:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Intervalo Y:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ydotool encontrado. O modo teclado está pronto.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>Você pode importar mais tarde em Configurações &gt; Privacidade e Migração.</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>Seu olhar é rastreado continuamente apenas enquanto você faz o gesto de pinça e segura o dispositivo — é assim que todos os aplicativos de rastreamento por olhar do visionOS funcionam.</value>
+  </data>
+</root>

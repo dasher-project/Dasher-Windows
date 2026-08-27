@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (bn). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>একটি ক্র্যাশ রিপোর্ট ~/Library/Logs/DiagnosticReports/Dasher-*.ips-এ সংরক্ষিত হয়েছে। আপনি যদি এটি একটি গিটহাব ইস্যু-তে শেয়ার করেন, তবে তা আমাদের বাগটি সমাধান করতে সাহায্য করবে।</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>সম্বন্ধে</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>হোভার/পয়েন্টার ইভেন্টগুলোকে ড্যাশার ইনপুট হিসেবে গ্রহণ করুন। আই ট্র্যাকিং বা এক্সটার্নাল পয়েন্টারের জন্য এটি সক্রিয় করুন।</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>অ্যাক্সেস</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>প্রবেশগম্যতার অনুমতি প্রয়োজন</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>স্বয়ংক্রিয়ভাবে গতি সামঞ্জস্য করুন</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>উন্নত সেটিংস</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>ড্যাশার-এর সমস্ত সেটিংস তাদের ডিফল্ট মানে পুনরুদ্ধার করা হবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>বর্ণমালা</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>ড্যাশারকে উন্নত করতে সাহায্য করুন</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>এখন নয়</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>বেনামী বিশ্লেষণ এবং ক্র্যাশ রিপোর্ট শেয়ার করুন</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>বিশ্লেষণ আইডি রিসেট করুন</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>বেনামী ব্যবহার বিশ্লেষণ</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>বেনামী ব্যবহার বিশ্লেষণ আমাদের বুঝতে সাহায্য করে যে ড্যাশার কীভাবে ব্যবহৃত হচ্ছে এবং ক্র্যাশ ঠিক করতে সহায়তা করে। টাইপ করা কোনো লেখা, ক্লিপবোর্ডের বিষয়বস্তু বা ব্যক্তিগত তথ্য কখনোই সংগ্রহ করা হয় না। সেটিংস → গোপনীয়তা-তে গিয়ে যেকোনো সময় এটি থেকে বেরিয়ে আসুন।</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>অ্যাপ-স্তরে নির্বাচন করতে থাকুন</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>অটো</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>অটো-সেন্টার টার্গেট</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>দৃষ্টি নিবদ্ধ করার পর স্বয়ংক্রিয়ভাবে নির্বাচিত হবে। শুধুমাত্র OS ডুয়েল বন্ধ থাকলেই এটি সক্রিয় করুন।</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>পিঞ্চ করার সময় দৃষ্টি স্থির রাখলে স্বয়ংক্রিয়ভাবে নির্বাচন হবে। শুধুমাত্র OS dwell বন্ধ থাকলেই এটি সক্রিয় করুন।</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>বাতিল করুন</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>আবার পরীক্ষা করুন</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>বেছে নিন...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>ফাইল নির্বাচন করুন...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>পরিষ্কার</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>কীবোর্ড মোড সেট আপ করতে ক্লিক করুন (ydotool প্রয়োজন)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>বন্ধ করুন</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>রঙের থিম</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>ক্লিপবোর্ড-এ কপি করা হয়েছে</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>কপি করুন</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>সব কপি করুন</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>সব কপি করুন</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>কমান্ড কপি করুন</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>বর্তমান ক্রমাঙ্কন</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>কাস্টমাইজেশন</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>অন্ধকার</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>Dasher</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>এই ম্যাক-এ ড্যাশার ৫ ডেটা শনাক্ত করা হয়েছে।</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>ড্যাশার ৫-এর সেটিংস সফলভাবে ইম্পোর্ট করা হয়েছে।</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>ড্যাশার সিস্টেম কিবোর্ড হিসেবেও কাজ করে, ফলে আপনি যেকোনো অ্যাপে লিখতে পারবেন। সেটিংস থেকে এটি একবার চালু করুন।</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>ড্যাশার ব্যবহার বুঝতে এবং ক্র্যাশ ঠিক করতে বেনামী অ্যানালিটিক্স সংগ্রহ করে। টাইপ করা কোনো টেক্সট, ক্লিপবোর্ড বা ব্যক্তিগত তথ্য কখনোই সংগ্রহ করা হয় না। ওপেন ইভেন্ট স্কিমাটি github.com/dasher-project/Dasher-Apple-এ দেখুন।</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>ড্যাশার ব্যবহারের ধরণ বুঝতে এবং ক্র্যাশ ঠিক করতে বেনামী ও গোপনীয়তা রক্ষাকারী অ্যানালিটিক্স সংগ্রহ করে। টাইপ করা কোনো লেখা, ক্লিপবোর্ডের বিষয়বস্তু বা ব্যক্তিগত তথ্য কখনোই সংগ্রহ করা হয় না।
+
+আপনি সেটিংস &gt; গোপনীয়তা-তে গিয়ে যেকোনো সময় এটি পরিবর্তন করতে পারেন।</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>ড্যাশার কীবোর্ড</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>ড্যাশার কিবোর্ড</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>অন্যান্য অ্যাপ্লিকেশনে টেক্সট পাঠাতে ড্যাশারের অ্যাক্সেসিবিলিটি অ্যাক্সেস প্রয়োজন।</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Dasher পছন্দসমূহ</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>ড্যাশার অপ্রত্যাশিতভাবে পদত্যাগ করেছে</value>
+  </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>ড্যাশার v6</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;ড্যাশার v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>গতি কমানো</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>ডিফল্ট</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>ডায়াগনস্টিকস</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>সরাসরি মোড</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>সম্পন্ন হয়েছে</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>ক্লিক করতে বসুন</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>সেটিংস → সাধারণ → কীবোর্ড → কীবোর্ডস-এ গিয়ে ড্যাশার সক্রিয় করুন, তারপর সম্পূর্ণ অ্যাক্সেসের অনুমতি দিন (Allow Full Access) চালু করুন, যাতে ড্যাশার কথা বলতে ও শিখতে পারে।</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>ক্যালিব্রেশন অ্যাক্সেস করতে প্রথমে টিল্ট ইনপুট সক্রিয় করুন।</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>রপ্তানি প্রশিক্ষণ পাঠ্য</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>চোখের দৃষ্টি</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>প্যারেন্ট ফোল্ডারে স্থানান্তর করুন</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>সংরক্ষণ করতে ব্যর্থ হয়েছে</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>দ্রুত</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>ফুল অ্যাক্সেস ড্যাশারকে আপনার লেখা কথা বলতে এবং আপনার প্রশিক্ষণ মনে রাখতে সাহায্য করে। এটি ছাড়াও, সাধারণ এন্ট্রির জন্য কিবোর্ড কাজ করে।</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>গেম মোড</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>গেম মোড</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>গেম টেক্সট ফাইল</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>বুঝেছি।</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>GTK সংস্করণ</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>ইম্পোর্ট ল্যাঙ্গুয়েজ মডেলে টেক্সট যোগ করে (বিদ্যমান লার্নিং-এর সাথে যুক্ত করে)। এক্সপোর্ট আপনার সংগৃহীত ট্রেনিং ডেটা ব্যাকআপ বা স্থানান্তরের জন্য সংরক্ষণ করে। রিসেট কাস্টম ট্রেনিং ডেটা মুছে দেয় — পরবর্তীবার চালু করলে মডেলটি তার বিল্ট-ইন ডিফল্ট সেটিংসে ফিরে আসে।</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>ড্যাশার ৫ থেকে আমদানি করুন</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>সেটিংস আমদানি করুন</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>প্রশিক্ষণ পাঠ্য আমদানি করুন</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>গতি বাড়ান</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>ইনপুট</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>জয়স্টিক / গেমপ্যাড (দিক পরিবর্তন করার জন্য স্টিকটি নাড়ানো)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>কাত করুন (ডিভাইসটি ধরে রাখুন, চালনা করতে কাত করুন)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>ইনপুট পদ্ধতি</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>স্পর্শ করুন (ক্যানভাসে টেনে আনুন)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;কীবোর্ড মোড ব্যবহার করতে ydotool ইনস্টল করুন&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>ইনস্টল করা নেই । এই কমান্ডগুলি চালান, তারপরে আবার চেষ্টা করুন টিপুন:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>কিবোর্ড</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>কীবোর্ড মোড থেকে প্রস্থান করুন</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;এই বিল্ডে কীবোর্ড মোড উপলভ্য নয়&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>কীবোর্ড মোডের অস্বচ্ছতা</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>কীবোর্ড মোড বন্ধ করা হয়েছে: ydotool টেক্সট ইনজেক্ট করতে পারেনি । ydotoold কি</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>ডান বাটন:</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;ভাষা / স্থানীয়&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>নীচে</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>পেইন পজিশন এবং ডাইরেক্ট-এন্ট্রি মোড</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>কিবোর্ড</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>বাম দিকে</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>ডান দিকে</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>শীর্ষ</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>শিক্ষা</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>গেম মোড ত্যাগ করুন</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>আলো</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>ভাষা</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>লোকাল</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>অভিবাসন</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>চালনা করার জন্য চিমটি কাটার সাথে সাথে চোখ নাড়াচাড়া করুন।</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>নতুন</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>নতুন বার্তা</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>এই ম্যাক-এ কোনো ড্যাশার ৫ ডেটা পাওয়া যায়নি।</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>এই বিভাগের জন্য কোনও সেটিংস উপলব্ধ নেই ।</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>বাঁচানোর কিছুই নেই</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>শেয়ার করার মতো কিছুই নেই</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>ঠিক আছে</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>ভিশনওএস-এ, লেখা শুরু করতে ক্যানভাসের উপর পিঞ্চ করে ধরে রাখুন, দিক পরিবর্তন করতে পিঞ্চ করার সময় চারপাশে তাকান এবং বিরতি দিতে ছেড়ে দিন। এর ইনপুট মডেলটি হলো পিঞ্চ-অ্যান্ড-লুক।</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>খুলুন</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>খোলা...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>খুলতে ব্যর্থ হয়েছে</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>কীবোর্ড সেটিংস খুলুন</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>সেটিংস খুলুন</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>সিস্টেম সেটিংস খুলুন</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>টেক্সট ফাইল খুলুন</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>আউটপুট</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>আউটপুট ফন্ট সাইজ</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>লেখা শুরু করতে ক্যানভাসটি স্পর্শ করুন।</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>পেস্ট</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>বিরতি</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>অন্যদিকে তাকানোর সময় থামুন</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>শুরু করতে ক্যানভাসের যেকোনো জায়গায় চিমটি দিয়ে ধরে রাখুন।</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>লেখার জন্য চিমটি দিন এবং দেখুন</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>খেলা</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>পয়েন্টার হোভার ইনপুট</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>গোপনীয়তা</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;গোপনীয়তা&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>ড্যাশার ৫ থেকে পুনরায় আমদানি করুন</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>পড়া</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>থামানোর জন্য চিমটি ছেড়ে দিন।</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>রিসেট</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>সমস্ত সেটিংস ডিফল্টে রিসেট করুন</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>সমস্ত সেটিংস ডিফল্টে রিসেট করবেন?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>বেনামী আইডি রিসেট করুন</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>ইঞ্জিন সেটিংস ডিফল্টে রিসেট করুন</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>সেটিংস রিসেট করুন</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>ডিফল্টে রিসেট করুন</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>প্রশিক্ষণ ডেটা রিসেট করুন</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>প্রশিক্ষণ ডেটা রিসেট করবেন?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>ড্যাশার-এর সমস্ত সেটিংস ডিফল্ট মানে পুনরুদ্ধার করুন। এটি পূর্বাবস্থায় ফেরানো যাবে না।</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>পুনরায় চেষ্টা করুন</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>সংরক্ষণ করুন</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>সংরক্ষণ করুন...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>সংরক্ষণ ব্যর্থ হয়েছে</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>টেক্সট ফাইল সংরক্ষণ করুন</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>সংরক্ষিত</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>সংরক্ষণ হয়েছে</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>স্ক্যান গতি</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>সেটিংস</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>সেটিংস...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>সমস্ত সেটিংস ডিফল্টে রিসেট করুন</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>সেটিংস রিসেট করা হয়েছে</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>সমস্ত ইঞ্জিন সেটিংস তাদের বিল্ট-ইন ডিফল্টে রিসেট করবেন?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>সেটিংস (গতি, রং, নিয়ন্ত্রণ মোড, ভাষা মডেল)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>শেয়ার</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>ইনপুট ডিবাগ ওভারলে দেখান</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>টাইপিং রেট (WPM) দেখান</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>আকার</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>বাদ দেওয়া ফাইলগুলি</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>ধীর</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>বক্তৃতা</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>বক্তৃতা বন্ধ</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>বক্তৃতা</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;স্পিচ সেটিংস&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>গতি</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>গতি</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>ক্যালিব্রেশন শুরু করুন</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>নতুন করে শুরু করুন</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>থামুন</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>সিস্টেম</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>পাঠ্য</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>টেক্সট ফাইল</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>ডিবাগ ওভারলে ক্যানভাসের উপরের-বামে একটি সবুজ প্যানেল প্রদর্শন করে, যেখানে লাইভ টাচ ইভেন্টের সংখ্যা এবং সর্বশেষ রিপোর্ট করা (x, y) স্থানাঙ্ক দেখা যায়। যখন আপনি পিঞ্চ করে ধরে রাখবেন, তখন চারপাশে তাকানোর সাথে সাথে স্থানাঙ্ক পরিবর্তন হতে থাকবে এবং তারপরে touch.began ও touch.moved লেখাটি দেখতে পাবেন।</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>এটি আপনার সঞ্চিত প্রশিক্ষণ ডেটা মুছে দেবে। পরবর্তীবার চালু করলে ল্যাঙ্গুয়েজ মডেলটি তার অন্তর্নির্মিত ডিফল্ট সেটিংসে ফিরে আসবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>টিল্ট ক্যালিব্রেশন</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>এখন আপনার ডিভাইসটি কাত করুন...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>ক্যালিব্রেশনের সময় আপনার ডিভাইসটিকে এর সম্পূর্ণ গতিসীমা জুড়ে কাত করুন।</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>নতুন / পরিষ্কার আউটপুট</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>ফাইলটি খুলুন</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>ফাইলে সংরক্ষণ করুন</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>টেক্সট শেয়ার করুন</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>প্রশিক্ষণ</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>প্রশিক্ষণ ডেটা</value>
+  </data>
+  <data name="turbo" xml:space="preserve">
+    <value>টার্বো</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>টাইপ করার হার</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>আপনার কিবোর্ড হিসেবে ড্যাশার ব্যবহার করুন</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>আমরা এই ম্যাকটিতে আপনার Dasher 5 কনফিগারেশনটি খুঁজে পেয়েছি। আপনার অ্যালফাবেট, রং, স্পিড সেটিংস এবং কাস্টম ফাইলগুলো Dasher 6-এ ইম্পোর্ট করা যাবে।</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>যা পাওয়া গেল</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>X পরিসর:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Y পরিসর:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ydotool পাওয়া গেছে । কীবোর্ড মোড প্রস্তুত ।</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>আপনি পরে সেটিংস &gt; গোপনীয়তা ও মাইগ্রেশন-এ ইম্পোর্ট করতে পারবেন।</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>শুধুমাত্র পিঞ্চ করে ধরে রাখলেই আপনার দৃষ্টি অবিচ্ছিন্নভাবে ট্র্যাক করা হয় — ভিশনওএস-এর সমস্ত গেজ অ্যাপ এভাবেই কাজ করে।</value>
+  </data>
+</root>

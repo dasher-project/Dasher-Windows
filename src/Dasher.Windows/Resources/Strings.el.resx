@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (el). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f cpm · %2$d wpm</value>
+  </data>
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>Μια αναφορά σφάλματος αποθηκεύτηκε στο ~/Library/Logs/DiagnosticReports/Dasher-*.ips. Αν μπορείτε να την κοινοποιήσετε σε ένα πρόβλημα του GitHub, θα μας βοηθήσει να διορθώσουμε το σφάλμα.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>Σχετικά</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>Αποδοχή συμβάντων κατάδειξης/δείκτη ως είσοδο Dasher. Ενεργοποίηση για παρακολούθηση ματιών ή εξωτερικούς δείκτες.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>Πρόσβαση</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>Απαιτείται άδεια προσβασιμότητας</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>Αυτόματη προσαρμογή ταχύτητας</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>Προηγμένες ρυθμίσεις</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>Όλες οι ρυθμίσεις του Dasher θα επανέλθουν στις προεπιλεγμένες τιμές τους. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>Αλφάβητο</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>Βοηθήστε στη βελτίωση του Dasher</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>Όχι τώρα</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>Κοινοποίηση ανώνυμων αναλυτικών στοιχείων και αναφορών σφαλμάτων</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>Επαναφορά αναγνωριστικού αναλυτικών στοιχείων</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>Ανώνυμα αναλυτικά στοιχεία χρήσης</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>Τα ανώνυμα αναλυτικά στοιχεία χρήσης μας βοηθούν να κατανοήσουμε πώς χρησιμοποιείται το Dasher και να διορθώσουμε σφάλματα. Δεν συλλέγεται ποτέ πληκτρολογημένο κείμενο, περιεχόμενο προχείρου ή προσωπικά στοιχεία. Μπορείτε να εξαιρεθείτε οποιαδήποτε στιγμή από τις Ρυθμίσεις → Απόρρητο.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>Παραμονή σε επίπεδο εφαρμογής για επιλογή</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>Αυτο</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>Αυτόματο κεντράρισμα στόχου</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>Αυτόματη επιλογή μετά τη σταθεροποίηση. Ενεργοποίηση μόνο εάν η παραμονή στο λειτουργικό σύστημα είναι απενεργοποιημένη.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>Αυτόματη επιλογή αφού εστιάσετε το βλέμμα σας ενώ τσίμπημα. Ενεργοποιήστε την μόνο εάν η παραμονή στο λειτουργικό σύστημα είναι απενεργοποιημένη.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Ματαίωση</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>Έλεγχος ξανά</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>Επιλέγω...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>Επιλέξτε Αρχείο...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>Σαφής</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>Κάντε κλικ για να ρυθμίσετε τη λειτουργία πληκτρολογίου (χρειάζεται ydotool)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Κλείσιμο</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>Θέμα χρώματος</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>Αντιγράφηκε στο Πρόχειρο.</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>Αντιγραφή</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>Αντιγραφή όλων</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>Αντιγραφή όλων</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>Αντιγραφή εντολών</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>Βαθμονόμηση ρεύματος</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>Προσαρμογή</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Σκοτάδι</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>Dasher</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>Εντοπίστηκαν δεδομένα Dasher 5 σε αυτόν τον Mac.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>Οι ρυθμίσεις του Dasher 5 εισήχθησαν με επιτυχία.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>Το Dasher λειτουργεί επίσης ως πληκτρολόγιο συστήματος, επομένως μπορείτε να γράφετε σε οποιαδήποτε εφαρμογή. Ενεργοποιήστε το μία φορά στις Ρυθμίσεις.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>Το Dasher συλλέγει ανώνυμα αναλυτικά στοιχεία για την κατανόηση της χρήσης και την επιδιόρθωση σφαλμάτων. Δεν συλλέγεται ποτέ πληκτρολογημένο κείμενο, πρόχειρο ή προσωπικές πληροφορίες. Δείτε το σχήμα ανοιχτού συμβάντος στη διεύθυνση github.com/dasher-project/Dasher-Apple.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>Το Dasher συλλέγει ανώνυμα, σεβόμενα την ιδιωτικότητα αναλυτικά στοιχεία για να κατανοήσει τα πρότυπα χρήσης και να διορθώσει σφάλματα. Δεν συλλέγεται ποτέ πληκτρολογημένο κείμενο, περιεχόμενο προχείρου ή προσωπικά στοιχεία.
+
+Μπορείτε να το αλλάξετε αυτό οποιαδήποτε στιγμή στις Ρυθμίσεις &gt; Απόρρητο.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>Πληκτρολόγιο Dasher</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>Πληκτρολόγιο Dasher</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>Το Dasher χρειάζεται πρόσβαση προσβασιμότητας για να στείλει κείμενο σε άλλες εφαρμογές.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Προτιμήσεις Dasher</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>Ο Ντάσερ παραιτήθηκε απροσδόκητα.</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>Μείωση ταχύτητας</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Αθέτηση</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>Διαγνωστικά</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>Άμεση λειτουργία</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>Γινώμενος</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>Συγκεντρωθείτε για να κάνετε κλικ</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>Ενεργοποιήστε το Dasher στις Ρυθμίσεις → Γενικά → Πληκτρολόγιο → Πληκτρολόγια και, στη συνέχεια, ενεργοποιήστε την επιλογή Να επιτρέπεται η πλήρης πρόσβαση, ώστε το Dasher να μπορεί να μιλάει και να μαθαίνει.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>Ενεργοποιήστε πρώτα την εισαγωγή κλίσης για να αποκτήσετε πρόσβαση στη βαθμονόμηση.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>Εξαγωγή κειμένου εκπαίδευσης</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>Βλέμμα</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>: Αποτυχία ανοίγματος του :</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>Αποτυχία αποθήκευσης :</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>Γρήγορα</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>Η πλήρης πρόσβαση επιτρέπει στον Dasher να εκφωνεί ό,τι γράφετε και να θυμάται την εκπαίδευσή σας. Το πληκτρολόγιο εξακολουθεί να λειτουργεί για βασική εισαγωγή χωρίς αυτήν.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>Λειτουργία παιχνιδιού</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>Λειτουργία παιχνιδιού</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>Αρχείο κειμένου παιχνιδιού</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>Το κατάλαβα</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>Έκδοση GTK</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>Η εισαγωγή προσθέτει κείμενο στο μοντέλο γλώσσας (προστίθεται στην υπάρχουσα εκμάθηση). Η εξαγωγή αποθηκεύει τα συσσωρευμένα δεδομένα εκπαίδευσης για δημιουργία αντιγράφων ασφαλείας ή μεταφορά. Η επαναφορά διαγράφει τα προσαρμοσμένα δεδομένα εκπαίδευσης — το μοντέλο επιστρέφει στις ενσωματωμένες προεπιλογές του στην επόμενη εκκίνηση.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>Εισαγωγή από το Dasher 5</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>Εισαγωγή ρυθμίσεων</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>Εισαγωγή κειμένου εκπαίδευσης</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>Αύξηση ταχύτητας</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Εισαγωγή</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>Joystick / gamepad (εκτροπή ενός μοχλού για οδήγηση)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>Κλίση (κρατήστε τη συσκευή, γείρετε για να οδηγήσετε)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>Μέθοδος εισαγωγής</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>Αγγίξτε (σύρετε στον καμβά)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;Εγκαταστήστε το ydotool για να χρησιμοποιήσετε τη λειτουργία πληκτρολογίου&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>δεν έχει εγκατασταθεί. Εκτελέστε αυτές τις εντολές και, στη συνέχεια, πατήστε Επανάληψη:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>Πλήκτρα</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>Λειτουργία πλήκτρων</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;Η λειτουργία πληκτρολογίου δεν είναι διαθέσιμη σε αυτήν την έκδοση&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>Αδιαφάνεια λειτουργίας πληκτρολογίου</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>Η λειτουργία πληκτρολογίου σταμάτησε: το ydotool δεν μπόρεσε να εισάγει κείμενο. Είναι το ydotoold</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>Ενεργοποίηση λειτουργίας πληκτρολογίου</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;Γλώσσα / Τοπικές ρυθμίσεις&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>Κάτω μέρος</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>Θέση υαλοπίνακα και λειτουργία άμεσης εισόδου</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>Πληκτρολόγιο</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>Αριστερή πλευρά</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>Δεξιά πλευρά</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>Κορυφή</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>Μάθηση</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>Έξοδος από τη λειτουργία παιχνιδιού</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>Φως</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>Γλώσσα</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>Τοποθεσία</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>Μετανάστευση</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>Κουνήστε τα μάτια σας ενώ τσιμπάτε για να οδηγήσετε</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Νέα</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>Νέο μήνυμα</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>Δεν βρέθηκαν δεδομένα Dasher 5 σε αυτόν τον Mac.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>Δεν υπάρχουν διαθέσιμες ρυθμίσεις για αυτήν την ενότητα.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>Δεν υπάρχει τίποτα για αποθήκευση</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>Δεν υπάρχει τίποτα για κοινή χρήση</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>ΕΝΤΑΞΕΙ</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>Στο visionOS, κρατήστε πατημένο το δάχτυλο στον καμβά για να ξεκινήσετε να γράφετε, κοιτάξτε γύρω σας ενώ τραβάτε το δάχτυλο για να κατευθύνετε και αφήστε το για παύση. Το μοντέλο εισαγωγής είναι με το δάχτυλο και το δάχτυλο.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Άνοιγμα</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>Ανοιχτό...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>Το άνοιγμα απέτυχε</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>Άνοιγμα ρυθμίσεων πληκτρολογίου</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>Άνοιγμα Ρυθμίσεων</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>Άνοιγμα ρυθμίσεων συστήματος</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>Άνοιγμα αρχείου κειμένου</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>Τιμή εξόδου</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>Μέγεθος γραμματοσειράς εξόδου</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>Αγγίξτε τον καμβά για να ξεκινήσετε να γράφετε.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>Πάστα</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>Παύση</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>Παύση όταν κοιτάτε αλλού</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>Τσιμπήστε και κρατήστε πατημένο οπουδήποτε στον καμβά για να ξεκινήσετε</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>Τσιμπήστε και κοιτάξτε για να γράψετε</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>Αναπαραγωγή</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>Είσοδος δείκτη με αιώρηση</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>Προτιμήσεις</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>Μυστικότητα</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;Απόρρητο&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>Επανεισαγωγή από το Dasher 5</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>Αναγνωσμένο</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>Αφήστε το τσίμπημα για παύση</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>Επαναφορά</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>Επαναφορά όλων των ρυθμίσεων στις προεπιλογές</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>Επαναφορά όλων των ρυθμίσεων στις προεπιλογές τους;</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>Επαναφορά ανώνυμου αναγνωριστικού</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>Επαναφορά ρυθμίσεων κινητήρα στις προεπιλογές</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>Επαναφορά ρυθμίσεων</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>Επαναφορά στις προεπιλογές</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>Επαναφορά δεδομένων εκπαίδευσης</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>Επαναφορά δεδομένων εκπαίδευσης;</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>Επαναφέρετε όλες τις ρυθμίσεις του Dasher στις προεπιλεγμένες τιμές τους. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>Επανάληψη</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Αποθήκευση</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>Εκτός...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>Η αποθήκευση απέτυχε.</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>Αποθήκευση αρχείου κειμένου</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>Αποθηκεύτηκε</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>Αποθηκεύτηκε</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>Ταχύτητα σάρωσης</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Ρυθμίσεις</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>Ρυθμίσεις...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>Επαναφορά όλων των ρυθμίσεων στις προεπιλογές</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>Επαναφορά ρυθμίσεων</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>Επαναφέρετε όλες τις ρυθμίσεις του κινητήρα στις ενσωματωμένες προεπιλογές τους;</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>Ρυθμίσεις (ταχύτητα, χρώματα, λειτουργία ελέγχου, μοντέλο γλώσσας)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>Μερίδιο</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>Εμφάνιση επικάλυψης εντοπισμού σφαλμάτων εισόδου</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>Εμφάνιση ρυθμού πληκτρολόγησης (WPM)</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>Μέγεθος</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>Παραλειφθέντα αρχεία</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>Αργός</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>Ομιλία</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>Απενεργοποίηση ομιλίας</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>Ομιλία στο</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>Ρυθμίσεις ομιλίας</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>Ταχύτητα</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>Ταχύτητα</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>Έναρξη βαθμονόμησης</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>Ξεκινήστε από την αρχή</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>Στάση</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>Σύστημα</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>κείμενο</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>Αρχεία κειμένου</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>Η επικάλυψη εντοπισμού σφαλμάτων σχεδιάζει ένα πράσινο πλαίσιο επάνω αριστερά στον καμβά που δείχνει τον αριθμό των ζωντανών συμβάντων αφής και το τελευταίο που αναφέρθηκε (x, y). Όταν τραβάτε παρατεταμένα τα δάχτυλα, θα πρέπει να δείτε το touch.began και στη συνέχεια το touch.move με μεταβαλλόμενες συντεταγμένες καθώς κοιτάτε τριγύρω.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>Αυτό διαγράφει τα συσσωρευμένα δεδομένα εκπαίδευσης. Το μοντέλο γλώσσας θα επιστρέψει στις ενσωματωμένες προεπιλογές στην επόμενη εκκίνηση. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>Βαθμονόμηση κλίσης</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>Γείρετε τη συσκευή σας τώρα...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>Γείρετε τη συσκευή σας σε όλο το εύρος κίνησής της κατά τη διάρκεια της βαθμονόμησης.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>Νέα / καθαρή έξοδος</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>Άνοιγμα αρχείου</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>Αποθήκευση σε αρχείο</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>Κοινή χρήση κειμένου</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>Εκπαίδευση</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>Δεδομένα Εκπαίδευσης</value>
+  </data>
+  <data name="turbo" xml:space="preserve">
+    <value>Τούρμπο</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>Ρυθμός πληκτρολόγησης</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>Χρησιμοποιήστε το Dasher ως πληκτρολόγιό σας</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>Βρήκαμε τη διαμόρφωση του Dasher 5 σε αυτόν τον Mac. Το αλφάβητο, τα χρώματα, οι ρυθμίσεις ταχύτητας και τα προσαρμοσμένα αρχεία σας μπορούν να εισαχθούν στο Dasher 6.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>Τι βρέθηκε</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>Εύρος Χ:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Εύρος Y:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>βρέθηκε το ydotool. Η λειτουργία πληκτρολογίου είναι έτοιμη.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>Μπορείτε να κάνετε εισαγωγή αργότερα στις Ρυθμίσεις &gt; Απόρρητο και μετεγκατάσταση</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>Το βλέμμα σας παρακολουθείται συνεχώς μόνο όταν το πιέζετε παρατεταμένα — έτσι λειτουργούν όλες οι εφαρμογές βλέμματος visionOS.</value>
+  </data>
+</root>

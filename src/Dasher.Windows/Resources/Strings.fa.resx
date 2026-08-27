@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (fa). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>یک گزارش خرابی در ~/Library/Logs/DiagnosticReports/Dasher-*.ips ذخیره شد. اگر بتوانید آن را در یک مشکل GitHub به اشتراک بگذارید، به ما در رفع اشکال کمک می‌کند.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>درباره</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>رویدادهای شناور/اشاره‌گر را به عنوان ورودی Dasher بپذیرید. برای ردیابی چشم یا اشاره‌گرهای خارجی فعال کنید.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>دسترسی</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>مجوز دسترسی لازم است</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>سرعت را به صورت خودکار تنظیم کنید</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>تنظیمات پیشرفته</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>تمام تنظیمات Dasher به مقادیر پیش‌فرض خود بازگردانده می‌شوند. این کار قابل بازگشت نیست.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>الفبا</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>به بهبود Dasher کمک کنید</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>الان نه</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>اشتراک‌گذاری گزارش‌های تحلیلی و خرابی ناشناس</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>برای بازنشانی فیلتر تجزیه و تحلیل ، روی دکمه کلیک کنید</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>تجزیه و تحلیل استفاده ناشناس</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>تجزیه و تحلیل استفاده ناشناس به ما کمک می‌کند تا نحوه استفاده از Dasher را درک کنیم و مشکلات مربوط به خرابی را برطرف کنیم. هیچ متن تایپ شده، محتوای کلیپ بورد یا اطلاعات شخصی هرگز جمع‌آوری نمی‌شود. در هر زمان که خواستید، در تنظیمات → حریم خصوصی، انصراف خود را اعلام کنید.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>اقامت در سطح برنامه برای انتخاب</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>خودکار</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>هدف مرکز خودکار</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>انتخاب خودکار پس از تثبیت. فقط در صورتی فعال شود که OS dwell خاموش باشد.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>انتخاب خودکار پس از ثابت نگه داشتن نگاه هنگام گرفتن دو انگشت. فقط در صورتی فعال شود که OS dwell خاموش باشد.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>لغو</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>دوباره بررسی کنید</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>انتخاب کن...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>انتخاب فایل...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>برای تنظیم حالت صفحه‌کلید کلیک کنید (به ydotool نیاز دارد)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>بستن</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>تم رنگی</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>در کلیپ بورد کپی شد.</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>کپی</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>همه را کپی کنید</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>کپی کردن همه</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>کپی کردن دستورات</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>کالیبراسیون جریان</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>سفارشی سازی</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>تیره</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>دَشِر</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>داده‌های Dasher 5 روی این مک شناسایی شد.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>تنظیمات Dasher 5 با موفقیت وارد شد.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>Dasher همچنین به عنوان یک صفحه کلید سیستمی عمل می‌کند، بنابراین می‌توانید در هر برنامه‌ای بنویسید. آن را یک بار در تنظیمات فعال کنید.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>دَشِر (Dasher) برای درک میزان استفاده و رفع مشکلات، تجزیه و تحلیل‌های ناشناس را جمع‌آوری می‌کند. هیچ متن تایپ‌شده، کلیپ‌بورد یا اطلاعات شخصی هرگز جمع‌آوری نمی‌شود. طرحواره رویداد باز را در github.com/dasher-project/Dasher-Apple ببینید.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>دشر به صورت ناشناس و با رعایت حریم خصوصی، تجزیه و تحلیل‌هایی را جمع‌آوری می‌کند تا الگوهای استفاده را درک کرده و خرابی‌ها را برطرف کند. هیچ متن تایپ شده، محتوای کلیپ‌بورد یا اطلاعات شخصی هرگز جمع‌آوری نمی‌شود.
+
+می‌توانید این مورد را در هر زمان در تنظیمات &gt; حریم خصوصی تغییر دهید.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>کیبورد دشر</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>کیبورد دشر</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>دشر برای ارسال متن به برنامه‌های دیگر به دسترسی دسترسی نیاز دارد.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>ترجیحات دَشر</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>دشر به طور غیرمنتظره‌ای استعفا داد</value>
+  </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>داشر نسخه ۶</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;داشر نسخه ۶&lt;/b&gt;&lt;/big&gt; 
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>کاهش سرعت</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>پیش‌فرض</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>تشخیص</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>حالت مستقیم</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>انجام شد</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>برای کلیک کردن، مکث کنید</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>Dasher را از طریق مسیر تنظیمات → عمومی → صفحه‌کلید → صفحه‌کلید فعال کنید، سپس گزینه «اجازه دسترسی کامل» را فعال کنید تا Dasher بتواند صحبت کند و یاد بگیرد.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>برای دسترسی به کالیبراسیون، ابتدا ورودی شیب را فعال کنید.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>متن آموزشی را صادر کنید</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>نگاه خیره</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>پرونده باز نشد</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>ذخیره ناموفق بود</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>سریع</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>دسترسی کامل به Dasher اجازه می‌دهد آنچه را که شما می‌نویسید، بخواند و آموزش‌های شما را به خاطر بسپارد. صفحه کلید بدون آن نیز برای ورود اولیه کار می‌کند.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>حالت بازی</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>حالت بازی</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>فایل متنی بازی</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>گرفتمش.</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>نسخه GTK</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>وارد کردن، متن را به مدل زبان اضافه می‌کند (به یادگیری موجود اضافه می‌کند). صادر کردن، داده‌های آموزشی انباشته‌شده شما را برای پشتیبان‌گیری یا انتقال ذخیره می‌کند. بازنشانی، داده‌های آموزشی سفارشی را حذف می‌کند - مدل در راه‌اندازی بعدی به پیش‌فرض‌های داخلی خود باز می‌گردد.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>وارد کردن از Dasher 5</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>تنظیمات را وارد کنید</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>وارد کردن متن آموزشی</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>افزایش سرعت</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>ورودی</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>جوی‌استیک / گیم‌پد (برای هدایت، دسته را منحرف کنید)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>کج کردن (دستگاه را نگه دارید، برای هدایت کج کنید)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>روش ورودی</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>لمس (کشیدن روی بوم)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;برای استفاده از حالت کیبورد، ydotool را نصب کنید&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>نصب نشده است. این دستورات را اجرا کنید، سپس دوباره امتحان کنید:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>صفحه‌کلید</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>سودهی برای حالت صفحه کلید</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;حالت صفحه‌کلید در این بیلد در دسترس نیست&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>کدورت حالت صفحه کلید</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>حالت صفحه کلید متوقف شد: ydotool نتوانست متن را تزریق کند. آیا ydotool قدیمی است؟</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>فعال کردن حالت صفحه کلید</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;زبان / منطقه&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>پایین</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>مدخل مستقیم</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>کیبورد</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>سمت چپ</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>سمت راست</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>بالا</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>یادگیری</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>حالت بازی را ترک کنید</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>نور</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>زبان</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>محل</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>مهاجرت</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>برای هدایت، هنگام نیشگون گرفتن، چشمان خود را حرکت دهید</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>جدید</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>پیام جدید</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>هیچ داده‌ای از Dasher 5 در این مک یافت نشد.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>تنظیماتی برای این بخش وجود ندارد.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>چیزی برای ذخیره کردن نیست</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>چیزی برای به اشتراک گذاشتن وجود ندارد</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>باشه</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>در visionOS، برای شروع نوشتن، انگشت خود را روی بوم به طرفین گرفته و نگه دارید، برای هدایت، در حین نوشتن به اطراف نگاه کنید و برای مکث، انگشت خود را رها کنید. مدل ورودی به صورت نیشگون گرفتن و نگاه کردن است.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>باز کردن</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>باز...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>باز کردن ناموفق بود</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>تنظیمات صفحه کلید را باز کنید</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>تنظیمات را باز کنید</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>تنظیمات سیستم را باز کنید</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>باز کردن فایل متنی</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>برون داد</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>اندازه فونت خروجی</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>برای شروع نوشتن، بوم را لمس کنید.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>چسباندن</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>مکث</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>هنگام نگاه کردن به دوردست مکث کنید</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>برای شروع، هر جایی از بوم را به هم نزدیک کرده و نگه دارید</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>برای نوشتن، انگشتتان را به هم نزدیک کنید و نگاه کنید</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>شروع</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>ورودی نشانگر موس</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>مقدماتی</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>حریم خصوصی</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;حریم خصوصی&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>دوباره از Dasher 5 وارد کنید</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>خواندن</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>برای مکث، نیشگون گرفتن را رها کنید</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>تنظیم مجدد</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>همه تنظیمات را به پیش‌فرض‌ها برگردانید</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>همه تنظیمات را به حالت پیش‌فرضشان برمی‌گرداند؟</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>شناسه ناشناس را بازنشانی کنید</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>بازگردانی تنظیمات به پیش فرض</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>تنظیمات را بازنشانی کنید</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>تنظیم مجدد به پیش‌فرض‌ها</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>داده‌های آموزشی را بازنشانی کنید</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>داده‌های آموزشی را بازنشانی کنید؟</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>تمام تنظیمات Dasher را به مقادیر پیش‌فرضشان برگردانید. این کار قابل بازگشت نیست.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>تلاش مجدد</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>ذخیره</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>ذخیره...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>ذخیره ناموفق بود</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>ذخیره فایل متنی</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>ذخیره شده</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>ذخیره شده</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>سرعت اسکن</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>تنظیمات</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>تنظیمات...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>تمام تنظیمات را به حالت پیش‌فرض برگردانید</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>تنظیمات ریست شدند</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>تمام تنظیمات موتور را به پیش‌فرض‌های داخلی‌شان برگردانید؟</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>تنظیمات (سرعت، رنگ‌ها، حالت کنترل، مدل زبان)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>اشتراک گذاری</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>نمایش ورودی اشکال‌زدایی روی هم افتاده</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>نمایش نرخ تایپ (WPM)</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>اندازه</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>فایل‌های رد شده</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>آهسته</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>گفتار</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>سخنرانی خاموش</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>سخنرانی در مورد</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;تنظیمات گفتار&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>سرعت</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>سرعت</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>کالیبراسیون را شروع کنید</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>از نو شروع کنید</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>توقف</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>سیستم</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>پرونده‌های متنی</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>لایه اشکال‌زدایی یک پنل سبز در بالا سمت چپ بوم رسم می‌کند که تعداد رویدادهای لمسی زنده و آخرین گزارش‌شده (x، y) را نشان می‌دهد. وقتی انگشت خود را روی صفحه نگه می‌دارید، باید touch.begin و سپس touch.moved را با تغییر مختصات هنگام نگاه کردن به اطراف ببینید.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>این کار داده‌های آموزشی انباشته‌شده شما را حذف می‌کند. مدل زبان در اجرای بعدی به پیش‌فرض‌های داخلی خود باز خواهد گشت. این کار قابل بازگشت نیست.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>کالیبراسیون شیب</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>همین الان دستگاه خود را کج کنید...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>در طول کالیبراسیون، دستگاه خود را در تمام دامنه حرکتی آن کج کنید.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>خروجی جدید/پاک کردن</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>باز کردن فایل</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>ذخیره در فایل</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>متن را به اشتراک بگذارید</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>آموزش</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>داده‌های آموزشی</value>
+  </data>
+  <data name="turbo" xml:space="preserve">
+    <value>توربو</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>نرخ تایپ</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>از Dasher به عنوان کیبورد خود استفاده کنید</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>ما پیکربندی Dasher 5 شما را در این مک پیدا کردیم. حروف الفبا، رنگ‌ها، تنظیمات سرعت و فایل‌های سفارشی شما را می‌توان به Dasher 6 وارد کرد.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>چه چیزی پیدا شد؟</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>محدوده ایکس:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>محدوده Y:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ابزار ydotool پیدا شد. حالت صفحه کلید آماده است.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>می‌توانید بعداً در تنظیمات &gt; حریم خصوصی و مهاجرت وارد کنید</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>نگاه شما فقط در حالی که انگشت خود را به هم نزدیک می‌کنید و نگه می‌دارید، به طور مداوم ردیابی می‌شود - این نحوه عملکرد همه برنامه‌های نگاه visionOS است.</value>
+  </data>
+</root>

@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (zu). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>Umbiko wokuphahlazeka ulondolozwe ku-~/Library/Logs/DiagnosticReports/Dasher-*.ips. Uma ungawabelana ngawo enkingeni ye-GitHub, uyasisiza ukulungisa iphutha.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>Mayelana</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>Yamukela imicimbi ye-hover/pointer njengokufaka kwe-Dasher. Nika amandla ukulandelela amehlo noma izikhombisi zangaphandle.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>Ukufinyelela</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>Imvume Yokufinyeleleka Iyadingeka</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>Lungisa Isivinini Ngokuzenzakalelayo</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>Izilungiselelo ezithuthukisiwe</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>Zonke izilungiselelo ze-Dasher zizobuyiselwa kumanani azo azenzakalelayo. Lokhu akukwazi ukuhlehliswa.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>Izinhlamvu zamagama</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>Siza ukuthuthukisa i-Dasher</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>Hhayi manje</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>Yabelana ngokuhlaziywa okungaziwa kanye nemibiko yokuphahlazeka</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>Setha kabusha i-ID yokuhlaziya</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>Ukuhlaziywa kokusetshenziswa okungaziwa</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>Ukuhlaziywa kokusetshenziswa okungaziwa kusisiza siqonde ukuthi i-Dasher isetshenziswa kanjani futhi silungise ukuphahlazeka. Akukho mbhalo othayishiwe, okuqukethwe kwebhodi lokunamathisela, noma ulwazi lomuntu siqu oluqoqwayo. Khetha ukuphuma noma nini kuzilungiselelo → Ubumfihlo.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>Hlala ku-App-Level ukuze Ukhethe</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>Okuzenzakalelayo</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>I-Auto-Centre Target</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>Khetha ngokuzenzakalelayo ngemva kokulungisa. Vumela kuphela uma i-OS dwell ivaliwe.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>Khetha ngokuzenzakalelayo ngemva kokulungisa amehlo akho ngenkathi ucindezela. Vumela kuphela uma i-OS dwell ivaliwe.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Khansela</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>Hlola Futhi</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>Khetha...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>Khetha Ifayela...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>Sula</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>Chofoza ukuze usethe imodi yekhibhodi (idinga i-ydotool)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Vala</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>Itimu Yombala</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>Kukopishwe ebhodini lokunamathisela.</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>Kopisha</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>Kopisha konke</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>Kopisha Konke</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>Kopisha imiyalo</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>Ukulinganisa Kwamanje</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>Ukwenza ngokwezifiso</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Okumnyama</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>I-Dasher</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>Idatha ye-Dasher 5 itholakele kule Mac.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>Izilungiselelo ze-Dasher 5 zingeniswe ngempumelelo.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>I-Dasher isebenza futhi njengekhibhodi yesistimu, ngakho-ke ungabhala kunoma yiluphi uhlelo lokusebenza. Lunike amandla kanye kuzilungiselelo.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>I-Dasher iqoqa ukuhlaziya okungaziwa ukuze iqonde ukusetshenziswa nokulungisa ukuphahlazeka. Akukho mbhalo othayishiwe, ibhodi lokunamathisela, noma ulwazi lomuntu siqu oluqoqwayo. Bheka uhlelo lomcimbi oluvulekile ku-github.com/dasher-project/Dasher-Apple.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>I-Dasher iqoqa ukuhlaziya okungaziwa, okuhlonipha ubumfihlo ukuze iqonde amaphethini okusetshenziswa futhi ilungise ukuphahlazeka. Akukho mbhalo othayishiwe, okuqukethwe kwebhodi lokunamathisela, noma ulwazi lomuntu siqu oluqoqwayo.
+
+Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>Ikhibhodi ye-Dasher</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>Ikhibhodi ye-Dasher</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>I-Dasher idinga ukufinyelela kokufinyelela ukuze ithumele umbhalo kwezinye izinhlelo zokusebenza.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Izintandokazi ze-Dasher</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>UDasher uyeke ngokungalindelekile</value>
+  </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>I-Dasher v6</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;I-Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>Yehlisa Isivinini</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Okuzenzakalelayo</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>Ukuxilongwa</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>Imodi Eqondile</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>Kuqediwe</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>Hlala ukuze uchofoze</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>Nika amandla i-Dasher ngaphansi kwezilungiselelo → Okuvamile → Ikhibhodi → Amakhibhodi, bese uvula i-Vumela Ukufinyelela Okugcwele ukuze i-Dasher ikwazi ukukhuluma nokufunda.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>Nika amandla okokufaka kokuthambekela kuqala ukuze ufinyelele ekulinganisweni.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>Thumela Umbhalo Wokuqeqesha</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>Ukubuka Kwamehlo</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>Yehlulekile ukuvula:</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>Yehlulekile ukulondoloza:</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>Okusheshayo</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>Ukufinyelela Okugcwele kuvumela i-Dasher ukuthi ikhulume lokho okubhalayo futhi ikhumbule ukuqeqeshwa kwakho. Ikhibhodi isasebenza ekungeneni okuyisisekelo ngaphandle kwayo.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>Imodi yegeyimu</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>Imodi Yomdlalo</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>Ifayela Lombhalo Lomdlalo</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>Ngiyitholile</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>Uhlelo lwe-GTK</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>Ukungenisa kunezela umbhalo kumodeli yolimi (kunezela ekufundeni okukhona). Ukuthumela ngaphandle kulondoloza idatha yakho yokuqeqesha eqoqwe ukuze igcinwe noma idluliselwe. Ukusetha kabusha kususa idatha yokuqeqesha ngokwezifiso — imodeli ibuyela kokuzenzakalelayo kwayo okwakhelwe ngaphakathi ekuqalisweni okulandelayo.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>Ngenisa kusuka ku-Dasher 5</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>Ngenisa izilungiselelo</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>Ngenisa Umbhalo Wokuqeqesha</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>Khulisa isivinini</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Okokufaka</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>Induku yokudlala/iphedi yomdlalo (ukuguqula induku ukuze uyiqondise)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>Tshekisa (bamba idivayisi, tshekisa ukuze uqondise)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>Indlela yokufaka</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>Thinta (hudula kukhanvasi)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;Faka i-ydotool ukuze usebenzise imodi yekhibhodi&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>ayifakiwe. Sebenzisa le miyalo, bese ucindezela u-Retry:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>_Ikhibhodi</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>Phuma kwimodi yekhibhodi</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;Imodi yekhibhodi ayitholakali kulesi sakhiwo&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>Ukungacaci kwemodi yekhibhodi</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>Imodi yekhibhodi imile: i-ydotool ayikwazanga ukufaka umbhalo. Ingabe i-ydotoold</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>Nika amandla imodi yekhibhodi</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;Ulimi / Indawo&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>Ngaphansi</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>Indawo yephaneli kanye nemodi yokungena ngqo</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>Ikhibhodi</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>Uhlangothi lwesobunxele</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>Uhlangothi lwesokudla</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>Phezulu</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>Ukufunda</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>Shiya imodi yomdlalo</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>Ukukhanya</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>Ulimi</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>Indawo</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>Ukufuduka</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>Hambisa amehlo akho ngenkathi ucindezela ukuze uqondise</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Okusha</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>Umlayezo Omusha</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>Akukho datha ye-Dasher 5 etholakele kule Mac.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>Azikho izilungiselelo ezitholakalayo zalesi sigaba.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>Akukho okufanele kulondolozwe</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>Akukho ongakwabelana ngakho</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>KULUNGILE</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>Ku-visionOS, cindezela bese ubamba ku-canvas ukuze uqale ukubhala, bheka nxazonke ngenkathi ucindezela ukuze uqondise, bese udedela ukuze ume isikhashana. Imodeli yokufaka i-pinch-and-look.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Vula</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>Vula...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>Ukuvula kwehlulekile</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>Vula Izilungiselelo Zekhibhodi</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>Vula Izilungiselelo</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>Vula Izilungiselelo Zesistimu</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>Vula Ifayela Lombhalo</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>Umphumela</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>Usayizi Wefonti Yokukhipha</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>Thinta ikhanvasi ukuze uqale ukubhala.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>Namathisela</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>Misa isikhashana</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>Misa isikhashana uma ubheka kude</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>Cindezela bese ubamba noma kuphi kukhanvasi ukuze uqale</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>Cindezela bese ubheka ukuthi ubhale ini</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>Dlala</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>Okokufaka Kokuhambisa Ngesikhombisi</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>Okuthandwayo</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>Ubumfihlo</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;Ubumfihlo&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>Ngenisa kabusha kusuka ku-Dasher 5</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>Funda</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>Khulula ukuncinza ukuze umise okwesikhashana</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>Setha kabusha</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>Setha kabusha Zonke Izilungiselelo zibe Okuzenzakalelayo</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>Setha kabusha zonke izilungiselelo zibe okuzenzakalelayo kwazo?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>Setha kabusha i-ID engaziwa</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>Setha kabusha izilungiselelo zenjini zibe okuzenzakalelayo</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>Setha kabusha izilungiselelo</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>Setha kabusha kube okuzenzakalelayo</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>Setha kabusha idatha yokuqeqesha</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>Setha kabusha idatha yokuqeqesha?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>Buyisela zonke izilungiselelo ze-Dasher kumanani azo azenzakalelayo. Lokhu akukwazi ukuhlehliswa.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>Zama futhi</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Londoloza</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>Londoloza...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>Ukulondoloza kwehlulekile</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>Londoloza Ifayela Lombhalo</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>Kulondoloziwe</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>Kulondoloziwe:</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>Isivinini Sokuskena</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Izilungiselelo</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>Izilungiselelo...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>Setha kabusha zonke izilungiselelo zibe okuzenzakalelayo</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>Setha kabusha izilungiselelo</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>Setha kabusha zonke izilungiselelo zenjini zibe okuzenzakalelayo kwazo okwakhelwe ngaphakathi?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>Izilungiselelo (isivinini, imibala, imodi yokulawula, imodeli yolimi)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>Yabelana</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>Bonisa i-Input Debug Overlay</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>Khombisa izinga lokuthayipha (WPM)</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>Usayizi</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>Amafayela eqiwe</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>Kancane kancane</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>Inkulumo</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>Inkulumo ivaliwe</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>Inkulumo ivuliwe</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;Izilungiselelo Zenkulumo&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>Isivinini</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>Isivinini</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>Qala Ukulinganisa</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>Qala kabusha</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>Ima</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>Uhlelo</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>umbhalo</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>Amafayela ombhalo</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>Isembozo sokulungisa amaphutha sidweba iphaneli eluhlaza phezulu kwesobunxele sekhanvasi ekhombisa ukubalwa kwemicimbi yokuthinta bukhoma kanye nokugcina okubikiwe (x, y). Uma ucindezela futhi ubamba, kufanele ubone ukuthi i-touch.began iqala bese kuthi i-touch.moved ngokushintsha ama-coordinates njengoba ubheka nxazonke.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>Lokhu kususa idatha yakho yokuqeqesha eqoqwe. Imodeli yolimi izobuyela kokuzenzakalelayo okwakhelwe ngaphakathi ekuqalisweni okulandelayo. Lokhu akukwazi ukuhlehliswa.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>Ukulinganisa Ukuthambekela</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>Tshekisa idivayisi yakho manje...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>Tshekisa idivayisi yakho phakathi nobubanzi bayo obuphelele bokunyakaza ngesikhathi sokulinganisa.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>Okusha / okucacile okukhiphayo</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>Vula ifayela</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>Londoloza kufayela</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>Yabelana ngombhalo</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>Ukuqeqeshwa</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>Idatha Yokuqeqesha</value>
+  </data>
+  <data name="turbo" xml:space="preserve">
+    <value>I-Turbo</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>Izinga lokuthayipha</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>Sebenzisa i-Dasher njengekhibhodi yakho</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>Sithole ukucushwa kwe-Dasher 5 yakho kule Mac. Izinhlamvu zakho, imibala, izilungiselelo zesivinini, namafayela enziwe ngokwezifiso kungangeniswa ku-Dasher 6.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>Lokho okutholiwe</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>Ububanzi buka-X:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Ububanzi buka-Y:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>i-ydotool itholakele. Imodi yekhibhodi isilungile.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>Ungangenisa kamuva kuzilungiselelo &gt; Ubumfihlo kanye nokufuduka</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>Ukubuka kwakho kulandelwa njalo kuphela ngenkathi ucindezela futhi ubamba — yile ndlela zonke izinhlelo zokusebenza ze-visionOS gaze ezisebenza ngayo.</value>
+  </data>
+</root>

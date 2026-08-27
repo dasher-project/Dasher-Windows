@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (cs). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>Zpráva o pádu byla uložena do souboru ~/Library/Logs/DiagnosticReports/Dasher-*.ips. Pokud ji můžete sdílet v rámci problému na GitHubu, pomůže nám to chybu opravit.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>O nás</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>Přijímat události najetí myší/ukazatele jako vstup Dasheru. Povolit pro sledování očí nebo externí ukazatele.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>Přístup</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>Vyžadováno oprávnění přístupnosti</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>Automaticky přizpůsobit rychlost</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>Pokročilá nastavení</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>Všechna nastavení Dasheru budou obnovena na výchozí hodnoty. Tuto akci nelze vrátit zpět.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>Abeceda</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>Pomozte vylepšit Dasher</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>Teď ne</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>Sdílejte anonymní analýzy a zprávy o selhání</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>Resetovat ID analýzy</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>Anonymní analýzy užívání</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>Anonymní analýzy používání nám pomáhají pochopit, jak se Dasher používá, a opravit pády. Nikdy se neshromažďuje žádný napsaný text, obsah schránky ani osobní údaje. Můžete se kdykoli odhlásit v Nastavení → Soukromí.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>Setrvání na úrovni aplikace pro výběr</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>Automatické centrování cíle</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>Automatický výběr po fixaci. Povolit pouze v případě, že je vypnuta prodleva operačního systému.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>Automatický výběr po upoutání pozornosti během sevření prstů. Povolit pouze v případě, že je vypnuta prodleva v režimu OS.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>Zkontrolujte znovu</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>Vybrat...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>Vyberte soubor...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>Jasný</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>Kliknutím nastavíte režim klávesnice (potřebuje ydotool)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Zavřít</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>Barevné téma</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>Zkopírováno do schránky</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>Kopírování</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>Kopírovat vše</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>Kopírovat vše</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>Kopírovat příkazy</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>Kalibrace proudu</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>Přizpůsobení</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Tmavý</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>Dasher</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>Na tomto Macu byla nalezena data z Dasheru 5.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>Nastavení Dasheru 5 bylo úspěšně importováno.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>Dasher funguje také jako systémová klávesnice, takže můžete psát v jakékoli aplikaci. Povolte ji jednou v Nastavení.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>Dasher shromažďuje anonymní analytické údaje, aby pochopil používání a opravil pády. Nikdy se neshromažďuje žádný text na počítači, schránka ani osobní údaje. Schéma otevřených událostí naleznete na adrese github.com/dasher-project/Dasher-Apple.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>Dasher shromažďuje anonymní analytické údaje respektující soukromí, aby pochopil vzorce používání a opravil pády. Nikdy se neshromažďuje žádný psaný text, obsah schránky ani osobní údaje.
+
+Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>Klávesnice Dasher</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>Klávesnice Dasher</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>Dasher potřebuje přístup k přístupu, aby mohl posílat textové zprávy do jiných aplikací.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Předvolby pomlčky</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>Dasher nečekaně odešel</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>Snížení rychlosti</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Výchozí</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>Diagnostika</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>Přímý režim</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>Hotovo</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>Klepněte na tlačítko Dwell</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>Povolte Dasher v Nastavení → Obecné → Klávesnice → Klávesnice a poté zapněte Povolit plný přístup, aby Dasher mohl mluvit a učit se.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>Pro přístup ke kalibraci nejprve povolte vstup náklonu.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>Exportovat školicí text</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>Pohled do očí</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>Nepodařilo se otevřít</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>Uložení se nezdařilo</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>Rychle</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>Plný přístup umožňuje Dasheru číst, co píšete, a pamatovat si váš trénink. Klávesnice funguje pro základní zadávání i bez ní.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>Herní režim</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>Režim Hry</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>Textový soubor hry</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>Rozumím</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>Import přidá text do jazykového modelu (připojí se k existujícímu učení). Export uloží nashromážděná tréninková data pro zálohování nebo přenos. Obnovení odstraní vlastní tréninková data – model se při dalším spuštění vrátí k výchozím nastavením.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>Import z Dasheru 5</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>Nastavení importu</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>Importovat školicí text</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>Zvýšit rychlost</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Vstup</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>Joystick / gamepad (otáčením páčky se řídí)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>Naklonění (držte zařízení, nakloněním řiďte)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>Metoda vstupu</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>Dotyk (tažení po plátně)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;Nainstalujte ydotool pro použití režimu klávesnice&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>není nainstalován. Spusťte tyto příkazy a stiskněte Opakovat:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>Klávesnice</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>Ukončit režim klávesnice</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;Režim klávesnice není v této sestavě k dispozici&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>Neprůhlednost režimu klávesnice</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>Režim klávesnice zastaven: ydotool nemohl vložit text. Je ydotoold</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>Povolit režim klávesnice</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>Jazyková lokalita</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>Dno</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>Poloha panelu a režim přímého vstupu</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>Klávesnice</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>Levá strana</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>Pravá strana</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>Nahoře</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>Učení</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>Opustit herní režim</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>Světlo</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>Lokalita</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>Migrace</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>Pohybujte očima při sevření prstů pro řízení</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Nový</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>Nová zpráva</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>Na tomto Macu nebyla nalezena žádná data pro Dasher 5.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>Pro tuto sekci nejsou k dispozici žádná nastavení.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>Nic k uložení</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>Nic ke sdílení</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>V systému VisionOS začněte psát stisknutím a podržením prstů na plátně, při stisknutí a stisknutí prstů se rozhlédněte pro řízení a uvolněním prstů pozastavte psaní. Model vstupu je se stisknutím a pohledem.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Otevřít</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>OTEVŘENO...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>Otevřít se nezdařilo</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>Otevřít nastavení klávesnice</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>Otevřít Nastavení</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>Otevřít Nastavení systému</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>Otevřete textový soubor.</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>Výstup</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>Velikost výstupního písma</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>Dotkněte se plátna a začněte psát.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>Pauza</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>Pauza při odvracení pohledu</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>Spusťte stisknutím a podržením libovolného místa na plátně.</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>Štípnutí a pohled pro psaní</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>Zahrajte si</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>Vstup při najetí kurzoru</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>Soukromí</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;Soukromí&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>Znovu importovat z Dasheru 5</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>Přečteno</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>Uvolněním prstů pozastavíte</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>Obnovit všechna nastavení na výchozí hodnoty</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>Obnovit všechna nastavení na výchozí hodnoty?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>Obnovit anonymní ID</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>Resetovat nastavení motoru na výchozí</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>Obnovit nastavení</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>Obnovit na výchozí nastavení</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>Resetovat tréninková data</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>Resetovat tréninková data?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>Obnovit všechna nastavení Dasheru na výchozí hodnoty. Tuto akci nelze vrátit zpět.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>Zkusit znovu</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>Uložit...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>Uložení se nezdařilo</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>Uložit textový soubor</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>Uloženo</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>Uloženo:</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>Rychlost skenování</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>Nastavení...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>Obnovit všechna nastavení na výchozí hodnoty</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>Obnovení nastavení</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>Obnovit všechna nastavení motoru na jejich vestavěné výchozí hodnoty?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>Nastavení (rychlost, barvy, režim ovládání, jazykový model)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>Podíl</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>Zobrazit překryvné ladění vstupu</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>Zobrazit rychlost psaní (WPM)</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>Velikost</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>Přeskočené soubory</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>Pomalý</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>Řeč</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>Řeč vypnuta</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>Projev na</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;Nastavení řeči&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>Rychlost</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>Rychlost</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>Zahájení kalibrace</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>Začněte znovu</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>Zastávka</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>Systém</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>Textové soubory</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>Ladicí překryv nakreslí v levém horním rohu plátna zelený panel zobrazující počet událostí dotyku v reálném čase a poslední hlášenou hodnotu (x, y). Když stisknete a podržíte prsty, měli byste vidět touch.began a poté touch.moved se měnícími souřadnicemi, jak se rozhlížíte.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>Tímto se smažou nashromážděná trénovací data. Jazykový model se při dalším spuštění vrátí k výchozím nastavením. Tuto akci nelze vrátit zpět.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>Kalibrace náklonu</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>Nakloňte zařízení nyní...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>Během kalibrace naklánějte zařízení v celém rozsahu jeho pohybu.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>Nový / čistý výstup</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>Otevřít soubor</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>Uložit do souboru</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>Sdílet text</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>Výcvik</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>Trénovací data</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>Rychlost psaní</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>Používejte Dasher jako klávesnici</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>Na tomto Macu jsme našli vaši konfiguraci Dasheru 5. Vaši abecedu, barvy, nastavení rychlosti a vlastní soubory lze importovat do Dasheru 6.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>Co bylo nalezeno</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>Rozsah X:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Rozsah Y:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ydotool nalezen. Režim klávesnice je připraven.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>Importovat můžete později v Nastavení &gt; Soukromí a migrace</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>Váš pohled je nepřetržitě sledován pouze během sevření a podržení prstů – takto fungují všechny aplikace pro sledování pohledu VisionOS.</value>
+  </data>
+</root>
