@@ -107,8 +107,10 @@ public class EngineCApiTests
         var dataDir = FindDataDir();
         if (dataDir == null) { if (RequireEngine) Assert.Fail("DasherCore/Data not found"); return; }
 
-        var sharedDir = Path.Combine(Path.GetTempPath(), "dasher-tests", "filter-persist");
-        if (Directory.Exists(sharedDir)) Directory.Delete(sharedDir, recursive: true);
+        // Invocation-unique (concurrent test processes must not stomp each
+        // other's settings files) but shared by BOTH engines below — the
+        // point is that the second engine restores what the first saved.
+        var sharedDir = Path.Combine(Path.GetTempPath(), "dasher-tests", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(sharedDir);
 
         var key = NativeBridge.dasher_find_parameter_key("SP_INPUT_FILTER");
@@ -138,6 +140,7 @@ public class EngineCApiTests
         finally
         {
             NativeBridge.dasher_destroy(handle2);
+            try { Directory.Delete(sharedDir, recursive: true); } catch { }
         }
     }
 
