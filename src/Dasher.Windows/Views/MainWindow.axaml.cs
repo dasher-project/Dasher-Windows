@@ -299,6 +299,12 @@ public partial class MainWindow : Window
         // Phase 3: Start engine (triggers Realize)
         _canvas!.StartEngine();
 
+        // Localise: resolve the OS language, push it into the engine so
+        // parameter labels follow the same locale (RFC 0003 one-locale).
+        Loc.InitializeFromSystem(_vm!.Handle);
+        if (Loc.IsRtl)
+            FlowDirection = FlowDirection.RightToLeft;
+
         // Phase 4: Apply deferred parameters (must be after Realize)
         if (migrationResult != null)
         {

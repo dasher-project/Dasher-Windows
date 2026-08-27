@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (ta). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>செயலிழப்பு அறிக்கை ~/Library/Logs/DiagnosticReports/Dasher-*.ips என்ற கோப்பில் சேமிக்கப்பட்டுள்ளது. அதை நீங்கள் ஒரு GitHub சிக்கலாகப் பகிர்ந்தால், அந்தப் பிழையைச் சரிசெய்ய எங்களுக்கு அது உதவும்.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>பற்றி</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>ஹோவர்/பாயிண்டர் நிகழ்வுகளை டாஷர் உள்ளீடாக ஏற்றுக்கொள்ளுங்கள். கண் கண்காணிப்பு அல்லது வெளிப்புற பாயிண்டர்களுக்காக இதைச் செயல்படுத்துங்கள்.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>அணுகல்</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>அணுகல் அனுமதி தேவை</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>வேகத்தை தானாகவே சரிசெய்யவும்</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>மேம்பட்ட அமைப்புகள்</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>டேஷரின் அனைத்து அமைப்புகளும் அவற்றின் இயல்புநிலை மதிப்புகளுக்கு மீட்டமைக்கப்படும். இதை மீண்டும் பழைய நிலைக்குக் கொண்டுவர முடியாது.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>எழுத்துக்கள்</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>டாஷரை மேம்படுத்த உதவுங்கள்</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>இப்போது இல்லை</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>அநாமதேய பகுப்பாய்வுகள் மற்றும் செயலிழப்பு அறிக்கைகளைப் பகிரவும்</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>பகுப்பாய்வு ஐடியை மீட்டமைக்கவும்</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>அநாமதேய பயன்பாட்டு பகுப்பாய்வு</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>அடையாளம் தெரியாத பயன்பாட்டுப் பகுப்பாய்வுகள், டேஷர் எவ்வாறு பயன்படுத்தப்படுகிறது என்பதைப் புரிந்துகொள்ளவும் செயலிழப்புகளைச் சரிசெய்யவும் எங்களுக்கு உதவுகின்றன. தட்டச்சு செய்யப்பட்ட உரை, கிளிப்போர்டு உள்ளடக்கங்கள் அல்லது தனிப்பட்ட தகவல்கள் எதுவும் ஒருபோதும் சேகரிக்கப்படுவதில்லை. அமைப்புகள் → தனியுரிமை என்பதற்குச் சென்று எப்போது வேண்டுமானாலும் இதிலிருந்து விலகிக்கொள்ளலாம்.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>தேர்ந்தெடுக்க வேண்டிய செயலி அளவிலான தங்கு நேரம்.</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>ஆட்டோ</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>தானியங்கி மைய இலக்கு</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>நிலைநிறுத்திய பிறகு தானாகத் தேர்ந்தெடுக்கும். OS தங்குதல் முடக்கப்பட்டிருந்தால் மட்டுமே இதைச் செயல்படுத்தவும்.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>விரல்களால் கிள்ளும்போது உங்கள் பார்வையை நிலைநிறுத்திய பிறகு தானாகவே தேர்ந்தெடுக்கும். OS dwell முடக்கப்பட்டிருந்தால் மட்டுமே இதைச் செயல்படுத்தவும்.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>ரத்துசெய்</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>மீண்டும் சரிபார்க்கவும்</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>தேர்ந்தெடுங்கள்...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>கோப்பைத் தேர்ந்தெடுக்கவும்...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>தெளிவான</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>விசைப்பலகை பயன்முறையை அமைக்க கிளிக் செய்யவும் (ydotool தேவை)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>அருகில்</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>வண்ண தீம்</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது.</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>நகல்</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>அனைத்தையும் நகலெடுக்கவும்</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>அனைத்தையும் நகலெடுக்கவும்</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>நகல் கட்டளைகள்</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>தற்போதைய அளவுத்திருத்தம்</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>தனிப்பயனாக்கம்</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>இருள்</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>டேஷர்</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>இந்த மேக்கில் டேஷர் 5 தரவு கண்டறியப்பட்டுள்ளது.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>டாஷர் 5 அமைப்புகள் வெற்றிகரமாக இறக்குமதி செய்யப்பட்டன.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>டாஷர் ஒரு சிஸ்டம் கீபோர்டாகவும் செயல்படும், எனவே நீங்கள் எந்த செயலியிலும் எழுதலாம். அமைப்புகளில் அதை ஒருமுறை இயக்கவும்.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>பயன்பாட்டைப் புரிந்துகொள்வதற்கும் செயலிழப்புகளைச் சரிசெய்வதற்கும் டேஷர் அநாமதேயப் பகுப்பாய்வுகளைச் சேகரிக்கிறது. தட்டச்சு செய்யப்பட்ட உரை, கிளிப்போர்டு அல்லது தனிப்பட்ட தகவல்கள் எதுவும் ஒருபோதும் சேகரிக்கப்படுவதில்லை. திறந்த நிகழ்வுத் திட்டத்தை github.com/dasher-project/Dasher-Apple இல் பார்க்கவும்.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>பயன்பாட்டு முறைகளைப் புரிந்துகொள்வதற்கும் செயலிழப்புகளைச் சரிசெய்வதற்கும், டேஷர் அநாமதேய, தனியுரிமையை மதிக்கும் பகுப்பாய்வுகளைச் சேகரிக்கிறது. தட்டச்சு செய்யப்பட்ட உரை, கிளிப்போர்டு உள்ளடக்கங்கள் அல்லது தனிப்பட்ட தகவல்கள் எதுவும் ஒருபோதும் சேகரிக்கப்படுவதில்லை.
+
+அமைப்புகள் &gt; தனியுரிமை என்பதில் இதை நீங்கள் எப்போது வேண்டுமானாலும் மாற்றிக்கொள்ளலாம்.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>டேஷர் விசைப்பலகை</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>டாஷர் விசைப்பலகை</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>மற்ற பயன்பாடுகளுக்கு உரையை அனுப்ப, டாஷருக்கு அணுகல்தன்மை தேவைப்படுகிறது.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>டாஷர் விருப்பத்தேர்வுகள்</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>டாஷர் எதிர்பாராத விதமாக வேலையை விட்டு விலகினார்</value>
+  </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>டேஷர் வி6</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;டாஷர் v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>வேகத்தைக் குறைக்கவும்</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>இயல்புநிலை</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>நோயறிதல்</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>நேரடி பயன்முறை</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>முடிந்தது</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>கிளிக் செய்ய தங்குங்கள்</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>அமைப்புகள் → பொது → விசைப்பலகை → விசைப்பலகைகள் என்பதற்குச் சென்று டேஷரை இயக்கவும், பின்னர் முழு அணுகலை அனுமதி என்பதை இயக்கவும், இதன்மூலம் டேஷர் பேசவும் கற்றுக்கொள்ளவும் முடியும்.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>அளவுத்திருத்தத்தை அணுக, முதலில் சாய்வு உள்ளீட்டை இயக்கவும்.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>பயிற்சி உரையை ஏற்றுமதி செய்</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>கண் பார்வை</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>திறக்க முடியவில்லை:</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>சேமிக்க முடியவில்லை:</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>வேகமாக</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>முழு அணுகல் வசதி, நீங்கள் எழுதுவதை டேஷர் பேசவும், உங்கள் பயிற்சியை நினைவில் கொள்ளவும் அனுமதிக்கிறது. அது இல்லாமலேயே, அடிப்படை உள்ளீட்டிற்கு விசைப்பலகை தொடர்ந்து செயல்படும்.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>விளையாட்டு முறை</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>விளையாட்டு முறை</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>விளையாட்டு உரை கோப்பு</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>புரிந்தது</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>ஜிடிகே பதிப்பு</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>இறக்குமதி (Import) என்பது மொழி மாதிரியில் உரையைச் சேர்க்கிறது (ஏற்கனவே உள்ள கற்றலுடன் இணைக்கிறது). ஏற்றுமதி (Export) என்பது நீங்கள் சேகரித்த பயிற்சித் தரவை காப்புப் பிரதி எடுக்க அல்லது மாற்றுவதற்காகச் சேமிக்கிறது. மீட்டமைத்தல் (Reset) என்பது தனிப்பயன் பயிற்சித் தரவை நீக்குகிறது — அடுத்த முறை இயக்கும்போது மாதிரி அதன் உள்ளமைக்கப்பட்ட இயல்புநிலைகளுக்குத் திரும்பும்.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>டேஷர் 5 இலிருந்து இறக்குமதி செய்யவும்</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>முக்கியமான அமைப்புகள்</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>இறக்குமதி பயிற்சி உரை</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>வேகத்தை அதிகரிக்கவும்</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>உள்ளீடு</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>ஜாய்ஸ்டிக் / கேம்பேட் (திசை திருப்புவதற்கு ஸ்டிக்கை ஒரு பக்கமாகத் திருப்பவும்)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>சாய்த்தல் (சாதனத்தைப் பிடித்து, திருப்புவதற்குச் சாய்க்கவும்)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>உள்ளீட்டு முறை</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>தொடவும் (கேன்வாஸில் இழுக்கவும்)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;விசைப்பலகை பயன்முறையைப் பயன்படுத்த ydotool-ஐ நிறுவவும்&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>நிறுவப்படவில்லை. இந்தக் கட்டளைகளை இயக்கவும், பின்னர் மீண்டும் முயற்சிக்கவும்:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>விசைப்பலகை</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>விசைப்பலகை பயன்முறையிலிருந்து வெளியேறு</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;இந்த உருவாக்கத்தில் விசைப்பலகை பயன்முறை கிடைக்காது&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>விசைப்பலகை பயன்முறை ஒளிபுகாத்தன்மை</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>விசைப்பலகை பயன்முறை நிறுத்தப்பட்டது: ydotool-ஆல் உரையை உள்ளிட முடியவில்லை. ydotool பழையதா?</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>விசைப்பலகை பயன்முறையை இயக்கு</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;மொழி / வட்டாரம்&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>கீழ்</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>பலகத்தின் நிலை மற்றும் நேரடி நுழைவு முறை</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>விசைப்பலகை</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>இடது பக்கம்</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>வலது பக்கம்</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>மேல்</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>கற்றல்</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>விளையாட்டு பயன்முறையை விட்டு வெளியேறு</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>ஒளி</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>மொழி</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>வட்டாரம்</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>இடம்பெயர்வு</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>திசை திருப்புவதற்கு, விரல்களை நெரித்தவாறே உங்கள் கண்களை நகர்த்தவும்.</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>புதிய</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>புதிய செய்தி</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>இந்த மேக்கில் டேஷர் 5 தரவு எதுவும் காணப்படவில்லை.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>இந்தப் பகுதிக்கு அமைப்புகள் எதுவும் கிடைக்கவில்லை.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>காப்பாற்ற ஒன்றுமில்லை</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>பகிர்வதற்கு ஒன்றுமில்லை.</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>சரி</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>விஷன்ஓஎஸ்-இல், எழுதத் தொடங்க கேன்வாஸில் விரல்களைப் பிடித்து அழுத்திப் பிடிக்கவும்; விரல்களைப் பிடித்தவாறே சுற்றிலும் பார்த்து வழிநடத்தவும்; பின்னர் விடுவிப்பதன் மூலம் இடைநிறுத்தவும். உள்ளீட்டு முறை, விரல்களைப் பிடித்துப் பார்க்கும் வகையிலானது.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>திறந்த</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>திற...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>திறப்பு தோல்வியடைந்தது</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>விசைப்பலகை அமைப்புகளைத் திறக்கவும்</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>அமைப்புகளைத் திறக்கவும்</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>கணினி அமைப்புகளைத் திறக்கவும்</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>உரை கோப்பைத் திறக்கவும்</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>வெளியீடு</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>வெளியீட்டு எழுத்துரு அளவு</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>எழுதத் தொடங்க கேன்வாஸைத் தொடவும்.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>பசை</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>இடைநிறுத்தம்</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>வேறு பக்கம் பார்க்கும்போது இடைநிறுத்தம்</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>தொடங்குவதற்கு கேன்வாஸில் எந்த இடத்திலும் கிள்ளி பிடித்துக் கொள்ளவும்.</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>எழுதுவதற்கு கிள்ளி, பார்க்கவும்</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>விளையாடு</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>சுட்டி வட்டமிடல் உள்ளீடு</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>விருப்பத்தேர்வுகள்</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>தனியுரிமை</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;தனியுரிமை&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>டேஷர் 5 இலிருந்து மீண்டும் இறக்குமதி செய்யவும்</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>படிக்கவும்</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>இடைநிறுத்த, கிள்ளலை விடுங்கள்.</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>மீட்டமை</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>அனைத்து அமைப்புகளையும் இயல்புநிலைக்கு மீட்டமைக்கவும்</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>அனைத்து அமைப்புகளையும் அவற்றின் இயல்புநிலைக்கு மீட்டமைக்கவா?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>அநாமதேய ஐடியை மீட்டமைக்கவும்</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>இயந்திர அமைப்புகளை இயல்புநிலைகளுக்கு மீட்டமைக்கவும்</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>அமைப்புகளை மீட்டமைக்கவும்</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>இயல்புநிலைகளுக்கு மீட்டமைக்கவும்</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>பயிற்சி தரவை மீட்டமைக்கவும்</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>பயிற்சித் தரவை மீட்டமைக்கவா?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>டேஷரின் அனைத்து அமைப்புகளையும் அவற்றின் இயல்புநிலை மதிப்புகளுக்கு மீட்டமைக்கவும். இதை மீண்டும் பழைய நிலைக்குக் கொண்டுவர முடியாது.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>மீண்டும் முயற்சி</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>சேமிக்கவும்</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>சேமிக்கவும்...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>சேமிப்பு தோல்வியடைந்தது</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>உரை கோப்பை சேமிக்கவும்</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>சேமிக்கப்பட்டது</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>சேமிக்கப்பட்டது:</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>ஸ்கேன் வேகம்</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>அமைப்புகள்</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>அமைப்புகள்...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>அனைத்து அமைப்புகளையும் இயல்புநிலைக்கு மீட்டமைக்கவும்</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>அமைப்புகள் மீட்டமைக்கப்பட்டன</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>அனைத்து எஞ்சின் அமைப்புகளையும் அவற்றின் உள்ளமைக்கப்பட்ட இயல்புநிலைகளுக்கு மீட்டமைக்கவா?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>அமைப்புகள் (வேகம், வண்ணங்கள், கட்டுப்பாட்டு முறை, மொழி மாதிரி)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>பகிர்</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>உள்ளீட்டுப் பிழைத்திருத்த மேலடுக்குக் காட்சியைக் காட்டு</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>தட்டச்சு வேகத்தைக் (WPM) காட்டு</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>அளவு</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>கோப்புகளைத் தவிர்க்கவும்</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>மெதுவாக</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>பேச்சு</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>பேச்சு தடை</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>ஸ்டெப் ஆன்</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;பேச்சு அமைப்புகள்&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>வேகம்</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>வேகம்</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>அளவீடு செய்யத் தொடங்குங்கள்</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>புதிதாகத் தொடங்குங்கள்</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>நிறுத்து</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>அமைப்பு</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>உரை</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>உரை கோப்புகள்</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>பிழைத்திருத்த மேலடுக்கு, கேன்வாஸின் மேல் இடதுபுறத்தில் ஒரு பச்சை நிறப் பலகையை வரைகிறது. அது நிகழ்நேரத் தொடு நிகழ்வுகளின் எண்ணிக்கையையும், கடைசியாகப் பதிவு செய்யப்பட்ட (x, y) ஆயத்தொலைவுகளையும் காட்டுகிறது. நீங்கள் விரலைச் சுருக்கிப் பிடிக்கும்போது, நீங்கள் சுற்றிலும் பார்க்கும்போது ஆயத்தொலைவுகள் மாறிக்கொண்டே, 'touch.began' மற்றும் அதைத் தொடர்ந்து 'touch.moved' நிகழ்வுகளைக் காண்பீர்கள்.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>இது நீங்கள் சேகரித்த பயிற்சித் தரவுகளை நீக்கிவிடும். அடுத்த முறை இயக்கும்போது மொழி மாதிரி அதன் இயல்புநிலை அமைப்புகளுக்குத் திரும்பும். இதை மீண்டும் பழைய நிலைக்குக் கொண்டுவர முடியாது.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>சாய்வு அளவுத்திருத்தம்</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>உங்கள் சாதனத்தை இப்போது சாய்க்கவும்...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>அளவுத்திருத்தத்தின் போது உங்கள் சாதனத்தை அதன் முழு இயக்க வரம்பிலும் சாய்க்கவும்.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>புதிய / தெளிவான வெளியீடு</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>கோப்பைத் திறக்கவும்</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>கோப்பில் சேமிக்கவும்</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>உரையைப் பகிரவும்</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>பயிற்சி</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>பயிற்சி தரவு</value>
+  </data>
+  <data name="turbo" xml:space="preserve">
+    <value>டர்போ</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>தட்டச்சு விகிதம்</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>டேஷரை உங்கள் விசைப்பலகையாகப் பயன்படுத்தவும்.</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>இந்த மேக்கில் உங்கள் டேஷர் 5 உள்ளமைப்பைக் கண்டறிந்துள்ளோம். உங்கள் எழுத்துக்கள், வண்ணங்கள், வேக அமைப்புகள் மற்றும் தனிப்பயன் கோப்புகளை டேஷர் 6-இல் இறக்குமதி செய்யலாம்.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>கண்டுபிடிக்கப்பட்டது</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>X வரம்பு:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Y வரம்பு:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ydotool கண்டறியப்பட்டது. விசைப்பலகை பயன்முறை தயாராக உள்ளது.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>அமைப்புகள் &gt; தனியுரிமை மற்றும் இடமாற்றம் என்பதில் நீங்கள் பின்னர் இறக்குமதி செய்யலாம்.</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>நீங்கள் விரலைச் சுருக்கிப் பிடித்துக்கொண்டிருக்கும்போது மட்டுமே உங்கள் பார்வை தொடர்ந்து கண்காணிக்கப்படுகிறது — இந்த முறையில்தான் அனைத்து விஷன்ஓஎஸ் (visionOS) பார்வை சார்ந்த செயலிகளும் செயல்படுகின்றன.</value>
+  </data>
+</root>

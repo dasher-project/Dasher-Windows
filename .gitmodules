@@ -3,3 +3,6 @@
 	url = https://github.com/dasher-project/DasherCore.git
 	branch = main
 	ignore = dirty
+[submodule "shared-resources"]
+	path = shared-resources
+	url = https://github.com/dasher-project/dasher-shared-resources.git

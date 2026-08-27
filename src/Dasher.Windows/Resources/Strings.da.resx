@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (da). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f cps · %2$d ord/minutte</value>
+  </data>
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>En nedbrudsrapport blev gemt i ~/Library/Logs/DiagnosticReports/Dasher-*.ips. Hvis du kan dele den i et GitHub-problem, hjælper det os med at rette fejlen.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>Om</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>Accepter svævende/markørhændelser som Dasher-input. Aktiver øjensporing eller eksterne markører.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>Adgang</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>Tilgængelighedstilladelse påkrævet</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>Tilpas hastigheden automatisk</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>Avancerede indstillinger</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>Alle Dasher-indstillinger vil blive gendannet til deres standardværdier. Dette kan ikke fortrydes.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>Alfabet</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>Hjælp med at forbedre Dasher</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>Ikke nu</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>Del anonyme analyser og ulykkesrapporter</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>Nulstil analysen</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>Anonym brugsanalyse</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>Anonym brugsanalyse hjælper os med at forstå, hvordan Dasher bruges, og med at rette nedbrud. Der indsamles aldrig skrevet tekst, indhold fra udklipsholder eller personlige oplysninger. Du kan til enhver tid framelde dig i Indstillinger → Privatliv.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>Dvæl på app-niveau for at vælge</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>Bil</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>Automatisk centrering af mål</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>Automatisk valg efter fiksering. Aktiver kun, hvis OS-dvælgelse er slået fra.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>Vælg automatisk efter at have fikseret dit blik, mens du kniber. Aktiver kun, hvis OS-dvælen er slået fra.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Ophæve</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>Tjek igen</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>Vælge...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>Vælg Fil...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>Klar</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>Klik for at konfigurere tastaturtilstand (har brug for ydotool)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Luk</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>Farvetema</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>Kopieret til udklipsholder.</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>Kopi</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>Kopier alt</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>Kopiér alle</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>Kopier kommandoer</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>Aktuel kalibrering</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>Tilpasning</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Mørk</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>Dasher</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>Dasher 5-data fundet på denne Mac.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>Dasher 5-indstillinger blev importeret.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>Dasher fungerer også som et systemtastatur, så du kan skrive i enhver app. Aktiver det én gang i Indstillinger.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>Dasher indsamler anonyme analyser for at forstå brugen og rette nedbrud. Der indsamles aldrig indtastet tekst, udklipsholder eller personlige oplysninger. Se det åbne hændelsesskema på github.com/dasher-project/Dasher-Apple.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>Dasher indsamler anonyme analyser, der respekterer privatlivets fred, for at forstå brugsmønstre og rette nedbrud. Der indsamles aldrig skrevet tekst, indhold af udklipsholder eller personlige oplysninger.
+
+Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>Dasher-tastatur</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>Dasher-tastatur</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>Dasher skal have adgang til tilgængelighed for at sende tekst til andre apps.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Dasher-præferencer</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>Dasher stoppede uventet</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher&lt;/b&gt;&lt;/big&gt; v6
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>Sænk hastigheden</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Misligholdelse</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>Diagnostik</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>Direkte tilstand</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>Færdig</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>Dvæl ved at klikke</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>Aktivér Dasher under Indstillinger → Generelt → Tastatur → Tastaturer, og aktivér derefter Tillad fuld adgang, så Dasher kan tale og lære.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>Aktiver først hældningsinput for at få adgang til kalibrering.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>Eksportér træningstekst</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>Øjeblik</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>Afslutning mislykkedes</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>Fejl - blev ikke demt</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>Hurtig</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>Fuld adgang giver Dasher mulighed for at læse det, du skriver, og huske din træning. Tastaturet fungerer stadig til grundlæggende indtastning uden den.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>Spiltilstand</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>Spiltilstand</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>Spiltekstfil</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>Forstået</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>GTK-udgave</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>Import tilføjer tekst til sprogmodellen (tilføjes eksisterende læring). Eksport gemmer dine akkumulerede træningsdata til sikkerhedskopiering eller overførsel. Nulstil sletter brugerdefinerede træningsdata — modellen vender tilbage til dens indbyggede standardindstillinger ved næste opstart.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>Importer fra Dasher 5</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>Importindstillinger</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>Importer træningstekst</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>Øg hastigheden</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>Joystick / gamepad (drej en pind for at styre)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>Vip (hold enheden, vip for at styre)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>Inputmetode</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>Tryk (træk på lærredet)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;Installer ydotool for at bruge tastaturtilstand&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>er ikke installeret. Kør disse kommandoer, og tryk derefter på Prøv igen:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>Tastatur</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>Afslut tastaturtilstand</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;Tastaturtilstand er ikke tilgængelig i dette build&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>Tastaturtilstand opacitet</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>Tastaturtilstand stoppet: ydotool kunne ikke injicere tekst. Er ydotoold</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>Aktiver tastaturtilstand</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;Sprog/lokalitet&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>Bund</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>Rudeposition og direkte indgangstilstand</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>Tastatur</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>Venstre side</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>Højre side</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>Læring</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>Forlad spiltilstand</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>Lys</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>Sprog</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>Lokalitet</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>Bevæg dine øjne, mens du kniber for at styre</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Ny</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>Ny besked</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>Ingen Dasher 5-data fundet på denne Mac.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>Der er ingen tilgængelige indstillinger for dette afsnit.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>Intet at gemme</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>Intet at dele</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>Okay</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>På visionOS skal du knibe og holde fingeren nede på lærredet for at begynde at skrive, se dig omkring, mens du kniber for at styre, og slippe for at sætte på pause. Inputmodellen er knibe-og-se.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Åbn</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>Åben...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>Åbning mislykkedes</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>Åbn tastaturindstillinger</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>Åbn Indstillinger</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>Åbn systemindstillinger</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>Åbn tekstfil</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>Udgang</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>Skriftstørrelse for output</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>Tryk på lærredet for at begynde at skrive.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>Indsæt</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>Hold pause, når du kigger væk</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>Knib og hold et vilkårligt sted på lærredet for at starte</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>Knib og se for at skrive</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>Afspil</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>Markør-hover-input</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>Præferencer</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>Privatliv</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;Privatliv&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>Genimportér fra Dasher 5</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>Læs</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>Slip kniben for at sætte på pause</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>Nulstil</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>Nulstil alle indstillinger til standardindstillinger</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>Nulstil alle indstillinger til standardindstillingerne?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>Nulstil anonymt ID</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>Nulstil motorindstillinger til standardindstillinger</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>Nulstil indstillinger</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>Nulstil til standardindstillinger</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>Nulstil træningsdata</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>Nulstil træningsdata?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>Gendan alle Dasher-indstillinger til deres standardværdier. Dette kan ikke fortrydes.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>Prøv igen</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Gem</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>Spare...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>Gemning mislykkedes</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>Gem tekstfil</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>Gemt</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>Gemt</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>Scanningshastighed</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Indstillinger</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>Indstillinger...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>Nulstil alle indstillinger til standardindstillingerne</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>Indstillinger nulstillet</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>Nulstil alle motorindstillinger til deres indbyggede standardindstillinger?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>Indstillinger (hastighed, farver, kontroltilstand, sprogmodel)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>Dele</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>Vis input-fejlfindingsoverlay</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>Vis skrivehastighed (WPM)</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>Størrelse</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>Springede filer over</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>Langsom</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>Tale</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>Tale fra</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>Tale om</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;Taleindstillinger&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>Hastighed</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>Hastighed</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>Start kalibrering</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>Start på en frisk</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>tekst</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>Tekstfiler</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>Fejlfindingsoverlayet tegner et grønt panel øverst til venstre på lærredet, der viser antallet af live-berøringshændelser og de sidst rapporterede (x, y). Når du kniber og holder, bør du se touch.began og derefter touch.moved med skiftende koordinater, mens du kigger dig omkring.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>Dette sletter dine akkumulerede træningsdata. Sprogmodellen vender tilbage til de indbyggede standardindstillinger ved næste opstart. Dette kan ikke fortrydes.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>Hældningskalibrering</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>Vip din enhed nu...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>Vip din enhed gennem hele dens bevægelsesområde under kalibrering.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>Nyt/klart output</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>Åbn fil</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>Gem til fil</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>Del tekst</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>Uddannelse</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>Træningsdata</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>Skrivehastighed</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>Brug Dasher som dit tastatur</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>Vi fandt din Dasher 5-konfiguration på denne Mac. Dit alfabet, dine farver, hastighedsindstillinger og brugerdefinerede filer kan importeres til Dasher 6.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>Hvad der blev fundet</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>X-område:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Y-område:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ydotool fundet. Tastaturtilstand er klar.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>Du kan importere senere i Indstillinger &gt; Privatliv og migrering</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>Dit blik spores kontinuerligt, mens du kniber og holder – sådan fungerer alle visionOS blikapps.</value>
+  </data>
+</root>

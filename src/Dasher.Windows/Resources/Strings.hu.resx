@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (hu). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>Egy hibajelentés került mentésre a ~/Library/Logs/DiagnosticReports/Dasher-*.ips fájlba. Ha megosztod egy GitHub-hiba esetén, az segít nekünk a hiba kijavításában.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>Névjegy</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>Elfogadja a lebegés/mutató eseményeket Dasher bemenetként. Engedélyezze a szemkövetést vagy a külső mutatókat.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>Hozzáférés</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>Akadálymentesítési engedély szükséges</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>Automatikus sebességállítás</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>Speciális beállítások</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>A Dasher összes beállítása visszaáll az alapértelmezett értékre. Ez a művelet nem vonható vissza.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>Ábécé</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>Segítsen a Dasher fejlesztésében</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>Most nem</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>Anonim elemzések és hibajelentések megosztása</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>Elemzési azonosító visszaállítása</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>Névtelen használati elemzés</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>Az anonim használati elemzések segítenek megérteni, hogyan használják a Dashert, és segítenek kijavítani az összeomlásokat. Soha nem gyűjtünk begépelt szöveget, vágólap tartalmát vagy személyes adatokat. Bármikor leiratkozhat a Beállítások → Adatvédelem menüpontban.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>Alkalmazásszintű várakozás a kiválasztáshoz</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>Autó</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>Automatikus középre igazítás</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>Automatikus kiválasztás fixálás után. Csak akkor engedélyezze, ha az operációs rendszer várakozása ki van kapcsolva.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>Automatikus kiválasztás a tekintet rögzítése után csippentés közben. Csak akkor engedélyezze, ha az operációs rendszer várakozási ideje ki van kapcsolva.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Mégsem</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>Ellenőrizd újra</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>Válasszon...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>Fájl kiválasztása...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>Világos</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>Kattintson a billentyűzet mód beállításához (ydotool szükséges)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Bezárás</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>Színtéma</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>Vágólapra másolva</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>Másolja</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>Mindet másolja</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>Összes másolása</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>Parancsok másolása</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>Aktuális kalibráció</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>Testreszabás</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Sötét</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>Dasher</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>Dasher 5 adatok észlelve ezen a Mac gépen.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>A Dasher 5 beállításainak importálása sikeresen megtörtént.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>A Dasher rendszerbillentyűzetként is működik, így bármelyik alkalmazásban írhatsz vele. Engedélyezd egyszer a Beállításokban.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>A Dasher névtelen elemzéseket gyűjt a használat megértése és az összeomlások kijavítása érdekében. Semmilyen begépelt szöveget, vágólapra helyezett adatot vagy személyes adatot nem gyűjt. A nyílt eseménysémát a github.com/dasher-project/Dasher-Apple oldalon tekintheti meg.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>A Dasher névtelen, az adatvédelmet tiszteletben tartó elemzéseket gyűjt a használati minták megértése és az összeomlások kijavítása érdekében. Semmilyen begépelt szöveget, vágólap tartalmát vagy személyes információt nem gyűjt.
+
+Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>Dasher billentyűzet</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>Dasher billentyűzet</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>A Dashernek akadálymentes hozzáférésre van szüksége ahhoz, hogy szöveget küldhessen más alkalmazásokba.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Dasher beállításai</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>Dasher váratlanul kilépett</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>Csökkentse a sebességet</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Alapértelmezett</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>Diagnosztika</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>Közvetlen mód</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>Kész</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>Engedélyezze a Dashert a Beállítások → Általános → Billentyűzet → Billentyűzetek menüpontban, majd kapcsolja be a Teljes hozzáférés engedélyezése beállítást, hogy a Dasher beszélhessen és tanulhasson.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>A kalibráció eléréséhez először engedélyezze a dőlésszög bemenetét.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>Betanítási szöveg exportálása</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>Szem tekintete</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>Nem nyílt meg</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>Sikertelen mentés:</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>Gyors</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>A Teljes Hozzáférés lehetővé teszi a Dasher számára, hogy kimondja, amit írsz, és megjegyezze a betanításodat. A billentyűzet nélküle is működik az alapvető bevitelhez.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>Játékmód</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>Játék üzemmód</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>Játék szövegfájl</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>Értem</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>Az importálás szöveget ad hozzá a nyelvi modellhez (hozzáfűzi a meglévő tanuláshoz). Az exportálás menti a felhalmozott betanítási adatokat biztonsági mentés vagy átvitel céljából. A visszaállítás törli az egyéni betanítási adatokat – a modell a következő indításkor visszaáll a beépített alapértelmezett értékekre.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>Importálás a Dasher 5-ből</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>Beállítások importálása</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>Betanító szöveg importálása</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>Növelje a sebességet</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Bemenet</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>Joystick / gamepad (irányításhoz tereld el a kart)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>Döntés (fogd meg a készüléket, döntsd a kormányzáshoz)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>Beviteli mód</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>Érintés (húzás a vásznon)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;Telepítse az ydotool eszközt a billentyűzet mód használatához&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>nincs telepítve. Futtassa ezeket a parancsokat, majd nyomja meg az Újra gombot:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>Billentyűzet</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>Billentyűzetes mód</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;A billentyűzet mód nem érhető el ebben az összeállításban&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>Billentyűzet mód átlátszósága</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>A billentyűzet mód leállt: az ydotool nem tudott szöveget befecskendezni. Az ydotoold</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>A billentyűzet használata</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;Nyelv /Terület&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>Alsó</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>Az ablaktábla pozíciója és közvetlen belépési üzemmódja</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>Billentyűzet</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>Bal oldal</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>Jobb oldal</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>Felső</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>Tanulás</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>Kilépés a játékmódból</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>Fény</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>Nyelv</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>Helyi</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>Migráció</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>Mozgasd a szemed, miközben csippentve irányítod az ujjaidat.</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Új</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>Új üzenet</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>Nem találhatók Dasher 5 adatok ezen a Mac gépen.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>Ehhez a szakaszhoz nem érhetők el beállítások.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>Nincs mit menteni</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>Nincs mit megosztani</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>RENDBEN</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>VisionOS rendszeren a vásznon tartva csippentsd az ujjad az írás megkezdéséhez, körülnézz csippentés közben az irányításhoz, majd engedd el a szüneteltetéshez. A beviteli modell csippentéses és nézési.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Nyitva</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>Nyitott...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>Megnyitás sikertelen</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>Nyissa meg a billentyűzet beállításait</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>Beállítások megnyitása</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>Rendszerbeállítások megnyitása</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>Szövegfájl megnyitása</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>Kimeneti betűméret</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>Érintse meg a vásznat az írás megkezdéséhez.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>Paszta</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>Szünet</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>Szünet, amikor elnéz</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>Csippentsd össze és tartsd lenyomva az ujjad a vásznon bárhol a kezdéshez</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>Csippentés és ránézés íráshoz</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>Játék</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>Mutató lebegés bemenet</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>Magánélet</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;Adatvédelem&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>Újraimportálás a Dasher 5-ből</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>Elolvas</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>Engedje el a csípést a szüneteltetéshez</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>Visszaállítás</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>Minden beállítás visszaállítása alapértelmezettre</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>Visszaállítja az összes beállítást az alapértelmezett értékre?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>Névtelen azonosító visszaállítása</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>Motorbeállítások alapértelmezéseinek visszaállítása</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>Beállítások visszaállítása</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>Alapértelmezett beállítások visszaállítása</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>Edzésadatok visszaállítása</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>Edzési adatok visszaállítása?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>Az összes Dasher-beállítás visszaállítása az alapértelmezett értékre. Ez a művelet nem vonható vissza.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>Újrapróbálkozás</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Mentés</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>Megtakarítás...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>Mentés sikertelen</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>Mentés szöveges fájlba</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>Mentett</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>Elmentve:</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>Szkennelési sebesség</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Beállítások</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>Beállítások...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>Minden beállítás visszaállítása az alapértelmezett értékekre</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>Beállítások visszaállítása</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>Visszaállítja az összes motorbeállítást a beépített alapértékekre?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>Beállítások (sebesség, színek, vezérlési mód, nyelvi modell)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>Részesedés</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>Beviteli hibakeresési átfedés megjelenítése</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>Gépelési sebesség (WPM) megjelenítése</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>Méret</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>Kihagyott fájlok</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>Lassú</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>Beszéd</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>Beszéd kikapcsolva</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>Beszéd a következőn:</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;Beszédbeállítások&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>Sebesség</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>Sebesség</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>Kalibrálás indítása</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>Kezdj újra</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>Rendszer</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>szöveg</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>Szövegfájlok</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>A hibakeresési átfedés egy zöld panelt rajzol a vászon bal felső sarkába, amelyen látható az élő érintési események száma és az utolsó jelentett érték (x, y). Amikor összecsippenti és nyomva tartja az ujját, a touch.began, majd a touch.moved elemeket kell látnia változó koordinátákkal, miközben körülnéz.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>Ez törli a felhalmozott betanítási adatokat. A nyelvi modell a következő indításkor visszaáll a beépített alapértelmezett értékekre. Ez a művelet nem vonható vissza.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>Dőlésszög kalibrálása</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>Döntse meg most a készülékét...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>Kalibrálás közben döntse meg a készüléket teljes mozgástartományában.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>Új / tiszta kimenet</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>Fájl megnyitása</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>Mentés fájlba</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>Szöveg megosztása</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>Edzés</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>Betanítási adatok</value>
+  </data>
+  <data name="turbo" xml:space="preserve">
+    <value>Turbó</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>Gépelési sebesség</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>Használd a Dashert billentyűzetként</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>Megtaláltuk a Dasher 5 konfigurációdat ezen a Mac gépen. Az ábécé, a színek, a sebességbeállítások és az egyéni fájlok importálhatók a Dasher 6-ba.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>Mit találtak</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>X tartomány:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Y tartomány:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ydotool található. A billentyűzet mód készen áll.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>Később importálhatja a Beállítások &gt; Adatvédelem és migrálás menüpontban.</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>A tekinteted követése folyamatosan csak akkor történik, ha összecsippented és lenyomva tartod az ujjaidat – így működik az összes visionOS tekintetet rögzítő alkalmazás.</value>
+  </data>
+</root>

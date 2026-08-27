@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (zh-CN). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>崩溃报告已保存到 ~/Library/Logs/DiagnosticReports/Dasher-*.ips。如果您可以在 GitHub 问题中分享它，它将帮助我们修复该错误。</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>接受悬停/指针事件作为 Dasher 输入。启用眼动追踪或外部指针。</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>使用权</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>需要无障碍许可</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>自动适应速度</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>高级设置</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>所有 Dasher 设置都将恢复为默认值。此操作无法撤消。</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>字母</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>帮助改进 Dasher</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>现在不要</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>分享匿名分析和崩溃报告</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>重置分析 ID</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>匿名使用分析</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>匿名使用情况分析有助于我们了解 Dasher 的使用方式并修复崩溃问题。我们绝不会收集任何您输入的文本、剪贴板内容或个人信息。您可以随时在“设置”→“隐私”中选择退出。</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>应用程序级停留选择</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>汽车</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>自动居中目标</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>固定后自动选择。仅当操作系统停留关闭时才启用。</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>捏合时注视后自动选择。仅当操作系统停留关闭时才启用。</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>再次检查</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>选择...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>选择文件...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>点击设置键盘模式（需要 ydotool）</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>颜色主题</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>已复制到剪贴板。</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>全部复制</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>全部复制</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>复制命令</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>电流校准</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>定制</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>黑暗的</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>冲锋者</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>在此 Mac 上检测到 Dasher 5 数据。</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>Dasher 5 设置已成功导入。</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>Dasher 还可以用作系统键盘，因此您可以在任何应用程序中书写。在“设置”中启用一次。</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>Dasher 收集匿名分析以了解使用情况并修复崩溃。不会收集任何键入的文本、剪贴板或个人信息。请参阅 github.com/dasher-project/Dasher-Apple 上的开放事件架构。</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>Dasher 收集匿名、尊重隐私的分析，以了解使用模式并修复崩溃。不会收集任何键入的文本、剪贴板内容或个人信息。
+
+您可以随时在“设置”&gt;“隐私”中更改此设置。</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>短跑键盘</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>短跑键盘</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>Dasher 需要辅助访问权限才能将文本发送到其他应用程序。</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>冲锋者偏好</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>Dasher 意外退出</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>降低速度</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>诊断</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>直接模式</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>完毕</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>停留点击</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>在“设置”→“常规”→“键盘”→“键盘”下启用 Dasher，然后打开“允许完全访问”，以便 Dasher 可以说话和学习。</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>首先启用倾斜输入以访问校准。</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>导出培训文本</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>目光凝视</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>打开失败：</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>保存失败：</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>快速地</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>完全访问权限可让 Dasher 说出您所写的内容并记住您的训练。没有它，键盘仍然可以进行基本输入。</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>游戏模式</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>游戏模式</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>游戏文本文件</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>知道了</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>GTK版</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>导入将文本添加到语言模型中（附加到现有学习中）。导出保存您积累的训练数据以供备份或传输。重置会删除自定义训练数据——模型在下次启动时返回到其内置默认值。</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>从 Dasher 5 导入</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>导入设置</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>导入训练文本</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>提高速度</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>输入</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>游戏手柄/操纵杆（拨动操纵杆来控制方向）</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>倾斜（握住设备，倾斜以控制方向）</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>输入法</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>触摸（在画布上拖动）</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>安装 ydotool 以使用键盘模式。</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>未安装。请运行以下命令，然后按“重试”：</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>_键盘</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>退出键盘模式</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;此版本不支持键盘模式&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>键盘模式不透明度</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>键盘模式已停止：ydotool 无法注入文本。ydotoold 是否已停止？</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>启用键盘模式</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;语言/地区&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>底部</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>窗格位置和直接进入模式</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>键盘</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>左侧</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>右侧</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>顶部</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>学习</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>退出游戏模式</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>光</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>本地化</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>迁移</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>移动眼睛，同时捏住转向</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>新的</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>新消息</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>在此 Mac 上找不到 Dasher 5 数据。</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>此部分暂无设置选项。</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>已无可挽救</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>没什么可分享的</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>在 VisionOS 上，捏住画布即可开始书写，捏合时环顾四周即可转向，松开即可暂停。输入模型是捏看式的。</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>打开...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>打开失败</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>打开键盘设置</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>打开设置</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>打开系统设置</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>打开文本文件</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>输出</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>输出字体大小</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>点击画布开始书写。</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>目光移开时暂停</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>捏住画布上的任意位置即可开始</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>捏捏并看着写</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>玩</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>指针悬停输入</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>偏好</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>隐私</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;隐私&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>从 Dasher 5 重新导入</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>读</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>松开捏合即可暂停</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>将所有设置重置为默认值</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>将所有设置重置为默认值？</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>重置匿名ID</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>将引擎设置重置为默认值</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>重置设置</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>重置为默认值</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>重置训练数据</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>重置训练数据？</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>将所有 Dasher 设置恢复为默认值。此操作无法撤消。</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>重试</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>节省</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>节省...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>保存失败</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>保存文本文件</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>已保存</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>已保存：</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>扫描速度</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>设置...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>将所有设置重置为默认值</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>设置重置</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>将所有引擎设置重置为内置默认值？</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>设置（速度、颜色、控制模式、语言模型）</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>分享</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>显示输入调试覆盖</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>显示打字速度 (WPM)</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>尺寸</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>跳过的文件</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>慢的</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>演讲</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>演讲结束</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>演讲内容</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;语音设置&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>速度</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>速度</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>开始校准</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>重新开始</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>文本文件</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>调试覆盖层在画布的左上角绘制一个绿色面板，显示实时触摸事件计数和最后报告的 (x, y)。当您捏住并按住时，您应该会看到 touch.began 然后 touch.moved ，并且当您环顾四周时，坐标会发生变化。</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>这将删除您积累的训练数据。语言模型将在下次启动时恢复为内置默认值。此操作无法撤消。</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>倾斜校准</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>现在倾斜您的设备...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>在校准过程中，在整个运动范围内倾斜您的设备。</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>新/清晰输出</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>打开文件</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>保存到文件</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>分享文本</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>训练</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>训练数据</value>
+  </data>
+  <data name="turbo" xml:space="preserve">
+    <value>涡轮</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>打字速度</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>使用 Dasher 作为键盘</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>我们在这台 Mac 上找到了您的 Dasher 5 配置。您的字母表、颜色、速度设置和自定义文件都可以导入到 Dasher 6 中。</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>发现了什么</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>X范围：</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Y范围：</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>已找到 ydotool。键盘模式已准备就绪。</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>您可以稍后在“设置”&gt;“隐私和迁移”中导入</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>仅当您捏捏并按住时，才会持续跟踪您的视线 - 这就是所有visionOS 视线应用程序的工作原理。</value>
+  </data>
+</root>

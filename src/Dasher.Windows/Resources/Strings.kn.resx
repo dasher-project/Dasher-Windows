@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (kn). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>ಕ್ರ್ಯಾಶ್ ವರದಿಯನ್ನು ~/Library/Logs/DiagnosticReports/Dasher-*.ips ಗೆ ಉಳಿಸಲಾಗಿದೆ. ನೀವು ಅದನ್ನು GitHub ಸಮಸ್ಯೆಯಲ್ಲಿ ಹಂಚಿಕೊಳ್ಳಲು ಸಾಧ್ಯವಾದರೆ, ಅದು ದೋಷವನ್ನು ಸರಿಪಡಿಸಲು ನಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>ಕುರಿತಾಗಿ</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ ಇನ್‌ಪುಟ್ ಆಗಿ ಹೋವರ್/ಪಾಯಿಂಟರ್ ಈವೆಂಟ್‌ಗಳನ್ನು ಸ್ವೀಕರಿಸಿ. ಕಣ್ಣಿನ ಟ್ರ್ಯಾಕಿಂಗ್ ಅಥವಾ ಬಾಹ್ಯ ಪಾಯಿಂಟರ್‌ಗಳಿಗಾಗಿ ಸಕ್ರಿಯಗೊಳಿಸಿ.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>ಪ್ರವೇಶ</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>ಪ್ರವೇಶಿಸುವಿಕೆ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>ವೇಗವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>ಸುಧಾರಿತ ಸೆಟ್ಟಿಂಗ್‌ಗಳು</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>ಎಲ್ಲಾ ಡ್ಯಾಷರ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಅವುಗಳ ಡೀಫಾಲ್ಟ್ ಮೌಲ್ಯಗಳಿಗೆ ಮರುಸ್ಥಾಪಿಸಲಾಗುತ್ತದೆ. ಇದನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>ವರ್ಣಮಾಲೆ</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ ಸುಧಾರಿಸಲು ಸಹಾಯ ಮಾಡಿ</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>ಈಗಲ್ಲ</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>ಅನಾಮಧೇಯ ವಿಶ್ಲೇಷಣೆಗಳು ಮತ್ತು ಕ್ರ್ಯಾಶ್ ವರದಿಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳಿ</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>ಅನಾಲಿಟಿಕ್ಸ್ ಐಡಿಯನ್ನು ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>ಅನಾಮಧೇಯ ಬಳಕೆಯ ವಿಶ್ಲೇಷಣೆ</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>ಅನಾಮಧೇಯ ಬಳಕೆಯ ವಿಶ್ಲೇಷಣೆಯು ಡ್ಯಾಷರ್ ಅನ್ನು ಹೇಗೆ ಬಳಸಲಾಗುತ್ತದೆ ಎಂಬುದನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಮತ್ತು ಕ್ರ್ಯಾಶ್‌ಗಳನ್ನು ಸರಿಪಡಿಸಲು ನಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ. ಟೈಪ್ ಮಾಡಿದ ಪಠ್ಯ, ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ವಿಷಯಗಳು ಅಥವಾ ವೈಯಕ್ತಿಕ ಮಾಹಿತಿಯನ್ನು ಎಂದಿಗೂ ಸಂಗ್ರಹಿಸಲಾಗುವುದಿಲ್ಲ. ಸೆಟ್ಟಿಂಗ್‌ಗಳು → ಗೌಪ್ಯತೆಯಲ್ಲಿ ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಆಯ್ಕೆಯಿಂದ ಹೊರಗುಳಿಯಿರಿ.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>ಆಯ್ಕೆ ಮಾಡಲು ಅಪ್ಲಿಕೇಶನ್-ಮಟ್ಟದ ಡ್ವೆಲ್</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>ಆಟೋ</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>ಆಟೋ-ಸೆಂಟರ್ ಗುರಿ</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>ಸರಿಪಡಿಸಿದ ನಂತರ ಸ್ವಯಂ-ಆಯ್ಕೆ ಮಾಡಿ. OS dwell ಆಫ್ ಆಗಿದ್ದರೆ ಮಾತ್ರ ಸಕ್ರಿಯಗೊಳಿಸಿ.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>ಪಿಂಚ್ ಮಾಡುವಾಗ ನಿಮ್ಮ ನೋಟವನ್ನು ಸರಿಪಡಿಸಿದ ನಂತರ ಸ್ವಯಂ-ಆಯ್ಕೆ ಮಾಡಿ. OS ಡ್ವೆಲ್ ಆಫ್ ಆಗಿದ್ದರೆ ಮಾತ್ರ ಸಕ್ರಿಯಗೊಳಿಸಿ.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>ರದ್ದುಮಾಡಿ</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸಿ</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>ಆರಿಸಿ...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>ಸ್ಪಷ್ಟ</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್ ಮೋಡ್ ಹೊಂದಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ (ydotool ಅಗತ್ಯವಿದೆ)</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>ಮುಚ್ಚಿ</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>ಬಣ್ಣದ ಥೀಮ್</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>à²à²²à²¾à²¯à²¿à²¸à³</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>ಎಲ್ಲವನ್ನೂ ನಕಲಿಸಿ</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>ಎಲ್ಲವನ್ನೂ ನಕಲಿಸಿ</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>ಆದೇಶಗಳನ್ನು ನಕಲಿಸಿ</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>ಪ್ರಸ್ತುತ ಮಾಪನಾಂಕ ನಿರ್ಣಯ</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>ಗ್ರಾಹಕೀಕರಣ</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>ಕತ್ತಲೆ</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>ದಾಶರ್</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>ಈ Mac ನಲ್ಲಿ Dasher 5 ಡೇಟಾ ಪತ್ತೆಯಾಗಿದೆ.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ 5 ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಆಮದು ಮಾಡಿಕೊಳ್ಳಲಾಗಿದೆ.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ ಸಿಸ್ಟಮ್ ಕೀಬೋರ್ಡ್ ಆಗಿಯೂ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ, ಆದ್ದರಿಂದ ನೀವು ಯಾವುದೇ ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ಬರೆಯಬಹುದು. ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಒಮ್ಮೆ ಅದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>ಬಳಕೆಯನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಮತ್ತು ಕ್ರ್ಯಾಶ್‌ಗಳನ್ನು ಸರಿಪಡಿಸಲು ಡ್ಯಾಷರ್ ಅನಾಮಧೇಯ ವಿಶ್ಲೇಷಣೆಯನ್ನು ಸಂಗ್ರಹಿಸುತ್ತದೆ. ಟೈಪ್ ಮಾಡಿದ ಪಠ್ಯ, ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ಅಥವಾ ವೈಯಕ್ತಿಕ ಮಾಹಿತಿಯನ್ನು ಎಂದಿಗೂ ಸಂಗ್ರಹಿಸಲಾಗುವುದಿಲ್ಲ. github.com/dasher-project/Dasher-Apple ನಲ್ಲಿ ತೆರೆದ ಈವೆಂಟ್ ಸ್ಕೀಮಾವನ್ನು ನೋಡಿ.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>ಬಳಕೆಯ ಮಾದರಿಗಳನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಮತ್ತು ಕ್ರ್ಯಾಶ್‌ಗಳನ್ನು ಸರಿಪಡಿಸಲು ಡ್ಯಾಷರ್ ಅನಾಮಧೇಯ, ಗೌಪ್ಯತೆಯನ್ನು ಗೌರವಿಸುವ ವಿಶ್ಲೇಷಣೆಗಳನ್ನು ಸಂಗ್ರಹಿಸುತ್ತದೆ. ಟೈಪ್ ಮಾಡಿದ ಪಠ್ಯ, ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ವಿಷಯಗಳು ಅಥವಾ ವೈಯಕ್ತಿಕ ಮಾಹಿತಿಯನ್ನು ಎಂದಿಗೂ ಸಂಗ್ರಹಿಸಲಾಗುವುದಿಲ್ಲ.
+
+ನೀವು ಇದನ್ನು ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳು &gt; ಗೌಪ್ಯತೆಯಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ ಕೀಬೋರ್ಡ್</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ ಕೀಬೋರ್ಡ್</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗೆ ಪಠ್ಯವನ್ನು ಕಳುಹಿಸಲು ಡ್ಯಾಷರ್‌ಗೆ ಪ್ರವೇಶದ ಪ್ರವೇಶದ ಅಗತ್ಯವಿದೆ.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Dasher ಆದ್ಯತೆಗಳು</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ ಅನಿರೀಕ್ಷಿತವಾಗಿ ತ್ಯಜಿಸಿದೆ</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>ವೇಗ ಕಡಿಮೆ ಮಾಡಿ</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>ಡೀಫಾಲ್ಟ್</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>ರೋಗನಿರ್ಣಯ</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>ನೇರ ಮೋಡ್</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>ಮುಗಿದಿದೆ</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>ಕ್ಲಿಕ್ ಮಾಡಲು ವಾಸಿಸು (Dwell)</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳು → ಸಾಮಾನ್ಯ → ಕೀಬೋರ್ಡ್ → ಕೀಬೋರ್ಡ್‌ಗಳು ಅಡಿಯಲ್ಲಿ ಡ್ಯಾಷರ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ, ನಂತರ ಡ್ಯಾಷರ್ ಮಾತನಾಡಲು ಮತ್ತು ಕಲಿಯಲು ಪೂರ್ಣ ಪ್ರವೇಶವನ್ನು ಅನುಮತಿಸಿ ಆನ್ ಮಾಡಿ.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>ಮಾಪನಾಂಕ ನಿರ್ಣಯವನ್ನು ಪ್ರವೇಶಿಸಲು ಮೊದಲು ಟಿಲ್ಟ್ ಇನ್‌ಪುಟ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>ತರಬೇತಿ ಪಠ್ಯವನ್ನು ರಫ್ತು ಮಾಡಿ</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>ಕಣ್ಣಿನ ನೋಟ</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>ತೆರೆಯಲು ವಿಫಲವಾಗಿದೆ:</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>ಉಳಿಸಲು &lt;x id="1"/&gt;ವಿಫಲವಾಗಿದೆ.</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>ವೇಗವಾಗಿ</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>ಪೂರ್ಣ ಪ್ರವೇಶವು ಡ್ಯಾಶರ್‌ಗೆ ನೀವು ಬರೆಯುವುದನ್ನು ಮಾತನಾಡಲು ಮತ್ತು ನಿಮ್ಮ ತರಬೇತಿಯನ್ನು ನೆನಪಿಟ್ಟುಕೊಳ್ಳಲು ಅನುಮತಿಸುತ್ತದೆ. ಕೀಬೋರ್ಡ್ ಇಲ್ಲದೆಯೂ ಸಹ ಮೂಲಭೂತ ಪ್ರವೇಶಕ್ಕಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>ಆಟದ ಮೋಡ್</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>ಗೇಮ್ ಮೋಡ್</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>ಆಟದ ಪಠ್ಯ ಫೈಲ್</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>ಅರ್ಥವಾಯಿತು</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>GTK ಆವೃತ್ತಿ</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>ಆಮದು ಭಾಷಾ ಮಾದರಿಗೆ ಪಠ್ಯವನ್ನು ಸೇರಿಸುತ್ತದೆ (ಅಸ್ತಿತ್ವದಲ್ಲಿರುವ ಕಲಿಕೆಗೆ ಸೇರಿಸುತ್ತದೆ). ರಫ್ತು ನಿಮ್ಮ ಸಂಗ್ರಹವಾದ ತರಬೇತಿ ಡೇಟಾವನ್ನು ಬ್ಯಾಕಪ್ ಅಥವಾ ವರ್ಗಾವಣೆಗಾಗಿ ಉಳಿಸುತ್ತದೆ. ಮರುಹೊಂದಿಸುವಿಕೆಯು ಕಸ್ಟಮ್ ತರಬೇತಿ ಡೇಟಾವನ್ನು ಅಳಿಸುತ್ತದೆ - ಮುಂದಿನ ಉಡಾವಣೆಯಲ್ಲಿ ಮಾದರಿಯು ಅದರ ಅಂತರ್ನಿರ್ಮಿತ ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಮರಳುತ್ತದೆ.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ 5 ರಿಂದ ಆಮದು ಮಾಡಿ</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಆಮದು ಮಾಡಿ</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>ತರಬೇತಿ ಪಠ್ಯವನ್ನು ಆಮದು ಮಾಡಿ</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>ವೇಗ ಹೆಚ್ಚಿಸಿ</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>ಇನ್ಪುಟ್</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>ಜಾಯ್‌ಸ್ಟಿಕ್ / ಗೇಮ್‌ಪ್ಯಾಡ್ (ಸ್ಟಿಯರ್ ಮಾಡಲು ಕೋಲನ್ನು ತಿರುಗಿಸಿ)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>ಓರೆಯಾಗಿಸಿ (ಸಾಧನವನ್ನು ಹಿಡಿದುಕೊಳ್ಳಿ, ಚಲಿಸಲು ಓರೆಯಾಗಿಸಿ)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>ಇನ್‌ಪುಟ್ ವಿಧಾನ</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>ಸ್ಪರ್ಶಿಸಿ (ಕ್ಯಾನ್ವಾಸ್ ಮೇಲೆ ಎಳೆಯಿರಿ)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;ಕೀಬೋರ್ಡ್ ಮೋಡ್ ಬಳಸಲು ydotool ಅನ್ನು ಸ್ಥಾಪಿಸಿ&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>ಸ್ಥಾಪಿಸಲಾಗಿಲ್ಲ. ಈ ಆಜ್ಞೆಗಳನ್ನು ರನ್ ಮಾಡಿ, ನಂತರ ಮರುಪ್ರಯತ್ನಿಸಿ ಒತ್ತಿರಿ:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>ಕೀಲಿಮಣೆ</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್ ಮೋಡ್‌ನಿಂದ ನಿರ್ಗಮಿಸಿ</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;ಈ ಬಿಲ್ಡ್‌ನಲ್ಲಿ ಕೀಬೋರ್ಡ್ ಮೋಡ್ ಲಭ್ಯವಿಲ್ಲ.&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್ ಮೋಡ್ ಅಪಾರದರ್ಶಕತೆ</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್ ಮೋಡ್ ನಿಲ್ಲಿಸಲಾಗಿದೆ: ydotool ಪಠ್ಯವನ್ನು ಚುಚ್ಚಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ydotoold ಆಗಿದೆಯೇ?</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್ ಮೋಡ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;ಭಾಷೆ / ಸ್ಥಳ&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>ಕೆಳಭಾಗ</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>ಪೇನ್ ಸ್ಥಾನ ಮತ್ತು ಡೈರೆಕ್ಟ್-ಎಂಟ್ರಿ ಮೋಡ್</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>ಎಡಭಾಗ</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>ಬಲಭಾಗ</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>ಟಾಪ್</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>ಕಲಿಕೆ</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>ಆಟದ ಮೋಡ್ ಅನ್ನು ಬಿಡಿ</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>ಬೆಳಕು</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>ಭಾಷೆ</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>ಪ್ರಾದೇಶಿಕ</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>ವಲಸೆ</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>ಸ್ಟಿಯರ್ ಮಾಡಲು ಚಿವುಟುವಾಗ ನಿಮ್ಮ ಕಣ್ಣುಗಳನ್ನು ಸರಿಸಿ.</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>ಹೊಸ</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>ಹೊಸ ಸಂದೇಶ</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>ಈ Mac ನಲ್ಲಿ ಯಾವುದೇ Dasher 5 ಡೇಟಾ ಕಂಡುಬಂದಿಲ್ಲ.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>ಈ ವಿಭಾಗಕ್ಕೆ ಯಾವುದೇ ಸೆಟ್ಟಿಂಗ್‌ಗಳು ಲಭ್ಯವಿಲ್ಲ.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>ಉಳಿಸಲು ಏನೂ ಇಲ್ಲ.</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>ಹಂಚಿಕೊಳ್ಳಲು ಏನೂ ಇಲ್ಲ</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>ಸರಿ</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>ವಿಷನ್ಓಎಸ್‌ನಲ್ಲಿ, ಬರೆಯಲು ಪ್ರಾರಂಭಿಸಲು ಕ್ಯಾನ್ವಾಸ್ ಅನ್ನು ಪಿಂಚ್ ಮಾಡಿ ಮತ್ತು ಹಿಡಿದುಕೊಳ್ಳಿ, ಸ್ಟಿಯರ್ ಮಾಡಲು ಪಿಂಚ್ ಮಾಡುವಾಗ ಸುತ್ತಲೂ ನೋಡಿ ಮತ್ತು ವಿರಾಮಗೊಳಿಸಲು ಬಿಡುಗಡೆ ಮಾಡಿ. ಇನ್‌ಪುಟ್ ಮಾದರಿ ಪಿಂಚ್-ಅಂಡ್-ಲುಕ್ ಆಗಿದೆ.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>ತೆರೆ</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>ತೆರೆಯಿರಿ...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>ತೆರೆಯುವಿಕೆ ವಿಫಲವಾಗಿದೆ</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>ಸಿಸ್ಟಂ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>ಪಠ್ಯ ಫೈಲ್ ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>ಪ್ರದಾನ (ಔಟ್ ಪುಟ್)</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>ಔಟ್‌ಪುಟ್ ಫಾಂಟ್ ಗಾತ್ರ</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>ಬರೆಯಲು ಪ್ರಾರಂಭಿಸಲು ಕ್ಯಾನ್ವಾಸ್ ಅನ್ನು ಸ್ಪರ್ಶಿಸಿ.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>ಅಂಟಿಸಿ</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>ವಿರಾಮಗೊಳಿಸಿ</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>ದೂರ ನೋಡುವಾಗ ವಿರಾಮಗೊಳಿಸಿ</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>ಪ್ರಾರಂಭಿಸಲು ಕ್ಯಾನ್ವಾಸ್‌ನಲ್ಲಿ ಎಲ್ಲಿಯಾದರೂ ಪಿಂಚ್ ಮಾಡಿ ಮತ್ತು ಹಿಡಿದುಕೊಳ್ಳಿ</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>ಬರೆಯಲು ಪಿಂಚ್ ಮಾಡಿ ನೋಡಿ</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>ಪ್ಲೇ</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>ಪಾಯಿಂಟರ್ ಹೋವರ್ ಇನ್‌ಪುಟ್</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>ಪೂರ್ವಭಾವಿಗಳು</value>
+  </data>
+  <data name="privacy" xml:space="preserve">
+    <value>ಗೌಪ್ಯತೆ</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;ಗೌಪ್ಯತೆ&lt;/b&gt;</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ 5 ರಿಂದ ಮರು-ಆಮದು ಮಾಡಿ</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>ಓದು, @ item: intext Access permission, concatenated</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>ವಿರಾಮಗೊಳಿಸಲು ಪಿಂಚ್ ಅನ್ನು ಬಿಡುಗಡೆ ಮಾಡಿ</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>ಎಲ್ಲಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>ಎಲ್ಲಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಅವುಗಳ ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಮರುಹೊಂದಿಸುವುದೇ?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>ಅನಾಮಧೇಯ ID ಯನ್ನು ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>ಎಂಜಿನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>ತರಬೇತಿ ಡೇಟಾವನ್ನು ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>ತರಬೇತಿ ಡೇಟಾವನ್ನು ಮರುಹೊಂದಿಸುವುದೇ?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>ಎಲ್ಲಾ ಡ್ಯಾಷರ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಅವುಗಳ ಡೀಫಾಲ್ಟ್ ಮೌಲ್ಯಗಳಿಗೆ ಮರುಸ್ಥಾಪಿಸಿ. ಇದನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>ಪುನಃ ಪ್ರಯತ್ನಿಸು</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>ಉಳಿಸಿ</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>ಉಳಿಸಿ...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>ಉಳಿಸುವಿಕೆ ವಿಫಲವಾಗಿದೆ</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>ಪಠ್ಯ ಫೈಲ್ ಉಳಿಸಿ</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>ಉಳಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>ಉಳಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>ಸ್ಕ್ಯಾನ್ ವೇಗ</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳು</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳು...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>ಎಲ್ಲಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಮರುಹೊಂದಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>ಎಲ್ಲಾ ಎಂಜಿನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಅವುಗಳ ಅಂತರ್ನಿರ್ಮಿತ ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಮರುಹೊಂದಿಸುವುದೇ?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳು (ವೇಗ, ಬಣ್ಣಗಳು, ನಿಯಂತ್ರಣ ಮೋಡ್, ಭಾಷಾ ಮಾದರಿ)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>ಹಂಚಿ</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>ಇನ್‌ಪುಟ್ ಡೀಬಗ್ ಓವರ್‌ಲೇ ತೋರಿಸಿ</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>ಟೈಪಿಂಗ್ ದರ (WPM) ತೋರಿಸಿ</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>ಗಾತ್ರ</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>ಬಿಟ್ಟುಬಿಟ್ಟ ಫೈಲ್‌ಗಳು</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>ನಿಧಾನ</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>ಭಾಷಣ</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>ಭಾಷಣ ಆಫ್ ಆಗಿದೆ</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>ಭಾಷಣ ಆನ್ ಆಗಿದೆ</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;ಭಾಷಣ ಸೆಟ್ಟಿಂಗ್‌ಗಳು&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>ವೇಗ</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>ವೇಗ</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>ಮಾಪನಾಂಕ ನಿರ್ಣಯಿಸಲು ಪ್ರಾರಂಭಿಸಿ</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>ಹೊಸದಾಗಿ ಪ್ರಾರಂಭಿಸಿ</value>
+  </data>
+  <data name="stop" xml:space="preserve">
+    <value>ನಿಲ್ಲಿಸಿ</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>ವ್ಯವಸ್ಥೆ</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>ಪಠ್ಯ</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>ಪಠ್ಯ ಕಡತಗಳುComment</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>ಡೀಬಗ್ ಓವರ್‌ಲೇ ಕ್ಯಾನ್ವಾಸ್‌ನ ಮೇಲಿನ ಎಡಭಾಗದಲ್ಲಿ ಹಸಿರು ಫಲಕವನ್ನು ಚಿತ್ರಿಸುತ್ತದೆ, ಇದು ಲೈವ್ ಟಚ್ ಈವೆಂಟ್ ಎಣಿಕೆಗಳು ಮತ್ತು ಕೊನೆಯದಾಗಿ ವರದಿ ಮಾಡಲಾದ (x, y) ಅನ್ನು ತೋರಿಸುತ್ತದೆ. ನೀವು ಪಿಂಚ್ ಮಾಡಿ ಹಿಡಿದಿಟ್ಟುಕೊಂಡಾಗ, ನೀವು ಸುತ್ತಲೂ ನೋಡುವಾಗ ಬದಲಾಗುತ್ತಿರುವ ನಿರ್ದೇಶಾಂಕಗಳೊಂದಿಗೆ touch.began ಅನ್ನು ನಂತರ touch.moved ಅನ್ನು ನೋಡಬೇಕು.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>ಇದು ನಿಮ್ಮ ಸಂಗ್ರಹವಾದ ತರಬೇತಿ ಡೇಟಾವನ್ನು ಅಳಿಸುತ್ತದೆ. ಮುಂದಿನ ಉಡಾವಣೆಯಲ್ಲಿ ಭಾಷಾ ಮಾದರಿಯು ಅಂತರ್ನಿರ್ಮಿತ ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಹಿಂತಿರುಗುತ್ತದೆ. ಇದನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>ಟಿಲ್ಟ್ ಮಾಪನಾಂಕ ನಿರ್ಣಯ</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>ನಿಮ್ಮ ಸಾಧನವನ್ನು ಈಗ ಓರೆಯಾಗಿಸಿ...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>ಮಾಪನಾಂಕ ನಿರ್ಣಯದ ಸಮಯದಲ್ಲಿ ನಿಮ್ಮ ಸಾಧನವನ್ನು ಅದರ ಪೂರ್ಣ ವ್ಯಾಪ್ತಿಯ ಚಲನೆಯ ಮೂಲಕ ಓರೆಯಾಗಿಸಿ.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>ಹೊಸ / ಸ್ಪಷ್ಟ ಔಟ್‌ಪುಟ್</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>ಫೈಲ್ ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>ಫೈಲ್‌ಗೆ ಉಳಿಸಿ</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>ಪಠ್ಯವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>ತರಬೇತಿ</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>ತರಬೇತಿ ಡೇಟಾ</value>
+  </data>
+  <data name="turbo" xml:space="preserve">
+    <value>ಟರ್ಬೊ</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>ಟೈಪಿಂಗ್ ದರ</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>ಡ್ಯಾಷರ್ ಅನ್ನು ನಿಮ್ಮ ಕೀಬೋರ್ಡ್ ಆಗಿ ಬಳಸಿ</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>ಈ Mac ನಲ್ಲಿ ನಿಮ್ಮ Dasher 5 ಕಾನ್ಫಿಗರೇಶನ್ ನಮಗೆ ಕಂಡುಬಂದಿದೆ. ನಿಮ್ಮ ವರ್ಣಮಾಲೆ, ಬಣ್ಣಗಳು, ವೇಗ ಸೆಟ್ಟಿಂಗ್‌ಗಳು ಮತ್ತು ಕಸ್ಟಮ್ ಫೈಲ್‌ಗಳನ್ನು Dasher 6 ಗೆ ಆಮದು ಮಾಡಿಕೊಳ್ಳಬಹುದು.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>ಏನು ಸಿಕ್ಕಿತು?</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>X ಶ್ರೇಣಿ:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Y ಶ್ರೇಣಿ:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ydotool ಕಂಡುಬಂದಿದೆ. ಕೀಬೋರ್ಡ್ ಮೋಡ್ ಸಿದ್ಧವಾಗಿದೆ.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>ನೀವು ನಂತರ ಸೆಟ್ಟಿಂಗ್‌ಗಳು &gt; ಗೌಪ್ಯತೆ ಮತ್ತು ವಲಸೆಯಲ್ಲಿ ಆಮದು ಮಾಡಿಕೊಳ್ಳಬಹುದು.</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>ನೀವು ಪಿಂಚ್ ಮಾಡಿ ಹಿಡಿದಿಟ್ಟುಕೊಳ್ಳುವಾಗ ಮಾತ್ರ ನಿಮ್ಮ ನೋಟವನ್ನು ನಿರಂತರವಾಗಿ ಟ್ರ್ಯಾಕ್ ಮಾಡಲಾಗುತ್ತದೆ - ಎಲ್ಲಾ ವಿಷನ್ಓಎಸ್ ಗೇಜ್ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಹೀಗೆಯೇ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತವೆ.</value>
+  </data>
+</root>

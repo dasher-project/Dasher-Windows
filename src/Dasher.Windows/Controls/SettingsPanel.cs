@@ -123,7 +123,7 @@ public class SettingsPanel : Decorator
     {
         if (_handle == IntPtr.Zero) return;
         _currentCategory = category;
-        Title = category;
+        Title = LocalizeCategory(category);
 
         _panel.Children.Clear();
 
@@ -136,9 +136,9 @@ public class SettingsPanel : Decorator
 
         if (category == "Language")
         {
-            var localeRow = BuildLocaleRow();
-            if (localeRow != null)
-                _panel.Children.Add(localeRow);
+            // No in-app locale picker: the UI follows the OS language
+            // (Windows' per-app language override included) and Loc pushes
+            // the resolved locale into the engine at startup.
             _panel.Children.Add(BuildTrainingSection());
         }
 
@@ -177,6 +177,15 @@ public class SettingsPanel : Decorator
 
         if (category == "Language")
             parameters = FilterByActiveLanguageModel(parameters);
+
+        // Progressive disclosure (RFC 0006): Simple shows common params only;
+        // the switch reveals advanced + expert tiers.
+        var uiSettings = UiSettings.Load();
+        if (!uiSettings.ShowAdvanced)
+            parameters = parameters.Where(p => p.Advanced == 0).ToList();
+
+        if (parameters.Count > 0)
+            _panel.Children.Add(BuildSimpleAdvancedRow(uiSettings));
 
         var grouped = parameters
             .GroupBy(p => string.IsNullOrEmpty(p.Subgroup) ? "" : p.Subgroup)
@@ -394,7 +403,7 @@ public class SettingsPanel : Decorator
 
         panel.Children.Add(new TextBlock
         {
-            Text = "Typing Rate",
+            Text = Loc.Tr("typing_rate", "Typing rate"),
             FontSize = 13,
             FontWeight = FontWeight.SemiBold,
             Foreground = BrushLabel,
@@ -724,66 +733,24 @@ public class SettingsPanel : Decorator
         }
     }
 
-    private static readonly Dictionary<string, string> AvailableLocales = new()
+    /// <summary>
+    /// Localise a settings category name from the shared catalogue (RFC 0003).
+    /// The UI culture follows the OS language, so the right satellite resource
+    /// is chosen automatically. Categories without a catalogue key
+    /// (Appearance, Other) stay as-is.
+    /// </summary>
+    public static string LocalizeCategory(string category) => category switch
     {
-        ["en"] = "English",
-        ["de"] = "Deutsch",
-        ["es"] = "Espanol",
-        ["fr"] = "Francais",
-        ["it"] = "Italiano",
-        ["pt"] = "Portugues",
-        ["pt-PT"] = "Portugues (Portugal)",
-        ["ar"] = "Arabic",
-        ["el"] = "Greek",
-        ["zh-CN"] = "Chinese (Simplified)",
+        "Input" => Loc.Tr("input", "Input"),
+        "Language" => Loc.Tr("language", "Language"),
+        "Customization" => Loc.Tr("customization", "Customization"),
+        "Speed" => Loc.Tr("speed", "Speed"),
+        "Output" => Loc.Tr("output", "Output"),
+        "Speech" => Loc.Tr("speech", "Speech"),
+        "Advanced" => Loc.Tr("advanced_settings", "Advanced"),
+        "Privacy" => Loc.Tr("privacy", "Privacy"),
+        _ => category,
     };
-
-    private Control? BuildLocaleRow()
-    {
-        var row = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
-
-        var label = new TextBlock
-        {
-            Text = "App Language",
-            FontSize = 12,
-            FontWeight = FontWeight.Medium,
-            Foreground = BrushLabel,
-            VerticalAlignment = VerticalAlignment.Center,
-            Width = 180,
-        };
-        DockPanel.SetDock(label, Dock.Left);
-        row.Children.Add(label);
-
-        var combo = new ComboBox
-        {
-            MinWidth = 200,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            FontSize = 12,
-        };
-
-        var currentLocalePtr = NativeBridge.dasher_get_locale(_handle);
-        var currentLocale = currentLocalePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(currentLocalePtr) ?? "en" : "en";
-
-        foreach (var kvp in AvailableLocales)
-        {
-            combo.Items.Add(kvp.Value);
-            if (kvp.Key == currentLocale)
-                combo.SelectedIndex = combo.Items.Count - 1;
-        }
-
-        if (combo.SelectedIndex < 0) combo.SelectedIndex = 0;
-
-        combo.SelectionChanged += (s, e) =>
-        {
-            var idx = combo.SelectedIndex;
-            var code = AvailableLocales.Keys.ElementAt(idx);
-            NativeBridge.dasher_set_locale(_handle, code);
-            LoadParameterGroups();
-        };
-
-        row.Children.Add(combo);
-        return row;
-    }
 
     private Control BuildTrainingSection()
     {
@@ -791,7 +758,7 @@ public class SettingsPanel : Decorator
 
         panel.Children.Add(new TextBlock
         {
-            Text = "Training Data",
+            Text = Loc.Tr("training_data", "Training Data"),
             FontSize = 13,
             FontWeight = FontWeight.SemiBold,
             Foreground = BrushLabel,
@@ -1264,6 +1231,42 @@ public class SettingsPanel : Decorator
         return comboBox;
     }
 
+    /// <summary>
+    /// Simple/Advanced switch (RFC 0006 progressive disclosure, parity with
+    /// Dasher-Android). Simple hides advanced and expert parameter tiers.
+    /// </summary>
+    private Control BuildSimpleAdvancedRow(UiSettings settings)
+    {
+        var row = new DockPanel { Margin = new Thickness(0, 0, 0, 10) };
+
+        var text = new TextBlock
+        {
+            Text = Loc.Tr("advanced_settings", "Advanced settings"),
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = BrushLabel,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        DockPanel.SetDock(text, Dock.Left);
+        row.Children.Add(text);
+
+        var toggle = new ToggleSwitch
+        {
+            IsChecked = settings.ShowAdvanced,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Margin = new Thickness(12, 0, 0, 0),
+        };
+        toggle.IsCheckedChanged += (s, e) =>
+        {
+            settings.ShowAdvanced = toggle.IsChecked == true;
+            settings.Save();
+            ShowCategory(_currentCategory);
+        };
+        row.Children.Add(toggle);
+
+        return row;
+    }
+
     private Control BuildSwitch(ParameterDisplayInfo info)
     {
         var toggle = new ToggleSwitch
@@ -1543,7 +1546,7 @@ public class SettingsPanel : Decorator
 
         section.Children.Add(new TextBlock
         {
-            Text = "Analytics & Crash Reporting",
+            Text = Loc.Tr("anonymous_usage_analytics", "Anonymous usage analytics"),
             FontSize = 15,
             FontWeight = FontWeight.SemiBold,
             Foreground = BrushLabel,
@@ -1558,7 +1561,7 @@ public class SettingsPanel : Decorator
             Foreground = BrushValue,
         });
 
-        var toggleRow = BuildToggleRow("Send anonymous usage data", settings.OptedIn, isChecked =>
+        var toggleRow = BuildToggleRow(Loc.Tr("analytics_opt_in", "Share anonymous analytics and crash reports"), settings.OptedIn, isChecked =>
             AnalyticsService.SetOptIn(isChecked));
         toggleRow.Margin = new Thickness(0, 8, 0, 0);
         section.Children.Add(toggleRow);
@@ -1573,7 +1576,7 @@ public class SettingsPanel : Decorator
 
         var resetBtn = new Button
         {
-            Content = "Reset analytics ID",
+            Content = Loc.Tr("analytics_reset_id", "Reset analytics ID"),
             Padding = new Thickness(16, 6),
             FontSize = 12,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -1703,7 +1706,7 @@ public class SettingsPanel : Decorator
 
         section.Children.Add(new TextBlock
         {
-            Text = "Reset Settings",
+            Text = Loc.Tr("reset_settings", "Reset Settings"),
             FontSize = 15,
             FontWeight = FontWeight.SemiBold,
             Foreground = BrushLabel,
@@ -1711,7 +1714,7 @@ public class SettingsPanel : Decorator
 
         section.Children.Add(new TextBlock
         {
-            Text = "Restore all Dasher settings to their default values. This cannot be undone.",
+            Text = Loc.Tr("restore_all_dasher_settings_to_their_default_values_this_can", "Restore all Dasher settings to their default values. This cannot be undone."),
             FontSize = 12,
             TextWrapping = TextWrapping.Wrap,
             Foreground = BrushValue,
@@ -1719,7 +1722,7 @@ public class SettingsPanel : Decorator
 
         var resetSettingsBtn = new Button
         {
-            Content = "Reset to defaults",
+            Content = Loc.Tr("reset_to_defaults", "Reset to defaults"),
             Padding = new Thickness(16, 6),
             FontSize = 12,
             Margin = new Thickness(0, 8, 0, 0),

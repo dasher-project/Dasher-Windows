@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <!-- Generated from shared-resources/ui-strings.json (nl). Do not edit by hand. -->
+  <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
+    <value>Er is een crashrapport opgeslagen in ~/Library/Logs/DiagnosticReports/Dasher-*.ips. Als je dit rapport kunt delen via een GitHub-issue, helpt dat ons om de bug te verhelpen.</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>Over</value>
+  </data>
+  <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
+    <value>Accepteer hover-/aanwijzergebeurtenissen als Dasher-input. Schakel deze functie in voor oogtracking of externe aanwijzers.</value>
+  </data>
+  <data name="access" xml:space="preserve">
+    <value>Toegang</value>
+  </data>
+  <data name="accessibility_permission_required" xml:space="preserve">
+    <value>Toestemming voor toegankelijkheid vereist</value>
+  </data>
+  <data name="adapt_speed_automatically" xml:space="preserve">
+    <value>Snelheid automatisch aanpassen</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>Geavanceerde instellingen</value>
+  </data>
+  <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
+    <value>Alle Dasher-instellingen worden teruggezet naar de standaardwaarden. Dit kan niet ongedaan worden gemaakt.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>Alfabet</value>
+  </data>
+  <data name="analytics_accept" xml:space="preserve">
+    <value>Help Dasher te verbeteren</value>
+  </data>
+  <data name="analytics_decline" xml:space="preserve">
+    <value>Nu niet</value>
+  </data>
+  <data name="analytics_opt_in" xml:space="preserve">
+    <value>Deel anonieme analyses en crashrapporten.</value>
+  </data>
+  <data name="analytics_reset_id" xml:space="preserve">
+    <value>Analytische ID opnieuw instellen</value>
+  </data>
+  <data name="anonymous_usage_analytics" xml:space="preserve">
+    <value>Anonieme gebruiksanalyses</value>
+  </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>Anonieme gebruiksstatistieken helpen ons te begrijpen hoe Dasher wordt gebruikt en crashes te verhelpen. Er wordt nooit getypte tekst, klembordinhoud of persoonlijke informatie verzameld. U kunt zich op elk gewenst moment afmelden via Instellingen → Privacy.</value>
+  </data>
+  <data name="app_level_dwell_to_select" xml:space="preserve">
+    <value>App-niveau verblijftijd om te selecteren</value>
+  </data>
+  <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
+    <value>Automatisch selecteren na fixatie. Alleen inschakelen als OS dwell is uitgeschakeld.</value>
+  </data>
+  <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
+    <value>Automatisch selecteren na fixatie tijdens het knijpen. Alleen inschakelen als de 'dwell'-functie van het besturingssysteem is uitgeschakeld.</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="check_again" xml:space="preserve">
+    <value>Controleer het nogmaals</value>
+  </data>
+  <data name="choose" xml:space="preserve">
+    <value>Kiezen...</value>
+  </data>
+  <data name="choose_file" xml:space="preserve">
+    <value>Kies een bestand...</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>Duidelijk</value>
+  </data>
+  <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
+    <value>Klik hier om de toetsenbordmodus in te stellen (hiervoor is ydotool nodig).</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Dichtbij</value>
+  </data>
+  <data name="colour_theme" xml:space="preserve">
+    <value>Kleurenthema</value>
+  </data>
+  <data name="copied_to_clipboard" xml:space="preserve">
+    <value>Gekopieerd naar het klembord.</value>
+  </data>
+  <data name="copy" xml:space="preserve">
+    <value>Kopiëren</value>
+  </data>
+  <data name="copy_all" xml:space="preserve">
+    <value>Alles kopiëren</value>
+  </data>
+  <data name="copy_all_2" xml:space="preserve">
+    <value>Alles kopiëren</value>
+  </data>
+  <data name="copy_commands" xml:space="preserve">
+    <value>Kopieeropdrachten</value>
+  </data>
+  <data name="current_calibration" xml:space="preserve">
+    <value>Huidige kalibratie</value>
+  </data>
+  <data name="customization" xml:space="preserve">
+    <value>Aanpassing</value>
+  </data>
+  <data name="dark" xml:space="preserve">
+    <value>Donker</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>Dasher</value>
+  </data>
+  <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
+    <value>Dasher 5-gegevens gedetecteerd op deze Mac.</value>
+  </data>
+  <data name="dasher_5_settings_imported_successfully" xml:space="preserve">
+    <value>De Dasher 5-instellingen zijn succesvol geïmporteerd.</value>
+  </data>
+  <data name="dasher_also_works_as_a_system_keyboard_so_you_can_write_in_a" xml:space="preserve">
+    <value>Dasher functioneert ook als systeemtoetsenbord, zodat je in elke app kunt typen. Schakel het eenmalig in via de instellingen.</value>
+  </data>
+  <data name="dasher_collects_anonymous_analytics_to_understand_usage_and_" xml:space="preserve">
+    <value>Dasher verzamelt anonieme analyses om het gebruik te begrijpen en crashes te verhelpen. Er wordt nooit getypte tekst, klembordinformatie of persoonlijke gegevens verzameld. Zie het open event schema op github.com/dasher-project/Dasher-Apple.</value>
+  </data>
+  <data name="dasher_collects_anonymous_privacy_respecting_analytics_to_un" xml:space="preserve">
+    <value>Dasher verzamelt anonieme, privacyvriendelijke analyses om gebruikspatronen te begrijpen en crashes te verhelpen. Er wordt nooit getypte tekst, klembordinhoud of persoonlijke informatie verzameld.
+
+U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
+  </data>
+  <data name="dasher_keyboard" xml:space="preserve">
+    <value>Dasher-toetsenbord</value>
+  </data>
+  <data name="dasher_keyboard_2" xml:space="preserve">
+    <value>Dasher-toetsenbord</value>
+  </data>
+  <data name="dasher_needs_accessibility_access_to_send_text_to_other_appl" xml:space="preserve">
+    <value>Dasher heeft toegankelijkheidstoegang nodig om tekst naar andere applicaties te kunnen verzenden.</value>
+  </data>
+  <data name="dasher_preferences" xml:space="preserve">
+    <value>Dasher-voorkeuren</value>
+  </data>
+  <data name="dasher_quit_unexpectedly" xml:space="preserve">
+    <value>Dasher nam onverwacht ontslag.</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
+  </data>
+  <data name="decrease_speed" xml:space="preserve">
+    <value>Verlaag de snelheid</value>
+  </data>
+  <data name="default" xml:space="preserve">
+    <value>Standaard</value>
+  </data>
+  <data name="diagnostics" xml:space="preserve">
+    <value>Diagnostiek</value>
+  </data>
+  <data name="direct_mode" xml:space="preserve">
+    <value>Directe modus</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>Klaar</value>
+  </data>
+  <data name="dwell_to_click" xml:space="preserve">
+    <value>Blijf staan om te klikken</value>
+  </data>
+  <data name="enable_dasher_under_settings_general_keyboard_keyboards_then" xml:space="preserve">
+    <value>Schakel Dasher in via Instellingen → Algemeen → Toetsenbord → Toetsenborden en zet vervolgens 'Volledige toegang toestaan' aan, zodat Dasher kan spreken en leren.</value>
+  </data>
+  <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
+    <value>Schakel eerst de kantelinput in om toegang te krijgen tot de kalibratie.</value>
+  </data>
+  <data name="export_training_text" xml:space="preserve">
+    <value>Exporteer trainingstekst</value>
+  </data>
+  <data name="eye_gaze" xml:space="preserve">
+    <value>Oogcontact</value>
+  </data>
+  <data name="failed_to_open" xml:space="preserve">
+    <value>Kan niet openen:</value>
+  </data>
+  <data name="failed_to_save" xml:space="preserve">
+    <value>Opslaan mislukt:</value>
+  </data>
+  <data name="fast" xml:space="preserve">
+    <value>Snel</value>
+  </data>
+  <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
+    <value>Met Full Access kan Dasher uitspreken wat je typt en je training onthouden. Het toetsenbord werkt nog steeds voor eenvoudige invoer, ook zonder Full Access.</value>
+  </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>Spelmodus</value>
+  </data>
+  <data name="game_mode_2" xml:space="preserve">
+    <value>Spelmodus</value>
+  </data>
+  <data name="game_text_file" xml:space="preserve">
+    <value>Speltekstbestand</value>
+  </data>
+  <data name="got_it" xml:space="preserve">
+    <value>Begrepen.</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>GTK-editie</value>
+  </data>
+  <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
+    <value>Met 'Importeren' wordt tekst aan het taalmodel toegevoegd (aanvulling op bestaande leergegevens). Met 'Exporteren' worden uw verzamelde trainingsgegevens opgeslagen voor back-up of overdracht. 'Resetten' verwijdert aangepaste trainingsgegevens; het model keert bij de volgende keer opstarten terug naar de ingebouwde standaardinstellingen.</value>
+  </data>
+  <data name="import_from_dasher_5" xml:space="preserve">
+    <value>Importeren vanuit Dasher 5</value>
+  </data>
+  <data name="import_settings" xml:space="preserve">
+    <value>Importinstellingen</value>
+  </data>
+  <data name="import_training_text" xml:space="preserve">
+    <value>Trainingstekst importeren</value>
+  </data>
+  <data name="increase_speed" xml:space="preserve">
+    <value>Verhoog de snelheid</value>
+  </data>
+  <data name="input" xml:space="preserve">
+    <value>Invoer</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>Joystick / gamepad (een stick bewegen om te sturen)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>Kantelen (houd het apparaat vast en kantel het om te sturen)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>Invoermethode</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>Aanraken (slepen op het canvas)</value>
+  </data>
+  <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
+    <value>&lt;b&gt;Installeer ydotool om de toetsenbordmodus te gebruiken&lt;/b&gt;</value>
+  </data>
+  <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
+    <value>is niet geïnstalleerd. Voer deze opdrachten uit en druk vervolgens op Opnieuw proberen:</value>
+  </data>
+  <data name="keyboard_2" xml:space="preserve">
+    <value>_Toetsenbord</value>
+  </data>
+  <data name="keyboard_mode_exit" xml:space="preserve">
+    <value>Toetsenbordmodus verlaten</value>
+  </data>
+  <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
+    <value>&lt;b&gt;De toetsenbordmodus is niet beschikbaar in deze build&lt;/b&gt;</value>
+  </data>
+  <data name="keyboard_mode_opacity" xml:space="preserve">
+    <value>Dekking van de toetsenbordmodus</value>
+  </data>
+  <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
+    <value>Toetsenbordmodus gestopt: ydotool kon geen tekst invoegen. Is ydotoold</value>
+  </data>
+  <data name="keyboard_mode_title" xml:space="preserve">
+    <value>Toetsenbordmodus inschakelen</value>
+  </data>
+  <data name="language_locale_2" xml:space="preserve">
+    <value>&lt;b&gt;Taal / Locatie&lt;/b&gt;</value>
+  </data>
+  <data name="layout_bottom" xml:space="preserve">
+    <value>Onderkant</value>
+  </data>
+  <data name="layout_description" xml:space="preserve">
+    <value>Paneelpositie en directe invoermodus</value>
+  </data>
+  <data name="layout_keyboard" xml:space="preserve">
+    <value>Toetsenbord</value>
+  </data>
+  <data name="layout_left" xml:space="preserve">
+    <value>Linkerzijde</value>
+  </data>
+  <data name="layout_right" xml:space="preserve">
+    <value>Rechterkant</value>
+  </data>
+  <data name="layout_top" xml:space="preserve">
+    <value>Bovenkant</value>
+  </data>
+  <data name="learning" xml:space="preserve">
+    <value>Leren</value>
+  </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>Verlaat de spelmodus</value>
+  </data>
+  <data name="light" xml:space="preserve">
+    <value>Licht</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>Taal</value>
+  </data>
+  <data name="locale_2" xml:space="preserve">
+    <value>Plaats</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>Migratie</value>
+  </data>
+  <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
+    <value>Beweeg je ogen terwijl je met je ogen knijpt om te sturen.</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>Nieuw</value>
+  </data>
+  <data name="new_message" xml:space="preserve">
+    <value>Nieuw bericht</value>
+  </data>
+  <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
+    <value>Er zijn geen Dasher 5-gegevens gevonden op deze Mac.</value>
+  </data>
+  <data name="no_settings_available_for_this_section" xml:space="preserve">
+    <value>Er zijn geen instellingen beschikbaar voor dit gedeelte.</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>Niets te redden</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>Niets te delen</value>
+  </data>
+  <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
+    <value>Op visionOS begin je met typen door je vinger op het canvas te houden, rond te kijken terwijl je je vinger erop houdt om te sturen, en los te laten om te pauzeren. Het invoermodel is 'knijpen en kijken'.</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>Openen mislukt</value>
+  </data>
+  <data name="open_keyboard_settings" xml:space="preserve">
+    <value>Toetsenbordinstellingen openen</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>Open instellingen</value>
+  </data>
+  <data name="open_system_settings" xml:space="preserve">
+    <value>Open Systeeminstellingen</value>
+  </data>
+  <data name="open_text_file" xml:space="preserve">
+    <value>Tekstbestand openen</value>
+  </data>
+  <data name="output" xml:space="preserve">
+    <value>Uitvoer</value>
+  </data>
+  <data name="output_font_size" xml:space="preserve">
+    <value>Uitvoer lettergrootte</value>
+  </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>Raak het canvas aan om te beginnen met schrijven.</value>
+  </data>
+  <data name="paste" xml:space="preserve">
+    <value>Plakken</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>Pauze</value>
+  </data>
+  <data name="pause_when_looking_away" xml:space="preserve">
+    <value>Pauzeer even als je wegkijkt.</value>
+  </data>
+  <data name="pinch_and_hold_anywhere_on_the_canvas_to_start" xml:space="preserve">
+    <value>Knijp en houd ergens op het doek vast om te beginnen.</value>
+  </data>
+  <data name="pinch_and_look_to_write" xml:space="preserve">
+    <value>Knijp en kijk om te schrijven</value>
+  </data>
+  <data name="play_2" xml:space="preserve">
+    <value>Toneelstuk</value>
+  </data>
+  <data name="pointer_hover_input" xml:space="preserve">
+    <value>Invoer voor muisovergang</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
+    <value>Voorkeuren</value>
+  </data>
+  <data name="re_import_from_dasher_5" xml:space="preserve">
+    <value>Opnieuw importeren vanuit Dasher 5</value>
+  </data>
+  <data name="read" xml:space="preserve">
+    <value>Lezen</value>
+  </data>
+  <data name="release_the_pinch_to_pause" xml:space="preserve">
+    <value>Laat los om te pauzeren</value>
+  </data>
+  <data name="reset_all_settings_to_defaults" xml:space="preserve">
+    <value>Alle instellingen terugzetten naar de standaardwaarden</value>
+  </data>
+  <data name="reset_all_settings_to_their_defaults" xml:space="preserve">
+    <value>Alle instellingen terugzetten naar de standaardwaarden?</value>
+  </data>
+  <data name="reset_anonymous_id" xml:space="preserve">
+    <value>Anonieme ID opnieuw instellen</value>
+  </data>
+  <data name="reset_engine_settings_to_defaults" xml:space="preserve">
+    <value>Zet de motorinstellingen terug naar de standaardwaarden.</value>
+  </data>
+  <data name="reset_settings" xml:space="preserve">
+    <value>Instellingen resetten</value>
+  </data>
+  <data name="reset_to_defaults" xml:space="preserve">
+    <value>Terugzetten naar standaardinstellingen</value>
+  </data>
+  <data name="reset_training_data" xml:space="preserve">
+    <value>Trainingsgegevens resetten</value>
+  </data>
+  <data name="reset_training_data_2" xml:space="preserve">
+    <value>Trainingsgegevens resetten?</value>
+  </data>
+  <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
+    <value>Alle Dasher-instellingen worden teruggezet naar de standaardwaarden. Deze wijziging is onomkeerbaar.</value>
+  </data>
+  <data name="retry" xml:space="preserve">
+    <value>Opnieuw proberen</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Redden</value>
+  </data>
+  <data name="save_2" xml:space="preserve">
+    <value>Redden...</value>
+  </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>Opslaan mislukt</value>
+  </data>
+  <data name="save_text_file" xml:space="preserve">
+    <value>Tekstbestand opslaan</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>Opgeslagen</value>
+  </data>
+  <data name="saved_2" xml:space="preserve">
+    <value>Opgeslagen:</value>
+  </data>
+  <data name="scan_speed" xml:space="preserve">
+    <value>Scansnelheid</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Instellingen</value>
+  </data>
+  <data name="settings_2" xml:space="preserve">
+    <value>Instellingen...</value>
+  </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>Alle instellingen terugzetten naar de standaardwaarden.</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>Instellingen resetten</value>
+  </data>
+  <data name="settings_reset_confirm" xml:space="preserve">
+    <value>Alle motorinstellingen terugzetten naar de standaardinstellingen?</value>
+  </data>
+  <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
+    <value>Instellingen (snelheid, kleuren, bedieningsmodus, taalmodel)</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>Deel</value>
+  </data>
+  <data name="show_input_debug_overlay" xml:space="preserve">
+    <value>Toon invoerfoutopsporingsoverlay</value>
+  </data>
+  <data name="show_typing_rate_wpm" xml:space="preserve">
+    <value>Typsnelheid weergeven (WPM)</value>
+  </data>
+  <data name="size" xml:space="preserve">
+    <value>Maat</value>
+  </data>
+  <data name="skipped_files" xml:space="preserve">
+    <value>Overgeslagen bestanden</value>
+  </data>
+  <data name="slow" xml:space="preserve">
+    <value>Langzaam</value>
+  </data>
+  <data name="speech" xml:space="preserve">
+    <value>Toespraak</value>
+  </data>
+  <data name="speech_off" xml:space="preserve">
+    <value>Toespraak</value>
+  </data>
+  <data name="speech_on" xml:space="preserve">
+    <value>Toespraak over</value>
+  </data>
+  <data name="speech_settings_2" xml:space="preserve">
+    <value>&lt;b&gt;Spraakinstellingen&lt;/b&gt;</value>
+  </data>
+  <data name="speed" xml:space="preserve">
+    <value>Snelheid</value>
+  </data>
+  <data name="speed_2" xml:space="preserve">
+    <value>Snelheid</value>
+  </data>
+  <data name="start_calibrating" xml:space="preserve">
+    <value>Beginnen met kalibreren</value>
+  </data>
+  <data name="start_fresh" xml:space="preserve">
+    <value>Begin opnieuw</value>
+  </data>
+  <data name="system" xml:space="preserve">
+    <value>Systeem</value>
+  </data>
+  <data name="text" xml:space="preserve">
+    <value>tekst</value>
+  </data>
+  <data name="text_files" xml:space="preserve">
+    <value>Tekstbestanden</value>
+  </data>
+  <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
+    <value>De debug-overlay tekent een groen paneel linksboven in het canvas met live tellingen van aanraakgebeurtenissen en de laatst gerapporteerde (x, y)-coördinaten. Wanneer je knijpt en vasthoudt, zie je eerst touch.began en vervolgens touch.moved, waarbij de coördinaten veranderen terwijl je rondkijkt.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
+    <value>Hiermee worden uw verzamelde trainingsgegevens verwijderd. Het taalmodel zal bij de volgende keer opstarten terugkeren naar de ingebouwde standaardinstellingen. Deze wijziging kan niet ongedaan worden gemaakt.</value>
+  </data>
+  <data name="tilt_calibration" xml:space="preserve">
+    <value>Kantelkalibratie</value>
+  </data>
+  <data name="tilt_your_device_now" xml:space="preserve">
+    <value>Kantel uw apparaat nu...</value>
+  </data>
+  <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
+    <value>Kantel uw apparaat tijdens de kalibratie door het volledige bewegingsbereik.</value>
+  </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>Nieuwe / schone uitvoer</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>Bestand openen</value>
+  </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>Opslaan als bestand</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>Deel tekst</value>
+  </data>
+  <data name="training" xml:space="preserve">
+    <value>Opleiding</value>
+  </data>
+  <data name="training_data" xml:space="preserve">
+    <value>Trainingsgegevens</value>
+  </data>
+  <data name="typing_rate" xml:space="preserve">
+    <value>Typsnelheid</value>
+  </data>
+  <data name="use_dasher_as_your_keyboard" xml:space="preserve">
+    <value>Gebruik Dasher als je toetsenbord.</value>
+  </data>
+  <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
+    <value>We hebben je Dasher 5-configuratie op deze Mac gevonden. Je alfabet, kleuren, snelheidsinstellingen en aangepaste bestanden kunnen worden geïmporteerd in Dasher 6.</value>
+  </data>
+  <data name="what_was_found" xml:space="preserve">
+    <value>Wat werd gevonden?</value>
+  </data>
+  <data name="x_range" xml:space="preserve">
+    <value>X-bereik:</value>
+  </data>
+  <data name="y_range" xml:space="preserve">
+    <value>Y-bereik:</value>
+  </data>
+  <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
+    <value>ydotool gevonden. Toetsenbordmodus is gereed.</value>
+  </data>
+  <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
+    <value>Je kunt de gegevens later importeren via Instellingen &gt; Privacy en migratie.</value>
+  </data>
+  <data name="your_gaze_is_tracked_continuously_only_while_you_pinch_and_h" xml:space="preserve">
+    <value>Je blik wordt alleen continu gevolgd zolang je knijpt en vasthoudt — zo werken alle visionOS-apps voor blikherkenning.</value>
+  </data>
+</root>

@@ -52,6 +52,16 @@ jobs:
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
+      - name: Verify generated strings are fresh
+        shell: pwsh
+        run: |
+          python -X utf8 Scripts/gen-translations.py
+          git diff --exit-code -- src/Dasher.Windows/Resources
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "::error::Resources/Strings*.resx are stale — run 'python Scripts/gen-translations.py' and commit the regenerated files"
+            exit 1
+          }
+
       - name: Build DasherCore DLL
         working-directory: native
         run: |
