@@ -1559,7 +1559,13 @@ public partial class MainWindow : Window
             settings.RecordCheck();
             if (!info.IsUpdateAvailable) return;
 
-            var skipped = settings.SkippedVersion;
+            // Re-read state: the user may have opted out (Settings > Privacy)
+            // or skipped this version while the request was in flight. The
+            // check that already ran is recorded, but no toast may follow an
+            // opt-out or a skip.
+            var persisted = UpdateCheckSettings.Load();
+            if (!persisted.Enabled) return;
+            var skipped = persisted.SkippedVersion;
             if (!string.IsNullOrEmpty(skipped) &&
                 string.Equals(skipped.TrimStart('v'), info.LatestTag?.TrimStart('v'), StringComparison.OrdinalIgnoreCase))
                 return;
