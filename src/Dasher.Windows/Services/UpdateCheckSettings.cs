@@ -14,7 +14,7 @@ public class UpdateCheckSettings
     public long LastCheckEpochMs { get; set; }
     public string? SkippedVersion { get; set; }
 
-    private static readonly string SettingsPath = Path.Combine(
+    private static readonly string DefaultSettingsPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "Dasher", "update-check.json");
 
@@ -23,13 +23,14 @@ public class UpdateCheckSettings
     public bool ShouldCheck =>
         Enabled && (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - LastCheckEpochMs) >= CheckIntervalMs;
 
-    public static UpdateCheckSettings Load()
+    public static UpdateCheckSettings Load(string? path = null)
     {
+        path ??= DefaultSettingsPath;
         try
         {
-            if (File.Exists(SettingsPath))
+            if (File.Exists(path))
             {
-                var json = File.ReadAllText(SettingsPath);
+                var json = File.ReadAllText(path);
                 return JsonSerializer.Deserialize<UpdateCheckSettings>(json) ?? new UpdateCheckSettings();
             }
         }
@@ -37,20 +38,29 @@ public class UpdateCheckSettings
         return new UpdateCheckSettings();
     }
 
-    public void Save()
+    public void Save(string? path = null)
     {
+        path ??= DefaultSettingsPath;
         try
         {
-            var dir = Path.GetDirectoryName(SettingsPath);
+            var dir = Path.GetDirectoryName(path);
             if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
-            File.WriteAllText(SettingsPath, JsonSerializer.Serialize(this));
+            File.WriteAllText(path, JsonSerializer.Serialize(this));
         }
         catch { }
     }
 
-    public void RecordCheck()
+    /// <summary>
+    /// Record that a check just ran, touching ONLY the timestamp. Re-reads
+    /// the file first: the caller's instance can be stale by the time the
+    /// network await completes (the user may have toggled the opt-out
+    /// mid-flight), and writing the stale snapshot would silently re-enable
+    /// the check (PR #44 review finding).
+    /// </summary>
+    public void RecordCheck(string? path = null)
     {
-        LastCheckEpochMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        Save();
+        var fresh = Load(path);
+        fresh.LastCheckEpochMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        fresh.Save(path);
     }
 }
