@@ -146,8 +146,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Dasher se ne è andato inaspettatamente</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;b&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/
-</value>
+    <value>&lt;b&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Diminuire la velocità</value>
@@ -376,6 +375,9 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Preferenze</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Preparazione di Dasher</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Reimportare da Dasher 5</value>

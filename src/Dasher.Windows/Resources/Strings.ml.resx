@@ -155,8 +155,7 @@
     <value>ഡാഷർ v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;ഡാഷർ v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;ഡാഷർ v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>വേഗത കുറയ്ക്കുക</value>
@@ -388,6 +387,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>മുൻഗണനകൾ</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher തയ്യാറാകുന്നു</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>സ്വകാര്യത</value>

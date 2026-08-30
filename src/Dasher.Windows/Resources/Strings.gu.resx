@@ -155,8 +155,7 @@
     <value>ડેશર v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;ડેશર v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;ડેશર v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>ઝડપ ઘટાડો</value>
@@ -388,6 +387,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>પસંદગીઓ</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher તૈયાર થઈ રહ્યું છે</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>ગોપનીયતા</value>

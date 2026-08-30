@@ -152,8 +152,7 @@
     <value>ড্যাশার v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;ড্যাশার v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;ড্যাশার v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>গতি কমানো</value>
@@ -382,6 +381,9 @@
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>পয়েন্টার হোভার ইনপুট</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher প্রস্তুত করা হচ্ছে</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>গোপনীয়তা</value>

@@ -152,8 +152,7 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
     <value>I-Dasher v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;I-Dasher v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;I-Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Yehlisa Isivinini</value>
@@ -385,6 +384,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Okuthandwayo</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Ilungiselela i-Dasher</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Ubumfihlo</value>

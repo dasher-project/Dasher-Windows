@@ -149,8 +149,7 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
     <value>Dasher váratlanul kilépett</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Csökkentse a sebességet</value>
@@ -370,6 +369,9 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Mutató lebegés bemenet</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>A Dasher előkészítése</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Magánélet</value>

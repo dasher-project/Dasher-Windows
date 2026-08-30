@@ -152,8 +152,7 @@
     <value>டேஷர் வி6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;டாஷர் v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;டாஷர் v6&lt;/b&gt;&lt;/big&gt;</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>வேகத்தைக் குறைக்கவும்</value>
@@ -385,6 +384,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>விருப்பத்தேர்வுகள்</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher தயாராகிறது</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>தனியுரிமை</value>

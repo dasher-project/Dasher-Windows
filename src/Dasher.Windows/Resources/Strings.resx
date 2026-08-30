@@ -167,7 +167,7 @@ You can change this anytime in Settings &gt; Privacy.</value>
     <value>Dasher v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\
 </value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
@@ -441,6 +441,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Prefs</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Preparing Dasher</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privacy</value>

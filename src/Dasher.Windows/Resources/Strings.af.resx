@@ -152,8 +152,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Dashers V6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Verminder spoed</value>
@@ -382,6 +381,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Voorkeure</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Berei Dasher voor</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privaatheid</value>

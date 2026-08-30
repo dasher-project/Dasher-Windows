@@ -351,6 +351,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="prefs" xml:space="preserve">
     <value>Préf.</value>
   </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Préparation de Dasher</value>
+  </data>
   <data name="privacy" xml:space="preserve">
     <value>Confidentialité</value>
   </data>

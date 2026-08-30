@@ -152,8 +152,7 @@
     <value>แดชเชอร์ v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;แดชเชอร์ เวอร์ชัน 6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;แดชเชอร์ เวอร์ชัน 6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>ลดความเร็ว</value>

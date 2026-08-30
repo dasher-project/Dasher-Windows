@@ -152,8 +152,7 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
     <value>Dasher stoppede uventet</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher&lt;/b&gt;&lt;/big&gt; v6
-</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher&lt;/b&gt;&lt;/big&gt; v6\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Sænk hastigheden</value>
@@ -373,6 +372,9 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Præferencer</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Forbereder Dasher</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privatliv</value>

@@ -143,8 +143,7 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
     <value>Dasher nam onverwacht ontslag.</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Verlaag de snelheid</value>
@@ -367,6 +366,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Voorkeuren</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher wordt voorbereid</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Opnieuw importeren vanuit Dasher 5</value>

@@ -149,8 +149,7 @@
     <value>Dasher 意外退出</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>降低速度</value>
@@ -382,6 +381,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>偏好</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>正在准备 Dasher</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>隐私</value>

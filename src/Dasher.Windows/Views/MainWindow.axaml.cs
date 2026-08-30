@@ -133,6 +133,10 @@ public partial class MainWindow : Window
 
         ThemeBrushes.Initialize(this);
 
+        // RFC 0018: the overlay ships visible in the AXAML so the first
+        // rendered frame is already themed + occupied. Localise it now.
+        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher");
+
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var dataDir = Path.Combine(appData, "Dasher");
         Directory.CreateDirectory(dataDir);
@@ -147,15 +151,6 @@ public partial class MainWindow : Window
         }
 
         var coreDataDir = FindCoreDataDir();
-        CopyDataIfNeeded(coreDataDir, dataDir);
-
-        // Phase 1: Create engine (but don't start it yet)
-        _canvas.Initialize(dataDir, dataDir);
-        _canvas.EngineMessage += OnEngineMessage;
-        _canvas.EngineFaultDetected += OnEngineFault;
-        _canvas.WpmUpdated += OnWpmUpdated;
-        _canvas.EngineOutput += OnEngineOutput;
-        _vm.SetHandle(_canvas.GetHandle());
 
         this.Deactivated += (_, _) =>
         {
@@ -168,24 +163,74 @@ public partial class MainWindow : Window
             }
         };
 
-        _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
-        NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
+        // RFC 0018: everything startup-blocking (data install, engine create,
+        // v5 scan) runs off the UI thread so the overlay animates; the
+        // spinner must never freeze and the window must never go dead.
+        _ = StartupAsync(coreDataDir, dataDir);
+    }
 
-        _parameterCallback = new NativeBridge.ParameterCallback(OnParameterChanged);
-        NativeBridge.dasher_set_parameter_callback(_vm.Handle, _parameterCallback, IntPtr.Zero);
+    private async Task StartupAsync(string coreDataDir, string dataDir)
+    {
+        bool needsMigration = false;
+        string? error = null;
 
-        var accessConfig = AccessConfiguration.Load();
-        accessConfig.Apply(_vm.Handle);
-
-        // Phase 2: Check for v5 migration BEFORE starting engine
-        if (V5MigrationService.HasV5Data && !V5MigrationService.HasBeenOffered)
+        try
         {
+            await Task.Run(() =>
+            {
+                CopyDataIfNeeded(coreDataDir, dataDir);
+                _canvas!.Initialize(dataDir, dataDir);
+            });
+
+            _canvas!.EngineMessage += OnEngineMessage;
+            _canvas.EngineFaultDetected += OnEngineFault;
+            _canvas.WpmUpdated += OnWpmUpdated;
+            _canvas.EngineOutput += OnEngineOutput;
+            _canvas.FirstEngineFrame += OnFirstEngineFrame;
+            _vm!.SetHandle(_canvas.GetHandle());
+
+            _speakCallback = new NativeBridge.SpeakCallback(OnEngineSpeak);
+            NativeBridge.dasher_set_speak_callback(_vm.Handle, _speakCallback, IntPtr.Zero);
+
+            _parameterCallback = new NativeBridge.ParameterCallback(OnParameterChanged);
+            NativeBridge.dasher_set_parameter_callback(_vm.Handle, _parameterCallback, IntPtr.Zero);
+
+            var accessConfig = AccessConfiguration.Load();
+            accessConfig.Apply(_vm.Handle);
+
+            needsMigration = await Task.Run(() =>
+                V5MigrationService.HasV5Data && !V5MigrationService.HasBeenOffered);
+
+            if (!needsMigration)
+                await CompleteStartupAsync(null);
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+
+        if (error != null)
+        {
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                // RFC 0018: on failure show the error on the overlay —
+                // never back to a blank window.
+                StartupOverlayText.IsVisible = false;
+                StartupOverlayError.Text = $"Dasher failed to start:\n{error}";
+                StartupOverlayError.IsVisible = true;
+            });
+            return;
+        }
+
+        if (needsMigration)
             ShowV5MigrationPrompt();
-        }
-        else
-        {
-            CompleteStartup(null);
-        }
+    }
+
+    private void OnFirstEngineFrame(object? sender, EventArgs e)
+    {
+        // The canvas has drawn real content — retire the loading overlay
+        // (RFC 0018). Runs on the UI thread via the compositor callback.
+        StartupOverlay.IsVisible = false;
     }
 
     private void ShowV5MigrationPrompt()
@@ -290,14 +335,16 @@ public partial class MainWindow : Window
 
         dialog.Content = panel;
         dialog.Closed += (_, _) =>
-            Avalonia.Threading.Dispatcher.UIThread.Post(() => CompleteStartup(migrationResult));
+            Avalonia.Threading.Dispatcher.UIThread.Post(async () => await CompleteStartupAsync(migrationResult));
         dialog.ShowDialog(this);
     }
 
-    private void CompleteStartup(V5MigrationResult? migrationResult)
+    private async Task CompleteStartupAsync(V5MigrationResult? migrationResult)
     {
-        // Phase 3: Start engine (triggers Realize)
-        _canvas!.StartEngine();
+        // Phase 3: Start engine. Realize runs off the UI thread (RFC 0018) so
+        // the startup overlay keeps animating; the frame loop starts after.
+        await _canvas!.RealizeOffUiThreadAsync();
+        _canvas.BeginFrameLoop();
 
         // Localise: resolve the OS language, push it into the engine so
         // parameter labels follow the same locale (RFC 0003 one-locale).
@@ -981,12 +1028,19 @@ public partial class MainWindow : Window
         BuildSettingsTabs(panel);
     }
 
-    private void OnResetSettingsRequested()
+    private async void OnResetSettingsRequested()
     {
         if (_canvas == null || _vm == null) return;
 
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var dataDir = Path.Combine(appData, "Dasher");
+
+        // RFC 0018: engine restart is startup-blocking work — show the
+        // loading overlay while it runs off the UI thread.
+        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher");
+        StartupOverlayText.IsVisible = true;
+        StartupOverlayError.IsVisible = false;
+        StartupOverlay.IsVisible = true;
 
         // Destroy engine (this saves current settings to file)
         _canvas.Shutdown();
@@ -995,13 +1049,14 @@ public partial class MainWindow : Window
         var settingsFile = Path.Combine(dataDir, "dasher_settings.xml");
         try { if (File.Exists(settingsFile)) File.Delete(settingsFile); } catch { }
 
-        // Recreate engine with defaults. The canvas's C# events (EngineMessage,
-        // EngineFaultDetected, WpmUpdated, EngineOutput) stay wired from OnOpened
-        // — the canvas object survives Shutdown/Initialize, so re-subscribing here
+        // Recreate engine with defaults, off the UI thread. The canvas's C#
+        // events (EngineMessage, EngineFaultDetected, WpmUpdated,
+        // EngineOutput, FirstEngineFrame) stay wired from OnOpened — the
+        // canvas object survives Shutdown/Initialize, so re-subscribing here
         // would run each handler once per reset (duplicate toasts, and double
         // keyboard-mode injection). Native callbacks are re-registered on the
         // first tick after Initialize (per-handle state is reset there).
-        _canvas.Initialize(dataDir, dataDir);
+        await Task.Run(() => _canvas.Initialize(dataDir, dataDir));
         _vm.SetHandle(_canvas.GetHandle());
 
         // Re-wire callbacks
@@ -1013,8 +1068,9 @@ public partial class MainWindow : Window
         var accessConfig = AccessConfiguration.Load();
         accessConfig.Apply(_vm.Handle);
 
-        // Start engine
-        _canvas.StartEngine();
+        // Start engine (realize off-thread, then frame loop)
+        await _canvas.RealizeOffUiThreadAsync();
+        _canvas.BeginFrameLoop();
 
         // Refresh UI state — read from engine defaults
         _vm.LoadSpeedBounds();

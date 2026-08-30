@@ -146,8 +146,7 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
     <value>Dasher nečekaně odešel</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Snížení rychlosti</value>
@@ -370,6 +369,9 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Vstup při najetí kurzoru</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Příprava Dasheru</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Soukromí</value>

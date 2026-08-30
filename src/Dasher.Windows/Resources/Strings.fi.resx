@@ -149,8 +149,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Dasher lopetti yllättäen</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
-</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Vähennä nopeutta</value>
@@ -376,6 +375,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Osoittimen leijutussyöttö</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Valmistellaan Dasheria</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Tietosuoja</value>
