@@ -1624,6 +1624,18 @@ public class SettingsPanel : Decorator
             Margin = new Thickness(0, 8, 0, 0),
         });
 
+#if !STORE
+        // RFC 0017: opt-out for the passive update check (weekly, toast).
+        var updateSettings = UpdateCheckSettings.Load();
+        var updateToggle = BuildToggleRow("Check for updates", updateSettings.Enabled, isChecked =>
+        {
+            updateSettings.Enabled = isChecked;
+            updateSettings.Save();
+        });
+        updateToggle.Margin = new Thickness(0, 4, 0, 0);
+        section.Children.Add(updateToggle);
+#endif
+
         // ── Dasher 5 Import section ──
         section.Children.Add(new Border
         {

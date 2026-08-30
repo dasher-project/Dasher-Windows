@@ -1488,97 +1488,32 @@ public partial class MainWindow : Window
     }
 
 #if !STORE
+    // RFC 0017: passive update check for self-managed builds (MSI/portable).
+    // At most weekly, opt-out in Settings > Privacy, never a modal — a toast
+    // that opens the release page when tapped. Skip-version: the toast for a
+    // given version is shown once per check window, not nagged per launch.
     private async Task CheckForUpdatesAsync()
     {
         try
         {
+            var settings = UpdateCheckSettings.Load();
+            if (!settings.ShouldCheck) return;
+
             var info = await UpdateChecker.CheckAsync();
+            settings.RecordCheck();
             if (!info.IsUpdateAvailable) return;
 
-            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                var dialog = new Window
-                {
-                    Title = "Dasher Update Available",
-                    Background = (IBrush)(Application.Current?.FindResource("BgLight") ?? Brushes.White),
-                    SizeToContent = SizeToContent.WidthAndHeight,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                    CanResize = false,
-                    ShowInTaskbar = false,
-                    Content = new StackPanel
-                    {
-                        Margin = new Thickness(24),
-                        Spacing = 12,
-                        MaxWidth = 380,
-                        Children =
-                        {
-                            new TextBlock
-                            {
-                                Text = "Update Available",
-                                FontSize = 18,
-                                FontWeight = FontWeight.Bold,
-                                Foreground = ThemeBrushes.TextPrimary,
-                            },
-                            new TextBlock
-                            {
-                                Text = $"Dasher {info.LatestTag} is now available (you're running v{info.CurrentVersion}).",
-                                FontSize = 13,
-                                TextWrapping = TextWrapping.Wrap,
-                                Foreground = ThemeBrushes.TextSecondary,
-                            },
-                            new StackPanel
-                            {
-                                Orientation = Orientation.Horizontal,
-                                Spacing = 8,
-                                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right,
-                                Children =
-                                {
-                                    new Button
-                                    {
-                                        Content = "Later",
-                                        Padding = new Thickness(16, 6),
-                                        Background = Brushes.Transparent,
-                                        Foreground = ThemeBrushes.TextSecondary,
-                                        BorderBrush = (IBrush)(Application.Current?.FindResource("BorderLight") ?? Brushes.Gray),
-                                    },
-                                    new Button
-                                    {
-                                        Content = "Download",
-                                        Padding = new Thickness(16, 6),
-                                        Background = (IBrush)(Application.Current?.FindResource("DasherTeal") ?? Brushes.Teal),
-                                        Foreground = (IBrush)(Application.Current?.FindResource("OnAccent") ?? Brushes.Black),
-                                        BorderThickness = new Thickness(0),
-                                        Tag = info.ReleaseUrl,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                };
+            var skipped = settings.SkippedVersion;
+            if (!string.IsNullOrEmpty(skipped) &&
+                string.Equals(skipped.TrimStart('v'), info.LatestTag?.TrimStart('v'), StringComparison.OrdinalIgnoreCase))
+                return;
 
-                var buttons = ((StackPanel)dialog.Content).Children.OfType<StackPanel>().Last();
-                var laterBtn = buttons.Children.OfType<Button>().First(b => b.Content is "Later");
-                var downloadBtn = buttons.Children.OfType<Button>().First(b => b.Content is "Download");
-
-                laterBtn.Click += (_, _) => dialog.Close();
-                downloadBtn.Click += (_, _) =>
-                {
-                    if (downloadBtn.Tag is string url)
-                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                        {
-                            FileName = url,
-                            UseShellExecute = true,
-                        });
-                    dialog.Close();
-                };
-
-                // Temporarily disable Topmost so dialog isn't trapped behind
-                // the keyboard mode window
-                var wasTopmost = this.Topmost;
-                this.Topmost = false;
-                dialog.Closed += (_, _) => { if (wasTopmost) this.Topmost = true; };
-                dialog.ShowDialog(this);
-            });
+            var url = info.ReleaseUrl;
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                ToastNotifier.Show(
+                    "Dasher update available",
+                    $"Dasher {info.LatestTag} is available (you're running v{info.CurrentVersion}). Tap to download — disable in Settings > Privacy.",
+                    url));
         }
         catch { }
     }
