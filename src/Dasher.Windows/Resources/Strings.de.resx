@@ -143,7 +143,8 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
     <value>Dasher gab unerwartet auf</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Geschwindigkeit verringern</value>
@@ -183,6 +184,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   </data>
   <data name="fast" xml:space="preserve">
     <value>Schnell</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Um die Tastatur schweben zu lassen, erlauben Sie Dasher, über anderen Apps anzuzeigen, und tippen Sie dann erneut auf Float.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Mit Vollzugriff kann Dasher sprechen, was Sie schreiben, und sich an Ihr Training erinnern. Die Tastatur funktioniert auch ohne sie weiterhin für die einfache Eingabe.</value>
@@ -359,7 +363,7 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
     <value>Zeiger-Hover-Eingabe</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Dasher wird vorbereitet</value>
+    <value>Dasher wird vorbereitet…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privatsphäre</value>

@@ -155,7 +155,8 @@
     <value>ડેશર v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;ડેશર v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;ડેશર v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>ઝડપ ઘટાડો</value>
@@ -195,6 +196,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>ઝડપી</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>કીબોર્ડને તરતું કરવા માટે, Dasher ને અન્ય એપ્સ પર દર્શાવવાની મંજૂરી આપો, પછી ફરીથી Float પર ટેપ કરો.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>ફુલ એક્સેસ ડેશરને તમે જે લખો છો તે બોલવા અને તમારી તાલીમ યાદ રાખવા દે છે. કીબોર્ડ તેના વિના પણ મૂળભૂત એન્ટ્રી માટે કામ કરે છે.</value>
@@ -389,7 +393,7 @@
     <value>પસંદગીઓ</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Dasher તૈયાર થઈ રહ્યું છે</value>
+    <value>Dasher તૈયાર થઈ રહ્યું છે…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>ગોપનીયતા</value>

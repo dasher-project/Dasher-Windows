@@ -152,7 +152,8 @@
     <value>டேஷர் வி6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;டாஷர் v6&lt;/b&gt;&lt;/big&gt;</value>
+    <value>&lt;big&gt;&lt;b&gt;டாஷர் v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>வேகத்தைக் குறைக்கவும்</value>
@@ -192,6 +193,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>வேகமாக</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>விசைப்பலகையை மிதக்கச் செய்ய, Dasher ஐ பிற பயன்பாடுகளின் மேல் காட்ட அனுமதித்து, பின்னர் Float ஐ மீண்டும் தட்டவும்.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>முழு அணுகல் வசதி, நீங்கள் எழுதுவதை டேஷர் பேசவும், உங்கள் பயிற்சியை நினைவில் கொள்ளவும் அனுமதிக்கிறது. அது இல்லாமலேயே, அடிப்படை உள்ளீட்டிற்கு விசைப்பலகை தொடர்ந்து செயல்படும்.</value>
@@ -386,7 +390,7 @@
     <value>விருப்பத்தேர்வுகள்</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Dasher தயாராகிறது</value>
+    <value>Dasher தய்யாறாகிறது…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>தனியுரிமை</value>

@@ -152,7 +152,8 @@
     <value>డాషర్ v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;డాషర్ v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;డాషర్ v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>వేగాన్ని తగ్గించండి</value>
@@ -192,6 +193,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>వేగంగా</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>కీబోర్డ్‌ను ఫ్లోట్ చేయడానికి, Dasher ను ఇతర యాప్‌ల పైన చూపించడానికి అనుమతించం, ఆపై Float ను మళ్లీ ట్యాప్ చేయం.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>ఫుల్ యాక్సెస్‌తో, మీరు రాసేదాన్ని డాషర్ చదవగలదు మరియు మీ శిక్షణను గుర్తుంచుకోగలదు. అది లేకుండా కూడా కీబోర్డ్ ప్రాథమిక ఎంట్రీ కోసం పనిచేస్తుంది.</value>
@@ -386,7 +390,7 @@
     <value>ప్రాధాన్యతలు</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Dasher సిద్ధమవుతోంది</value>
+    <value>Dasher సిద్ధమవుతోంది…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>గోప్యత</value>

@@ -152,7 +152,8 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
     <value>Dasher slutade oväntat</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Minska hastigheten</value>
@@ -192,6 +193,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   </data>
   <data name="fast" xml:space="preserve">
     <value>Snabb</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>För att lossa tangentbordet, tillåt Dasher att visas över andra appar och tryck på Float igen.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Fullständig åtkomst låter Dasher läsa upp det du skriver och komma ihåg din träning. Tangentbordet fungerar fortfarande för grundläggande inmatning utan den.</value>
@@ -377,7 +381,7 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
     <value>Preferenser</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Förbereder Dasher</value>
+    <value>Förbereder Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privatliv</value>

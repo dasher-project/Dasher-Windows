@@ -149,7 +149,8 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
     <value>Dasher pediu demissão inesperadamente.</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Diminuir a velocidade</value>
@@ -189,6 +190,9 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   </data>
   <data name="fast" xml:space="preserve">
     <value>Rápido</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Para flutuar o teclado, permita que o Dasher seja exibido sobre outros apps e toque em Float novamente.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>O Acesso Total permite que o Dasher leia o que você escreve e memorize seu treinamento. O teclado ainda funciona para digitação básica sem ele.</value>
@@ -380,7 +384,7 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
     <value>Preferências</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>A preparar o Dasher</value>
+    <value>Preparando o Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privacidade</value>

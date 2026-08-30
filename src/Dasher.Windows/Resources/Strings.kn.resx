@@ -149,7 +149,8 @@
     <value>ಡ್ಯಾಷರ್ ಅನಿರೀಕ್ಷಿತವಾಗಿ ತ್ಯಜಿಸಿದೆ</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>ವೇಗ ಕಡಿಮೆ ಮಾಡಿ</value>
@@ -189,6 +190,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>ವೇಗವಾಗಿ</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್ ಅನ್ನು ತೇಲುವಂತೆ ಮಾಡಲು, Dasher ಅನ್ನು ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳ ಮೇಲೆ ತೋರಿಸಲು ಅನುಮತಿಸಿ, ನಂತರ Float ಅನ್ನು ಮತ್ತೊಮ್ಮೆ ಟ್ಯಾಪ್ ಮಾಡಿ.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>ಪೂರ್ಣ ಪ್ರವೇಶವು ಡ್ಯಾಶರ್‌ಗೆ ನೀವು ಬರೆಯುವುದನ್ನು ಮಾತನಾಡಲು ಮತ್ತು ನಿಮ್ಮ ತರಬೇತಿಯನ್ನು ನೆನಪಿಟ್ಟುಕೊಳ್ಳಲು ಅನುಮತಿಸುತ್ತದೆ. ಕೀಬೋರ್ಡ್ ಇಲ್ಲದೆಯೂ ಸಹ ಮೂಲಭೂತ ಪ್ರವೇಶಕ್ಕಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.</value>
@@ -383,7 +387,7 @@
     <value>ಪೂರ್ವಭಾವಿಗಳು</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Dasher ಸಿದ್ಧವಾಗುತ್ತಿದೆ</value>
+    <value>Dasher ಸಿದ್ಧವಾಗುತ್ತಿದೆ…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>ಗೌಪ್ಯತೆ</value>

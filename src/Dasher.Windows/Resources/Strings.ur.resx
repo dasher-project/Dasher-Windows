@@ -152,7 +152,8 @@
     <value>ڈیشر v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>رفتار کو کم کریں۔</value>
@@ -192,6 +193,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>تیز</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>کی بورڈ کو فلوٹ کرنے کے لیے، Dasher کو دوسرے ایپس کے اوپر دکھنے کی اجازت دیں، پھر دوبارہ Float پر ٹیپ کریں۔</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>مکمل رسائی ڈیشر کو وہ بولنے دیتا ہے جو آپ لکھتے ہیں اور اپنی تربیت کو یاد رکھتے ہیں۔ کی بورڈ اب بھی اس کے بغیر بنیادی اندراج کے لیے کام کرتا ہے۔</value>
@@ -383,7 +387,7 @@
     <value>پوائنٹر ہوور ان پٹ</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>ڈیشر تیار کیا جا رہا ہے</value>
+    <value>ڈیشر تیار ہو رہا ہے…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>رازداری</value>

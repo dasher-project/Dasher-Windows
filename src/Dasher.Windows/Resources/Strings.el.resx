@@ -152,7 +152,8 @@
     <value>Ο Ντάσερ παραιτήθηκε απροσδόκητα.</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Μείωση ταχύτητας</value>
@@ -192,6 +193,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>Γρήγορα</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Για να αιωρήσετε το πληκτρολόγιο, επιτρέψτε στο Dasher να εμφανίζεται πάνω από άλλες εφαρμογές και πατήστε ξανά Float.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Η πλήρης πρόσβαση επιτρέπει στον Dasher να εκφωνεί ό,τι γράφετε και να θυμάται την εκπαίδευσή σας. Το πληκτρολόγιο εξακολουθεί να λειτουργεί για βασική εισαγωγή χωρίς αυτήν.</value>
@@ -386,7 +390,7 @@
     <value>Προτιμήσεις</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Προετοιμασία του Dasher</value>
+    <value>Προετοιμασία του Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Μυστικότητα</value>

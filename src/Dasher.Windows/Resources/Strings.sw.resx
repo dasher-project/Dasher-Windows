@@ -149,7 +149,8 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
     <value>Dasher aliacha bila kutarajia</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Desher v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;Desher v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Punguza Kasi</value>
@@ -189,6 +190,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="fast" xml:space="preserve">
     <value>Haraka</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Kufanya kibodi iweze kuelea, ruhusu Dasher ionekane juu ya programu nyingine, kisha gusa Float tena.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Ufikiaji Kamili humruhusu Dasher kuzungumza unachoandika na kukumbuka mafunzo yako. Kibodi bado inafanya kazi kwa ajili ya kuingia kwa msingi bila hiyo.</value>
@@ -383,7 +387,7 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
     <value>Mapendeleo</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Inaandaa Dasher</value>
+    <value>Dasher inaandaliwa…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Faragha</value>

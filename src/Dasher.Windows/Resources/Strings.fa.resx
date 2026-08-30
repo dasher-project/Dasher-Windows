@@ -152,7 +152,8 @@
     <value>داشر نسخه ۶</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;داشر نسخه ۶&lt;/b&gt;&lt;/big&gt; \</value>
+    <value>&lt;big&gt;&lt;b&gt;داشر نسخه ۶&lt;/b&gt;&lt;/big&gt; 
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>کاهش سرعت</value>
@@ -192,6 +193,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>سریع</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>برای شناور کردن صفحه‌کلید، به Dasher اجازه دهید روی برنامه‌های دیگر نمایش داده شود، سپس دوباره Float را بزنید.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>دسترسی کامل به Dasher اجازه می‌دهد آنچه را که شما می‌نویسید، بخواند و آموزش‌های شما را به خاطر بسپارد. صفحه کلید بدون آن نیز برای ورود اولیه کار می‌کند.</value>
@@ -386,7 +390,7 @@
     <value>مقدماتی</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>آماده‌سازی Dasher</value>
+    <value>در حال آماده‌سازی Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>حریم خصوصی</value>

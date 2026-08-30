@@ -152,7 +152,8 @@
     <value>ড্যাশার v6</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;ড্যাশার v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;ড্যাশার v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>গতি কমানো</value>
@@ -192,6 +193,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>দ্রুত</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>কীবোর্ড ভাসমান করতে Dasher-কে অন্য অ্যাপের উপরে দেখানোর অনুমতি দিন, তারপর আবার Float ট্যাপ করুন।</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>ফুল অ্যাক্সেস ড্যাশারকে আপনার লেখা কথা বলতে এবং আপনার প্রশিক্ষণ মনে রাখতে সাহায্য করে। এটি ছাড়াও, সাধারণ এন্ট্রির জন্য কিবোর্ড কাজ করে।</value>
@@ -383,7 +387,7 @@
     <value>পয়েন্টার হোভার ইনপুট</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Dasher প্রস্তুত করা হচ্ছে</value>
+    <value>Dasher প্রস্তুত হচ্ছে…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>গোপনীয়তা</value>

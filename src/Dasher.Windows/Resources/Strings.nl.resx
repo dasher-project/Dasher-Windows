@@ -143,7 +143,8 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
     <value>Dasher nam onverwacht ontslag.</value>
   </data>
   <data name="dasher_v6_2" xml:space="preserve">
-    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;\</value>
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
+</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Verlaag de snelheid</value>
@@ -183,6 +184,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="fast" xml:space="preserve">
     <value>Snel</value>
+  </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Om het toetsenbord te laten zweven, geef je Dasher toestemming om over andere apps te verschijnen en tik je opnieuw op Float.</value>
   </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Met Full Access kan Dasher uitspreken wat je typt en je training onthouden. Het toetsenbord werkt nog steeds voor eenvoudige invoer, ook zonder Full Access.</value>
@@ -368,7 +372,7 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
     <value>Voorkeuren</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
-    <value>Dasher wordt voorbereid</value>
+    <value>Dasher wordt voorbereid…</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Opnieuw importeren vanuit Dasher 5</value>
