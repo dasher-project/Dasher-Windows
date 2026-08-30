@@ -1626,11 +1626,13 @@ public class SettingsPanel : Decorator
 
 #if !STORE
         // RFC 0017: opt-out for the passive update check (weekly, toast).
-        var updateSettings = UpdateCheckSettings.Load();
-        var updateToggle = BuildToggleRow("Check for updates", updateSettings.Enabled, isChecked =>
+        // The initial value is a read-only snapshot; the handler re-loads and
+        // writes ONLY Enabled so it can't clobber a check timestamp recorded
+        // by the startup path while the panel was open.
+        var updateEnabled = UpdateCheckSettings.Load().Enabled;
+        var updateToggle = BuildToggleRow("Check for updates", updateEnabled, isChecked =>
         {
-            updateSettings.Enabled = isChecked;
-            updateSettings.Save();
+            UpdateCheckSettings.SetEnabled(isChecked);
         });
         updateToggle.Margin = new Thickness(0, 4, 0, 0);
         section.Children.Add(updateToggle);

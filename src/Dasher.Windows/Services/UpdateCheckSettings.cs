@@ -63,4 +63,18 @@ public class UpdateCheckSettings
         fresh.LastCheckEpochMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         fresh.Save(path);
     }
+
+    /// <summary>
+    /// Flip the opt-out, touching ONLY Enabled. Reloads from disk first so a
+    /// panel-era snapshot can't clobber a timestamp the startup check
+    /// recorded while the panel was open (PR #44 review finding: restoring
+    /// the old LastCheckEpochMs would bypass the seven-day throttle on the
+    /// next launch).
+    /// </summary>
+    public static void SetEnabled(bool enabled, string? path = null)
+    {
+        var fresh = Load(path);
+        fresh.Enabled = enabled;
+        fresh.Save(path);
+    }
 }

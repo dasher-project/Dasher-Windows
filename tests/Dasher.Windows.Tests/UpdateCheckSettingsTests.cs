@@ -45,6 +45,31 @@ public class UpdateCheckSettingsTests : IDisposable
     }
 
     [Fact]
+    public void SetEnabled_preserves_timestamp_recorded_while_panel_was_open()
+    {
+        // Greptile finding on #44: the Privacy toggle holds a panel-era
+        // snapshot; flipping it after the startup check recorded its
+        // completion must not restore the old timestamp (which would bypass
+        // the seven-day throttle on the next launch).
+        var panelEraSnapshot = new UpdateCheckSettings { Enabled = true, LastCheckEpochMs = 0 };
+        panelEraSnapshot.Save(_path);
+
+        // The startup check records while the panel is open.
+        var startupPath = new UpdateCheckSettings { Enabled = true, LastCheckEpochMs = 0 };
+        startupPath.RecordCheck(_path);
+        var recorded = UpdateCheckSettings.Load(_path).LastCheckEpochMs;
+        Assert.True(recorded > 0);
+
+        // User flips the toggle — handler goes through SetEnabled, not the
+        // stale object's Save().
+        UpdateCheckSettings.SetEnabled(false, _path);
+
+        var persisted = UpdateCheckSettings.Load(_path);
+        Assert.False(persisted.Enabled);
+        Assert.Equal(recorded, persisted.LastCheckEpochMs);
+    }
+
+    [Fact]
     public void ShouldCheck_respects_weekly_throttle()
     {
         var justChecked = new UpdateCheckSettings
