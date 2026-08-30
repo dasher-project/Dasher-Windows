@@ -217,6 +217,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
 
 </value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>To float the keyboard, allow Dasher to display over other apps, then tap Float again.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Full Access lets Dasher speak what you write and remember your training. The keyboard still works for basic entry without it.</value>
   </data>
@@ -441,6 +444,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Prefs</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Preparing Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privacy</value>

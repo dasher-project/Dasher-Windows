@@ -194,6 +194,9 @@
   <data name="fast" xml:space="preserve">
     <value>سريع</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>لتحريك لوحة المفاتيح عائمة، اسمح لـ Dasher بالعرض فوق التطبيقات الأخرى، ثم اضغط Float مرة أخرى.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>تتيح لك خاصية الوصول الكامل في برنامج داشر نطق ما تكتبه وحفظ تدريبك. ولا يزال بإمكانك استخدام لوحة المفاتيح لإدخال البيانات الأساسية بدونها.</value>
   </data>
@@ -385,6 +388,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>التفضيلات</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>جارٍ تحضير Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>خصوصية</value>

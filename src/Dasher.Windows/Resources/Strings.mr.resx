@@ -194,6 +194,9 @@
   <data name="fast" xml:space="preserve">
     <value>जलद</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>कीबोर्ड फ्लोट करण्यासाठी, Dasher ला इतर अ‍ॅप्ंवर दर्शवण्याची परवानगी द्या, नंतर पुन्हा Float टॅप करा.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>फुल ॲक्सेसमुळे डॅशर तुम्ही जे लिहिता ते बोलू शकतो आणि तुमचे प्रशिक्षण लक्षात ठेवतो. त्याशिवायही, मूलभूत नोंदीसाठी कीबोर्ड काम करतो.</value>
   </data>
@@ -385,6 +388,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>प्राधान्ये</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher सज्ज होत आहे…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>गोपनीयता</value>

@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -108,11 +109,35 @@ public partial class DasherCanvas : Control
         StartFrameLoop();
     }
 
+    /// <summary>
+    /// Realize on a background thread (RFC 0018): the screen-size set
+    /// triggers the heavy engine init (training load, node tree) which can
+    /// take hundreds of ms warm and seconds cold. The UI thread stays free
+    /// to animate the startup overlay; call <see cref="BeginFrameLoop"/> on
+    /// the UI thread afterwards.
+    /// </summary>
+    public Task RealizeOffUiThreadAsync() =>
+        Task.Run(() => NativeBridge.dasher_set_screen_size(_handle, 700, 640));
+
+    /// <summary>UI-thread half of <see cref="StartEngine"/> after the
+    /// background realize: starts the compositor frame loop.</summary>
+    public void BeginFrameLoop() => StartFrameLoop();
+
+    /// <summary>
+    /// Raised once per frame-loop generation after the first engine frame
+    /// has been produced — the earliest point the canvas has visible
+    /// content (RFC 0018: hide the startup overlay here, never earlier).
+    /// </summary>
+    public event EventHandler? FirstEngineFrame;
+
+    private bool _firstFrameRaised;
+
     private void StartFrameLoop()
     {
         if (_frameLoopRunning) return;
         _frameLoopRunning = true;
         _lastWallMs = -1;
+        _firstFrameRaised = false;
 
         // Generation token: a compositor callback queued before Shutdown()
         // (e.g. Settings > Reset destroying and recreating the engine on this
@@ -144,6 +169,12 @@ public partial class DasherCanvas : Control
         if (!_frameLoopRunning || generation != _frameLoopGeneration) return;
 
         StepFrame();
+
+        if (!_firstFrameRaised && _handle != IntPtr.Zero)
+        {
+            _firstFrameRaised = true;
+            FirstEngineFrame?.Invoke(this, EventArgs.Empty);
+        }
 
         if (_frameLoopRunning && generation == _frameLoopGeneration)
             TopLevel.GetTopLevel(this)?.RequestAnimationFrame(ts => OnAnimationFrame(ts, generation));

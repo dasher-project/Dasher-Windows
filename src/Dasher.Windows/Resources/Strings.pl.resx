@@ -191,6 +191,9 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
   <data name="fast" xml:space="preserve">
     <value>Szybko</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Aby oddokować klawiaturę, zezwól Dasherowi na wyświetlanie nad innymi aplikacjami, a następnie ponownie dotknij Float.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Pełny dostęp pozwala Dasherowi czytać to, co piszesz, i zapamiętywać trening. Klawiatura nadal działa bez niego, umożliwiając podstawowe wprowadzanie danych.</value>
   </data>
@@ -379,6 +382,9 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Preferencje</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Przygotowywanie Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Prywatność</value>

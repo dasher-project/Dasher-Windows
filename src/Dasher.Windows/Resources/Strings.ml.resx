@@ -197,6 +197,9 @@
   <data name="fast" xml:space="preserve">
     <value>വേഗത</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>കീബോർഡ് ഫ്ലോട്ട് ചെയ്യാൻ, Dasher-ന് മറ്റ് ആപ്പുകൾക്ക് മുകളിൽ കാണിക്കാൻ അനുവദിക്കുക, തുടർന്ന് Float വീണ്ടും ടാപ്പ് ചെയ്യുക.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>പൂർണ്ണ ആക്‌സസ് ഡാഷറിനെ നിങ്ങൾ എഴുതുന്നത് സംസാരിക്കാനും നിങ്ങളുടെ പരിശീലനം ഓർമ്മിക്കാനും അനുവദിക്കുന്നു. കീബോർഡ് ഇല്ലാതെ തന്നെ അടിസ്ഥാന എൻട്രിക്ക് ഇപ്പോഴും പ്രവർത്തിക്കുന്നു.</value>
   </data>
@@ -388,6 +391,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>മുൻഗണനകൾ</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher തയ്യാറാകുകയാണ്…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>സ്വകാര്യത</value>

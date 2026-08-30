@@ -185,6 +185,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   <data name="fast" xml:space="preserve">
     <value>Schnell</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Um die Tastatur schweben zu lassen, erlauben Sie Dasher, über anderen Apps anzuzeigen, und tippen Sie dann erneut auf Float.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Mit Vollzugriff kann Dasher sprechen, was Sie schreiben, und sich an Ihr Training erinnern. Die Tastatur funktioniert auch ohne sie weiterhin für die einfache Eingabe.</value>
   </data>
@@ -358,6 +361,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Zeiger-Hover-Eingabe</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher wird vorbereitet…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privatsphäre</value>

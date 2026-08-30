@@ -185,6 +185,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="fast" xml:space="preserve">
     <value>Snel</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Om het toetsenbord te laten zweven, geef je Dasher toestemming om over andere apps te verschijnen en tik je opnieuw op Float.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Met Full Access kan Dasher uitspreken wat je typt en je training onthouden. Het toetsenbord werkt nog steeds voor eenvoudige invoer, ook zonder Full Access.</value>
   </data>
@@ -367,6 +370,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Voorkeuren</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher wordt voorbereid…</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Opnieuw importeren vanuit Dasher 5</value>

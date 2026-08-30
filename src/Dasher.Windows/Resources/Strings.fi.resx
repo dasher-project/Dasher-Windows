@@ -191,6 +191,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="fast" xml:space="preserve">
     <value>Nopeasti</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Vapauta näppäimistö kellumaan sallimalla Dasherin näkyä muiden sovellusten päällä ja napauta sitten Float uudelleen.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Täysi käyttöoikeus antaa Dasherille mahdollisuuden puhua kirjoittamasi ja muistaa koulutuksesi. Näppäimistö toimii perussyötöissä ilman sitäkin.</value>
   </data>
@@ -376,6 +379,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Osoittimen leijutussyöttö</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Valmistellaan Dasheria…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Tietosuoja</value>

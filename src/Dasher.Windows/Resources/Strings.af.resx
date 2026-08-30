@@ -194,6 +194,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   <data name="fast" xml:space="preserve">
     <value>Vinnig</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Om die sleutelbord te laat dryf, laat Dasher toe om oor ander apps te vertoon en tik dan Float weer.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Volle Toegang laat Dasher toe om te praat wat jy skryf en jou opleiding te onthou. Die sleutelbord werk steeds vir basiese invoer daarsonder.</value>
   </data>
@@ -382,6 +385,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Voorkeure</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher word voorberei…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privaatheid</value>

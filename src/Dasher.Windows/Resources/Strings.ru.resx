@@ -191,6 +191,9 @@
   <data name="fast" xml:space="preserve">
     <value>Быстрый</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Чтобы открепить клавиатуру, разрешите Dasher отображаться поверх других приложений, затем снова нажмите Float.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Функция Full Access позволяет Dasher озвучивать написанный текст и запоминать ваши инструкции. Клавиатура по-прежнему работает для базового ввода без этой функции.</value>
   </data>
@@ -379,6 +382,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Настройки</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Подготовка Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Конфиденциальность</value>

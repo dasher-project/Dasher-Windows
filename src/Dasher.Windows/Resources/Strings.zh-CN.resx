@@ -191,6 +191,9 @@
   <data name="fast" xml:space="preserve">
     <value>快速地</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>要悬浮键盘，请允许 Dasher 在其他应用上方显示，然后再次点击“悬浮”。</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>完全访问权限可让 Dasher 说出您所写的内容并记住您的训练。没有它，键盘仍然可以进行基本输入。</value>
   </data>
@@ -382,6 +385,9 @@
   </data>
   <data name="prefs" xml:space="preserve">
     <value>偏好</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>正在准备 Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>隐私</value>

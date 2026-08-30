@@ -188,6 +188,9 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   <data name="fast" xml:space="preserve">
     <value>Rychle</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Chcete-li klávesnici uvolnit, povolte aplikaci Dasher zobrazovat nad jinými aplikacemi a klepněte znovu na Float.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Plný přístup umožňuje Dasheru číst, co píšete, a pamatovat si váš trénink. Klávesnice funguje pro základní zadávání i bez ní.</value>
   </data>
@@ -370,6 +373,9 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Vstup při najetí kurzoru</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Příprava Dasheru…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Soukromí</value>

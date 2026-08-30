@@ -194,6 +194,9 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
   <data name="fast" xml:space="preserve">
     <value>Hurtig</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>For at gøre tastaturet flydende, skal du tillade Dasher at vise over andre apps og trykke på Float igen.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>Fuld adgang giver Dasher mulighed for at læse det, du skriver, og huske din træning. Tastaturet fungerer stadig til grundlæggende indtastning uden den.</value>
   </data>
@@ -373,6 +376,9 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Præferencer</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Forbereder Dasher…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privatliv</value>

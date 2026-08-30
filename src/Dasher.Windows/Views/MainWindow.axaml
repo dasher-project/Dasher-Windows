@@ -510,5 +510,28 @@
             </Button>
         </StackPanel>
     </Border>
+
+    <!-- RFC 0018: startup loading state - visible from the very first frame
+         so there is never a dead or unthemed window while data install,
+         engine create/realize or v5 migration runs on a worker thread. -->
+    <Border x:Name="StartupOverlay" ZIndex="200"
+            Background="{DynamicResource BgLight}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Spacing="18" MaxWidth="360">
+            <TextBlock Text="Dasher" FontSize="28" FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource TextPrimary}"/>
+            <ProgressBar IsIndeterminate="True" MinWidth="220"
+                         HorizontalAlignment="Center"/>
+            <TextBlock x:Name="StartupOverlayText"
+                       Text="Preparing Dasher" FontSize="13"
+                       HorizontalAlignment="Center" TextWrapping="Wrap"
+                       Foreground="{DynamicResource TextSecondary}"/>
+            <TextBlock x:Name="StartupOverlayError" IsVisible="False"
+                       FontSize="12" TextWrapping="Wrap"
+                       HorizontalAlignment="Center"
+                       Foreground="#EB5B5C"/>
+        </StackPanel>
+    </Border>
     </Grid>
 </Window>

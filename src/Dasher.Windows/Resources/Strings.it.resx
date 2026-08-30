@@ -188,6 +188,9 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
   <data name="fast" xml:space="preserve">
     <value>Veloce</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>Per rendere fluttuante la tastiera, consenti a Dasher di essere visualizzato sopra altre app, quindi tocca di nuovo Float.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>L'accesso completo consente a Dasher di parlare ciò che scrivi e di ricordare la tua formazione. La tastiera funziona ancora per l'immissione di base senza di essa.</value>
   </data>
@@ -376,6 +379,9 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Preferenze</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Preparazione di Dasher…</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Reimportare da Dasher 5</value>

@@ -188,6 +188,9 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   <data name="fast" xml:space="preserve">
     <value>Gyors</value>
   </data>
+  <data name="float_needs_permission" xml:space="preserve">
+    <value>A billentyűzet lebegtetéséhez engedélyezze a Dashernek a más alkalmazások feletti megjelenítést, majd koppintson újra a Float gombra.</value>
+  </data>
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>A Teljes Hozzáférés lehetővé teszi a Dasher számára, hogy kimondja, amit írsz, és megjegyezze a betanításodat. A billentyűzet nélküle is működik az alapvető bevitelhez.</value>
   </data>
@@ -370,6 +373,9 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Mutató lebegés bemenet</value>
+  </data>
+  <data name="preparing_dasher" xml:space="preserve">
+    <value>Dasher előkészítése…</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Magánélet</value>
