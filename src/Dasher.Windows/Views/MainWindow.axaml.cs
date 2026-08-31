@@ -117,6 +117,7 @@ public partial class MainWindow : Window
     private const uint KEYEVENTF_UNICODE = 0x0004;
     private const uint KEYEVENTF_KEYUP = 0x0002;
     private const ushort VK_BACK = 0x08;
+    private const ushort VK_RETURN = 0x0D;
 
     public MainWindow()
     {
@@ -565,7 +566,16 @@ public partial class MainWindow : Window
 
         foreach (char c in text)
         {
-            SendUnicodeChar(c);
+            // Newlines must go as VK_RETURN: target applications ignore a
+            // Unicode 0x0A injected via KEYEVENTF_UNICODE (they expect the
+            // Enter key). Dropping the insert while the engine still emits
+            // a matching delete ("\n" = one backspace) made zooming back
+            // across a paragraph eat the last character of the preceding
+            // word — the build .24 "messes up the previous word" report.
+            if (c == '\n' || c == '\r')
+                SendVirtualKey(VK_RETURN);
+            else
+                SendUnicodeChar(c);
         }
 
         var fgAfter = GetForegroundWindow();
