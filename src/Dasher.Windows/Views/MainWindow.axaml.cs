@@ -213,7 +213,11 @@ public partial class MainWindow : Window
     }
 
     /// <summary>Continuously remember the normal-state bounds so closing while
-    /// maximized saves the restore bounds, not the maximized ones.</summary>
+    /// maximized saves the restore bounds, not the maximized ones. Trackers are
+    /// shared across modes (events don't know the pane mode), so every
+    /// programmatic mode-bounds application re-seeds them — otherwise geometry
+    /// captured while in keyboard mode would persist as the normal restore
+    /// bounds after returning to a maximized normal window (review).</summary>
     private void TrackNormalStateGeometry()
     {
         PositionChanged += (_, _) => { if (WindowState == WindowState.Normal) _lastNormalPosition = Position; };
@@ -222,6 +226,12 @@ public partial class MainWindow : Window
             if (WindowState == WindowState.Normal && e.ClientSize.Width > 0)
                 _lastNormalSize = e.ClientSize;
         };
+    }
+
+    private void SeedTrackers(PixelPoint position, Size size)
+    {
+        _lastNormalPosition = position;
+        _lastNormalSize = size;
     }
 
     private void SaveWindowGeometry()
@@ -239,11 +249,24 @@ public partial class MainWindow : Window
         }
         else
         {
-            _windowSettings.X = pos.X;
-            _windowSettings.Y = pos.Y;
-            _windowSettings.Width = size.Width;
-            _windowSettings.Height = size.Height;
-            _windowSettings.Maximized = WindowState == WindowState.Maximized;
+            // Closing while maximized with no tracker history this session
+            // (e.g. started maximized, went keyboard, returned maximized,
+            // closed): Position/Bounds are the MAXIMIZED frame — don't let
+            // them clobber the saved normal restore bounds; keep the bucket
+            // and only refresh the maximized flag (review).
+            if (WindowState == WindowState.Maximized &&
+                _lastNormalPosition.X == int.MinValue && _lastNormalSize == null)
+            {
+                _windowSettings.Maximized = true;
+            }
+            else
+            {
+                _windowSettings.X = pos.X;
+                _windowSettings.Y = pos.Y;
+                _windowSettings.Width = size.Width;
+                _windowSettings.Height = size.Height;
+                _windowSettings.Maximized = WindowState == WindowState.Maximized;
+            }
         }
         _windowSettings.Save();
     }
@@ -837,12 +860,21 @@ public partial class MainWindow : Window
                     _windowSettings.DirectWidth, _windowSettings.DirectHeight))
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
-                Position = new PixelPoint((int)_windowSettings.DirectX, (int)_windowSettings.DirectY);
+                var p = new PixelPoint((int)_windowSettings.DirectX, (int)_windowSettings.DirectY);
+                Position = p;
+                var size = new Size(_windowSettings.DirectWidth, _windowSettings.DirectHeight);
                 if (_windowSettings.DirectWidth >= MinWidth && _windowSettings.DirectHeight >= MinHeight)
                 {
                     Width = _windowSettings.DirectWidth;
                     Height = _windowSettings.DirectHeight;
                 }
+                else
+                {
+                    size = Bounds.Size;
+                }
+                // The shared trackers must describe the mode we just applied —
+                // not retain the previous mode's geometry (review).
+                SeedTrackers(p, size);
             }
         }
         else
@@ -852,12 +884,22 @@ public partial class MainWindow : Window
                     _windowSettings.Width, _windowSettings.Height))
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
-                Position = new PixelPoint((int)_windowSettings.X, (int)_windowSettings.Y);
+                var p = new PixelPoint((int)_windowSettings.X, (int)_windowSettings.Y);
+                Position = p;
+                var size = new Size(_windowSettings.Width, _windowSettings.Height);
                 if (_windowSettings.Width >= MinWidth && _windowSettings.Height >= MinHeight)
                 {
                     Width = _windowSettings.Width;
                     Height = _windowSettings.Height;
                 }
+                else
+                {
+                    size = Bounds.Size;
+                }
+                // Seed BEFORE the Maximized switch: these ARE the normal
+                // restore bounds, so a later close-while-maximized saves
+                // them instead of stale keyboard geometry (review).
+                SeedTrackers(p, size);
             }
             WindowState = _windowSettings.Maximized ? WindowState.Maximized : WindowState.Normal;
         }
