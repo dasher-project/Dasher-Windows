@@ -5,8 +5,18 @@ namespace Dasher.Windows.Tests;
 
 // Integration tests against the real dasher.dll + DasherCore/Data. The DLL
 // is built in CI before tests run (Build Installer workflow) and is a
-// gitignored artifact locally — if it (or the data tree) is absent these
+// gitignored artifact locally - if it (or the data tree) is absent these
 // tests pass vacuously rather than fail; CI is where they bite.
+//
+// Engine-integration collection: dasher_create sets PROCESS-GLOBAL data/user
+// directories (FileUtils::SetDataDirectory), so two engines created
+// concurrently in one process swap directories under each other - the loser's
+// Realize fails and latches engineError (DasherCore #77), emitting zero draw
+// commands thereafter. Production is single-engine (single-instance mutex),
+// but every test class that creates an engine MUST join this collection so
+// they serialize. Observed as the flaky "engine drew no labels at rest"
+// failure (5/12 full-suite runs) once a second engine class existed.
+[Collection("engine-integration")]
 public class EngineCApiTests
 {
     private static string? FindDataDir()
