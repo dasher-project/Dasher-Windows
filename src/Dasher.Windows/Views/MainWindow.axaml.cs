@@ -139,9 +139,10 @@ public partial class MainWindow : Window
     /// <summary>
     /// Restore saved bounds before the window is shown. Falls back to the
     /// AXAML default (1024x768, centered) when nothing is saved or the saved
-    /// position is off every currently-connected screen (monitor unplugged /
-    /// DPI change). Restores the bounds matching the saved pane mode so a
-    /// direct-mode-quit's small window doesn't shrink the next normal launch.
+    /// geometry is stranded off every currently-connected screen (monitor
+    /// unplugged / DPI change). Restores the bounds matching the saved pane
+    /// mode so a direct-mode-quit's small window doesn't shrink the next
+    /// normal launch.
     /// </summary>
     private void RestoreWindowGeometry()
     {
@@ -149,38 +150,54 @@ public partial class MainWindow : Window
         var keyboardMode = PaneSettings.Load().PanePosition == PanePosition.Keyboard.ToString();
 
         var hasBounds = keyboardMode ? _windowSettings.HasDirectBounds : _windowSettings.HasNormalBounds;
-        if (!hasBounds) return;
-
-        var x = keyboardMode ? _windowSettings.DirectX : _windowSettings.X;
-        var y = keyboardMode ? _windowSettings.DirectY : _windowSettings.Y;
-        var w = keyboardMode ? _windowSettings.DirectWidth : _windowSettings.Width;
-        var h = keyboardMode ? _windowSettings.DirectHeight : _windowSettings.Height;
-
-        if (!IsPositionOnAnyScreen(x, y)) return;
-
-        WindowStartupLocation = WindowStartupLocation.Manual;
-        Position = new PixelPoint((int)x, (int)y);
-        if (!double.IsNaN(w) && w >= MinWidth && !double.IsNaN(h) && h >= MinHeight)
+        if (hasBounds)
         {
-            Width = w;
-            Height = h;
+            var x = keyboardMode ? _windowSettings.DirectX : _windowSettings.X;
+            var y = keyboardMode ? _windowSettings.DirectY : _windowSettings.Y;
+            var w = keyboardMode ? _windowSettings.DirectWidth : _windowSettings.Width;
+            var h = keyboardMode ? _windowSettings.DirectHeight : _windowSettings.Height;
+
+            if (IsGeometryUsableOnAnyScreen(x, y, w, h))
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual;
+                Position = new PixelPoint((int)x, (int)y);
+                if (!double.IsNaN(w) && w >= MinWidth && !double.IsNaN(h) && h >= MinHeight)
+                {
+                    Width = w;
+                    Height = h;
+                }
+                if (!keyboardMode && _windowSettings.Maximized)
+                    WindowState = WindowState.Maximized;
+            }
         }
-        if (!keyboardMode && _windowSettings.Maximized)
-            WindowState = WindowState.Maximized;
+
+        // Startup restore has RUN (whether or not it found usable bounds) —
+        // later mode switches must apply mode bounds even when this session
+        // started fresh (review: leaving the flag false suppressed runtime
+        // mode-bound application for the whole process).
         _geometryRestored = true;
     }
 
-    private bool IsPositionOnAnyScreen(double x, double y)
+    /// <summary>
+    /// True when the restored window RECT keeps a substantial usable area on
+    /// some connected screen — at least a 100x100 px chunk. Deliberately
+    /// accepts partially off-screen placements the user chose (multi-monitor
+    /// straddles, edge-parked windows with most of their body visible) and
+    /// rejects only geometry stranded behind a bezel or on an unplugged
+    /// monitor (review: the old fixed top-left probe rejected valid windows).
+    /// </summary>
+    private bool IsGeometryUsableOnAnyScreen(double x, double y, double w, double h)
     {
         try
         {
-            // Require a visible chunk of the title bar area on some screen —
-            // not merely a pixel intersection — so a restored window is never
-            // stranded behind a bezel.
-            const int visiblePx = 80;
+            const double minVisibleArea = 100 * 100;
+            if (double.IsNaN(w) || double.IsNaN(h) || w <= 0 || h <= 0) return false;
             return Screens.ScreenCount > 0 && Screens.All.Any(s =>
-                x < s.Bounds.Right - visiblePx && x + visiblePx > s.Bounds.X &&
-                y < s.Bounds.Bottom - visiblePx && y + visiblePx > s.Bounds.Y);
+            {
+                var iw = Math.Min(x + w, s.Bounds.Right) - Math.Max(x, s.Bounds.X);
+                var ih = Math.Min(y + h, s.Bounds.Bottom) - Math.Max(y, s.Bounds.Y);
+                return iw >= 1 && ih >= 1 && iw * ih >= minVisibleArea;
+            });
         }
         catch { return false; }
     }
@@ -805,7 +822,9 @@ public partial class MainWindow : Window
 
         if (position == PanePosition.Keyboard)
         {
-            if (_windowSettings.HasDirectBounds && IsPositionOnAnyScreen(_windowSettings.DirectX, _windowSettings.DirectY))
+            if (_windowSettings.HasDirectBounds &&
+                IsGeometryUsableOnAnyScreen(_windowSettings.DirectX, _windowSettings.DirectY,
+                    _windowSettings.DirectWidth, _windowSettings.DirectHeight))
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
                 Position = new PixelPoint((int)_windowSettings.DirectX, (int)_windowSettings.DirectY);
@@ -818,7 +837,9 @@ public partial class MainWindow : Window
         }
         else
         {
-            if (_windowSettings.HasNormalBounds && IsPositionOnAnyScreen(_windowSettings.X, _windowSettings.Y))
+            if (_windowSettings.HasNormalBounds &&
+                IsGeometryUsableOnAnyScreen(_windowSettings.X, _windowSettings.Y,
+                    _windowSettings.Width, _windowSettings.Height))
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
                 Position = new PixelPoint((int)_windowSettings.X, (int)_windowSettings.Y);
