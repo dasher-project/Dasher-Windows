@@ -901,6 +901,18 @@ public partial class MainWindow : Window
                 // them instead of stale keyboard geometry (review).
                 SeedTrackers(p, size);
             }
+            else
+            {
+                // Saved normal bounds unusable (unplugged monitor, bezel) or
+                // absent: the window keeps its live geometry, but the shared
+                // trackers may still hold KEYBOARD values — and the
+                // Maximized switch below follows. Empty them so
+                // SaveWindowGeometry's close-while-maximized guard keeps the
+                // saved normal bucket instead of persisting the keyboard
+                // geometry as restore bounds (review).
+                _lastNormalPosition = new PixelPoint(int.MinValue, int.MinValue);
+                _lastNormalSize = null;
+            }
             WindowState = _windowSettings.Maximized ? WindowState.Maximized : WindowState.Normal;
         }
     }
