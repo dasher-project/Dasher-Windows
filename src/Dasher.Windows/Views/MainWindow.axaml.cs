@@ -185,10 +185,12 @@ public partial class MainWindow : Window
     /// accepts partially off-screen placements the user chose (multi-monitor
     /// straddles, edge-parked windows with most of their body visible) and
     /// rejects only geometry stranded behind a bezel or on an unplugged
-    /// monitor. (Review: an area-only test admitted 1-px slivers that pass
-    /// the pixel count but cannot be grabbed; the old fixed top-left probe
-    /// rejected valid straddles; and DIP sizes must be converted per-screen
-    /// before intersecting physical-pixel screen bounds.)
+    /// monitor. (Review history: area-only tests admitted un-grabbable
+    /// slivers; the fixed top-left probe rejected valid straddles; DIP sizes
+    /// must be converted to physical px; and the conversion must use ONE
+    /// coherent window scale — per-candidate-screen scaling inflated the
+    /// rect on higher-DPI displays and admitted geometry whose real visible
+    /// intersection was under the threshold.)
     /// </summary>
     private bool IsGeometryUsableOnAnyScreen(double x, double y, double w, double h)
     {
@@ -196,14 +198,22 @@ public partial class MainWindow : Window
         {
             const double minVisiblePx = 100;
             if (double.IsNaN(w) || double.IsNaN(h) || w <= 0 || h <= 0) return false;
+            if (Screens.ScreenCount == 0) return false;
+
             // x/y (Window.Position) and Screen.Bounds are physical pixels;
-            // w/h (Window.Width/Height) are DIPs. Convert the size with each
-            // candidate screen's own scaling so a 150%-display straddle is
-            // measured with 150% pixels on that display.
-            return Screens.ScreenCount > 0 && Screens.All.Any(s =>
+            // w/h (Window.Width/Height) are DIPs. A window renders at ONE
+            // physical size: convert with the scaling of the screen owning
+            // the saved origin (the best predictor of the scale the OS will
+            // apply at restore), falling back to the primary screen.
+            var origin = new PixelPoint((int)x, (int)y);
+            var owner = Screens.All.FirstOrDefault(s => s.Bounds.Contains(origin))
+                        ?? Screens.Primary
+                        ?? Screens.All[0];
+            var pw = w * owner.Scaling;
+            var ph = h * owner.Scaling;
+
+            return Screens.All.Any(s =>
             {
-                var pw = w * s.Scaling;
-                var ph = h * s.Scaling;
                 var iw = Math.Min(x + pw, s.Bounds.Right) - Math.Max(x, s.Bounds.X);
                 var ih = Math.Min(y + ph, s.Bounds.Bottom) - Math.Max(y, s.Bounds.Y);
                 return iw >= minVisiblePx && ih >= minVisiblePx;
