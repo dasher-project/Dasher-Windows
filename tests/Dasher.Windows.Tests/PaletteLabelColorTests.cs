@@ -7,6 +7,10 @@ namespace Dasher.Windows.Tests;
 // the real engine with the palette selected, decodes opcode-5 (Text) draw
 // commands, and asserts the label colour is the palette's defaultLabelColor
 // (#FFFF00), not black/transparent.
+//
+// engine-integration collection: see EngineCApiTests — concurrent engine
+// creation swaps process-global data dirs; engine classes must serialize.
+[Collection("engine-integration")]
 public class PaletteLabelColorTests
 {
     private static string? FindDataDir()
