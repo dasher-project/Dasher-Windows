@@ -180,23 +180,26 @@ public partial class MainWindow : Window
 
     /// <summary>
     /// True when the restored window RECT keeps a substantial usable area on
-    /// some connected screen — at least a 100x100 px chunk. Deliberately
-    /// accepts partially off-screen placements the user chose (multi-monitor
+    /// some connected screen — an intersection at least 100x100 px in BOTH
+    /// dimensions, so the visible chunk is draggable. Deliberately accepts
+    /// partially off-screen placements the user chose (multi-monitor
     /// straddles, edge-parked windows with most of their body visible) and
     /// rejects only geometry stranded behind a bezel or on an unplugged
-    /// monitor (review: the old fixed top-left probe rejected valid windows).
+    /// monitor. (Review: an area-only test admitted 1-px slivers that pass
+    /// the pixel count but cannot be grabbed; the old fixed top-left probe
+    /// rejected valid straddles.)
     /// </summary>
     private bool IsGeometryUsableOnAnyScreen(double x, double y, double w, double h)
     {
         try
         {
-            const double minVisibleArea = 100 * 100;
+            const double minVisiblePx = 100;
             if (double.IsNaN(w) || double.IsNaN(h) || w <= 0 || h <= 0) return false;
             return Screens.ScreenCount > 0 && Screens.All.Any(s =>
             {
                 var iw = Math.Min(x + w, s.Bounds.Right) - Math.Max(x, s.Bounds.X);
                 var ih = Math.Min(y + h, s.Bounds.Bottom) - Math.Max(y, s.Bounds.Y);
-                return iw >= 1 && ih >= 1 && iw * ih >= minVisibleArea;
+                return iw >= minVisiblePx && ih >= minVisiblePx;
             });
         }
         catch { return false; }
