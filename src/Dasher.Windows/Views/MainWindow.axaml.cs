@@ -32,6 +32,14 @@ public partial class MainWindow : Window
     private NativeBridge.ParameterCallback? _parameterCallback;
     private IntPtr _lastTargetWindow = IntPtr.Zero;
 
+    // Window geometry persistence (issue #46): last-known normal-state
+    // bounds, tracked continuously so closing while maximized saves the
+    // restore bounds rather than the maximized ones.
+    private WindowSettings _windowSettings = new();
+    private PixelPoint _lastNormalPosition = new(int.MinValue, int.MinValue);
+    private Size? _lastNormalSize;
+    private bool _geometryRestored;
+
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
 
@@ -122,6 +130,95 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        RestoreWindowGeometry();
+        TrackNormalStateGeometry();
+    }
+
+    // ── Window geometry persistence (issue #46) ─────────────────────────────
+
+    /// <summary>
+    /// Restore saved bounds before the window is shown. Falls back to the
+    /// AXAML default (1024x768, centered) when nothing is saved or the saved
+    /// position is off every currently-connected screen (monitor unplugged /
+    /// DPI change). Restores the bounds matching the saved pane mode so a
+    /// direct-mode-quit's small window doesn't shrink the next normal launch.
+    /// </summary>
+    private void RestoreWindowGeometry()
+    {
+        _windowSettings = WindowSettings.Load();
+        var keyboardMode = PaneSettings.Load().PanePosition == PanePosition.Keyboard.ToString();
+
+        var hasBounds = keyboardMode ? _windowSettings.HasDirectBounds : _windowSettings.HasNormalBounds;
+        if (!hasBounds) return;
+
+        var x = keyboardMode ? _windowSettings.DirectX : _windowSettings.X;
+        var y = keyboardMode ? _windowSettings.DirectY : _windowSettings.Y;
+        var w = keyboardMode ? _windowSettings.DirectWidth : _windowSettings.Width;
+        var h = keyboardMode ? _windowSettings.DirectHeight : _windowSettings.Height;
+
+        if (!IsPositionOnAnyScreen(x, y)) return;
+
+        WindowStartupLocation = WindowStartupLocation.Manual;
+        Position = new PixelPoint((int)x, (int)y);
+        if (!double.IsNaN(w) && w >= MinWidth && !double.IsNaN(h) && h >= MinHeight)
+        {
+            Width = w;
+            Height = h;
+        }
+        if (!keyboardMode && _windowSettings.Maximized)
+            WindowState = WindowState.Maximized;
+        _geometryRestored = true;
+    }
+
+    private bool IsPositionOnAnyScreen(double x, double y)
+    {
+        try
+        {
+            // Require a visible chunk of the title bar area on some screen —
+            // not merely a pixel intersection — so a restored window is never
+            // stranded behind a bezel.
+            const int visiblePx = 80;
+            return Screens.ScreenCount > 0 && Screens.All.Any(s =>
+                x < s.Bounds.Right - visiblePx && x + visiblePx > s.Bounds.X &&
+                y < s.Bounds.Bottom - visiblePx && y + visiblePx > s.Bounds.Y);
+        }
+        catch { return false; }
+    }
+
+    /// <summary>Continuously remember the normal-state bounds so closing while
+    /// maximized saves the restore bounds, not the maximized ones.</summary>
+    private void TrackNormalStateGeometry()
+    {
+        PositionChanged += (_, _) => { if (WindowState == WindowState.Normal) _lastNormalPosition = Position; };
+        Resized += (_, e) =>
+        {
+            if (WindowState == WindowState.Normal && e.ClientSize.Width > 0)
+                _lastNormalSize = e.ClientSize;
+        };
+    }
+
+    private void SaveWindowGeometry()
+    {
+        var keyboardMode = _vm?.PanePosition == PanePosition.Keyboard;
+        var pos = _lastNormalPosition.X != int.MinValue ? _lastNormalPosition : Position;
+        var size = _lastNormalSize ?? Bounds.Size;
+
+        if (keyboardMode)
+        {
+            _windowSettings.DirectX = pos.X;
+            _windowSettings.DirectY = pos.Y;
+            _windowSettings.DirectWidth = size.Width;
+            _windowSettings.DirectHeight = size.Height;
+        }
+        else
+        {
+            _windowSettings.X = pos.X;
+            _windowSettings.Y = pos.Y;
+            _windowSettings.Width = size.Width;
+            _windowSettings.Height = size.Height;
+            _windowSettings.Maximized = WindowState == WindowState.Maximized;
+        }
+        _windowSettings.Save();
     }
 
     protected override void OnOpened(EventArgs e)
@@ -470,6 +567,7 @@ public partial class MainWindow : Window
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
+        SaveWindowGeometry();
         _canvas?.Shutdown();
         _ = AnalyticsService.ShutdownAsync();
         base.OnClosing(e);
@@ -686,10 +784,52 @@ public partial class MainWindow : Window
     private void SetPanePosition(PanePosition position)
     {
         if (_vm == null) return;
+        // Capture the outgoing mode's bounds before the layout (and possibly
+        // the window chrome) changes (issue #46).
+        SaveWindowGeometry();
         _vm.PanePosition = position;
         _vm.IsKeyboardMode = position == PanePosition.Keyboard;
         ApplyPaneLayout();
+        ApplyModeWindowBounds(position);
         new PaneSettings { PanePosition = position.ToString(), StatusBarHidden = _vm.IsStatusBarHidden }.Save();
+    }
+
+    /// <summary>
+    /// On a runtime mode switch, apply the entering mode's saved bounds if it
+    /// has any (first-ever switch keeps the current size). Startup restore
+    /// already ran in the constructor and is skipped.
+    /// </summary>
+    private void ApplyModeWindowBounds(PanePosition position)
+    {
+        if (!_geometryRestored) return; // constructor restore handles startup
+
+        if (position == PanePosition.Keyboard)
+        {
+            if (_windowSettings.HasDirectBounds && IsPositionOnAnyScreen(_windowSettings.DirectX, _windowSettings.DirectY))
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual;
+                Position = new PixelPoint((int)_windowSettings.DirectX, (int)_windowSettings.DirectY);
+                if (_windowSettings.DirectWidth >= MinWidth && _windowSettings.DirectHeight >= MinHeight)
+                {
+                    Width = _windowSettings.DirectWidth;
+                    Height = _windowSettings.DirectHeight;
+                }
+            }
+        }
+        else
+        {
+            if (_windowSettings.HasNormalBounds && IsPositionOnAnyScreen(_windowSettings.X, _windowSettings.Y))
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual;
+                Position = new PixelPoint((int)_windowSettings.X, (int)_windowSettings.Y);
+                if (_windowSettings.Width >= MinWidth && _windowSettings.Height >= MinHeight)
+                {
+                    Width = _windowSettings.Width;
+                    Height = _windowSettings.Height;
+                }
+            }
+            WindowState = _windowSettings.Maximized ? WindowState.Maximized : WindowState.Normal;
+        }
     }
 
     private void OnToggleStatusBar(object? sender, RoutedEventArgs e)
