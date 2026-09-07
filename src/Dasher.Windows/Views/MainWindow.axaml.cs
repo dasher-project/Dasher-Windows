@@ -772,6 +772,67 @@ public partial class MainWindow : Window
 
     private int _contextSeedGeneration;
 
+    // ── Foreground WinEventHook (RFC 0015 context seeding) ─────────────────
+
+    private IntPtr _foregroundHook;
+    private WinEventProc? _foregroundHookProc;
+
+    private delegate void WinEventProc(IntPtr hook, uint eventType, IntPtr hwnd, int idObject,
+        int idChild, uint dwEventThread, uint dwmsEventTime);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax,
+        IntPtr hmodWinEventProc, WinEventProc lpfnWinEventProc, uint idProcess,
+        uint idThread, uint dwFlags);
+
+    [DllImport("user32.dll")]
+    private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+    private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+    private const uint WINEVENT_OUTOFCONTEXT = 0x0000;
+
+    /// <summary>
+    /// Install a system-wide foreground-change hook (v5's mechanism). Fires
+    /// whenever ANY window gains the foreground — including when Dasher's
+    /// own WS_EX_NOACTIVATE style prevents Deactivated from firing. The hook
+    /// callback runs on the thread that installed it (the UI thread), so
+    /// it's safe to update _lastTargetWindow and trigger seeding directly.
+    /// </summary>
+    private void InstallForegroundHook()
+    {
+        RemoveForegroundHook(); // idempotent
+
+        _foregroundHookProc = (hook, eventType, hwnd, idObject, idChild, thread, time) =>
+        {
+            if (idObject != 0 /* OBJID_WINDOW */ ) return;
+            if (hwnd == IntPtr.Zero) return;
+
+            var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
+            if (hwnd == ourHandle) return; // Dasher gained focus — not a target
+
+            var changedTarget = hwnd != _lastTargetWindow;
+            _lastTargetWindow = hwnd;
+            KbLog($"ForegroundHook: target = 0x{hwnd:X} (changed={changedTarget})");
+
+            if (changedTarget && _vm is { IsKeyboardMode: true })
+                _ = SeedContextFromTargetAsync("foreground hook");
+        };
+
+        _foregroundHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
+            IntPtr.Zero, _foregroundHookProc, 0, 0, WINEVENT_OUTOFCONTEXT);
+        KbLog($"ForegroundHook installed: handle=0x{_foregroundHook:X}");
+    }
+
+    private void RemoveForegroundHook()
+    {
+        if (_foregroundHook != IntPtr.Zero)
+        {
+            UnhookWinEvent(_foregroundHook);
+            _foregroundHook = IntPtr.Zero;
+            KbLog("ForegroundHook removed");
+        }
+    }
+
     private void SendTextToForeground(string text)
     {
         EnsureTargetForeground();
@@ -1111,12 +1172,12 @@ public partial class MainWindow : Window
             Avalonia.Threading.Dispatcher.UIThread.Post(
                 () => SetNoActivate(true), Avalonia.Threading.DispatcherPriority.Render);
 
-            // RFC 0015 context seeding does NOT fire here: at mode entry
-            // Dasher is still the foreground (the user just clicked our
-            // button) and the target's caret isn't where they want to
-            // continue. The Deactivated handler — which fires the moment
-            // the user clicks into the target — is the correct trigger and
-            // reads the live caret position.
+            // RFC 0015 context seeding: install a WinEventHook to detect when
+            // the user focuses their target application. The Deactivated event
+            // does NOT fire reliably in keyboard mode (WS_EX_NOACTIVATE suppress
+            // it), but the hook fires on every system-wide foreground change —
+            // the same mechanism v5 used (DasherWindow.cpp HandleWinEvent).
+            InstallForegroundHook();
         }
         else
         {
@@ -1127,6 +1188,8 @@ public partial class MainWindow : Window
 
             Topmost = false;
             this.Opacity = 1.0;
+
+            RemoveForegroundHook();
             SetNoActivate(false);
 
             TxtModeLabel.Text = position switch
