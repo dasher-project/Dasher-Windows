@@ -179,7 +179,12 @@ public static class TargetContextReader
                         UIA_PropertyIds.UIA_IsTextPatternAvailablePropertyId, true);
                     var descendant = element.FindFirst(
                         TreeScope.TreeScope_Descendants, condition);
-                    if (descendant != null)
+                    // Process isolation: FindFirst can reach out-of-process
+                    // hosted text elements (browser render processes, etc.) —
+                    // the descendant's process must match the target's before
+                    // its text enters the engine (greptile: "descendant
+                    // lookup bypasses process isolation").
+                    if (descendant != null && descendant.CurrentProcessId == (int)targetPid)
                     {
                         pattern = descendant.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)
                             as IUIAutomationTextPattern;
