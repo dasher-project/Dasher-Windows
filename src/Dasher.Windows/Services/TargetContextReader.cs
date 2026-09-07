@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -26,6 +27,20 @@ namespace Dasher.Windows.Services;
 public static class TargetContextReader
 {
     public sealed record TargetContext(string Text, int CaretUtf16);
+
+    // Diagnostic logging to the same file MainWindow.KbLog uses — the
+    // seeding path is remote-debugged via %APPDATA%\Dasher\keyboard_debug.log.
+    private static void Log(string msg)
+    {
+        try
+        {
+            var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
+            File.AppendAllText(Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Dasher", "keyboard_debug.log"), line);
+        }
+        catch { }
+    }
 
     /// <summary>
     /// Read the focused control of the given target window. Safe from the UI
@@ -87,15 +102,24 @@ public static class TargetContextReader
             {
                 focused = uia.ElementFromHandle(targetHwnd);
             }
-            catch
+            catch (Exception ex)
             {
+                Log($"[UIA] ElementFromHandle(0x{targetHwnd:X}) threw: {ex.Message}");
                 return null;
             }
-            if (focused == null) return null;
+            if (focused == null)
+            {
+                Log($"[UIA] ElementFromHandle(0x{targetHwnd:X}) returned null");
+                return null;
+            }
 
             var pattern = focused.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)
                 as IUIAutomationTextPattern;
-            if (pattern == null) return null;
+            if (pattern == null)
+            {
+                Log($"[UIA] hwnd 0x{targetHwnd:X} class='{focused.CurrentClassName}' no TextPattern — falling through to Win32");
+                return null;
+            }
 
             var document = pattern.DocumentRange;
             if (document == null) return null;
@@ -136,8 +160,9 @@ public static class TargetContextReader
 
             return new TargetContext(text, caretUtf16);
         }
-        catch
+        catch (Exception ex)
         {
+            Log($"[UIA] TextPattern read threw: {ex.Message}");
             return null;
         }
     }
@@ -148,18 +173,23 @@ public static class TargetContextReader
     {
         try
         {
-            // The caller passes the top-level window; the edit control is
-            // usually its focused child. Resolve via GetGUIThreadInfo, then
-            // confirm the class actually exposes EM_* semantics.
             var edit = GetFocusedChildOf(topLevel);
-            if (edit == IntPtr.Zero) return null;
+            if (edit == IntPtr.Zero)
+            {
+                Log($"[Win32] no focused child of 0x{topLevel:X}");
+                return null;
+            }
 
             var className = new StringBuilder(64);
             GetClassName(edit, className, 64);
             var cn = className.ToString();
             if (!cn.Equals("Edit", StringComparison.OrdinalIgnoreCase) &&
                 !cn.StartsWith("RICHEDIT", StringComparison.OrdinalIgnoreCase))
+            {
+                Log($"[Win32] focused child 0x{edit:X} class='{cn}' — not an edit control");
                 return null;
+            }
+            Log($"[Win32] reading edit control 0x{edit:X} class='{cn}'");
 
             int length = (int)SendMessage(edit, WM_GETTEXTLENGTH, IntPtr.Zero, IntPtr.Zero);
             if (length < 0 || length > 1_000_000) return null;

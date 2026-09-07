@@ -291,6 +291,11 @@ public partial class MainWindow : Window
 
         ThemeBrushes.Initialize(this);
 
+        // Keyboard (direct) mode is a deliberately small floating overlay:
+        // halve the normal-mode minimum (issue: "direct mode window has a
+        // minimum size — make it smaller, at least half").
+        UpdateWindowMinimum();
+
         // RFC 0018: the overlay ships visible in the AXAML so the first
         // rendered frame is already themed + occupied. Localise it now.
         StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher");
@@ -923,6 +928,22 @@ public partial class MainWindow : Window
     private void OnKbPaste(object? sender, RoutedEventArgs e) => SendCtrlChord(VK_KEY_V, "V");
     private void OnKbSelectAll(object? sender, RoutedEventArgs e) => SendCtrlChord(VK_KEY_A, "A");
 
+    private void UpdateWindowMinimum()
+    {
+        if (_vm == null) return;
+        if (_vm.IsKeyboardMode)
+        {
+            // Half the normal minimum: enough for the canvas + mini-bar
+            MinWidth = 300;
+            MinHeight = 250;
+        }
+        else
+        {
+            MinWidth = 600;
+            MinHeight = 500;
+        }
+    }
+
     private void OnModeRightSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Right);
     private void OnModeLeftSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Left);
     private void OnModeBottom(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Bottom);
@@ -943,6 +964,7 @@ public partial class MainWindow : Window
         SaveWindowGeometry();
         _vm.PanePosition = position;
         _vm.IsKeyboardMode = position == PanePosition.Keyboard;
+        UpdateWindowMinimum();
         ApplyPaneLayout();
         ApplyModeWindowBounds(position);
         new PaneSettings { PanePosition = position.ToString(), StatusBarHidden = _vm.IsStatusBarHidden }.Save();
