@@ -113,7 +113,7 @@ public static class TargetContextReader
             try
             {
                 var focused = uia.GetFocusedElement();
-                if (focused != null && BelongsToTargetWindow(uia, focused, targetHwnd, targetPid))
+                if (focused != null && BelongsToTargetWindow(uia, focused, targetHwnd))
                 {
                     element = focused;
                     Log($"[UIA] focused element class='{focused.CurrentClassName}' in target window — using it");
@@ -180,12 +180,14 @@ public static class TargetContextReader
                         UIA_PropertyIds.UIA_IsTextPatternAvailablePropertyId, true);
                     var descendant = element.FindFirst(
                         TreeScope.TreeScope_Descendants, condition);
-                    // Process isolation: FindFirst can reach out-of-process
-                    // hosted text elements (browser render processes, etc.) —
-                    // the descendant's process must match the target's before
-                    // its text enters the engine (greptile: "descendant
-                    // lookup bypasses process isolation").
-                    if (descendant != null && descendant.CurrentProcessId == (int)targetPid)
+                    // Containment, not process equality: FindFirst can reach
+                    // elements hosted by out-of-process renderers (browser
+                    // render processes) that ARE part of the target window's
+                    // subtree — a PID gate would reject them and lose the
+                    // field's context (greptile: "renderer fields lose
+                    // context"). The tree walk to targetHwnd proves the
+                    // descendant belongs to the target window.
+                    if (descendant != null && BelongsToTargetWindow(uia, descendant, targetHwnd))
                     {
                         pattern = descendant.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)
                             as IUIAutomationTextPattern;
@@ -249,18 +251,21 @@ public static class TargetContextReader
     }
 
     /// <summary>
-    /// True when the element is within the given target window (not just the
-    /// process — the same process can own multiple top-level windows).
-    /// Walks the control-view tree upward looking for a window whose native
-    /// handle matches. Bounded by tree depth (20) to avoid hanging on deep
-    /// or cyclic provider trees.
+    /// True when the element is within the given target window. Deliberately
+    /// does NOT compare process ids: browsers and Electron expose their
+    /// TextPattern from out-of-process render processes, so a PID gate would
+    /// reject the target's own controls (greptile: "renderer fields lose
+    /// context"). Containment is proven by walking the control-view tree
+    /// upward looking for a window whose native handle matches targetHwnd;
+    /// hitting a DIFFERENT non-zero handle — another top-level window, same
+    /// process or not — rejects immediately. Bounded by tree depth (20) to
+    /// avoid hanging on deep or cyclic provider trees.
     /// </summary>
     private static bool BelongsToTargetWindow(
-        CUIAutomationClass uia, IUIAutomationElement element, IntPtr targetHwnd, uint targetPid)
+        CUIAutomationClass uia, IUIAutomationElement element, IntPtr targetHwnd)
     {
         try
         {
-            if (element.CurrentProcessId != (int)targetPid) return false;
             var walker = uia.ControlViewWalker;
             var current = element;
             for (int depth = 0; depth < 20 && current != null; depth++)
