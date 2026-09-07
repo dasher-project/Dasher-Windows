@@ -343,7 +343,11 @@ public static class TargetContextReader
     /// <summary>
     /// Get the focused child of the given top-level window, scoped to the
     /// TARGET's thread. NEVER falls back to the system-wide focus — that
-    /// would cross target boundaries.
+    /// would cross target boundaries. A GUI thread can own several top-level
+    /// windows; if its current focus belongs to a different one, the control
+    /// is rejected rather than read (greptile: "fallback crosses window
+    /// boundaries" — process ownership alone accepted a sibling window's
+    /// control and seeded its text).
     /// </summary>
     private static IntPtr GetFocusedChildInThread(IntPtr topLevel)
     {
@@ -351,7 +355,15 @@ public static class TargetContextReader
         uint pid = 0;
         uint tid = GetWindowThreadProcessId(topLevel, ref pid);
         if (tid != 0 && GetGUIThreadInfo(tid, ref info) && info.hwndFocus != IntPtr.Zero)
+        {
+            var focusRoot = GetAncestor(info.hwndFocus, GA_ROOT);
+            if (focusRoot == IntPtr.Zero || focusRoot != topLevel)
+            {
+                Log($"[Win32] thread focus 0x{info.hwndFocus:X} roots to 0x{focusRoot:X} != target 0x{topLevel:X} — rejecting");
+                return IntPtr.Zero;
+            }
             return info.hwndFocus;
+        }
         return IntPtr.Zero;
     }
 
@@ -394,6 +406,11 @@ public static class TargetContextReader
 
     [DllImport("user32.dll")]
     private static extern uint GetWindowThreadProcessId(IntPtr hWnd, ref uint lpdwProcessId);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
+
+    private const uint GA_ROOT = 2;
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
