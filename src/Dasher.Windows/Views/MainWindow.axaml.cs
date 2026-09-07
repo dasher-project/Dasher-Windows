@@ -814,8 +814,12 @@ public partial class MainWindow : Window
             _lastTargetWindow = hwnd;
             KbLog($"ForegroundHook: target = 0x{hwnd:X} (changed={changedTarget})");
 
-            if (changedTarget && _vm is { IsKeyboardMode: true })
-                _ = SeedContextFromTargetAsync("foreground hook");
+            // Always seed in keyboard mode — even when the HWND hasn't changed,
+            // the user may have moved to a different field WITHIN the same
+            // window (browser tabs, document sections). The debounce prevents
+            // rapid-fire; a same-window re-read is cheap and correct.
+            if (_vm is { IsKeyboardMode: true })
+                _ = SeedContextFromTargetAsync(changedTarget ? "foreground changed" : "foreground re-focus");
         };
 
         _foregroundHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
