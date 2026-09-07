@@ -30,18 +30,15 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
     <PackageReference Include="DotNetTtsWrapper" Version="1.1.6" />
     <PackageReference Include="eyetuitive.NET" Version="1.7.1" />
+    <PackageReference Include="Interop.UIAutomationClient" Version="10.19041.0" />
     <PackageReference Include="Lucide.Avalonia" Version="0.2.10" />
     <PackageReference Include="PostHog" Version="2.7.1" />
     <PackageReference Include="System.Speech" Version="10.0.9" />
   </ItemGroup>
 
   <Target Name="CopyTobiiDll" AfterTargets="Build;Publish">
-    <Copy SourceFiles="native\tobii_stream_engine.dll"
-          DestinationFolder="$(OutputPath)"
-          Condition="Exists('native\tobii_stream_engine.dll')" />
-    <Copy SourceFiles="native\tobii_stream_engine.dll"
-          DestinationFolder="$(PublishDir)"
-          Condition="Exists('native\tobii_stream_engine.dll') And '$(PublishDir)' != ''" />
+    <Copy SourceFiles="native\tobii_stream_engine.dll" DestinationFolder="$(OutputPath)" Condition="Exists('native\tobii_stream_engine.dll')" />
+    <Copy SourceFiles="native\tobii_stream_engine.dll" DestinationFolder="$(PublishDir)" Condition="Exists('native\tobii_stream_engine.dll') And '$(PublishDir)' != ''" />
   </Target>
 
   <!-- i18n: regenerate Resources/Strings*.resx from the shared catalogue
@@ -53,14 +50,8 @@
     <SharedCatalogue>$(MSBuildThisFileDirectory)..\..\shared-resources\ui-strings.json</SharedCatalogue>
     <GenTranslationsScript>$(MSBuildThisFileDirectory)..\..\Scripts\gen-translations.py</GenTranslationsScript>
   </PropertyGroup>
-  <Target Name="GenerateStringsResx"
-          Inputs="$(SharedCatalogue)"
-          Outputs="$(MSBuildThisFileDirectory)Resources\Strings.resx"
-          BeforeTargets="BeforeBuild">
-    <Warning Text="shared-resources submodule missing — run 'git submodule update --init' to localise UI strings."
-             Condition="!Exists('$(SharedCatalogue)')" />
-    <Exec Command="python -X utf8 &quot;$(GenTranslationsScript)&quot; || py -3 -X utf8 &quot;$(GenTranslationsScript)&quot;"
-          Condition="Exists('$(SharedCatalogue)')"
-          ContinueOnError="WarnAndContinue" />
+  <Target Name="GenerateStringsResx" Inputs="$(SharedCatalogue)" Outputs="$(MSBuildThisFileDirectory)Resources\Strings.resx" BeforeTargets="BeforeBuild">
+    <Warning Text="shared-resources submodule missing — run 'git submodule update --init' to localise UI strings." Condition="!Exists('$(SharedCatalogue)')" />
+    <Exec Command="python -X utf8 &quot;$(GenTranslationsScript)&quot; || py -3 -X utf8 &quot;$(GenTranslationsScript)&quot;" Condition="Exists('$(SharedCatalogue)')" ContinueOnError="WarnAndContinue" />
   </Target>
 </Project>
