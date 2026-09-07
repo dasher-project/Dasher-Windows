@@ -30,7 +30,13 @@ public partial class MainWindow : Window
     private bool _settingsInitialized;
     private NativeBridge.SpeakCallback? _speakCallback;
     private NativeBridge.ParameterCallback? _parameterCallback;
-    private IntPtr _lastTargetWindow = IntPtr.Zero;
+
+    /// <summary>
+    /// RFC 0015 direct-entry target tracking: WinEventHooks, the rooted
+    /// target HWND, and foreground restoration before input injection.
+    /// See KeyboardTargetTracker — MainWindow only decides what to seed.
+    /// </summary>
+    private readonly Services.KeyboardTargetTracker _targetTracker = new();
 
     // Window geometry persistence (issue #46): last-known normal-state
     // bounds, tracked continuously so closing while maximized saves the
@@ -41,27 +47,10 @@ public partial class MainWindow : Window
     private bool _geometryRestored;
 
     [DllImport("user32.dll")]
-    private static extern bool SetForegroundWindow(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
-
-    private const uint GA_ROOT = 2;
-
-    [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
 
     [DllImport("user32.dll")]
     private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
-
-    [DllImport("user32.dll")]
-    private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-    [DllImport("user32.dll")]
-    private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
-
-    [DllImport("kernel32.dll")]
-    private static extern uint GetCurrentThreadId();
 
     [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
     private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
@@ -326,16 +315,22 @@ public partial class MainWindow : Window
             var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
             if (fg != ourHandle && fg != IntPtr.Zero)
             {
-                var changedTarget = fg != _lastTargetWindow;
-                _lastTargetWindow = fg;
-                KbLog($"Deactivated: target window = 0x{fg:X}");
+                var changed = _targetTracker.RecordForeground(fg, ourHandle);
+                KbLog($"Deactivated: target window = 0x{fg:X} (changed={changed})");
                 // RFC 0015 tier 2/3: switching target fields re-reads and
                 // re-seeds the new field's text + caret. This is the
                 // PRIMARY seeding trigger — the user just clicked into the
                 // target, so the caret is where they want to continue.
-                _ = SeedContextFromTargetAsync(changedTarget ? "target changed" : "refocus");
+                // (Best-effort path: the WS_EX_NOACTIVATE overlay suppresses
+                // Deactivated in keyboard mode — the tracker's hooks cover it.)
+                _ = SeedContextFromTargetAsync(changed ? "target changed" : "refocus");
             }
         };
+
+        // Tracker events arrive on the UI thread (hook callbacks run on the
+        // installing thread). Both window switches and same-window field
+        // changes re-seed — the field text/caret is what matters, not the HWND.
+        _targetTracker.TargetChanged += reason => _ = SeedContextFromTargetAsync(reason);
 
         // RFC 0018: everything startup-blocking (data install, engine create,
         // v5 scan) runs off the UI thread so the overlay animates; the
@@ -746,7 +741,7 @@ public partial class MainWindow : Window
     private async Task SeedContextFromTargetAsync(string reason)
     {
         if (_vm == null || !_vm.IsKeyboardMode || _vm.Handle == IntPtr.Zero) return;
-        if (_lastTargetWindow == IntPtr.Zero) return;
+        if (_targetTracker.Current == IntPtr.Zero) return;
 
         // Debounce: rapid focus churn (mode entry -> target re-focus) must
         // not stack concurrent reads/seeds.
@@ -755,7 +750,7 @@ public partial class MainWindow : Window
         await Task.Delay(150); // let the target's caret settle
         if (generation != _contextSeedGeneration) return; // superseded
 
-        var context = await TargetContextReader.ReadAsync(_lastTargetWindow);
+        var context = await TargetContextReader.ReadAsync(_targetTracker.Current);
         if (generation != _contextSeedGeneration) return;
 
         if (_vm.Handle == IntPtr.Zero) return;
@@ -777,116 +772,12 @@ public partial class MainWindow : Window
 
     private int _contextSeedGeneration;
 
-    // ── Foreground WinEventHook (RFC 0015 context seeding) ─────────────────
-
-    private IntPtr _foregroundHook;
-    private IntPtr _focusHook;
-    private WinEventProc? _foregroundHookProc;
-
-    private delegate void WinEventProc(IntPtr hook, uint eventType, IntPtr hwnd, int idObject,
-        int idChild, uint dwEventThread, uint dwmsEventTime);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax,
-        IntPtr hmodWinEventProc, WinEventProc lpfnWinEventProc, uint idProcess,
-        uint idThread, uint dwFlags);
-
-    [DllImport("user32.dll")]
-    private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
-
-    private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
-    private const uint EVENT_OBJECT_FOCUS = 0x8005; // fires on control focus, same window too
-    private const uint WINEVENT_OUTOFCONTEXT = 0x0000;
-
-    /// <summary>
-    /// Install system-wide hooks (v5's mechanism): EVENT_SYSTEM_FOREGROUND for
-    /// window switches + EVENT_OBJECT_FOCUS for field changes within the same
-    /// window (browser tabs, multi-pane apps). Both fire on the UI thread.
-    /// </summary>
-    private void InstallForegroundHook()
-    {
-        RemoveForegroundHook(); // idempotent
-
-        _foregroundHookProc = (hook, eventType, hwnd, idObject, idChild, thread, time) =>
-        {
-            if (hwnd == IntPtr.Zero) return;
-
-            var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
-            if (hwnd == ourHandle) return; // Dasher gained focus — not a target
-
-            // EVENT_OBJECT_FOCUS fires for non-window objects too (individual
-            // controls, accessible elements) — the hwnd is still the containing
-            // window, which is what we need. Only filter by OBJID_WINDOW for
-            // EVENT_SYSTEM_FOREGROUND (greptile: "focus filter skips modern
-            // controls" — the old check rejected focus events for browser
-            // and Electron editable elements that aren't windowed controls).
-            if (eventType == EVENT_SYSTEM_FOREGROUND && idObject != 0 /* OBJID_WINDOW */) return;
-
-            // Normalize to the top-level window: EVENT_OBJECT_FOCUS can fire
-            // with a child-control HWND (classic EDIT in a dialog, MDI
-            // children). SetForegroundWindow requires a top-level handle, so
-            // storing a child HWND in _lastTargetWindow would break target
-            // restoration and send input to the wrong window (greptile:
-            // "child HWND breaks target restoration"). Rooting also keeps the
-            // change comparison meaningful — focus on a child of the current
-            // target is a same-window field change, not a new target.
-            var root = GetAncestor(hwnd, GA_ROOT);
-            if (root != IntPtr.Zero && root != hwnd)
-            {
-                KbLog($"FocusHook: child 0x{hwnd:X} → root 0x{root:X}");
-                hwnd = root;
-            }
-            else if (root == IntPtr.Zero)
-            {
-                // No root ancestor (shouldn't happen for focus events) — be
-                // safe and ignore rather than risk storing a bad handle.
-                return;
-            }
-
-            var changedTarget = hwnd != _lastTargetWindow;
-            _lastTargetWindow = hwnd;
-            if (eventType == EVENT_OBJECT_FOCUS)
-            {
-                // Focus moved within the same window (same HWND): re-seed to
-                // pick up the new field's text + caret (greptile: "nonactivating
-                // overlay misses field changes").
-                KbLog($"FocusHook: hwnd = 0x{hwnd:X}");
-                if (_vm is { IsKeyboardMode: true })
-                    _ = SeedContextFromTargetAsync("focus changed");
-            }
-            else
-            {
-                KbLog($"ForegroundHook: target = 0x{hwnd:X} (changed={changedTarget})");
-                if (_vm is { IsKeyboardMode: true })
-                    _ = SeedContextFromTargetAsync(changedTarget ? "foreground changed" : "foreground re-focus");
-            }
-        };
-
-        _foregroundHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
-            IntPtr.Zero, _foregroundHookProc, 0, 0, WINEVENT_OUTOFCONTEXT);
-        _focusHook = SetWinEventHook(EVENT_OBJECT_FOCUS, EVENT_OBJECT_FOCUS,
-            IntPtr.Zero, _foregroundHookProc, 0, 0, WINEVENT_OUTOFCONTEXT);
-        KbLog($"ForegroundHook installed: fg=0x{_foregroundHook:X} focus=0x{_focusHook:X}");
-    }
-
-    private void RemoveForegroundHook()
-    {
-        if (_foregroundHook != IntPtr.Zero)
-        {
-            UnhookWinEvent(_foregroundHook);
-            _foregroundHook = IntPtr.Zero;
-        }
-        if (_focusHook != IntPtr.Zero)
-        {
-            UnhookWinEvent(_focusHook);
-            _focusHook = IntPtr.Zero;
-            KbLog("ForegroundHook removed");
-        }
-    }
+    /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
+    private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
 
     private void SendTextToForeground(string text)
     {
-        EnsureTargetForeground();
+        _targetTracker.EnsureForeground(OurHwnd());
 
         foreach (char c in text)
         {
@@ -910,64 +801,13 @@ public partial class MainWindow : Window
     {
         if (count <= 0) return;
 
-        EnsureTargetForeground();
+        _targetTracker.EnsureForeground(OurHwnd());
 
         for (var i = 0; i < count; i++)
             SendVirtualKey(VK_BACK);
 
         var fgAfter = GetForegroundWindow();
         KbLog($"  → after SendInput ({count} backspace(s)), fg=0x{fgAfter:X}");
-    }
-
-    /// <summary>
-    /// Tracks or restores the injection target so keystrokes always land in
-    /// the user's application, never in Dasher itself.
-    /// </summary>
-    private void EnsureTargetForeground()
-    {
-        var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
-        var fg = GetForegroundWindow();
-
-        KbLog($"EnsureTargetForeground: fg=0x{fg:X} us=0x{ourHandle:X} lastTarget=0x{_lastTargetWindow:X}");
-
-        // Track or restore the target window
-        if (fg != ourHandle && fg != IntPtr.Zero)
-        {
-            var changedTarget = fg != _lastTargetWindow;
-            _lastTargetWindow = fg;
-            KbLog("  foreground is target, tracking it");
-
-            // The user's FIRST typing after a target switch is the strongest
-            // signal that they've arrived at their real target (the initial
-            // Deactivated may have fired on the taskbar or Start menu, which
-            // reads empty). Seed the new target's context now (RFC 0015).
-            if (changedTarget && _vm is { IsKeyboardMode: true })
-                _ = SeedContextFromTargetAsync("typing into new target");
-        }
-        else if (_lastTargetWindow != IntPtr.Zero)
-        {
-            KbLog("  → Dasher has focus, restoring target...");
-            var targetThread = GetWindowThreadProcessId(_lastTargetWindow, out _);
-            var ourThread = GetCurrentThreadId();
-            KbLog($"  → targetThread={targetThread} ourThread={ourThread}");
-
-            if (targetThread != 0 && targetThread != ourThread)
-            {
-                var attached = AttachThreadInput(ourThread, targetThread, true);
-                var set = SetForegroundWindow(_lastTargetWindow);
-                AttachThreadInput(ourThread, targetThread, false);
-                KbLog($"  → AttachThreadInput={attached} SetForegroundWindow={set}");
-            }
-            else
-            {
-                var set = SetForegroundWindow(_lastTargetWindow);
-                KbLog($"  → SetForegroundWindow={set}");
-            }
-        }
-        else
-        {
-            KbLog("  → no known target window!");
-        }
     }
 
     private void SendUnicodeChar(char c)
@@ -1016,7 +856,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void SendCtrlChord(ushort key, string name)
     {
-        EnsureTargetForeground();
+        _targetTracker.EnsureForeground(OurHwnd());
         var inputs = new INPUT[4];
 
         inputs[0].type = INPUT_KEYBOARD;
@@ -1032,7 +872,7 @@ public partial class MainWindow : Window
 
         var cbSize = Marshal.SizeOf<INPUT>();
         SendInput(4, inputs, cbSize);
-        KbLog($"  Ctrl+{name} sent to target 0x{_lastTargetWindow:X}");
+        KbLog($"  Ctrl+{name} sent to target 0x{_targetTracker.Current:X}");
     }
 
     private void OnKbCopy(object? sender, RoutedEventArgs e)
@@ -1202,11 +1042,9 @@ public partial class MainWindow : Window
             MainGrid.Children.Add(DasherCanvas);
             Grid.SetColumn(DasherCanvas, 0);
 
-            // Remember the window that currently has focus so we can send text to it
-            var fg = GetForegroundWindow();
-            var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
-            if (fg != ourHandle && fg != IntPtr.Zero)
-                _lastTargetWindow = fg;
+            // Remember the window that currently has focus so we can send
+            // text to it — rooted by the tracker (never a raw focus handle).
+            _targetTracker.RecordForeground(GetForegroundWindow(), OurHwnd());
 
             Topmost = true;
             this.Opacity = _vm.KeyboardModeOpacity;
@@ -1223,12 +1061,14 @@ public partial class MainWindow : Window
             Avalonia.Threading.Dispatcher.UIThread.Post(
                 () => SetNoActivate(true), Avalonia.Threading.DispatcherPriority.Render);
 
-            // RFC 0015 context seeding: install a WinEventHook to detect when
-            // the user focuses their target application. The Deactivated event
-            // does NOT fire reliably in keyboard mode (WS_EX_NOACTIVATE suppress
-            // it), but the hook fires on every system-wide foreground change —
-            // the same mechanism v5 used (DasherWindow.cpp HandleWinEvent).
-            InstallForegroundHook();
+            // RFC 0015 context seeding: the tracker's WinEventHooks detect
+            // when the user focuses their target application. The Deactivated
+            // event does NOT fire reliably in keyboard mode (WS_EX_NOACTIVATE
+            // suppresses it), but the hooks fire on every system-wide
+            // foreground change — the same mechanism v5 used
+            // (DasherWindow.cpp HandleWinEvent). Install on the UI thread so
+            // callbacks arrive here.
+            _targetTracker.Install(OurHwnd());
         }
         else
         {
@@ -1240,7 +1080,7 @@ public partial class MainWindow : Window
             Topmost = false;
             this.Opacity = 1.0;
 
-            RemoveForegroundHook();
+            _targetTracker.Remove();
             SetNoActivate(false);
 
             TxtModeLabel.Text = position switch

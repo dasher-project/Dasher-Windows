@@ -254,12 +254,13 @@ public static class TargetContextReader
     /// True when the element is within the given target window. Deliberately
     /// does NOT compare process ids: browsers and Electron expose their
     /// TextPattern from out-of-process render processes, so a PID gate would
-    /// reject the target's own controls (greptile: "renderer fields lose
-    /// context"). Containment is proven by walking the control-view tree
-    /// upward looking for a window whose native handle matches targetHwnd;
-    /// hitting a DIFFERENT non-zero handle — another top-level window, same
-    /// process or not — rejects immediately. Bounded by tree depth (20) to
-    /// avoid hanging on deep or cyclic provider trees.
+    /// reject the target's own controls ("renderer fields lose context").
+    /// Containment is proven by walking the control-view tree upward looking
+    /// for an HWND-backed element that TargetWindowIdentity accepts: child
+    /// HWND containers owned by the target (browser render-widget hosts, MDI
+    /// children) count, foreign windows — same process or not — reject.
+    /// Bounded by tree depth (20) to avoid hanging on deep or cyclic
+    /// provider trees.
     /// </summary>
     private static bool BelongsToTargetWindow(
         CUIAutomationClass uia, IUIAutomationElement element, IntPtr targetHwnd)
@@ -271,8 +272,8 @@ public static class TargetContextReader
             for (int depth = 0; depth < 20 && current != null; depth++)
             {
                 var handle = current.CurrentNativeWindowHandle;
-                if (handle == targetHwnd) return true;
-                if (handle != 0) return false; // reached a DIFFERENT window — wrong target
+                if (handle != 0)
+                    return TargetWindowIdentity.IsOwnedBy(handle, targetHwnd);
                 current = walker.GetParentElement(current);
             }
             return false;
@@ -344,10 +345,9 @@ public static class TargetContextReader
     /// Get the focused child of the given top-level window, scoped to the
     /// TARGET's thread. NEVER falls back to the system-wide focus — that
     /// would cross target boundaries. A GUI thread can own several top-level
-    /// windows; if its current focus belongs to a different one, the control
-    /// is rejected rather than read (greptile: "fallback crosses window
-    /// boundaries" — process ownership alone accepted a sibling window's
-    /// control and seeded its text).
+    /// windows; the focus is accepted only when TargetWindowIdentity says it
+    /// belongs to the requested root — a sibling window of the same thread
+    /// and process is rejected, not read.
     /// </summary>
     private static IntPtr GetFocusedChildInThread(IntPtr topLevel)
     {
@@ -356,10 +356,9 @@ public static class TargetContextReader
         uint tid = GetWindowThreadProcessId(topLevel, ref pid);
         if (tid != 0 && GetGUIThreadInfo(tid, ref info) && info.hwndFocus != IntPtr.Zero)
         {
-            var focusRoot = GetAncestor(info.hwndFocus, GA_ROOT);
-            if (focusRoot == IntPtr.Zero || focusRoot != topLevel)
+            if (!TargetWindowIdentity.IsOwnedBy(info.hwndFocus, topLevel))
             {
-                Log($"[Win32] thread focus 0x{info.hwndFocus:X} roots to 0x{focusRoot:X} != target 0x{topLevel:X} — rejecting");
+                Log($"[Win32] thread focus 0x{info.hwndFocus:X} not rooted at 0x{topLevel:X} — rejecting");
                 return IntPtr.Zero;
             }
             return info.hwndFocus;
@@ -406,11 +405,6 @@ public static class TargetContextReader
 
     [DllImport("user32.dll")]
     private static extern uint GetWindowThreadProcessId(IntPtr hWnd, ref uint lpdwProcessId);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
-
-    private const uint GA_ROOT = 2;
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
