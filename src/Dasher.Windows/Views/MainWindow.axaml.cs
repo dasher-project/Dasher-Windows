@@ -775,6 +775,7 @@ public partial class MainWindow : Window
     // ── Foreground WinEventHook (RFC 0015 context seeding) ─────────────────
 
     private IntPtr _foregroundHook;
+    private IntPtr _focusHook;
     private WinEventProc? _foregroundHookProc;
 
     private delegate void WinEventProc(IntPtr hook, uint eventType, IntPtr hwnd, int idObject,
@@ -789,14 +790,13 @@ public partial class MainWindow : Window
     private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
 
     private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+    private const uint EVENT_OBJECT_FOCUS = 0x8005; // fires on control focus, same window too
     private const uint WINEVENT_OUTOFCONTEXT = 0x0000;
 
     /// <summary>
-    /// Install a system-wide foreground-change hook (v5's mechanism). Fires
-    /// whenever ANY window gains the foreground — including when Dasher's
-    /// own WS_EX_NOACTIVATE style prevents Deactivated from firing. The hook
-    /// callback runs on the thread that installed it (the UI thread), so
-    /// it's safe to update _lastTargetWindow and trigger seeding directly.
+    /// Install system-wide hooks (v5's mechanism): EVENT_SYSTEM_FOREGROUND for
+    /// window switches + EVENT_OBJECT_FOCUS for field changes within the same
+    /// window (browser tabs, multi-pane apps). Both fire on the UI thread.
     /// </summary>
     private void InstallForegroundHook()
     {
@@ -812,19 +812,28 @@ public partial class MainWindow : Window
 
             var changedTarget = hwnd != _lastTargetWindow;
             _lastTargetWindow = hwnd;
-            KbLog($"ForegroundHook: target = 0x{hwnd:X} (changed={changedTarget})");
-
-            // Always seed in keyboard mode — even when the HWND hasn't changed,
-            // the user may have moved to a different field WITHIN the same
-            // window (browser tabs, document sections). The debounce prevents
-            // rapid-fire; a same-window re-read is cheap and correct.
-            if (_vm is { IsKeyboardMode: true })
-                _ = SeedContextFromTargetAsync(changedTarget ? "foreground changed" : "foreground re-focus");
+            if (eventType == EVENT_OBJECT_FOCUS)
+            {
+                // Focus moved within the same window (same HWND): re-seed to
+                // pick up the new field's text + caret (greptile: "nonactivating
+                // overlay misses field changes").
+                KbLog($"FocusHook: hwnd = 0x{hwnd:X}");
+                if (_vm is { IsKeyboardMode: true })
+                    _ = SeedContextFromTargetAsync("focus changed");
+            }
+            else
+            {
+                KbLog($"ForegroundHook: target = 0x{hwnd:X} (changed={changedTarget})");
+                if (_vm is { IsKeyboardMode: true })
+                    _ = SeedContextFromTargetAsync(changedTarget ? "foreground changed" : "foreground re-focus");
+            }
         };
 
         _foregroundHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
             IntPtr.Zero, _foregroundHookProc, 0, 0, WINEVENT_OUTOFCONTEXT);
-        KbLog($"ForegroundHook installed: handle=0x{_foregroundHook:X}");
+        _focusHook = SetWinEventHook(EVENT_OBJECT_FOCUS, EVENT_OBJECT_FOCUS,
+            IntPtr.Zero, _foregroundHookProc, 0, 0, WINEVENT_OUTOFCONTEXT);
+        KbLog($"ForegroundHook installed: fg=0x{_foregroundHook:X} focus=0x{_focusHook:X}");
     }
 
     private void RemoveForegroundHook()
@@ -833,6 +842,11 @@ public partial class MainWindow : Window
         {
             UnhookWinEvent(_foregroundHook);
             _foregroundHook = IntPtr.Zero;
+        }
+        if (_focusHook != IntPtr.Zero)
+        {
+            UnhookWinEvent(_focusHook);
+            _focusHook = IntPtr.Zero;
             KbLog("ForegroundHook removed");
         }
     }

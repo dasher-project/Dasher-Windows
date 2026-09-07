@@ -103,19 +103,20 @@ public static class TargetContextReader
             var uia = new CUIAutomationClass();
 
             // Strategy: the focused element, verified to belong to the
-            // target's process (greptile: "focused text crosses target
-            // boundaries" — GetFocusedElement alone can return another
-            // app's control). If the focused element IS in the target,
-            // it's the most precise: the user's actual caret location.
+            // TARGET WINDOW (not just the process — greptile: "process check
+            // crosses window boundaries": the same process can own multiple
+            // top-level windows, and focus may be in another one). We walk
+            // up from the focused element to its top-level window and check
+            // the native handle matches targetHwnd.
             IUIAutomationElement? element = null;
 
             try
             {
                 var focused = uia.GetFocusedElement();
-                if (focused != null && focused.CurrentProcessId == (int)targetPid)
+                if (focused != null && BelongsToTargetWindow(uia, focused, targetHwnd, targetPid))
                 {
                     element = focused;
-                    Log($"[UIA] focused element pid={focused.CurrentProcessId} class='{focused.CurrentClassName}' — in target, using it");
+                    Log($"[UIA] focused element class='{focused.CurrentClassName}' in target window — using it");
                 }
             }
             catch { /* GetFocusedElement can throw on hung providers */ }
@@ -215,17 +216,21 @@ public static class TargetContextReader
                 if (selection != null && selection.Length > 0)
                 {
                     var sel = selection.GetElement(0);
-                    // CompareEndpoints(START, sel, START) returns the SIGNED
-                    // unit count from sel.START to document.START — the
-                    // NEGATION of the caret offset (greptile: "endpoint
-                    // comparison breaks caret offsets" — treating the raw
-                    // value as an absolute clamped every caret to 0).
-                    int units = document.CompareEndpoints(
-                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start,
+                    // Robust caret measurement (greptile: "endpoint magnitude
+                    // misplaces caret" — CompareEndpoints's return semantics vary
+                    // by provider and its magnitude is not guaranteed to be the
+                    // UTF-16 distance). Clone the document range, truncate its
+                    // END to the selection's START, and measure the remaining
+                    // text — that length IS the caret offset, independent of
+                    // provider quirks.
+                    var truncated = document.Clone();
+                    truncated.MoveEndpointByRange(
+                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
                         sel,
                         TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
-                    caretUtf16 = Math.Clamp(-units, 0, text.Length);
-                    Log($"[UIA] CompareEndpoints={units} → caret16={caretUtf16} (text len {text.Length})");
+                    var beforeCaret = truncated.GetText(-1) ?? "";
+                    caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
+                    Log($"[UIA] caret via truncated range: {beforeCaret.Length} chars before caret (text len {text.Length})");
                 }
             }
             catch
@@ -241,6 +246,33 @@ public static class TargetContextReader
             Log($"[UIA] TextPattern read threw: {ex.Message}");
             return null;
         }
+    }
+
+    /// <summary>
+    /// True when the element is within the given target window (not just the
+    /// process — the same process can own multiple top-level windows).
+    /// Walks the control-view tree upward looking for a window whose native
+    /// handle matches. Bounded by tree depth (20) to avoid hanging on deep
+    /// or cyclic provider trees.
+    /// </summary>
+    private static bool BelongsToTargetWindow(
+        CUIAutomationClass uia, IUIAutomationElement element, IntPtr targetHwnd, uint targetPid)
+    {
+        try
+        {
+            if (element.CurrentProcessId != (int)targetPid) return false;
+            var walker = uia.ControlViewWalker;
+            var current = element;
+            for (int depth = 0; depth < 20 && current != null; depth++)
+            {
+                var handle = current.CurrentNativeWindowHandle;
+                if (handle == targetHwnd) return true;
+                if (handle != 0) return false; // reached a DIFFERENT window — wrong target
+                current = walker.GetParentElement(current);
+            }
+            return false;
+        }
+        catch { return false; }
     }
 
     // ── Win32 fallback (classic EDIT / RichEdit) ─────────────────────────────
