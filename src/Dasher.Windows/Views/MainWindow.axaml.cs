@@ -44,6 +44,11 @@ public partial class MainWindow : Window
     private static extern bool SetForegroundWindow(IntPtr hWnd);
 
     [DllImport("user32.dll")]
+    private static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
+
+    private const uint GA_ROOT = 2;
+
+    [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
 
     [DllImport("user32.dll")]
@@ -816,6 +821,27 @@ public partial class MainWindow : Window
             // controls" — the old check rejected focus events for browser
             // and Electron editable elements that aren't windowed controls).
             if (eventType == EVENT_SYSTEM_FOREGROUND && idObject != 0 /* OBJID_WINDOW */) return;
+
+            // Normalize to the top-level window: EVENT_OBJECT_FOCUS can fire
+            // with a child-control HWND (classic EDIT in a dialog, MDI
+            // children). SetForegroundWindow requires a top-level handle, so
+            // storing a child HWND in _lastTargetWindow would break target
+            // restoration and send input to the wrong window (greptile:
+            // "child HWND breaks target restoration"). Rooting also keeps the
+            // change comparison meaningful — focus on a child of the current
+            // target is a same-window field change, not a new target.
+            var root = GetAncestor(hwnd, GA_ROOT);
+            if (root != IntPtr.Zero && root != hwnd)
+            {
+                KbLog($"FocusHook: child 0x{hwnd:X} → root 0x{root:X}");
+                hwnd = root;
+            }
+            else if (root == IntPtr.Zero)
+            {
+                // No root ancestor (shouldn't happen for focus events) — be
+                // safe and ignore rather than risk storing a bad handle.
+                return;
+            }
 
             var changedTarget = hwnd != _lastTargetWindow;
             _lastTargetWindow = hwnd;
