@@ -82,12 +82,28 @@ public sealed class KeyboardTargetTracker : IDisposable
             if (hwnd == _ourHwnd) return; // Dasher gained focus — not a target
 
             var changed = hwnd != _target;
-            _target = hwnd;
 
             if (eventType == EVENT_OBJECT_FOCUS)
-                Raise(changed ? "focus changed (new window)" : "focus changed");
-            else
-                Raise(changed ? "foreground changed" : "foreground re-focus");
+            {
+                // Background-focus guard ("background focus replaces target"):
+                // focus events are system-wide and background applications
+                // emit them for internal control focus changes without being
+                // foreground. Accepting one would let a background app hijack
+                // the target — its text would enter predictions and it would
+                // be ACTIVATED for injected input. A focus event only counts
+                // when its window is the foreground window; a field change in
+                // a non-foreground window is invisible by design, and the
+                // EVENT_SYSTEM_FOREGROUND branch catches target switches.
+                var fgRoot = TargetWindowIdentity.RootOf(GetForegroundWindow());
+                if (fgRoot == IntPtr.Zero || hwnd != fgRoot) return;
+            }
+            // else EVENT_SYSTEM_FOREGROUND: hwnd IS the new foreground by
+            // definition of the event — no guard needed.
+
+            _target = hwnd;
+            Raise(eventType == EVENT_OBJECT_FOCUS
+                ? (changed ? "focus changed (new window)" : "focus changed")
+                : (changed ? "foreground changed" : "foreground re-focus"));
         };
 
         _foregroundHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
