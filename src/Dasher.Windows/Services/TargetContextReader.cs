@@ -62,7 +62,7 @@ public static class TargetContextReader
         bool comInit = hr == 0 || hr == 1; // S_OK or S_FALSE (already init)
         try
         {
-            var viaUia = TryReadTextPattern();
+            var viaUia = TryReadTextPattern(targetHwnd);
             if (viaUia != null) return viaUia;
             return TryReadWin32Edit(targetHwnd);
         }
@@ -74,12 +74,23 @@ public static class TargetContextReader
 
     // ── UI Automation TextPattern ────────────────────────────────────────────
 
-    private static TargetContext? TryReadTextPattern()
+    private static TargetContext? TryReadTextPattern(IntPtr targetHwnd)
     {
         try
         {
             var uia = new CUIAutomationClass();
-            var focused = uia.GetFocusedElement();
+            // ElementFromHandle on the TARGET — never GetFocusedElement(): at
+            // mode entry Dasher itself is the foreground, and the globally
+            // focused element would be one of our own buttons (no text).
+            IUIAutomationElement focused;
+            try
+            {
+                focused = uia.ElementFromHandle(targetHwnd);
+            }
+            catch
+            {
+                return null;
+            }
             if (focused == null) return null;
 
             var pattern = focused.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)

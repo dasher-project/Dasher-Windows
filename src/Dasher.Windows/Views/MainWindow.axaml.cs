@@ -319,10 +319,11 @@ public partial class MainWindow : Window
                 var changedTarget = fg != _lastTargetWindow;
                 _lastTargetWindow = fg;
                 KbLog($"Deactivated: target window = 0x{fg:X}");
-                // RFC 0015 tier 2: switching target fields re-reads and
-                // re-seeds the new field instead of resetting to empty.
-                if (changedTarget)
-                    _ = SeedContextFromTargetAsync("target changed");
+                // RFC 0015 tier 2/3: switching target fields re-reads and
+                // re-seeds the new field's text + caret. This is the
+                // PRIMARY seeding trigger — the user just clicked into the
+                // target, so the caret is where they want to continue.
+                _ = SeedContextFromTargetAsync(changedTarget ? "target changed" : "refocus");
             }
         };
 
@@ -1080,10 +1081,12 @@ public partial class MainWindow : Window
             Avalonia.Threading.Dispatcher.UIThread.Post(
                 () => SetNoActivate(true), Avalonia.Threading.DispatcherPriority.Render);
 
-            // RFC 0015 tier 3: seed the engine with the target field's
-            // pre-existing text so predictions continue from it (v5 never
-            // could). Async; degrades to session context on failure.
-            _ = SeedContextFromTargetAsync("mode entry");
+            // RFC 0015 context seeding does NOT fire here: at mode entry
+            // Dasher is still the foreground (the user just clicked our
+            // button) and the target's caret isn't where they want to
+            // continue. The Deactivated handler — which fires the moment
+            // the user clicks into the target — is the correct trigger and
+            // reads the live caret position.
         }
         else
         {
