@@ -10,19 +10,17 @@ namespace Dasher.Windows.Services;
 
 /// <summary>
 /// Reads the focused control's text + caret for direct-entry context
-/// awareness (RFC 0015 tiers 2/3). Two mechanisms, most-capable-first:
+/// awareness (RFC 0015 tiers 2/3). Strategy (most-capable-first):
 ///
-/// 1. UI Automation TextPattern — modern apps (WPF, UWP, browsers, Office,
-///    Electron). Ranges report UTF-16 code-unit offsets; the caller converts
-///    with dasher_byte_offset_from_utf16.
-/// 2. Win32 fallback — WM_GETTEXT / EM_GETSEL for classic EDIT and RichEdit
-///    controls (Notepad, many dialogs).
+/// 1. UI Automation TextPattern on the TARGET's focused descendant —
+///    modern apps (WPF, UWP, browsers, Office, Electron).
+/// 2. UI Automation TextPattern on the TARGET's top-level window.
+/// 3. Win32 WM_GETTEXT / EM_GETSEL for classic EDIT / RichEdit controls.
 ///
-/// All reads run on a dedicated background thread: UIA COM calls can block
-/// on unresponsive providers, and the hard timeout (default 300 ms, RFC 0015
-/// budget ~200 ms + slack) ensures a misbehaving target never stalls the
-/// mode switch. Returns null on timeout/unsupported — callers degrade to
-/// session-only context.
+/// All reads are scoped to the target window's process — text from other
+/// applications is never read (greptile security: "crosses target
+/// boundaries"). All work runs on a dedicated background thread with a
+/// hard timeout; returns null on timeout/unsupported.
 /// </summary>
 public static class TargetContextReader
 {
@@ -77,9 +75,18 @@ public static class TargetContextReader
         bool comInit = hr == 0 || hr == 1; // S_OK or S_FALSE (already init)
         try
         {
-            var viaUia = TryReadTextPattern(targetHwnd);
+            // Determine the target's process — all reads are scoped to it.
+            uint targetPid = 0;
+            GetWindowThreadProcessId(targetHwnd, ref targetPid);
+            if (targetPid == 0)
+            {
+                Log($"[Ctx] cannot resolve process for hwnd 0x{targetHwnd:X}");
+                return null;
+            }
+
+            var viaUia = TryReadTextPattern(targetHwnd, targetPid);
             if (viaUia != null) return viaUia;
-            return TryReadWin32Edit(targetHwnd);
+            return TryReadWin32Edit(targetHwnd, targetPid);
         }
         finally
         {
@@ -89,35 +96,103 @@ public static class TargetContextReader
 
     // ── UI Automation TextPattern ────────────────────────────────────────────
 
-    private static TargetContext? TryReadTextPattern(IntPtr targetHwnd)
+    private static TargetContext? TryReadTextPattern(IntPtr targetHwnd, uint targetPid)
     {
         try
         {
             var uia = new CUIAutomationClass();
-            // ElementFromHandle on the TARGET — never GetFocusedElement(): at
-            // mode entry Dasher itself is the foreground, and the globally
-            // focused element would be one of our own buttons (no text).
-            IUIAutomationElement focused;
+
+            // Strategy: the focused element, verified to belong to the
+            // target's process (greptile: "focused text crosses target
+            // boundaries" — GetFocusedElement alone can return another
+            // app's control). If the focused element IS in the target,
+            // it's the most precise: the user's actual caret location.
+            IUIAutomationElement? element = null;
+
             try
             {
-                focused = uia.ElementFromHandle(targetHwnd);
+                var focused = uia.GetFocusedElement();
+                if (focused != null && focused.CurrentProcessId == (int)targetPid)
+                {
+                    element = focused;
+                    Log($"[UIA] focused element pid={focused.CurrentProcessId} class='{focused.CurrentClassName}' — in target, using it");
+                }
             }
-            catch (Exception ex)
+            catch { /* GetFocusedElement can throw on hung providers */ }
+
+            // Fallback: the focused child HWND from GetGUIThreadInfo (scoped
+            // to the target's thread, not system-wide), then ElementFromHandle.
+            if (element == null)
             {
-                Log($"[UIA] ElementFromHandle(0x{targetHwnd:X}) threw: {ex.Message}");
-                return null;
+                var focusedHwnd = GetFocusedChildInThread(targetHwnd);
+                if (focusedHwnd != IntPtr.Zero && focusedHwnd != targetHwnd)
+                {
+                    try
+                    {
+                        var child = uia.ElementFromHandle(focusedHwnd);
+                        if (child != null && child.CurrentProcessId == (int)targetPid)
+                        {
+                            element = child;
+                            Log($"[UIA] focused child 0x{focusedHwnd:X} class='{child.CurrentClassName}' — using it");
+                        }
+                    }
+                    catch { }
+                }
             }
-            if (focused == null)
+
+            // Fallback: the top-level window itself (greptile: "top-level
+            // lookup misses focused controls" — some apps put TextPattern
+            // on the top-level, some on descendants).
+            if (element == null)
             {
-                Log($"[UIA] ElementFromHandle(0x{targetHwnd:X}) returned null");
+                try
+                {
+                    element = uia.ElementFromHandle(targetHwnd);
+                    if (element != null)
+                        Log($"[UIA] top-level 0x{targetHwnd:X} class='{element.CurrentClassName}' — trying TextPattern on it");
+                }
+                catch (Exception ex)
+                {
+                    Log($"[UIA] ElementFromHandle(0x{targetHwnd:X}) threw: {ex.Message}");
+                    return null;
+                }
+            }
+
+            if (element == null)
+            {
+                Log($"[UIA] no element found for hwnd 0x{targetHwnd:X}");
                 return null;
             }
 
-            var pattern = focused.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)
+            // Try TextPattern on the element we found.
+            var pattern = element.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)
                 as IUIAutomationTextPattern;
             if (pattern == null)
             {
-                Log($"[UIA] hwnd 0x{targetHwnd:X} class='{focused.CurrentClassName}' no TextPattern — falling through to Win32");
+                // Last resort: search descendants for the first element
+                // with TextPattern (greptile: "top-level lookup misses
+                // focused controls"). Bounded by the read timeout.
+                Log($"[UIA] element class='{element.CurrentClassName}' no TextPattern — searching descendants");
+                try
+                {
+                    var condition = uia.CreatePropertyCondition(
+                        UIA_PropertyIds.UIA_IsTextPatternAvailablePropertyId, true);
+                    var descendant = element.FindFirst(
+                        TreeScope.TreeScope_Descendants, condition);
+                    if (descendant != null)
+                    {
+                        pattern = descendant.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)
+                            as IUIAutomationTextPattern;
+                        if (pattern != null)
+                            Log($"[UIA] descendant class='{descendant.CurrentClassName}' has TextPattern");
+                    }
+                }
+                catch { /* FindFirst can timeout on unresponsive providers */ }
+            }
+
+            if (pattern == null)
+            {
+                Log($"[UIA] no TextPattern found for hwnd 0x{targetHwnd:X} — falling through to Win32");
                 return null;
             }
 
@@ -127,30 +202,25 @@ public static class TargetContextReader
             string? text = document.GetText(-1);
             if (text == null) return null;
 
-            int caretUtf16;
+            // Compute the caret offset from the document start.
+            int caretUtf16 = text.Length; // default: end of text
             try
             {
                 var selection = pattern.GetSelection();
-                caretUtf16 = text.Length; // no selection info: end of text
                 if (selection != null && selection.Length > 0)
                 {
-                    // Clone the selection, move its START to the document's
-                    // START: the returned (negative) unit count is the
-                    // caret's UTF-16 offset from the document start. Robust
-                    // across providers that return oversized clones.
-                    var probe = selection.GetElement(0).Clone();
-                    probe.MoveEndpointByRange(
-                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start,
-                        document,
-                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
-                    // The COM method returns the moved-unit count, but the
-                    // generated interop maps it to void; recompute the caret
-                    // by comparing endpoints instead (provider-portable).
+                    var sel = selection.GetElement(0);
+                    // CompareEndpoints(START, sel, START) returns the SIGNED
+                    // unit count from sel.START to document.START — the
+                    // NEGATION of the caret offset (greptile: "endpoint
+                    // comparison breaks caret offsets" — treating the raw
+                    // value as an absolute clamped every caret to 0).
                     int units = document.CompareEndpoints(
                         TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start,
-                        selection.GetElement(0),
+                        sel,
                         TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
-                    caretUtf16 = Math.Clamp(units, 0, text.Length);
+                    caretUtf16 = Math.Clamp(-units, 0, text.Length);
+                    Log($"[UIA] CompareEndpoints={units} → caret16={caretUtf16} (text len {text.Length})");
                 }
             }
             catch
@@ -158,6 +228,7 @@ public static class TargetContextReader
                 caretUtf16 = text.Length;
             }
 
+            Log($"[UIA] read {text.Length} chars, caret16={caretUtf16}");
             return new TargetContext(text, caretUtf16);
         }
         catch (Exception ex)
@@ -169,14 +240,29 @@ public static class TargetContextReader
 
     // ── Win32 fallback (classic EDIT / RichEdit) ─────────────────────────────
 
-    private static TargetContext? TryReadWin32Edit(IntPtr topLevel)
+    private static TargetContext? TryReadWin32Edit(IntPtr topLevel, uint targetPid)
     {
         try
         {
-            var edit = GetFocusedChildOf(topLevel);
+            // Get the focused child within the TARGET's thread — never the
+            // system-wide fallback (greptile: "fallback crosses target
+            // boundaries" — GetGUIThreadInfo(0) returns another app's Edit
+            // without an ownership check; its text must never enter the engine).
+            var edit = GetFocusedChildInThread(topLevel);
+            if (edit == IntPtr.Zero)
+                edit = topLevel;
             if (edit == IntPtr.Zero)
             {
-                Log($"[Win32] no focused child of 0x{topLevel:X}");
+                Log($"[Win32] no focused child for 0x{topLevel:X}");
+                return null;
+            }
+
+            // Ownership check: the edit must belong to the target's process.
+            uint editPid = 0;
+            GetWindowThreadProcessId(edit, ref editPid);
+            if (editPid != targetPid)
+            {
+                Log($"[Win32] edit 0x{edit:X} pid={editPid} != target pid={targetPid} — rejecting");
                 return null;
             }
 
@@ -186,9 +272,10 @@ public static class TargetContextReader
             if (!cn.Equals("Edit", StringComparison.OrdinalIgnoreCase) &&
                 !cn.StartsWith("RICHEDIT", StringComparison.OrdinalIgnoreCase))
             {
-                Log($"[Win32] focused child 0x{edit:X} class='{cn}' — not an edit control");
+                Log($"[Win32] hwnd 0x{edit:X} class='{cn}' — not an edit control");
                 return null;
             }
+
             Log($"[Win32] reading edit control 0x{edit:X} class='{cn}'");
 
             int length = (int)SendMessage(edit, WM_GETTEXTLENGTH, IntPtr.Zero, IntPtr.Zero);
@@ -201,23 +288,27 @@ public static class TargetContextReader
             SendMessageI2(edit, EM_GETSEL, ref selStart, ref selEnd);
             int caret = Math.Clamp(selEnd, 0, buffer.Length);
 
+            Log($"[Win32] read {buffer.Length} chars, caret={caret}");
             return new TargetContext(buffer.ToString(), caret);
         }
-        catch
+        catch (Exception ex)
         {
+            Log($"[Win32] read threw: {ex.Message}");
             return null;
         }
     }
 
-    private static IntPtr GetFocusedChildOf(IntPtr topLevel)
+    /// <summary>
+    /// Get the focused child of the given top-level window, scoped to the
+    /// TARGET's thread. NEVER falls back to the system-wide focus — that
+    /// would cross target boundaries.
+    /// </summary>
+    private static IntPtr GetFocusedChildInThread(IntPtr topLevel)
     {
         var info = new GUITHREADINFO { cbSize = Marshal.SizeOf<GUITHREADINFO>() };
         uint pid = 0;
         uint tid = GetWindowThreadProcessId(topLevel, ref pid);
         if (tid != 0 && GetGUIThreadInfo(tid, ref info) && info.hwndFocus != IntPtr.Zero)
-            return info.hwndFocus;
-        // Fallback: foreground thread's focus (system-wide).
-        if (GetGUIThreadInfo(0, ref info) && info.hwndFocus != IntPtr.Zero)
             return info.hwndFocus;
         return IntPtr.Zero;
     }

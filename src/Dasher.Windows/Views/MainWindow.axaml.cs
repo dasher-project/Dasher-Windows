@@ -821,8 +821,16 @@ public partial class MainWindow : Window
         // Track or restore the target window
         if (fg != ourHandle && fg != IntPtr.Zero)
         {
+            var changedTarget = fg != _lastTargetWindow;
             _lastTargetWindow = fg;
-            KbLog("  → foreground is target, tracking it");
+            KbLog("  foreground is target, tracking it");
+
+            // The user's FIRST typing after a target switch is the strongest
+            // signal that they've arrived at their real target (the initial
+            // Deactivated may have fired on the taskbar or Start menu, which
+            // reads empty). Seed the new target's context now (RFC 0015).
+            if (changedTarget && _vm is { IsKeyboardMode: true })
+                _ = SeedContextFromTargetAsync("typing into new target");
         }
         else if (_lastTargetWindow != IntPtr.Zero)
         {
