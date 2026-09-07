@@ -804,11 +804,18 @@ public partial class MainWindow : Window
 
         _foregroundHookProc = (hook, eventType, hwnd, idObject, idChild, thread, time) =>
         {
-            if (idObject != 0 /* OBJID_WINDOW */ ) return;
             if (hwnd == IntPtr.Zero) return;
 
             var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
             if (hwnd == ourHandle) return; // Dasher gained focus — not a target
+
+            // EVENT_OBJECT_FOCUS fires for non-window objects too (individual
+            // controls, accessible elements) — the hwnd is still the containing
+            // window, which is what we need. Only filter by OBJID_WINDOW for
+            // EVENT_SYSTEM_FOREGROUND (greptile: "focus filter skips modern
+            // controls" — the old check rejected focus events for browser
+            // and Electron editable elements that aren't windowed controls).
+            if (eventType == EVENT_SYSTEM_FOREGROUND && idObject != 0 /* OBJID_WINDOW */) return;
 
             var changedTarget = hwnd != _lastTargetWindow;
             _lastTargetWindow = hwnd;
