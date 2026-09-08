@@ -415,6 +415,21 @@ public static class V5MigrationService
                 sourceDirs.Add(sysDir);
         }
 
+        // Training-flag bookkeeping, scoped to RUNS not sources: a basename
+        // can appear in BOTH the user dasher.rc and an installed system .rc
+        // with DIFFERENT accumulated corpora — every source must merge, so
+        // the flag check only consults flags from PREVIOUS runs (snapshot
+        // before the loop) and flags are written AFTER a basename's sources
+        // all succeeded (greptile: "basename flags skip training").
+        var migratedBefore = new HashSet<string>();
+        var trainingThisRun = new Dictionary<string, bool>(); // name → all sources ok
+        foreach (var f in Directory.Exists(V6Dir)
+                     ? Directory.GetFiles(V6Dir, "training_*.v5migrated")
+                     : Array.Empty<string>())
+        {
+            migratedBefore.Add(Path.GetFileName(f).Replace(".v5migrated", ""));
+        }
+
         foreach (var sourceDir in sourceDirs)
         {
             try
@@ -459,21 +474,20 @@ public static class V5MigrationService
                         // swallows them, silently losing v5 learning while
                         // migration still completes.
                         //
-                        // ONCE-EVER PER ALPHABET, not version-scoped and not
-                        // global: the per-file flag is written after THAT
-                        // file's first successful migration and never
-                        // re-offered on version changes. Without it, a user
-                        // who Resets training and later upgrades (re-offering
-                        // migration) hit the fresh-copy branch and the v5
-                        // corpus was silently resurrected (greptile: "reset
-                        // training returns after upgrade"). Global once-ever
-                        // had its own hole — the first alphabet's success
-                        // dropped every later alphabet (greptile: "global
-                        // flag drops later alphabets"). The flags deliberately
-                        // survive Reset — Settings' Reset deletes the training
-                        // file, not these flags.
-                        var migratedFlag = TrainingMigratedFlagFor(name);
-                        if (File.Exists(migratedFlag))
+                        // ONCE-EVER PER ALPHABET across RUNS: flags from
+                        // previous runs block re-migration (so a user who
+                        // Resets training and later upgrades never gets the
+                        // corpus resurrected — "reset training returns after
+                        // upgrade"), but WITHIN this run every source dir's
+                        // copy of a basename merges — user dasher.rc and an
+                        // installed system .rc can hold DIFFERENT accumulated
+                        // corpora under one name, and a mid-run flag write
+                        // would skip the second ("basename flags skip
+                        // training"). Flags are written after the loop, per
+                        // basename, only when every source succeeded. They
+                        // deliberately survive Reset — Settings' Reset deletes
+                        // the training file, not these flags.
+                        if (migratedBefore.Contains(name))
                         {
                             if (!result.CopiedFiles.Contains(name))
                                 result.CopiedFiles.Add(name);
@@ -506,17 +520,13 @@ public static class V5MigrationService
                                 if (!File.ReadAllText(dest).Contains(v5text))
                                     throw new IOException("training merge verification failed");
                             }
-                            // Once-ever flag AFTER the corpus is verifiably
-                            // in. A flag-write failure records a failed
-                            // migration (completion suppressed, retry next
-                            // launch); the retry no-ops on the content check
-                            // and re-attempts the flag — converges.
-                            File.WriteAllText(migratedFlag, UpdateChecker.GetCurrentVersion());
+                            trainingThisRun[name] = trainingThisRun.GetValueOrDefault(name);
                             if (!result.CopiedFiles.Contains(name))
                                 result.CopiedFiles.Add(name);
                         }
                         catch (Exception ex)
                         {
+                            trainingThisRun[name] = false;
                             result.FailedFiles.Add($"{name}: {ex.Message}");
                         }
                         continue;
@@ -537,6 +547,23 @@ public static class V5MigrationService
                 }
             }
             catch { }
+        }
+
+        // Post-loop flag writes, per basename, only when every source of
+        // that basename succeeded this run. A flag-write failure records a
+        // failed migration (completion suppressed → retry next launch); the
+        // retry no-ops on the content check and re-attempts only the flag.
+        foreach (var (name, allOk) in trainingThisRun)
+        {
+            if (!allOk) continue;
+            try
+            {
+                File.WriteAllText(TrainingMigratedFlagFor(name), UpdateChecker.GetCurrentVersion());
+            }
+            catch (Exception ex)
+            {
+                result.FailedFiles.Add($"{name}: flag write failed: {ex.Message}");
+            }
         }
     }
 
