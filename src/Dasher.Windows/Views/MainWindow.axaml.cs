@@ -143,6 +143,16 @@ public partial class MainWindow : Window
         _windowSettings = WindowSettings.Load();
         var keyboardMode = PaneSettings.Load().PanePosition == PanePosition.Keyboard.ToString();
 
+        // Set the mode's minimum BEFORE the saved-bounds check: this runs in
+        // the constructor, when MinWidth still holds the AXAML default (600)
+        // — a valid saved direct-mode size of e.g. 400 would be rejected and
+        // the window would open at the normal-mode default instead.
+        if (keyboardMode)
+        {
+            MinWidth = 300;
+            MinHeight = 250;
+        }
+
         var hasBounds = keyboardMode ? _windowSettings.HasDirectBounds : _windowSettings.HasNormalBounds;
         if (hasBounds)
         {
@@ -579,6 +589,11 @@ public partial class MainWindow : Window
             _vm.PanePosition = savedPos;
         _vm.IsKeyboardMode = _vm.PanePosition == PanePosition.Keyboard;
         _vm.IsStatusBarHidden = paneSettings.StatusBarHidden;
+        // Startup enters the persisted mode WITHOUT SetPanePosition (that is
+        // interactive-only), so the mode's minimum must be re-applied here —
+        // otherwise a restart into keyboard mode keeps the AXAML 600x500
+        // minimum for the whole session and the window cannot be shrunk.
+        UpdateWindowMinimum();
         ApplyPaneLayout();
 
         _vm.PropertyChanged += (s, args) =>
