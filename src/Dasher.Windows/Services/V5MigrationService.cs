@@ -520,7 +520,13 @@ public static class V5MigrationService
                                 if (!File.ReadAllText(dest).Contains(v5text))
                                     throw new IOException("training merge verification failed");
                             }
-                            trainingThisRun[name] = trainingThisRun.GetValueOrDefault(name);
+                            // Success latch: default TRUE for the first source
+                            // of a basename; a failure anywhere below/earlier
+                            // latches false for the run. (GetValueOrDefault
+                            // without a default returned false — the flag was
+                            // never written and Reset-then-upgrade could
+                            // resurrect the corpus. Greptile.)
+                            trainingThisRun[name] = trainingThisRun.GetValueOrDefault(name, true);
                             if (!result.CopiedFiles.Contains(name))
                                 result.CopiedFiles.Add(name);
                         }
