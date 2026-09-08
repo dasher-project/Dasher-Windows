@@ -52,6 +52,16 @@ public static class V5MigrationService
     private static readonly string MigrationFlagFile = Path.Combine(V6Dir, "v5_migration_completed");
 
     /// <summary>
+    /// Once-EVER training-migration flag (unlike MigrationFlagFile, not
+    /// version-scoped). Written after the first successful v5 training
+    /// migration; blocks ALL later version-triggered re-migrations from
+    /// touching training files — in particular a Reset-then-upgrade must not
+    /// resurrect the corpus the user deleted. Deliberately not deleted by
+    /// Settings' training Reset.
+    /// </summary>
+    private static readonly string TrainingMigratedFlag = Path.Combine(V6Dir, "v5_training_migrated");
+
+    /// <summary>
     /// Only re-offer if the app version changed since last migration.
     /// This ensures users who ran a broken migration get re-prompted on update.
     /// </summary>
@@ -443,6 +453,22 @@ public static class V5MigrationService
                         // swallows them, silently losing v5 learning while
                         // migration still completes.
                         //
+                        // ONCE-EVER, not version-scoped: v5_training_migrated
+                        // is written after the first successful training
+                        // migration and never re-offered on version changes.
+                        // Without it, a user who Resets training and later
+                        // upgrades (re-offering migration) hit the fresh-copy
+                        // branch and the v5 corpus was silently resurrected
+                        // (greptile: "reset training returns after upgrade").
+                        // The flag deliberately survives Reset — Settings'
+                        // Reset deletes the training file, not this flag.
+                        if (File.Exists(TrainingMigratedFlag))
+                        {
+                            if (!result.CopiedFiles.Contains(name))
+                                result.CopiedFiles.Add(name);
+                            continue;
+                        }
+                        //
                         // Idempotent by CONTENT, not bookkeeping: append only
                         // when the v5 corpus is not already in the file. A
                         // sidecar-marker approach had two holes — the marker
@@ -469,6 +495,12 @@ public static class V5MigrationService
                                 if (!File.ReadAllText(dest).Contains(v5text))
                                     throw new IOException("training merge verification failed");
                             }
+                            // Once-ever flag AFTER the corpus is verifiably
+                            // in. A flag-write failure records a failed
+                            // migration (completion suppressed, retry next
+                            // launch); the retry no-ops on the content check
+                            // and re-attempts the flag — converges.
+                            File.WriteAllText(TrainingMigratedFlag, UpdateChecker.GetCurrentVersion());
                             if (!result.CopiedFiles.Contains(name))
                                 result.CopiedFiles.Add(name);
                         }
