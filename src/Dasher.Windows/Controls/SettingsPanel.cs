@@ -856,7 +856,8 @@ public class SettingsPanel : Decorator
             if (trainingFile != null && System.IO.File.Exists(trainingFile))
             {
                 var sizeKB = new System.IO.FileInfo(trainingFile).Length / 1024;
-                statusText.Text = Loc.Tr("training_current_size", $"Current training data: {sizeKB} KB");
+                statusText.Text = string.Format(
+                    Loc.Tr("training_current_size", "Current training data: {0} KB"), sizeKB);
             }
             else
             {
@@ -898,9 +899,11 @@ public class SettingsPanel : Decorator
                 // instead of claiming a plain failure after mutating state.
                 var rc = NativeBridge.dasher_import_training_text(_handle, text);
                 statusText.Text = rc == 0
-                    ? Loc.Tr("training_imported", $"Imported {text.Length / 1024} KB of training text")
-                    : Loc.Tr("training_imported_restart",
-                        $"Imported {text.Length / 1024} KB — applies fully on next launch (live model returned {rc})");
+                    ? string.Format(Loc.Tr("training_imported", "Imported {0} KB of training text"), text.Length / 1024)
+                    : string.Format(
+                        Loc.Tr("training_imported_restart",
+                            "Imported {0} KB — applies fully on next launch (live model returned {1})"),
+                        text.Length / 1024, rc);
                 RefreshStatus();
             }
             catch (Exception ex)
@@ -1009,8 +1012,10 @@ public class SettingsPanel : Decorator
             {
                 // Partial (or glob-level) failure: deleted-what-we-could —
                 // the remaining files stay and Reset can simply be retried.
-                statusText.Text = Loc.Tr("training_reset_partial",
-                    $"Deleted training data where possible — {failures.Count} item(s) failed; press Reset again to retry");
+                statusText.Text = string.Format(
+                    Loc.Tr("training_reset_partial",
+                        "Deleted training data where possible — {0} item(s) failed; press Reset again to retry"),
+                    failures.Count);
                 return;
             }
 

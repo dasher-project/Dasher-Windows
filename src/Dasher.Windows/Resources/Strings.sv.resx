@@ -548,8 +548,47 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="training" xml:space="preserve">
     <value>Utbildning</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Aktuella träningsdata: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Träningsdata</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Import lägger till text till språkmodellen och dina ackumulerade träningsdata (förvaras över omstarter). Export sparar dina träningsdata för säkerhetskopiering eller överföring. Återställning tar bort all användarträningsdata – modellen återgår till sina inbyggda standardinställningar vid nästa lansering.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Exportera träningsdata</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Exporterad till {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} misslyckades: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Importera träningstext</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB utbildningstext importerad</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} KB importerat — tillämpas fullständigt vid nästa start (livemodellen returnerade {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Inga användarträningsdata ännu</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Ingen träningsdata att exportera ännu</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Återställa</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Träningsdata raderade — modellen återgår till sina inbyggda standardinställningar vid nästa lansering</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Raderade träningsdata där det är möjligt — {0} objekt(er) misslyckades; tryck på Reset igen för att försöka igen</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Skrivhastighet</value>

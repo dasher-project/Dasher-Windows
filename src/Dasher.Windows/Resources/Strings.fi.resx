@@ -551,8 +551,47 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="training" xml:space="preserve">
     <value>Koulutus</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Nykyiset harjoitustiedot: {0} kt</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Harjoitustiedot</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Tuo lisää tekstiä kielimalliin ja kertyneisiin harjoitustietoihisi (säilytetään uudelleenkäynnistysten aikana). Vienti tallentaa harjoitustietosi varmuuskopiointia tai siirtoa varten. Reset poistaa kaikki käyttäjien harjoitustiedot – malli palaa sisäänrakennetuille oletusasetuksiin seuraavan käynnistyksen yhteydessä.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Vie koulutustiedot</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Vietiin kohteeseen {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} epäonnistui: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Tuo koulutusteksti</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Tuotu {0} kt harjoitustekstiä</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Tuotu {0} kt – sovelletaan kokonaan seuraavan julkaisun yhteydessä (malli palautettiin {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Ei vielä käyttäjien koulutustietoja</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Ei vielä harjoitustietoja viedä</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Nollaa</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Harjoitustiedot poistettu – malli palaa sisäänrakennettuun oletusasetuksiinsa seuraavan käynnistyksen yhteydessä</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Harjoitustiedot poistettu mahdollisuuksien mukaan – {0} kohde(tta) epäonnistui; paina Reset uudelleen yrittääksesi uudelleen</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Kirjoitusnopeus</value>

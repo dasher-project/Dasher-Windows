@@ -560,8 +560,47 @@
   <data name="training" xml:space="preserve">
     <value>تربیت</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>موجودہ تربیتی ڈیٹا: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>تربیت کا ڈیٹا</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>درآمد زبان کے ماڈل اور آپ کے جمع کردہ تربیتی ڈیٹا میں متن شامل کرتا ہے (دوبارہ شروع ہونے پر رکھا جاتا ہے)۔ ایکسپورٹ آپ کے تربیتی ڈیٹا کو بیک اپ یا ٹرانسفر کے لیے محفوظ کرتا ہے۔ ری سیٹ کرنے سے صارف کی تربیت کا تمام ڈیٹا حذف ہو جاتا ہے — ماڈل اگلے لانچ پر اپنے پہلے سے طے شدہ ڈیفالٹس پر واپس آجاتا ہے۔</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>ٹریننگ ڈیٹا برآمد کریں</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0} کو برآمد کیا گیا</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} ناکام ہو گیا: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>ٹریننگ ٹیکسٹ درآمد کریں</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} کلو بائٹ ٹریننگ ٹیکسٹ درآمد ہو گیا</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} کلو بائٹ درآمد ہو گئے — اگلے لانچ پر مکمل لاگو ہوں گے (لائیو ماڈل نے {1} واپس دیا)</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>ابھی تک صارف کی تربیت کا کوئی ڈیٹا نہیں ہے۔</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>برآمد کرنے کے لیے ابھی تک کوئی تربیتی ڈیٹا نہیں ہے۔</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>ری سیٹ</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>ٹریننگ ڈیٹا کو حذف کر دیا گیا — ماڈل اگلی لانچ پر اپنے بلٹ ان ڈیفالٹس پر واپس آجاتا ہے۔</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>جہاں ممکن ہو تربیتی ڈیٹا کو حذف کر دیا گیا — {0} آئٹمز ناکام ہو گئے؛ دوبارہ کوشش کرنے کے لیے دوبارہ ری سیٹ دبائیں۔</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>ٹربو</value>

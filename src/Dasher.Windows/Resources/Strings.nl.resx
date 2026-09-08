@@ -533,8 +533,47 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="training" xml:space="preserve">
     <value>Opleiding</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Huidige trainingsgegevens: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Trainingsgegevens</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Import voegt tekst toe aan het taalmodel en uw verzamelde trainingsgegevens (bewaard tijdens herstarts). Export slaat uw trainingsgegevens op voor back-up of overdracht. Met Reset worden alle gebruikerstrainingsgegevens verwijderd; het model keert bij de volgende lancering terug naar de ingebouwde standaardwaarden.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Trainingsgegevens exporteren</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Geëxporteerd naar {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} mislukt: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Trainingstekst importeren</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB trainingstekst geïmporteerd</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} KB geïmporteerd — wordt volledig toegepast bij de volgende start (livemodel gaf {1} terug)</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Nog geen gebruikerstrainingsgegevens</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Er zijn nog geen trainingsgegevens om te exporteren</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Opnieuw instellen</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Trainingsgegevens verwijderd: het model keert bij de volgende lancering terug naar de ingebouwde standaardwaarden</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Trainingsgegevens waar mogelijk verwijderd: {0} item(s) mislukt; druk nogmaals op Reset om het opnieuw te proberen</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Typsnelheid</value>

@@ -563,8 +563,47 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   <data name="training" xml:space="preserve">
     <value>Ukuqeqeshwa</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Idatha yokuqeqeshwa yamanje: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Idatha Yokuqeqesha</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Ukungenisa kwengeza umbhalo kumodeli yolimi kanye nedatha yakho yokuqeqeshwa eqoqiwe (igcinwa kukho konke ukuqalisa kabusha). Ukuthekelisa kulondoloza idatha yakho yokuqeqeshwa ukuze kwenziwe ikhophi yasenqolobaneni noma ukudluliselwa. Ukusetha kabusha kususa yonke idatha yokuqeqeshwa komsebenzisi — imodeli ibuyela kokuzenzakalelayo kwayo eyakhelwe ngaphakathi ekuqaliseni okulandelayo.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Thumela ngaphandle idatha yokuqeqesha</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Kuthunelwe ngaphandle ku-{0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} kwehlulekile: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Ngenisa Umbhalo Wokuqeqesha</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Kungeniwe {0} KB kombhalo wokuqeqesha</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Ingenisiwe {0} KB — isebenza ngokugcwele ekuqalisweni okulandelayo (imodeli ebukhoma ibuyisiwe {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Ayikho idatha yokuqeqeshwa komsebenzisi okwamanje</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Ayikho idatha yokuqeqeshwa ezothekeliswa okwamanje</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Setha kabusha</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Idatha yokuqeqesha isusiwe — imodeli ibuyela kokumisiwe kwayo eyakhelwe ngaphakathi ekuqaliseni okulandelayo</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Kususwe idatha yokuqeqeshwa lapho kungenzeka khona — {0}izinto zehlulekile; cindezela okuthi Setha kabusha futhi ukuze uzame futhi</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>I-Turbo</value>

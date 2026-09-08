@@ -563,8 +563,47 @@
   <data name="training" xml:space="preserve">
     <value>प्रशिक्षण</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>वर्तमान प्रशिक्षण डेटा: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>प्रशिक्षण डेटा</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>आयात भाषा मॉडल और आपके संचित प्रशिक्षण डेटा (पुनः आरंभ में रखा गया) में पाठ जोड़ता है। निर्यात आपके प्रशिक्षण डेटा को बैकअप या स्थानांतरण के लिए सहेजता है। रीसेट सभी उपयोगकर्ता प्रशिक्षण डेटा को हटा देता है - मॉडल अगले लॉन्च पर अपने अंतर्निहित डिफ़ॉल्ट पर वापस आ जाता है।</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>प्रशिक्षण डेटा निर्यात करें</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0} पर निर्यात किया गया</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} विफल: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>प्रशिक्षण पाठ आयात करें</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>प्रशिक्षण पाठ का आयातित {0} KB</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>आयातित {0} KB - अगले लॉन्च पर पूरी तरह लागू होता है (लाइव मॉडल लौटाया गया {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>अभी तक कोई उपयोगकर्ता प्रशिक्षण डेटा नहीं</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>अभी तक निर्यात करने के लिए कोई प्रशिक्षण डेटा नहीं है</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>रीसेट करें</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>प्रशिक्षण डेटा हटा दिया गया - मॉडल अगले लॉन्च पर अपने अंतर्निहित डिफ़ॉल्ट पर वापस आ जाता है</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>जहां संभव हो वहां प्रशिक्षण डेटा हटा दिया गया - {0} आइटम विफल; पुनः प्रयास करने के लिए पुनः रीसेट दबाएँ</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>टर्बो</value>

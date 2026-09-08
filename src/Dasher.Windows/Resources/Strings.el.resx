@@ -563,8 +563,47 @@
   <data name="training" xml:space="preserve">
     <value>Εκπαίδευση</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Τρέχοντα δεδομένα εκπαίδευσης: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Δεδομένα Εκπαίδευσης</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Η Εισαγωγή προσθέτει κείμενο στο μοντέλο γλώσσας και τα συσσωρευμένα δεδομένα προπόνησής σας (διατηρούνται κατά τις επανεκκινήσεις). Η Εξαγωγή αποθηκεύει τα δεδομένα προπόνησής σας για δημιουργία αντιγράφων ασφαλείας ή μεταφορά. Η επαναφορά διαγράφει όλα τα δεδομένα εκπαίδευσης των χρηστών — το μοντέλο επιστρέφει στις ενσωματωμένες προεπιλογές του στην επόμενη εκκίνηση.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Εξαγωγή δεδομένων εκπαίδευσης</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Έγινε εξαγωγή σε {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} απέτυχε: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Εισαγωγή εκπαιδευτικού κειμένου</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Εισήχθησαν {0} KB εκπαιδευτικού κειμένου</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Εισήχθησαν {0} KB — ισχύει πλήρως στην επόμενη κυκλοφορία (το ζωντανό μοντέλο επιστράφηκε {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Δεν υπάρχουν ακόμη δεδομένα εκπαίδευσης χρηστών</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Δεν υπάρχουν ακόμη δεδομένα εκπαίδευσης για εξαγωγή</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Επαναφορά</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Τα δεδομένα προπόνησης διαγράφηκαν — το μοντέλο επιστρέφει στις ενσωματωμένες προεπιλογές του στην επόμενη εκκίνηση</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Διαγράφηκαν δεδομένα εκπαίδευσης όπου είναι δυνατόν — {0} στοιχεία απέτυχαν. πατήστε ξανά Επαναφορά για να προσπαθήσετε ξανά</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>Τούρμπο</value>

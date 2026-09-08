@@ -566,8 +566,47 @@
   <data name="training" xml:space="preserve">
     <value>તાલીમ</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>વર્તમાન તાલીમ ડેટા: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>તાલીમ ડેટા</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>આયાત ભાષા મોડેલ અને તમારા સંચિત તાલીમ ડેટામાં ટેક્સ્ટ ઉમેરે છે (પુનઃપ્રારંભ દરમિયાન રાખવામાં આવે છે). નિકાસ બેકઅપ અથવા ટ્રાન્સફર માટે તમારા તાલીમ ડેટાને સાચવે છે. રીસેટ બધા વપરાશકર્તા તાલીમ ડેટાને કાઢી નાખે છે — મોડેલ આગામી લોંચ પર તેના બિલ્ટ-ઇન ડિફોલ્ટ પર પાછું આવે છે.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>નિકાસ તાલીમ ડેટા</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0} પર નિકાસ કરેલ</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} નિષ્ફળ: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>તાલીમ ટેક્સ્ટ આયાત કરો</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>આયાત કરેલ {0} KB તાલીમ ટેક્સ્ટ</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>આયાત કરેલ {0} KB — આગલા લૉન્ચ પર સંપૂર્ણપણે લાગુ થાય છે (લાઇવ મોડલ {1} પરત કર્યું)</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>હજુ સુધી કોઈ વપરાશકર્તા તાલીમ ડેટા નથી</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>નિકાસ કરવા માટે હજુ સુધી કોઈ તાલીમ ડેટા નથી</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>રીસેટ કરો</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>પ્રશિક્ષણ ડેટા કાઢી નાખવામાં આવ્યો — મોડલ આગામી લોંચ પર તેના બિલ્ટ-ઇન ડિફોલ્ટ પર પાછું આવે છે</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>જ્યાં શક્ય હોય ત્યાં તાલીમ ડેટા કાઢી નાખ્યો — {0} આઇટમ નિષ્ફળ ગઈ; ફરીથી પ્રયાસ કરવા માટે ફરીથી રીસેટ દબાવો</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>ટર્બો</value>

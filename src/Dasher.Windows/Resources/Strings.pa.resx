@@ -566,8 +566,47 @@
   <data name="training" xml:space="preserve">
     <value>ਸਿਖਲਾਈ</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>ਮੌਜੂਦਾ ਸਿਖਲਾਈ ਡੇਟਾ: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>ਸਿਖਲਾਈ ਡੇਟਾ</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>ਆਯਾਤ ਭਾਸ਼ਾ ਮਾਡਲ ਵਿੱਚ ਟੈਕਸਟ ਜੋੜਦਾ ਹੈ ਅਤੇ ਤੁਹਾਡੇ ਇਕੱਠੇ ਕੀਤੇ ਸਿਖਲਾਈ ਡੇਟਾ (ਰੀਸਟਾਰਟ ਵਿੱਚ ਰੱਖਿਆ ਜਾਂਦਾ ਹੈ)। ਨਿਰਯਾਤ ਬੈਕਅੱਪ ਜਾਂ ਟ੍ਰਾਂਸਫਰ ਲਈ ਤੁਹਾਡੇ ਸਿਖਲਾਈ ਡੇਟਾ ਨੂੰ ਸੁਰੱਖਿਅਤ ਕਰਦਾ ਹੈ। ਰੀਸੈਟ ਸਾਰੇ ਉਪਭੋਗਤਾ ਸਿਖਲਾਈ ਡੇਟਾ ਨੂੰ ਮਿਟਾ ਦਿੰਦਾ ਹੈ — ਮਾਡਲ ਅਗਲੀ ਲਾਂਚ 'ਤੇ ਆਪਣੇ ਬਿਲਟ-ਇਨ ਡਿਫੌਲਟ 'ਤੇ ਵਾਪਸ ਆ ਜਾਂਦਾ ਹੈ।</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>ਸਿਖਲਾਈ ਡਾਟਾ ਨਿਰਯਾਤ ਕਰੋ</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0} ਨੂੰ ਨਿਰਯਾਤ ਕੀਤਾ ਗਿਆ</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} ਅਸਫਲ: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>ਸਿਖਲਾਈ ਪਾਠ ਆਯਾਤ ਕਰੋ</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>ਸਿਖਲਾਈ ਪਾਠ ਦਾ {0} KB ਆਯਾਤ ਕੀਤਾ ਗਿਆ</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>ਆਯਾਤ ਕੀਤਾ {0} KB — ਅਗਲੀ ਲਾਂਚ 'ਤੇ ਪੂਰੀ ਤਰ੍ਹਾਂ ਲਾਗੂ ਹੁੰਦਾ ਹੈ (ਲਾਈਵ ਮਾਡਲ ਵਾਪਸ ਕੀਤਾ ਗਿਆ {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>ਅਜੇ ਤੱਕ ਕੋਈ ਉਪਭੋਗਤਾ ਸਿਖਲਾਈ ਡੇਟਾ ਨਹੀਂ ਹੈ</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>ਨਿਰਯਾਤ ਕਰਨ ਲਈ ਹਾਲੇ ਕੋਈ ਸਿਖਲਾਈ ਡਾਟਾ ਨਹੀਂ</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>ਰੀਸੈੱਟ</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>ਸਿਖਲਾਈ ਡਾਟਾ ਮਿਟਾ ਦਿੱਤਾ — ਅਗਲੇ ਲਾਂਚ ਤੇ ਮਾਡਲ ਆਪਣੇ ਬਿਲਟ-ਇਨ ਡਿਫਾਲਟ ਤੇ ਵਾਪਸ ਆਵੇਗਾ</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>ਜਿੱਥੇ ਸੰਭਵ ਹੋਵੇ ਮਿਟਾਇਆ ਗਿਆ ਸਿਖਲਾਈ ਡੇਟਾ — {0} ਆਈਟਮਾਂ ਅਸਫਲ ਹੋਈਆਂ; ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰਨ ਲਈ ਦੁਬਾਰਾ ਰੀਸੈਟ ਦਬਾਓ</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>ਟਰਬੋ</value>

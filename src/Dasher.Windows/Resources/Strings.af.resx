@@ -557,8 +557,47 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   <data name="training" xml:space="preserve">
     <value>Opleiding</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Huidige opleidingsdata: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Opleidingsdata</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Invoer voeg teks by die taalmodel en jou opgehoopte opleidingsdata (met herbeginsels gehou). Uitvoer stoor jou opleidingsdata vir rugsteun of oordrag. Herstel vee alle gebruikersopleidingsdata uit - die model keer terug na sy ingeboude verstekke met volgende bekendstelling.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Voer opleidingsdata uit</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Uitgevoer na {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} het misluk: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Voer opleidingsteks in</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Het {0} KB se opleidingsteks ingevoer</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Ingevoerde {0} KB — is ten volle van toepassing op volgende bekendstelling (regstreekse model teruggestuur {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Nog geen gebruikeropleidingsdata nie</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Nog geen opleidingsdata om uit te voer nie</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Stel terug</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Opleidingsdata is uitgevee - die model keer terug na sy ingeboude verstekke met volgende bekendstelling</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Opleidingsdata uitgevee waar moontlik — {0} item(s) het misluk; druk Herstel weer om weer te probeer</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Te tik Tempo</value>

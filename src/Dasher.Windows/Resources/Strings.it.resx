@@ -545,8 +545,47 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
   <data name="training" xml:space="preserve">
     <value>Formazione</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Dati di addestramento correnti: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Dati di allenamento</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>L'importazione aggiunge testo al modello linguistico e ai dati di addestramento accumulati (mantenuti durante i riavvii). L'esportazione salva i dati di allenamento per il backup o il trasferimento. Il ripristino elimina tutti i dati di formazione dell'utente: il modello ritorna alle impostazioni predefinite integrate al successivo avvio.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Esporta dati di allenamento</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Esportato in {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} non riuscito: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Importa testo di formazione</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB di testo di addestramento importati</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} KB importati: si applica completamente al prossimo lancio (il modello live ha restituito {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Nessun dato di formazione utente ancora</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Nessun dato di addestramento ancora da esportare</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Reimposta</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Dati di addestramento eliminati: il modello ritorna alle impostazioni predefinite integrate al prossimo avvio</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Dati di addestramento eliminati ove possibile: {0} elemento/i non riuscito; premere nuovamente Reset per riprovare</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Velocità di digitazione</value>

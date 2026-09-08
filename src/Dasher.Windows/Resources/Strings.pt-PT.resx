@@ -557,8 +557,47 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   <data name="training" xml:space="preserve">
     <value>Treinamento</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Dados de treinamento atuais: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Dados de treinamento</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Importar adiciona texto ao modelo de linguagem e aos seus dados de treinamento acumulados (mantidos entre reinícios). Exportar guarda os seus dados de treinamento para cópia de segurança ou transferência. Reiniciar elimina todos os dados de treinamento do utilizador — o modelo volta aos predefinidos integrados no próximo arranque.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Exportar dados de treinamento</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Exportado para {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} falhou: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Importar texto de treinamento</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Importou {0} KB de texto de treinamento</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} KB importados — aplica-se totalmente no próximo lançamento (modelo ativo retornado {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Ainda não há dados de treinamento do usuário</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Ainda não há dados de treinamento para exportar</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Reiniciar</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Dados de treinamento excluídos — o modelo retorna aos padrões integrados na próxima inicialização</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Dados de treinamento excluídos sempre que possível — {0} itens falharam; pressione Redefinir novamente para tentar novamente</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Taxa de digitação</value>

@@ -554,8 +554,47 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
   <data name="training" xml:space="preserve">
     <value>Szkolenie</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Aktualne dane treningowe: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Dane treningowe</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Import dodaje tekst do modelu językowego i zgromadzonych danych treningowych (zostają po ponownym uruchomieniu). Eksport zapisuje dane treningowe do kopii zapasowej lub przeniesienia. Resetowanie usuwa wszystkie dane treningowe użytkownika — model powróci do wbudowanych ustawień domyślnych przy następnym uruchomieniu.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Eksportuj dane treningowe</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Wyeksportowano do {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} nie powiodło się: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Importuj tekst szkoleniowy</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Zaimportowano {0} KB tekstu szkoleniowego</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Zaimportowano {0} KB — stosuje się w całości przy następnym uruchomieniu (zwrócony aktywny model {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Brak danych treningowych użytkownika</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Nie ma jeszcze danych treningowych do wyeksportowania</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Nastawić</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Dane treningowe usunięto — model powróci do wbudowanych ustawień domyślnych przy następnym uruchomieniu</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Dane treningowe usunięto tam, gdzie było to możliwe — {0} elementów nie powiodło się; naciśnij ponownie Resetuj, aby spróbować ponownie</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Szybkość pisania</value>

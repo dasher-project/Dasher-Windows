@@ -551,8 +551,47 @@ Puedes cambiar esta configuración en cualquier momento en Ajustes &gt; Privacid
   <data name="training" xml:space="preserve">
     <value>Capacitación</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Datos de entrenamiento actuales: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Datos de entrenamiento</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>La importación agrega texto al modelo de idioma y a los datos de entrenamiento acumulados (se conservan durante los reinicios). Exportar guarda tus datos de entrenamiento para realizar una copia de seguridad o transferirlos. Restablecer elimina todos los datos de entrenamiento del usuario: el modelo vuelve a sus valores predeterminados integrados en el próximo lanzamiento.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Exportar datos de entrenamiento</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Exportado a {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} falló: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Importar texto de capacitación</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Se importaron {0} KB de texto de capacitación</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} KB importados: se aplica completamente en el próximo lanzamiento (el modelo en vivo devolvió {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Aún no hay datos de entrenamiento de usuarios</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Aún no hay datos de entrenamiento para exportar</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Reiniciar</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Datos de entrenamiento eliminados: el modelo vuelve a sus valores predeterminados integrados en el próximo lanzamiento</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Datos de entrenamiento eliminados siempre que fue posible: {0} elementos fallaron; presione Restablecer nuevamente para volver a intentarlo</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Ratio de tecleo</value>

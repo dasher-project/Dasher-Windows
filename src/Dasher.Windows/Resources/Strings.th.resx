@@ -563,8 +563,47 @@
   <data name="training" xml:space="preserve">
     <value>การฝึกอบรม</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>ข้อมูลการฝึกอบรมปัจจุบัน: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>ข้อมูลการฝึกอบรม</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>การนำเข้าจะเพิ่มข้อความลงในโมเดลภาษาและข้อมูลการฝึกอบรมที่สะสมของคุณ (เก็บไว้ระหว่างการรีสตาร์ท) การส่งออกจะบันทึกข้อมูลการฝึกอบรมของคุณเพื่อสำรองหรือถ่ายโอน การรีเซ็ตจะลบข้อมูลการฝึกผู้ใช้ทั้งหมด โมเดลจะกลับสู่ค่าเริ่มต้นในตัวในการเปิดตัวครั้งถัดไป</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>ส่งออกข้อมูลการฝึกอบรม</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>ส่งออกไปยัง {0} แล้ว</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} ล้มเหลว: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>นำเข้าข้อความฝึกอบรม</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>นำเข้าข้อความการฝึกอบรม {0} KB</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>นำเข้า {0} KB — นำไปใช้โดยสมบูรณ์ในการเปิดตัวครั้งถัดไป (โมเดลสดส่งคืน {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>ยังไม่มีข้อมูลการฝึกอบรมของผู้ใช้</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>ยังไม่มีข้อมูลการฝึกอบรมที่จะส่งออก</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>รีเซ็ต</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>ลบข้อมูลการฝึกอบรมแล้ว — โมเดลจะกลับไปใช้ค่าเริ่มต้นที่มีอยู่ในตัวเมื่อเปิดใช้งานครั้งถัดไป</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>ลบข้อมูลการฝึกอบรมเท่าที่ทำได้ — {0} รายการล้มเหลว; กดรีเซ็ตอีกครั้งเพื่อลองใหม่</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>เทอร์โบ</value>

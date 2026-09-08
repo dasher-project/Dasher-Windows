@@ -533,8 +533,47 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   <data name="training" xml:space="preserve">
     <value>Ausbildung</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Aktuelle Trainingsdaten: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Trainingsdaten</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Der Import fügt Text zum Sprachmodell und Ihren gesammelten Trainingsdaten hinzu (die über Neustarts hinweg beibehalten werden). Beim Exportieren werden Ihre Trainingsdaten zur Sicherung oder Übertragung gespeichert. Beim Zurücksetzen werden alle Benutzertrainingsdaten gelöscht – das Modell kehrt beim nächsten Start zu seinen integrierten Standardeinstellungen zurück.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Trainingsdaten exportieren</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Exportiert nach {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} fehlgeschlagen: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Trainingstext importieren</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB Trainingstext importiert</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} KB importiert – wird beim nächsten Start vollständig übernommen (Live-Modell hat {1} zurückgegeben)</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Noch keine Benutzerschulungsdaten</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Noch keine Trainingsdaten zum Exportieren</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Trainingsdaten gelöscht – das Modell kehrt beim nächsten Start zu seinen integrierten Standardwerten zurück</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Trainingsdaten nach Möglichkeit gelöscht – {0} Element(e) fehlgeschlagen; Drücken Sie erneut „Zurücksetzen“, um es erneut zu versuchen</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Tippgeschwindigkeit</value>
