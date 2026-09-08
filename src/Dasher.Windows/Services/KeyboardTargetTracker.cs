@@ -90,12 +90,24 @@ public sealed class KeyboardTargetTracker : IDisposable
                 // emit them for internal control focus changes without being
                 // foreground. Accepting one would let a background app hijack
                 // the target — its text would enter predictions and it would
-                // be ACTIVATED for injected input. A focus event only counts
-                // when its window is the foreground window; a field change in
-                // a non-foreground window is invisible by design, and the
-                // EVENT_SYSTEM_FOREGROUND branch catches target switches.
-                var fgRoot = TargetWindowIdentity.RootOf(GetForegroundWindow());
-                if (fgRoot == IntPtr.Zero || hwnd != fgRoot) return;
+                // be ACTIVATED for injected input. Two tiers:
+                //
+                //  - hwnd == _target: a same-window field change. It cannot
+                //    hijack anything (the window is already the target) and
+                //    MUST be accepted unconditionally — hook callbacks are
+                //    delivered asynchronously, and gating them on a live
+                //    GetForegroundWindow() would discard valid field
+                //    transitions whenever the foreground flickered between
+                //    the event and its delivery ("delayed focus events get
+                //    discarded").
+                //  - hwnd != _target: a focus event can only PROMOTE a new
+                //    target when its window really is the foreground —
+                //    EVENT_SYSTEM_FOREGROUND covers the ordinary switches.
+                if (hwnd != _target)
+                {
+                    var fgRoot = TargetWindowIdentity.RootOf(GetForegroundWindow());
+                    if (fgRoot == IntPtr.Zero || hwnd != fgRoot) return;
+                }
             }
             // else EVENT_SYSTEM_FOREGROUND: hwnd IS the new foreground by
             // definition of the event — no guard needed.
