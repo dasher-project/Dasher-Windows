@@ -955,12 +955,21 @@ public class SettingsPanel : Decorator
 
                 var deleted = false;
 
-                // The engine-owned file (what adaptive learning appends to).
-                var trainingFile = GetTrainingPath();
-                if (trainingFile != null && System.IO.File.Exists(trainingFile))
+                // ALL alphabets' training files, matching the copy ("deletes
+                // ALL user training data"): the glob covers every
+                // training_*.txt in the engine's user-dir root, not just the
+                // current alphabet's file.
+                var engineFile = GetTrainingPath();
+                var rootDir = engineFile != null
+                    ? System.IO.Path.GetDirectoryName(engineFile)
+                    : System.IO.Path.GetDirectoryName(LegacyTrainingDir);
+                if (rootDir != null && System.IO.Directory.Exists(rootDir))
                 {
-                    System.IO.File.Delete(trainingFile);
-                    deleted = true;
+                    foreach (var f in System.IO.Directory.GetFiles(rootDir, "training_*.txt"))
+                    {
+                        System.IO.File.Delete(f);
+                        deleted = true;
+                    }
                 }
 
                 // Legacy v5-migration copies under training\ — also scanned
