@@ -750,6 +750,16 @@ public partial class MainWindow : Window
         await Task.Delay(150); // let the target's caret settle
         if (generation != _contextSeedGeneration) return; // superseded
 
+        // Stale-seed guard: a queued focus event whose target was superseded
+        // mid-debounce must not leak the OLD window's text — verified here at
+        // seed time, right before the read ("stale focus bypasses foreground
+        // guard"). When dropped, the new foreground's own event chain seeds.
+        if (!_targetTracker.TargetIsForegroundOrUnknown(OurHwnd()))
+        {
+            KbLog($"Context seed ({reason}): stale — target no longer foreground, dropping");
+            return;
+        }
+
         var context = await TargetContextReader.ReadAsync(_targetTracker.Current);
         if (generation != _contextSeedGeneration) return;
 

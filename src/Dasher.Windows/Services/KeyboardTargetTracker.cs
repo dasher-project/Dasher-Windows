@@ -29,6 +29,25 @@ public sealed class KeyboardTargetTracker : IDisposable
     /// <summary>The rooted HWND of the tracked target window.</summary>
     public IntPtr Current => _target;
 
+    /// <summary>
+    /// True when the tracked target is still the foreground window (or the
+    /// foreground is unknown/transient and cannot be judged). Call this at
+    /// SEED time — after any debounce delay, immediately before reading the
+    /// target's text — so a stale queued focus event whose target was
+    /// superseded mid-debounce cannot leak the old window's text into the
+    /// engine ("stale focus bypasses foreground guard": the same-target hook
+    //  branch deliberately skips the live check, so the seed path must be
+    /// the one that verifies). When this returns false, drop the pending
+    /// seed: the new foreground's own event chain will trigger a fresh one.
+    /// </summary>
+    public bool TargetIsForegroundOrUnknown(IntPtr ourHwnd)
+    {
+        var fg = GetForegroundWindow();
+        if (fg == IntPtr.Zero || fg == ourHwnd)
+            return true; // unknown, or Dasher transiently holds focus
+        return TargetWindowIdentity.RootOf(fg) == _target;
+    }
+
     /// <summary>Raised on the UI thread with a diagnostic reason.</summary>
     public event Action<string>? TargetChanged;
 

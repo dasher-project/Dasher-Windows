@@ -244,19 +244,39 @@ public static class TargetContextReader
                     var beforeCaret = truncated.GetText(-1) ?? "";
                     caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
                 }
+                else if ((caretRange = TryRangeFromSystemCaret(uia, pattern, targetHwnd)) != null)
+                {
+                    // System caret → RangeFromPoint: exact caret position
+                    // including the ACTIVE end of a selection, for any
+                    // provider supporting RangeFromPoint (nearly all).
+                    // Covers backward selections (Shift+Left, Ctrl+Shift+Home,
+                    // right-to-left drag) that TextPattern1 ranges cannot
+                    // describe — they carry no direction information.
+                    var truncated = document.Clone();
+                    truncated.MoveEndpointByRange(
+                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
+                        caretRange,
+                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
+                    var beforeCaret = truncated.GetText(-1) ?? "";
+                    caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
+                    Log($"[UIA] caret via system caret → RangeFromPoint: {caretUtf16}");
+                }
                 else
                 {
                     var selection = pattern.GetSelection();
                     if (selection != null && selection.Length > 0)
                     {
                         var sel = selection.GetElement(0);
-                        // Selection-based fallback (provider-quirk-proof: no
-                        // CompareEndpoints magnitudes — see history). The
-                        // anchor endpoint depends on the selection shape:
-                        // collapsed → either endpoint; non-collapsed → the
-                        // END, which is the active caret for forward
-                        // selections (shift+Right, Ctrl+Shift+End, mouse
-                        // drag left-to-right) — the common cases.
+                        // Last-resort selection fallback. TextPattern1 cannot
+                        // report selection DIRECTION — that is the documented
+                        // reason TextPattern2.GetCaretRange exists — so for a
+                        // non-collapsed selection we anchor at the END, the
+                        // active end of forward selections (shift+Right,
+                        // Ctrl+Shift+End, left-to-right drag). Backward
+                        // selections are handled exactly by the two paths
+                        // above whenever the system caret is visible; the
+                        // residual case (no TextPattern2, hidden caret) is
+                        // genuinely undetectable via TextPattern1.
                         var selStart = sel.Clone();
                         var startLen = 0;
                         {
@@ -332,6 +352,42 @@ public static class TargetContextReader
             return false;
         }
         catch { return false; }
+    }
+
+    /// <summary>
+    /// Resolve the caret's document position from the blinking system caret:
+    /// GUITHREADINFO (target thread) → hwndCaret + GetCaretPos (client
+    /// coords) → ClientToScreen → RangeFromPoint. Exact — including the
+    /// ACTIVE end of a non-collapsed selection, which TextPattern1 ranges
+    /// cannot express. Returns null when the caret is hidden or anything
+    /// along the way is unavailable.
+    /// </summary>
+    private static IUIAutomationTextRange? TryRangeFromSystemCaret(
+        CUIAutomationClass uia, IUIAutomationTextPattern pattern, IntPtr targetHwnd)
+    {
+        try
+        {
+            var info = new GUITHREADINFO { cbSize = Marshal.SizeOf<GUITHREADINFO>() };
+            uint pid = 0;
+            uint tid = GetWindowThreadProcessId(targetHwnd, ref pid);
+            if (tid == 0 || !GetGUIThreadInfo(tid, ref info) || info.hwndCaret == IntPtr.Zero)
+                return null;
+
+            // The caret window must belong to the target — a foreign thread's
+            // caret (attached input edge cases) would seed the wrong position.
+            if (!TargetWindowIdentity.IsOwnedBy(info.hwndCaret, targetHwnd))
+                return null;
+
+            var pt = new tagPOINT();
+            if (!GetCaretPos(ref pt)) return null;
+            if (!ClientToScreen(info.hwndCaret, ref pt)) return null;
+
+            return pattern.RangeFromPoint(pt);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     // ── Win32 fallback (classic EDIT / RichEdit) ─────────────────────────────
@@ -458,6 +514,14 @@ public static class TargetContextReader
 
     [DllImport("user32.dll")]
     private static extern uint GetWindowThreadProcessId(IntPtr hWnd, ref uint lpdwProcessId);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GetCaretPos(ref tagPOINT point);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool ClientToScreen(IntPtr hWnd, ref tagPOINT point);
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
