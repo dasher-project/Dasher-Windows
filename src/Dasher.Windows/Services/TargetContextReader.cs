@@ -356,11 +356,15 @@ public static class TargetContextReader
 
     /// <summary>
     /// Resolve the caret's document position from the blinking system caret:
-    /// GUITHREADINFO (target thread) → hwndCaret + GetCaretPos (client
-    /// coords) → ClientToScreen → RangeFromPoint. Exact — including the
-    /// ACTIVE end of a non-collapsed selection, which TextPattern1 ranges
-    /// cannot express. Returns null when the caret is hidden or anything
-    /// along the way is unavailable.
+    /// GUITHREADINFO for the TARGET's thread provides both hwndCaret and
+    /// rcCaret (client coords). GetCaretPos is NOT usable here — it reports
+    /// the CALLING thread's caret, and this reader runs on a background
+    /// thread ("caret coordinates use wrong thread"); rcCaret from
+    /// GetGUIThreadInfo is cross-thread-safe by construction. A point inside
+    /// the caret rect → ClientToScreen → RangeFromPoint gives the exact
+    /// document position, including the ACTIVE end of a non-collapsed
+    /// selection, which TextPattern1 ranges cannot express. Returns null
+    /// when the caret is hidden or anything along the way is unavailable.
     /// </summary>
     private static IUIAutomationTextRange? TryRangeFromSystemCaret(
         CUIAutomationClass uia, IUIAutomationTextPattern pattern, IntPtr targetHwnd)
@@ -374,12 +378,21 @@ public static class TargetContextReader
                 return null;
 
             // The caret window must belong to the target — a foreign thread's
-            // caret (attached input edge cases) would seed the wrong position.
+            // caret (attached-input edge cases) would seed the wrong position.
             if (!TargetWindowIdentity.IsOwnedBy(info.hwndCaret, targetHwnd))
                 return null;
 
-            var pt = new tagPOINT();
-            if (!GetCaretPos(ref pt)) return null;
+            // Point inside the caret bar: horizontal middle of the (usually
+            // thin) rect, vertical middle of its height. Degenerate rects
+            // (zero size) still anchor at their top-left.
+            var rc = info.rcCaret;
+            var width = Math.Max(0, rc.Right - rc.Left);
+            var height = Math.Max(0, rc.Bottom - rc.Top);
+            var pt = new tagPOINT
+            {
+                x = rc.Left + width / 2,
+                y = rc.Top + height / 2,
+            };
             if (!ClientToScreen(info.hwndCaret, ref pt)) return null;
 
             return pattern.RangeFromPoint(pt);
@@ -514,10 +527,6 @@ public static class TargetContextReader
 
     [DllImport("user32.dll")]
     private static extern uint GetWindowThreadProcessId(IntPtr hWnd, ref uint lpdwProcessId);
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetCaretPos(ref tagPOINT point);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
