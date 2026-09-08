@@ -945,6 +945,14 @@ public class SettingsPanel : Decorator
         {
             try
             {
+                // Flags-first: settle the v5 migration lifecycle BEFORE any
+                // deletion (clean-failure semantics). Without this, a corpus
+                // whose .v5migrated flag write had failed could be restored
+                // by a later migration after the Reset deleted the only
+                // content evidence — resurrecting training the user deleted.
+                // A flag-write failure aborts here with nothing deleted.
+                V5MigrationService.MarkTrainingReset();
+
                 var deleted = false;
 
                 // The engine-owned file (what adaptive learning appends to).

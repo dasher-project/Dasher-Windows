@@ -68,6 +68,33 @@ public static class V5MigrationService
         Path.Combine(V6Dir, trainingFileName + ".v5migrated");
 
     /// <summary>
+    /// Called by Settings' training Reset BEFORE it deletes anything: writes
+    /// the .v5migrated flag for every v5 source training file. This settles
+    /// the migration lifecycle at Reset time — without it, a corpus whose
+    /// flag write had failed (rare disk error) plus a Reset that deleted the
+    /// only content evidence left a later retry free to copy the v5 corpus
+    /// back, restoring what the user explicitly deleted (greptile: "failed
+    /// flag permits resurrection"). Flags-first ordering gives clean-failure
+    /// semantics: a flag-write failure aborts the Reset before any deletion,
+    /// and the user can retry.
+    /// </summary>
+    public static void MarkTrainingReset()
+    {
+        var sources = new List<string> { V5Dir };
+        foreach (var sysDir in V5SystemDirs)
+            if (Directory.Exists(sysDir))
+                sources.Add(sysDir);
+
+        foreach (var dir in sources)
+        {
+            if (!Directory.Exists(dir)) continue;
+            foreach (var f in Directory.GetFiles(dir, "training_*", SearchOption.TopDirectoryOnly))
+                File.WriteAllText(TrainingMigratedFlagFor(Path.GetFileName(f)),
+                    "reset " + DateTime.UtcNow.ToString("O"));
+        }
+    }
+
+    /// <summary>
     /// Only re-offer if the app version changed since last migration.
     /// This ensures users who ran a broken migration get re-prompted on update.
     /// </summary>
