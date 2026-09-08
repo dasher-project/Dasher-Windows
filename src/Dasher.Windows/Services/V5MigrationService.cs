@@ -52,14 +52,20 @@ public static class V5MigrationService
     private static readonly string MigrationFlagFile = Path.Combine(V6Dir, "v5_migration_completed");
 
     /// <summary>
-    /// Once-EVER training-migration flag (unlike MigrationFlagFile, not
-    /// version-scoped). Written after the first successful v5 training
-    /// migration; blocks ALL later version-triggered re-migrations from
-    /// touching training files — in particular a Reset-then-upgrade must not
-    /// resurrect the corpus the user deleted. Deliberately not deleted by
-    /// Settings' training Reset.
+    /// Per-training-file once-EVER migration flags: &lt;training file&gt;.v5migrated
+    /// beside the destination in V6Dir. Unlike MigrationFlagFile these are not
+    /// version-scoped, so version-triggered re-migrations never touch an
+    /// alphabet's training again after its first successful migration — in
+    /// particular a Reset-then-upgrade must not resurrect the corpus the user
+    /// deleted. PER FILE, not global: a v5 profile can hold training for
+    /// several alphabets, and a single global flag dropped every alphabet
+    /// after the first (greptile: "global flag drops later alphabets").
+    /// Deliberately not deleted by Settings' training Reset. The content
+    /// contains-check below makes flag-write-failure retries no-ops, so the
+    /// flag can never cause duplication.
     /// </summary>
-    private static readonly string TrainingMigratedFlag = Path.Combine(V6Dir, "v5_training_migrated");
+    private static string TrainingMigratedFlagFor(string trainingFileName) =>
+        Path.Combine(V6Dir, trainingFileName + ".v5migrated");
 
     /// <summary>
     /// Only re-offer if the app version changed since last migration.
@@ -453,16 +459,21 @@ public static class V5MigrationService
                         // swallows them, silently losing v5 learning while
                         // migration still completes.
                         //
-                        // ONCE-EVER, not version-scoped: v5_training_migrated
-                        // is written after the first successful training
-                        // migration and never re-offered on version changes.
-                        // Without it, a user who Resets training and later
-                        // upgrades (re-offering migration) hit the fresh-copy
-                        // branch and the v5 corpus was silently resurrected
-                        // (greptile: "reset training returns after upgrade").
-                        // The flag deliberately survives Reset — Settings'
-                        // Reset deletes the training file, not this flag.
-                        if (File.Exists(TrainingMigratedFlag))
+                        // ONCE-EVER PER ALPHABET, not version-scoped and not
+                        // global: the per-file flag is written after THAT
+                        // file's first successful migration and never
+                        // re-offered on version changes. Without it, a user
+                        // who Resets training and later upgrades (re-offering
+                        // migration) hit the fresh-copy branch and the v5
+                        // corpus was silently resurrected (greptile: "reset
+                        // training returns after upgrade"). Global once-ever
+                        // had its own hole — the first alphabet's success
+                        // dropped every later alphabet (greptile: "global
+                        // flag drops later alphabets"). The flags deliberately
+                        // survive Reset — Settings' Reset deletes the training
+                        // file, not these flags.
+                        var migratedFlag = TrainingMigratedFlagFor(name);
+                        if (File.Exists(migratedFlag))
                         {
                             if (!result.CopiedFiles.Contains(name))
                                 result.CopiedFiles.Add(name);
@@ -500,7 +511,7 @@ public static class V5MigrationService
                             // migration (completion suppressed, retry next
                             // launch); the retry no-ops on the content check
                             // and re-attempts the flag — converges.
-                            File.WriteAllText(TrainingMigratedFlag, UpdateChecker.GetCurrentVersion());
+                            File.WriteAllText(migratedFlag, UpdateChecker.GetCurrentVersion());
                             if (!result.CopiedFiles.Contains(name))
                                 result.CopiedFiles.Add(name);
                         }
