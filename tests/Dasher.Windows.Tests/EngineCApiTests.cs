@@ -161,6 +161,53 @@ public class EngineCApiTests
     }
 
     [Fact]
+    public void Training_path_is_engine_owned_and_in_user_dir()
+    {
+        // Issue #53 / DasherCore#84: the training panel must read/export/
+        // reset the ONE file the engine appends adaptive learning to.
+        // dasher_get_training_path is the contract — it must resolve inside
+        // the caller-supplied user dir with the alphabet's training filename
+        // (root layout, not the training\ subtree the old UI guessed), and
+        // must not crash before the file exists.
+        var dataDir = FindDataDir();
+        if (dataDir == null) { if (RequireEngine) Assert.Fail("DasherCore/Data not found"); return; }
+
+        var userDir = Path.Combine(Path.GetTempPath(), "dasher-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(userDir);
+
+        var handle = NativeBridge.dasher_create(dataDir, userDir, out var err);
+        Assert.False(handle == IntPtr.Zero,
+            err != IntPtr.Zero ? "dasher_create: " + Marshal.PtrToStringUTF8(err) : "dasher_create failed");
+        try
+        {
+            NativeBridge.dasher_set_screen_size(handle, 800, 600);
+
+            var ptr = NativeBridge.dasher_get_training_path(handle);
+            Assert.False(ptr == IntPtr.Zero, "dasher_get_training_path returned null");
+
+            // tlString contract: valid until the next engine call — snapshot.
+            var path = Marshal.PtrToStringUTF8(ptr) ?? "";
+
+            Assert.NotEqual("", path);
+            Assert.StartsWith(userDir, path);
+            Assert.Contains("training_", path);
+            Assert.DoesNotContain(@"\training\", path);
+            Assert.DoesNotContain(@"/training/", path);
+
+            // The file need not exist yet — learning may not have started.
+            // Import must not leave the engine's temp file behind either.
+            Assert.Equal(0, NativeBridge.dasher_import_training_text(handle, "windows test corpus"));
+            Assert.False(File.Exists(Path.Combine(userDir, ".dasher_training_tmp.txt")),
+                "import left .dasher_training_tmp.txt in the user dir");
+        }
+        finally
+        {
+            NativeBridge.dasher_destroy(handle);
+            try { Directory.Delete(userDir, recursive: true); } catch { }
+        }
+    }
+
+    [Fact]
     public void Autocalibrate_off_by_default_and_no_offset_drift()
     {
         // DasherCore #64 (the recurring restart drift): BP_AUTOCALIBRATE is

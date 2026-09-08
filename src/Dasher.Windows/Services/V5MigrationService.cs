@@ -406,7 +406,14 @@ public static class V5MigrationService
                     else if (name.StartsWith("control."))
                         destSubdir = "control";
                     else if (name.StartsWith("training_"))
-                        destSubdir = "training";
+                        // The ENGINE appends adaptive learning to the ROOT of
+                        // the user dir (ResolveUserDataPath) and the startup
+                        // scan is recursive — the v5 training file must land
+                        // in the same place so there is ONE accumulated file
+                        // the UI exports/resets (issue #53: the old
+                        // training\ copy diverged silently and exported
+                        // stale snapshots). destSubdir stays null → root.
+                        destSubdir = null;
                     else
                         continue;
 

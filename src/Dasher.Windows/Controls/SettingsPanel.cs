@@ -761,6 +761,33 @@ public class SettingsPanel : Decorator
         _ => category,
     };
 
+    /// <summary>
+    /// The engine-owned training file for the current alphabet (the file
+    /// adaptive learning appends to), or null when unavailable. The UI reads,
+    /// exports, appends imports to, and resets THIS file — never a derived
+    /// path (issue #53: the old code read training\training_english_GB.txt,
+    /// a file the engine never writes, so exports failed on fresh installs
+    /// and exported stale v5 snapshots for migrants).
+    /// </summary>
+    private string? GetTrainingPath()
+    {
+        try
+        {
+            var p = NativeBridge.dasher_get_training_path(_handle);
+            if (p == IntPtr.Zero) return null;
+            var path = Marshal.PtrToStringUTF8(p);
+            return string.IsNullOrEmpty(path) ? null : path;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static readonly string LegacyTrainingDir = System.IO.Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "Dasher", "training");
+
     private Control BuildTrainingSection()
     {
         var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 12, 0, 0) };
@@ -775,7 +802,10 @@ public class SettingsPanel : Decorator
 
         panel.Children.Add(new TextBlock
         {
-            Text = "Import adds text to the language model (appends to existing learning). Export saves your accumulated training data for backup or transfer.",
+            Text = Loc.Tr("training_data_description",
+                "Import adds text to the language model and your accumulated training data (kept across restarts). " +
+                "Export saves your training data for backup or transfer. Reset deletes all user training data — " +
+                "the model returns to its built-in defaults on next launch."),
             FontSize = 11,
             TextWrapping = TextWrapping.Wrap,
             Foreground = BrushValue,
@@ -785,7 +815,7 @@ public class SettingsPanel : Decorator
 
         var importBtn = new Button
         {
-            Content = "Import Training Text",
+            Content = Loc.Tr("training_import", "Import Training Text"),
             Padding = new Thickness(12, 6),
             FontSize = 12,
             Background = BrushControlBg,
@@ -795,7 +825,17 @@ public class SettingsPanel : Decorator
 
         var exportBtn = new Button
         {
-            Content = "Export Training Data",
+            Content = Loc.Tr("training_export", "Export Training Data"),
+            Padding = new Thickness(12, 6),
+            FontSize = 12,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+        };
+
+        var resetBtn = new Button
+        {
+            Content = Loc.Tr("training_reset", "Reset"),
             Padding = new Thickness(12, 6),
             FontSize = 12,
             Background = BrushControlBg,
@@ -810,19 +850,20 @@ public class SettingsPanel : Decorator
             Margin = new Thickness(0, 4, 0, 0),
         };
 
-        // Show current training file size
-        var trainingFile = System.IO.Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Dasher", "training", "training_english_GB.txt");
-        if (System.IO.File.Exists(trainingFile))
+        void RefreshStatus()
         {
-            var sizeKB = new System.IO.FileInfo(trainingFile).Length / 1024;
-            statusText.Text = $"Current training data: {sizeKB} KB";
+            var trainingFile = GetTrainingPath();
+            if (trainingFile != null && System.IO.File.Exists(trainingFile))
+            {
+                var sizeKB = new System.IO.FileInfo(trainingFile).Length / 1024;
+                statusText.Text = Loc.Tr("training_current_size", $"Current training data: {sizeKB} KB");
+            }
+            else
+            {
+                statusText.Text = Loc.Tr("training_none_yet", "No user training data yet");
+            }
         }
-        else
-        {
-            statusText.Text = "No user training data yet";
-        }
+        RefreshStatus();
 
         importBtn.Click += async (s, e) =>
         {
@@ -831,7 +872,7 @@ public class SettingsPanel : Decorator
             var storageProvider = topLevel.StorageProvider;
             var result = await storageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
             {
-                Title = "Import Training Text",
+                Title = Loc.Tr("training_import", "Import Training Text"),
                 FileTypeFilter = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
                 AllowMultiple = false,
             });
@@ -839,23 +880,41 @@ public class SettingsPanel : Decorator
             try
             {
                 var text = await System.IO.File.ReadAllTextAsync(result[0].Path.LocalPath);
+
+                // 1. Train the LIVE model (immediate effect).
                 NativeBridge.dasher_import_training_text(_handle, text);
-                statusText.Text = $"Imported {text.Length / 1024} KB of training text";
+
+                // 2. Persist: append to the engine-owned training file so the
+                // import survives restarts (issue #53 — the engine's import
+                // trains in memory only; Android/Apple append manually too).
+                var trainingFile = GetTrainingPath();
+                if (trainingFile != null)
+                    await System.IO.File.AppendAllTextAsync(trainingFile, text + "\n");
+
+                statusText.Text = Loc.Tr("training_imported", $"Imported {text.Length / 1024} KB of training text");
+                RefreshStatus();
             }
             catch (Exception ex)
             {
-                statusText.Text = $"Import failed: {ex.Message}";
+                statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
+                    Loc.Tr("training_import", "Import"), ex.Message);
             }
         };
 
         exportBtn.Click += async (s, e) =>
         {
+            var trainingFile = GetTrainingPath();
+            if (trainingFile == null || !System.IO.File.Exists(trainingFile))
+            {
+                statusText.Text = Loc.Tr("training_nothing_to_export", "No training data to export yet");
+                return;
+            }
             var topLevel = TopLevel.GetTopLevel(this);
             if (topLevel == null) return;
             var storageProvider = topLevel.StorageProvider;
             var result = await storageProvider.SaveFilePickerAsync(new Avalonia.Platform.Storage.FilePickerSaveOptions
             {
-                Title = "Export Training Data",
+                Title = Loc.Tr("training_export", "Export Training Data"),
                 DefaultExtension = "txt",
                 SuggestedFileName = "dasher_training_export.txt",
                 FileTypeChoices = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
@@ -863,17 +922,55 @@ public class SettingsPanel : Decorator
             if (result == null) return;
             try
             {
-                await System.IO.File.WriteAllTextAsync(result.Path.LocalPath, System.IO.File.ReadAllText(trainingFile));
-                statusText.Text = $"Exported to {result.Name}";
+                await System.IO.File.WriteAllTextAsync(result.Path.LocalPath, await System.IO.File.ReadAllTextAsync(trainingFile));
+                statusText.Text = string.Format(Loc.Tr("training_exported", "Exported to {0}"), result.Name);
             }
             catch (Exception ex)
             {
-                statusText.Text = $"Export failed: {ex.Message}";
+                statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
+                    Loc.Tr("training_export", "Export"), ex.Message);
+            }
+        };
+
+        resetBtn.Click += (s, e) =>
+        {
+            try
+            {
+                var deleted = false;
+
+                // The engine-owned file (what adaptive learning appends to).
+                var trainingFile = GetTrainingPath();
+                if (trainingFile != null && System.IO.File.Exists(trainingFile))
+                {
+                    System.IO.File.Delete(trainingFile);
+                    deleted = true;
+                }
+
+                // Legacy v5-migration copies under training\ — also scanned
+                // at startup, so they must go too.
+                if (System.IO.Directory.Exists(LegacyTrainingDir))
+                {
+                    foreach (var f in System.IO.Directory.GetFiles(LegacyTrainingDir, "training_*.txt"))
+                    {
+                        System.IO.File.Delete(f);
+                        deleted = true;
+                    }
+                }
+
+                statusText.Text = deleted
+                    ? Loc.Tr("training_reset_done", "Training data deleted — the model returns to its built-in defaults on next launch")
+                    : Loc.Tr("training_none_yet", "No user training data yet");
+            }
+            catch (Exception ex)
+            {
+                statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
+                    Loc.Tr("training_reset", "Reset"), ex.Message);
             }
         };
 
         btnRow.Children.Add(importBtn);
         btnRow.Children.Add(exportBtn);
+        btnRow.Children.Add(resetBtn);
         panel.Children.Add(btnRow);
         panel.Children.Add(statusText);
 
