@@ -881,8 +881,18 @@ public class SettingsPanel : Decorator
             {
                 var text = await System.IO.File.ReadAllTextAsync(result[0].Path.LocalPath);
 
-                // 1. Train the LIVE model (immediate effect).
-                NativeBridge.dasher_import_training_text(_handle, text);
+                // 1. Train the LIVE model (immediate effect). A nonzero
+                // return means the engine rejected the text — do NOT append
+                // to the persistent file in that case, or the live model and
+                // the training file diverge while the UI claims success
+                // (greptile: "native import failures are ignored").
+                var rc = NativeBridge.dasher_import_training_text(_handle, text);
+                if (rc != 0)
+                {
+                    statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
+                        Loc.Tr("training_import", "Import"), $"engine returned {rc}");
+                    return;
+                }
 
                 // 2. Persist: append to the engine-owned training file so the
                 // import survives restarts (issue #53 — the engine's import

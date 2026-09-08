@@ -397,6 +397,7 @@ public static class V5MigrationService
                 foreach (var f in Directory.GetFiles(sourceDir, "*.*", SearchOption.TopDirectoryOnly))
                 {
                     var name = Path.GetFileName(f);
+                    bool isTraining = name.StartsWith("training_");
                     string? destSubdir = null;
 
                     if (name.StartsWith("alphabet."))
@@ -405,7 +406,7 @@ public static class V5MigrationService
                         destSubdir = "colours";
                     else if (name.StartsWith("control."))
                         destSubdir = "control";
-                    else if (name.StartsWith("training_"))
+                    else if (isTraining)
                         // The ENGINE appends adaptive learning to the ROOT of
                         // the user dir (ResolveUserDataPath) and the startup
                         // scan is recursive — the v5 training file must land
@@ -420,6 +421,25 @@ public static class V5MigrationService
                     var destDir = destSubdir != null ? Path.Combine(V6Dir, destSubdir) : V6Dir;
                     Directory.CreateDirectory(destDir);
                     var dest = Path.Combine(destDir, name);
+
+                    if (isTraining && File.Exists(dest))
+                    {
+                        // The root training file accumulates v6 learning — a
+                        // collision must MERGE, not skip (greptile: "training
+                        // collisions skip migration data" — the generic
+                        // skip-if-exists silently dropped the alphabet's v5
+                        // history). Append the v5 content; overlapping text
+                        // with the v6 file just reinforces counts. Migration
+                        // runs at most once, so this can't double-append.
+                        try
+                        {
+                            File.AppendAllText(dest, File.ReadAllText(f) + "\n");
+                            if (!result.CopiedFiles.Contains(name))
+                                result.CopiedFiles.Add(name);
+                        }
+                        catch { }
+                        continue;
+                    }
 
                     var overwrite = name.Equals("control.xml", StringComparison.OrdinalIgnoreCase);
 
