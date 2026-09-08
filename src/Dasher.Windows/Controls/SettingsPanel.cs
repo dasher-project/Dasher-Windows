@@ -943,18 +943,45 @@ public class SettingsPanel : Decorator
 
         resetBtn.Click += (s, e) =>
         {
+            // Flags-first: settle the v5 migration lifecycle BEFORE any
+            // deletion (clean-failure semantics). Without this, a corpus
+            // whose .v5migrated flag write had failed could be restored
+            // by a later migration after the Reset deleted the only
+            // content evidence — resurrecting training the user deleted.
+            // A flag-write failure aborts here with nothing deleted.
             try
             {
-                // Flags-first: settle the v5 migration lifecycle BEFORE any
-                // deletion (clean-failure semantics). Without this, a corpus
-                // whose .v5migrated flag write had failed could be restored
-                // by a later migration after the Reset deleted the only
-                // content evidence — resurrecting training the user deleted.
-                // A flag-write failure aborts here with nothing deleted.
                 V5MigrationService.MarkTrainingReset();
+            }
+            catch (Exception ex)
+            {
+                statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
+                    Loc.Tr("training_reset", "Reset"), ex.Message);
+                return;
+            }
 
-                var deleted = false;
+            // Deletions are per-file isolated: one locked/undeletable file
+            // must not abort the loop halfway ("reset leaves partial training
+            // state") — every file gets its attempt, and Retry (idempotent:
+            // flags rewritten, glob covers survivors) mops up the rest.
+            var deleted = false;
+            var failures = new List<string>();
 
+            void TryDelete(string file)
+            {
+                try
+                {
+                    System.IO.File.Delete(file);
+                    deleted = true;
+                }
+                catch (Exception ex)
+                {
+                    failures.Add($"{System.IO.Path.GetFileName(file)}: {ex.Message}");
+                }
+            }
+
+            try
+            {
                 // ALL alphabets' training files, matching the copy ("deletes
                 // ALL user training data"): the glob covers every
                 // training_*.txt in the engine's user-dir root, not just the
@@ -964,34 +991,32 @@ public class SettingsPanel : Decorator
                     ? System.IO.Path.GetDirectoryName(engineFile)
                     : System.IO.Path.GetDirectoryName(LegacyTrainingDir);
                 if (rootDir != null && System.IO.Directory.Exists(rootDir))
-                {
                     foreach (var f in System.IO.Directory.GetFiles(rootDir, "training_*.txt"))
-                    {
-                        System.IO.File.Delete(f);
-                        deleted = true;
-                    }
-                }
+                        TryDelete(f);
 
                 // Legacy v5-migration copies under training\ — also scanned
                 // at startup, so they must go too.
                 if (System.IO.Directory.Exists(LegacyTrainingDir))
-                {
                     foreach (var f in System.IO.Directory.GetFiles(LegacyTrainingDir, "training_*.txt"))
-                    {
-                        System.IO.File.Delete(f);
-                        deleted = true;
-                    }
-                }
-
-                statusText.Text = deleted
-                    ? Loc.Tr("training_reset_done", "Training data deleted — the model returns to its built-in defaults on next launch")
-                    : Loc.Tr("training_none_yet", "No user training data yet");
+                        TryDelete(f);
             }
             catch (Exception ex)
             {
-                statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
-                    Loc.Tr("training_reset", "Reset"), ex.Message);
+                failures.Add(ex.Message);
             }
+
+            if (failures.Count > 0)
+            {
+                // Partial (or glob-level) failure: deleted-what-we-could —
+                // the remaining files stay and Reset can simply be retried.
+                statusText.Text = Loc.Tr("training_reset_partial",
+                    $"Deleted training data where possible — {failures.Count} item(s) failed; press Reset again to retry");
+                return;
+            }
+
+            statusText.Text = deleted
+                ? Loc.Tr("training_reset_done", "Training data deleted — the model returns to its built-in defaults on next launch")
+                : Loc.Tr("training_none_yet", "No user training data yet");
         };
 
         btnRow.Children.Add(importBtn);
