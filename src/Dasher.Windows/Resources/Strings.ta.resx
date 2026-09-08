@@ -563,8 +563,47 @@
   <data name="training" xml:space="preserve">
     <value>பயிற்சி</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>தற்போதைய பயிற்சி தரவு: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>பயிற்சி தரவு</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>இறக்குமதி மொழி மாதிரியிலும் உங்கள் சேமிப்பு பயிற்சி தரவிலும் உரையைச் சேர்க்கிறது (மறுதொடக்கங்களிலும் நிலவும்). ஏற்றுமதி காப்புப்பிரதி அல்லது பரிமாற்றத்திற்காக உங்கள் பயிற்சி தரவைச் சேமிக்கிறது. மீட்டமைப்பு அனைத்து பயனர் பயிற்சி தரவையும் நீக்குகிறது — அடுத்த தொடக்கத்தில் மாதிரி தனது உள்ளமைக்கப்பட்ட இயல்புநிலைக்குத் திரும்பும்.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>பயிற்சி தரவை ஏற்றுமதி செய்யவும்</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0}க்கு ஏற்றுமதி செய்யப்பட்டது</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} தோல்வியுற்றது: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>பயிற்சி உரையை இறக்குமதி செய்யவும்</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB பயிற்சி உரை இறக்குமதி செய்யப்பட்டது</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} KB இறக்குமதி செய்யப்பட்டது — அடுத்த தொடக்கத்தில் முழுமையாக பயன்படும் (நேரடி மாதிரி {1} திருப்பியது)</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>இன்னும் பயனர் பயிற்சி தரவு இல்லை</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>ஏற்றுமதி செய்ய இன்னும் பயிற்சி தரவு இல்லை</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>மீட்டமை</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>பயிற்சி தரவு நீக்கப்பட்டது — அடுத்த தொடக்கத்தில் மாதிரி தனது உள்ளமைக்கப்பட்ட இயல்புநிலைக்குத் திரும்பும்</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>முடிந்த இடங்களில் பயிற்சி தரவு நீக்கப்பட்டது — {0} உருப்படி(கள்) தோல்வியுற்றன; மீண்டும் முயற்சிக்க மீட்டமையை மீண்டும் அழுத்தவும்</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>டர்போ</value>

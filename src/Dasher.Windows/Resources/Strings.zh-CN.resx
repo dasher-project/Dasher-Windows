@@ -560,8 +560,47 @@
   <data name="training" xml:space="preserve">
     <value>训练</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>当前训练数据：{0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>训练数据</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>导入会将文本添加到语言模型和您累积的训练数据中（重启后仍保留）。导出可保存您的训练数据以用于备份或传输。重置会删除所有用户训练数据 — 模型将在下次启动时恢复为内置默认值。</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>导出训练数据</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>导出到{0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} 失败：{1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>导入训练文本</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>导入了 {0} KB 的训练文本</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>已导入 {0} KB — 将在下次启动时完全生效（实时模型返回了 {1}）</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>尚无用户训练数据</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>尚无可导出的训练数据</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>训练数据已删除 - 模型在下次启动时恢复其内置默认值</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>已尽可能删除训练数据 — {0} 项失败；请再次点击重置以重试</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>涡轮</value>

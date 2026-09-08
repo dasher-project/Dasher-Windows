@@ -560,8 +560,47 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="training" xml:space="preserve">
     <value>Mafunzo</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Data ya sasa ya mafunzo: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Data ya Mafunzo</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Kuingiza huongeza maandishi kwenye mfano wa lugha na data yako ya mafunzo iliyokusanywa (hubaki kwenye kuanzisha upya). Kuhamisha huhifadhi data yako ya mafunzo kwa ajili ya nakala rudufu au uhamisho. Kuweka upya hunfuta data yote ya mafunzo ya mtumiaji — mfano utarudi kwa msingi wake uliyojengwa ndani kwenye uzinduaji ujao.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Hamisha data ya mafunzo</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Imesafirishwa hadi {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} imeshindwa: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Ingiza maandishi ya mafunzo</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Imeingiza KB {0} ya maandishi ya mafunzo</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Imeingizwa {0} KB — itatumika kikamilifu kwenye uzinduzi unaofuata (muundo wa moja kwa moja umerejeshwa {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Hakuna data ya mafunzo ya mtumiaji bado</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Hakuna data ya mafunzo ya kuhamisha bado</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Weka upya</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Data ya mafunzo imefutwa - muundo unarudi kwa chaguomsingi zilizojumuishwa kwenye uzinduzi unaofuata</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Data ya mafunzo ilifutwa inapowezekana - {0} kipengee/vipengee havikufaulu; bonyeza Rudisha tena ili kujaribu tena</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Kiwango cha kuandika</value>

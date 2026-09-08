@@ -545,8 +545,47 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
   <data name="training" xml:space="preserve">
     <value>Uddannelse</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Aktuelle træningsdata: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Træningsdata</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Import tilføjer tekst til sprogmodellen og dine akkumulerede træningsdata (gemt på tværs af genstarter). Eksport gemmer dine træningsdata til backup eller overførsel. Nulstilling sletter alle brugertræningsdata - modellen vender tilbage til dens indbyggede standardindstillinger ved næste lancering.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Eksporter træningsdata</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Eksporteret til {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} mislykkedes: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Importer træningstekst</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Importerede {0} KB træningstekst</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Importeret {0} KB — gælder fuldt ud ved næste lancering (live model returneret {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Ingen brugertræningsdata endnu</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Ingen træningsdata at eksportere endnu</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Nulstil</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Træningsdata slettet — modellen vender tilbage til dens indbyggede standardindstillinger ved næste lancering</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Slettede træningsdata, hvor det var muligt — {0} element(er) mislykkedes; tryk på Reset igen for at prøve igen</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Skrivehastighed</value>

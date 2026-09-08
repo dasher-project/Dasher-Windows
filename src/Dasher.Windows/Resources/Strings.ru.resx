@@ -557,8 +557,47 @@
   <data name="training" xml:space="preserve">
     <value>Обучение</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Текущие данные обучения: {0} КБ.</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>обучающие данные</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Импорт добавляет текст в языковую модель и накопленные данные обучения (сохраняются при перезапуске). Экспорт сохраняет данные тренировок для резервного копирования или передачи. При сбросе удаляются все данные обучения пользователей — при следующем запуске модель возвращается к встроенным настройкам по умолчанию.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Экспортировать данные обучения</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Экспортировано в {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>Сбой {0}: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Импортировать обучающий текст</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Импортировано {0} КБ обучающего текста</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Импортировано {0} КБ — полностью применяется при следующем запуске (действующая модель возвращена {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Данных по обучению пользователей пока нет.</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Пока нет обучающих данных для экспорта.</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Перезагрузить</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Данные обучения удалены — модель возвращается к своим встроенным настройкам по умолчанию при следующем запуске.</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Данные обучения удалены там, где это удалось — {0} элемент(ов) не удалось; нажмите «Сбросить» ещё раз, чтобы повторить</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>Турбо</value>

@@ -563,8 +563,47 @@
   <data name="training" xml:space="preserve">
     <value>آموزش</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>داده های آموزشی فعلی: {0} کیلوبایت</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>داده‌های آموزشی</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Import متنی را به مدل زبان و داده‌های آموزشی انباشته‌شده شما اضافه می‌کند (در طول راه‌اندازی مجدد حفظ می‌شود). Export داده های آموزشی شما را برای پشتیبان گیری یا انتقال ذخیره می کند. بازنشانی تمام داده‌های آموزش کاربر را حذف می‌کند - مدل در راه‌اندازی بعدی به پیش‌فرض‌های داخلی خود بازمی‌گردد.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>صادرات داده های آموزشی</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>به {0} صادر شد</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} ناموفق بود: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>وارد کردن متن آموزشی</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} کیلوبایت متن آموزشی وارد شد</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} کیلوبایت وارد شده — در راه اندازی بعدی کاملاً اعمال می شود (مدل زنده {1} برگردانده شد)</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>هنوز اطلاعاتی برای آموزش کاربر وجود ندارد</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>هنوز اطلاعات آموزشی برای صادرات وجود ندارد</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>بازنشانی کنید</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>داده های آموزشی حذف شد - مدل در راه اندازی بعدی به پیش فرض های داخلی خود باز می گردد</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>در صورت امکان، داده‌های آموزشی حذف شد - {0} مورد (ها) ناموفق بود. دوباره Reset را فشار دهید تا دوباره امتحان کنید</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>توربو</value>

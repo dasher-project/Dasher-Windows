@@ -560,8 +560,47 @@
   <data name="training" xml:space="preserve">
     <value>প্রশিক্ষণ</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>বর্তমান প্রশিক্ষণ ডেটা: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>প্রশিক্ষণ ডেটা</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>আমদানি ভাষা মডেলে পাঠ্য যোগ করে এবং আপনার সঞ্চিত প্রশিক্ষণ ডেটা (পুনঃসূচনা জুড়ে রাখা)। রপ্তানি ব্যাকআপ বা স্থানান্তরের জন্য আপনার প্রশিক্ষণ ডেটা সংরক্ষণ করে। রিসেট সমস্ত ব্যবহারকারী প্রশিক্ষণ ডেটা মুছে দেয় — পরবর্তী লঞ্চে মডেলটি তার বিল্ট-ইন ডিফল্টে ফিরে আসে।</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>রপ্তানি প্রশিক্ষণ তথ্য</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0} এ রপ্তানি করা হয়েছে</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} ব্যর্থ হয়েছে: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>প্রশিক্ষণ পাঠ্য আমদানি করুন</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>প্রশিক্ষণ পাঠ্যের {0} KB আমদানি করা হয়েছে৷</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>আমদানি করা {0} KB — পরবর্তী লঞ্চে সম্পূর্ণরূপে প্রযোজ্য (লাইভ মডেল {1} ফেরত)</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>এখনও কোন ব্যবহারকারী প্রশিক্ষণ তথ্য</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>এখনো রপ্তানি করার জন্য কোনো প্রশিক্ষণের তথ্য নেই</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>রিসেট করুন</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>প্রশিক্ষণের ডেটা মুছে ফেলা হয়েছে — পরবর্তী লঞ্চে মডেলটি তার বিল্ট-ইন ডিফল্টে ফিরে আসে</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>যেখানে সম্ভব প্রশিক্ষণের ডেটা মুছে ফেলা হয়েছে — {0}টি আইটেম(গুলি) ব্যর্থ হয়েছে; পুনরায় চেষ্টা করতে আবার রিসেট টিপুন</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>টার্বো</value>

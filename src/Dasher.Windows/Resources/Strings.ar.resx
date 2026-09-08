@@ -563,8 +563,47 @@
   <data name="training" xml:space="preserve">
     <value>تمرين</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>بيانات التدريب الحالية: {0} كيلوبايت</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>بيانات التدريب</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>يضيف الاستيراد نصًا إلى نموذج اللغة وبيانات التدريب المتراكمة (التي يتم الاحتفاظ بها خلال عمليات إعادة التشغيل). يحفظ التصدير بيانات التدريب الخاصة بك للنسخ الاحتياطي أو النقل. تؤدي إعادة التعيين إلى حذف جميع بيانات تدريب المستخدم — ويعود النموذج إلى إعداداته الافتراضية المضمنة عند الإطلاق التالي.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>تصدير بيانات التدريب</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>تم التصدير إلى {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} فشل: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>استيراد نص التدريب</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>تم استيراد {0} كيلوبايت من نص التدريب</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>تم استيراد {0} كيلوبايت — ينطبق بالكامل عند التشغيل التالي (تم إرجاع النموذج المباشر {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>لا توجد بيانات تدريب المستخدم حتى الآن</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>لا توجد بيانات تدريب لتصديرها حتى الآن</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>إعادة ضبط</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>تم حذف بيانات التدريب — يعود النموذج إلى إعداداته الافتراضية المضمنة عند الإطلاق التالي</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>تم حذف بيانات التدريب حيثما أمكن — فشل {0} عنصر (عناصر)؛ اضغط على إعادة تعيين مرة أخرى لإعادة المحاولة</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>توربيني</value>

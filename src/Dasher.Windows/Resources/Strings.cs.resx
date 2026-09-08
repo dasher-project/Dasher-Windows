@@ -545,8 +545,47 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   <data name="training" xml:space="preserve">
     <value>Výcvik</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Aktuální tréninková data: {0} kB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Trénovací data</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Import přidá text do jazykového modelu a vaše nashromážděná tréninková data (uchovaná po restartech). Export uloží vaše tréninková data pro zálohování nebo přenos. Reset odstraní všechna uživatelská trénovací data – model se při příštím spuštění vrátí ke svým vestavěným výchozím hodnotám.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Export tréninkových dat</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Exportováno do {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} se nezdařilo: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Import tréninkového textu</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Importováno {0} kB tréninkového textu</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Importované {0} kB – plně platí při příštím spuštění (živý model vrátil {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Zatím žádné údaje o školení uživatelů</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Zatím žádná tréninková data k exportu</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Resetovat</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Tréninková data byla odstraněna – model se při příštím spuštění vrátí ke svým vestavěným výchozím nastavením</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Tam, kde to bylo možné, byla smazána tréninková data – počet položek selhal: {0}; znovu stiskněte Reset pro opakování</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Rychlost psaní</value>

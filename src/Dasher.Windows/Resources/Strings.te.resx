@@ -563,8 +563,47 @@
   <data name="training" xml:space="preserve">
     <value>శిక్షణ</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>ప్రస్తుత శిక్షణ డేటా: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>శిక్షణ డేటా</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>దిగుమతి భాషా మోడల్ మరియు మీ పేర్కొన్న శిక్షణ డేటాకు పాఠ్యాన్ని జోడిస్తుంది (పునఃప్రారంభాలలో నిలుస్తుంది). ఎగుమతి బ్యాకప్ లేదా బదిలీ కోసం మీ శిక్షణ డేటాను సేవ్ చేస్తుంది. రీసెట్ అన్ని వినియోగదారు శిక్షణ డేటాను తొలగిస్తుంది — తదుపరి ప్రారంభంలో మోడల్ దాని అంతర్గత డిఫాల్ట్‌లకు తిరిగి వస్తుంది.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>శిక్షణ డేటాను ఎగుమతి చేయండి</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0}కి ఎగుమతి చేయబడింది</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} విఫలమైంది: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>శిక్షణ వచనాన్ని దిగుమతి చేయండి</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB శిక్షణ పాఠ్యం దిగుమతి చేయబడింది</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>దిగుమతి చేయబడిన {0} KB — తదుపరి ప్రయోగానికి పూర్తిగా వర్తిస్తుంది (ప్రత్యక్ష మోడల్ తిరిగి ఇవ్వబడింది {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>వినియోగదారు శిక్షణ డేటా ఇంకా లేదు</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>ఎగుమతి చేయడానికి ఇంకా శిక్షణ డేటా లేదు</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>రీసెట్</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>శిక్షణ డేటా తొలగించబడింది - మోడల్ తదుపరి లాంచ్‌లో దాని అంతర్నిర్మిత డిఫాల్ట్‌లకు తిరిగి వస్తుంది</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>సాధ్యమైన చోట శిక్షణ డేటా తొలగించబడింది — {0} అంశం(లు) విఫలమైంది; మళ్లీ ప్రయత్నించడానికి మళ్లీ రీసెట్ నొక్కండి</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>టర్బో</value>

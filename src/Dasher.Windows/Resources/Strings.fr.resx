@@ -513,8 +513,47 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="training" xml:space="preserve">
     <value>Entraînement</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Données d'entraînement actuelles : {0} Ko</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Données de formation</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>L'importation ajoute du texte au modèle de langage et à vos données d'entraînement accumulées (conservées lors des redémarrages). L'exportation enregistre vos données d'entraînement pour la sauvegarde ou le transfert. La réinitialisation supprime toutes les données de formation des utilisateurs : le modèle revient à ses valeurs par défaut intégrées au prochain lancement.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Exporter les données de formation</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Exporté vers {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} a échoué : {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Importer le texte de formation</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>Importation de {0} Ko de texte d'entraînement</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>{0} Ko importés : s'applique entièrement au prochain lancement (modèle actif renvoyé {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Aucune donnée de formation des utilisateurs pour l'instant</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Aucune donnée d'entraînement à exporter pour l'instant</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Réinitialiser</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>Données d'entraînement supprimées : le modèle revient à ses valeurs par défaut intégrées au prochain lancement</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>Données d'entraînement supprimées lorsque cela est possible : {0} élément(s) ont échoué ; appuyez à nouveau sur Réinitialiser pour réessayer</value>
   </data>
   <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
     <value>La saisie dans d'autres applications nécessite l'accès à /dev/uinput, ce qu'un </value>

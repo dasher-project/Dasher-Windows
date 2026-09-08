@@ -560,8 +560,47 @@
   <data name="training" xml:space="preserve">
     <value>ತರಬೇತಿ</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>ಪ್ರಸ್ತುತ ತರಬೇತಿ ಡೇಟಾ: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>ತರಬೇತಿ ಡೇಟಾ</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>ಆಮದು ಭಾಷಾ ಮಾದರಿಗೆ ಪಠ್ಯವನ್ನು ಸೇರಿಸುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ಸಂಚಿತ ತರಬೇತಿ ಡೇಟಾ (ಮರುಪ್ರಾರಂಭದಾದ್ಯಂತ ಇರಿಸಲಾಗುತ್ತದೆ). ರಫ್ತು ಬ್ಯಾಕಪ್ ಅಥವಾ ವರ್ಗಾವಣೆಗಾಗಿ ನಿಮ್ಮ ತರಬೇತಿ ಡೇಟಾವನ್ನು ಉಳಿಸುತ್ತದೆ. ಮರುಹೊಂದಿಸಿ ಎಲ್ಲಾ ಬಳಕೆದಾರ ತರಬೇತಿ ಡೇಟಾವನ್ನು ಅಳಿಸುತ್ತದೆ - ಮುಂದಿನ ಉಡಾವಣೆಯಲ್ಲಿ ಮಾದರಿಯು ಅದರ ಅಂತರ್ನಿರ್ಮಿತ ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಹಿಂತಿರುಗುತ್ತದೆ.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>ತರಬೇತಿ ಡೇಟಾವನ್ನು ರಫ್ತು ಮಾಡಿ</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0} ಗೆ ರಫ್ತು ಮಾಡಲಾಗಿದೆ</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} ವಿಫಲವಾಗಿದೆ: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>ತರಬೇತಿ ಪಠ್ಯವನ್ನು ಆಮದು ಮಾಡಿ</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB ತರಬೇತಿ ಪಠ್ಯವನ್ನು ಆಮದು ಮಾಡಲಾಗಿದೆ</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>ಆಮದು ಮಾಡಿದ {0} KB — ಮುಂದಿನ ಉಡಾವಣೆಯಲ್ಲಿ ಸಂಪೂರ್ಣವಾಗಿ ಅನ್ವಯಿಸುತ್ತದೆ (ಲೈವ್ ಮಾಡೆಲ್ ಹಿಂತಿರುಗಿಸಲಾಗಿದೆ {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>ಬಳಕೆದಾರರ ತರಬೇತಿ ಡೇಟಾ ಇನ್ನೂ ಇಲ್ಲ</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>ರಫ್ತು ಮಾಡಲು ಇನ್ನೂ ಯಾವುದೇ ತರಬೇತಿ ಡೇಟಾ ಇಲ್ಲ</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>ಮರುಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>ತರಬೇತಿ ಡೇಟಾವನ್ನು ಅಳಿಸಲಾಗಿದೆ - ಮುಂದಿನ ಉಡಾವಣೆಯಲ್ಲಿ ಮಾದರಿಯು ಅದರ ಅಂತರ್ನಿರ್ಮಿತ ಡೀಫಾಲ್ಟ್‌ಗಳಿಗೆ ಹಿಂತಿರುಗುತ್ತದೆ</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>ಸಾಧ್ಯವಿರುವಲ್ಲಿ ತರಬೇತಿ ಡೇಟಾವನ್ನು ಅಳಿಸಲಾಗಿದೆ - {0} ಐಟಂ(ಗಳು) ವಿಫಲವಾಗಿದೆ; ಮರುಪ್ರಯತ್ನಿಸಲು ಪುನಃ ಮರುಹೊಂದಿಸಿ ಒತ್ತಿರಿ</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>ಟರ್ಬೊ</value>

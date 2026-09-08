@@ -545,8 +545,47 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   <data name="training" xml:space="preserve">
     <value>Edzés</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>Jelenlegi edzési adatok: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>Betanítási adatok</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>Az importálás szöveget ad a nyelvi modellhez és a felhalmozott edzési adatokhoz (az újraindítások során megőrzik). Az Exportálás menti az edzési adatokat biztonsági mentés vagy átvitel céljából. A visszaállítás törli az összes felhasználói képzési adatot – a modell a következő indításakor visszaáll a beépített alapértékeihez.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>Képzési adatok exportálása</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>Exportálva ide: {0}</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} sikertelen: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>Képzési szöveg importálása</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB képzési szöveg importálva</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>Importált {0} KB – a következő indításkor teljes mértékben érvényes (az élő modell visszaküldése: {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>Még nincsenek felhasználói képzési adatok</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>Még nincsenek exportálandó edzési adatok</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>Visszaállítás</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>A képzési adatok törölve – a modell a következő indításkor visszaáll a beépített alapértékeihez</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>A képzési adatok törölve, ahol lehetséges – {0} elem meghiúsult; az újrapróbálkozáshoz nyomja meg újra a Reset gombot</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>Turbó</value>

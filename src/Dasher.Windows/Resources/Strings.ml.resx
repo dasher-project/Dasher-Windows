@@ -566,8 +566,47 @@
   <data name="training" xml:space="preserve">
     <value>പരിശീലനം</value>
   </data>
+  <data name="training_current_size" xml:space="preserve">
+    <value>നിലവിലെ പരിശീലന ഡാറ്റ: {0} KB</value>
+  </data>
   <data name="training_data" xml:space="preserve">
     <value>പരിശീലന ഡാറ്റ</value>
+  </data>
+  <data name="training_data_description" xml:space="preserve">
+    <value>ഇറക്കുമതി ഭാഷാ മോഡലിലേക്കും നിങ്ങളുടെ പരിശീലന ഡാറ്റയിലേക്കും ടെക്‌സ്‌റ്റ് ചേർക്കുന്നു (പുനരാരംഭിക്കുന്നതിലുടനീളം സൂക്ഷിക്കുന്നു). കയറ്റുമതി നിങ്ങളുടെ പരിശീലന ഡാറ്റ ബാക്കപ്പിനും കൈമാറ്റത്തിനും സംരക്ഷിക്കുന്നു. റീസെറ്റ് എല്ലാ ഉപയോക്തൃ പരിശീലന ഡാറ്റയും ഇല്ലാതാക്കുന്നു - അടുത്ത ലോഞ്ചിൽ മോഡൽ അതിൻ്റെ ബിൽറ്റ്-ഇൻ ഡിഫോൾട്ടുകളിലേക്ക് മടങ്ങുന്നു.</value>
+  </data>
+  <data name="training_export" xml:space="preserve">
+    <value>പരിശീലന ഡാറ്റ കയറ്റുമതി ചെയ്യുക</value>
+  </data>
+  <data name="training_exported" xml:space="preserve">
+    <value>{0} എന്നതിലേക്ക് കയറ്റുമതി ചെയ്തു</value>
+  </data>
+  <data name="training_failed" xml:space="preserve">
+    <value>{0} പരാജയപ്പെട്ടു: {1}</value>
+  </data>
+  <data name="training_import" xml:space="preserve">
+    <value>പരിശീലന വാചകം ഇറക്കുമതി ചെയ്യുക</value>
+  </data>
+  <data name="training_imported" xml:space="preserve">
+    <value>{0} KB പരിശീലന വാചകം ഇറക്കുമതി ചെയ്തു</value>
+  </data>
+  <data name="training_imported_restart" xml:space="preserve">
+    <value>ഇറക്കുമതി ചെയ്‌ത {0} KB — അടുത്ത ലോഞ്ചിൽ പൂർണ്ണമായും ബാധകമാകും (തത്സമയ മോഡൽ തിരികെ നൽകി {1})</value>
+  </data>
+  <data name="training_none_yet" xml:space="preserve">
+    <value>ഇതുവരെ ഉപയോക്തൃ പരിശീലന ഡാറ്റകളൊന്നുമില്ല</value>
+  </data>
+  <data name="training_nothing_to_export" xml:space="preserve">
+    <value>കയറ്റുമതി ചെയ്യാൻ ഇതുവരെ പരിശീലന ഡാറ്റകളൊന്നുമില്ല</value>
+  </data>
+  <data name="training_reset" xml:space="preserve">
+    <value>പുനഃസജ്ജമാക്കുക</value>
+  </data>
+  <data name="training_reset_done" xml:space="preserve">
+    <value>പരിശീലന ഡാറ്റ ഇല്ലാതാക്കി - അടുത്ത ലോഞ്ചിൽ മോഡൽ അതിൻ്റെ ബിൽറ്റ്-ഇൻ ഡിഫോൾട്ടുകളിലേക്ക് മടങ്ങുന്നു</value>
+  </data>
+  <data name="training_reset_partial" xml:space="preserve">
+    <value>സാധ്യമാകുന്നിടത്ത് പരിശീലന ഡാറ്റ ഇല്ലാതാക്കി - {0} ഇനം(ങ്ങൾ) പരാജയപ്പെട്ടു; വീണ്ടും ശ്രമിക്കാൻ വീണ്ടും റീസെറ്റ് അമർത്തുക</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>ടർബോ</value>
