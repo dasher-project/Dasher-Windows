@@ -433,34 +433,42 @@ public static class V5MigrationService
                     Directory.CreateDirectory(destDir);
                     var dest = Path.Combine(destDir, name);
 
-                    if (isTraining && File.Exists(dest))
+                    if (isTraining)
                     {
-                        // The root training file accumulates v6 learning — a
-                        // collision must MERGE, not skip (greptile: "training
-                        // collisions skip migration data" — the generic
-                        // skip-if-exists silently dropped the alphabet's v5
-                        // history). Append the v5 content; overlapping text
-                        // with the v6 file just reinforces counts. Idempotent
-                        // via a sidecar marker: migration can re-run after an
-                        // app upgrade (the completion flag is version-
-                        // specific) and must not append the corpus twice
-                        // (greptile: "version upgrades duplicate migrated
-                        // training"). Failures are RECORDED, not swallowed —
-                        // the caller must not mark migration complete while a
-                        // training merge failed, or the v5 learning is
-                        // silently lost with no retry (greptile: "failed
-                        // merge still marks completion").
-                        var marker = dest + ".v5merged";
-                        if (File.Exists(marker))
-                        {
-                            if (!result.CopiedFiles.Contains(name))
-                                result.CopiedFiles.Add(name);
-                            continue;
-                        }
+                        // Training files take a dedicated path: the root file
+                        // accumulates v6 learning, so a collision must MERGE,
+                        // not skip (greptile: "training collisions skip
+                        // migration data"), and a fresh copy must record
+                        // failures too — the generic per-directory catch
+                        // swallows them, silently losing v5 learning while
+                        // migration still completes.
+                        //
+                        // Idempotent by CONTENT, not bookkeeping: append only
+                        // when the v5 corpus is not already in the file. A
+                        // sidecar-marker approach had two holes — the marker
+                        // was absent after an initial noncollision copy (a
+                        // later version-triggered re-migration hit the
+                        // collision path and appended again), and a
+                        // marker-write failure after a successful append
+                        // duplicated the corpus on retry. The contains-check
+                        // makes every re-run — whatever preceded it — a no-op
+                        // once the corpus is in. Overlapping text with v6
+                        // learning just reinforces PPM counts.
                         try
                         {
-                            File.AppendAllText(dest, File.ReadAllText(f) + "\n");
-                            File.WriteAllText(marker, UpdateChecker.GetCurrentVersion());
+                            var v5text = File.ReadAllText(f);
+                            if (!File.Exists(dest))
+                            {
+                                File.Copy(f, dest);
+                            }
+                            else if (!File.ReadAllText(dest).Contains(v5text))
+                            {
+                                File.AppendAllText(dest, v5text + "\n");
+                                // Verify: a torn append (disk full mid-write)
+                                // must not silently pass.
+                                if (!File.ReadAllText(dest).Contains(v5text))
+                                    throw new IOException("training merge verification failed");
+                            }
                             if (!result.CopiedFiles.Contains(name))
                                 result.CopiedFiles.Add(name);
                         }
