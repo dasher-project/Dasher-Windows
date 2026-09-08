@@ -254,6 +254,31 @@ public static class NativeBridge
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_reset_cps(IntPtr ctx);
+
+    // ── Context awareness (RFC 0015) ─────────────────────────────────────────
+
+    /// <summary>Re-anchor the model at a UTF-8 byte offset in the buffer.</summary>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_set_offset(IntPtr ctx, int offset);
+
+    /// <summary>
+    /// Replace the edit buffer with the target field's text and anchor at the
+    /// caret (UTF-8 byte offset). Emits output event 2 (buffer cleared) first —
+    /// subscribers resync without injecting.
+    /// </summary>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_seed_buffer(IntPtr ctx,
+        [MarshalAs(UnmanagedType.LPStr)] string text, int caretOffset);
+
+    /// <summary>Convert a UTF-16 code-unit caret (UIA/EDIT) to a UTF-8 byte offset.</summary>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_byte_offset_from_utf16(
+        [MarshalAs(UnmanagedType.LPStr)] string utf8Text, int utf16Offset);
+
+    /// <summary>Convert a codepoint caret (AX/atspi) to a UTF-8 byte offset.</summary>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_byte_offset_from_codepoints(
+        [MarshalAs(UnmanagedType.LPStr)] string utf8Text, int codepointOffset);
 }
 
 [StructLayout(LayoutKind.Sequential)]

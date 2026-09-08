@@ -502,6 +502,19 @@
             <Button x:Name="KbControlBtn" Click="OnToggleControlMode" ToolTip.Tip="Control mode">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.MousePointerClick}" Size="18"/>
             </Button>
+            <!-- RFC 0015 clipboard bridge: act on the TARGET's selection -->
+            <Button x:Name="KbCopyBtn" Click="OnKbCopy" ToolTip.Tip="Copy all (to clipboard)">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Copy}" Size="18"/>
+            </Button>
+            <Button Click="OnKbCut" ToolTip.Tip="Cut selection in target app">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Scissors}" Size="18"/>
+            </Button>
+            <Button Click="OnKbPaste" ToolTip.Tip="Paste into target app">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.ClipboardPaste}" Size="18"/>
+            </Button>
+            <Button Click="OnKbSelectAll" ToolTip.Tip="Select all in target app">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.TextCursorInput}" Size="18"/>
+            </Button>
             <Button Click="OnTogglePrefs" ToolTip.Tip="Settings">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.Settings}" Size="18"/>
             </Button>
