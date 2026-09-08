@@ -12,6 +12,13 @@ public class V5MigrationResult
     public List<string> Imported { get; set; } = new();
     public List<string> Skipped { get; set; } = new();
     public List<string> CopiedFiles { get; set; } = new();
+
+    /// <summary>
+    /// Files whose migration failed (training merges). Non-empty suppresses
+    /// the completion marker so migration is re-offered on next launch.
+    /// </summary>
+    public List<string> FailedFiles { get; set; } = new();
+
     public List<(int key, string value)> DeferredParameters { get; set; } = new();
     public bool HasData { get; set; }
     public string Alphabet { get; set; } = "";
@@ -43,6 +50,49 @@ public static class V5MigrationService
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher");
 
     private static readonly string MigrationFlagFile = Path.Combine(V6Dir, "v5_migration_completed");
+
+    /// <summary>
+    /// Per-training-file once-EVER migration flags: &lt;training file&gt;.v5migrated
+    /// beside the destination in V6Dir. Unlike MigrationFlagFile these are not
+    /// version-scoped, so version-triggered re-migrations never touch an
+    /// alphabet's training again after its first successful migration — in
+    /// particular a Reset-then-upgrade must not resurrect the corpus the user
+    /// deleted. PER FILE, not global: a v5 profile can hold training for
+    /// several alphabets, and a single global flag dropped every alphabet
+    /// after the first (greptile: "global flag drops later alphabets").
+    /// Deliberately not deleted by Settings' training Reset. The content
+    /// contains-check below makes flag-write-failure retries no-ops, so the
+    /// flag can never cause duplication.
+    /// </summary>
+    private static string TrainingMigratedFlagFor(string trainingFileName) =>
+        Path.Combine(V6Dir, trainingFileName + ".v5migrated");
+
+    /// <summary>
+    /// Called by Settings' training Reset BEFORE it deletes anything: writes
+    /// the .v5migrated flag for every v5 source training file. This settles
+    /// the migration lifecycle at Reset time — without it, a corpus whose
+    /// flag write had failed (rare disk error) plus a Reset that deleted the
+    /// only content evidence left a later retry free to copy the v5 corpus
+    /// back, restoring what the user explicitly deleted (greptile: "failed
+    /// flag permits resurrection"). Flags-first ordering gives clean-failure
+    /// semantics: a flag-write failure aborts the Reset before any deletion,
+    /// and the user can retry.
+    /// </summary>
+    public static void MarkTrainingReset()
+    {
+        var sources = new List<string> { V5Dir };
+        foreach (var sysDir in V5SystemDirs)
+            if (Directory.Exists(sysDir))
+                sources.Add(sysDir);
+
+        foreach (var dir in sources)
+        {
+            if (!Directory.Exists(dir)) continue;
+            foreach (var f in Directory.GetFiles(dir, "training_*", SearchOption.TopDirectoryOnly))
+                File.WriteAllText(TrainingMigratedFlagFor(Path.GetFileName(f)),
+                    "reset " + DateTime.UtcNow.ToString("O"));
+        }
+    }
 
     /// <summary>
     /// Only re-offer if the app version changed since last migration.
@@ -308,8 +358,12 @@ public static class V5MigrationService
         // Copy user data files
         CopyUserDataFiles(result);
 
-        // Mark as completed
-        MarkCompleted();
+        // Mark as completed — UNLESS a training merge failed: migration must
+        // be re-offered (next launch) so the v5 learning isn't silently
+        // dropped. The merge itself is idempotent (sidecar marker), so a
+        // retry is safe.
+        if (result.FailedFiles.Count == 0)
+            MarkCompleted();
 
         return result;
     }
@@ -388,6 +442,21 @@ public static class V5MigrationService
                 sourceDirs.Add(sysDir);
         }
 
+        // Training-flag bookkeeping, scoped to RUNS not sources: a basename
+        // can appear in BOTH the user dasher.rc and an installed system .rc
+        // with DIFFERENT accumulated corpora — every source must merge, so
+        // the flag check only consults flags from PREVIOUS runs (snapshot
+        // before the loop) and flags are written AFTER a basename's sources
+        // all succeeded (greptile: "basename flags skip training").
+        var migratedBefore = new HashSet<string>();
+        var trainingThisRun = new Dictionary<string, bool>(); // name → all sources ok
+        foreach (var f in Directory.Exists(V6Dir)
+                     ? Directory.GetFiles(V6Dir, "training_*.v5migrated")
+                     : Array.Empty<string>())
+        {
+            migratedBefore.Add(Path.GetFileName(f).Replace(".v5migrated", ""));
+        }
+
         foreach (var sourceDir in sourceDirs)
         {
             try
@@ -397,6 +466,7 @@ public static class V5MigrationService
                 foreach (var f in Directory.GetFiles(sourceDir, "*.*", SearchOption.TopDirectoryOnly))
                 {
                     var name = Path.GetFileName(f);
+                    bool isTraining = name.StartsWith("training_");
                     string? destSubdir = null;
 
                     if (name.StartsWith("alphabet."))
@@ -405,14 +475,95 @@ public static class V5MigrationService
                         destSubdir = "colours";
                     else if (name.StartsWith("control."))
                         destSubdir = "control";
-                    else if (name.StartsWith("training_"))
-                        destSubdir = "training";
+                    else if (isTraining)
+                        // The ENGINE appends adaptive learning to the ROOT of
+                        // the user dir (ResolveUserDataPath) and the startup
+                        // scan is recursive — the v5 training file must land
+                        // in the same place so there is ONE accumulated file
+                        // the UI exports/resets (issue #53: the old
+                        // training\ copy diverged silently and exported
+                        // stale snapshots). destSubdir stays null → root.
+                        destSubdir = null;
                     else
                         continue;
 
                     var destDir = destSubdir != null ? Path.Combine(V6Dir, destSubdir) : V6Dir;
                     Directory.CreateDirectory(destDir);
                     var dest = Path.Combine(destDir, name);
+
+                    if (isTraining)
+                    {
+                        // Training files take a dedicated path: the root file
+                        // accumulates v6 learning, so a collision must MERGE,
+                        // not skip (greptile: "training collisions skip
+                        // migration data"), and a fresh copy must record
+                        // failures too — the generic per-directory catch
+                        // swallows them, silently losing v5 learning while
+                        // migration still completes.
+                        //
+                        // ONCE-EVER PER ALPHABET across RUNS: flags from
+                        // previous runs block re-migration (so a user who
+                        // Resets training and later upgrades never gets the
+                        // corpus resurrected — "reset training returns after
+                        // upgrade"), but WITHIN this run every source dir's
+                        // copy of a basename merges — user dasher.rc and an
+                        // installed system .rc can hold DIFFERENT accumulated
+                        // corpora under one name, and a mid-run flag write
+                        // would skip the second ("basename flags skip
+                        // training"). Flags are written after the loop, per
+                        // basename, only when every source succeeded. They
+                        // deliberately survive Reset — Settings' Reset deletes
+                        // the training file, not these flags.
+                        if (migratedBefore.Contains(name))
+                        {
+                            if (!result.CopiedFiles.Contains(name))
+                                result.CopiedFiles.Add(name);
+                            continue;
+                        }
+                        //
+                        // Idempotent by CONTENT, not bookkeeping: append only
+                        // when the v5 corpus is not already in the file. A
+                        // sidecar-marker approach had two holes — the marker
+                        // was absent after an initial noncollision copy (a
+                        // later version-triggered re-migration hit the
+                        // collision path and appended again), and a
+                        // marker-write failure after a successful append
+                        // duplicated the corpus on retry. The contains-check
+                        // makes every re-run — whatever preceded it — a no-op
+                        // once the corpus is in. Overlapping text with v6
+                        // learning just reinforces PPM counts.
+                        try
+                        {
+                            var v5text = File.ReadAllText(f);
+                            if (!File.Exists(dest))
+                            {
+                                File.Copy(f, dest);
+                            }
+                            else if (!File.ReadAllText(dest).Contains(v5text))
+                            {
+                                File.AppendAllText(dest, v5text + "\n");
+                                // Verify: a torn append (disk full mid-write)
+                                // must not silently pass.
+                                if (!File.ReadAllText(dest).Contains(v5text))
+                                    throw new IOException("training merge verification failed");
+                            }
+                            // Success latch: default TRUE for the first source
+                            // of a basename; a failure anywhere below/earlier
+                            // latches false for the run. (GetValueOrDefault
+                            // without a default returned false — the flag was
+                            // never written and Reset-then-upgrade could
+                            // resurrect the corpus. Greptile.)
+                            trainingThisRun[name] = trainingThisRun.GetValueOrDefault(name, true);
+                            if (!result.CopiedFiles.Contains(name))
+                                result.CopiedFiles.Add(name);
+                        }
+                        catch (Exception ex)
+                        {
+                            trainingThisRun[name] = false;
+                            result.FailedFiles.Add($"{name}: {ex.Message}");
+                        }
+                        continue;
+                    }
 
                     var overwrite = name.Equals("control.xml", StringComparison.OrdinalIgnoreCase);
 
@@ -429,6 +580,23 @@ public static class V5MigrationService
                 }
             }
             catch { }
+        }
+
+        // Post-loop flag writes, per basename, only when every source of
+        // that basename succeeded this run. A flag-write failure records a
+        // failed migration (completion suppressed → retry next launch); the
+        // retry no-ops on the content check and re-attempts only the flag.
+        foreach (var (name, allOk) in trainingThisRun)
+        {
+            if (!allOk) continue;
+            try
+            {
+                File.WriteAllText(TrainingMigratedFlagFor(name), UpdateChecker.GetCurrentVersion());
+            }
+            catch (Exception ex)
+            {
+                result.FailedFiles.Add($"{name}: flag write failed: {ex.Message}");
+            }
         }
     }
 

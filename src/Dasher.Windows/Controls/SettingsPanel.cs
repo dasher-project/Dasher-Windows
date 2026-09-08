@@ -761,6 +761,33 @@ public class SettingsPanel : Decorator
         _ => category,
     };
 
+    /// <summary>
+    /// The engine-owned training file for the current alphabet (the file
+    /// adaptive learning appends to), or null when unavailable. The UI reads,
+    /// exports, appends imports to, and resets THIS file — never a derived
+    /// path (issue #53: the old code read training\training_english_GB.txt,
+    /// a file the engine never writes, so exports failed on fresh installs
+    /// and exported stale v5 snapshots for migrants).
+    /// </summary>
+    private string? GetTrainingPath()
+    {
+        try
+        {
+            var p = NativeBridge.dasher_get_training_path(_handle);
+            if (p == IntPtr.Zero) return null;
+            var path = Marshal.PtrToStringUTF8(p);
+            return string.IsNullOrEmpty(path) ? null : path;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static readonly string LegacyTrainingDir = System.IO.Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "Dasher", "training");
+
     private Control BuildTrainingSection()
     {
         var panel = new StackPanel { Spacing = 8, Margin = new Thickness(0, 12, 0, 0) };
@@ -775,7 +802,10 @@ public class SettingsPanel : Decorator
 
         panel.Children.Add(new TextBlock
         {
-            Text = "Import adds text to the language model (appends to existing learning). Export saves your accumulated training data for backup or transfer.",
+            Text = Loc.Tr("training_data_description",
+                "Import adds text to the language model and your accumulated training data (kept across restarts). " +
+                "Export saves your training data for backup or transfer. Reset deletes all user training data — " +
+                "the model returns to its built-in defaults on next launch."),
             FontSize = 11,
             TextWrapping = TextWrapping.Wrap,
             Foreground = BrushValue,
@@ -785,7 +815,7 @@ public class SettingsPanel : Decorator
 
         var importBtn = new Button
         {
-            Content = "Import Training Text",
+            Content = Loc.Tr("training_import", "Import Training Text"),
             Padding = new Thickness(12, 6),
             FontSize = 12,
             Background = BrushControlBg,
@@ -795,7 +825,17 @@ public class SettingsPanel : Decorator
 
         var exportBtn = new Button
         {
-            Content = "Export Training Data",
+            Content = Loc.Tr("training_export", "Export Training Data"),
+            Padding = new Thickness(12, 6),
+            FontSize = 12,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+        };
+
+        var resetBtn = new Button
+        {
+            Content = Loc.Tr("training_reset", "Reset"),
             Padding = new Thickness(12, 6),
             FontSize = 12,
             Background = BrushControlBg,
@@ -810,19 +850,20 @@ public class SettingsPanel : Decorator
             Margin = new Thickness(0, 4, 0, 0),
         };
 
-        // Show current training file size
-        var trainingFile = System.IO.Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Dasher", "training", "training_english_GB.txt");
-        if (System.IO.File.Exists(trainingFile))
+        void RefreshStatus()
         {
-            var sizeKB = new System.IO.FileInfo(trainingFile).Length / 1024;
-            statusText.Text = $"Current training data: {sizeKB} KB";
+            var trainingFile = GetTrainingPath();
+            if (trainingFile != null && System.IO.File.Exists(trainingFile))
+            {
+                var sizeKB = new System.IO.FileInfo(trainingFile).Length / 1024;
+                statusText.Text = Loc.Tr("training_current_size", $"Current training data: {sizeKB} KB");
+            }
+            else
+            {
+                statusText.Text = Loc.Tr("training_none_yet", "No user training data yet");
+            }
         }
-        else
-        {
-            statusText.Text = "No user training data yet";
-        }
+        RefreshStatus();
 
         importBtn.Click += async (s, e) =>
         {
@@ -831,7 +872,7 @@ public class SettingsPanel : Decorator
             var storageProvider = topLevel.StorageProvider;
             var result = await storageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
             {
-                Title = "Import Training Text",
+                Title = Loc.Tr("training_import", "Import Training Text"),
                 FileTypeFilter = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
                 AllowMultiple = false,
             });
@@ -839,23 +880,50 @@ public class SettingsPanel : Decorator
             try
             {
                 var text = await System.IO.File.ReadAllTextAsync(result[0].Path.LocalPath);
-                NativeBridge.dasher_import_training_text(_handle, text);
-                statusText.Text = $"Imported {text.Length / 1024} KB of training text";
+
+                // 1. Persist FIRST — the training file is the source of truth
+                // at startup, so if anything later fails the learning still
+                // applies on next launch (self-healing). The reverse order
+                // trained the live model and then lost the text on a
+                // persistence failure, diverging model and file (greptile:
+                // "persistence failure leaves models divergent"). An
+                // unavailable path or failed append is a clean failure:
+                // nothing has changed anywhere.
+                var trainingFile = GetTrainingPath()
+                    ?? throw new InvalidOperationException("training path unavailable");
+                await System.IO.File.AppendAllTextAsync(trainingFile, text + "\n");
+
+                // 2. Train the LIVE model. A failure here leaves the FILE
+                // ahead of the model — they converge at next launch; say so
+                // instead of claiming a plain failure after mutating state.
+                var rc = NativeBridge.dasher_import_training_text(_handle, text);
+                statusText.Text = rc == 0
+                    ? Loc.Tr("training_imported", $"Imported {text.Length / 1024} KB of training text")
+                    : Loc.Tr("training_imported_restart",
+                        $"Imported {text.Length / 1024} KB — applies fully on next launch (live model returned {rc})");
+                RefreshStatus();
             }
             catch (Exception ex)
             {
-                statusText.Text = $"Import failed: {ex.Message}";
+                statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
+                    Loc.Tr("training_import", "Import"), ex.Message);
             }
         };
 
         exportBtn.Click += async (s, e) =>
         {
+            var trainingFile = GetTrainingPath();
+            if (trainingFile == null || !System.IO.File.Exists(trainingFile))
+            {
+                statusText.Text = Loc.Tr("training_nothing_to_export", "No training data to export yet");
+                return;
+            }
             var topLevel = TopLevel.GetTopLevel(this);
             if (topLevel == null) return;
             var storageProvider = topLevel.StorageProvider;
             var result = await storageProvider.SaveFilePickerAsync(new Avalonia.Platform.Storage.FilePickerSaveOptions
             {
-                Title = "Export Training Data",
+                Title = Loc.Tr("training_export", "Export Training Data"),
                 DefaultExtension = "txt",
                 SuggestedFileName = "dasher_training_export.txt",
                 FileTypeChoices = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
@@ -863,17 +931,97 @@ public class SettingsPanel : Decorator
             if (result == null) return;
             try
             {
-                await System.IO.File.WriteAllTextAsync(result.Path.LocalPath, System.IO.File.ReadAllText(trainingFile));
-                statusText.Text = $"Exported to {result.Name}";
+                await System.IO.File.WriteAllTextAsync(result.Path.LocalPath, await System.IO.File.ReadAllTextAsync(trainingFile));
+                statusText.Text = string.Format(Loc.Tr("training_exported", "Exported to {0}"), result.Name);
             }
             catch (Exception ex)
             {
-                statusText.Text = $"Export failed: {ex.Message}";
+                statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
+                    Loc.Tr("training_export", "Export"), ex.Message);
             }
+        };
+
+        resetBtn.Click += (s, e) =>
+        {
+            // Flags-first: settle the v5 migration lifecycle BEFORE any
+            // deletion (clean-failure semantics). Without this, a corpus
+            // whose .v5migrated flag write had failed could be restored
+            // by a later migration after the Reset deleted the only
+            // content evidence — resurrecting training the user deleted.
+            // A flag-write failure aborts here with nothing deleted.
+            try
+            {
+                V5MigrationService.MarkTrainingReset();
+            }
+            catch (Exception ex)
+            {
+                statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
+                    Loc.Tr("training_reset", "Reset"), ex.Message);
+                return;
+            }
+
+            // Deletions are per-file isolated: one locked/undeletable file
+            // must not abort the loop halfway ("reset leaves partial training
+            // state") — every file gets its attempt, and Retry (idempotent:
+            // flags rewritten, glob covers survivors) mops up the rest.
+            var deleted = false;
+            var failures = new List<string>();
+
+            void TryDelete(string file)
+            {
+                try
+                {
+                    System.IO.File.Delete(file);
+                    deleted = true;
+                }
+                catch (Exception ex)
+                {
+                    failures.Add($"{System.IO.Path.GetFileName(file)}: {ex.Message}");
+                }
+            }
+
+            try
+            {
+                // ALL alphabets' training files, matching the copy ("deletes
+                // ALL user training data"): the glob covers every
+                // training_*.txt in the engine's user-dir root, not just the
+                // current alphabet's file.
+                var engineFile = GetTrainingPath();
+                var rootDir = engineFile != null
+                    ? System.IO.Path.GetDirectoryName(engineFile)
+                    : System.IO.Path.GetDirectoryName(LegacyTrainingDir);
+                if (rootDir != null && System.IO.Directory.Exists(rootDir))
+                    foreach (var f in System.IO.Directory.GetFiles(rootDir, "training_*.txt"))
+                        TryDelete(f);
+
+                // Legacy v5-migration copies under training\ — also scanned
+                // at startup, so they must go too.
+                if (System.IO.Directory.Exists(LegacyTrainingDir))
+                    foreach (var f in System.IO.Directory.GetFiles(LegacyTrainingDir, "training_*.txt"))
+                        TryDelete(f);
+            }
+            catch (Exception ex)
+            {
+                failures.Add(ex.Message);
+            }
+
+            if (failures.Count > 0)
+            {
+                // Partial (or glob-level) failure: deleted-what-we-could —
+                // the remaining files stay and Reset can simply be retried.
+                statusText.Text = Loc.Tr("training_reset_partial",
+                    $"Deleted training data where possible — {failures.Count} item(s) failed; press Reset again to retry");
+                return;
+            }
+
+            statusText.Text = deleted
+                ? Loc.Tr("training_reset_done", "Training data deleted — the model returns to its built-in defaults on next launch")
+                : Loc.Tr("training_none_yet", "No user training data yet");
         };
 
         btnRow.Children.Add(importBtn);
         btnRow.Children.Add(exportBtn);
+        btnRow.Children.Add(resetBtn);
         panel.Children.Add(btnRow);
         panel.Children.Add(statusText);
 

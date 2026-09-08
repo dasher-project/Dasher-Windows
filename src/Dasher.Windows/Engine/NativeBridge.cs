@@ -222,10 +222,16 @@ public static class NativeBridge
 
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_set_log_callback(IntPtr ctx, LogCallback callback, IntPtr user_data, int min_level);
-
     // Training
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int dasher_import_training_text(IntPtr ctx, [MarshalAs(UnmanagedType.LPStr)] string text);
+    public static extern int dasher_import_training_text(IntPtr ctx,
+        [MarshalAs(UnmanagedType.LPStr)] string text);
+
+    // Absolute path of the current alphabet's user training file — the file
+    // adaptive learning appends to and the UI reads/exports/resets
+    // (DasherCore#84 / #53). Pointer valid until the next engine call.
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern IntPtr dasher_get_training_path(IntPtr ctx);
 
     // Engine error flag (RFC 0009 A2)
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
