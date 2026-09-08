@@ -881,27 +881,26 @@ public class SettingsPanel : Decorator
             {
                 var text = await System.IO.File.ReadAllTextAsync(result[0].Path.LocalPath);
 
-                // 1. Train the LIVE model (immediate effect). A nonzero
-                // return means the engine rejected the text — do NOT append
-                // to the persistent file in that case, or the live model and
-                // the training file diverge while the UI claims success
-                // (greptile: "native import failures are ignored").
+                // 1. Persist FIRST — the training file is the source of truth
+                // at startup, so if anything later fails the learning still
+                // applies on next launch (self-healing). The reverse order
+                // trained the live model and then lost the text on a
+                // persistence failure, diverging model and file (greptile:
+                // "persistence failure leaves models divergent"). An
+                // unavailable path or failed append is a clean failure:
+                // nothing has changed anywhere.
+                var trainingFile = GetTrainingPath()
+                    ?? throw new InvalidOperationException("training path unavailable");
+                await System.IO.File.AppendAllTextAsync(trainingFile, text + "\n");
+
+                // 2. Train the LIVE model. A failure here leaves the FILE
+                // ahead of the model — they converge at next launch; say so
+                // instead of claiming a plain failure after mutating state.
                 var rc = NativeBridge.dasher_import_training_text(_handle, text);
-                if (rc != 0)
-                {
-                    statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
-                        Loc.Tr("training_import", "Import"), $"engine returned {rc}");
-                    return;
-                }
-
-                // 2. Persist: append to the engine-owned training file so the
-                // import survives restarts (issue #53 — the engine's import
-                // trains in memory only; Android/Apple append manually too).
-                var trainingFile = GetTrainingPath();
-                if (trainingFile != null)
-                    await System.IO.File.AppendAllTextAsync(trainingFile, text + "\n");
-
-                statusText.Text = Loc.Tr("training_imported", $"Imported {text.Length / 1024} KB of training text");
+                statusText.Text = rc == 0
+                    ? Loc.Tr("training_imported", $"Imported {text.Length / 1024} KB of training text")
+                    : Loc.Tr("training_imported_restart",
+                        $"Imported {text.Length / 1024} KB — applies fully on next launch (live model returned {rc})");
                 RefreshStatus();
             }
             catch (Exception ex)

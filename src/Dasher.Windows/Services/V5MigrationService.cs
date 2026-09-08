@@ -12,6 +12,13 @@ public class V5MigrationResult
     public List<string> Imported { get; set; } = new();
     public List<string> Skipped { get; set; } = new();
     public List<string> CopiedFiles { get; set; } = new();
+
+    /// <summary>
+    /// Files whose migration failed (training merges). Non-empty suppresses
+    /// the completion marker so migration is re-offered on next launch.
+    /// </summary>
+    public List<string> FailedFiles { get; set; } = new();
+
     public List<(int key, string value)> DeferredParameters { get; set; } = new();
     public bool HasData { get; set; }
     public string Alphabet { get; set; } = "";
@@ -308,8 +315,12 @@ public static class V5MigrationService
         // Copy user data files
         CopyUserDataFiles(result);
 
-        // Mark as completed
-        MarkCompleted();
+        // Mark as completed — UNLESS a training merge failed: migration must
+        // be re-offered (next launch) so the v5 learning isn't silently
+        // dropped. The merge itself is idempotent (sidecar marker), so a
+        // retry is safe.
+        if (result.FailedFiles.Count == 0)
+            MarkCompleted();
 
         return result;
     }
@@ -429,15 +440,34 @@ public static class V5MigrationService
                         // collisions skip migration data" — the generic
                         // skip-if-exists silently dropped the alphabet's v5
                         // history). Append the v5 content; overlapping text
-                        // with the v6 file just reinforces counts. Migration
-                        // runs at most once, so this can't double-append.
+                        // with the v6 file just reinforces counts. Idempotent
+                        // via a sidecar marker: migration can re-run after an
+                        // app upgrade (the completion flag is version-
+                        // specific) and must not append the corpus twice
+                        // (greptile: "version upgrades duplicate migrated
+                        // training"). Failures are RECORDED, not swallowed —
+                        // the caller must not mark migration complete while a
+                        // training merge failed, or the v5 learning is
+                        // silently lost with no retry (greptile: "failed
+                        // merge still marks completion").
+                        var marker = dest + ".v5merged";
+                        if (File.Exists(marker))
+                        {
+                            if (!result.CopiedFiles.Contains(name))
+                                result.CopiedFiles.Add(name);
+                            continue;
+                        }
                         try
                         {
                             File.AppendAllText(dest, File.ReadAllText(f) + "\n");
+                            File.WriteAllText(marker, UpdateChecker.GetCurrentVersion());
                             if (!result.CopiedFiles.Contains(name))
                                 result.CopiedFiles.Add(name);
                         }
-                        catch { }
+                        catch (Exception ex)
+                        {
+                            result.FailedFiles.Add($"{name}: {ex.Message}");
+                        }
                         continue;
                     }
 
