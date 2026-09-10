@@ -700,12 +700,17 @@ public partial class MainWindow : Window
         // the TextBox (a user keystroke changes the TextBox first; the TwoWay
         // binding then updates the VM). Applying them here lets us preserve
         // the caret and suppress the feedback, per RFC 0019 clause 4.
+        // TextChanged is DEFERRED by Avalonia (dispatcher), so these handlers
+        // can run after a mode switch re-parened the controls — every
+        // reference is snapshotted and null-guarded (the crash report:
+        // NRE on MessageArea.Text.Length after a null binding push).
         _vm!.PropertyChanged += (s, args) =>
         {
             if (args.PropertyName != nameof(MainWindowViewModel.OutputText)) return;
             if (_vm.IsKeyboardMode) return; // pane hidden in direct mode
-            var newText = _vm.OutputText;
-            if (newText == MessageArea.Text) return; // user-origin (binding already synced)
+            var newText = _vm.OutputText ?? "";
+            var box = MessageArea;
+            if (box == null || newText == box.Text) return; // user-origin (binding already synced)
 
             _suppressEditorSync = true;
             try
@@ -715,10 +720,10 @@ public partial class MainWindow : Window
                 // caret with the new text); otherwise it stays at its index,
                 // clamped. Insert/delete-position math against the engine
                 // offset can refine this later if users need it.
-                var oldCaret = MessageArea.CaretIndex;
-                var oldLen = MessageArea.Text.Length;
-                MessageArea.Text = newText;
-                MessageArea.CaretIndex = oldCaret >= oldLen
+                var oldCaret = box.CaretIndex;
+                var oldLen = (box.Text ?? "").Length;
+                box.Text = newText;
+                box.CaretIndex = oldCaret >= oldLen
                     ? newText.Length
                     : Math.Min(oldCaret, newText.Length);
             }
@@ -727,8 +732,13 @@ public partial class MainWindow : Window
 
         MessageArea.TextChanged += (s, e) =>
         {
-            if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+            var vm = _vm;
+            var box = s as TextBox ?? MessageArea;
+            if (vm == null || vm.Handle == IntPtr.Zero) return;
+            if (box == null) return;
             if (_suppressEditorSync) return;
+
+            var paneText = box.Text ?? "";
 
             // The engine buffer is the origin of truth: a pane change that
             // makes it EQUAL the buffer is an engine push landing (nothing
@@ -737,37 +747,36 @@ public partial class MainWindow : Window
             // a debounced edit would be clobbered before the timer fired
             // (clause 2's "debouncing allowed" traded away for correctness
             // on this architecture).
-            var engineText = ReadEngineText();
-            if (MessageArea.Text == engineText) return;
+            var enginePtr = NativeBridge.dasher_get_output_text(vm.Handle);
+            var engineText = enginePtr != IntPtr.Zero
+                ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
+            if (paneText == engineText) return;
 
-            var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(
-                MessageArea.Text, MessageArea.CaretIndex);
-            NativeBridge.dasher_seed_buffer(_vm.Handle, MessageArea.Text, caretBytes);
-            KbLog($"Editor sync: seeded {MessageArea.Text.Length} chars, caret u16={MessageArea.CaretIndex} → byte={caretBytes}");
+            var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(paneText, box.CaretIndex);
+            NativeBridge.dasher_seed_buffer(vm.Handle, paneText, caretBytes);
+            KbLog($"Editor sync: seeded {paneText.Length} chars, caret u16={box.CaretIndex} → byte={caretBytes}");
         };
 
         MessageArea.PropertyChanged += (s, args) =>
         {
             if (args.Property != TextBox.CaretIndexProperty) return;
             if (_suppressEditorSync) return;
-            if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+            var vm = _vm;
+            var box = MessageArea;
+            if (vm == null || vm.Handle == IntPtr.Zero || box == null) return;
 
             // Pure caret move with the text already in sync → re-anchor the
             // model (v5's SetOffset-on-click, clause 3).
-            var engineText = ReadEngineText();
-            if (engineText.Length == 0 || MessageArea.Text != engineText) return;
+            var enginePtr = NativeBridge.dasher_get_output_text(vm.Handle);
+            var engineText = enginePtr != IntPtr.Zero
+                ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
+            var paneText = box.Text ?? "";
+            if (engineText.Length == 0 || paneText != engineText) return;
 
-            var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(engineText, MessageArea.CaretIndex);
-            if (caretBytes >= 0 && caretBytes != NativeBridge.dasher_get_offset(_vm.Handle))
-                NativeBridge.dasher_set_offset(_vm.Handle, caretBytes);
+            var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(engineText, box.CaretIndex);
+            if (caretBytes >= 0 && caretBytes != NativeBridge.dasher_get_offset(vm.Handle))
+                NativeBridge.dasher_set_offset(vm.Handle, caretBytes);
         };
-    }
-
-    /// <summary>Snapshot of the engine's buffer (tlString contract: use immediately).</summary>
-    private string ReadEngineText()
-    {
-        var p = NativeBridge.dasher_get_output_text(_vm!.Handle);
-        return p != IntPtr.Zero ? Marshal.PtrToStringUTF8(p) ?? "" : "";
     }
 
     /// <summary>
