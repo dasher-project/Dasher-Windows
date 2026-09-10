@@ -161,6 +161,55 @@ public class EngineCApiTests
     }
 
     [Fact]
+    public void Editor_contract_seed_offset_and_new_round_trip()
+    {
+        // RFC 0019 (the editor contract) via the Windows P/Invoke surface:
+        // clause 2 — a user edit seeds text + caret and the caret lands on the
+        // converted BYTE offset; clause 3 — a pure caret move re-anchors via
+        // set_offset; clause 5 — New (dasher_reset) clears buffer AND offset
+        // (context drop is engine-internal; offset 0 + empty output is the
+        // observable contract).
+        var dataDir = FindDataDir();
+        if (dataDir == null) { if (RequireEngine) Assert.Fail("DasherCore/Data not found"); return; }
+
+        var userDir = Path.Combine(Path.GetTempPath(), "dasher-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(userDir);
+
+        var handle = NativeBridge.dasher_create(dataDir, userDir, out var err);
+        Assert.False(handle == IntPtr.Zero,
+            err != IntPtr.Zero ? "dasher_create: " + Marshal.PtrToStringUTF8(err) : "dasher_create failed");
+        try
+        {
+            NativeBridge.dasher_set_screen_size(handle, 800, 600);
+
+            // "héllo wörld": é/ö are 1 UTF-16 unit but 2 UTF-8 bytes.
+            // The caret parameter is a UTF-8 BYTE offset (RFC 0015 contract):
+            // after "héllo" is byte 6 (h=0 é=1,2 l=3 l=4 o=5, space=6).
+            const string text = "héllo wörld";
+            Assert.Equal(0, NativeBridge.dasher_seed_buffer(handle, text, 6));
+            Assert.Equal(6, NativeBridge.dasher_get_offset(handle));
+
+            // Pure caret move (clause 3): after "w" is UTF-16 7 → byte 8.
+            var mid = NativeBridge.dasher_byte_offset_from_utf16(text, 7);
+            Assert.Equal(8, mid);
+            Assert.Equal(0, NativeBridge.dasher_set_offset(handle, mid));
+            Assert.Equal(8, NativeBridge.dasher_get_offset(handle));
+
+            // New (clause 5): buffer and offset both reset.
+            NativeBridge.dasher_reset(handle);
+            var outPtr = NativeBridge.dasher_get_output_text(handle);
+            var output = outPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(outPtr) : null;
+            Assert.Equal("", output ?? "");
+            Assert.Equal(0, NativeBridge.dasher_get_offset(handle));
+        }
+        finally
+        {
+            NativeBridge.dasher_destroy(handle);
+            try { Directory.Delete(userDir, recursive: true); } catch { }
+        }
+    }
+
+    [Fact]
     public void Training_path_is_engine_owned_and_in_user_dir()
     {
         // Issue #53 / DasherCore#84: the training panel must read/export/

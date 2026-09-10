@@ -37,6 +37,10 @@ public static class NativeBridge
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr dasher_get_output_text(IntPtr ctx);
 
+    /// <summary>Current engine offset (byte position in the buffer; RFC 0019).</summary>
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_get_offset(IntPtr ctx);
+
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_reset_output_text(IntPtr ctx);
 
@@ -225,7 +229,7 @@ public static class NativeBridge
     // Training
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_import_training_text(IntPtr ctx,
-        [MarshalAs(UnmanagedType.LPStr)] string text);
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
 
     // Absolute path of the current alphabet's user training file — the file
     // adaptive learning appends to and the UI reads/exports/resets
@@ -274,17 +278,17 @@ public static class NativeBridge
     /// </summary>
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_seed_buffer(IntPtr ctx,
-        [MarshalAs(UnmanagedType.LPStr)] string text, int caretOffset);
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string text, int caretOffset);
 
     /// <summary>Convert a UTF-16 code-unit caret (UIA/EDIT) to a UTF-8 byte offset.</summary>
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_byte_offset_from_utf16(
-        [MarshalAs(UnmanagedType.LPStr)] string utf8Text, int utf16Offset);
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string utf8Text, int utf16Offset);
 
     /// <summary>Convert a codepoint caret (AX/atspi) to a UTF-8 byte offset.</summary>
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int dasher_byte_offset_from_codepoints(
-        [MarshalAs(UnmanagedType.LPStr)] string utf8Text, int codepointOffset);
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string utf8Text, int codepointOffset);
 }
 
 [StructLayout(LayoutKind.Sequential)]

@@ -53,7 +53,7 @@ public partial class DasherCanvas : Control
     public event EventHandler<EngineOutputEventArgs>? EngineOutput;
 
     public static readonly StyledProperty<string> OutputTextProperty =
-        AvaloniaProperty.Register<DasherCanvas, string>(nameof(OutputText));
+        AvaloniaProperty.Register<DasherCanvas, string>(nameof(OutputText), ""); // default "": no default = null, and the OneWayToSource binding pushed that null into VM.OutputText → MessageArea.Text on mode switches (editor-sync NRE crash, line-746 report)
 
     public string OutputText
     {
