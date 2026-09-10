@@ -40,10 +40,82 @@ public static class TargetContextReader
         catch { }
     }
 
+    // ── Caret-move watch (RFC 0015 clause-8 amendment / RFC 0019 clause 6) ──
+
+    private static CUIAutomationClass? _watchUia;
+    private static IUIAutomationElement? _watchElement;
+    private static SelectionChangedHandler? _watchHandler;
+
+    /// <summary>
+    /// Subscribe to text-selection-changed events inside the target window so
+    /// caret moves WITHIN an already-focused field re-seed the engine (the
+    /// focus/foreground hooks can't see those). TreeScope_Subtree on the
+    /// window covers every field; the seed-time foreground guard drops
+    /// stale/cross-window events. Idempotent per hwnd — call with the current
+    /// tracked root whenever it changes.
+    /// </summary>
+    public static void StartSelectionWatch(IntPtr targetHwnd, Action onCaretMoved)
+    {
+        StopSelectionWatch();
+        if (targetHwnd == IntPtr.Zero || onCaretMoved == null) return;
+        try
+        {
+            _watchUia = new CUIAutomationClass();
+            _watchElement = _watchUia.ElementFromHandle(targetHwnd);
+            if (_watchElement == null)
+            {
+                _watchUia = null;
+                return;
+            }
+            _watchHandler = new SelectionChangedHandler(onCaretMoved);
+            _watchUia.AddAutomationEventHandler(
+                UIA_EventIds.UIA_Text_TextSelectionChangedEventId,
+                _watchElement,
+                TreeScope.TreeScope_Subtree,
+                null,
+                _watchHandler);
+            Log($"[UIA] selection watch armed on 0x{targetHwnd:X}");
+        }
+        catch (Exception ex)
+        {
+            Log($"[UIA] selection watch failed: {ex.Message}");
+            StopSelectionWatch();
+        }
+    }
+
+    public static void StopSelectionWatch()
+    {
+        try
+        {
+            if (_watchUia != null && _watchElement != null && _watchHandler != null)
+                _watchUia.RemoveAutomationEventHandler(
+                    UIA_EventIds.UIA_Text_TextSelectionChangedEventId, _watchElement, _watchHandler);
+        }
+        catch { }
+        _watchUia = null;
+        _watchElement = null;
+        _watchHandler = null;
+    }
+
+    /// <summary>
+    /// UIA event handlers must return immediately and must not query UIA from
+    /// within — this one only signals; the callback marshals to the UI thread
+    /// and the existing seeding debounce + stale-target guard do the rest.
+    /// </summary>
+    private sealed class SelectionChangedHandler : IUIAutomationEventHandler
+    {
+        private readonly Action _onEvent;
+        public SelectionChangedHandler(Action onEvent) { _onEvent = onEvent; }
+
+        public void HandleAutomationEvent(IUIAutomationElement sender, int eventId)
+        {
+            try { _onEvent(); } catch { }
+        }
+    }
+
     /// <summary>
     /// Read the focused control of the given target window. Safe from the UI
-    /// thread — work happens on a background thread with a hard timeout.
-    /// Null = read failed/timed out/unsupported (fall back to session context).
+    /// thread — work happens on a background thread with a hard timeout.    /// Null = read failed/timed out/unsupported (fall back to session context).
     /// </summary>
     public static async Task<TargetContext?> ReadAsync(IntPtr targetHwnd, int timeoutMs = 300)
     {

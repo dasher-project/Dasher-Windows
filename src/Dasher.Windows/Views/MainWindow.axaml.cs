@@ -340,7 +340,11 @@ public partial class MainWindow : Window
         // Tracker events arrive on the UI thread (hook callbacks run on the
         // installing thread). Both window switches and same-window field
         // changes re-seed — the field text/caret is what matters, not the HWND.
-        _targetTracker.TargetChanged += reason => _ = SeedContextFromTargetAsync(reason);
+        _targetTracker.TargetChanged += reason =>
+        {
+            ArmSelectionWatch();
+            _ = SeedContextFromTargetAsync(reason);
+        };
 
         // RFC 0018: everything startup-blocking (data install, engine create,
         // v5 scan) runs off the UI thread so the overlay animates; the
@@ -602,6 +606,9 @@ public partial class MainWindow : Window
                 OnOutputTextChanged();
         };
 
+        // RFC 0019 (the editor contract): editable pane + caret re-anchor.
+        WireEditorSync();
+
         // Wire speech volume slider to SpeechService
         var volSlider = this.FindControl<Avalonia.Controls.Slider>("SpeakVolumeSlider");
         if (volSlider != null)
@@ -679,6 +686,102 @@ public partial class MainWindow : Window
             SyncGameModeState();
     }
 
+    // ── Editor contract (RFC 0019): editable pane + caret re-anchor ────────
+
+    /// <summary>
+    /// True while an engine-origin text push is being applied to the pane —
+    /// the sync handlers must not feed it back into the engine.
+    /// </summary>
+    private bool _suppressEditorSync;
+
+    private void WireEditorSync()
+    {
+        // Engine-origin pushes arrive as VM changes whose value differs from
+        // the TextBox (a user keystroke changes the TextBox first; the TwoWay
+        // binding then updates the VM). Applying them here lets us preserve
+        // the caret and suppress the feedback, per RFC 0019 clause 4.
+        _vm!.PropertyChanged += (s, args) =>
+        {
+            if (args.PropertyName != nameof(MainWindowViewModel.OutputText)) return;
+            if (_vm.IsKeyboardMode) return; // pane hidden in direct mode
+            var newText = _vm.OutputText;
+            if (newText == MessageArea.Text) return; // user-origin (binding already synced)
+
+            _suppressEditorSync = true;
+            try
+            {
+                // Caret preservation (clause 4): a caret at the end of the
+                // old text follows the growth (zooming at the caret keeps the
+                // caret with the new text); otherwise it stays at its index,
+                // clamped. Insert/delete-position math against the engine
+                // offset can refine this later if users need it.
+                var oldCaret = MessageArea.CaretIndex;
+                var oldLen = MessageArea.Text.Length;
+                MessageArea.Text = newText;
+                MessageArea.CaretIndex = oldCaret >= oldLen
+                    ? newText.Length
+                    : Math.Min(oldCaret, newText.Length);
+            }
+            finally { _suppressEditorSync = false; }
+        };
+
+        MessageArea.TextChanged += (s, e) =>
+        {
+            if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+            if (_suppressEditorSync) return;
+
+            // The engine buffer is the origin of truth: a pane change that
+            // makes it EQUAL the buffer is an engine push landing (nothing
+            // to seed); a difference is a user edit. Seeding is immediate —
+            // the canvas pushes the engine text into the VM every frame, so
+            // a debounced edit would be clobbered before the timer fired
+            // (clause 2's "debouncing allowed" traded away for correctness
+            // on this architecture).
+            var engineText = ReadEngineText();
+            if (MessageArea.Text == engineText) return;
+
+            var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(
+                MessageArea.Text, MessageArea.CaretIndex);
+            NativeBridge.dasher_seed_buffer(_vm.Handle, MessageArea.Text, caretBytes);
+            KbLog($"Editor sync: seeded {MessageArea.Text.Length} chars, caret u16={MessageArea.CaretIndex} → byte={caretBytes}");
+        };
+
+        MessageArea.PropertyChanged += (s, args) =>
+        {
+            if (args.Property != TextBox.CaretIndexProperty) return;
+            if (_suppressEditorSync) return;
+            if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+
+            // Pure caret move with the text already in sync → re-anchor the
+            // model (v5's SetOffset-on-click, clause 3).
+            var engineText = ReadEngineText();
+            if (engineText.Length == 0 || MessageArea.Text != engineText) return;
+
+            var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(engineText, MessageArea.CaretIndex);
+            if (caretBytes >= 0 && caretBytes != NativeBridge.dasher_get_offset(_vm.Handle))
+                NativeBridge.dasher_set_offset(_vm.Handle, caretBytes);
+        };
+    }
+
+    /// <summary>Snapshot of the engine's buffer (tlString contract: use immediately).</summary>
+    private string ReadEngineText()
+    {
+        var p = NativeBridge.dasher_get_output_text(_vm!.Handle);
+        return p != IntPtr.Zero ? Marshal.PtrToStringUTF8(p) ?? "" : "";
+    }
+
+    /// <summary>
+    /// RFC 0019 clause 5 — New = full reset (v5's SetBuffer(0)): buffer AND
+    /// model context AND the rate window. dasher_reset_output_text alone
+    /// would keep the learned position and resume mid-sentence.
+    /// </summary>
+    private void OnNewSession(object? sender, RoutedEventArgs e)
+    {
+        if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+        NativeBridge.dasher_reset(_vm.Handle);
+        KbLog("New session: engine reset (buffer + context)");
+    }
+
     private static readonly string KbLogPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dasher", "keyboard_debug.log");
 
@@ -745,6 +848,31 @@ public partial class MainWindow : Window
     }
 
     // ── Direct-entry context awareness (RFC 0015) ───────────────────────────
+
+    /// <summary>Last HWND the selection watch is armed on (avoids resubscribing per focus event).</summary>
+    private IntPtr _lastWatchTarget;
+
+    /// <summary>
+    /// Arm the UIA selection-changed watch on the tracked target root —
+    /// caret moves WITHIN an already-focused field are invisible to the
+    /// focus/foreground hooks (RFC 0015 clause-8 amendment / RFC 0019
+    /// clause 6). Re-armed only when the root changes; the handler marshals
+    /// to the UI thread and reuses SeedContextFromTargetAsync's debounce +
+    /// stale-target foreground guard.
+    /// </summary>
+    private void ArmSelectionWatch()
+    {
+        var target = _targetTracker.Current;
+        if (target == IntPtr.Zero || target == _lastWatchTarget) return;
+        _lastWatchTarget = target;
+
+        TargetContextReader.StartSelectionWatch(target,
+            () => Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (_vm is { IsKeyboardMode: true })
+                    _ = SeedContextFromTargetAsync("caret moved");
+            }));
+    }
 
     /// <summary>
     /// Read the target field's text + caret (UIA TextPattern, Win32 fallback)
@@ -1094,6 +1222,9 @@ public partial class MainWindow : Window
             // (DasherWindow.cpp HandleWinEvent). Install on the UI thread so
             // callbacks arrive here.
             _targetTracker.Install(OurHwnd());
+            // Arm the caret-move watch for the target recorded at entry (the
+            // hooks re-arm it whenever the root changes).
+            ArmSelectionWatch();
         }
         else
         {
@@ -1106,6 +1237,8 @@ public partial class MainWindow : Window
             this.Opacity = 1.0;
 
             _targetTracker.Remove();
+            TargetContextReader.StopSelectionWatch();
+            _lastWatchTarget = IntPtr.Zero;
             SetNoActivate(false);
 
             TxtModeLabel.Text = position switch

@@ -412,6 +412,12 @@
                             <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
 
                             <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnNewSession" ToolTip.Tip="New session (clear text and context)">
+                                    <StackPanel Spacing="2" VerticalAlignment="Center">
+                                        <LucideIcon Kind="{x:Static lucide:LucideIconKind.FilePlus}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
+                                        <TextBlock Text="New" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
                                 <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnCopySelection" ToolTip.Tip="Copy selection">
                                     <StackPanel Spacing="2" VerticalAlignment="Center">
                                         <LucideIcon Kind="{x:Static lucide:LucideIconKind.Copy}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
@@ -457,7 +463,7 @@
                     <TextBox x:Name="MessageArea" Grid.Row="3"
                              Classes="message-area"
                              Text="{Binding OutputText, Mode=TwoWay}"
-                             IsReadOnly="True"/>
+                             UndoLimit="0"/>
                 </Grid>
             </Border>
         </Grid>
@@ -501,6 +507,10 @@
                        Text="{Binding CurrentWpm, StringFormat={}{0:F0} wpm}"/>
             <Button x:Name="KbControlBtn" Click="OnToggleControlMode" ToolTip.Tip="Control mode">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.MousePointerClick}" Size="18"/>
+            </Button>
+            <!-- RFC 0019 clause 5: New = full reset (buffer + context) -->
+            <Button Click="OnNewSession" ToolTip.Tip="New session (clear text and context)">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.FilePlus}" Size="18"/>
             </Button>
             <!-- RFC 0015 clipboard bridge: act on the TARGET's selection -->
             <Button x:Name="KbCopyBtn" Click="OnKbCopy" ToolTip.Tip="Copy all (to clipboard)">
