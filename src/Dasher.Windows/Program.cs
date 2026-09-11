@@ -75,6 +75,13 @@ sealed class Program
             {
                 failure = "dasher.dll could not be loaded (missing or wrong architecture).";
             }
+            catch (BadImageFormatException)
+            {
+                // A wrong-architecture or malformed DLL throws this from the
+                // P/Invoke itself — review: it must reach the actionable
+                // message, not the generic handler.
+                failure = "dasher.dll could not be loaded (wrong architecture — a 64-bit build is required).";
+            }
             catch (EntryPointNotFoundException ex)
             {
                 failure =
