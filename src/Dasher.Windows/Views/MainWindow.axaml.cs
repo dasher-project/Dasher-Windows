@@ -865,9 +865,15 @@ public partial class MainWindow : Window
     /// Arm the UIA selection-changed watch on the tracked target root —
     /// caret moves WITHIN an already-focused field are invisible to the
     /// focus/foreground hooks (RFC 0015 clause-8 amendment / RFC 0019
-    /// clause 6). Re-armed only when the root changes; the handler marshals
-    /// to the UI thread and reuses SeedContextFromTargetAsync's debounce +
-    /// stale-target foreground guard.
+    /// clause 6). Self-injection echoes need NO suppression window here:
+    /// the engine buffer mirrors our injected output byte-for-byte
+    /// (Dasher-Windows #45), so an echo read compares EQUAL in
+    /// SeedContextFromTargetAsync and is skipped without a rebuild — while
+    /// genuine caret moves, target-side pastes and external edits correctly
+    /// differ and re-seed. A time-based quiet window was considered and
+    /// rejected in review: it would also drop real caret moves made during
+    /// continuous Dasher output and the sync event of a target-side paste
+    /// (stale anchor until the next trigger).
     /// </summary>
     private void ArmSelectionWatch()
     {
@@ -928,6 +934,29 @@ public partial class MainWindow : Window
 
         // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
         var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(context.Text, context.CaretUtf16);
+
+        // Shadow-compare skip (#58): if the target text EQUALS the engine
+        // buffer, the read carried no new information — either an echo of
+        // our own injection or an unchanged re-read (focus churn). A full
+        // re-seed would force a model rebuild = the visible canvas reset;
+        // at most the caret moved within unchanged text, which is exactly
+        // the cheap set_offset re-anchor (no rebuild).
+        var enginePtr = NativeBridge.dasher_get_output_text(_vm.Handle);
+        var engineText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
+        if (context.Text == engineText)
+        {
+            if (byteOffset >= 0 && byteOffset != NativeBridge.dasher_get_offset(_vm.Handle))
+            {
+                KbLog($"Context seed ({reason}): text unchanged, caret u16={context.CaretUtf16} → offset {byteOffset} (no rebuild)");
+                NativeBridge.dasher_set_offset(_vm.Handle, byteOffset);
+            }
+            else
+            {
+                KbLog($"Context seed ({reason}): text unchanged and offset current — skipping");
+            }
+            return;
+        }
+
         KbLog($"Context seed ({reason}): {context.Text.Length} chars, caret u16={context.CaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, context.Text, byteOffset);
     }
