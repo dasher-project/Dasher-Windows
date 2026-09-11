@@ -22,8 +22,13 @@ public static class EditorSeedPolicy
         if (string.IsNullOrEmpty(text) || text.Length <= MaxSeedUtf16)
             return (text, Math.Clamp(caretUtf16, 0, text?.Length ?? 0), false);
 
-        var seed = text[^MaxSeedUtf16..];
-        var caret = Math.Clamp(caretUtf16 - (text.Length - MaxSeedUtf16), 0, seed.Length);
+        var start = text.Length - MaxSeedUtf16;
+        // A fixed UTF-16 cutoff can split a supplementary character (emoji,
+        // CJK extensions): landing on the LOW half would seed an unpaired
+        // surrogate through the UTF-8 bridge. Slide one unit forward.
+        if (char.IsLowSurrogate(text[start])) start++;
+        var seed = text[start..];
+        var caret = Math.Clamp(caretUtf16 - start, 0, seed.Length);
         return (seed, caret, true);
     }
 }

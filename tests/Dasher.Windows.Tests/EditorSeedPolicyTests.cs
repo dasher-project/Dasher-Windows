@@ -53,6 +53,26 @@ public class EditorSeedPolicyTests
     }
 
     [Fact]
+    public void Boundary_never_splits_a_surrogate_pair()
+    {
+        // 'a' * (Max+1) then an emoji (surrogate PAIR) straddling the cutoff:
+        // the window's first unit would be the emoji's LOW surrogate.
+        var emoji = "\U0001F600"; // U+1F600 = high + low surrogate
+        var text = new string('a', EditorSeedPolicy.MaxSeedUtf16 - 1) + emoji + new string('b', 10);
+
+        var (seed, caret, truncated) = EditorSeedPolicy.Clamp(text, text.Length);
+
+        Assert.True(truncated);
+        Assert.False(char.IsLowSurrogate(seed[0])); // never starts on a low half
+        Assert.Equal(seed.Length, caret);
+
+        // And the seed is what the UTF-8 bridge can encode losslessly:
+        Assert.DoesNotContain('\uD800', seed.Select(c => c).Where(char.IsSurrogate).ToArray());
+        var roundTrip = new string(seed.SkipWhile(char.IsLowSurrogate).ToArray());
+        Assert.Equal(seed, roundTrip);
+    }
+
+    [Fact]
     public void Out_of_range_caret_clamps()
     {
         var (text, caret, _) = EditorSeedPolicy.Clamp("abc", 99);

@@ -852,13 +852,22 @@ public partial class MainWindow : Window
         return _imeRecheckTimer;
     }
 
-    /// <summary>Seed the engine from the pane text with the long-document cap applied (RFC 0019 clause 7).</summary>
+    /// <summary>
+    /// Seed the engine from the pane text — FULL text, no cap: the pane IS
+    /// the document and the engine buffer mirrors it back through the VM
+    /// binding, so a capped seed would truncate the user's document on the
+    /// next engine-origin push (the buffer-as-document invariant). The RFC
+    /// 0019 clause-7 cap applies to the TARGET-field path only, where the
+    /// target's app owns the full text. IME commit note: the immediate seed
+    /// here supersedes any pending deferred seed.
+    /// </summary>
     private void SeedPaneText(MainWindowViewModel vm, TextBox box, string paneText)
     {
-        var (seedText, caretUtf16, truncated) = EditorSeedPolicy.Clamp(paneText, box.CaretIndex);
-        var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(seedText, caretUtf16);
-        NativeBridge.dasher_seed_buffer(vm.Handle, seedText, caretBytes);
-        KbLog($"Editor sync: seeded {seedText.Length} chars{(truncated ? $" (capped from {paneText.Length})" : "")}, caret u16={caretUtf16} → byte={caretBytes}");
+        _imeSeedPending = false; // this seed supersedes the deferred one
+        _imeRecheckTimer?.Stop();
+        var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(paneText, box.CaretIndex);
+        NativeBridge.dasher_seed_buffer(vm.Handle, paneText, caretBytes);
+        KbLog($"Editor sync: seeded {paneText.Length} chars, caret u16={box.CaretIndex} → byte={caretBytes}");
     }
 
     /// <summary>
@@ -1022,15 +1031,16 @@ public partial class MainWindow : Window
         // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
         var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(seedText, seedCaretUtf16);
 
-        // Shadow-compare skip (#58): if the target text EQUALS the engine
-        // buffer, the read carried no new information — either an echo of
-        // our own injection or an unchanged re-read (focus churn). A full
-        // re-seed would force a model rebuild = the visible canvas reset;
-        // at most the caret moved within unchanged text, which is exactly
-        // the cheap set_offset re-anchor (no rebuild).
+        // Shadow-compare skip (#58), cap-aware: the engine buffer holds the
+        // CLAMPED text, so the comparison must use the same clamp — comparing
+        // the full document against a capped buffer could never match and
+        // every caret move would re-seed (the #58 reset loop reborn for huge
+        // documents; review P1). Unchanged target → either an echo of our own
+        // injection or an unchanged re-read; at most the caret moved, which is
+        // exactly the cheap set_offset re-anchor (no rebuild).
         var enginePtr = NativeBridge.dasher_get_output_text(_vm.Handle);
         var engineText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
-        if (context.Text == engineText)
+        if (seedText == engineText)
         {
             if (byteOffset >= 0 && byteOffset != NativeBridge.dasher_get_offset(_vm.Handle))
             {
