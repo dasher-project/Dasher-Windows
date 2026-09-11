@@ -862,12 +862,27 @@ public partial class MainWindow : Window
     private IntPtr _lastWatchTarget;
 
     /// <summary>
+    /// TickCount64 of Dasher's LAST keystroke injection into the target. The
+    /// UIA selection watch must not re-seed on the echo of our own output:
+    /// Dasher injects a char/newline → the target's selection changes →
+    /// TextSelectionChanged fires → re-seed → forced model rebuild → the
+    /// visible "canvas resets on every Enter" (#58, Outlook fires per
+    /// keystroke). Focus/foreground triggers are NOT suppressed — a genuine
+    /// app/field switch always re-seeds.
+    /// </summary>
+    private long _lastInjectTick;
+
+    /// <summary>Quiet window after our own injection (#58): UIA selection echoes arrive within milliseconds.</summary>
+    private const long InjectEchoQuietMs = 750;
+
+    /// <summary>
     /// Arm the UIA selection-changed watch on the tracked target root —
     /// caret moves WITHIN an already-focused field are invisible to the
     /// focus/foreground hooks (RFC 0015 clause-8 amendment / RFC 0019
     /// clause 6). Re-armed only when the root changes; the handler marshals
     /// to the UI thread and reuses SeedContextFromTargetAsync's debounce +
-    /// stale-target foreground guard.
+    /// stale-target foreground guard. Self-caused echoes (our own injected
+    /// output) are dropped via the post-inject quiet window (#58).
     /// </summary>
     private void ArmSelectionWatch()
     {
@@ -878,8 +893,13 @@ public partial class MainWindow : Window
         TargetContextReader.StartSelectionWatch(target,
             () => Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
-                if (_vm is { IsKeyboardMode: true })
-                    _ = SeedContextFromTargetAsync("caret moved");
+                if (_vm is not { IsKeyboardMode: true }) return;
+                if (Environment.TickCount64 - _lastInjectTick < InjectEchoQuietMs)
+                {
+                    KbLog("Selection watch: echo of own injection, dropping");
+                    return;
+                }
+                _ = SeedContextFromTargetAsync("caret moved");
             }));
     }
 
@@ -928,6 +948,29 @@ public partial class MainWindow : Window
 
         // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
         var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(context.Text, context.CaretUtf16);
+
+        // Shadow-compare skip (#58): if the target text EQUALS the engine
+        // buffer, the read carried no new information — either an echo of
+        // our own injection or an unchanged re-read (focus churn). A full
+        // re-seed would force a model rebuild = the visible canvas reset;
+        // at most the caret moved within unchanged text, which is exactly
+        // the cheap set_offset re-anchor (no rebuild).
+        var enginePtr = NativeBridge.dasher_get_output_text(_vm.Handle);
+        var engineText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
+        if (context.Text == engineText)
+        {
+            if (byteOffset >= 0 && byteOffset != NativeBridge.dasher_get_offset(_vm.Handle))
+            {
+                KbLog($"Context seed ({reason}): text unchanged, caret u16={context.CaretUtf16} → offset {byteOffset} (no rebuild)");
+                NativeBridge.dasher_set_offset(_vm.Handle, byteOffset);
+            }
+            else
+            {
+                KbLog($"Context seed ({reason}): text unchanged and offset current — skipping");
+            }
+            return;
+        }
+
         KbLog($"Context seed ({reason}): {context.Text.Length} chars, caret u16={context.CaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, context.Text, byteOffset);
     }
@@ -957,6 +1000,7 @@ public partial class MainWindow : Window
 
         var fgAfter = GetForegroundWindow();
         KbLog($"  → after SendInput, fg=0x{fgAfter:X}");
+        _lastInjectTick = Environment.TickCount64; // #58: selection echoes of this injection are dropped
     }
 
     private void SendBackspaces(int count)
@@ -970,6 +1014,7 @@ public partial class MainWindow : Window
 
         var fgAfter = GetForegroundWindow();
         KbLog($"  → after SendInput ({count} backspace(s)), fg=0x{fgAfter:X}");
+        _lastInjectTick = Environment.TickCount64; // #58: selection echoes of this injection are dropped
     }
 
     private void SendUnicodeChar(char c)
@@ -1035,6 +1080,7 @@ public partial class MainWindow : Window
         var cbSize = Marshal.SizeOf<INPUT>();
         SendInput(4, inputs, cbSize);
         KbLog($"  Ctrl+{name} sent to target 0x{_targetTracker.Current:X}");
+        _lastInjectTick = Environment.TickCount64; // #58: selection echoes of this injection are dropped
     }
 
     private void OnKbCopy(object? sender, RoutedEventArgs e)
