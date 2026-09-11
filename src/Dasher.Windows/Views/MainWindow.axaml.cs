@@ -49,6 +49,16 @@ public partial class MainWindow : Window
     [DllImport("user32.dll")]
     private static extern IntPtr GetForegroundWindow();
 
+    // IME composition probe (RFC 0019 clause 2 — defer seeding until commit).
+    [DllImport("imm32.dll")]
+    private static extern IntPtr ImmGetContext(IntPtr hWnd);
+
+    [DllImport("imm32.dll")]
+    private static extern bool ImmReleaseContext(IntPtr hWnd, IntPtr hImc);
+
+    [DllImport("imm32.dll")]
+    private static extern int ImmGetCompositionStringW(IntPtr hImc, int dwIndex, IntPtr lpBuf, int dwBufLen);
+
     [DllImport("user32.dll")]
     private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
@@ -609,6 +619,13 @@ public partial class MainWindow : Window
         // RFC 0019 (the editor contract): editable pane + caret re-anchor.
         WireEditorSync();
 
+        // RFC 0019 clause 5 — New buttons, localized from the shared
+        // catalogue (new + new_session_tooltip; dasher-shared-resources#3).
+        var newTip = Loc.Tr("new_session_tooltip", "New session (clear text and context)");
+        ToolTip.SetTip(BtnNewSession, newTip);
+        ToolTip.SetTip(KbNewSession, newTip);
+        BtnNewSessionLabel.Text = Loc.Tr("new", "New");
+
         // Wire speech volume slider to SpeechService
         var volSlider = this.FindControl<Avalonia.Controls.Slider>("SpeakVolumeSlider");
         if (volSlider != null)
@@ -752,9 +769,20 @@ public partial class MainWindow : Window
                 ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
             if (paneText == engineText) return;
 
-            var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(paneText, box.CaretIndex);
-            NativeBridge.dasher_seed_buffer(vm.Handle, paneText, caretBytes);
-            KbLog($"Editor sync: seeded {paneText.Length} chars, caret u16={box.CaretIndex} → byte={caretBytes}");
+            // RFC 0019 clause 2 — IME composition deferral: mid-composition
+            // TextChanged events carry the evolving composition string;
+            // seeding each intermediate state is wasted rebuilds. Defer until
+            // composition ends (the recheck timer completes the seed). On
+            // IMMs where the probe can't see composition this degrades to
+            // today's immediate seeding — always correct, merely noisier.
+            if (ImeCompositionActive())
+            {
+                _imeSeedPending = true;
+                EnsureImeRecheckTimer().Start();
+                return;
+            }
+
+            SeedPaneText(vm, box, paneText);
         };
 
         MessageArea.PropertyChanged += (s, args) =>
@@ -777,6 +805,60 @@ public partial class MainWindow : Window
             if (caretBytes >= 0 && caretBytes != NativeBridge.dasher_get_offset(vm.Handle))
                 NativeBridge.dasher_set_offset(vm.Handle, caretBytes);
         };
+    }
+
+    /// <summary>True while an IME composition is in progress on our window.</summary>
+    private bool ImeCompositionActive()
+    {
+        try
+        {
+            var hwnd = OurHwnd();
+            if (hwnd == IntPtr.Zero) return false;
+            var himc = ImmGetContext(hwnd);
+            if (himc == IntPtr.Zero) return false;
+            try
+            {
+                // GCS_COMPSTR: a non-empty composition string means in-progress.
+                const int GCS_COMPSTR = 0x0008;
+                return ImmGetCompositionStringW(himc, GCS_COMPSTR, IntPtr.Zero, 0) > 0;
+            }
+            finally { ImmReleaseContext(hwnd, himc); }
+        }
+        catch { return false; }
+    }
+
+    private bool _imeSeedPending;
+    private Avalonia.Threading.DispatcherTimer? _imeRecheckTimer;
+
+    private Avalonia.Threading.DispatcherTimer EnsureImeRecheckTimer()
+    {
+        if (_imeRecheckTimer != null) return _imeRecheckTimer;
+        _imeRecheckTimer = new Avalonia.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
+        _imeRecheckTimer.Tick += (_, _) =>
+        {
+            if (_imeSeedPending && !ImeCompositionActive())
+            {
+                _imeSeedPending = false;
+                _imeRecheckTimer!.Stop();
+                var box = MessageArea;
+                if (_vm != null && _vm.Handle != IntPtr.Zero && box != null && !_suppressEditorSync)
+                    SeedPaneText(_vm, box, box.Text ?? "");
+            }
+            else if (!_imeSeedPending)
+            {
+                _imeRecheckTimer!.Stop();
+            }
+        };
+        return _imeRecheckTimer;
+    }
+
+    /// <summary>Seed the engine from the pane text with the long-document cap applied (RFC 0019 clause 7).</summary>
+    private void SeedPaneText(MainWindowViewModel vm, TextBox box, string paneText)
+    {
+        var (seedText, caretUtf16, truncated) = EditorSeedPolicy.Clamp(paneText, box.CaretIndex);
+        var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(seedText, caretUtf16);
+        NativeBridge.dasher_seed_buffer(vm.Handle, seedText, caretBytes);
+        KbLog($"Editor sync: seeded {seedText.Length} chars{(truncated ? $" (capped from {paneText.Length})" : "")}, caret u16={caretUtf16} → byte={caretBytes}");
     }
 
     /// <summary>
@@ -932,8 +1014,13 @@ public partial class MainWindow : Window
             return;
         }
 
+        // RFC 0019 clause 7 — long-document seed cap (a 500k-char target
+        // document seeds only its trailing window; the caret moves with it).
+        var (seedText, seedCaretUtf16, truncated) =
+            EditorSeedPolicy.Clamp(context.Text, context.CaretUtf16);
+
         // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
-        var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(context.Text, context.CaretUtf16);
+        var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(seedText, seedCaretUtf16);
 
         // Shadow-compare skip (#58): if the target text EQUALS the engine
         // buffer, the read carried no new information — either an echo of
@@ -957,8 +1044,8 @@ public partial class MainWindow : Window
             return;
         }
 
-        KbLog($"Context seed ({reason}): {context.Text.Length} chars, caret u16={context.CaretUtf16} → byte={byteOffset}");
-        NativeBridge.dasher_seed_buffer(_vm.Handle, context.Text, byteOffset);
+        KbLog($"Context seed ({reason}): {seedText.Length} chars{(truncated ? $" (capped from {context.Text.Length})" : "")}, caret u16={seedCaretUtf16} → byte={byteOffset}");
+        NativeBridge.dasher_seed_buffer(_vm.Handle, seedText, byteOffset);
     }
 
     private int _contextSeedGeneration;
