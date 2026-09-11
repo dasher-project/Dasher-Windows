@@ -40,13 +40,28 @@ public class EngineExportContractTests
     [Fact]
     public void Every_dasher_import_resolves_in_the_local_engine_dll()
     {
-        // Same skip/require contract as the engine-integration tests.
-        var handle = LoadLibrary("dasher.dll");
-        if (handle == IntPtr.Zero)
+        // Force the same load the app performs (app-dir/PATH resolution via
+        // the DllImport layer) instead of LoadLibrary-by-name: a hand-rolled
+        // LoadLibrary follows its own search quirks (and an ANSI/W entry-point
+        // mixup made this vacuously skip locally while failing CI).
+        try
+        {
+            var probe = NativeBridge.dasher_find_parameter_key("BP_LM_ADAPTIVE");
+            Assert.True(probe >= 0, "context-free engine probe failed unexpectedly");
+        }
+        catch (DllNotFoundException)
         {
             if (Environment.GetEnvironmentVariable("DASHER_TESTS_REQUIRE_ENGINE") == "1")
                 Assert.Fail("dasher.dll not loadable but DASHER_TESTS_REQUIRE_ENGINE=1");
             return; // legit local skip (no engine build)
+        }
+
+        var handle = GetModuleHandle("dasher.dll");
+        if (handle == IntPtr.Zero)
+        {
+            if (Environment.GetEnvironmentVariable("DASHER_TESTS_REQUIRE_ENGINE") == "1")
+                Assert.Fail("engine loaded but GetModuleHandle failed — name mismatch?");
+            return;
         }
 
         try
@@ -66,16 +81,15 @@ public class EngineExportContractTests
         }
         finally
         {
-            FreeLibrary(handle);
+            // GetModuleHandle does NOT take a reference — nothing to free.
         }
     }
 
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)] string fileName);
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+    private static extern IntPtr GetModuleHandleW(string fileName);
+
+    private static IntPtr GetModuleHandle(string fileName) => GetModuleHandleW(fileName);
 
     [DllImport("kernel32.dll")]
     private static extern IntPtr GetProcAddress(IntPtr module, [MarshalAs(UnmanagedType.LPStr)] string procName);
-
-    [DllImport("kernel32.dll")]
-    private static extern bool FreeLibrary(IntPtr module);
 }
