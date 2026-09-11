@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Dasher.Windows.Engine;
 using Dasher.Windows.Services;
 
 namespace Dasher.Windows;
@@ -50,21 +51,43 @@ sealed class Program
         string failure;
         try
         {
-            var handle = LoadLibrary("dasher.dll");
-            if (handle == IntPtr.Zero)
+            try
+            {
+                // Force the SAME load the app performs — a context-free
+                // NativeBridge P/Invoke resolves dasher.dll through the
+                // DllImport layer (app dir / PATH), immune to hand-rolled
+                // LoadLibrary search quirks. The v0.1.28 guard hand-declared
+                // LoadLibrary without CharSet.Unicode: the marshaler called
+                // LoadLibraryA with a UTF-16 string, which read "d" before the
+                // first NUL and failed on EVERY machine — the "missing
+                // dasher.dll" startup dialog users saw (dll was present all
+                // along; MSIs verified byte-identical).
+                _ = NativeBridge.dasher_find_parameter_key("BP_LM_ADAPTIVE");
+
+                // Sentinel probe: resolves the export through the same
+                // interop path. A null ctx is the guard's documented
+                // safe-mode for this call (returns "" without touching the
+                // engine).
+                _ = NativeBridge.dasher_get_training_path(IntPtr.Zero);
+                return; // engine present and new enough
+            }
+            catch (DllNotFoundException)
             {
                 failure = "dasher.dll could not be loaded (missing or wrong architecture).";
             }
-            else if (GetProcAddress(handle, RequiredEngineSentinel) == IntPtr.Zero)
+            catch (BadImageFormatException)
+            {
+                // A wrong-architecture or malformed DLL throws this from the
+                // P/Invoke itself — review: it must reach the actionable
+                // message, not the generic handler.
+                failure = "dasher.dll could not be loaded (wrong architecture — a 64-bit build is required).";
+            }
+            catch (EntryPointNotFoundException ex)
             {
                 failure =
                     "This Dasher installation is mixed-version: dasher.dll is older than the app " +
-                    "(missing " + RequiredEngineSentinel + "). Periodic crashes would follow. " +
+                    $"({RequiredEngineSentinel} missing: {ex.Message}). Periodic crashes would follow. " +
                     "Please reinstall Dasher from the latest release.";
-            }
-            else
-            {
-                return; // engine present and new enough
             }
         }
         catch (Exception ex)
@@ -87,12 +110,9 @@ sealed class Program
         Environment.Exit(1);
     }
 
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)] string fileName);
-
-    [DllImport("kernel32.dll")]
-    private static extern IntPtr GetProcAddress(IntPtr module, [MarshalAs(UnmanagedType.LPStr)] string procName);
-
+    // NOTE: no LoadLibrary/GetProcAddress here by design — see the comment in
+    // VerifyEngineExports. If a handle is ever needed again, declare it as
+    // LoadLibraryW with CharSet = CharSet.Unicode and ExactSpelling = true.
     [DllImport("user32.dll")]
     private static extern int MessageBoxW(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)] string text,
         [MarshalAs(UnmanagedType.LPWStr)] string caption, uint type);
