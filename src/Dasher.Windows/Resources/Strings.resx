@@ -119,6 +119,24 @@
   <data name="copy_commands" xml:space="preserve">
     <value>Copy commands</value>
   </data>
+  <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
+    <value>Could not load the file into the engine</value>
+  </data>
+  <data name="could_not_open_the_selected_file" xml:space="preserve">
+    <value>Could not open the selected file.</value>
+  </data>
+  <data name="could_not_read_the_selected_file" xml:space="preserve">
+    <value>Could not read the selected file.</value>
+  </data>
+  <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
+    <value>Could not sync your edit with the engine — it may be overwritten</value>
+  </data>
+  <data name="could_not_write_the_export_file" xml:space="preserve">
+    <value>Could not write the export file.</value>
+  </data>
+  <data name="could_not_write_the_training_data" xml:space="preserve">
+    <value>Could not write the training data.</value>
+  </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Current Calibration</value>
   </data>
@@ -212,6 +230,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="fast" xml:space="preserve">
     <value>Fast</value>
   </data>
+  <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
+    <value>File truncated at 4 MB — only the first part is loaded</value>
+  </data>
   <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
     <value>Flatpak or AppImage build can't provide.
 
@@ -249,6 +270,12 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="import_training_text" xml:space="preserve">
     <value>Import Training Text</value>
+  </data>
+  <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
+    <value>Imported %1 — applies fully on next launch</value>
+  </data>
+  <data name="imported_1_of_training_text" xml:space="preserve">
+    <value>Imported %1 of training text</value>
   </data>
   <data name="increase_speed" xml:space="preserve">
     <value>Increase Speed</value>
@@ -346,6 +373,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="light" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="loaded_1_characters" xml:space="preserve">
+    <value>Loaded %1 characters</value>
+  </data>
   <data name="locale" xml:space="preserve">
     <value>Language</value>
   </data>
@@ -364,6 +394,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="new_message" xml:space="preserve">
     <value>New Message</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>New session (clear text and context)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>No Dasher 5 data found on this Mac.</value>
   </data>
@@ -372,6 +405,12 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
     <value>No speech engine available. Build with the system TTS feature, or set up a cloud voice in Preferences.</value>
+  </data>
+  <data name="no_training_data_to_export_yet" xml:space="preserve">
+    <value>No training data to export yet</value>
+  </data>
+  <data name="no_user_training_data_yet" xml:space="preserve">
+    <value>No user training data yet</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Nothing to save</value>
@@ -598,11 +637,23 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="text_files" xml:space="preserve">
     <value>Text files</value>
   </data>
+  <data name="that_file_already_is_your_training_data" xml:space="preserve">
+    <value>That file already is your training data.</value>
+  </data>
   <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
     <value>the app you are pointing at (needs ydotool)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>The debug overlay draws a green panel top-left of the canvas showing live touch event counts and the last reported (x, y). When you pinch and hold, you should see touch.began then touch.moved with changing coordinates as you look around.</value>
+  </data>
+  <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
+    <value>The file is too large (over 10 MB) to import as training text.</value>
+  </data>
+  <data name="the_selected_file_is_empty" xml:space="preserve">
+    <value>The selected file is empty.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
+    <value>This deletes your accumulated training data for every alphabet. Predictions keep the influence of very recent typing.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>This deletes your accumulated training data. The language model will return to built-in defaults on next launch. This cannot be undone.</value>
@@ -649,8 +700,14 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="training_data" xml:space="preserve">
     <value>Training Data</value>
   </data>
+  <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
+    <value>Training data deleted — restart Dasher to fully apply</value>
+  </data>
   <data name="training_data_description" xml:space="preserve">
     <value>Import adds text to the language model and your accumulated training data (kept across restarts). Export saves your training data for backup or transfer. Reset deletes all user training data — the model returns to its built-in defaults on next launch.</value>
+  </data>
+  <data name="training_data_exported" xml:space="preserve">
+    <value>Training data exported.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>Export Training Data</value>
@@ -669,6 +726,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="training_imported_restart" xml:space="preserve">
     <value>Imported {0} KB — applies fully on next launch (live model returned {1})</value>
+  </data>
+  <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
+    <value>Training is not available yet — try again once the canvas has rendered.</value>
   </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>No user training data yet</value>

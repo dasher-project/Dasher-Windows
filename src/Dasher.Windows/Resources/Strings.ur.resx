@@ -317,6 +317,9 @@
   <data name="new_message" xml:space="preserve">
     <value>نیا پیغام</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>نئی سیشن (متن اور سیاق صاف کریں)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>اس میک پر کوئی Dasher 5 ڈیٹا نہیں ملا۔</value>
   </data>

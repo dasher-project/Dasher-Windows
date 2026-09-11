@@ -317,6 +317,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   <data name="new_message" xml:space="preserve">
     <value>Umlayezo Omusha</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Iseshini esisha (sula umbhalo nomongo)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Akukho datha ye-Dasher 5 etholakele kule Mac.</value>
   </data>

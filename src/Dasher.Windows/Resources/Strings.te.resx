@@ -317,6 +317,9 @@
   <data name="new_message" xml:space="preserve">
     <value>కొత్త సందేశం</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>కొత్త సెషన్ (పాఠ్యం మరియు సందర్భాన్ని క్లియర్ చేయండి)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>ఈ Macలో డాషర్ 5 డేటా కనుగొనబడలేదు.</value>
   </data>

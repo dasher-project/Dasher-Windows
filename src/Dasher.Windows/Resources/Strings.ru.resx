@@ -311,6 +311,9 @@
   <data name="new_message" xml:space="preserve">
     <value>Новое сообщение</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Новый сеанс (очистить текст и контекст)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Данные Dasher 5 на этом Mac не найдены.</value>
   </data>

@@ -314,6 +314,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="new_message" xml:space="preserve">
     <value>Ujumbe Mpya</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Kipya kikao (futa maandishi na muktadha)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Hakuna data ya Dasher 5 iliyopatikana kwenye Mac hii.</value>
   </data>

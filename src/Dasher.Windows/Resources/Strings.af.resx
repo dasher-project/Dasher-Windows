@@ -314,6 +314,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   <data name="new_message" xml:space="preserve">
     <value>Nuwe Boodskap</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Nuwe sessie (maak teks en konteks skoon)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Geen Dasher 5-data op hierdie Mac gevind nie.</value>
   </data>

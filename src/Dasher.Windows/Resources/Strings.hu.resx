@@ -308,6 +308,9 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   <data name="new_message" xml:space="preserve">
     <value>Új üzenet</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Új munkamenet (szöveg és kontextus törlése)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Nem találhatók Dasher 5 adatok ezen a Mac gépen.</value>
   </data>

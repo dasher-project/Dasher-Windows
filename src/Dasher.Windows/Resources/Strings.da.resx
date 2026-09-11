@@ -308,6 +308,9 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
   <data name="new_message" xml:space="preserve">
     <value>Ny besked</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Ny session (ryd tekst og kontekst)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Ingen Dasher 5-data fundet på denne Mac.</value>
   </data>
