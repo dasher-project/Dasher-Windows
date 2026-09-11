@@ -862,27 +862,18 @@ public partial class MainWindow : Window
     private IntPtr _lastWatchTarget;
 
     /// <summary>
-    /// TickCount64 of Dasher's LAST keystroke injection into the target. The
-    /// UIA selection watch must not re-seed on the echo of our own output:
-    /// Dasher injects a char/newline → the target's selection changes →
-    /// TextSelectionChanged fires → re-seed → forced model rebuild → the
-    /// visible "canvas resets on every Enter" (#58, Outlook fires per
-    /// keystroke). Focus/foreground triggers are NOT suppressed — a genuine
-    /// app/field switch always re-seeds.
-    /// </summary>
-    private long _lastInjectTick;
-
-    /// <summary>Quiet window after our own injection (#58): UIA selection echoes arrive within milliseconds.</summary>
-    private const long InjectEchoQuietMs = 750;
-
-    /// <summary>
     /// Arm the UIA selection-changed watch on the tracked target root —
     /// caret moves WITHIN an already-focused field are invisible to the
     /// focus/foreground hooks (RFC 0015 clause-8 amendment / RFC 0019
-    /// clause 6). Re-armed only when the root changes; the handler marshals
-    /// to the UI thread and reuses SeedContextFromTargetAsync's debounce +
-    /// stale-target foreground guard. Self-caused echoes (our own injected
-    /// output) are dropped via the post-inject quiet window (#58).
+    /// clause 6). Self-injection echoes need NO suppression window here:
+    /// the engine buffer mirrors our injected output byte-for-byte
+    /// (Dasher-Windows #45), so an echo read compares EQUAL in
+    /// SeedContextFromTargetAsync and is skipped without a rebuild — while
+    /// genuine caret moves, target-side pastes and external edits correctly
+    /// differ and re-seed. A time-based quiet window was considered and
+    /// rejected in review: it would also drop real caret moves made during
+    /// continuous Dasher output and the sync event of a target-side paste
+    /// (stale anchor until the next trigger).
     /// </summary>
     private void ArmSelectionWatch()
     {
@@ -893,13 +884,8 @@ public partial class MainWindow : Window
         TargetContextReader.StartSelectionWatch(target,
             () => Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
-                if (_vm is not { IsKeyboardMode: true }) return;
-                if (Environment.TickCount64 - _lastInjectTick < InjectEchoQuietMs)
-                {
-                    KbLog("Selection watch: echo of own injection, dropping");
-                    return;
-                }
-                _ = SeedContextFromTargetAsync("caret moved");
+                if (_vm is { IsKeyboardMode: true })
+                    _ = SeedContextFromTargetAsync("caret moved");
             }));
     }
 
@@ -1000,7 +986,6 @@ public partial class MainWindow : Window
 
         var fgAfter = GetForegroundWindow();
         KbLog($"  → after SendInput, fg=0x{fgAfter:X}");
-        _lastInjectTick = Environment.TickCount64; // #58: selection echoes of this injection are dropped
     }
 
     private void SendBackspaces(int count)
@@ -1014,7 +999,6 @@ public partial class MainWindow : Window
 
         var fgAfter = GetForegroundWindow();
         KbLog($"  → after SendInput ({count} backspace(s)), fg=0x{fgAfter:X}");
-        _lastInjectTick = Environment.TickCount64; // #58: selection echoes of this injection are dropped
     }
 
     private void SendUnicodeChar(char c)
@@ -1080,7 +1064,6 @@ public partial class MainWindow : Window
         var cbSize = Marshal.SizeOf<INPUT>();
         SendInput(4, inputs, cbSize);
         KbLog($"  Ctrl+{name} sent to target 0x{_targetTracker.Current:X}");
-        _lastInjectTick = Environment.TickCount64; // #58: selection echoes of this injection are dropped
     }
 
     private void OnKbCopy(object? sender, RoutedEventArgs e)
