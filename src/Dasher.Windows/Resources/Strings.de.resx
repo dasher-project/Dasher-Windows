@@ -302,6 +302,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   <data name="new_message" xml:space="preserve">
     <value>Neue Nachricht</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Neue Sitzung (Text und Kontext löschen)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Auf diesem Mac wurden keine Dasher 5-Daten gefunden.</value>
   </data>
