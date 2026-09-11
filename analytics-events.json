@@ -55,7 +55,10 @@
     "crash": {
       "description": "Uncaught exception",
       "properties": {
-        "stack_trace": { "type": "string", "note": "May contain file paths but not user text" }
+        "stack_trace": { "type": "string", "note": "May contain file paths but not user text" },
+        "exception_type": { "type": "string", "note": "Original exception type name; set explicitly on deferred reports where the SDK's native typing names the SavedCrashException wrapper instead (#60)" },
+        "source": { "type": "string", "note": "Where the exception was caught (e.g. Program.Main)" },
+        "engine_log_tail": { "type": "string", "note": "Deferred reports only: last engine diagnostic lines captured with the crash" }
       },
       "pii": false
     }

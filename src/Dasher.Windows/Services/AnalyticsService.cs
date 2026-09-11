@@ -241,6 +241,9 @@ public static class AnalyticsService
                 if (bodyParts.Length > 1 && !string.IsNullOrWhiteSpace(bodyParts[1]))
                     crashProps["engine_log_tail"] = bodyParts[1].Trim();
                 crashProps["source"] = source;
+                // The original type as an explicit property too (#60): the
+                // SDK's native $exception typing names the wrapper class.
+                crashProps["exception_type"] = exceptionType;
 
                 // Use CaptureException so PostHog Error Tracking sees it as $exception
                 var ex = new SavedCrashException(exceptionType, stackTrace);
@@ -285,8 +288,12 @@ public static class AnalyticsService
 /// Reconstructed exception for deferred crash reporting (RFC 0009).
 /// Carries the original exception type name and saved stack trace so
 /// PostHogSdk.CaptureException produces a proper $exception event.
+/// The saved frames are installed via ExceptionDispatchInfo.SetRemoteStackTrace
+/// (#60): the SDK reads ex.StackTrace / ex.GetType(), not ToString() — without
+/// this the deferred reports arrived as type-only events with no frames,
+/// gutting their diagnostic value.
 /// </summary>
-internal sealed class SavedCrashException : Exception
+public sealed class SavedCrashException : Exception
 {
     private readonly string _savedStackTrace;
 
@@ -295,10 +302,31 @@ internal sealed class SavedCrashException : Exception
     {
         _savedStackTrace = savedStackTrace;
         Source = originalTypeName;
+
+        // Restore the ORIGINAL frames onto this instance's StackTrace
+        // property (never rewrites history: this exception was never
+        // thrown; the frames are text restored from the crash file).
+        if (!string.IsNullOrWhiteSpace(savedStackTrace))
+        {
+            try
+            {
+                System.Runtime.ExceptionServices.ExceptionDispatchInfo
+                    .SetRemoteStackTrace(this, savedStackTrace);
+            }
+            catch
+            {
+                // Malformed/synthetic stack text — the properties below
+                // still carry it verbatim.
+            }
+        }
     }
 
     public override string ToString()
     {
-        return _savedStackTrace;
+        // Full rendering: original frames first (SDK/portal display order),
+        // with the deferred-context note after.
+        return string.IsNullOrWhiteSpace(_savedStackTrace)
+            ? base.ToString()
+            : _savedStackTrace + Environment.NewLine + "--- reported after restart (deferred) ---";
     }
 }
