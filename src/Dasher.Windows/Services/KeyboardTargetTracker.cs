@@ -261,7 +261,12 @@ public sealed class KeyboardTargetTracker : IDisposable
     [DllImport("user32.dll")]
     private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
 
-    [DllImport("user32.dll")]
+    // GetCurrentThreadId is a KERNEL32 export — declaring it as user32 caused
+    // EntryPointNotFoundException on every injection whenever the target-
+    // restore path ran (Heide's v0.1.29 crash: "Unable to find an entry point
+    // named 'GetCurrentThreadId' in DLL 'user32.dll'" from
+    // EnsureForeground → SendTextToForeground → OnEngineOutput).
+    [DllImport("kernel32.dll")]
     private static extern uint GetCurrentThreadId();
 
     private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
