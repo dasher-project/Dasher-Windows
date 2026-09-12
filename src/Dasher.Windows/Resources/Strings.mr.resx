@@ -317,6 +317,9 @@
   <data name="new_message" xml:space="preserve">
     <value>नवीन संदेश</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>नवीन सत्र (मजकूर आणि संदर्भ पुसा)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>या मॅकवर डॅशर ५ चा कोणताही डेटा आढळला नाही.</value>
   </data>

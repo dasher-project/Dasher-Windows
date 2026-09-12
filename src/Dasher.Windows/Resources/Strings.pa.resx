@@ -320,6 +320,9 @@
   <data name="new_message" xml:space="preserve">
     <value>ਨਵਾਂ ਸੁਨੇਹਾ</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>ਨਵੀਂ ਸੈਸ਼ਨ (ਟੈਕਸਟ ਅਤੇ ਪ੍ਰਸੰਗ ਸਾਫ਼ ਕਰੋ)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>ਇਸ ਮੈਕ 'ਤੇ ਕੋਈ ਡੈਸ਼ਰ 5 ਡਾਟਾ ਨਹੀਂ ਮਿਲਿਆ।</value>
   </data>

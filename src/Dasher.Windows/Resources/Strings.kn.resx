@@ -314,6 +314,9 @@
   <data name="new_message" xml:space="preserve">
     <value>ಹೊಸ ಸಂದೇಶ</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>ಹೊಸ ಅಧಿವೇಶನ (ಪಠ್ಯ ಮತ್ತು ಸಂದರ್ಭ ಅಳಿಸಿ)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>ಈ Mac ನಲ್ಲಿ ಯಾವುದೇ Dasher 5 ಡೇಟಾ ಕಂಡುಬಂದಿಲ್ಲ.</value>
   </data>

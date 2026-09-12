@@ -311,6 +311,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="new_message" xml:space="preserve">
     <value>Nytt meddelande</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Ny session (rensa text och kontext)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Inga Dasher 5-data hittades på den här Mac-datorn.</value>
   </data>

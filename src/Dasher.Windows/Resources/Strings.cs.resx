@@ -308,6 +308,9 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   <data name="new_message" xml:space="preserve">
     <value>Nová zpráva</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Nová relace (vymazat text a kontext)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Na tomto Macu nebyla nalezena žádná data pro Dasher 5.</value>
   </data>

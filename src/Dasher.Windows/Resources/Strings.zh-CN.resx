@@ -314,6 +314,9 @@
   <data name="new_message" xml:space="preserve">
     <value>新消息</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>新建会话（清除文本和上下文）</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>在此 Mac 上找不到 Dasher 5 数据。</value>
   </data>

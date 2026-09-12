@@ -314,6 +314,9 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   <data name="new_message" xml:space="preserve">
     <value>Nova mensagem</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Nova sessão (limpar texto e contexto)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Nenhum dado do Dasher 5 foi encontrado neste Mac.</value>
   </data>

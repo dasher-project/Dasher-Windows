@@ -308,6 +308,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="new_message" xml:space="preserve">
     <value>Nieuw bericht</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Nieuwe sessie (tekst en context wissen)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Er zijn geen Dasher 5-gegevens gevonden op deze Mac.</value>
   </data>

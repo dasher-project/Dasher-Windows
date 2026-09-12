@@ -320,6 +320,9 @@
   <data name="new_message" xml:space="preserve">
     <value>નવો સંદેશ</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>નવો સત્ર (ટેક્સ્ટ અને સંદર્ભ સાફ કરો)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>આ Mac પર કોઈ Dasher 5 ડેટા મળ્યો નથી.</value>
   </data>

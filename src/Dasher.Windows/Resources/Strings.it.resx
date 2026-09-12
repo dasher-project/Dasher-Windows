@@ -311,6 +311,9 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
   <data name="new_message" xml:space="preserve">
     <value>Nuovo messaggio</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Nuova sessione (cancella testo e contesto)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Nessun dato Dasher 5 trovato su questo Mac.</value>
   </data>

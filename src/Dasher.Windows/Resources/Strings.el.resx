@@ -317,6 +317,9 @@
   <data name="new_message" xml:space="preserve">
     <value>Νέο μήνυμα</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Νέα συνεδρία (εκκαθάριση κειμένου και συμφραζομένων)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>Δεν βρέθηκαν δεδομένα Dasher 5 σε αυτόν τον Mac.</value>
   </data>

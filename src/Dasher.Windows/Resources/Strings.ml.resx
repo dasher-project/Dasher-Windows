@@ -320,6 +320,9 @@
   <data name="new_message" xml:space="preserve">
     <value>പുതിയ സന്ദേശം</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>പുതിയ സെഷൻ (വാചകവും സന്ദർഭവും മായ്ക്കുക)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>ഈ മാക്കിൽ ഡാഷർ 5 ഡാറ്റയൊന്നും കണ്ടെത്തിയില്ല.</value>
   </data>

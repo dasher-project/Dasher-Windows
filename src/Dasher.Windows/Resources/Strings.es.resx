@@ -308,6 +308,9 @@ Puedes cambiar esta configuración en cualquier momento en Ajustes &gt; Privacid
   <data name="new_message" xml:space="preserve">
     <value>Nuevo mensaje</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>Nueva sesión (borrar texto y contexto)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>No se encontraron datos de Dasher 5 en esta Mac.</value>
   </data>

@@ -317,6 +317,9 @@
   <data name="new_message" xml:space="preserve">
     <value>புதிய செய்தி</value>
   </data>
+  <data name="new_session_tooltip" xml:space="preserve">
+    <value>புதிய அமர்வு (உரை மற்றும் சூழலை அழி)</value>
+  </data>
   <data name="no_dasher_5_data_found_on_this_mac" xml:space="preserve">
     <value>இந்த மேக்கில் டேஷர் 5 தரவு எதுவும் காணப்படவில்லை.</value>
   </data>
