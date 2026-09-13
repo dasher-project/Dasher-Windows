@@ -1060,14 +1060,8 @@ public partial class MainWindow : Window
         var engineFullText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
         var (engineSentence, _) = SentenceWindow.Trim(engineFullText, engineFullText.Length);
 
-        // Trailing-whitespace tolerance (review round 2 #3): the engine can
-        // lag a trailing space behind the target — comparing without
-        // trimming the tail causes churn re-seeds until convergence. Trim
-        // both sides for the comparison only; the seed uses the untrimmed
-        // target sentence.
-        var compareSeed = seedText.TrimEnd();
-        var compareEngine = engineSentence.TrimEnd();
-        if (compareSeed == compareEngine)
+        // Exact match — the cheap re-anchor (no rebuild).
+        if (seedText == engineSentence)
         {
             if (byteOffset >= 0 && byteOffset != NativeBridge.dasher_get_offset(_vm.Handle))
             {
@@ -1081,7 +1075,22 @@ public partial class MainWindow : Window
             return;
         }
 
-        KbLog($"Context seed ({reason}): sentence \"{seedText}\" ({seedText.Length} of {context.Text.Length} chars), caret u16={seedCaretUtf16} → byte={byteOffset}");
+        // Whitespace-tolerant match (review P1 "whitespace hides buffer
+        // divergence"): the engine can lag a trailing space behind the
+        // target. A cheap set_offset here would compute from the LONGER
+        // string and place the engine beyond its own buffer — instead,
+        // re-seed with the current sentence to absorb the difference.
+        if (seedText.TrimEnd() == engineSentence.TrimEnd())
+        {
+            KbLog($"Context seed ({reason}): sentence matches modulo trailing whitespace — re-seeding to sync");
+            NativeBridge.dasher_seed_buffer(_vm.Handle, seedText, byteOffset);
+            return;
+        }
+
+        // No sentence CONTENT in the log — lengths only (review P1 security:
+        // "private target text is logged"; the sentence can contain up to
+        // 200 chars of a private email or message).
+        KbLog($"Context seed ({reason}): {seedText.Length} of {context.Text.Length} chars, caret u16={seedCaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, seedText, byteOffset);
     }
 
