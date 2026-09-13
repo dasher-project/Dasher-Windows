@@ -55,6 +55,19 @@ public static class SentenceWindow
         while (start < caret && char.IsWhiteSpace(text[start]))
             start++;
 
+        // Surrogate-pair guard (review): the 200-char cap can land on the LOW
+        // half of a supplementary character — sliding one UTF-16 unit forward
+        // prevents seeding an orphan half through the UTF-8 bridge (which
+        // would make the shadow-compare never match again).
+        if (start < caret && char.IsLowSurrogate(text[start]))
+            start++;
+
+        // End-side surrogate guard (review round 2): the caret can split a
+        // pair (UIA ranges sometimes return mid-pair offsets) — step back so
+        // the window doesn't end with a lone high surrogate.
+        if (caret > start && char.IsHighSurrogate(text[caret - 1]))
+            caret--;
+
         // Take from the sentence start to the caret
         var trimmed = text[start..caret];
         return (trimmed, trimmed.Length); // caret at end of trimmed text

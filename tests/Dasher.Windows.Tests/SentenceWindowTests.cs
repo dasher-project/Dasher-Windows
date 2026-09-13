@@ -108,4 +108,85 @@ public class SentenceWindowTests
         var (text2, _) = SentenceWindow.Trim("one: two|", 8);
         Assert.Equal("two", text2);
     }
+
+    // ── Review-loop round 1 additions: the cases that broke the lockstep ────
+
+    [Fact]
+    public void Typing_a_boundary_char_does_not_break_lockstep()
+    {
+        // THE critical test (review #1): typing '.' through Dasher grows
+        // the engine buffer to include the '.', but the sentence window
+        // trims to "" (boundary). SYMMETRIC trimming (both sides trimmed
+        // the same way) makes them match.
+        var target = "Hello John. I wanted to ask."; // user typed the '.'
+        var (sentence, _) = SentenceWindow.Trim(target, target.Length);
+        Assert.Equal("", sentence); // boundary → empty sentence
+
+        // Engine buffer also has the '.': trim it the same way
+        var engineBuffer = "I wanted to ask."; // what the engine accumulated
+        var (engineSentence, _) = SentenceWindow.Trim(engineBuffer, engineBuffer.Length);
+        Assert.Equal("", engineSentence); // also empty
+
+        // Symmetric: both sides see the same sentence at the same position
+        Assert.Equal(sentence, engineSentence); // match → skip, no reset
+    }
+
+    [Fact]
+    public void Typing_after_a_boundary_resumes_lockstep()
+    {
+        // After typing '.', then ' N' (start of next sentence)
+        var engineBuffer = "I wanted to ask. N"; // engine has the period + new char
+        var target = "Hello John. I wanted to ask. N"; // target has same
+
+        var (engineSentence, _) = SentenceWindow.Trim(engineBuffer, engineBuffer.Length);
+        var (targetSentence, _) = SentenceWindow.Trim(target, target.Length);
+
+        Assert.Equal("N", engineSentence);
+        Assert.Equal("N", targetSentence);
+        Assert.Equal(engineSentence, targetSentence); // match → skip
+    }
+
+    [Fact]
+    public void Newline_crlf_divergence_symmetric_trim_handles_it()
+    {
+        // Engine emits \n, Outlook inserts \r\n (review #2). Symmetric
+        // trimming lands on the same boundary on both sides.
+        var engineBuffer = "hello world\nNew sent"; // \n from the engine
+        var target = "hello world\r\nNew sent";     // \r\n from Outlook
+
+        var (engineSentence, _) = SentenceWindow.Trim(engineBuffer, engineBuffer.Length);
+        var (targetSentence, _) = SentenceWindow.Trim(target, target.Length);
+
+        Assert.Equal("New sent", engineSentence);
+        Assert.Equal("New sent", targetSentence);
+        Assert.Equal(engineSentence, targetSentence); // match → skip
+    }
+
+    [Fact]
+    public void Consecutive_boundaries()
+    {
+        var (text, _) = SentenceWindow.Trim("Wow!!! Next|", 11);
+        Assert.Equal("Next", text); // only the LAST boundary matters
+    }
+
+    [Fact]
+    public void Surrogate_pair_at_lookback_cap_does_not_split()
+    {
+        // An emoji straddling the 200-char cap must not produce an orphan
+        // low surrogate at the start of the window (review #5).
+        var emoji = "\U0001F600"; // surrogate pair
+        var text = new string('a', SentenceWindow.MaxLookback - 1) + emoji + " tail";
+        var (trimmed, _) = SentenceWindow.Trim(text, text.Length);
+
+        Assert.False(char.IsLowSurrogate(trimmed[0]));
+        Assert.True(trimmed.Length > 0);
+    }
+
+    [Fact]
+    public void Caret_beyond_text_length_clamps()
+    {
+        var (text, caret) = SentenceWindow.Trim("Hello", 999);
+        Assert.Equal("Hello", text);
+        Assert.Equal(5, caret);
+    }
 }

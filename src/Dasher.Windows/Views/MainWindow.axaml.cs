@@ -967,14 +967,19 @@ public partial class MainWindow : Window
     {
         var target = _targetTracker.Current;
         if (target == IntPtr.Zero || target == _lastWatchTarget) return;
-        _lastWatchTarget = target;
-
-        TargetContextReader.StartSelectionWatch(target,
-            () => Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-            {
-                if (_vm is { IsKeyboardMode: true })
-                    _ = SeedContextFromTargetAsync("caret moved");
-            }));
+        // Set _lastWatchTarget only on CONFIRMED success — a sticky field
+        // on silent failure would permanently disable re-arming for this
+        // window (review round 1 #3, round 2 #1: the assignment must not
+        // precede the arm attempt).
+        if (TargetContextReader.StartSelectionWatch(target,
+                () => Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    if (_vm is { IsKeyboardMode: true })
+                        _ = SeedContextFromTargetAsync("caret moved");
+                })))
+        {
+            _lastWatchTarget = target;
+        }
     }
 
     /// <summary>
@@ -1034,22 +1039,35 @@ public partial class MainWindow : Window
 
         // Sentence-window trimming (Heide's suggestion, v5-aligned): the
         // engine only needs local context for prediction, not the full
-        // email body. Seeding with the sentence around the caret makes the
-        // shadow-compare stable during typing (sentence and engine buffer
-        // grow together — each typed character extends both identically),
-        // and re-seeds are cheap (small text = small model change).
+        // email body. Seeding with the sentence around the caret makes
+        // re-seeds cheap (small text = small model change).
         var (seedText, seedCaretUtf16) = SentenceWindow.Trim(context.Text, context.CaretUtf16);
 
         // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
         var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(seedText, seedCaretUtf16);
 
-        // Shadow-compare (#58): if the sentence context EQUALS the engine
-        // buffer, the read carried no new information — either an echo of
-        // our own injection or an unchanged re-read. At most the caret
-        // moved within unchanged text = the cheap set_offset re-anchor.
+        // Shadow-compare (#58) with SYMMETRIC trimming (review fix): the
+        // engine buffer and the target sentence must be trimmed the SAME
+        // way before comparing. Without this, typing a sentence terminator
+        // ('.') through Dasher broke the lockstep invariant: the engine
+        // buffer grew to "word." while the sentence window trimmed to ""
+        // (boundary) → mismatch → full re-seed → visible canvas reset on
+        // every period, question mark, and newline. Symmetric trimming
+        // makes both sides see the same sentence at the same position,
+        // including the CRLF divergence (engine emits \n, Outlook inserts
+        // \r\n — the boundary lands the same place on both sides).
         var enginePtr = NativeBridge.dasher_get_output_text(_vm.Handle);
-        var engineText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
-        if (seedText == engineText)
+        var engineFullText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
+        var (engineSentence, _) = SentenceWindow.Trim(engineFullText, engineFullText.Length);
+
+        // Trailing-whitespace tolerance (review round 2 #3): the engine can
+        // lag a trailing space behind the target — comparing without
+        // trimming the tail causes churn re-seeds until convergence. Trim
+        // both sides for the comparison only; the seed uses the untrimmed
+        // target sentence.
+        var compareSeed = seedText.TrimEnd();
+        var compareEngine = engineSentence.TrimEnd();
+        if (compareSeed == compareEngine)
         {
             if (byteOffset >= 0 && byteOffset != NativeBridge.dasher_get_offset(_vm.Handle))
             {
@@ -1379,6 +1397,8 @@ public partial class MainWindow : Window
             this.Opacity = 1.0;
 
             _targetTracker.Remove();
+            TargetContextReader.StopSelectionWatch(); // review #6: don't leak the UIA subscription
+            _lastWatchTarget = IntPtr.Zero;
             SetNoActivate(false);
 
             TxtModeLabel.Text = position switch
