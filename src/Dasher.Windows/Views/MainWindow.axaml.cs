@@ -352,7 +352,6 @@ public partial class MainWindow : Window
         // changes re-seed — the field text/caret is what matters, not the HWND.
         _targetTracker.TargetChanged += reason =>
         {
-            ArmSelectionWatch();
             _ = SeedContextFromTargetAsync(reason);
         };
 
@@ -949,36 +948,16 @@ public partial class MainWindow : Window
 
     // ── Direct-entry context awareness (RFC 0015) ───────────────────────────
 
-    /// <summary>Last HWND the selection watch is armed on (avoids resubscribing per focus event).</summary>
-    private IntPtr _lastWatchTarget;
-
-    /// <summary>
-    /// Arm the UIA selection-changed watch on the tracked target root —
-    /// caret moves WITHIN an already-focused field are invisible to the
-    /// focus/foreground hooks (RFC 0015 clause-8 amendment / RFC 0019
-    /// clause 6). Self-injection echoes need NO suppression window here:
-    /// the engine buffer mirrors our injected output byte-for-byte
-    /// (Dasher-Windows #45), so an echo read compares EQUAL in
-    /// SeedContextFromTargetAsync and is skipped without a rebuild — while
-    /// genuine caret moves, target-side pastes and external edits correctly
-    /// differ and re-seed. A time-based quiet window was considered and
-    /// rejected in review: it would also drop real caret moves made during
-    /// continuous Dasher output and the sync event of a target-side paste
-    /// (stale anchor until the next trigger).
-    /// </summary>
-    private void ArmSelectionWatch()
-    {
-        var target = _targetTracker.Current;
-        if (target == IntPtr.Zero || target == _lastWatchTarget) return;
-        _lastWatchTarget = target;
-
-        TargetContextReader.StartSelectionWatch(target,
-            () => Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-            {
-                if (_vm is { IsKeyboardMode: true })
-                    _ = SeedContextFromTargetAsync("caret moved");
-            }));
-    }
+    // NOTE: the UIA selection-change watch was REMOVED (Heide's Outlook
+    // report: canvas reset on every keystroke). Outlook's UIA provider
+    // fires TextSelectionChanged per injected character and returns
+    // inconsistent full-document reads (signatures, formatting, timing) —
+    // the shadow-compare could never reliably match, so every keystroke
+    // triggered a full model rebuild. v5 never had this problem because
+    // it never re-read the target within a field. The model now:
+    //   - seed with the SENTENCE around the caret on focus/app switch
+    //   - let the engine buffer accumulate internally (v5 parity)
+    //   - no per-keystroke re-reads at all
 
     /// <summary>
     /// Read the target field's text + caret (UIA TextPattern, Win32 fallback)
@@ -1023,38 +1002,38 @@ public partial class MainWindow : Window
             return;
         }
 
-        // RFC 0019 clause 7 — long-document seed cap (a 500k-char target
-        // document seeds only its trailing window; the caret moves with it).
-        var (seedText, seedCaretUtf16, truncated) =
-            EditorSeedPolicy.Clamp(context.Text, context.CaretUtf16);
+        // Sentence-window trimming (Heide's suggestion, v5-aligned): the
+        // engine only needs local context for prediction, not the full
+        // email body. Seeding with the sentence around the caret makes the
+        // shadow-compare stable during typing (sentence and engine buffer
+        // grow together — each typed character extends both identically),
+        // and re-seeds are cheap (small text = small model change).
+        var (seedText, seedCaretUtf16) = SentenceWindow.Trim(context.Text, context.CaretUtf16);
 
         // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
         var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(seedText, seedCaretUtf16);
 
-        // Shadow-compare skip (#58), cap-aware: the engine buffer holds the
-        // CLAMPED text, so the comparison must use the same clamp — comparing
-        // the full document against a capped buffer could never match and
-        // every caret move would re-seed (the #58 reset loop reborn for huge
-        // documents; review P1). Unchanged target → either an echo of our own
-        // injection or an unchanged re-read; at most the caret moved, which is
-        // exactly the cheap set_offset re-anchor (no rebuild).
+        // Shadow-compare (#58): if the sentence context EQUALS the engine
+        // buffer, the read carried no new information — either an echo of
+        // our own injection or an unchanged re-read. At most the caret
+        // moved within unchanged text = the cheap set_offset re-anchor.
         var enginePtr = NativeBridge.dasher_get_output_text(_vm.Handle);
         var engineText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
         if (seedText == engineText)
         {
             if (byteOffset >= 0 && byteOffset != NativeBridge.dasher_get_offset(_vm.Handle))
             {
-                KbLog($"Context seed ({reason}): text unchanged, caret u16={context.CaretUtf16} → offset {byteOffset} (no rebuild)");
+                KbLog($"Context seed ({reason}): sentence unchanged, offset {byteOffset} (no rebuild)");
                 NativeBridge.dasher_set_offset(_vm.Handle, byteOffset);
             }
             else
             {
-                KbLog($"Context seed ({reason}): text unchanged and offset current — skipping");
+                KbLog($"Context seed ({reason}): sentence unchanged and offset current — skipping");
             }
             return;
         }
 
-        KbLog($"Context seed ({reason}): {seedText.Length} chars{(truncated ? $" (capped from {context.Text.Length})" : "")}, caret u16={seedCaretUtf16} → byte={byteOffset}");
+        KbLog($"Context seed ({reason}): sentence \"{seedText}\" ({seedText.Length} of {context.Text.Length} chars), caret u16={seedCaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, seedText, byteOffset);
     }
 
@@ -1357,9 +1336,6 @@ public partial class MainWindow : Window
             // (DasherWindow.cpp HandleWinEvent). Install on the UI thread so
             // callbacks arrive here.
             _targetTracker.Install(OurHwnd());
-            // Arm the caret-move watch for the target recorded at entry (the
-            // hooks re-arm it whenever the root changes).
-            ArmSelectionWatch();
         }
         else
         {
@@ -1372,8 +1348,6 @@ public partial class MainWindow : Window
             this.Opacity = 1.0;
 
             _targetTracker.Remove();
-            TargetContextReader.StopSelectionWatch();
-            _lastWatchTarget = IntPtr.Zero;
             SetNoActivate(false);
 
             TxtModeLabel.Text = position switch
