@@ -352,6 +352,7 @@ public partial class MainWindow : Window
         // changes re-seed — the field text/caret is what matters, not the HWND.
         _targetTracker.TargetChanged += reason =>
         {
+            ArmSelectionWatch();
             _ = SeedContextFromTargetAsync(reason);
         };
 
@@ -948,16 +949,45 @@ public partial class MainWindow : Window
 
     // ── Direct-entry context awareness (RFC 0015) ───────────────────────────
 
-    // NOTE: the UIA selection-change watch was REMOVED (Heide's Outlook
-    // report: canvas reset on every keystroke). Outlook's UIA provider
-    // fires TextSelectionChanged per injected character and returns
-    // inconsistent full-document reads (signatures, formatting, timing) —
-    // the shadow-compare could never reliably match, so every keystroke
-    // triggered a full model rebuild. v5 never had this problem because
-    // it never re-read the target within a field. The model now:
-    //   - seed with the SENTENCE around the caret on focus/app switch
-    //   - let the engine buffer accumulate internally (v5 parity)
-    //   - no per-keystroke re-reads at all
+    /// <summary>Last HWND the selection watch is armed on (avoids resubscribing per focus event).</summary>
+    private IntPtr _lastWatchTarget;
+
+    /// <summary>
+    /// Arm the UIA selection-changed watch on the tracked target root. With
+    /// sentence-window trimming this is now SAFE: during typing the sentence
+    /// and the engine buffer grow together (shadow-compare matches, skip);
+    /// on a genuine caret click the sentence changes (mismatch, re-seed with
+    /// the new sentence — the re-anchor the user wants). The previous
+    /// full-document compare was the Outlook reset cause; the sentence window
+    /// is immune to the signature/formatting inconsistencies that broke it.
+    /// A manual re-anchor button on the mini-bar provides a belt-and-braces
+    /// override if the watch misses an edge case.
+    /// </summary>
+    private void ArmSelectionWatch()
+    {
+        var target = _targetTracker.Current;
+        if (target == IntPtr.Zero || target == _lastWatchTarget) return;
+        _lastWatchTarget = target;
+
+        TargetContextReader.StartSelectionWatch(target,
+            () => Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (_vm is { IsKeyboardMode: true })
+                    _ = SeedContextFromTargetAsync("caret moved");
+            }));
+    }
+
+    /// <summary>
+    /// Manual re-anchor (mini-bar button): force a fresh read + seed regardless
+    /// of the watch — for when the user clicks somewhere the watch missed or
+    /// just wants certainty about the current context.
+    /// </summary>
+    private void OnManualReanchor(object? sender, RoutedEventArgs e)
+    {
+        if (_vm is not { IsKeyboardMode: true }) return;
+        KbLog("Manual re-anchor requested");
+        _ = SeedContextFromTargetAsync("manual re-anchor");
+    }
 
     /// <summary>
     /// Read the target field's text + caret (UIA TextPattern, Win32 fallback)
@@ -1336,6 +1366,7 @@ public partial class MainWindow : Window
             // (DasherWindow.cpp HandleWinEvent). Install on the UI thread so
             // callbacks arrive here.
             _targetTracker.Install(OurHwnd());
+            ArmSelectionWatch();
         }
         else
         {
