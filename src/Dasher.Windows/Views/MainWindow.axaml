@@ -508,6 +508,10 @@
             <Button x:Name="KbControlBtn" Click="OnToggleControlMode" ToolTip.Tip="Control mode">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.MousePointerClick}" Size="18"/>
             </Button>
+            <!-- Re-anchor: force a fresh read of the target's sentence around the caret -->
+            <Button x:Name="KbReanchorBtn" Click="OnManualReanchor" ToolTip.Tip="Re-anchor predictions to the caret (read the sentence around your cursor)">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Locate}" Size="18"/>
+            </Button>
             <!-- RFC 0019 clause 5: New = full reset (buffer + context) -->
             <Button x:Name="KbNewSession" Click="OnNewSession" ToolTip.Tip="New session (clear text and context)">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.FilePlus}" Size="18"/>

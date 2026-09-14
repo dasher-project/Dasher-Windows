@@ -54,10 +54,12 @@ public static class TargetContextReader
     /// stale/cross-window events. Idempotent per hwnd — call with the current
     /// tracked root whenever it changes.
     /// </summary>
-    public static void StartSelectionWatch(IntPtr targetHwnd, Action onCaretMoved)
+    /// <returns>True if the watch was armed successfully; false means the
+    /// caller should NOT mark the target as watched (retry on next event).</returns>
+    public static bool StartSelectionWatch(IntPtr targetHwnd, Action onCaretMoved)
     {
         StopSelectionWatch();
-        if (targetHwnd == IntPtr.Zero || onCaretMoved == null) return;
+        if (targetHwnd == IntPtr.Zero || onCaretMoved == null) return false;
         try
         {
             _watchUia = new CUIAutomationClass();
@@ -65,7 +67,7 @@ public static class TargetContextReader
             if (_watchElement == null)
             {
                 _watchUia = null;
-                return;
+                return false;
             }
             _watchHandler = new SelectionChangedHandler(onCaretMoved);
             _watchUia.AddAutomationEventHandler(
@@ -75,11 +77,13 @@ public static class TargetContextReader
                 null,
                 _watchHandler);
             Log($"[UIA] selection watch armed on 0x{targetHwnd:X}");
+            return true;
         }
         catch (Exception ex)
         {
             Log($"[UIA] selection watch failed: {ex.Message}");
             StopSelectionWatch();
+            return false;
         }
     }
 
