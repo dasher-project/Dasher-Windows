@@ -1030,10 +1030,15 @@ public partial class MainWindow : Window
 
         if (context == null)
         {
-            // Read failed (unsupported control, elevated target, timeout):
-            // reset to empty context — v5's focus-change behaviour.
-            KbLog($"Context seed ({reason}): read failed → empty context");
-            NativeBridge.dasher_seed_buffer(_vm.Handle, "", 0);
+            // Read failed (timeout, unsupported control, elevated target):
+            // KEEP the existing engine context (RFC 0015 Tier 1 — session
+            // context). The engine continues accumulating from what the user
+            // has typed through Dasher. Seeding empty here was wiping the
+            // buffer on every UIA timeout in Outlook (9231-char email body
+            // exceeding the 300ms read budget), resetting predictions to
+            // sentence-start (the "Hello space → uppercase" bug). The next
+            // successful read will re-seed with the correct sentence.
+            KbLog($"Context seed ({reason}): read failed → keeping existing context");
             return;
         }
 
