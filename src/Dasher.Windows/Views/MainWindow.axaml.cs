@@ -1075,6 +1075,24 @@ public partial class MainWindow : Window
             return;
         }
 
+        // ENGINE-AHEAD guard (the "H resets" bug): right after our output is
+        // injected, the target's UIA read can LAG — it hasn't reflected the
+        // character we just sent. The engine sentence is longer (has the
+        // output) while the target sentence is shorter (stale read). Without
+        // this guard, the mismatch triggers a re-seed with the SHORTER text,
+        // which LOSES our output from the engine buffer → canvas resets →
+        // next selection event reads the longer text → another mismatch →
+        // resets again (the bounce the user sees). If the engine sentence
+        // STARTS WITH the target sentence, our output is simply not in the
+        // target's UIA yet — skip and let the next event (which will have
+        // the reflected text) do the compare.
+        if (engineSentence.Length > seedText.Length &&
+            engineSentence.StartsWith(seedText, StringComparison.Ordinal))
+        {
+            KbLog($"Context seed ({reason}): engine ahead of target read ({engineSentence.Length} vs {seedText.Length} chars) — output not yet reflected, skipping");
+            return;
+        }
+
         // Whitespace-tolerant match (review P1 "whitespace hides buffer
         // divergence"): the engine can lag a trailing space behind the
         // target. A cheap set_offset here would compute from the LONGER
