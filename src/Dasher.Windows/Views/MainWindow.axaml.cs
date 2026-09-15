@@ -1074,6 +1074,19 @@ public partial class MainWindow : Window
         // Exact match — the cheap re-anchor (no rebuild).
         if (seedText == engineSentence)
         {
+            // EMPTY-SENTENCE GUARD: at a sentence boundary both sentences
+            // are "" and byteOffset = 0 — but set_offset(0) would snap the
+            // engine back to the START of its buffer, visibly resetting the
+            // canvas (the "resets after finishing a sentence" + "stutters
+            // on the first word" reports). The engine is already correctly
+            // positioned at the boundary (it just output the terminator);
+            // do NOT touch the offset when the sentence is empty.
+            if (seedText.Length == 0)
+            {
+                KbLog($"Context seed ({reason}): sentence boundary — engine already positioned, skipping");
+                return;
+            }
+
             if (byteOffset >= 0 && byteOffset != NativeBridge.dasher_get_offset(_vm.Handle))
             {
                 KbLog($"Context seed ({reason}): sentence unchanged, offset {byteOffset} (no rebuild)");
