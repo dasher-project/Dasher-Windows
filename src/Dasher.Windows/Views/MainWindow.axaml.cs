@@ -1034,6 +1034,22 @@ public partial class MainWindow : Window
 
         if (_vm.Handle == IntPtr.Zero) return;
 
+        // CARET-GLITCH GUARD: Outlook's UIA returns caret position 0 or 1
+        // during rapid text transitions (insert → delete → insert), even when
+        // the user is typing at position 27+. The sentence window then reads
+        // from the WRONG position (beginning of text instead of the typing
+        // point) → bogus re-seed → canvas jumps. If the caret is near the
+        // START of a long text AND this is a selection-watch event (the user
+        // is mid-typing, not clicking), the read is glitched — skip.
+        if (reason == "caret moved" &&
+            context != null &&
+            context.CaretUtf16 < 3 &&
+            context.Text.Length > 10)
+        {
+            KbLog($"Context seed ({reason}): caret glitch (pos {context.CaretUtf16} in {context.Text.Length}-char text) — skipping");
+            return;
+        }
+
         if (context == null)
         {
             // Read failed (timeout, unsupported control, elevated target):
