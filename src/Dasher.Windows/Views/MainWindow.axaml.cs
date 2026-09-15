@@ -1070,6 +1070,15 @@ public partial class MainWindow : Window
         // re-seeds cheap (small text = small model change).
         var (seedText, seedCaretUtf16) = SentenceWindow.Trim(context.Text, context.CaretUtf16);
 
+        // Normalize BEFORE anything else — the target read can contain
+        // non-breaking spaces, zero-width chars, etc. from Outlook's
+        // rich-text formatting. These go into the engine's buffer on seed
+        // and then permanently mismatch every future comparison against
+        // the engine's own output (which uses regular spaces). Normalizing
+        // at the source means both sides are always clean.
+        seedText = NormalizeInvisible(seedText);
+        seedCaretUtf16 = seedText.Length; // caret at end after normalization
+
         // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
         var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(seedText, seedCaretUtf16);
 
