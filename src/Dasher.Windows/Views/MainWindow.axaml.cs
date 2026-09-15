@@ -1007,10 +1007,16 @@ public partial class MainWindow : Window
         if (_targetTracker.Current == IntPtr.Zero) return;
 
         // Debounce: rapid focus churn (mode entry -> target re-focus) must
-        // not stack concurrent reads/seeds.
+        // not stack concurrent reads/seeds. 500ms (not 150ms): mid-word
+        // context corrections (target cleared/switched while the user is
+        // typing) must NOT fire during continuous output — the canvas reset
+        // mid-word is far more disruptive than a 350ms-later correction.
+        // During continuous typing the debounce keeps getting pushed forward
+        // (each output increments the generation), so no re-seed fires at
+        // all until the user pauses.
         _contextSeedGeneration++;
         var generation = _contextSeedGeneration;
-        await Task.Delay(150); // let the target's caret settle
+        await Task.Delay(500); // let the target's caret settle AND the user finish their word
         if (generation != _contextSeedGeneration) return; // superseded
 
         // Stale-seed guard: a queued focus event whose target was superseded
