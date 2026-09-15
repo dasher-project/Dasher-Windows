@@ -1088,7 +1088,15 @@ public partial class MainWindow : Window
         var (engineSentence, _) = SentenceWindow.Trim(engineFullText, engineFullText.Length);
 
         // Exact match — the cheap re-anchor (no rebuild).
-        if (seedText == engineSentence)
+        // Normalize invisible characters first: Outlook inserts non-breaking
+        // spaces (U+00A0), zero-width spaces (U+200B), and other format
+        // characters that make otherwise-identical strings compare unequal
+        // — TrimEnd() alone doesn't catch them because zero-width chars
+        // aren't classified as whitespace in .NET (the "Hi heide I " reset:
+        // byte=12 for 11 chars = hidden non-ASCII from Outlook formatting).
+        var normalizedSeed = NormalizeInvisible(seedText);
+        var normalizedEngine = NormalizeInvisible(engineSentence);
+        if (normalizedSeed == normalizedEngine)
         {
             // EMPTY-SENTENCE GUARD: at a sentence boundary both sentences
             // are "" and byteOffset = 0 — but set_offset(0) would snap the
@@ -1140,7 +1148,7 @@ public partial class MainWindow : Window
         // the model = visible canvas reset on every space (the "Hello space
         // resets" bug — the trailing whitespace path was the culprit). Skip
         // and let the next character output settle the buffers.
-        if (seedText.TrimEnd() == engineSentence.TrimEnd())
+        if (normalizedSeed.TrimEnd() == normalizedEngine.TrimEnd())
         {
             KbLog($"Context seed ({reason}): sentence matches modulo trailing whitespace — skipping (no re-seed)");
             return;
@@ -1154,6 +1162,30 @@ public partial class MainWindow : Window
     }
 
     private int _contextSeedGeneration;
+
+    /// <summary>
+    /// Normalize invisible Unicode characters that rich-text editors (Outlook,
+    /// Word, Gmail) insert into otherwise plain text: non-breaking spaces,
+    /// zero-width spaces/joiners, BOM, narrow no-break spaces, figure spaces.
+    /// These make otherwise-identical strings compare unequal and cause
+    /// unnecessary re-seeds. Zero-width chars aren't classified as whitespace
+    /// in .NET, so TrimEnd() alone can't catch them.
+    /// </summary>
+    private static string NormalizeInvisible(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return s;
+        var sb = new System.Text.StringBuilder(s.Length);
+        foreach (var c in s)
+        {
+            sb.Append(c switch
+            {
+                '\u00A0' or '\u202F' or '\u2007' or '\u2009' => ' ',  // NBSP, narrow NBSP, figure space, thin space
+                '\u200B' or '\u200C' or '\u200D' or '\uFEFF' => default, // zero-width space/ZWJ/ZWNJ/BOM → strip
+                _ => c,
+            });
+        }
+        return sb.ToString();
+    }
 
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
