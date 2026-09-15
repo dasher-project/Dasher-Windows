@@ -1104,15 +1104,16 @@ public partial class MainWindow : Window
             return;
         }
 
-        // Whitespace-tolerant match (review P1 "whitespace hides buffer
-        // divergence"): the engine can lag a trailing space behind the
-        // target. A cheap set_offset here would compute from the LONGER
-        // string and place the engine beyond its own buffer — instead,
-        // re-seed with the current sentence to absorb the difference.
+        // Whitespace-tolerant match: the engine can lag a trailing space
+        // behind the target (engine buffer strips it or hasn't accumulated
+        // it yet). This is a BENIGN divergence — the engine will absorb the
+        // space on the next output. DO NOT re-seed here: a re-seed rebuilds
+        // the model = visible canvas reset on every space (the "Hello space
+        // resets" bug — the trailing whitespace path was the culprit). Skip
+        // and let the next character output settle the buffers.
         if (seedText.TrimEnd() == engineSentence.TrimEnd())
         {
-            KbLog($"Context seed ({reason}): sentence matches modulo trailing whitespace — re-seeding to sync");
-            NativeBridge.dasher_seed_buffer(_vm.Handle, seedText, byteOffset);
+            KbLog($"Context seed ({reason}): sentence matches modulo trailing whitespace — skipping (no re-seed)");
             return;
         }
 
