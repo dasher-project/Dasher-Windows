@@ -75,6 +75,30 @@ namespace Dasher.Windows.Controls
         private float _cachedOriginX;
         private float _cachedOriginY;
 
+        private GazeFilter? _gazeFilter;
+        private long _gazeLogStartMs;
+        private int _gazeLogInterval; // log every Nth sample (throttles the log)
+
+        /// <summary>
+        /// Configure the gaze filter (dead zone, velocity gate, settle window).
+        /// Null disables all filtering (raw passthrough — pre-Juan behaviour).
+        /// </summary>
+        public void ConfigureGazeFilter(double? deadZonePx = null, double? maxVelocity = null, double? settleMs = null)
+        {
+            if (deadZonePx == null && maxVelocity == null && settleMs == null)
+            {
+                _gazeFilter = null; // disable
+                EyeGazeLogger.Log("Gaze filter DISABLED (raw passthrough)");
+                return;
+            }
+
+            _gazeFilter ??= new GazeFilter();
+            if (deadZonePx.HasValue) _gazeFilter.DeadZonePx = deadZonePx.Value;
+            if (maxVelocity.HasValue) _gazeFilter.MaxVelocityPxPerMs = maxVelocity.Value;
+            if (settleMs.HasValue) _gazeFilter.SettleMs = settleMs.Value;
+            EyeGazeLogger.Log($"Gaze filter: deadZone={_gazeFilter.DeadZonePx}px vel={_gazeFilter.MaxVelocityPxPerMs}px/ms settle={_gazeFilter.SettleMs}ms");
+        }
+
         private void OnEyeGazePositionChanged(object? sender, GazePoint gazePoint)
         {
             if (!_useEyeGazeInput || _handle == IntPtr.Zero) return;
@@ -89,6 +113,27 @@ namespace Dasher.Windows.Controls
             {
                 x = (float)(gazePoint.X - _cachedOriginX);
                 y = (float)(gazePoint.Y - _cachedOriginY);
+            }
+
+            // Apply the gaze filter (dead zone → velocity gate → settle)
+            if (_gazeFilter != null)
+            {
+                var nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                if (!_gazeFilter.Process(x, y, nowMs, out var filteredX, out var filteredY))
+                    return; // filtered out (in transit, jitter, or not settled)
+
+                // Diagnostic: log every 30th sample (≈once per 500ms at 60Hz)
+                _gazeLogInterval++;
+                if (_gazeLogInterval >= 30)
+                {
+                    _gazeLogInterval = 0;
+                    var f = _gazeFilter;
+                    EyeGazeLogger.Log($"gaze filter: sent=({filteredX:F0},{filteredY:F0}) vel={f.LastVelocity:F1}px/ms " +
+                        $"[total={f.TotalSamples} sent={f.SentSamples} dz={f.DeadZoneBlocks} vel_blk={f.VelocityBlocks} settle_blk={f.SettleBlocks}]");
+                }
+
+                x = (float)filteredX;
+                y = (float)filteredY;
             }
 
             NativeBridge.dasher_mouse_move(_handle, x, y);
