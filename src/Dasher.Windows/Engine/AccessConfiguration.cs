@@ -11,6 +11,20 @@ public class AccessConfiguration
     public string EyeTrackerType { get; set; } = "WindowsNative";
     public int UdpPort { get; set; } = 5555;
 
+    // ── Gaze filter (transit zoom fix; Juan's Tobii PCEye + TD Control) ────
+
+    /// <summary>Minimum px movement before sending (0 = always send).</summary>
+    public double GazeDeadZonePx { get; set; } = 8;
+
+    /// <summary>Maximum velocity px/ms before holding (0 = disabled).</summary>
+    public double GazeMaxVelocityPxPerMs { get; set; } = 3.0;
+
+    /// <summary>Ms the gaze must dwell before sending (0 = immediate).</summary>
+    public double GazeSettleMs { get; set; } = 80;
+
+    /// <summary>Master switch: false = raw passthrough (pre-filter behaviour).</summary>
+    public bool GazeFilterEnabled { get; set; } = true;
+
     /// <summary>
     /// The engine input filter (SP_INPUT_FILTER). Persisted explicitly rather
     /// than derived from Selection: deriving clobbered the user's choice every
