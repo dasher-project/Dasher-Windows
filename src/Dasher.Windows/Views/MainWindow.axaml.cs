@@ -1829,53 +1829,67 @@ public partial class MainWindow : Window
     private async void OnOpen(object? sender, RoutedEventArgs e)
     {
         if (_vm == null) return;
-        var storage = StorageProvider;
-        var result = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
-        {
-            Title = "Open text file",
-            AllowMultiple = false,
-            FileTypeFilter =
-            [
-                new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
-                new FilePickerFileType("All files") { Patterns = ["*"] },
-            ]
-        });
-
-        if (result.Count == 0) return;
-
+        // Whole-handler guard (async void): a picker exception must not
+        // take down the process (see the training export/import handlers).
         try
         {
+            var storage = StorageProvider;
+            var result = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = "Open text file",
+                AllowMultiple = false,
+                FileTypeFilter =
+                [
+                    new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
+                    new FilePickerFileType("All files") { Patterns = ["*"] },
+                ]
+            });
+
+            if (result.Count == 0) return;
+
             await using var stream = await result[0].OpenReadAsync();
             using var reader = new StreamReader(stream);
             var text = await reader.ReadToEndAsync();
             NativeBridge.dasher_reset_output_text(_vm.Handle);
             _vm.OutputText = text;
         }
-        catch { }
+        catch (Exception ex)
+        {
+            if (ex is not OperationCanceledException)
+                Services.AnalyticsService.WriteCrashFile(ex, "open file picker");
+            Services.ToastNotifier.Show("Open failed", ex.Message, isWarning: true);
+        }
     }
 
     private async void OnSave(object? sender, RoutedEventArgs e)
     {
         if (_vm == null) return;
-        var result = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title = "Save text file",
-            SuggestedFileName = "dasher_output.txt",
-            FileTypeChoices =
-            [
-                new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
-            ]
-        });
-
-        if (result == null) return;
-
+        // Whole-handler guard (async void): a picker exception must not
+        // take down the process (see the training export/import handlers).
         try
         {
+            var result = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = "Save text file",
+                SuggestedFileName = "dasher_output.txt",
+                FileTypeChoices =
+                [
+                    new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
+                ]
+            });
+
+            if (result == null) return;
+
             await using var stream = await result.OpenWriteAsync();
             using var writer = new StreamWriter(stream);
             await writer.WriteAsync(_vm.OutputText);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            if (ex is not OperationCanceledException)
+                Services.AnalyticsService.WriteCrashFile(ex, "save file picker");
+            Services.ToastNotifier.Show("Save failed", ex.Message, isWarning: true);
+        }
     }
 
 

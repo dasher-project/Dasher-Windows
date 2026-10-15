@@ -882,18 +882,23 @@ public class SettingsPanel : Decorator
 
         importBtn.Click += async (s, e) =>
         {
-            var topLevel = TopLevel.GetTopLevel(this);
-            if (topLevel == null) return;
-            var storageProvider = topLevel.StorageProvider;
-            var result = await storageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
-            {
-                Title = Loc.Tr("training_import", "Import Training Text"),
-                FileTypeFilter = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
-                AllowMultiple = false,
-            });
-            if (result.Count == 0) return;
+            // Whole-handler guard: this is an async void — an exception
+            // from the picker itself (COM failures, owner-window issues —
+            // environment-dependent, see the recurring "export crashes the
+            // app" reports) would take down the process. Everything shows a
+            // status message instead.
             try
             {
+                var topLevel = TopLevel.GetTopLevel(this);
+                if (topLevel == null) return;
+                var storageProvider = topLevel.StorageProvider;
+                var result = await storageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
+                {
+                    Title = Loc.Tr("training_import", "Import Training Text"),
+                    FileTypeFilter = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
+                    AllowMultiple = false,
+                });
+                if (result.Count == 0) return;
                 var text = await System.IO.File.ReadAllTextAsync(result[0].Path.LocalPath);
 
                 // 1. Persist FIRST — the training file is the source of truth
@@ -922,6 +927,12 @@ public class SettingsPanel : Decorator
             }
             catch (Exception ex)
             {
+                // Non-fatal, but keep the evidence: these picker failures are
+                // environment-dependent — the scrubbed crash file (kept
+                // locally unless uploaded, see FlushPendingCrash) is how we
+                // diagnose them (greptile: "picker error details disappear").
+                if (ex is not OperationCanceledException)
+                    AnalyticsService.WriteCrashFile(ex, "training import picker");
                 statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
                     Loc.Tr("training_import", "Import"), ex.Message);
             }
@@ -929,30 +940,32 @@ public class SettingsPanel : Decorator
 
         exportBtn.Click += async (s, e) =>
         {
-            var trainingFile = GetTrainingPath();
-            if (trainingFile == null || !System.IO.File.Exists(trainingFile))
-            {
-                statusText.Text = Loc.Tr("training_nothing_to_export", "No training data to export yet");
-                return;
-            }
-            var topLevel = TopLevel.GetTopLevel(this);
-            if (topLevel == null) return;
-            var storageProvider = topLevel.StorageProvider;
-            var result = await storageProvider.SaveFilePickerAsync(new Avalonia.Platform.Storage.FilePickerSaveOptions
-            {
-                Title = Loc.Tr("training_export", "Export Training Data"),
-                DefaultExtension = "txt",
-                SuggestedFileName = "dasher_training_export.txt",
-                FileTypeChoices = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
-            });
-            if (result == null) return;
             try
             {
+                var trainingFile = GetTrainingPath();
+                if (trainingFile == null || !System.IO.File.Exists(trainingFile))
+                {
+                    statusText.Text = Loc.Tr("training_nothing_to_export", "No training data to export yet");
+                    return;
+                }
+                var topLevel = TopLevel.GetTopLevel(this);
+                if (topLevel == null) return;
+                var storageProvider = topLevel.StorageProvider;
+                var result = await storageProvider.SaveFilePickerAsync(new Avalonia.Platform.Storage.FilePickerSaveOptions
+                {
+                    Title = Loc.Tr("training_export", "Export Training Data"),
+                    DefaultExtension = "txt",
+                    SuggestedFileName = "dasher_training_export.txt",
+                    FileTypeChoices = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
+                });
+                if (result == null) return;
                 await System.IO.File.WriteAllTextAsync(result.Path.LocalPath, await System.IO.File.ReadAllTextAsync(trainingFile));
                 statusText.Text = string.Format(Loc.Tr("training_exported", "Exported to {0}"), result.Name);
             }
             catch (Exception ex)
             {
+                if (ex is not OperationCanceledException)
+                    AnalyticsService.WriteCrashFile(ex, "training export picker");
                 statusText.Text = string.Format(Loc.Tr("training_failed", "{0} failed: {1}"),
                     Loc.Tr("training_export", "Export"), ex.Message);
             }
