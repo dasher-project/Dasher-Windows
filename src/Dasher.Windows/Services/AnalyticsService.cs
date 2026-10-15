@@ -162,7 +162,10 @@ public static class AnalyticsService
     // ── Crash reporting (RFC 0009) ─────────────────────────────────────────────
 
     /// <summary>
-    /// Write a crash file to disk. Called from the unhandled-exception handler.
+    /// Write a crash file to disk. Called from the unhandled-exception
+    /// handlers, and from caught exceptions worth diagnosing (file-picker
+    /// failures: environment-dependent, never reproducible locally — the
+    /// source string distinguishes them).
     /// The file is flushed to PostHog on next launch if the user has opted in.
     /// </summary>
     public static void WriteCrashFile(Exception ex, string? source = null)
@@ -195,7 +198,11 @@ public static class AnalyticsService
 
     /// <summary>
     /// On launch: if a pending crash file exists, send it (only if opted in)
-    /// and delete it. Crash files older than 7 days are discarded.
+    /// and delete it once sent. Crash files older than 7 days are discarded.
+    /// When the user has NOT opted in the file is KEPT (local, scrubbed per
+    /// RFC 0009): deleting it unconditionally destroyed the only crash
+    /// evidence on machines that never uploaded — exactly the machines that
+    /// report "it just crashes" with nothing to diagnose from.
     /// </summary>
     private static void FlushPendingCrash()
     {
@@ -249,9 +256,12 @@ public static class AnalyticsService
                 var ex = new SavedCrashException(exceptionType, stackTrace);
                 PostHogSdk.CaptureException(ex, _distinctId, crashProps, null, false, DateTimeOffset.UtcNow);
                 PostHogSdk.FlushAsync().Wait(TimeSpan.FromSeconds(5));
-            }
 
-            File.Delete(CrashFilePath);
+                File.Delete(CrashFilePath); // sent — no longer needed locally
+            }
+            // Not sent (not opted in / not initialized): keep the file for
+            // local diagnosis (%APPDATA%\Dasher\pending_crash.txt). The next
+            // crash overwrites it; the 7-day age check above retires it.
         }
         catch { }
     }
