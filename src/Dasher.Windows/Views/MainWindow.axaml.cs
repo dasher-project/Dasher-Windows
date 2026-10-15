@@ -563,9 +563,9 @@ public partial class MainWindow : Window
             // pointer drift for non-gaze users (DasherCore #64). The access
             // method — not the old file — decides.
             var migratedConfig = AccessConfiguration.Load();
-            // But a migrated InputFilter must survive the gate: apply() sets it
-            // from access.json, so adopt whatever the deferred params (v5
-            // InputFilter, or the engine's own persisted value) left active.
+            // The filter is engine-owned now (Apply doesn't push it); this
+            // just refreshes the access.json mirror to whatever the
+            // migration left active, so the file reflects the live choice.
             var filterPtr = NativeBridge.dasher_get_string_parameter(_vm.Handle, ParameterKeys.SP_INPUT_FILTER);
             var activeFilter = filterPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(filterPtr) : null;
             if (!string.IsNullOrEmpty(activeFilter))
@@ -1064,137 +1064,32 @@ public partial class MainWindow : Window
             return;
         }
 
-        // Sentence-window trimming (Heide's suggestion, v5-aligned): the
-        // engine only needs local context for prediction, not the full
-        // email body. Seeding with the sentence around the caret makes
-        // re-seeds cheap (small text = small model change).
-        var (seedText, seedCaretUtf16) = SentenceWindow.Trim(context.Text, context.CaretUtf16);
-
-        // Normalize BEFORE anything else — the target read can contain
-        // non-breaking spaces, zero-width chars, etc. from Outlook's
-        // rich-text formatting. These go into the engine's buffer on seed
-        // and then permanently mismatch every future comparison against
-        // the engine's own output (which uses regular spaces). Normalizing
-        // at the source means both sides are always clean.
-        seedText = NormalizeInvisible(seedText);
-        seedCaretUtf16 = seedText.Length; // caret at end after normalization
-
-        // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
-        var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(seedText, seedCaretUtf16);
-
-        // Shadow-compare (#58) with SYMMETRIC trimming (review fix): the
-        // engine buffer and the target sentence must be trimmed the SAME
-        // way before comparing. Without this, typing a sentence terminator
-        // ('.') through Dasher broke the lockstep invariant: the engine
-        // buffer grew to "word." while the sentence window trimmed to ""
-        // (boundary) → mismatch → full re-seed → visible canvas reset on
-        // every period, question mark, and newline. Symmetric trimming
-        // makes both sides see the same sentence at the same position,
-        // including the CRLF divergence (engine emits \n, Outlook inserts
-        // \r\n — the boundary lands the same place on both sides).
+        // Shadow-compare (#58): the engine buffer vs the target field, both
+        // sentence-trimmed and normalised, decides whether a re-seed is
+        // warranted at all. Every skip reason maps to a canvas-reset class
+        // this chain has fixed — see ContextSeedPolicy for the rationale
+        // (notably: the sentence-match branch must NOT call set_offset; the
+        // engine is buffer-absolute, the trimmed sentence is not).
         var enginePtr = NativeBridge.dasher_get_output_text(_vm.Handle);
         var engineFullText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
-        var (engineSentence, _) = SentenceWindow.Trim(engineFullText, engineFullText.Length);
-
-        // Exact match — the cheap re-anchor (no rebuild).
-        // Normalize invisible characters first: Outlook inserts non-breaking
-        // spaces (U+00A0), zero-width spaces (U+200B), and other format
-        // characters that make otherwise-identical strings compare unequal
-        // — TrimEnd() alone doesn't catch them because zero-width chars
-        // aren't classified as whitespace in .NET (the "Hi heide I " reset:
-        // byte=12 for 11 chars = hidden non-ASCII from Outlook formatting).
-        var normalizedSeed = NormalizeInvisible(seedText);
-        var normalizedEngine = NormalizeInvisible(engineSentence);
-        if (normalizedSeed == normalizedEngine)
+        var decision = ContextSeedPolicy.Decide(engineFullText, context.Text, context.CaretUtf16);
+        if (decision.Action == ContextSeedAction.Skip)
         {
-            // EMPTY-SENTENCE GUARD: at a sentence boundary both sentences
-            // are "" and byteOffset = 0 — but set_offset(0) would snap the
-            // engine back to the START of its buffer, visibly resetting the
-            // canvas (the "resets after finishing a sentence" + "stutters
-            // on the first word" reports). The engine is already correctly
-            // positioned at the boundary (it just output the terminator);
-            // do NOT touch the offset when the sentence is empty.
-            if (seedText.Length == 0)
-            {
-                KbLog($"Context seed ({reason}): sentence boundary — engine already positioned, skipping");
-                return;
-            }
-
-            if (byteOffset >= 0 && byteOffset != NativeBridge.dasher_get_offset(_vm.Handle))
-            {
-                KbLog($"Context seed ({reason}): sentence unchanged, offset {byteOffset} (no rebuild)");
-                NativeBridge.dasher_set_offset(_vm.Handle, byteOffset);
-            }
-            else
-            {
-                KbLog($"Context seed ({reason}): sentence unchanged and offset current — skipping");
-            }
+            KbLog($"Context seed ({reason}): {decision.Reason}");
             return;
         }
 
-        // ENGINE-AHEAD guard (the "H resets" bug): right after our output is
-        // injected, the target's UIA read can LAG — it hasn't reflected the
-        // character we just sent. The engine sentence is longer (has the
-        // output) while the target sentence is shorter (stale read). Without
-        // this guard, the mismatch triggers a re-seed with the SHORTER text,
-        // which LOSES our output from the engine buffer → canvas resets →
-        // next selection event reads the longer text → another mismatch →
-        // resets again (the bounce the user sees). If the engine sentence
-        // STARTS WITH the target sentence, our output is simply not in the
-        // target's UIA yet — skip and let the next event (which will have
-        // the reflected text) do the compare.
-        if (engineSentence.Length > seedText.Length &&
-            engineSentence.StartsWith(seedText, StringComparison.Ordinal))
-        {
-            KbLog($"Context seed ({reason}): engine ahead of target read ({engineSentence.Length} vs {seedText.Length} chars) — output not yet reflected, skipping");
-            return;
-        }
-
-        // Whitespace-tolerant match: the engine can lag a trailing space
-        // behind the target (engine buffer strips it or hasn't accumulated
-        // it yet). This is a BENIGN divergence — the engine will absorb the
-        // space on the next output. DO NOT re-seed here: a re-seed rebuilds
-        // the model = visible canvas reset on every space (the "Hello space
-        // resets" bug — the trailing whitespace path was the culprit). Skip
-        // and let the next character output settle the buffers.
-        if (normalizedSeed.TrimEnd() == normalizedEngine.TrimEnd())
-        {
-            KbLog($"Context seed ({reason}): sentence matches modulo trailing whitespace — skipping (no re-seed)");
-            return;
-        }
+        // UIA carets are UTF-16 units; convert to the engine's UTF-8 bytes.
+        var byteOffset = NativeBridge.dasher_byte_offset_from_utf16(decision.Text, decision.CaretUtf16);
 
         // No sentence CONTENT in the log — lengths only (review P1 security:
         // "private target text is logged"; the sentence can contain up to
         // 200 chars of a private email or message).
-        KbLog($"Context seed ({reason}): {seedText.Length} of {context.Text.Length} chars, caret u16={seedCaretUtf16} → byte={byteOffset}");
-        NativeBridge.dasher_seed_buffer(_vm.Handle, seedText, byteOffset);
+        KbLog($"Context seed ({reason}): {decision.Text.Length} of {context.Text.Length} chars, caret u16={decision.CaretUtf16} → byte={byteOffset}");
+        NativeBridge.dasher_seed_buffer(_vm.Handle, decision.Text, byteOffset);
     }
 
     private int _contextSeedGeneration;
-
-    /// <summary>
-    /// Normalize invisible Unicode characters that rich-text editors (Outlook,
-    /// Word, Gmail) insert into otherwise plain text: non-breaking spaces,
-    /// zero-width spaces/joiners, BOM, narrow no-break spaces, figure spaces.
-    /// These make otherwise-identical strings compare unequal and cause
-    /// unnecessary re-seeds. Zero-width chars aren't classified as whitespace
-    /// in .NET, so TrimEnd() alone can't catch them.
-    /// </summary>
-    private static string NormalizeInvisible(string s)
-    {
-        if (string.IsNullOrEmpty(s)) return s;
-        var sb = new System.Text.StringBuilder(s.Length);
-        foreach (var c in s)
-        {
-            sb.Append(c switch
-            {
-                '\u00A0' or '\u202F' or '\u2007' or '\u2009' => ' ',  // NBSP, narrow NBSP, figure space, thin space
-                '\u200B' or '\u200C' or '\u200D' or '\uFEFF' => default, // zero-width space/ZWJ/ZWNJ/BOM → strip
-                _ => c,
-            });
-        }
-        return sb.ToString();
-    }
 
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
