@@ -161,6 +161,45 @@ public class EngineCApiTests
     }
 
     [Fact]
+    public void Access_configuration_apply_does_not_clobber_persisted_input_filter()
+    {
+        // The "input filter always defaults to Normal Control" report:
+        // AccessConfiguration.Apply used to push access.json's (possibly
+        // stale) InputFilter into the engine at every startup — pre-realize,
+        // where SAVE_IMMEDIATELY persisted it over the user's actual choice.
+        // The engine owns SP_INPUT_FILTER now (DasherCore #76); Apply must
+        // leave it untouched. access.json's copy is only a mirror.
+        var dataDir = FindDataDir();
+        if (dataDir == null) { if (RequireEngine) Assert.Fail("DasherCore/Data not found"); return; }
+
+        var sharedDir = Path.Combine(Path.GetTempPath(), "dasher-tests", Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(sharedDir);
+
+        var key = NativeBridge.dasher_find_parameter_key("SP_INPUT_FILTER");
+        Assert.True(key >= 0);
+
+        var handle = NativeBridge.dasher_create(dataDir, sharedDir, out var err);
+        Assert.False(handle == IntPtr.Zero,
+            err != IntPtr.Zero ? "dasher_create: " + Marshal.PtrToStringUTF8(err) : "dasher_create failed");
+        try
+        {
+            NativeBridge.dasher_set_screen_size(handle, 800, 600);
+            NativeBridge.dasher_set_string_parameter(handle, key, "Smoothing Mode");
+
+            // A stale access.json (e.g. the raw parameter row changed the
+            // filter without touching access.json) still says Normal Control.
+            new Engine.AccessConfiguration { InputFilter = "Normal Control" }.Apply(handle);
+
+            Assert.Equal("Smoothing Mode", ReadFilter(handle, key));
+        }
+        finally
+        {
+            NativeBridge.dasher_destroy(handle);
+            try { Directory.Delete(sharedDir, recursive: true); } catch { }
+        }
+    }
+
+    [Fact]
     public void Editor_contract_seed_offset_and_new_round_trip()
     {
         // RFC 0019 (the editor contract) via the Windows P/Invoke surface:

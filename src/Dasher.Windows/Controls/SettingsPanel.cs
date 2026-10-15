@@ -615,8 +615,14 @@ public class SettingsPanel : Decorator
             FontSize = 12,
         };
 
-        // Curated subset of filters most useful for accessibility users
-        var filterOptions = new[]
+        // Curated subset of filters most useful for accessibility users.
+        // The list is a UI convenience, not the truth: the engine can hold
+        // any registered filter (Selection Method choices, v5 imports, the
+        // raw parameter row). Silently snapping the display back to
+        // "Normal Control" for those made the app LOOK like it had forgotten
+        // the user's choice ("always defaults to Normal Control") while the
+        // engine was actually running it — so append the live value.
+        var filterOptions = new List<(string Name, string Help)>
         {
             ("Normal Control", "Standard continuous control (default)"),
             ("Smoothing Mode", "Input smoothing — reduces jitter for noisy input (eye gaze, head tracking)"),
@@ -625,17 +631,20 @@ public class SettingsPanel : Decorator
 
         var currentFilterPtr = NativeBridge.dasher_get_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER);
         var currentFilter = currentFilterPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(currentFilterPtr) ?? "Normal Control" : "Normal Control";
+        if (!string.IsNullOrEmpty(currentFilter) &&
+            filterOptions.All(f => f.Name != currentFilter))
+            filterOptions.Add((currentFilter, "Active engine input filter (set via Selection Method or advanced settings)"));
 
         foreach (var (name, _) in filterOptions)
             filterCombo.Items.Add(name);
-        filterCombo.SelectedIndex = Array.FindIndex(filterOptions, f => f.Item1 == currentFilter);
+        filterCombo.SelectedIndex = filterOptions.FindIndex(f => f.Name == currentFilter);
         if (filterCombo.SelectedIndex < 0) filterCombo.SelectedIndex = 0;
 
         var filterHelp = new TextBlock
         {
             FontSize = 11,
             Foreground = BrushMuted,
-            Text = filterOptions[filterCombo.SelectedIndex].Item2,
+            Text = filterOptions[filterCombo.SelectedIndex].Help,
             Margin = new Thickness(0, 2, 0, 0),
             TextWrapping = TextWrapping.Wrap,
         };
@@ -643,12 +652,12 @@ public class SettingsPanel : Decorator
         filterCombo.SelectionChanged += (s, e) =>
         {
             var idx = filterCombo.SelectedIndex;
-            if (idx < 0 || idx >= filterOptions.Length) return;
-            var newFilter = filterOptions[idx].Item1;
-            filterHelp.Text = filterOptions[idx].Item2;
-            // Persist the choice in access.json so startup doesn't reset it
-            // (the engine also saves immediately, but access.json Apply()
-            // runs after the engine loads — it must agree, not clobber).
+            if (idx < 0 || idx >= filterOptions.Count) return;
+            var newFilter = filterOptions[idx].Name;
+            filterHelp.Text = filterOptions[idx].Help;
+            // The engine saves immediately and owns the persisted value
+            // (Apply no longer pushes at startup); access.json is kept as a
+            // mirror of the last explicit choice for diagnostics.
             config.InputFilter = newFilter;
             config.Save();
             NativeBridge.dasher_set_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER, newFilter);
@@ -667,6 +676,10 @@ public class SettingsPanel : Decorator
             config.InputFilter = config.Selection.FilterName();
             UpdateTrackerVisibility();
             ApplyAccessConfig(config);
+            // Interactive filter push: the engine owns the persisted value
+            // (Apply no longer sets it), so an explicit method/selection
+            // choice must activate the canonical filter for that selection.
+            NativeBridge.dasher_set_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER, config.InputFilter);
         };
 
         selectionCombo.SelectionChanged += (s, e) =>
@@ -678,9 +691,10 @@ public class SettingsPanel : Decorator
                 config.Selection = valid[selectionCombo.SelectedIndex];
                 subtitle.Text = config.Selection.Subtitle();
                 // Keep the persisted input filter in step with the selection
-                // choice (Apply no longer derives it).
+                // choice (Apply no longer derives or pushes it).
                 config.InputFilter = config.Selection.FilterName();
                 ApplyAccessConfig(config);
+                NativeBridge.dasher_set_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER, config.InputFilter);
             }
         };
 
