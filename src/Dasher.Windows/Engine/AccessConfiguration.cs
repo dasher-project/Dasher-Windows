@@ -12,12 +12,14 @@ public class AccessConfiguration
     public int UdpPort { get; set; } = 5555;
 
     /// <summary>
-    /// The engine input filter (SP_INPUT_FILTER). Persisted explicitly rather
-    /// than derived from Selection: deriving clobbered the user's choice every
-    /// startup (e.g. Stylus Control reset to Normal Control) and, because the
-    /// engine saves settings immediately, destroyed the saved value too.
-    /// Null (absent in older access.json files) means "whatever the engine
-    /// persisted" — Apply leaves the filter untouched until the user chooses.
+    /// The engine input filter (SP_INPUT_FILTER). MIRROR ONLY — the engine's
+    /// own persistence (dasher_settings.xml, DasherCore #76 / v0.2.16+) owns
+    /// this value and survives restarts by itself. <see cref="Apply"/> no
+    /// longer pushes it: access.json can go stale (raw parameter row, method
+    /// changes) and pushing a stale value at every startup clobbered the
+    /// engine's persisted choice — the "always defaults to Normal Control"
+    /// report. It is still written when the access UI changes the filter, so
+    /// the file remains a useful diagnostic of the last explicit choice.
     /// </summary>
     public string? InputFilter { get; set; }
 
@@ -28,9 +30,11 @@ public class AccessConfiguration
     {
         try
         {
-            if (!string.IsNullOrEmpty(InputFilter))
-                NativeBridge.dasher_set_string_parameter(handle, ParameterKeys.SP_INPUT_FILTER,
-                    InputFilter);
+            // NOTE: deliberately does NOT touch SP_INPUT_FILTER. The engine
+            // persists that parameter itself; a startup push from here (which
+            // runs BEFORE realize) overwrote whatever the user last chose
+            // whenever access.json held an older value. The interactive
+            // settings UI pushes the filter explicitly on user actions.
 
             if (Selection == SelectionMethod.Dwell)
                 NativeBridge.dasher_set_bool_parameter(handle, 17, 1);
