@@ -892,12 +892,17 @@ public class SettingsPanel : Decorator
                 var topLevel = TopLevel.GetTopLevel(this);
                 if (topLevel == null) return;
                 var storageProvider = topLevel.StorageProvider;
-                var result = await storageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
+                // Dialog-friendly owner — see the export handler.
+                System.Collections.Generic.IReadOnlyList<Avalonia.Platform.Storage.IStorageFile> result;
+                using (Services.PickerSession.Begin(topLevel.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero))
                 {
-                    Title = Loc.Tr("training_import", "Import Training Text"),
-                    FileTypeFilter = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
-                    AllowMultiple = false,
-                });
+                    result = await storageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
+                    {
+                        Title = Loc.Tr("training_import", "Import Training Text"),
+                        FileTypeFilter = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
+                        AllowMultiple = false,
+                    });
+                }
                 if (result.Count == 0) return;
                 var text = await System.IO.File.ReadAllTextAsync(result[0].Path.LocalPath);
 
@@ -951,13 +956,20 @@ public class SettingsPanel : Decorator
                 var topLevel = TopLevel.GetTopLevel(this);
                 if (topLevel == null) return;
                 var storageProvider = topLevel.StorageProvider;
-                var result = await storageProvider.SaveFilePickerAsync(new Avalonia.Platform.Storage.FilePickerSaveOptions
+                // Dialog-friendly owner (keyboard mode's NOACTIVATE+TOPMOST
+                // styles make the native dialog unsurfaced → UI hangs in the
+                // invisible modal pump — the v0.1.33 "export white screen").
+                Avalonia.Platform.Storage.IStorageFile? result;
+                using (Services.PickerSession.Begin(topLevel.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero))
                 {
-                    Title = Loc.Tr("training_export", "Export Training Data"),
-                    DefaultExtension = "txt",
-                    SuggestedFileName = "dasher_training_export.txt",
-                    FileTypeChoices = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
-                });
+                    result = await storageProvider.SaveFilePickerAsync(new Avalonia.Platform.Storage.FilePickerSaveOptions
+                    {
+                        Title = Loc.Tr("training_export", "Export Training Data"),
+                        DefaultExtension = "txt",
+                        SuggestedFileName = "dasher_training_export.txt",
+                        FileTypeChoices = [new Avalonia.Platform.Storage.FilePickerFileType("Text Files") { Patterns = ["*.txt"] }],
+                    });
+                }
                 if (result == null) return;
                 await System.IO.File.WriteAllTextAsync(result.Path.LocalPath, await System.IO.File.ReadAllTextAsync(trainingFile));
                 statusText.Text = string.Format(Loc.Tr("training_exported", "Exported to {0}"), result.Name);

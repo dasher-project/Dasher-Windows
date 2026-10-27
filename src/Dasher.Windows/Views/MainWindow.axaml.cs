@@ -62,31 +62,15 @@ public partial class MainWindow : Window
     [DllImport("user32.dll")]
     private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
-    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
-    private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
+    // Ex-style access is centralized in Services.WindowDialogStyles (single
+    // source of truth for the 32/64-bit entry-point switch and the WS_EX_
+    // constants — formerly duplicated here).
+    private const long WS_EX_NOACTIVATE = Services.WindowDialogStyles.WS_EX_NOACTIVATE;
+    private const long WS_EX_LAYERED = Services.WindowDialogStyles.WS_EX_LAYERED;
 
-    [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
-    private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+    private static long GetWindowExStyle(IntPtr hWnd) => Services.WindowDialogStyles.GetExStyle(hWnd);
 
-    [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-    private static extern IntPtr GetWindowLong32(IntPtr hWnd, int nIndex);
-
-    [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
-    private static extern IntPtr SetWindowLong32(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
-
-    private const int GWL_EXSTYLE = -20;
-    private const int WS_EX_NOACTIVATE = 0x08000000;
-    private const int WS_EX_LAYERED = 0x00080000;
-
-    private static IntPtr GetWindowExStyle(IntPtr hWnd)
-    {
-        return IntPtr.Size == 8 ? GetWindowLongPtr64(hWnd, GWL_EXSTYLE) : GetWindowLong32(hWnd, GWL_EXSTYLE);
-    }
-
-    private static IntPtr SetWindowExStyle(IntPtr hWnd, IntPtr value)
-    {
-        return IntPtr.Size == 8 ? SetWindowLongPtr64(hWnd, GWL_EXSTYLE, value) : SetWindowLong32(hWnd, GWL_EXSTYLE, value);
-    }
+    private static long SetWindowExStyle(IntPtr hWnd, long value) => Services.WindowDialogStyles.SetExStyle(hWnd, value);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct INPUT
@@ -331,6 +315,10 @@ public partial class MainWindow : Window
 
         this.Deactivated += (_, _) =>
         {
+            // A native picker dialog legitimately takes foreground while we
+            // are dialog-friendly (PickerSession); recording IT as the typing
+            // target would misroute post-dialog input (review loop 1).
+            if (_pickerSessionActive) return;
             var fg = GetForegroundWindow();
             var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
             if (fg != ourHandle && fg != IntPtr.Zero)
@@ -352,14 +340,53 @@ public partial class MainWindow : Window
         // changes re-seed — the field text/caret is what matters, not the HWND.
         _targetTracker.TargetChanged += reason =>
         {
+            if (_pickerSessionActive) return; // a picker dialog, not the user's target
             ArmSelectionWatch();
             _ = SeedContextFromTargetAsync(reason);
         };
+
+        // Native pickers (training import/export, Open, Save) coordinate
+        // through PickerSession: window styles normalized, target tracking
+        // suspended for the dialog's lifetime, previous target focused back.
+        Services.PickerSession.Register(SuspendTargetTracking, ResumeTargetTracking);
+        Services.PickerSession.Log = KbLog;
 
         // RFC 0018: everything startup-blocking (data install, engine create,
         // v5 scan) runs off the UI thread so the overlay animates; the
         // spinner must never freeze and the window must never go dead.
         _ = StartupAsync(coreDataDir, dataDir);
+    }
+
+    /// <summary>True while a native picker dialog owns the foreground: no
+    /// foreground-change tracking (the DIALOG would become the "target").</summary>
+    private bool _pickerSessionActive;
+
+    private void SuspendTargetTracking()
+    {
+        _pickerSessionActive = true;
+        KbLog("PickerSession: suspending target tracking");
+        if (_vm is not { IsKeyboardMode: true }) return;
+        _targetTracker.Remove();
+        // Pair with the editor-mode convention (ApplyPaneLayout): a stopped
+        // watch MUST clear _lastWatchTarget, else ArmSelectionWatch's
+        // same-target early-out leaves the caret re-seed dead after the
+        // dialog (review loop 2, issue A).
+        _lastWatchTarget = IntPtr.Zero;
+        Services.TargetContextReader.StopSelectionWatch();
+    }
+
+    private void ResumeTargetTracking()
+    {
+        _pickerSessionActive = false;
+        KbLog($"PickerSession: resuming (target=0x{_targetTracker.Current:X})");
+        if (_vm is not { IsKeyboardMode: true }) return;
+        _targetTracker.Install(OurHwnd());
+        ArmSelectionWatch();
+        // Give the previous typing target its focus back BEFORE the window
+        // styles make Dasher non-activatable again (review loop 1: the dead
+        // dialog HWND would otherwise stay the recorded target and the first
+        // post-dialog characters would go nowhere).
+        Services.WindowDialogStyles.TrySetForeground(_targetTracker.Current);
     }
 
     private async Task StartupAsync(string coreDataDir, string dataDir)
@@ -677,6 +704,8 @@ public partial class MainWindow : Window
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
+        Services.PickerSession.Unregister(SuspendTargetTracking, ResumeTargetTracking);
+        Services.PickerSession.Log = null;
         SaveWindowGeometry();
         _canvas?.Shutdown();
         _ = AnalyticsService.ShutdownAsync();
@@ -906,24 +935,29 @@ public partial class MainWindow : Window
         {
             // Add both WS_EX_NOACTIVATE and WS_EX_LAYERED (layered is required
             // for Window.Opacity to work — Avalonia may not set it in time)
-            newStyle = exStyle.ToInt64() | WS_EX_NOACTIVATE | WS_EX_LAYERED;
+            newStyle = exStyle | WS_EX_NOACTIVATE | WS_EX_LAYERED;
         }
         else
         {
-            newStyle = exStyle.ToInt64() & ~WS_EX_NOACTIVATE;
+            newStyle = exStyle & ~WS_EX_NOACTIVATE;
         }
-        SetWindowExStyle(handle, (IntPtr)newStyle);
+        SetWindowExStyle(handle, newStyle);
 
         // Verify it stuck
         var verify = GetWindowExStyle(handle);
-        var hasFlag = (verify.ToInt64() & WS_EX_NOACTIVATE) != 0;
-        var hasLayered = (verify.ToInt64() & WS_EX_LAYERED) != 0;
+        var hasFlag = (verify & WS_EX_NOACTIVATE) != 0;
+        var hasLayered = (verify & WS_EX_LAYERED) != 0;
         KbLog($"SetNoActivate({enable}): style=0x{exStyle:X} → 0x{newStyle:X}, noActivate={hasFlag}, layered={hasLayered}");
     }
 
     private void OnEngineOutput(object? sender, EngineOutputEventArgs e)
     {
         if (_vm == null || !_vm.IsKeyboardMode) return;
+        // A picker dialog owns the foreground mid-session: no injection, and
+        // (belt-and-braces, review loop 2) the tracker must not record the
+        // dialog as the typing target from our own output-triggered focus
+        // restoration.
+        if (_pickerSessionActive) return;
 
         switch (e.EventType)
         {
@@ -1834,16 +1868,20 @@ public partial class MainWindow : Window
         try
         {
             var storage = StorageProvider;
-            var result = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
+            System.Collections.Generic.IReadOnlyList<Avalonia.Platform.Storage.IStorageFile> result;
+            using (Services.PickerSession.Begin(TryGetPlatformHandle()?.Handle ?? IntPtr.Zero))
             {
-                Title = "Open text file",
-                AllowMultiple = false,
-                FileTypeFilter =
-                [
-                    new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
-                    new FilePickerFileType("All files") { Patterns = ["*"] },
-                ]
-            });
+                result = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
+                {
+                    Title = "Open text file",
+                    AllowMultiple = false,
+                    FileTypeFilter =
+                    [
+                        new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
+                        new FilePickerFileType("All files") { Patterns = ["*"] },
+                    ]
+                });
+            }
 
             if (result.Count == 0) return;
 
@@ -1868,15 +1906,19 @@ public partial class MainWindow : Window
         // take down the process (see the training export/import handlers).
         try
         {
-            var result = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            Avalonia.Platform.Storage.IStorageFile? result;
+            using (Services.PickerSession.Begin(TryGetPlatformHandle()?.Handle ?? IntPtr.Zero))
             {
-                Title = "Save text file",
-                SuggestedFileName = "dasher_output.txt",
-                FileTypeChoices =
-                [
-                    new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
-                ]
-            });
+                result = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+                {
+                    Title = "Save text file",
+                    SuggestedFileName = "dasher_output.txt",
+                    FileTypeChoices =
+                    [
+                        new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
+                    ]
+                });
+            }
 
             if (result == null) return;
 
