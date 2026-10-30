@@ -231,6 +231,32 @@ public static class NativeBridge
     public static extern int dasher_import_training_text(IntPtr ctx,
         [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
 
+    // ── Viewport / coordinate conversion (engine screen space) ────────────
+    // Used by the gaze-loss hold: the crosshair is the zero-velocity point,
+    // so parking the pointer on its screen position freezes the zoom WITHOUT
+    // stopping the engine (no resume click needed — the next valid sample
+    // simply moves again). NOTE: dasher.h marks these as testing-oriented
+    // APIs that may change between engine versions — the pinned submodule +
+    // struct_size versioning keep that safe here.
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct DasherViewport
+    {
+        public int struct_size;
+        public long crosshair_x;
+        public long crosshair_y;
+        public long visible_min_y;
+        public long visible_max_y;
+        public int screen_width;
+        public int screen_height;
+    }
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_get_viewport(IntPtr ctx, ref DasherViewport viewport);
+
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int dasher_dasher_to_screen(IntPtr ctx, long dx, long dy, out int sx, out int sy);
+
     // Absolute path of the current alphabet's user training file — the file
     // adaptive learning appends to and the UI reads/exports/resets
     // (DasherCore#84 / #53). Pointer valid until the next engine call.

@@ -233,6 +233,18 @@ public partial class DasherCanvas : Control
             var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
             _cachedOriginX = (float)(origin.X / scaling);
             _cachedOriginY = (float)(origin.Y / scaling);
+
+            // Crosshair screen position — the zero-velocity point used to
+            // hold the zoom when gaze is lost (PauseForGazeLoss). Zoom-
+            // invariant but RESIZE-dependent: TrySetScreenSize invalidates
+            // the cache when the canvas dims change; until then the cached
+            // point is reused (2 P/Invokes saved per frame).
+            if (!_crosshairCached)
+                CacheCrosshairScreenPosition();
+
+            // Staleness backstop: catches a tracker that stops delivering
+            // entirely (no invalid samples either).
+            CheckGazeStaleness();
         }
 
         DrawEyeTrackIndicator(context);
@@ -383,6 +395,11 @@ public partial class DasherCanvas : Control
         NativeBridge.dasher_set_screen_size(_handle, w, h);
         _lastScreenWidth = w;
         _lastScreenHeight = h;
+        // The crosshair's screen position (the gaze hold's zero-velocity
+        // point) is resize-dependent — invalidate so the next Render
+        // recaches it (review loop 3: a stale park silently reintroduced
+        // the pan-during-blink bug after any resize/DPI change).
+        _crosshairCached = false;
     }
 
     private void Tick(long timeMs)

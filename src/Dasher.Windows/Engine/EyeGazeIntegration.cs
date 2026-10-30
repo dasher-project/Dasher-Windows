@@ -26,6 +26,11 @@ namespace Dasher.Windows.Engine
         }
 
         public event EventHandler<GazePoint>? GazePositionChanged;
+
+        /// <summary>Forwarded tracker warnings (degraded mode, permissions)
+        /// — raised on the tracker's thread (see IEyeTrackerService.Warning).</summary>
+        public event Action<string>? Warning;
+
         public bool IsActive => _device?.IsEnabled ?? false;
 
         public async Task<bool> InitializeAsync(Settings settings)
@@ -40,6 +45,8 @@ namespace Dasher.Windows.Engine
                     EyeGazeLogger.Log("InitializeAsync: CreateTracker returned null");
                     return false;
                 }
+
+                tracker.Warning += w => Warning?.Invoke(w);
 
                 _device = new EyeGazeInputDevice();
                 var ok = await _device.InitializeAsync(tracker);

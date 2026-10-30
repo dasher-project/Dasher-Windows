@@ -11,6 +11,29 @@ public class AccessConfiguration
     public string EyeTrackerType { get; set; } = "WindowsNative";
     public int UdpPort { get; set; } = 5555;
 
+    // ── Gaze filter (transit zoom fix; Juan's Tobii PCEye + TD Control) ────
+
+    /// <summary>Minimum px movement before sending (0 = always send).</summary>
+    public double GazeDeadZonePx { get; set; } = 8;
+
+    /// <summary>Maximum velocity px/ms before holding (0 = disabled).</summary>
+    public double GazeMaxVelocityPxPerMs { get; set; } = 3.0;
+
+    /// <summary>Ms the gaze must dwell before sending (0 = immediate).</summary>
+    public double GazeSettleMs { get; set; } = 80;
+
+    /// <summary>Master switch: false = raw passthrough (pre-filter behaviour).</summary>
+    public bool GazeFilterEnabled { get; set; } = true;
+
+    /// <summary>
+    /// Detailed eye-tracker diagnostics (per-sample flow lines, raw struct
+    /// dumps, filter stats) written to %APPDATA%\Dasher\eyegaze.log. The
+    /// always-on layer is lifecycle events only (connect, resume, heartbeat
+    /// counters, gaze lost/resumed, warnings). Default off; turn on when
+    /// reporting tracker problems.
+    /// </summary>
+    public bool GazeDiagnostics { get; set; }
+
     /// <summary>
     /// The engine input filter (SP_INPUT_FILTER). MIRROR ONLY — the engine's
     /// own persistence (dasher_settings.xml, DasherCore #76 / v0.2.16+) owns

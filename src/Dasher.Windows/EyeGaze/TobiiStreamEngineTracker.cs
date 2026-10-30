@@ -106,6 +106,27 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     private bool _disposed;
 
     public event EventHandler<GazePoint>? GazeDataReceived;
+    public event Action<string>? Warning;
+
+    /// <summary>
+    /// Next-log-round diagnostics (the "run as administrator" experiment):
+    /// resume_device needs elevation on OEM IS5 sensors — logging whether
+    /// this process IS elevated makes the next eyegaze.log self-interpreting.
+    /// </summary>
+    private static void LogElevationStatus()
+    {
+        try
+        {
+            using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var principal = new System.Security.Principal.WindowsPrincipal(identity);
+            var elevated = principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+            EyeGazeLogger.Log($"Tobii: process elevation = {elevated}");
+        }
+        catch (Exception ex)
+        {
+            EyeGazeLogger.Log($"Tobii: elevation check failed: {ex.Message}");
+        }
+    }
     public string TrackerName => "Tobii (Stream Engine)";
     public bool IsConnected { get; private set; }
 
@@ -126,11 +147,12 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     public Task<bool> ConnectAsync()
     {
-        return Task.Run(() =>
+        return Task.Run(async () =>
         {
             try
             {
                 EyeGazeLogger.Log("Tobii: ConnectAsync starting");
+                LogElevationStatus();
 
                 EnsureDllLoaded();
                 EyeGazeLogger.Log("Tobii: DLL resolved");
@@ -209,9 +231,30 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
                 int ssResult = tobii_stream_supported(_device, 0, out bool gazeSupported);
                 EyeGazeLogger.Log($"Tobii: Gaze point stream supported = {gazeSupported} (result code {ssResult})");
 
-                // Resume device in case it's paused
+                // Resume device in case it's paused. Some OEM sensors (IS5/
+                // Dynavox, e.g. IS514) require elevation for this — a
+                // permissions failure leaves them in a degraded low-rate,
+                // low-accuracy mode (one field session measured a 30 Hz
+                // ceiling at 60% validity instead of 90 Hz). Retry once,
+                // then surface the degradation to the user.
                 int rdResult = tobii_resume_device(_device);
-                EyeGazeLogger.Log($"Tobii: resume_device result = {rdResult}{(rdResult != 0 ? $": {GetTobiiError(rdResult)}" : "")}");
+                if (rdResult != 0)
+                {
+                    EyeGazeLogger.Log($"Tobii: resume_device result = {rdResult}: {GetTobiiError(rdResult)} — retrying once in 500ms");
+                    await Task.Delay(500);
+                    rdResult = tobii_resume_device(_device);
+                }
+                if (rdResult != 0)
+                {
+                    EyeGazeLogger.Log($"Tobii: resume_device still failing ({rdResult}: {GetTobiiError(rdResult)}) — continuing in possibly degraded mode");
+                    Warning?.Invoke(
+                        $"The eye tracker could not be fully resumed ({GetTobiiError(rdResult)}). " +
+                        "Tracking may run at reduced speed and accuracy — try running Dasher as administrator.");
+                }
+                else
+                {
+                    EyeGazeLogger.Log("Tobii: resume_device ok");
+                }
                 return true;
             }
             catch (Exception ex)
@@ -428,11 +471,13 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
                     continue;
                 }
 
-                // Heartbeat every 5 seconds
+                // Heartbeat every 5 seconds — the valid/invalid counters are
+                // the field-triage signal (degradation = rate ceiling +
+                // validity collapse), so this rides the ALWAYS-ON layer.
                 var now = DateTime.UtcNow;
                 if (now - lastHeartbeat >= TimeSpan.FromSeconds(5))
                 {
-                    EyeGazeLogger.Log($"Tobii: Heartbeat — {sampleCount} callbacks processed, {_validCount} valid, {_invalidCount} invalid");
+                    EyeGazeLogger.Log($"Tobii: Heartbeat — {sampleCount} callbacks processed, {_validCount} valid, {_invalidCount} invalid{(EyeGazeLogger.Verbose ? "" : " (diagnostics off — Settings > Input to enable per-sample lines)")}");
                     lastHeartbeat = now;
                 }
             }
@@ -455,18 +500,28 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     private void OnGazePoint(ref tobii_gaze_point_t gaze_point)
     {
-        // Dump raw struct bytes for the first few samples to verify layout
-        var dumpIdx = Interlocked.Increment(ref _rawDumpCount);
-        if (dumpIdx <= MaxRawDumps)
+        // Raw struct dumps (diagnostics only — layout verification)
+        if (EyeGazeLogger.Verbose)
         {
-            EyeGazeLogger.Log($"Tobii: RAW gaze #{dumpIdx}: ts={gaze_point.timestamp_us} validity={gaze_point.validity} x={gaze_point.x:F6} y={gaze_point.y:F6}");
-            EyeGazeLogger.Log($"  raw floats: ts_hex={BitConverter.DoubleToInt64Bits(gaze_point.timestamp_us):X16} x_bits={BitConverter.SingleToInt32Bits(gaze_point.x):X8} y_bits={BitConverter.SingleToInt32Bits(gaze_point.y):X8}");
+            var dumpIdx = Interlocked.Increment(ref _rawDumpCount);
+            if (dumpIdx <= MaxRawDumps)
+            {
+                EyeGazeLogger.Log($"Tobii: RAW gaze #{dumpIdx}: ts={gaze_point.timestamp_us} validity={gaze_point.validity} x={gaze_point.x:F6} y={gaze_point.y:F6}");
+                EyeGazeLogger.Log($"  raw floats: ts_hex={BitConverter.DoubleToInt64Bits(gaze_point.timestamp_us):X16} x_bits={BitConverter.SingleToInt32Bits(gaze_point.x):X8} y_bits={BitConverter.SingleToInt32Bits(gaze_point.y):X8}");
+            }
         }
 
         if (gaze_point.validity == 0)
         {
             Interlocked.Increment(ref _invalidCount);
             EyeGazeLogger.LogGazeData(gaze_point.x, gaze_point.y, valid: false);
+            // Forward the LOSS itself: the canvas pauses the engine on
+            // invalid samples (dropping them silently left the last gaze
+            // position driving the zoom — the eyegaze.log field session
+            // showed a 100-minute 0%-valid stretch).
+            GazeDataReceived?.Invoke(this, new GazePoint(
+                gaze_point.x * ScreenWidth, gaze_point.y * ScreenHeight,
+                DateTimeOffset.UtcNow, isValid: false, isScreenCoordinates: true));
             return;
         }
 

@@ -623,6 +623,130 @@ public class SettingsPanel : Decorator
             Margin = new Thickness(0, 2, 0, 0),
         };
 
+        // ── Gaze filter controls (transit zoom fix; tune for eye tracker latency) ──
+        var filterHeader = new TextBlock
+        {
+            Text = "Gaze Smoothing",
+            FontSize = 12,
+            FontWeight = FontWeight.Medium,
+            Foreground = BrushLabel,
+            Margin = new Thickness(0, 10, 0, 0),
+        };
+
+        var filterToggle = new ToggleSwitch
+        {
+            IsChecked = config.GazeFilterEnabled,
+            OnContent = "", OffContent = "", MinWidth = 0, Height = 24,
+        };
+        var filterToggleLabel = new TextBlock
+        {
+            Text = "Filter gaze (reduces zoom toward wrong positions during eye transit)",
+            FontSize = 12,
+            Foreground = BrushValue,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        var filterTogglePanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        filterTogglePanel.Children.Add(filterToggle);
+        filterTogglePanel.Children.Add(filterToggleLabel);
+
+        var gazeFilterHelp = new TextBlock
+        {
+            Text = "Reduces zoom toward wrong positions while your eyes move to a target",
+            FontSize = 11,
+            Foreground = BrushMuted,
+            TextWrapping = TextWrapping.Wrap,
+        };
+
+        // Eye-tracker diagnostics toggle: detailed per-sample logging to
+        // %APPDATA%\Dasher\eyegaze.log (off by default; lifecycle events
+        // always logged). The file to attach to bug reports.
+        var diagToggle = new ToggleSwitch
+        {
+            IsChecked = config.GazeDiagnostics,
+            OnContent = "", OffContent = "", MinWidth = 0, Height = 24,
+        };
+        var diagToggleLabel = new TextBlock
+        {
+            Text = "Save eye-tracker diagnostics",
+            FontSize = 12,
+            Foreground = BrushValue,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        var diagTogglePanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        diagTogglePanel.Children.Add(diagToggle);
+        diagTogglePanel.Children.Add(diagToggleLabel);
+        var diagHelp = new TextBlock
+        {
+            Text = "Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.",
+            FontSize = 11,
+            Foreground = BrushMuted,
+            TextWrapping = TextWrapping.Wrap,
+        };
+        diagToggle.PropertyChanged += (s, e) =>
+        {
+            if (e.Property.Name != "IsChecked") return;
+            var cfg = AccessConfiguration.Load();
+            cfg.GazeDiagnostics = diagToggle.IsChecked == true;
+            cfg.Save();
+            EyeGaze.EyeGazeLogger.Verbose = cfg.GazeDiagnostics;
+        };
+
+        var deadZoneSlider = new Slider
+        {
+            Minimum = 0, Maximum = 30, Value = config.GazeDeadZonePx,
+            Width = 180, FontSize = 12,
+        };
+        var deadZoneLabel = new TextBlock { Text = $"Dead zone: {config.GazeDeadZonePx:F0} px", FontSize = 11, Foreground = BrushValue };
+        deadZoneSlider.PropertyChanged += (s, e) =>
+        {
+            if (e.Property.Name == "Value")
+                deadZoneLabel.Text = $"Dead zone: {deadZoneSlider.Value:F0} px";
+        };
+
+        var settleSlider = new Slider
+        {
+            Minimum = 0, Maximum = 300, Value = config.GazeSettleMs,
+            Width = 180, FontSize = 12,
+        };
+        var settleLabel = new TextBlock { Text = $"Settle time: {config.GazeSettleMs:F0} ms", FontSize = 11, Foreground = BrushValue };
+        settleSlider.PropertyChanged += (s, e) =>
+        {
+            if (e.Property.Name == "Value")
+                settleLabel.Text = $"Settle time: {settleSlider.Value:F0} ms";
+        };
+
+        void SaveFilterConfig()
+        {
+            var cfg = AccessConfiguration.Load();
+            cfg.GazeFilterEnabled = filterToggle.IsChecked ?? true;
+            cfg.GazeDeadZonePx = deadZoneSlider.Value;
+            cfg.GazeSettleMs = settleSlider.Value;
+            cfg.Save();
+            // Apply live if canvas is available
+            var canvas = this.FindControl<DasherCanvas>("DasherCanvas");
+            if (canvas != null)
+            {
+                if (cfg.GazeFilterEnabled)
+                    canvas.ConfigureGazeFilter(cfg.GazeDeadZonePx, null, cfg.GazeSettleMs);
+                else
+                    canvas.ConfigureGazeFilter(); // disable
+            }
+        }
+
+        // Debounced save on slider change
+        Avalonia.Threading.DispatcherTimer? filterSaveTimer = null;
+        void ScheduleFilterSave()
+        {
+            filterSaveTimer?.Stop();
+            filterSaveTimer = new Avalonia.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+            filterSaveTimer.Tick += (_, _) => { filterSaveTimer!.Stop(); SaveFilterConfig(); };
+            filterSaveTimer.Start();
+        }
+
+        deadZoneSlider.PropertyChanged += (s, e) => { if (e.Property.Name == "Value") ScheduleFilterSave(); };
+        settleSlider.PropertyChanged += (s, e) => { if (e.Property.Name == "Value") ScheduleFilterSave(); };
+        filterToggle.PropertyChanged += (s, e) => { if (e.Property.Name == "IsChecked") ScheduleFilterSave(); };
+
         void UpdateTrackerVisibility()
         {
             var isEyeGaze = methods[methodCombo.SelectedIndex] == AccessMethod.EyeGaze;
@@ -631,6 +755,15 @@ public class SettingsPanel : Decorator
             var isUdp = isEyeGaze && trackerCombo.SelectedIndex == 1;
             portPanel.IsVisible = isUdp;
             trackerHelp.IsVisible = false;
+            filterHeader.IsVisible = isEyeGaze;
+            filterTogglePanel.IsVisible = isEyeGaze;
+            gazeFilterHelp.IsVisible = isEyeGaze;
+            diagTogglePanel.IsVisible = isEyeGaze;
+            diagHelp.IsVisible = isEyeGaze;
+            deadZoneSlider.IsVisible = isEyeGaze;
+            deadZoneLabel.IsVisible = isEyeGaze;
+            settleSlider.IsVisible = isEyeGaze;
+            settleLabel.IsVisible = isEyeGaze;
 
             if (!isEyeGaze) return;
 
@@ -806,6 +939,15 @@ public class SettingsPanel : Decorator
         panel.Children.Add(trackerCombo);
         panel.Children.Add(portPanel);
         panel.Children.Add(trackerHelp);
+        panel.Children.Add(filterHeader);
+        panel.Children.Add(filterTogglePanel);
+        panel.Children.Add(gazeFilterHelp);
+        panel.Children.Add(diagTogglePanel);
+        panel.Children.Add(diagHelp);
+        panel.Children.Add(deadZoneSlider);
+        panel.Children.Add(deadZoneLabel);
+        panel.Children.Add(settleSlider);
+        panel.Children.Add(settleLabel);
         panel.Children.Add(filterLabel);
         panel.Children.Add(filterCombo);
         panel.Children.Add(filterHelp);

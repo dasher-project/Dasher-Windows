@@ -15,6 +15,7 @@ namespace Dasher.Windows.EyeGaze
         private Task? _receiveTask;
 
         public event EventHandler<GazePoint>? GazeDataReceived;
+        public event Action<string>? Warning;
         public string TrackerName => "UDP Gaze Tracker";
         public bool IsConnected { get; private set; }
         public int UdpPort { get; set; } = 5555;
