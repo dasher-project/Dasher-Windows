@@ -62,31 +62,15 @@ public partial class MainWindow : Window
     [DllImport("user32.dll")]
     private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
-    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
-    private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
+    // Ex-style access is centralized in Services.WindowDialogStyles (single
+    // source of truth for the 32/64-bit entry-point switch and the WS_EX_
+    // constants — formerly duplicated here).
+    private const long WS_EX_NOACTIVATE = Services.WindowDialogStyles.WS_EX_NOACTIVATE;
+    private const long WS_EX_LAYERED = Services.WindowDialogStyles.WS_EX_LAYERED;
 
-    [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
-    private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+    private static long GetWindowExStyle(IntPtr hWnd) => Services.WindowDialogStyles.GetExStyle(hWnd);
 
-    [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-    private static extern IntPtr GetWindowLong32(IntPtr hWnd, int nIndex);
-
-    [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
-    private static extern IntPtr SetWindowLong32(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
-
-    private const int GWL_EXSTYLE = -20;
-    private const int WS_EX_NOACTIVATE = 0x08000000;
-    private const int WS_EX_LAYERED = 0x00080000;
-
-    private static IntPtr GetWindowExStyle(IntPtr hWnd)
-    {
-        return IntPtr.Size == 8 ? GetWindowLongPtr64(hWnd, GWL_EXSTYLE) : GetWindowLong32(hWnd, GWL_EXSTYLE);
-    }
-
-    private static IntPtr SetWindowExStyle(IntPtr hWnd, IntPtr value)
-    {
-        return IntPtr.Size == 8 ? SetWindowLongPtr64(hWnd, GWL_EXSTYLE, value) : SetWindowLong32(hWnd, GWL_EXSTYLE, value);
-    }
+    private static long SetWindowExStyle(IntPtr hWnd, long value) => Services.WindowDialogStyles.SetExStyle(hWnd, value);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct INPUT
@@ -331,6 +315,10 @@ public partial class MainWindow : Window
 
         this.Deactivated += (_, _) =>
         {
+            // A native picker dialog legitimately takes foreground while we
+            // are dialog-friendly (PickerSession); recording IT as the typing
+            // target would misroute post-dialog input (review loop 1).
+            if (_pickerSessionActive) return;
             var fg = GetForegroundWindow();
             var ourHandle = TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
             if (fg != ourHandle && fg != IntPtr.Zero)
@@ -352,14 +340,53 @@ public partial class MainWindow : Window
         // changes re-seed — the field text/caret is what matters, not the HWND.
         _targetTracker.TargetChanged += reason =>
         {
+            if (_pickerSessionActive) return; // a picker dialog, not the user's target
             ArmSelectionWatch();
             _ = SeedContextFromTargetAsync(reason);
         };
+
+        // Native pickers (training import/export, Open, Save) coordinate
+        // through PickerSession: window styles normalized, target tracking
+        // suspended for the dialog's lifetime, previous target focused back.
+        Services.PickerSession.Register(SuspendTargetTracking, ResumeTargetTracking);
+        Services.PickerSession.Log = KbLog;
 
         // RFC 0018: everything startup-blocking (data install, engine create,
         // v5 scan) runs off the UI thread so the overlay animates; the
         // spinner must never freeze and the window must never go dead.
         _ = StartupAsync(coreDataDir, dataDir);
+    }
+
+    /// <summary>True while a native picker dialog owns the foreground: no
+    /// foreground-change tracking (the DIALOG would become the "target").</summary>
+    private bool _pickerSessionActive;
+
+    private void SuspendTargetTracking()
+    {
+        _pickerSessionActive = true;
+        KbLog("PickerSession: suspending target tracking");
+        if (_vm is not { IsKeyboardMode: true }) return;
+        _targetTracker.Remove();
+        // Pair with the editor-mode convention (ApplyPaneLayout): a stopped
+        // watch MUST clear _lastWatchTarget, else ArmSelectionWatch's
+        // same-target early-out leaves the caret re-seed dead after the
+        // dialog (review loop 2, issue A).
+        _lastWatchTarget = IntPtr.Zero;
+        Services.TargetContextReader.StopSelectionWatch();
+    }
+
+    private void ResumeTargetTracking()
+    {
+        _pickerSessionActive = false;
+        KbLog($"PickerSession: resuming (target=0x{_targetTracker.Current:X})");
+        if (_vm is not { IsKeyboardMode: true }) return;
+        _targetTracker.Install(OurHwnd());
+        ArmSelectionWatch();
+        // Give the previous typing target its focus back BEFORE the window
+        // styles make Dasher non-activatable again (review loop 1: the dead
+        // dialog HWND would otherwise stay the recorded target and the first
+        // post-dialog characters would go nowhere).
+        Services.WindowDialogStyles.TrySetForeground(_targetTracker.Current);
     }
 
     private async Task StartupAsync(string coreDataDir, string dataDir)
@@ -632,7 +659,33 @@ public partial class MainWindow : Window
         {
             volSlider.Value = SpeechService.Instance.SpeechVolume;
             volSlider.ValueChanged += OnSpeakVolumeChanged;
+            // setting_changed fires on commit (drag release / keyboard
+            // adjust incl. Page/Home keys), deduped — never per tick.
+            int lastVol = SpeechService.Instance.SpeechVolume;
+            void VolCommit()
+            {
+                var v = (int)Math.Round(volSlider.Value);
+                if (v == lastVol) return;
+                lastVol = v;
+                OnSpeakVolumeCommitted();
+            }
+            volSlider.AddHandler(Avalonia.Input.InputElement.PointerReleasedEvent,
+                (_, _) => VolCommit(), Avalonia.Interactivity.RoutingStrategies.Bubble);
+            volSlider.KeyUp += (s, e) =>
+            {
+                if (e.Key is Avalonia.Input.Key.Left or Avalonia.Input.Key.Right or Avalonia.Input.Key.Up
+                    or Avalonia.Input.Key.Down or Avalonia.Input.Key.PageUp or Avalonia.Input.Key.PageDown
+                    or Avalonia.Input.Key.Home or Avalonia.Input.Key.End)
+                    VolCommit();
+            };
         }
+
+        // RFC 0001 2026-10-28: status-bar Auto/Learning toggles are bound
+        // TwoWay to VM properties that also change programmatically
+        // (startup/reset), so instrumentation is attached view-side here —
+        // AFTER the startup value load — and suppressed around programmatic
+        // writes (see OnResetSettingsRequested).
+        InstrumentStatusToggles();
 
 #if !STORE
         _ = CheckForUpdatesAsync();
@@ -677,6 +730,8 @@ public partial class MainWindow : Window
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
+        Services.PickerSession.Unregister(SuspendTargetTracking, ResumeTargetTracking);
+        Services.PickerSession.Log = null;
         SaveWindowGeometry();
         _canvas?.Shutdown();
         _ = AnalyticsService.ShutdownAsync();
@@ -878,6 +933,12 @@ public partial class MainWindow : Window
     private void OnNewSession(object? sender, RoutedEventArgs e)
     {
         if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+        // RFC 0001 2026-10-28: bound by the message-pane BtnNewSession
+        // (status_bar per the schema's message-pane note) and the mini-bar
+        // KbNewSession (ime_toolbar).
+        Services.AnalyticsService.CaptureUiAction(
+            _vm.IsKeyboardMode || !ReferenceEquals(sender, BtnNewSession) ? "ime_toolbar" : "status_bar",
+            "new");
         NativeBridge.dasher_reset(_vm.Handle);
         KbLog("New session: engine reset (buffer + context)");
     }
@@ -906,24 +967,29 @@ public partial class MainWindow : Window
         {
             // Add both WS_EX_NOACTIVATE and WS_EX_LAYERED (layered is required
             // for Window.Opacity to work — Avalonia may not set it in time)
-            newStyle = exStyle.ToInt64() | WS_EX_NOACTIVATE | WS_EX_LAYERED;
+            newStyle = exStyle | WS_EX_NOACTIVATE | WS_EX_LAYERED;
         }
         else
         {
-            newStyle = exStyle.ToInt64() & ~WS_EX_NOACTIVATE;
+            newStyle = exStyle & ~WS_EX_NOACTIVATE;
         }
-        SetWindowExStyle(handle, (IntPtr)newStyle);
+        SetWindowExStyle(handle, newStyle);
 
         // Verify it stuck
         var verify = GetWindowExStyle(handle);
-        var hasFlag = (verify.ToInt64() & WS_EX_NOACTIVATE) != 0;
-        var hasLayered = (verify.ToInt64() & WS_EX_LAYERED) != 0;
+        var hasFlag = (verify & WS_EX_NOACTIVATE) != 0;
+        var hasLayered = (verify & WS_EX_LAYERED) != 0;
         KbLog($"SetNoActivate({enable}): style=0x{exStyle:X} → 0x{newStyle:X}, noActivate={hasFlag}, layered={hasLayered}");
     }
 
     private void OnEngineOutput(object? sender, EngineOutputEventArgs e)
     {
         if (_vm == null || !_vm.IsKeyboardMode) return;
+        // A picker dialog owns the foreground mid-session: no injection, and
+        // (belt-and-braces, review loop 2) the tracker must not record the
+        // dialog as the typing target from our own output-triggered focus
+        // restoration.
+        if (_pickerSessionActive) return;
 
         switch (e.EventType)
         {
@@ -990,6 +1056,7 @@ public partial class MainWindow : Window
     private void OnManualReanchor(object? sender, RoutedEventArgs e)
     {
         if (_vm is not { IsKeyboardMode: true }) return;
+        Services.AnalyticsService.CaptureUiAction("ime_toolbar", "reanchor");
         KbLog("Manual re-anchor requested");
         _ = SeedContextFromTargetAsync("manual re-anchor");
     }
@@ -1197,15 +1264,30 @@ public partial class MainWindow : Window
     private void OnKbCopy(object? sender, RoutedEventArgs e)
     {
         if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+        Services.AnalyticsService.CaptureUiAction("ime_toolbar", "copy");
         // Copy ALL engine text via the system clipboard (v5 toolbar Copy).
         var text = _vm.OutputText;
         if (!string.IsNullOrEmpty(text))
             SetClipboardText(text);
     }
 
-    private void OnKbCut(object? sender, RoutedEventArgs e) => SendCtrlChord(VK_KEY_X, "X");
-    private void OnKbPaste(object? sender, RoutedEventArgs e) => SendCtrlChord(VK_KEY_V, "V");
-    private void OnKbSelectAll(object? sender, RoutedEventArgs e) => SendCtrlChord(VK_KEY_A, "A");
+    private void OnKbCut(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("ime_toolbar", "cut");
+        SendCtrlChord(VK_KEY_X, "X");
+    }
+
+    private void OnKbPaste(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("ime_toolbar", "paste");
+        SendCtrlChord(VK_KEY_V, "V");
+    }
+
+    private void OnKbSelectAll(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("ime_toolbar", "select_all");
+        SendCtrlChord(VK_KEY_A, "A");
+    }
 
     private void UpdateWindowMinimum()
     {
@@ -1223,16 +1305,51 @@ public partial class MainWindow : Window
         }
     }
 
-    private void OnModeRightSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Right);
-    private void OnModeLeftSide(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Left);
-    private void OnModeBottom(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Bottom);
-    private void OnModeTop(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Top);
-    private void OnModeKeyboard(object? sender, RoutedEventArgs e) => SetPanePosition(PanePosition.Keyboard);
-
     private void OnToggleMode(object? sender, RoutedEventArgs e)
     {
         if (_vm == null) return;
-        SetPanePosition(_vm.IsKeyboardMode ? PanePosition.Right : PanePosition.Keyboard);
+        // RFC 0001 2026-10-28: three affordances route here — the top-bar
+        // BtnKeyboard (enter, main_toolbar; hidden in keyboard mode), the
+        // message-pane eye button (enter, status_bar per the schema's
+        // message-pane note), and the mini-bar exit (leave, ime_toolbar).
+        var entering = !_vm.IsKeyboardMode;
+        if (entering)
+            Services.AnalyticsService.CaptureUiAction(
+                ReferenceEquals(sender, PaneEyeModeBtn) ? "status_bar" : "main_toolbar",
+                "direct_mode", "on");
+        else
+            Services.AnalyticsService.CaptureUiAction("ime_toolbar", "direct_mode", "off");
+        SetPanePosition(entering ? PanePosition.Keyboard : PanePosition.Right);
+    }
+
+    private void OnModeRightSide(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("main_toolbar", "layout", "right");
+        SetPanePosition(PanePosition.Right);
+    }
+
+    private void OnModeLeftSide(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("main_toolbar", "layout", "left");
+        SetPanePosition(PanePosition.Left);
+    }
+
+    private void OnModeBottom(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("main_toolbar", "layout", "bottom");
+        SetPanePosition(PanePosition.Bottom);
+    }
+
+    private void OnModeTop(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("main_toolbar", "layout", "top");
+        SetPanePosition(PanePosition.Top);
+    }
+
+    private void OnModeKeyboard(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("main_toolbar", "direct_mode", "on");
+        SetPanePosition(PanePosition.Keyboard);
     }
 
     private void SetPanePosition(PanePosition position)
@@ -1326,6 +1443,7 @@ public partial class MainWindow : Window
     {
         if (_vm == null) return;
         _vm.IsStatusBarHidden = !_vm.IsStatusBarHidden;
+        Services.AnalyticsService.CaptureUiAction("status_bar", "hide", _vm.IsStatusBarHidden ? "on" : "off");
         new PaneSettings { PanePosition = _vm.PanePosition.ToString(), StatusBarHidden = _vm.IsStatusBarHidden }.Save();
     }
 
@@ -1621,6 +1739,13 @@ public partial class MainWindow : Window
         if (dock == null) return;
 
         var wasVisible = dock.IsVisible;
+        // RFC 0001 2026-10-28: count OPENINGS, not toggles (the dock close
+        // button routes here too). In keyboard (direct) mode the only entry
+        // point is the mini-bar (ime_toolbar); otherwise the top bar.
+        if (!wasVisible)
+            Services.AnalyticsService.CaptureUiAction(
+                _vm.IsKeyboardMode ? "ime_toolbar" : "main_toolbar",
+                "settings");
         dock.IsVisible = !wasVisible;
 
         if (sender is Button btn)
@@ -1727,8 +1852,15 @@ public partial class MainWindow : Window
         // Refresh UI state — read from engine defaults
         _vm.LoadSpeedBounds();
         _vm.LoadSpeedFromEngine();
-        _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
-        _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
+        // Programmatic writes: suppress the view-side toggle telemetry
+        // (RFC: programmatic changes must not emit setting_changed).
+        _suppressStatusToggleTelemetry = true;
+        try
+        {
+            _vm.AutoSpeed = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_AUTO_SPEEDCONTROL) != 0;
+            _vm.Learning = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_LM_ADAPTIVE) != 0;
+        }
+        finally { _suppressStatusToggleTelemetry = false; }
         _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
         UpdateControlModeLabel();
         _vm.LoadAlphabets();
@@ -1821,6 +1953,7 @@ public partial class MainWindow : Window
 
     private void OnNew(object? sender, RoutedEventArgs e)
     {
+        Services.AnalyticsService.CaptureUiAction("main_toolbar", "new");
         if (_canvas == null || _vm == null) return;
         NativeBridge.dasher_reset(_vm.Handle);
         _vm.OutputText = "";
@@ -1828,22 +1961,27 @@ public partial class MainWindow : Window
 
     private async void OnOpen(object? sender, RoutedEventArgs e)
     {
+        Services.AnalyticsService.CaptureUiAction("main_toolbar", "open");
         if (_vm == null) return;
         // Whole-handler guard (async void): a picker exception must not
         // take down the process (see the training export/import handlers).
         try
         {
             var storage = StorageProvider;
-            var result = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
+            System.Collections.Generic.IReadOnlyList<Avalonia.Platform.Storage.IStorageFile> result;
+            using (Services.PickerSession.Begin(TryGetPlatformHandle()?.Handle ?? IntPtr.Zero))
             {
-                Title = "Open text file",
-                AllowMultiple = false,
-                FileTypeFilter =
-                [
-                    new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
-                    new FilePickerFileType("All files") { Patterns = ["*"] },
-                ]
-            });
+                result = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
+                {
+                    Title = "Open text file",
+                    AllowMultiple = false,
+                    FileTypeFilter =
+                    [
+                        new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
+                        new FilePickerFileType("All files") { Patterns = ["*"] },
+                    ]
+                });
+            }
 
             if (result.Count == 0) return;
 
@@ -1863,20 +2001,25 @@ public partial class MainWindow : Window
 
     private async void OnSave(object? sender, RoutedEventArgs e)
     {
+        Services.AnalyticsService.CaptureUiAction("main_toolbar", "save");
         if (_vm == null) return;
         // Whole-handler guard (async void): a picker exception must not
         // take down the process (see the training export/import handlers).
         try
         {
-            var result = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            Avalonia.Platform.Storage.IStorageFile? result;
+            using (Services.PickerSession.Begin(TryGetPlatformHandle()?.Handle ?? IntPtr.Zero))
             {
-                Title = "Save text file",
-                SuggestedFileName = "dasher_output.txt",
-                FileTypeChoices =
-                [
-                    new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
-                ]
-            });
+                result = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+                {
+                    Title = "Save text file",
+                    SuggestedFileName = "dasher_output.txt",
+                    FileTypeChoices =
+                    [
+                        new FilePickerFileType("Text files") { Patterns = ["*.txt"] },
+                    ]
+                });
+            }
 
             if (result == null) return;
 
@@ -1900,13 +2043,51 @@ public partial class MainWindow : Window
         if (_vm.SelectedLanguageIndex < _vm.Languages.Count)
         {
             var alphabet = _vm.Languages[_vm.SelectedLanguageIndex];
+            // Programmatic guard (RFC 0001 2026-10-28: programmatic changes
+            // must not emit): startup/reset assign SelectedLanguageIndex for
+            // the engine's CURRENT alphabet — only emit when the pick is an
+            // actual change. This also fixes the pre-existing startup
+            // alphabet_selected false-fire for non-default alphabets.
+            var currentPtr = NativeBridge.dasher_get_alphabet_id(_vm.Handle);
+            var current = currentPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(currentPtr) ?? "" : "";
+            if (alphabet == current) return;
             NativeBridge.dasher_set_alphabet_id(_vm.Handle, alphabet);
             AnalyticsService.Capture("alphabet_selected", new() { ["alphabet_id"] = alphabet });
+            // RFC 0001 2026-10-28 amendment: also a settings change made
+            // from the main UI (the picker sits in the status bar; surface
+            // stays main_ui = anywhere outside the settings windows).
+            AnalyticsService.CaptureSettingChanged("Alphabet", "enum", alphabet, "main_ui");
         }
     }
 
-    private void OnSpeedDown(object? sender, RoutedEventArgs e) => _vm?.DecreaseSpeed();
-    private void OnSpeedUp(object? sender, RoutedEventArgs e) => _vm?.IncreaseSpeed();
+    private void OnSpeedDown(object? sender, RoutedEventArgs e)
+    {
+        // The speed stepper sits in the bottom status bar.
+        Services.AnalyticsService.CaptureUiAction("status_bar", "speed_down");
+        if (_vm == null) return;
+        var before = _vm.Handle == IntPtr.Zero ? 0 : NativeBridge.dasher_get_long_parameter(_vm.Handle, ParameterKeys.LP_MAX_BITRATE);
+        _vm.DecreaseSpeed();
+        EmitSpeedIfChanged(before);
+    }
+
+    private void OnSpeedUp(object? sender, RoutedEventArgs e)
+    {
+        Services.AnalyticsService.CaptureUiAction("status_bar", "speed_up");
+        if (_vm == null) return;
+        var before = _vm.Handle == IntPtr.Zero ? 0 : NativeBridge.dasher_get_long_parameter(_vm.Handle, ParameterKeys.LP_MAX_BITRATE);
+        _vm.IncreaseSpeed();
+        EmitSpeedIfChanged(before);
+    }
+
+    /// <summary>setting_changed only when the value actually moved (the
+    /// steppers clamp at their bounds — a no-op click is not a change).</summary>
+    private void EmitSpeedIfChanged(long before)
+    {
+        if (_vm == null || _vm.Handle == IntPtr.Zero || before == 0) return;
+        var after = NativeBridge.dasher_get_long_parameter(_vm.Handle, ParameterKeys.LP_MAX_BITRATE);
+        if (after != before)
+            Services.AnalyticsService.CaptureSettingChanged("Max Speed (bits/sec)", "number", after, "main_ui");
+    }
 
     private async void OnInputSourceChanged(object? sender, (EyeGazeIntegration.TrackerType trackerType, int udpPort) args)
     {
@@ -1958,6 +2139,7 @@ public partial class MainWindow : Window
     private async void OnCopyAll(object? sender, RoutedEventArgs e)
     {
         if (_vm == null) return;
+        Services.AnalyticsService.CaptureUiAction("status_bar", "copy");
         SetClipboardText(_vm.OutputText);
     }
 
@@ -1965,12 +2147,14 @@ public partial class MainWindow : Window
     {
         var messageArea = this.FindControl<TextBox>("MessageArea");
         if (messageArea?.SelectedText == null) return;
+        Services.AnalyticsService.CaptureUiAction("status_bar", "copy_selection");
         SetClipboardText(messageArea.SelectedText);
     }
 
     private async void OnPaste(object? sender, RoutedEventArgs e)
     {
         if (_vm == null) return;
+        Services.AnalyticsService.CaptureUiAction("status_bar", "paste");
         var text = GetClipboardText();
         if (text != null)
             _vm.OutputText += text;
@@ -1979,11 +2163,13 @@ public partial class MainWindow : Window
     private void OnQuickSpeak(object? sender, RoutedEventArgs e)
     {
         if (_vm == null || string.IsNullOrWhiteSpace(_vm.OutputText)) return;
+        Services.AnalyticsService.CaptureUiAction("status_bar", "speak");
         _ = SpeechService.Instance.SpeakAsync(_vm.OutputText);
     }
 
     private void OnStopSpeak(object? sender, RoutedEventArgs e)
     {
+        Services.AnalyticsService.CaptureUiAction("status_bar", "stop_speak");
         SpeechService.Instance.Stop();
     }
 
@@ -1991,6 +2177,45 @@ public partial class MainWindow : Window
     {
         SpeechService.Instance.SpeechVolume = (int)Math.Round(e.NewValue);
         SpeechService.Instance.SaveSettings();
+    }
+
+    /// <summary>Commit-time telemetry for the status-bar speech volume (the
+    /// ValueChanged storm is a drag, not N commits — RFC: setting_changed is
+    /// for committed changes).</summary>
+    private void OnSpeakVolumeCommitted()
+    {
+        Services.AnalyticsService.CaptureSettingChanged("speech_volume", "number",
+            SpeechService.Instance.SpeechVolume, "main_ui");
+    }
+
+    private bool _statusTogglesInstrumented;
+    private bool _suppressStatusToggleTelemetry;
+
+    /// <summary>
+    /// RFC 0001 2026-10-28: attach setting_changed to the status-bar
+    /// Auto/Learning toggles at the VIEW, after startup values are loaded —
+    /// the VM properties are written programmatically at startup and by
+    /// Settings > Reset, and programmatic changes must not emit. Reset
+    /// suppresses via _suppressStatusToggleTelemetry.
+    /// </summary>
+    private void InstrumentStatusToggles()
+    {
+        if (_statusTogglesInstrumented) return;
+        _statusTogglesInstrumented = true;
+        var auto = this.FindControl<Avalonia.Controls.ToggleSwitch>("AutoSpeedToggle");
+        if (auto != null)
+            auto.IsCheckedChanged += (_, _) =>
+            {
+                if (!_suppressStatusToggleTelemetry)
+                    Services.AnalyticsService.CaptureSettingChanged("Automatic Speed Control", "bool", auto.IsChecked == true, "main_ui");
+            };
+        var learning = this.FindControl<Avalonia.Controls.ToggleSwitch>("LearningToggle");
+        if (learning != null)
+            learning.IsCheckedChanged += (_, _) =>
+            {
+                if (!_suppressStatusToggleTelemetry)
+                    Services.AnalyticsService.CaptureSettingChanged("Adaptive Language Model", "bool", learning.IsChecked == true, "main_ui");
+            };
     }
 
     private void OnEngineSpeak(IntPtr textPtr, int interrupt, IntPtr user_data)
@@ -2101,6 +2326,11 @@ public partial class MainWindow : Window
         if (_vm == null) return;
 
         _controlModeActive = !_controlModeActive;
+        // RFC 0001 2026-10-28: the main-toolbar Control button and the
+        // keyboard-mode mini-bar's KbControlBtn share this handler.
+        Services.AnalyticsService.CaptureUiAction(
+            ReferenceEquals(sender, KbControlBtn) ? "ime_toolbar" : "main_toolbar",
+            "control_mode", _controlModeActive ? "on" : "off");
         NativeBridge.dasher_set_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE, _controlModeActive ? 1 : 0);
         UpdateControlModeLabel();
     }
@@ -2124,6 +2354,7 @@ public partial class MainWindow : Window
 
         if (_gameModeActive)
         {
+            Services.AnalyticsService.CaptureUiAction("main_toolbar", "game_mode", "off");
             NativeBridge.dasher_leave_game_mode(_vm.Handle);
             _gameModeActive = false;
             NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 1);
@@ -2137,6 +2368,7 @@ public partial class MainWindow : Window
             var result = NativeBridge.dasher_enter_game_mode(_vm.Handle);
             if (result == 0)
             {
+                Services.AnalyticsService.CaptureUiAction("main_toolbar", "game_mode", "on");
                 _gameModeActive = true;
                 NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 0);
                 GameIcon.Kind = LucideIconKind.Pause;

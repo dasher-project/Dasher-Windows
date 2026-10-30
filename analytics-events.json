@@ -61,6 +61,25 @@
         "engine_log_tail": { "type": "string", "note": "Deferred reports only: last engine diagnostic lines captured with the crash" }
       },
       "pii": false
+    },
+    "ui_action": {
+      "description": "RFC 0001 2026-10-28 amendment: the user activated a control in the main UI (anything outside the settings windows). Opt-in gated like every event.",
+      "properties": {
+        "surface": { "type": "string", "enum": ["main_toolbar", "status_bar", "ime_toolbar"], "description": "ime_toolbar = the keyboard (direct-entry) mode mini-bar. status_bar also covers the bottom message-pane header (speak / copy / new / paste / enter-direct-mode controls). The RFC's ime_topbar surface has no Windows equivalent and is therefore never emitted." },
+        "action": { "type": "string", "description": "Fixed vocabulary; new identifiers require a schema update", "enum": ["new", "open", "save", "settings", "copy", "copy_selection", "cut", "paste", "select_all", "speak", "stop_speak", "speed_up", "speed_down", "layout", "direct_mode", "game_mode", "control_mode", "reanchor", "hide"] },
+        "state": { "type": "string", "enum": ["on", "off", "right", "left", "bottom", "top"], "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position" }
+      },
+      "pii": false
+    },
+    "setting_changed": {
+      "description": "RFC 0001 2026-10-28 amendment: the user committed a settings change at the widget site. Programmatic changes (engine init, defaults, migrations) never emit this.",
+      "properties": {
+        "setting_id": { "type": "string", "description": "Canonical identifier: the DasherCore parameter display name (e.g. Max Speed (bits/sec)) or the frontend setting key (e.g. output_font_size, access_method). Locale caveat: engine parameter display names follow the UI locale (RFC 0003), so the same setting may report under its translated name — frontend keys are locale-stable. Speech engine credentials are deliberately excluded (secrets).", "example": "Max Speed (bits/sec)" },
+        "value_type": { "type": "string", "enum": ["bool", "number", "enum", "string"] },
+        "value": { "type": ["boolean", "number", "string"], "description": "Present only for bool/number/enum values from a fixed vocabulary. OMITTED for string settings - free text is never collected" },
+        "surface": { "type": "string", "enum": ["settings", "main_ui", "ime"], "description": "Where the change was made. Windows currently emits settings and main_ui only" }
+      },
+      "pii": false
     }
   },
   "explicitly_not_collected": [
@@ -70,6 +89,8 @@
     "User name, email, or account info",
     "IP address (scrubbed at ingest)",
     "Training text contents",
-    "Game mode target text"
+    "Game mode target text",
+    "Values of free-text/string settings (2026-10-28 amendment: only the fact that such a setting changed is collected)",
+    "File paths of any kind (2026-10-28 amendment)"
   ]
 }

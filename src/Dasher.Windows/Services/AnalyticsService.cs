@@ -143,6 +143,45 @@ public static class AnalyticsService
         catch { }
     }
 
+    // ── RFC 0001, 2026-10-28 amendment: UI-interaction telemetry ─────────────
+    //
+    // Both events answer the UX team's question (which settings are the
+    // priority, where should main-UI focus go) and fire only after the
+    // existing opt-in. See analytics-events.json for the published schema —
+    // if it's not in the schema, it's not collected.
+
+    /// <summary>
+    /// The user activated a control in the main UI (outside settings).
+    /// Surfaces: main_toolbar, status_bar, ime_toolbar (the keyboard-mode
+    /// mini-bar). Fixed action vocabulary — declared in analytics-events.json.
+    /// </summary>
+    public static void CaptureUiAction(string surface, string action, string? state = null)
+    {
+        var props = new Dictionary<string, object> { ["surface"] = surface, ["action"] = action };
+        if (state != null) props["state"] = state;
+        Capture("ui_action", props);
+    }
+
+    /// <summary>
+    /// The user committed a settings change at the widget site. NEVER emit
+    /// for programmatic changes (engine init, defaults, migrations) — the
+    /// amendment explicitly scopes this to user commits. Values are included
+    /// only for bool/number/enum; string settings report the fact of the
+    /// change only (privacy: no free text, no file paths).
+    /// </summary>
+    public static void CaptureSettingChanged(string settingId, string valueType, object? value, string surface = "settings")
+    {
+        var props = new Dictionary<string, object>
+        {
+            ["setting_id"] = settingId,
+            ["value_type"] = valueType,
+            ["surface"] = surface,
+        };
+        if (valueType != "string" && value != null)
+            props["value"] = value;
+        Capture("setting_changed", props);
+    }
+
     // ── Engine log ring buffer (RFC 0009) ──────────────────────────────────────
 
     /// <summary>
