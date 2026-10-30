@@ -346,14 +346,14 @@
 
                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                     <TextBlock Classes="ui-nav-label" Text="Auto"/>
-                    <ToggleSwitch IsChecked="{Binding AutoSpeed}" OnContent="" OffContent="" MinWidth="0" Height="26" VerticalAlignment="Center"/>
+                    <ToggleSwitch x:Name="AutoSpeedToggle" IsChecked="{Binding AutoSpeed}" OnContent="" OffContent="" MinWidth="0" Height="26" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
 
                 <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                     <TextBlock Classes="ui-nav-label" Text="Learning"/>
-                    <ToggleSwitch IsChecked="{Binding Learning}" OnContent="" OffContent="" MinWidth="0" Height="26" VerticalAlignment="Center"/>
+                    <ToggleSwitch x:Name="LearningToggle" IsChecked="{Binding Learning}" OnContent="" OffContent="" MinWidth="0" Height="26" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
@@ -389,7 +389,7 @@
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.ChevronLeft}" Size="16" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
 
-                            <Button Classes="ui-circle-btn" Click="OnToggleMode" ToolTip.Tip="Toggle pane position">
+                            <Button x:Name="PaneEyeModeBtn" Classes="ui-circle-btn" Click="OnToggleMode" ToolTip.Tip="Toggle pane position">
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.Eye}" Size="18" Foreground="{DynamicResource TextSecondary}"/>
                             </Button>
 

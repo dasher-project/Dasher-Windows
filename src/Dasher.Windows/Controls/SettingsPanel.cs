@@ -313,8 +313,22 @@ public class SettingsPanel : Decorator
             OutputFontChanged?.Invoke(settings.FontFamily, fontSize);
         }
 
-        sizeDown.Click += (s, e) => { fontSize = Math.Max(8, fontSize - 1); UpdateFontSize(); };
-        sizeUp.Click += (s, e) => { fontSize = Math.Min(72, fontSize + 1); UpdateFontSize(); };
+        sizeDown.Click += (s, e) =>
+        {
+            var before = fontSize;
+            fontSize = Math.Max(8, fontSize - 1);
+            if (fontSize == before) return;
+            UpdateFontSize();
+            AnalyticsService.CaptureSettingChanged("output_font_size", "number", fontSize);
+        };
+        sizeUp.Click += (s, e) =>
+        {
+            var before = fontSize;
+            fontSize = Math.Min(72, fontSize + 1);
+            if (fontSize == before) return;
+            UpdateFontSize();
+            AnalyticsService.CaptureSettingChanged("output_font_size", "number", fontSize);
+        };
 
         sizeStack.Children.Add(sizeDown);
         sizeStack.Children.Add(sizeValue);
@@ -327,6 +341,7 @@ public class SettingsPanel : Decorator
             {
                 settings.FontFamily = OutputFontPresets[fontCombo.SelectedIndex];
                 settings.Save();
+                AnalyticsService.CaptureSettingChanged("output_font_family", "enum", settings.FontFamily);
                 OutputFontChanged?.Invoke(settings.FontFamily, fontSize);
             }
         };
@@ -381,6 +396,12 @@ public class SettingsPanel : Decorator
             }
         };
 
+        // Commit-time setting_changed (drag release / keyboard), not per
+        // tick. The slider works in FRACTIONS (0.2–1.0); report percent.
+        AttachSliderCommit(slider, (int)(settings.KeyboardOpacity * 100),
+            pct => AnalyticsService.CaptureSettingChanged("keyboard_mode_opacity", "number", pct),
+            v => (int)Math.Round(v * 100));
+
         sliderRow.Children.Add(slider);
         sliderRow.Children.Add(valueLabel);
         panel.Children.Add(sliderRow);
@@ -413,6 +434,7 @@ public class SettingsPanel : Decorator
         {
             settings.ShowTypingRate = isChecked;
             settings.Save();
+            AnalyticsService.CaptureSettingChanged("show_typing_rate", "bool", isChecked);
             TypingRateVisibilityChanged?.Invoke(settings.ShowTypingRate);
         });
         toggleRow.Margin = new Thickness(0, 4, 0, 0);
@@ -436,6 +458,39 @@ public class SettingsPanel : Decorator
 
     public event Action<bool>? TypingRateVisibilityChanged;
     public event Action? ResetTypingStatsRequested;
+
+    private bool _populatingSelections;
+    private bool _populatingVoices;
+    private int _voiceLoadDepth;
+
+    /// <summary>
+    /// RFC 0001 2026-10-28: setting_changed for a slider on COMMIT — drag
+    /// release or keyboard adjust (arrows/PageUp/PageDown/Home/End all move
+    /// Avalonia sliders) — deduped against the last committed value. A bare
+    /// ValueChanged handler fires per drag tick. Optional transform maps the
+    /// slider scale to the reported scale (e.g. 0.2–1.0 fraction → percent).
+    /// </summary>
+    private static void AttachSliderCommit(Avalonia.Controls.Slider slider, int initial, Action<int> emit,
+        Func<double, int>? transform = null)
+    {
+        int last = initial;
+        void Commit()
+        {
+            var v = transform != null ? transform(slider.Value) : (int)Math.Round(slider.Value);
+            if (v == last) return;
+            last = v;
+            emit(v);
+        }
+        slider.AddHandler(Avalonia.Input.InputElement.PointerReleasedEvent,
+            (_, _) => Commit(), Avalonia.Interactivity.RoutingStrategies.Bubble);
+        slider.KeyUp += (s, e) =>
+        {
+            if (e.Key is Avalonia.Input.Key.Left or Avalonia.Input.Key.Right or Avalonia.Input.Key.Up
+                or Avalonia.Input.Key.Down or Avalonia.Input.Key.PageUp or Avalonia.Input.Key.PageDown
+                or Avalonia.Input.Key.Home or Avalonia.Input.Key.End)
+                Commit();
+        };
+    }
 
     private Control? BuildInputSourceRow()
     {
@@ -483,14 +538,23 @@ public class SettingsPanel : Decorator
 
         void PopulateSelections(AccessMethod method)
         {
-            selectionCombo.Items.Clear();
-            var valid = method.ValidFor();
-            foreach (var s in valid)
+            // Auto-populated entries are NOT user commits: guard the
+            // selection handler's telemetry while the combo is rebuilt
+            // (review: changing Steering Method fired a false selection_method
+            // event for the app-picked default).
+            _populatingSelections = true;
+            try
             {
-                selectionCombo.Items.Add(s.DisplayName());
-                if (s == config.Selection) selectionCombo.SelectedIndex = selectionCombo.Items.Count - 1;
+                selectionCombo.Items.Clear();
+                var valid = method.ValidFor();
+                foreach (var s in valid)
+                {
+                    selectionCombo.Items.Add(s.DisplayName());
+                    if (s == config.Selection) selectionCombo.SelectedIndex = selectionCombo.Items.Count - 1;
+                }
+                if (selectionCombo.SelectedIndex < 0) selectionCombo.SelectedIndex = 0;
             }
-            if (selectionCombo.SelectedIndex < 0) selectionCombo.SelectedIndex = 0;
+            finally { _populatingSelections = false; }
         }
 
         PopulateSelections(config.Method);
@@ -661,6 +725,7 @@ public class SettingsPanel : Decorator
             config.InputFilter = newFilter;
             config.Save();
             NativeBridge.dasher_set_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER, newFilter);
+            AnalyticsService.CaptureSettingChanged("Input Filter", "enum", newFilter);
             // Rebuild the Input tab to show/hide filter-specific parameters
             ShowCategory(_currentCategory);
         };
@@ -669,6 +734,7 @@ public class SettingsPanel : Decorator
         {
             var method = methods[methodCombo.SelectedIndex];
             config.Method = method;
+            AnalyticsService.CaptureSettingChanged("access_method", "enum", method.DisplayName());
             PopulateSelections(method);
             var sel = method.ValidFor();
             config.Selection = sel[selectionCombo.SelectedIndex];
@@ -689,6 +755,8 @@ public class SettingsPanel : Decorator
             if (selectionCombo.SelectedIndex >= 0 && selectionCombo.SelectedIndex < valid.Length)
             {
                 config.Selection = valid[selectionCombo.SelectedIndex];
+                if (!_populatingSelections)
+                    AnalyticsService.CaptureSettingChanged("selection_method", "enum", config.Selection.DisplayName());
                 subtitle.Text = config.Selection.Subtitle();
                 // Keep the persisted input filter in step with the selection
                 // choice (Apply no longer derives or pushes it).
@@ -707,6 +775,7 @@ public class SettingsPanel : Decorator
                 3 => "Tobii",
                 _ => "WindowsNative",
             };
+            AnalyticsService.CaptureSettingChanged("eye_tracker_type", "enum", config.EyeTrackerType);
             UpdateTrackerVisibility();
             ApplyAccessConfig(config);
         };
@@ -715,6 +784,18 @@ public class SettingsPanel : Decorator
         {
             config.UdpPort = (int)portBox.Value;
             ApplyAccessConfig(config);
+        };
+        // setting_changed on commit (focus leaves the field), deduped against
+        // the last committed port — NumericUpDown ValueChanged fires per
+        // keystroke/spin, and a tab-through or panel rebuild blur must not
+        // emit a false change (review D1).
+        int lastPort = config.UdpPort;
+        portBox.LostFocus += (s, e) =>
+        {
+            var p = (int)portBox.Value;
+            if (p == lastPort) return;
+            lastPort = p;
+            AnalyticsService.CaptureSettingChanged("udp_port", "number", p);
         };
 
         panel.Children.Add(methodCombo);
@@ -1271,6 +1352,7 @@ public class SettingsPanel : Decorator
                 if (s is Button b && b.Tag is string paletteName)
                 {
                     NativeBridge.dasher_set_palette(_handle, paletteName);
+                    AnalyticsService.CaptureSettingChanged("Colour Palette", "enum", paletteName);
                     // Refresh the customization section to show the new theme selection
                     ShowCategory("Customization");
                 }
@@ -1426,6 +1508,7 @@ public class SettingsPanel : Decorator
             {
                 var font = DasherFontPresets[comboBox.SelectedIndex];
                 NativeBridge.dasher_set_string_parameter(_handle, info.Key, font == "System" ? "" : font);
+                AnalyticsService.CaptureSettingChanged(info.Name, "enum", font);
             }
         };
 
@@ -1461,6 +1544,7 @@ public class SettingsPanel : Decorator
         {
             settings.ShowAdvanced = toggle.IsChecked == true;
             settings.Save();
+            AnalyticsService.CaptureSettingChanged("show_advanced", "bool", toggle.IsChecked == true);
             ShowCategory(_currentCategory);
         };
         row.Children.Add(toggle);
@@ -1479,6 +1563,7 @@ public class SettingsPanel : Decorator
         toggle.IsCheckedChanged += (s, e) =>
         {
             NativeBridge.dasher_set_bool_parameter(_handle, info.Key, toggle.IsChecked == true ? 1 : 0);
+            AnalyticsService.CaptureSettingChanged(info.Name, "bool", toggle.IsChecked == true);
         };
 
         return toggle;
@@ -1555,6 +1640,12 @@ public class SettingsPanel : Decorator
             valueText.Text = val.ToString();
         };
 
+        // RFC 0001 2026-10-28: setting_changed is for COMMITTED changes —
+        // ValueChanged fires per drag tick (dozens per gesture), so emit on
+        // drag release / keyboard adjust instead, deduped against the last
+        // committed value.
+        AttachSliderCommit(slider, current, v => AnalyticsService.CaptureSettingChanged(info.Name, "number", v));
+
         stack.Children.Add(slider);
         stack.Children.Add(valueText);
         return stack;
@@ -1611,14 +1702,20 @@ public class SettingsPanel : Decorator
 
         downBtn.Click += (s, e) =>
         {
+            var before = val;
             val = Math.Max(min, val - step);
+            if (val == before) return; // clamped at the bound: not a change
             UpdateDisplay();
+            AnalyticsService.CaptureSettingChanged(info.Name, "number", val);
         };
 
         upBtn.Click += (s, e) =>
         {
+            var before = val;
             val = Math.Min(max, val + step);
+            if (val == before) return; // clamped at the bound: not a change
             UpdateDisplay();
+            AnalyticsService.CaptureSettingChanged(info.Name, "number", val);
         };
 
         stack.Children.Add(downBtn);
@@ -1657,7 +1754,10 @@ public class SettingsPanel : Decorator
         comboBox.SelectionChanged += (s, e) =>
         {
             if (comboBox.SelectedItem is ComboBoxItem item && item.Tag is int val)
+            {
                 NativeBridge.dasher_set_long_parameter(_handle, info.Key, val);
+                AnalyticsService.CaptureSettingChanged(info.Name, "enum", item.Content?.ToString() ?? "");
+            }
         };
 
         return comboBox;
@@ -1682,9 +1782,21 @@ public class SettingsPanel : Decorator
                 HorizontalAlignment = HorizontalAlignment.Stretch,
             };
 
+            // Last value actually applied to the engine: compare against
+            // THIS (not the build-time initial) so reverting to the original
+            // text still applies — and tab-through/ShowCategory rebuilds
+            // with unchanged text still skip (review N1: comparing against
+            // the build-time initial left the engine desynced on revert).
+            string lastApplied = current;
             textBox.LostFocus += (s, e) =>
             {
-                NativeBridge.dasher_set_string_parameter(_handle, info.Key, textBox.Text ?? "");
+                var text = textBox.Text ?? "";
+                if (text == lastApplied) return;
+                NativeBridge.dasher_set_string_parameter(_handle, info.Key, text);
+                lastApplied = text;
+                // Free-text setting: the fact of the change only — values are
+                // never collected (RFC 0001 2026-10-28 amendment).
+                AnalyticsService.CaptureSettingChanged(info.Name, "string", null);
             };
 
             return textBox;
@@ -1729,7 +1841,12 @@ public class SettingsPanel : Decorator
         comboBox.SelectionChanged += (s, e) =>
         {
             if (comboBox.SelectedIndex >= 0 && comboBox.SelectedIndex < names.Count)
+            {
                 NativeBridge.dasher_set_string_parameter(_handle, info.Key, names[comboBox.SelectedIndex]);
+                // Values come from the engine's permitted-value list — a
+                // fixed vocabulary, so the chosen value is collectable.
+                AnalyticsService.CaptureSettingChanged(info.Name, "enum", names[comboBox.SelectedIndex]);
+            }
         };
 
         return comboBox;
@@ -1763,7 +1880,12 @@ public class SettingsPanel : Decorator
         });
 
         var toggleRow = BuildToggleRow(Loc.Tr("analytics_opt_in", "Share anonymous analytics and crash reports"), settings.OptedIn, isChecked =>
-            AnalyticsService.SetOptIn(isChecked));
+        {
+            AnalyticsService.SetOptIn(isChecked);
+            // setting_changed fires for the commit regardless of opt-in state
+            // — Capture drops it when not opted in, matching every event.
+            AnalyticsService.CaptureSettingChanged("analytics_opt_in", "bool", isChecked);
+        });
         toggleRow.Margin = new Thickness(0, 8, 0, 0);
         section.Children.Add(toggleRow);
 
@@ -2049,6 +2171,7 @@ public class SettingsPanel : Decorator
                 svc.SelectedEngine = SpeechService.EngineNames[idx];
                 svc.InvalidateClient();
                 svc.SaveSettings();
+                AnalyticsService.CaptureSettingChanged("speech_engine", "enum", svc.SelectedEngine);
                 RebuildCredentials();
                 if (autoLoadVoices != null)
                     await autoLoadVoices();
@@ -2197,11 +2320,20 @@ public class SettingsPanel : Decorator
 
         _panel.Children.Add(voiceHeader);
 
-        // Voice loading logic — used by button click AND auto-load on engine change
+        // Voice loading logic — used by button click AND auto-load on engine change.
+        // (_populatingVoices spans the await: a user selection made mid-load
+        // is deliberately not emitted — the load's own programmatic
+        // selection wins and the user's is a transient mid-rebuild state.
+        // Single-flight: a second overlapping load would clear the flag
+        // while the first still populates, so re-entrance just re-arms it.)
         async Task LoadVoicesIntoCombo()
         {
             loadVoicesBtn.IsEnabled = false;
             voiceCountLabel.Text = "Loading...";
+            _voiceLoadDepth++;
+            // Auto-populated combo population is not a user commit: the
+            // SelectedIndex assignments below would fire the handler.
+            _populatingVoices = true;
             try
             {
                 await svc.LoadVoicesAsync();
@@ -2226,6 +2358,8 @@ public class SettingsPanel : Decorator
             finally
             {
                 loadVoicesBtn.IsEnabled = true;
+                if (--_voiceLoadDepth == 0)
+                    _populatingVoices = false;
             }
         }
 
@@ -2233,11 +2367,20 @@ public class SettingsPanel : Decorator
 
         voiceCombo.SelectionChanged += (s, e) =>
         {
+            // Locale-stable frontend vocabulary for the sentinel entry —
+            // the "(Default)" item is a frontend affordance, not an engine
+            // value, so it reports the neutral "default".
+            string chosen = "default";
             if (voiceCombo.SelectedIndex <= 0)
                 svc.SelectedVoiceId = null;
             else if (voiceCombo.SelectedIndex - 1 < svc.AvailableVoices.Count)
+            {
                 svc.SelectedVoiceId = svc.AvailableVoices[voiceCombo.SelectedIndex - 1].Id;
+                chosen = svc.AvailableVoices[voiceCombo.SelectedIndex - 1].Name;
+            }
             svc.SaveSettings();
+            if (!_populatingVoices)
+                AnalyticsService.CaptureSettingChanged("speech_voice", "enum", chosen);
         };
 
         previewBtn.Click += (s, e) =>
@@ -2254,6 +2397,7 @@ public class SettingsPanel : Decorator
             {
                 svc.SpeechRate = rateValues[rateCombo.SelectedIndex];
                 svc.SaveSettings();
+                AnalyticsService.CaptureSettingChanged("speech_rate", "enum", rateNames[rateCombo.SelectedIndex]);
             }
         };
 
@@ -2263,6 +2407,7 @@ public class SettingsPanel : Decorator
             {
                 svc.SpeechPitch = pitchValues[pitchCombo.SelectedIndex];
                 svc.SaveSettings();
+                AnalyticsService.CaptureSettingChanged("speech_pitch", "enum", pitchNames[pitchCombo.SelectedIndex]);
             }
         };
 
@@ -2272,6 +2417,11 @@ public class SettingsPanel : Decorator
             volValue.Text = $"{svc.SpeechVolume}%";
             svc.SaveSettings();
         };
+
+        // Commit-time setting_changed (drag release / keyboard), matching the
+        // generic parameter sliders — ValueChanged is a per-tick storm.
+        AttachSliderCommit(volSlider, svc.SpeechVolume,
+            v => AnalyticsService.CaptureSettingChanged("speech_volume", "number", v));
 
         // Auto-load voices on initial show
         autoLoadVoices = LoadVoicesIntoCombo;
@@ -2315,6 +2465,7 @@ public class SettingsPanel : Decorator
         speakOnStopToggle.IsCheckedChanged += (s, e) =>
         {
             NativeBridge.dasher_set_bool_parameter(_handle, ParameterKeys.BP_SPEAK_ALL_ON_STOP, speakOnStopToggle.IsChecked == true ? 1 : 0);
+            AnalyticsService.CaptureSettingChanged("Speak on Stop", "bool", speakOnStopToggle.IsChecked == true);
         };
         speakOnStopRow.Children.Add(speakOnStopToggle);
         _panel.Children.Add(speakOnStopRow);
@@ -2339,6 +2490,7 @@ public class SettingsPanel : Decorator
         speakWordsToggle.IsCheckedChanged += (s, e) =>
         {
             NativeBridge.dasher_set_bool_parameter(_handle, ParameterKeys.BP_SPEAK_WORDS, speakWordsToggle.IsChecked == true ? 1 : 0);
+            AnalyticsService.CaptureSettingChanged("Speak Words", "bool", speakWordsToggle.IsChecked == true);
         };
         speakWordsRow.Children.Add(speakWordsToggle);
         _panel.Children.Add(speakWordsRow);
