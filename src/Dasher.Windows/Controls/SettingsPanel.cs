@@ -638,7 +638,6 @@ public class SettingsPanel : Decorator
             IsChecked = config.GazeFilterEnabled,
             OnContent = "", OffContent = "", MinWidth = 0, Height = 24,
         };
-        var filterToggleRow = BuildToggleRow("Filter gaze", config.GazeFilterEnabled, null);
         var filterToggleLabel = new TextBlock
         {
             Text = "Filter gaze (reduces zoom toward wrong positions during eye transit)",

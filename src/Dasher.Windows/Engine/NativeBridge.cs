@@ -233,9 +233,11 @@ public static class NativeBridge
 
     // ── Viewport / coordinate conversion (engine screen space) ────────────
     // Used by the gaze-loss hold: the crosshair is the zero-velocity point,
-    // so parking the pointer on its screen X freezes the zoom WITHOUT
+    // so parking the pointer on its screen position freezes the zoom WITHOUT
     // stopping the engine (no resume click needed — the next valid sample
-    // simply moves again).
+    // simply moves again). NOTE: dasher.h marks these as testing-oriented
+    // APIs that may change between engine versions — the pinned submodule +
+    // struct_size versioning keep that safe here.
 
     [StructLayout(LayoutKind.Sequential)]
     public struct DasherViewport

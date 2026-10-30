@@ -14,6 +14,15 @@ namespace Dasher.Windows.Controls
         private long _lastGazeTicks;
         private static readonly TimeSpan GazeTimeout = TimeSpan.FromMilliseconds(500);
 
+        /// <summary>True while the engine is parked on the crosshair because
+        /// gaze was lost; the next valid sample clears it.</summary>
+        private volatile bool _gazePausedForLoss;
+
+        /// <summary>Serialises GazeFilter use between the gaze callback
+        /// thread (Process) and the UI thread (Reset in PauseForGazeLoss,
+        /// ConfigureGazeFilter swaps).</summary>
+        private readonly object _gazeFilterLock = new();
+
         public bool IsEyeTracking => _useEyeGazeInput;
         public bool IsEyeTrackActive => _eyeTrackActive;
 
@@ -46,6 +55,11 @@ namespace Dasher.Windows.Controls
                 _eyeGazeIntegration.Warning += OnEyeTrackerWarning;
                 _gazePausedForLoss = false;
                 _lastGazeTicks = 0;
+                _crosshairCached = false;
+                _crosshairQueryFailedLogged = false;
+                // Cache the crosshair now (not first-Render) so the
+                // hold-before-first-paint window is empty.
+                CacheCrosshairScreenPosition();
                 EyeGazeLogger.Log("Eye gaze input active — indicator should appear (green/red dot top-right)");
             }
             return ok;
@@ -102,18 +116,21 @@ namespace Dasher.Windows.Controls
         /// </summary>
         public void ConfigureGazeFilter(double? deadZonePx = null, double? maxVelocity = null, double? settleMs = null)
         {
-            if (deadZonePx == null && maxVelocity == null && settleMs == null)
+            lock (_gazeFilterLock)
             {
-                _gazeFilter = null; // disable
-                EyeGazeLogger.Log("Gaze filter DISABLED (raw passthrough)");
-                return;
-            }
+                if (deadZonePx == null && maxVelocity == null && settleMs == null)
+                {
+                    _gazeFilter = null; // disable
+                    EyeGazeLogger.Log("Gaze filter DISABLED (raw passthrough)");
+                    return;
+                }
 
-            _gazeFilter ??= new GazeFilter();
-            if (deadZonePx.HasValue) _gazeFilter.DeadZonePx = deadZonePx.Value;
-            if (maxVelocity.HasValue) _gazeFilter.MaxVelocityPxPerMs = maxVelocity.Value;
-            if (settleMs.HasValue) _gazeFilter.SettleMs = settleMs.Value;
-            EyeGazeLogger.Log($"Gaze filter: deadZone={_gazeFilter.DeadZonePx}px vel={_gazeFilter.MaxVelocityPxPerMs}px/ms settle={_gazeFilter.SettleMs}ms");
+                _gazeFilter ??= new GazeFilter();
+                if (deadZonePx.HasValue) _gazeFilter.DeadZonePx = deadZonePx.Value;
+                if (maxVelocity.HasValue) _gazeFilter.MaxVelocityPxPerMs = maxVelocity.Value;
+                if (settleMs.HasValue) _gazeFilter.SettleMs = settleMs.Value;
+                EyeGazeLogger.Log($"Gaze filter: deadZone={_gazeFilter.DeadZonePx}px vel={_gazeFilter.MaxVelocityPxPerMs}px/ms settle={_gazeFilter.SettleMs}ms");
+            }
         }
 
         private void OnEyeGazePositionChanged(object? sender, GazePoint gazePoint)
@@ -122,10 +139,9 @@ namespace Dasher.Windows.Controls
 
             if (!gazePoint.IsValid)
             {
-                // Tracker says eyes not found: pause immediately (the same
-                // stop-outside idiom as the pointer leaving the canvas).
-                // Dropping invalid samples silently left the last gaze
-                // position driving the zoom (the eyegaze.log field session).
+                // Tracker says eyes not found: hold immediately. Dropping
+                // invalid samples silently left the last gaze position
+                // driving the zoom (the eyegaze.log field session).
                 PauseForGazeLoss("invalid sample");
                 return;
             }
@@ -146,7 +162,6 @@ namespace Dasher.Windows.Controls
                 x = (float)(gazePoint.X - _cachedOriginX);
                 y = (float)(gazePoint.Y - _cachedOriginY);
             }
-            _lastGazeY = y;
 
             // Apply the gaze filter (velocity gate → dead zone → settle).
             // Local capture: ConfigureGazeFilter runs on the UI thread and
@@ -155,7 +170,10 @@ namespace Dasher.Windows.Controls
             if (filter != null)
             {
                 var nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                if (!filter.Process(x, y, nowMs, out var filteredX, out var filteredY))
+                double filteredX = x, filteredY = y;
+                bool send;
+                lock (_gazeFilterLock) send = filter.Process(x, y, nowMs, out filteredX, out filteredY);
+                if (!send)
                     return; // filtered out (in transit, jitter, or not settled)
 
                 // Diagnostic: log every 30th sample (≈once per 500ms at 60Hz)
@@ -174,23 +192,69 @@ namespace Dasher.Windows.Controls
             NativeBridge.dasher_mouse_move(_handle, x, y);
         }
 
-        /// <summary>True while the engine is parked on the crosshair because
-        /// gaze was lost; the next valid sample clears it.</summary>
-        private volatile bool _gazePausedForLoss;
-
-        /// <summary>Last valid gaze Y in canvas-local DIPs (the hold keeps
-        /// it so the freeze doesn't jump the Y axis).</summary>
-        private float _lastGazeY;
-
         /// <summary>Screen X of the crosshair in engine screen space — the
         /// zero-velocity point. Cached by Render (UI thread); the hold reads
         /// it from the gaze callback thread.</summary>
         private volatile float _cachedCrosshairScreenX;
 
         /// <summary>
+        /// Screen Y of the crosshair. BOTH axes matter: parking on the X
+        /// alone freezes the zoom but keeps steering the vertical pan (the
+        /// engine pans toward the pointer's Y at a constant rate — the
+        /// root-independent screen→Dasher mapping never self-corrects). The
+        /// full (X, Y) park is a TRUE freeze: dasher (2048, 2048) yields
+        /// zero zoom AND zero pan.
+        ///
+        /// Geometry assumption: valid for the default/squish geometries
+        /// (integer-exact screen↔Dasher round-trip). NOT maintained for
+        /// LP_GEOMETRY=square_no_xhair (crosshair offscreen + reverse
+        /// boost): the hold would reverse-zoom. Gaze users don't reach that
+        /// advanced engine setting via the Dasher UI.
+        /// </summary>
+        private volatile float _cachedCrosshairScreenY;
+        private volatile bool _crosshairCached;
+        private bool _crosshairQueryFailedLogged;
+
+        /// <summary>
+        /// Query the engine for the crosshair's screen position. UI thread
+        /// (Render) or once at gaze init; retried per frame until it
+        /// succeeds so the uncached window is empty.
+        /// </summary>
+        private void CacheCrosshairScreenPosition()
+        {
+            try
+            {
+                var vp = new NativeBridge.DasherViewport
+                {
+                    struct_size = System.Runtime.InteropServices.Marshal.SizeOf<NativeBridge.DasherViewport>()
+                };
+                if (NativeBridge.dasher_get_viewport(_handle, ref vp) == 0 &&
+                    NativeBridge.dasher_dasher_to_screen(_handle, vp.crosshair_x, vp.crosshair_y, out var chX, out var chY) == 0)
+                {
+                    _cachedCrosshairScreenX = chX;
+                    _cachedCrosshairScreenY = chY;
+                    _crosshairCached = true;
+                }
+                else if (!_crosshairQueryFailedLogged)
+                {
+                    _crosshairQueryFailedLogged = true;
+                    EyeGazeLogger.Log("Gaze hold: viewport query failed — will retry each frame (park unavailable until it succeeds)");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!_crosshairQueryFailedLogged)
+                {
+                    _crosshairQueryFailedLogged = true;
+                    EyeGazeLogger.Log($"Gaze hold: viewport query threw: {ex.Message} — will retry each frame");
+                }
+            }
+        }
+
+        /// <summary>
         /// Park the pointer on the crosshair: the crosshair is the engine's
-        /// zero-velocity point, so the zoom freezes WITHOUT stopping the
-        /// engine — no resume click is needed and the next valid sample
+        /// zero-velocity point, so the zoom AND pan freeze WITHOUT stopping
+        /// the engine — no resume click is needed and the next valid sample
         /// simply moves again. (The stop-outside idiom was rejected in
         /// review: BP_STOP_OUTSIDE performs a full engine stop that needs a
         /// Primary_Input click to resume — a click gaze users can't make;
@@ -200,14 +264,25 @@ namespace Dasher.Windows.Controls
         {
             _eyeTrackActive = false;
             var filter = _gazeFilter;
-            filter?.Reset();
+            lock (_gazeFilterLock) filter?.Reset();
             if (_gazePausedForLoss) return; // already holding
             _gazePausedForLoss = true;
+            if (!_crosshairCached)
+            {
+                // Not cached yet (gaze lost before the first Render): retry
+                // now. If it still fails, skip the park this instant — the
+                // next Render caches and subsequent losses hold properly.
+                CacheCrosshairScreenPosition();
+                if (!_crosshairCached)
+                {
+                    EyeGazeLogger.Log($"Gaze lost ({reason}) — crosshair not cached yet, holding skipped this once");
+                    return;
+                }
+            }
             EyeGazeLogger.Log($"Gaze lost ({reason}) — holding on crosshair");
             try
             {
-                var holdX = _cachedCrosshairScreenX != 0 ? _cachedCrosshairScreenX : (float)(Bounds.Width / 2);
-                NativeBridge.dasher_mouse_move(_handle, holdX, _lastGazeY);
+                NativeBridge.dasher_mouse_move(_handle, _cachedCrosshairScreenX, _cachedCrosshairScreenY);
             }
             catch (Exception ex)
             {
