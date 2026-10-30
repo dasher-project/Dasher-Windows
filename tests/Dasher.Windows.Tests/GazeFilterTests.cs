@@ -104,6 +104,37 @@ public class GazeFilterTests
     }
 
     [Fact]
+    public void First_sample_is_not_measured_against_the_origin()
+    {
+        // Regression (found while writing these tests): the first sample
+        // after construction/Reset computed velocity from the ORIGIN (0,0) —
+        // a phantom ~8.8 px/ms saccade for a first gaze at (100,100) that
+        // velocity-blocked the first real positions after every gaze-loss
+        // recovery. With the gate ON and settle off, the first sample must
+        // send immediately.
+        var f = new GazeFilter { DeadZonePx = 0, MaxVelocityPxPerMs = 2.0, SettleMs = 0 };
+        Assert.True(f.Process(100, 100, T(0), out _, out _));
+        Assert.Equal(0, f.LastVelocity, precision: 6);
+        // And after Reset (every gaze-loss recovery):
+        f.Reset();
+        Assert.True(f.Process(400, 300, T(1000), out _, out _));
+    }
+
+    [Fact]
+    public void Zero_dead_zone_with_settle_still_completes_the_dwell()
+    {
+        // Regression (review finding): the settle candidate check reused
+        // DeadZonePx as its tolerance — with the dead zone set to 0 (the
+        // settings slider's minimum), 1px jitter restarted the dwell timer
+        // forever and NOTHING was ever sent.
+        var f = new GazeFilter { DeadZonePx = 0, MaxVelocityPxPerMs = 0, SettleMs = 50 };
+        Assert.False(f.Process(100, 100, T(0), out _, out _)); // candidate
+        Assert.False(f.Process(101, 100, T(20), out _, out _)); // 1px jitter
+        Assert.False(f.Process(100, 101, T(40), out _, out _)); // more jitter
+        Assert.True(f.Process(101, 100, T(60), out _, out _)); // dwell completed despite jitter
+    }
+
+    [Fact]
     public void Velocity_gate_cancels_pending_settle()
     {
         // Dwelling at a candidate completes and sends; a saccade after a NEW

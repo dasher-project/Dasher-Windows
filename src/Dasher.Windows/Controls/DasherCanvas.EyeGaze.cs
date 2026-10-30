@@ -46,20 +46,6 @@ namespace Dasher.Windows.Controls
                 _eyeGazeIntegration.Warning += OnEyeTrackerWarning;
                 _gazePausedForLoss = false;
                 _lastGazeTicks = 0;
-
-                // Eye gaze NEEDS stop-outside semantics: when tracking is
-                // lost (blink, dropout, tracker losing the eyes) the last
-                // gaze position must stop driving the zoom. Without it,
-                // every invalid gap is a runaway zoom at the last spot —
-                // the eyegaze.log field session showed a 100-minute
-                // 0%-valid stretch where nothing told the engine to stop.
-                var stopKey = NativeBridge.dasher_find_parameter_key("BP_STOP_OUTSIDE");
-                if (stopKey >= 0 && NativeBridge.dasher_get_bool_parameter(_handle, stopKey) == 0)
-                {
-                    NativeBridge.dasher_set_bool_parameter(_handle, stopKey, 1);
-                    EyeGazeLogger.Log("Eye gaze: enabled 'Stop When Pointer Leaves' (required for gaze-loss pausing)");
-                }
-
                 EyeGazeLogger.Log("Eye gaze input active — indicator should appear (green/red dot top-right)");
             }
             return ok;
@@ -108,7 +94,6 @@ namespace Dasher.Windows.Controls
         private float _cachedOriginY;
 
         private GazeFilter? _gazeFilter;
-        private long _gazeLogStartMs;
         private int _gazeLogInterval; // log every Nth sample (throttles the log)
 
         /// <summary>
@@ -161,12 +146,16 @@ namespace Dasher.Windows.Controls
                 x = (float)(gazePoint.X - _cachedOriginX);
                 y = (float)(gazePoint.Y - _cachedOriginY);
             }
+            _lastGazeY = y;
 
-            // Apply the gaze filter (dead zone → velocity gate → settle)
-            if (_gazeFilter != null)
+            // Apply the gaze filter (velocity gate → dead zone → settle).
+            // Local capture: ConfigureGazeFilter runs on the UI thread and
+            // can swap the field to null between check and call.
+            var filter = _gazeFilter;
+            if (filter != null)
             {
                 var nowMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                if (!_gazeFilter.Process(x, y, nowMs, out var filteredX, out var filteredY))
+                if (!filter.Process(x, y, nowMs, out var filteredX, out var filteredY))
                     return; // filtered out (in transit, jitter, or not settled)
 
                 // Diagnostic: log every 30th sample (≈once per 500ms at 60Hz)
@@ -174,9 +163,8 @@ namespace Dasher.Windows.Controls
                 if (_gazeLogInterval >= 30)
                 {
                     _gazeLogInterval = 0;
-                    var f = _gazeFilter;
-                    EyeGazeLogger.Log($"gaze filter: sent=({filteredX:F0},{filteredY:F0}) vel={f.LastVelocity:F1}px/ms " +
-                        $"[total={f.TotalSamples} sent={f.SentSamples} dz={f.DeadZoneBlocks} vel_blk={f.VelocityBlocks} settle_blk={f.SettleBlocks}]");
+                    EyeGazeLogger.Log($"gaze filter: sent=({filteredX:F0},{filteredY:F0}) vel={filter.LastVelocity:F1}px/ms " +
+                        $"[total={filter.TotalSamples} sent={filter.SentSamples} dz={filter.DeadZoneBlocks} vel_blk={filter.VelocityBlocks} settle_blk={filter.SettleBlocks}]");
                 }
 
                 x = (float)filteredX;
@@ -186,28 +174,40 @@ namespace Dasher.Windows.Controls
             NativeBridge.dasher_mouse_move(_handle, x, y);
         }
 
-        /// <summary>True while the engine is paused because gaze was lost;
-        /// the next valid sample clears it.</summary>
+        /// <summary>True while the engine is parked on the crosshair because
+        /// gaze was lost; the next valid sample clears it.</summary>
         private volatile bool _gazePausedForLoss;
 
+        /// <summary>Last valid gaze Y in canvas-local DIPs (the hold keeps
+        /// it so the freeze doesn't jump the Y axis).</summary>
+        private float _lastGazeY;
+
+        /// <summary>Screen X of the crosshair in engine screen space — the
+        /// zero-velocity point. Cached by Render (UI thread); the hold reads
+        /// it from the gaze callback thread.</summary>
+        private volatile float _cachedCrosshairScreenX;
+
         /// <summary>
-        /// Pause the engine because gaze was lost: send the off-canvas
-        /// position (the engine's stop-outside idiom — enabled at gaze init),
-        /// flag the indicator red, and reset the gaze filter so stale
-        /// transit state doesn't fire the moment gaze returns. Called from
-        /// the gaze callback thread (invalid samples) and the UI thread
-        /// (staleness backstop in Render).
+        /// Park the pointer on the crosshair: the crosshair is the engine's
+        /// zero-velocity point, so the zoom freezes WITHOUT stopping the
+        /// engine — no resume click is needed and the next valid sample
+        /// simply moves again. (The stop-outside idiom was rejected in
+        /// review: BP_STOP_OUTSIDE performs a full engine stop that needs a
+        /// Primary_Input click to resume — a click gaze users can't make;
+        /// every blink would have halted typing.)
         /// </summary>
         private void PauseForGazeLoss(string reason)
         {
             _eyeTrackActive = false;
-            _gazeFilter?.Reset();
-            if (_gazePausedForLoss) return; // already paused
+            var filter = _gazeFilter;
+            filter?.Reset();
+            if (_gazePausedForLoss) return; // already holding
             _gazePausedForLoss = true;
-            EyeGazeLogger.Log($"Gaze lost ({reason}) — pausing zoom");
+            EyeGazeLogger.Log($"Gaze lost ({reason}) — holding on crosshair");
             try
             {
-                NativeBridge.dasher_mouse_move(_handle, -10000f, -10000f);
+                var holdX = _cachedCrosshairScreenX != 0 ? _cachedCrosshairScreenX : (float)(Bounds.Width / 2);
+                NativeBridge.dasher_mouse_move(_handle, holdX, _lastGazeY);
             }
             catch (Exception ex)
             {

@@ -13,13 +13,13 @@ namespace Dasher.Windows.EyeGaze;
 ///
 /// Three filters, in order:
 ///
-/// 1. DEAD ZONE: if the gaze hasn't moved more than N screen px from the
-///    last SENT position, don't send — reduces jitter noise.
-///
-/// 2. VELOCITY GATE: if the gaze is moving faster than N px/ms, it's in
+/// 1. VELOCITY GATE: if the gaze is moving faster than N px/ms, it's in
 ///    transit (saccade) — hold the last sent position until velocity drops.
 ///
-/// 3. SETTLE WINDOW: the gaze must stay within the dead zone for N ms
+/// 2. DEAD ZONE: if the gaze hasn't moved more than N screen px from the
+///    last SENT position, don't send — reduces jitter noise.
+///
+/// 3. SETTLE WINDOW: the gaze must stay near the candidate for N ms
 ///    before the position is sent — ensures the user has ARRIVED at their
 ///    target, not just passing through.
 ///
@@ -122,13 +122,27 @@ public sealed class GazeFilter
             return true;
         }
 
-        if (!_hasCandidate || Math.Abs(x - _candidateX) > DeadZonePx || Math.Abs(y - _candidateY) > DeadZonePx)
+        if (!_hasCandidate)
         {
-            // New candidate position — start the settle timer
+            // New candidate position — start the settle timer. The tolerance
+            // is its own (NOT the dead zone): a zero dead zone with settle
+            // on must still allow sub-pixel jitter to complete the dwell —
+            // reusing DeadZonePx there meant 1px noise restarted the timer
+            // forever and NOTHING was ever sent (review finding).
             _candidateX = x;
             _candidateY = y;
             _candidateStartMs = timestampMs;
             _hasCandidate = true;
+            SettleBlocks++;
+            return false;
+        }
+
+        var settleTol = DeadZonePx > 0 ? DeadZonePx : 2.0;
+        if (Math.Abs(x - _candidateX) > settleTol || Math.Abs(y - _candidateY) > settleTol)
+        {
+            _candidateX = x;
+            _candidateY = y;
+            _candidateStartMs = timestampMs;
             SettleBlocks++;
             return false;
         }

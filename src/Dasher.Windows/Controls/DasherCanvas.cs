@@ -233,6 +233,22 @@ public partial class DasherCanvas : Control
             var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
             _cachedOriginX = (float)(origin.X / scaling);
             _cachedOriginY = (float)(origin.Y / scaling);
+
+            // Crosshair screen X — the zero-velocity point used to hold the
+            // zoom when gaze is lost (PauseForGazeLoss). The crosshair is
+            // fixed on screen, so recache per frame is cheap and always
+            // fresh after resizes/geometry changes.
+            try
+            {
+                var vp = new NativeBridge.DasherViewport { struct_size = System.Runtime.InteropServices.Marshal.SizeOf<NativeBridge.DasherViewport>() };
+                if (NativeBridge.dasher_get_viewport(_handle, ref vp) == 0 &&
+                    NativeBridge.dasher_dasher_to_screen(_handle, vp.crosshair_x, vp.crosshair_y, out var chX, out _) == 0)
+                {
+                    _cachedCrosshairScreenX = chX;
+                }
+            }
+            catch { }
+
             // Staleness backstop: catches a tracker that stops delivering
             // entirely (no invalid samples either).
             CheckGazeStaleness();

@@ -107,6 +107,26 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     public event EventHandler<GazePoint>? GazeDataReceived;
     public event Action<string>? Warning;
+
+    /// <summary>
+    /// Next-log-round diagnostics (the "run as administrator" experiment):
+    /// resume_device needs elevation on OEM IS5 sensors — logging whether
+    /// this process IS elevated makes the next eyegaze.log self-interpreting.
+    /// </summary>
+    private static void LogElevationStatus()
+    {
+        try
+        {
+            using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            var principal = new System.Security.Principal.WindowsPrincipal(identity);
+            var elevated = principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+            EyeGazeLogger.Log($"Tobii: process elevation = {elevated}");
+        }
+        catch (Exception ex)
+        {
+            EyeGazeLogger.Log($"Tobii: elevation check failed: {ex.Message}");
+        }
+    }
     public string TrackerName => "Tobii (Stream Engine)";
     public bool IsConnected { get; private set; }
 
@@ -132,6 +152,7 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
             try
             {
                 EyeGazeLogger.Log("Tobii: ConnectAsync starting");
+                LogElevationStatus();
 
                 EnsureDllLoaded();
                 EyeGazeLogger.Log("Tobii: DLL resolved");
