@@ -233,6 +233,9 @@ public partial class DasherCanvas : Control
             var scaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
             _cachedOriginX = (float)(origin.X / scaling);
             _cachedOriginY = (float)(origin.Y / scaling);
+            // Staleness backstop: catches a tracker that stops delivering
+            // entirely (no invalid samples either).
+            CheckGazeStaleness();
         }
 
         DrawEyeTrackIndicator(context);

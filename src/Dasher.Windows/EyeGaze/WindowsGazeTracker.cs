@@ -10,6 +10,7 @@ namespace Dasher.Windows.EyeGaze
         private bool _isTracking;
 
         public event EventHandler<GazePoint>? GazeDataReceived;
+        public event Action<string>? Warning;
         public string TrackerName => "Windows Eye Tracker";
         public bool IsConnected { get; private set; }
 
@@ -57,7 +58,13 @@ namespace Dasher.Windows.EyeGaze
 
             var point = args.CurrentPoint;
             var pos = point.EyeGazePosition;
-            if (pos == null) return;
+            if (pos == null)
+            {
+                // No gaze for this frame (eyes not found) — forward the loss
+                // so the canvas can pause the engine (see TobiiStreamEngine).
+                GazeDataReceived?.Invoke(this, new GazePoint(-1, -1, DateTimeOffset.UtcNow, isValid: false, isScreenCoordinates: true));
+                return;
+            }
 
             var coords = pos.Value;
             GazeDataReceived?.Invoke(this, new GazePoint(

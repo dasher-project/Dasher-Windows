@@ -67,15 +67,27 @@ public sealed class GazeFilter
         outX = x; outY = y;
         TotalSamples++;
 
-        // Compute instantaneous velocity (px per ms)
-        var dtMs = _lastSampleMs == 0 ? 16 : Math.Max(1, timestampMs - _lastSampleMs);
-        var dx = x - _lastSampleX;
-        var dy = y - _lastSampleY;
-        var distance = Math.Sqrt(dx * dx + dy * dy);
-        var velocity = distance / dtMs;
-        // Exponential smoothing (alpha=0.3) — single-sample spikes don't
-        // trigger the gate; sustained transit does
-        _smoothedVelocity = _lastSampleMs == 0 ? velocity : _smoothedVelocity * 0.7 + velocity * 0.3;
+        // Compute instantaneous velocity (px per ms). The FIRST sample after
+        // construction/Reset must not be measured against the origin (0,0) —
+        // that phantom "saccade" (e.g. 8.8 px/ms for a first gaze at
+        // (100,100)) blocked the first real positions after every gaze-loss
+        // recovery; found by GazeFilterTests while pinning the semantics.
+        double velocity = 0;
+        if (_lastSampleMs != 0)
+        {
+            var dtMs = Math.Max(1, timestampMs - _lastSampleMs);
+            var dx = x - _lastSampleX;
+            var dy = y - _lastSampleY;
+            var distance = Math.Sqrt(dx * dx + dy * dy);
+            velocity = distance / dtMs;
+            // Exponential smoothing (alpha=0.3) — single-sample spikes don't
+            // trigger the gate; sustained transit does
+            _smoothedVelocity = _smoothedVelocity * 0.7 + velocity * 0.3;
+        }
+        else
+        {
+            _smoothedVelocity = 0;
+        }
         LastVelocity = _smoothedVelocity;
         _lastSampleMs = timestampMs;
         _lastSampleX = x;

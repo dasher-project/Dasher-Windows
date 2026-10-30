@@ -6,6 +6,14 @@ namespace Dasher.Windows.EyeGaze
     public interface IEyeTrackerService : IDisposable
     {
         event EventHandler<GazePoint> GazeDataReceived;
+
+        /// <summary>
+        /// Non-fatal tracker condition the user should know about (degraded
+        /// mode, permissions, licensing) — surfaces as a toast + log line.
+        /// Raised from the tracker's connect/callback thread.
+        /// </summary>
+        event Action<string>? Warning;
+
         string TrackerName { get; }
         bool IsConnected { get; }
         Task<bool> ConnectAsync();

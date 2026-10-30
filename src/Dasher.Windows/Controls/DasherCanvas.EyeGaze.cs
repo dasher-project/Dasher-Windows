@@ -43,9 +43,38 @@ namespace Dasher.Windows.Controls
             {
                 _useEyeGazeInput = true;
                 _eyeGazeIntegration.GazePositionChanged += OnEyeGazePositionChanged;
+                _eyeGazeIntegration.Warning += OnEyeTrackerWarning;
+                _gazePausedForLoss = false;
+                _lastGazeTicks = 0;
+
+                // Eye gaze NEEDS stop-outside semantics: when tracking is
+                // lost (blink, dropout, tracker losing the eyes) the last
+                // gaze position must stop driving the zoom. Without it,
+                // every invalid gap is a runaway zoom at the last spot —
+                // the eyegaze.log field session showed a 100-minute
+                // 0%-valid stretch where nothing told the engine to stop.
+                var stopKey = NativeBridge.dasher_find_parameter_key("BP_STOP_OUTSIDE");
+                if (stopKey >= 0 && NativeBridge.dasher_get_bool_parameter(_handle, stopKey) == 0)
+                {
+                    NativeBridge.dasher_set_bool_parameter(_handle, stopKey, 1);
+                    EyeGazeLogger.Log("Eye gaze: enabled 'Stop When Pointer Leaves' (required for gaze-loss pausing)");
+                }
+
                 EyeGazeLogger.Log("Eye gaze input active — indicator should appear (green/red dot top-right)");
             }
             return ok;
+        }
+
+        /// <summary>Tracker-side degradation notice (thread-pool thread):
+        /// log + one toast per session, marshalled to the UI thread.</summary>
+        private bool _gazeWarned;
+        private void OnEyeTrackerWarning(string message)
+        {
+            EyeGazeLogger.Log($"Tracker warning: {message}");
+            if (_gazeWarned) return;
+            _gazeWarned = true;
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                Services.ToastNotifier.Show("Eye tracker notice", message, isWarning: true));
         }
 
         public void DisableEyeGaze()
@@ -62,9 +91,12 @@ namespace Dasher.Windows.Controls
         {
             _useEyeGazeInput = false;
             _eyeTrackActive = false;
+            _gazePausedForLoss = false;
+            _gazeWarned = false;
             if (_eyeGazeIntegration != null)
             {
                 _eyeGazeIntegration.GazePositionChanged -= OnEyeGazePositionChanged;
+                _eyeGazeIntegration.Warning -= OnEyeTrackerWarning;
                 _eyeGazeIntegration.Shutdown(blocking);
                 _eyeGazeIntegration = null;
             }
@@ -103,8 +135,23 @@ namespace Dasher.Windows.Controls
         {
             if (!_useEyeGazeInput || _handle == IntPtr.Zero) return;
 
+            if (!gazePoint.IsValid)
+            {
+                // Tracker says eyes not found: pause immediately (the same
+                // stop-outside idiom as the pointer leaving the canvas).
+                // Dropping invalid samples silently left the last gaze
+                // position driving the zoom (the eyegaze.log field session).
+                PauseForGazeLoss("invalid sample");
+                return;
+            }
+
             _lastGazeTicks = DateTimeOffset.UtcNow.Ticks;
             _eyeTrackActive = true;
+            if (_gazePausedForLoss)
+            {
+                _gazePausedForLoss = false;
+                EyeGazeLogger.Log("Gaze resumed — zoom continues");
+            }
 
             float x = gazePoint.X;
             float y = gazePoint.Y;
@@ -139,6 +186,47 @@ namespace Dasher.Windows.Controls
             NativeBridge.dasher_mouse_move(_handle, x, y);
         }
 
+        /// <summary>True while the engine is paused because gaze was lost;
+        /// the next valid sample clears it.</summary>
+        private volatile bool _gazePausedForLoss;
+
+        /// <summary>
+        /// Pause the engine because gaze was lost: send the off-canvas
+        /// position (the engine's stop-outside idiom — enabled at gaze init),
+        /// flag the indicator red, and reset the gaze filter so stale
+        /// transit state doesn't fire the moment gaze returns. Called from
+        /// the gaze callback thread (invalid samples) and the UI thread
+        /// (staleness backstop in Render).
+        /// </summary>
+        private void PauseForGazeLoss(string reason)
+        {
+            _eyeTrackActive = false;
+            _gazeFilter?.Reset();
+            if (_gazePausedForLoss) return; // already paused
+            _gazePausedForLoss = true;
+            EyeGazeLogger.Log($"Gaze lost ({reason}) — pausing zoom");
+            try
+            {
+                NativeBridge.dasher_mouse_move(_handle, -10000f, -10000f);
+            }
+            catch (Exception ex)
+            {
+                EyeGazeLogger.Log($"PauseForGazeLoss: mouse_move failed: {ex.Message}");
+            }
+        }
+
+        /// <summary>Staleness backstop: called from Render (UI thread, RAF
+        /// cadence) — if no valid sample arrived within GazeTimeout (e.g.
+        /// the tracker stopped delivering entirely), pause. The indicator's
+        /// red dot rides the same check.</summary>
+        private void CheckGazeStaleness()
+        {
+            if (!_useEyeGazeInput) return;
+            if (_lastGazeTicks == 0 || DateTimeOffset.UtcNow - new DateTimeOffset(_lastGazeTicks, TimeSpan.Zero) <= GazeTimeout)
+                return;
+            PauseForGazeLoss("no gaze data for " + GazeTimeout.TotalMilliseconds + "ms");
+        }
+
         private void DrawEyeTrackIndicator(DrawingContext context)
         {
             if (!_useEyeGazeInput) return;
@@ -156,7 +244,8 @@ namespace Dasher.Windows.Controls
 
             var color = _eyeTrackActive
                 ? Color.FromRgb(80, 200, 80)   // green
-                : Color.FromRgb(200, 60, 60);  // red
+                : Color.FromRgb(200, 60, 60)   // red
+                ;
 
             context.DrawEllipse(
                 new SolidColorBrush(color),

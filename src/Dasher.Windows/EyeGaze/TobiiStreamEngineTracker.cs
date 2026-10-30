@@ -106,6 +106,7 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
     private bool _disposed;
 
     public event EventHandler<GazePoint>? GazeDataReceived;
+    public event Action<string>? Warning;
     public string TrackerName => "Tobii (Stream Engine)";
     public bool IsConnected { get; private set; }
 
@@ -126,7 +127,7 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     public Task<bool> ConnectAsync()
     {
-        return Task.Run(() =>
+        return Task.Run(async () =>
         {
             try
             {
@@ -209,9 +210,30 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
                 int ssResult = tobii_stream_supported(_device, 0, out bool gazeSupported);
                 EyeGazeLogger.Log($"Tobii: Gaze point stream supported = {gazeSupported} (result code {ssResult})");
 
-                // Resume device in case it's paused
+                // Resume device in case it's paused. Some OEM sensors (IS5/
+                // Dynavox, e.g. IS514) require elevation for this — a
+                // permissions failure leaves them in a degraded low-rate,
+                // low-accuracy mode (one field session measured a 30 Hz
+                // ceiling at 60% validity instead of 90 Hz). Retry once,
+                // then surface the degradation to the user.
                 int rdResult = tobii_resume_device(_device);
-                EyeGazeLogger.Log($"Tobii: resume_device result = {rdResult}{(rdResult != 0 ? $": {GetTobiiError(rdResult)}" : "")}");
+                if (rdResult != 0)
+                {
+                    EyeGazeLogger.Log($"Tobii: resume_device result = {rdResult}: {GetTobiiError(rdResult)} — retrying once in 500ms");
+                    await Task.Delay(500);
+                    rdResult = tobii_resume_device(_device);
+                }
+                if (rdResult != 0)
+                {
+                    EyeGazeLogger.Log($"Tobii: resume_device still failing ({rdResult}: {GetTobiiError(rdResult)}) — continuing in possibly degraded mode");
+                    Warning?.Invoke(
+                        $"The eye tracker could not be fully resumed ({GetTobiiError(rdResult)}). " +
+                        "Tracking may run at reduced speed and accuracy — try running Dasher as administrator.");
+                }
+                else
+                {
+                    EyeGazeLogger.Log("Tobii: resume_device ok");
+                }
                 return true;
             }
             catch (Exception ex)
@@ -467,6 +489,13 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
         {
             Interlocked.Increment(ref _invalidCount);
             EyeGazeLogger.LogGazeData(gaze_point.x, gaze_point.y, valid: false);
+            // Forward the LOSS itself: the canvas pauses the engine on
+            // invalid samples (dropping them silently left the last gaze
+            // position driving the zoom — the eyegaze.log field session
+            // showed a 100-minute 0%-valid stretch).
+            GazeDataReceived?.Invoke(this, new GazePoint(
+                gaze_point.x * ScreenWidth, gaze_point.y * ScreenHeight,
+                DateTimeOffset.UtcNow, isValid: false, isScreenCoordinates: true));
             return;
         }
 

@@ -16,6 +16,7 @@ public sealed class EyetuitiveTracker : IEyeTrackerService
     private bool _disposed;
 
     public event EventHandler<GazePoint>? GazeDataReceived;
+        public event Action<string>? Warning;
     public string TrackerName => "eyetuitive";
     public bool IsConnected { get; private set; }
 
