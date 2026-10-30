@@ -177,12 +177,15 @@ namespace Dasher.Windows.Controls
                     return; // filtered out (in transit, jitter, or not settled)
 
                 // Diagnostic: log every 30th sample (≈once per 500ms at 60Hz)
-                _gazeLogInterval++;
-                if (_gazeLogInterval >= 30)
+                if (EyeGazeLogger.Verbose)
                 {
-                    _gazeLogInterval = 0;
-                    EyeGazeLogger.Log($"gaze filter: sent=({filteredX:F0},{filteredY:F0}) vel={filter.LastVelocity:F1}px/ms " +
-                        $"[total={filter.TotalSamples} sent={filter.SentSamples} dz={filter.DeadZoneBlocks} vel_blk={filter.VelocityBlocks} settle_blk={filter.SettleBlocks}]");
+                    _gazeLogInterval++;
+                    if (_gazeLogInterval >= 30)
+                    {
+                        _gazeLogInterval = 0;
+                        EyeGazeLogger.Log($"gaze filter: sent=({filteredX:F0},{filteredY:F0}) vel={filter.LastVelocity:F1}px/ms " +
+                            $"[total={filter.TotalSamples} sent={filter.SentSamples} dz={filter.DeadZoneBlocks} vel_blk={filter.VelocityBlocks} settle_blk={filter.SettleBlocks}]");
+                    }
                 }
 
                 x = (float)filteredX;

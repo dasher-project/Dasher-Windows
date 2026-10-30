@@ -471,11 +471,13 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
                     continue;
                 }
 
-                // Heartbeat every 5 seconds
+                // Heartbeat every 5 seconds — the valid/invalid counters are
+                // the field-triage signal (degradation = rate ceiling +
+                // validity collapse), so this rides the ALWAYS-ON layer.
                 var now = DateTime.UtcNow;
                 if (now - lastHeartbeat >= TimeSpan.FromSeconds(5))
                 {
-                    EyeGazeLogger.Log($"Tobii: Heartbeat — {sampleCount} callbacks processed, {_validCount} valid, {_invalidCount} invalid");
+                    EyeGazeLogger.Log($"Tobii: Heartbeat — {sampleCount} callbacks processed, {_validCount} valid, {_invalidCount} invalid{(EyeGazeLogger.Verbose ? "" : " (diagnostics off — Settings > Input to enable per-sample lines)")}");
                     lastHeartbeat = now;
                 }
             }
@@ -498,12 +500,15 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
 
     private void OnGazePoint(ref tobii_gaze_point_t gaze_point)
     {
-        // Dump raw struct bytes for the first few samples to verify layout
-        var dumpIdx = Interlocked.Increment(ref _rawDumpCount);
-        if (dumpIdx <= MaxRawDumps)
+        // Raw struct dumps (diagnostics only — layout verification)
+        if (EyeGazeLogger.Verbose)
         {
-            EyeGazeLogger.Log($"Tobii: RAW gaze #{dumpIdx}: ts={gaze_point.timestamp_us} validity={gaze_point.validity} x={gaze_point.x:F6} y={gaze_point.y:F6}");
-            EyeGazeLogger.Log($"  raw floats: ts_hex={BitConverter.DoubleToInt64Bits(gaze_point.timestamp_us):X16} x_bits={BitConverter.SingleToInt32Bits(gaze_point.x):X8} y_bits={BitConverter.SingleToInt32Bits(gaze_point.y):X8}");
+            var dumpIdx = Interlocked.Increment(ref _rawDumpCount);
+            if (dumpIdx <= MaxRawDumps)
+            {
+                EyeGazeLogger.Log($"Tobii: RAW gaze #{dumpIdx}: ts={gaze_point.timestamp_us} validity={gaze_point.validity} x={gaze_point.x:F6} y={gaze_point.y:F6}");
+                EyeGazeLogger.Log($"  raw floats: ts_hex={BitConverter.DoubleToInt64Bits(gaze_point.timestamp_us):X16} x_bits={BitConverter.SingleToInt32Bits(gaze_point.x):X8} y_bits={BitConverter.SingleToInt32Bits(gaze_point.y):X8}");
+            }
         }
 
         if (gaze_point.validity == 0)

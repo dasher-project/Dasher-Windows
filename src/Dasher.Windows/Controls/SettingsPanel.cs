@@ -657,6 +657,40 @@ public class SettingsPanel : Decorator
             TextWrapping = TextWrapping.Wrap,
         };
 
+        // Eye-tracker diagnostics toggle: detailed per-sample logging to
+        // %APPDATA%\Dasher\eyegaze.log (off by default; lifecycle events
+        // always logged). The file to attach to bug reports.
+        var diagToggle = new ToggleSwitch
+        {
+            IsChecked = config.GazeDiagnostics,
+            OnContent = "", OffContent = "", MinWidth = 0, Height = 24,
+        };
+        var diagToggleLabel = new TextBlock
+        {
+            Text = "Save eye-tracker diagnostics",
+            FontSize = 12,
+            Foreground = BrushValue,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        var diagTogglePanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        diagTogglePanel.Children.Add(diagToggle);
+        diagTogglePanel.Children.Add(diagToggleLabel);
+        var diagHelp = new TextBlock
+        {
+            Text = "Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.",
+            FontSize = 11,
+            Foreground = BrushMuted,
+            TextWrapping = TextWrapping.Wrap,
+        };
+        diagToggle.PropertyChanged += (s, e) =>
+        {
+            if (e.Property.Name != "IsChecked") return;
+            var cfg = AccessConfiguration.Load();
+            cfg.GazeDiagnostics = diagToggle.IsChecked == true;
+            cfg.Save();
+            EyeGaze.EyeGazeLogger.Verbose = cfg.GazeDiagnostics;
+        };
+
         var deadZoneSlider = new Slider
         {
             Minimum = 0, Maximum = 30, Value = config.GazeDeadZonePx,
@@ -724,6 +758,8 @@ public class SettingsPanel : Decorator
             filterHeader.IsVisible = isEyeGaze;
             filterTogglePanel.IsVisible = isEyeGaze;
             gazeFilterHelp.IsVisible = isEyeGaze;
+            diagTogglePanel.IsVisible = isEyeGaze;
+            diagHelp.IsVisible = isEyeGaze;
             deadZoneSlider.IsVisible = isEyeGaze;
             deadZoneLabel.IsVisible = isEyeGaze;
             settleSlider.IsVisible = isEyeGaze;
@@ -906,6 +942,8 @@ public class SettingsPanel : Decorator
         panel.Children.Add(filterHeader);
         panel.Children.Add(filterTogglePanel);
         panel.Children.Add(gazeFilterHelp);
+        panel.Children.Add(diagTogglePanel);
+        panel.Children.Add(diagHelp);
         panel.Children.Add(deadZoneSlider);
         panel.Children.Add(deadZoneLabel);
         panel.Children.Add(settleSlider);

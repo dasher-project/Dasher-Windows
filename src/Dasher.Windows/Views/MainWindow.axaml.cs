@@ -714,6 +714,10 @@ public partial class MainWindow : Window
             if (_canvas == null) return;
             _canvas.DisableJoystick();
 
+            // Detailed eye-tracker diagnostics (per-sample lines, raw dumps,
+            // filter stats). Lifecycle logging is always on.
+            EyeGaze.EyeGazeLogger.Verbose = config.GazeDiagnostics;
+
             // Apply the gaze filter configuration (transit zoom fix)
             if (config.GazeFilterEnabled)
             {

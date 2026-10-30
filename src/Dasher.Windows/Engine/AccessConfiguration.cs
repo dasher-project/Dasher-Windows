@@ -26,6 +26,15 @@ public class AccessConfiguration
     public bool GazeFilterEnabled { get; set; } = true;
 
     /// <summary>
+    /// Detailed eye-tracker diagnostics (per-sample flow lines, raw struct
+    /// dumps, filter stats) written to %APPDATA%\Dasher\eyegaze.log. The
+    /// always-on layer is lifecycle events only (connect, resume, heartbeat
+    /// counters, gaze lost/resumed, warnings). Default off; turn on when
+    /// reporting tracker problems.
+    /// </summary>
+    public bool GazeDiagnostics { get; set; }
+
+    /// <summary>
     /// The engine input filter (SP_INPUT_FILTER). MIRROR ONLY — the engine's
     /// own persistence (dasher_settings.xml, DasherCore #76 / v0.2.16+) owns
     /// this value and survives restarts by itself. <see cref="Apply"/> no

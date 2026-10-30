@@ -11,6 +11,16 @@ public static class EyeGazeLogger
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "Dasher", "eyegaze.log");
 
+    /// <summary>
+    /// Detailed diagnostics (per-sample flow lines, heartbeat detail, raw
+    /// struct dumps, gaze filter stats). Off by default — the always-on
+    /// layer is lifecycle events only (connect, resume, warnings, gaze
+    /// lost/resumed), which is low-volume and exactly what field triage
+    /// needs first. Users reporting tracker problems turn this on in
+    /// Settings > Input ("Save eye-tracker diagnostics").
+    /// </summary>
+    public static bool Verbose;
+
     private static long _gazeLogCounter;
     private const long GazeLogInterval = 60; // log every 60th sample (~2s at 33Hz)
 
@@ -40,6 +50,7 @@ public static class EyeGazeLogger
 
     public static void LogGazeData(float x, float y, bool valid)
     {
+        if (!Verbose) return;
         var count = Interlocked.Increment(ref _gazeLogCounter);
         if (count == 1)
             Log($"First gaze data received: x={x:F1} y={y:F1} valid={valid}");
