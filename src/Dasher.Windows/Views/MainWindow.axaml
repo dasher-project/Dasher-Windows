@@ -385,7 +385,7 @@
                 <Grid RowDefinitions="Auto, Auto, Auto, *">
                     <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                         <StackPanel Orientation="Horizontal" Spacing="8" Margin="10,6" Height="48">
-                            <Button Width="32" Height="32" CornerRadius="16" Background="{DynamicResource ControlBg}" BorderThickness="0" VerticalAlignment="Center" ToolTip.Tip="Back">
+                            <Button Width="32" Height="32" CornerRadius="16" Background="{DynamicResource ControlBg}" BorderThickness="0" VerticalAlignment="Center" ToolTip.Tip="Back" IsVisible="False">
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.ChevronLeft}" Size="16" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
 
@@ -439,6 +439,25 @@
                             </StackPanel>
 
                             <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
+
+                            <Button x:Name="PaneBackspaceBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="Delete (hold to repeat)">
+                                <StackPanel Spacing="2" VerticalAlignment="Center">
+                                    <LucideIcon Kind="{x:Static lucide:LucideIconKind.Delete}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
+                                    <TextBlock Text="Del" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="PaneLeftBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="Move caret left (hold to repeat)">
+                                <StackPanel Spacing="2" VerticalAlignment="Center">
+                                    <LucideIcon Kind="{x:Static lucide:LucideIconKind.ArrowLeft}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
+                                    <TextBlock Text="Left" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="PaneRightBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="Move caret right (hold to repeat)">
+                                <StackPanel Spacing="2" VerticalAlignment="Center">
+                                    <LucideIcon Kind="{x:Static lucide:LucideIconKind.ArrowRight}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
+                                    <TextBlock Text="Right" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
 
                             <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="More options">
                                 <StackPanel Spacing="2" VerticalAlignment="Center">
@@ -505,6 +524,19 @@
                        VerticalAlignment="Center" Margin="6,0,4,0"
                        Foreground="{DynamicResource TextSecondary}" FontSize="11" FontWeight="Medium"
                        Text="{Binding CurrentWpm, StringFormat={}{0:F0} wpm}"/>
+            <!-- Editing keys first: for AAC users these are the most-used
+                 controls (Android strip parity; most people don't have a
+                 TouchMousePointer for backspace — Heide's request). Pointer
+                 events + hold-repeat wired in code (WireEditingKeyRepeat). -->
+            <Button x:Name="KbBackspaceBtn" ToolTip.Tip="Delete (hold to repeat)">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.Delete}" Size="18"/>
+            </Button>
+            <Button x:Name="KbLeftBtn" ToolTip.Tip="Move caret left (hold to repeat)">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.ArrowLeft}" Size="18"/>
+            </Button>
+            <Button x:Name="KbRightBtn" ToolTip.Tip="Move caret right (hold to repeat)">
+                <LucideIcon Kind="{x:Static lucide:LucideIconKind.ArrowRight}" Size="18"/>
+            </Button>
             <Button x:Name="KbControlBtn" Click="OnToggleControlMode" ToolTip.Tip="Control mode">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.MousePointerClick}" Size="18"/>
             </Button>

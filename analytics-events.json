@@ -66,7 +66,7 @@
       "description": "RFC 0001 2026-10-28 amendment: the user activated a control in the main UI (anything outside the settings windows). Opt-in gated like every event.",
       "properties": {
         "surface": { "type": "string", "enum": ["main_toolbar", "status_bar", "ime_toolbar"], "description": "ime_toolbar = the keyboard (direct-entry) mode mini-bar. status_bar also covers the bottom message-pane header (speak / copy / new / paste / enter-direct-mode controls). The RFC's ime_topbar surface has no Windows equivalent and is therefore never emitted." },
-        "action": { "type": "string", "description": "Fixed vocabulary; new identifiers require a schema update", "enum": ["new", "open", "save", "settings", "copy", "copy_selection", "cut", "paste", "select_all", "speak", "stop_speak", "speed_up", "speed_down", "layout", "direct_mode", "game_mode", "control_mode", "reanchor", "hide"] },
+        "action": { "type": "string", "description": "Fixed vocabulary; new identifiers require a schema update", "enum": ["new", "open", "save", "settings", "copy", "copy_selection", "cut", "paste", "select_all", "speak", "stop_speak", "speed_up", "speed_down", "backspace", "arrow_left", "arrow_right", "layout", "direct_mode", "game_mode", "control_mode", "reanchor", "hide"] },
         "state": { "type": "string", "enum": ["on", "off", "right", "left", "bottom", "top"], "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position" }
       },
       "pii": false
