@@ -1390,8 +1390,13 @@ public class SettingsPanel : Decorator
 
     private static bool ShouldHideParameter(ParameterDisplayInfo info, string category)
     {
-        if (info.Name == "Control Mode" && category == "Input")
-            return true;
+        // "Control Mode" used to be hidden here (the toolbar button owned the
+        // toggle) — that hid the ONLY in-settings way to enable the control
+        // node, and the toolbar button wasn't recognisable as it: a tester
+        // reported "the control node is gone, even in the settings" (Android
+        // keeps the settings row and has no such confusion). Both paths now
+        // toggle BP_CONTROL_MODE; the toolbar accent syncs via the engine's
+        // parameter callback (OnParameterChanged).
         if (info.Name == "Simulate Transparency")
             return true;
         return false;

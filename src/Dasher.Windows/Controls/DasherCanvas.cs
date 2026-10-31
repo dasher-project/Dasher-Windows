@@ -97,6 +97,7 @@ public partial class DasherCanvas : Control
         _callbacksRegistered = false;
         _lastScreenWidth = 0;
         _lastScreenHeight = 0;
+        _outputDirty = true; // fresh handle: read OutputText once on first Tick
     }
 
     /// <summary>
@@ -483,17 +484,24 @@ public partial class DasherCanvas : Control
         }
         catch { return; }
 
-        try
+        // Output text: read ONLY when an output event marked it dirty — the
+        // old unconditional poll allocated a full copy of the (growing)
+        // session buffer as a .NET string every frame (see OnEngineOutputEvent).
+        if (_outputDirty)
         {
-            var outputPtr = NativeBridge.dasher_get_output_text(_handle);
-            if (outputPtr != IntPtr.Zero)
+            _outputDirty = false;
+            try
             {
-                var text = Marshal.PtrToStringUTF8(outputPtr);
-                if (text != OutputText)
-                    OutputText = text ?? "";
+                var outputPtr = NativeBridge.dasher_get_output_text(_handle);
+                if (outputPtr != IntPtr.Zero)
+                {
+                    var text = Marshal.PtrToStringUTF8(outputPtr);
+                    if (text != OutputText)
+                        OutputText = text ?? "";
+                }
             }
+            catch { }
         }
-        catch { }
 
         // Update WPM stats (RFC 0012) — throttled to once per second
         if (timeMs - _lastWpmTimeMs >= 1000)
@@ -521,6 +529,13 @@ public partial class DasherCanvas : Control
     private void OnEngineOutputEvent(int eventType, IntPtr textPtr, IntPtr userData)
     {
         var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
+        // ANY output event (insert/delete/clear) changes the buffer: mark
+        // OutputText stale so the next Tick re-reads it. This replaces the
+        // old per-frame full-buffer poll (a fresh .NET string of the whole
+        // session 60x/s — allocation grew linearly with session length, so
+        // GC pressure and stutter worsened the more you typed until
+        // restart; Android is event-driven and never had it).
+        _outputDirty = true;
         // Events normally fire on the dasher_frame() thread; buffer-clear
         // events may fire on the thread calling the reset function itself.
         // Marshal to the UI thread preserving order.
@@ -529,6 +544,11 @@ public partial class DasherCanvas : Control
             EngineOutput?.Invoke(this, new EngineOutputEventArgs(eventType, text));
         });
     }
+
+    /// <summary>OutputText staleness: set by the engine's output callback,
+    /// consumed by Tick. Volatile — written on the frame/callback threads,
+    /// read on the UI thread.</summary>
+    private volatile bool _outputDirty = true;
 }
 
 public class EngineMessageEventArgs : EventArgs

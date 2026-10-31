@@ -771,6 +771,9 @@ public partial class MainWindow : Window
 
         // Keyboard-mode injection is driven by engine output events
         // (OnEngineOutput, RFC 0015 §7), not by diffing OutputText.
+        // (OutputText itself is now pushed event-driven too — the canvas
+        // marks it dirty from the output callback, so pane edits that
+        // don't fire engine events no longer race a per-frame push.)
         if (_gameModeActive)
             SyncGameModeState();
     }
