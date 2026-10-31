@@ -120,7 +120,69 @@ public partial class MainWindow : Window
         InitializeComponent();
         RestoreWindowGeometry();
         TrackNormalStateGeometry();
+        WireEditingKeyRepeat();
     }
+
+    /// <summary>
+    /// Hold-to-repeat for the ⌫ / ← / → editing keys: press fires once,
+    /// holding repeats after a 350 ms deliberate-hold delay (then every
+    /// 90 ms for backspace / 120 ms for arrows). Single-click-only would
+    /// make deleting a word unusable for the AAC input these buttons are
+    /// for. Pointer events drive the action (Click stays unwired — press
+    /// + click would double-fire).
+    /// </summary>
+    private sealed class KeyRepeatState
+    {
+        public Avalonia.Threading.DispatcherTimer? Delay;
+        public Avalonia.Threading.DispatcherTimer? Repeat;
+        public void Stop()
+        {
+            Delay?.Stop(); Delay = null;
+            Repeat?.Stop(); Repeat = null;
+        }
+    }
+
+    private void WireEditingKeyRepeat()
+    {
+        WireRepeat(KbBackspaceBtn, FireBackspace, repeatMs: 90);
+        WireRepeat(KbLeftBtn, FireArrowLeft, repeatMs: 120);
+        WireRepeat(KbRightBtn, FireArrowRight, repeatMs: 120);
+        WireRepeat(PaneBackspaceBtn, FireBackspace, repeatMs: 90);
+        WireRepeat(PaneLeftBtn, FireArrowLeft, repeatMs: 120);
+        WireRepeat(PaneRightBtn, FireArrowRight, repeatMs: 120);
+    }
+
+    private static void WireRepeat(Avalonia.Controls.Button button, Action fire, int repeatMs)
+    {
+        var state = new KeyRepeatState();
+
+        // handledEventsToo: Button marks pointer events handled internally
+        // (pressed visual state) — the repeat must still see them.
+        button.AddHandler(Avalonia.Input.InputElement.PointerPressedEvent, (_, _) =>
+        {
+            state.Stop();
+            fire(); // immediate action on press
+            // Deliberate-hold delay before repeating begins
+            state.Delay = new Avalonia.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(350) };
+            state.Delay.Tick += (_, _) =>
+            {
+                state.Delay?.Stop(); state.Delay = null;
+                state.Repeat = new Avalonia.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(repeatMs) };
+                state.Repeat.Tick += (_, _) => fire();
+                state.Repeat.Start();
+            };
+            state.Delay.Start();
+        }, Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
+
+        button.AddHandler(Avalonia.Input.InputElement.PointerReleasedEvent,
+            (_, _) => state.Stop(), Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
+        button.AddHandler(Avalonia.Input.InputElement.PointerCaptureLostEvent,
+            (_, _) => state.Stop(), Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
+    }
+
+    private void FireBackspace() => OnEditBackspaceKey(null!, new RoutedEventArgs());
+    private void FireArrowLeft() => OnEditArrowLeftKey(null!, new RoutedEventArgs());
+    private void FireArrowRight() => OnEditArrowRightKey(null!, new RoutedEventArgs());
 
     // ── Window geometry persistence (issue #46) ─────────────────────────────
 
@@ -1254,6 +1316,87 @@ public partial class MainWindow : Window
     private const ushort VK_KEY_X = 0x58;
     private const ushort VK_KEY_V = 0x56;
     private const ushort VK_KEY_A = 0x41;
+    private const ushort VK_LEFT = 0x25;
+    private const ushort VK_RIGHT = 0x27;
+
+    // ── Editing keys strip (Android parity — Heide's request) ───────────────
+    //
+    // ⌫ / ← / → on the mini-bar (direct mode, the strip an eye-gaze user
+    // actually has) and the message-pane header (editor mode). Hold repeats:
+    // deleting a word one click at a time is not usable for AAC input.
+    //
+    // Direct mode: real keystrokes to the TARGET (VK_BACK / VK_LEFT /
+    // VK_RIGHT) — the target owns the caret. Editor mode: MessageArea caret
+    // moves + backspace; the CaretIndex/TextChanged handlers already
+    // re-anchor the engine (RFC 0019 clause 3/4).
+
+    private void OnEditBackspaceKey(object? sender, RoutedEventArgs e)
+    {
+        if (_vm is { IsKeyboardMode: true })
+        {
+            Services.AnalyticsService.CaptureUiAction("ime_toolbar", "backspace");
+            SendBackspaces(1);
+        }
+        else
+        {
+            Services.AnalyticsService.CaptureUiAction("status_bar", "backspace");
+            EditorBackspace();
+        }
+    }
+
+    private void OnEditArrowLeftKey(object? sender, RoutedEventArgs e)
+    {
+        if (_vm is { IsKeyboardMode: true })
+        {
+            Services.AnalyticsService.CaptureUiAction("ime_toolbar", "arrow_left");
+            _targetTracker.EnsureForeground(OurHwnd());
+            SendVirtualKey(VK_LEFT);
+        }
+        else
+        {
+            Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_left");
+            EditorMoveCaret(-1);
+        }
+    }
+
+    private void OnEditArrowRightKey(object? sender, RoutedEventArgs e)
+    {
+        if (_vm is { IsKeyboardMode: true })
+        {
+            Services.AnalyticsService.CaptureUiAction("ime_toolbar", "arrow_right");
+            _targetTracker.EnsureForeground(OurHwnd());
+            SendVirtualKey(VK_RIGHT);
+        }
+        else
+        {
+            Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_right");
+            EditorMoveCaret(1);
+        }
+    }
+
+    /// <summary>Backspace in the editor pane: delete the char before the
+    /// caret as a USER edit (not suppressed → TextChanged seeds the engine,
+    /// RFC 0019 clause 4).</summary>
+    private void EditorBackspace()
+    {
+        var box = MessageArea;
+        if (box == null) return;
+        var caret = box.CaretIndex;
+        if (caret <= 0 || string.IsNullOrEmpty(box.Text)) return;
+        box.Text = box.Text.Remove(caret - 1, 1);
+        box.CaretIndex = caret - 1;
+    }
+
+    /// <summary>Caret move in the editor pane; the CaretIndexProperty handler
+    /// re-anchors the model when the text is in sync (RFC 0019 clause 3).</summary>
+    private void EditorMoveCaret(int delta)
+    {
+        var box = MessageArea;
+        if (box == null) return;
+        var target = Math.Clamp(box.CaretIndex + delta, 0, (box.Text ?? "").Length);
+        if (target != box.CaretIndex)
+            box.CaretIndex = target;
+    }
 
     /// <summary>
     /// Inject a Ctrl+<key> chord to the target app (RFC 0015 clipboard
