@@ -142,33 +142,42 @@ public partial class MainWindow : Window
         }
     }
 
+    private readonly List<KeyRepeatState> _editKeyRepeatStates = [];
+
     private void WireEditingKeyRepeat()
     {
-        WireRepeat(KbBackspaceBtn, FireBackspace, repeatMs: 90);
-        WireRepeat(KbLeftBtn, FireArrowLeft, repeatMs: 120);
-        WireRepeat(KbRightBtn, FireArrowRight, repeatMs: 120);
-        WireRepeat(PaneBackspaceBtn, FireBackspace, repeatMs: 90);
-        WireRepeat(PaneLeftBtn, FireArrowLeft, repeatMs: 120);
-        WireRepeat(PaneRightBtn, FireArrowRight, repeatMs: 120);
+        // press = telemetry + action (once per press — repeat ticks are not
+        // activations); repeat = action only.
+        WireRepeat(KbBackspaceBtn, () => OnEditBackspaceKey(true), () => OnEditBackspaceKey(false), repeatMs: 90);
+        WireRepeat(KbLeftBtn, () => OnEditArrowLeftKey(true), () => OnEditArrowLeftKey(false), repeatMs: 120);
+        WireRepeat(KbRightBtn, () => OnEditArrowRightKey(true), () => OnEditArrowRightKey(false), repeatMs: 120);
+        WireRepeat(PaneBackspaceBtn, () => OnEditBackspaceKey(true), () => OnEditBackspaceKey(false), repeatMs: 90);
+        WireRepeat(PaneLeftBtn, () => OnEditArrowLeftKey(true), () => OnEditArrowLeftKey(false), repeatMs: 120);
+        WireRepeat(PaneRightBtn, () => OnEditArrowRightKey(true), () => OnEditArrowRightKey(false), repeatMs: 120);
     }
 
-    private static void WireRepeat(Avalonia.Controls.Button button, Action fire, int repeatMs)
+    private void WireRepeat(Avalonia.Controls.Button button, Action press, Action repeat, int repeatMs)
     {
         var state = new KeyRepeatState();
+        _editKeyRepeatStates.Add(state);
 
         // handledEventsToo: Button marks pointer events handled internally
         // (pressed visual state) — the repeat must still see them.
-        button.AddHandler(Avalonia.Input.InputElement.PointerPressedEvent, (_, _) =>
+        button.AddHandler(Avalonia.Input.InputElement.PointerPressedEvent, (_, e) =>
         {
+            if (e is Avalonia.Input.PointerPressedEventArgs ppe &&
+                ppe.GetCurrentPoint(button).Properties.PointerUpdateKind !=
+                    Avalonia.Input.PointerUpdateKind.LeftButtonPressed)
+                return; // primary presses only, like every Click-wired sibling
             state.Stop();
-            fire(); // immediate action on press
+            press(); // immediate action (with telemetry) on press
             // Deliberate-hold delay before repeating begins
             state.Delay = new Avalonia.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(350) };
             state.Delay.Tick += (_, _) =>
             {
                 state.Delay?.Stop(); state.Delay = null;
                 state.Repeat = new Avalonia.Threading.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(repeatMs) };
-                state.Repeat.Tick += (_, _) => fire();
+                state.Repeat.Tick += (_, _) => repeat();
                 state.Repeat.Start();
             };
             state.Delay.Start();
@@ -178,11 +187,10 @@ public partial class MainWindow : Window
             (_, _) => state.Stop(), Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
         button.AddHandler(Avalonia.Input.InputElement.PointerCaptureLostEvent,
             (_, _) => state.Stop(), Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
+        // Mid-hold detach (mode switch clears MainGrid, pane re-layout):
+        // capture-lost covers most cases; this closes the rest.
+        button.DetachedFromVisualTree += (_, _) => state.Stop();
     }
-
-    private void FireBackspace() => OnEditBackspaceKey(null!, new RoutedEventArgs());
-    private void FireArrowLeft() => OnEditArrowLeftKey(null!, new RoutedEventArgs());
-    private void FireArrowRight() => OnEditArrowRightKey(null!, new RoutedEventArgs());
 
     // ── Window geometry persistence (issue #46) ─────────────────────────────
 
@@ -809,6 +817,9 @@ public partial class MainWindow : Window
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
+        // Editing-key hold-repeat timers must not outlive the window
+        // (review loop 1: a mid-hold close left the dispatcher firing).
+        foreach (var s in _editKeyRepeatStates) s.Stop();
         Services.PickerSession.Unregister(SuspendTargetTracking, ResumeTargetTracking);
         Services.PickerSession.Log = null;
         SaveWindowGeometry();
@@ -1330,72 +1341,78 @@ public partial class MainWindow : Window
     // moves + backspace; the CaretIndex/TextChanged handlers already
     // re-anchor the engine (RFC 0019 clause 3/4).
 
-    private void OnEditBackspaceKey(object? sender, RoutedEventArgs e)
+    private void OnEditBackspaceKey(bool reportTelemetry = true)
     {
+        // A picker dialog owns the foreground mid-session: injecting
+        // keystrokes now would send them into the filename box and retarget
+        // the tracker at the dialog (the bug class #73's review spent two
+        // loops on).
+        if (_pickerSessionActive) return;
         if (_vm is { IsKeyboardMode: true })
         {
-            Services.AnalyticsService.CaptureUiAction("ime_toolbar", "backspace");
+            if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("ime_toolbar", "backspace");
             SendBackspaces(1);
         }
         else
         {
-            Services.AnalyticsService.CaptureUiAction("status_bar", "backspace");
+            if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "backspace");
             EditorBackspace();
         }
     }
 
-    private void OnEditArrowLeftKey(object? sender, RoutedEventArgs e)
+    private void OnEditArrowLeftKey(bool reportTelemetry = true)
     {
+        if (_pickerSessionActive) return;
         if (_vm is { IsKeyboardMode: true })
         {
-            Services.AnalyticsService.CaptureUiAction("ime_toolbar", "arrow_left");
+            if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("ime_toolbar", "arrow_left");
             _targetTracker.EnsureForeground(OurHwnd());
             SendVirtualKey(VK_LEFT);
         }
         else
         {
-            Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_left");
+            if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_left");
             EditorMoveCaret(-1);
         }
     }
 
-    private void OnEditArrowRightKey(object? sender, RoutedEventArgs e)
+    private void OnEditArrowRightKey(bool reportTelemetry = true)
     {
+        if (_pickerSessionActive) return;
         if (_vm is { IsKeyboardMode: true })
         {
-            Services.AnalyticsService.CaptureUiAction("ime_toolbar", "arrow_right");
+            if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("ime_toolbar", "arrow_right");
             _targetTracker.EnsureForeground(OurHwnd());
             SendVirtualKey(VK_RIGHT);
         }
         else
         {
-            Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_right");
+            if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_right");
             EditorMoveCaret(1);
         }
     }
 
-    /// <summary>Backspace in the editor pane: delete the char before the
-    /// caret as a USER edit (not suppressed → TextChanged seeds the engine,
-    /// RFC 0019 clause 4).</summary>
+    /// <summary>Backspace in the editor pane: delete the code point before
+    /// the caret as a USER edit (not suppressed → TextChanged seeds the
+    /// engine, RFC 0019 clause 4). Surrogate-safe (EditorKeyActions).</summary>
     private void EditorBackspace()
     {
         var box = MessageArea;
         if (box == null) return;
-        var caret = box.CaretIndex;
-        if (caret <= 0 || string.IsNullOrEmpty(box.Text)) return;
-        box.Text = box.Text.Remove(caret - 1, 1);
-        box.CaretIndex = caret - 1;
+        var (text, caret) = Services.EditorKeyActions.Backspace(box.Text ?? "", box.CaretIndex);
+        if (text == box.Text) return;
+        box.Text = text;
+        box.CaretIndex = caret;
     }
 
     /// <summary>Caret move in the editor pane; the CaretIndexProperty handler
-    /// re-anchors the model when the text is in sync (RFC 0019 clause 3).</summary>
+    /// re-anchors the model when the text is in sync (RFC 0019 clause 3).
+    /// Surrogate-safe (EditorKeyActions).</summary>
     private void EditorMoveCaret(int delta)
     {
         var box = MessageArea;
         if (box == null) return;
-        var target = Math.Clamp(box.CaretIndex + delta, 0, (box.Text ?? "").Length);
-        if (target != box.CaretIndex)
-            box.CaretIndex = target;
+        box.CaretIndex = Services.EditorKeyActions.MoveCaret(box.Text ?? "", box.CaretIndex, delta);
     }
 
     /// <summary>
