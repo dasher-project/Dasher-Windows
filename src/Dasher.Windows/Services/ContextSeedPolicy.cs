@@ -125,7 +125,38 @@ public static class ContextSeedPolicy
         var caret = Math.Clamp(targetCaretUtf16, 0, targetFullText.Length);
         var targetToCaret = NormalizeInvisible(targetFullText[..caret]).Replace("\r", "");
         var targetAfterCaret = NormalizeInvisible(targetFullText[caret..]).Replace("\r", "");
-        for (var lag = 1; lag <= Math.Min(MaxLagChars, engineFull.Length - MinLagOverlapChars); lag++)
+
+        // Paragraph-mark mirror (Nov 2026 field evidence, builds .34/.35):
+        // a Dasher paragraph leaves the engine buffer ending "\n", and the
+        // follow-up UIA read sits BEFORE or AT the paragraph mark — Outlook's
+        // caret lands between the "\r" and "\n" of its representation, or the
+        // read predates the mark entirely, or it has fully settled. All three
+        // are the SAME text: the engine's own output IS the target's
+        // paragraph. Re-seeding from such a read strips the newline the
+        // engine just entered (buffer clear → canvas rebuild mid-zoom — the
+        // "first paragraph goes crazy, the rest are fine" report: after the
+        // strip the buffer no longer ends "\n", so later Enters compare
+        // equal and behave). Tail-anchored like the lag check so earlier
+        // field text the engine window doesn't carry cannot break it.
+        if (engineFull.EndsWith("\n", StringComparison.Ordinal))
+        {
+            var mirror = engineFull[..^1];
+            if (targetToCaret.Length >= mirror.Length &&
+                (targetToCaret.EndsWith(mirror, StringComparison.Ordinal) ||
+                 targetToCaret.EndsWith(engineFull, StringComparison.Ordinal)))
+                return ContextSeedDecision.Skip("paragraph-mark mirror — engine's newline is the target's; buffers in sync");
+        }
+
+        // Lag loop. Paragraph-aware (Nov 2026): when the engine buffer ends
+        // with its own "\n" and the target-to-caret ALREADY CONTAINS the
+        // whole buffer plus text past it, the engine is provably BEHIND
+        // (the user typed externally after our paragraph) — a coincidental
+        // engine-prefix match ("Hello my " retyped on the new line) must not
+        // read as "output not yet reflected" and swallow the real context.
+        var targetHasWholeEngine = engineFull.EndsWith("\n", StringComparison.Ordinal) &&
+                                   targetToCaret.Length > engineFull.Length &&
+                                   targetToCaret.Contains(engineFull, StringComparison.Ordinal);
+        for (var lag = 1; !targetHasWholeEngine && lag <= Math.Min(MaxLagChars, engineFull.Length - MinLagOverlapChars); lag++)
         {
             if (targetToCaret.EndsWith(engineFull[..^lag], StringComparison.Ordinal) &&
                 !targetAfterCaret.StartsWith(engineFull[^lag..], StringComparison.Ordinal))

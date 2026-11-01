@@ -284,4 +284,62 @@ public class ContextSeedPolicyTests
         Assert.Equal("", d.Text);
         Assert.Equal(0, d.CaretUtf16);
     }
+
+    // ---------------------------------------------------------------------
+    // Paragraph-mark regression (first-paragraph "crazy canvas", Nov 2026):
+    // engine emits "\n" -> VK_RETURN -> 500ms later the UIA read lands with
+    // the caret AT/before the paragraph mark while the engine buffer is the
+    // same text ending "\n". The sentence windows diverged -> re-seed
+    // stripped the just-entered newline -> buffer cleared -> canvas rebuilt
+    // mid-zoom. With gaze + auto-speed that is the runaway; with mouse, the
+    // slowdown. (Outlook keyboard_debug.log evidence, builds .34 AND .35.)
+    // ---------------------------------------------------------------------
+
+    [Fact]
+    public void Paragraph_mark_mirror_caret_before_mark_skips()
+    {
+        // Engine just entered the paragraph; Outlook's read still shows the
+        // caret BEFORE the paragraph mark (\r representation).
+        var d = ContextSeedPolicy.Decide(
+            "Hello my name is Willy!\n",
+            "Hello my name is Willy!\r\n",
+            23); // caret between the \r and the \n
+        Assert.Equal(ContextSeedAction.Skip, d.Action);
+    }
+
+    [Fact]
+    public void Paragraph_mark_mirror_read_missing_the_newline_skips()
+    {
+        // UIA lag variant: the read predates the paragraph mark entirely.
+        var d = ContextSeedPolicy.Decide(
+            "Hello my name is Willy!\n",
+            "Hello my name is Willy!",
+            23);
+        Assert.Equal(ContextSeedAction.Skip, d.Action);
+    }
+
+    [Fact]
+    public void Paragraph_mark_mirror_fully_reflected_read_skips()
+    {
+        // Settled variant: the read includes the newline and the caret sits
+        // after it, with earlier field text the engine window does not carry.
+        var d = ContextSeedPolicy.Decide(
+            "Hello my name is Willy\n",
+            "Earlier text. Hello my name is Willy\n",
+            36);
+        Assert.Equal(ContextSeedAction.Skip, d.Action);
+    }
+
+    [Fact]
+    public void Engine_paragraph_then_target_has_new_external_text_still_seeds()
+    {
+        // The user typed on their PHYSICAL keyboard after Dasher's paragraph:
+        // the read carries text the engine never emitted - a GENUINE context
+        // update (RFC 0015 tier 2). The mirror must not over-skip this.
+        var d = ContextSeedPolicy.Decide(
+            "Hello my name is Willy!\n",
+            "Hello my name is Willy!\r\nHello my &nail,",
+            34); // caret after "Hello " on the new line
+        Assert.Equal(ContextSeedAction.Seed, d.Action);
+    }
 }

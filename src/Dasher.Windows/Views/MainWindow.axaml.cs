@@ -1179,6 +1179,22 @@ public partial class MainWindow : Window
         await Task.Delay(500); // let the target's caret settle AND the user finish their word
         if (generation != _contextSeedGeneration) return; // superseded
 
+        // Paragraph-settle guard (Nov 2026 field evidence): our own VK_RETURN
+        // makes Outlook rewrite the paragraph mark and relocate its caret over
+        // the next ~second; reads in that window legitimately differ from the
+        // engine buffer, and re-seeding them resets the canvas immediately
+        // after the paragraph ("first paragraph goes crazy, the rest are
+        // fine" - the ContextSeedPolicy mirror guard catches the text-level
+        // cases; this covers the caret-position churn it cannot see).
+        const long ParagraphSettleMs = 1500;
+        if (reason == "caret moved" && _lastOwnParagraphInject != 0 &&
+            Environment.TickCount64 - _lastOwnParagraphInject < ParagraphSettleMs)
+        {
+            KbLog($"Context seed ({reason}): paragraph settle window " +
+                  $"({Environment.TickCount64 - _lastOwnParagraphInject}ms since our Enter) - skipping");
+            return;
+        }
+
         // Stale-seed guard: a queued focus event whose target was superseded
         // mid-debounce must not leak the OLD window's text — verified here at
         // seed time, right before the read ("stale focus bypasses foreground
@@ -1251,6 +1267,9 @@ public partial class MainWindow : Window
 
     private int _contextSeedGeneration;
 
+    /// <summary>TickCount64 of our last VK_RETURN injection (paragraph settle guard).</summary>
+    private long _lastOwnParagraphInject;
+
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
 
@@ -1267,7 +1286,13 @@ public partial class MainWindow : Window
             // across a paragraph eat the last character of the preceding
             // word — the build .24 "messes up the previous word" report.
             if (c == '\n' || c == '\r')
+            {
+                // Paragraph-settle guard timestamp (see SeedContextFromTargetAsync):
+                // our Enter makes Outlook rewrite the paragraph mark and relocate
+                // its caret for the next ~second.
+                _lastOwnParagraphInject = Environment.TickCount64;
                 SendVirtualKey(VK_RETURN);
+            }
             else
                 SendUnicodeChar(c);
         }
