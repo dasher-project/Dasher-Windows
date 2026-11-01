@@ -68,8 +68,6 @@ public class LocKeyCoverageTests
             foreach (var m in cs.Matches(content))
                 Check(((Match)m).Groups[1].Value);
 
-            continue;
-
             void Check(string key)
             {
                 checkedCount++;
