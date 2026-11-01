@@ -140,7 +140,7 @@
     <value>منسوخة إلى الحافظة.</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>[ترجمة المصطلح: Copy]</value>
+    <value>نسخ</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>نسخ الكل</value>
@@ -512,7 +512,7 @@
     <value>في نظام visionOS، اضغط بإصبعين على لوحة الرسم لبدء الكتابة، وانظر حولك أثناء الضغط للتوجيه، ثم ارفع إصبعيك للتوقف مؤقتًا. نموذج الإدخال هو الضغط والنظر.</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>مصدر مفتوح</value>
+    <value>افتح</value>
   </data>
   <data name="open_2" xml:space="preserve">
     <value>يفتح...</value>
@@ -647,7 +647,7 @@
     <value>أعد المحاولة</value>
   </data>
   <data name="save" xml:space="preserve">
-    <value>[ترجمة المصطلح: Save]</value>
+    <value>حفظ</value>
   </data>
   <data name="save_2" xml:space="preserve">
     <value>يحفظ...</value>

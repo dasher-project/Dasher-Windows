@@ -137,7 +137,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Knyp gekopiëerde aan knipbord</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>Kopie</value>
+    <value>Kopieer</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>kopieer alles</value>
@@ -644,7 +644,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Herprobeer</value>
   </data>
   <data name="save" xml:space="preserve">
-    <value>Laai af</value>
+    <value>Stoor</value>
   </data>
   <data name="save_2" xml:space="preserve">
     <value>Stoor...</value>

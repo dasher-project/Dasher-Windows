@@ -467,7 +467,7 @@ Puedes cambiar esta configuración en cualquier momento en Ajustes &gt; Privacid
     <value>Mueve los ojos mientras pellizcas para dirigir.</value>
   </data>
   <data name="new" xml:space="preserve">
-    <value>Noticia</value>
+    <value>Nuevo</value>
   </data>
   <data name="new_document" xml:space="preserve">
     <value>Nuevo documento</value>
@@ -539,7 +539,7 @@ Puedes cambiar esta configuración en cualquier momento en Ajustes &gt; Privacid
     <value>Posición del panel</value>
   </data>
   <data name="paste" xml:space="preserve">
-    <value>Pasta</value>
+    <value>Pegar</value>
   </data>
   <data name="pause" xml:space="preserve">
     <value>Pausa</value>

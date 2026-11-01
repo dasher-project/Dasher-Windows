@@ -503,7 +503,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Su visionOS, pizzica e tieni premuta l'area di disegno per iniziare a scrivere, guardati intorno mentre pizzichi per sterzare e rilascia per mettere in pausa. Il modello di input è pizzica e guarda.</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>Aprire</value>
+    <value>Apri</value>
   </data>
   <data name="open_2" xml:space="preserve">
     <value>Aprire...</value>
@@ -539,7 +539,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Posizione del pane</value>
   </data>
   <data name="paste" xml:space="preserve">
-    <value>Impasto</value>
+    <value>Incolla</value>
   </data>
   <data name="pause" xml:space="preserve">
     <value>Pausa</value>

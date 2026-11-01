@@ -137,7 +137,7 @@
     <value>क्लिपबोर्ड पर कॉपी कर लिया गया है</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>नाम पर्ची</value>
+    <value>कॉपी करें</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>सभी को कॉपी करें</value>
@@ -476,7 +476,7 @@
     <value>स्टीयरिंग के लिए पिंच करते समय अपनी आंखें हिलाएं।</value>
   </data>
   <data name="new" xml:space="preserve">
-    <value>मेव</value>
+    <value>नया</value>
   </data>
   <data name="new_document" xml:space="preserve">
     <value>नया दस्तावेज़</value>

@@ -137,7 +137,7 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
     <value>Skopiowano do schowka.</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>Kopia</value>
+    <value>Kopiuj</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>Kopiuj wszystko</value>
@@ -506,7 +506,7 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
     <value>W systemie VisionOS wystarczy szczypnąć i przytrzymać obszar roboczy, aby rozpocząć pisanie, rozglądać się, jednocześnie szczypając, aby sterować, i puścić, aby wstrzymać. Model wprowadzania danych to „szczypnięcie i spojrzenie”.</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>Otwarte</value>
+    <value>Otwórz</value>
   </data>
   <data name="open_2" xml:space="preserve">
     <value>Otwarte...</value>
@@ -542,7 +542,7 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
     <value>Pozycja panelu</value>
   </data>
   <data name="paste" xml:space="preserve">
-    <value>Pasta</value>
+    <value>Wklej</value>
   </data>
   <data name="pause" xml:space="preserve">
     <value>Pauza</value>
@@ -641,7 +641,7 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
     <value>Spróbować ponownie</value>
   </data>
   <data name="save" xml:space="preserve">
-    <value>Ratować</value>
+    <value>Zapisz</value>
   </data>
   <data name="save_2" xml:space="preserve">
     <value>Ratować...</value>

@@ -137,7 +137,7 @@
     <value>คัดลอกไปยังคลิปบอร์ดแล้ว</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>สำเนา</value>
+    <value>คัดลอก</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>คัดลอกทั้งหมด</value>
@@ -548,7 +548,7 @@
     <value>ตำแหน่งแผง</value>
   </data>
   <data name="paste" xml:space="preserve">
-    <value>แปะ</value>
+    <value>วาง</value>
   </data>
   <data name="pause" xml:space="preserve">
     <value>หยุดชั่วคราว</value>

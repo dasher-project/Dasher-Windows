@@ -137,7 +137,7 @@
     <value>Скопировано в буфер обмена.</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>Копия</value>
+    <value>Копировать</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>Скопировать все</value>
@@ -641,7 +641,7 @@
     <value>Повторить попытку</value>
   </data>
   <data name="save" xml:space="preserve">
-    <value>Сохранять</value>
+    <value>Сохранить</value>
   </data>
   <data name="save_2" xml:space="preserve">
     <value>Сохранять...</value>

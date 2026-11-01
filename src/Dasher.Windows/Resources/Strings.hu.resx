@@ -503,7 +503,7 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
     <value>VisionOS rendszeren a vásznon tartva csippentsd az ujjad az írás megkezdéséhez, körülnézz csippentés közben az irányításhoz, majd engedd el a szüneteltetéshez. A beviteli modell csippentéses és nézési.</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>Nyitva</value>
+    <value>Megnyitás</value>
   </data>
   <data name="open_2" xml:space="preserve">
     <value>Nyitott...</value>
@@ -536,7 +536,7 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
     <value>Panel pozíció</value>
   </data>
   <data name="paste" xml:space="preserve">
-    <value>Paszta</value>
+    <value>Beillesztés</value>
   </data>
   <data name="pause" xml:space="preserve">
     <value>Szünet</value>

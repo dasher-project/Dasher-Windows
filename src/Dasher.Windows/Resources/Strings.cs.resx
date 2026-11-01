@@ -134,7 +134,7 @@ Toto můžete kdykoliv změnit v Nastavení &gt; Soukromí.</value>
     <value>Zkopírováno do schránky</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>Kopírování</value>
+    <value>Kopírovat</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>Kopírovat vše</value>
@@ -536,7 +536,7 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
     <value>Pozice panelu</value>
   </data>
   <data name="paste" xml:space="preserve">
-    <value>Pasta</value>
+    <value>Vložit</value>
   </data>
   <data name="pause" xml:space="preserve">
     <value>Pauza</value>

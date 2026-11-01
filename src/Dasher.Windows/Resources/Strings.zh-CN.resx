@@ -473,7 +473,7 @@
     <value>移动眼睛，同时捏住转向</value>
   </data>
   <data name="new" xml:space="preserve">
-    <value>新的</value>
+    <value>新建</value>
   </data>
   <data name="new_document" xml:space="preserve">
     <value>新文档</value>
@@ -644,7 +644,7 @@
     <value>重试</value>
   </data>
   <data name="save" xml:space="preserve">
-    <value>节省</value>
+    <value>保存</value>
   </data>
   <data name="save_2" xml:space="preserve">
     <value>节省...</value>

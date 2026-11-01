@@ -137,7 +137,7 @@
     <value>கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது.</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>நகல்</value>
+    <value>நகலெடு</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>அனைத்தையும் நகலெடுக்கவும்</value>
@@ -512,7 +512,7 @@
     <value>விஷன்ஓஎஸ்-இல், எழுதத் தொடங்க கேன்வாஸில் விரல்களைப் பிடித்து அழுத்திப் பிடிக்கவும்; விரல்களைப் பிடித்தவாறே சுற்றிலும் பார்த்து வழிநடத்தவும்; பின்னர் விடுவிப்பதன் மூலம் இடைநிறுத்தவும். உள்ளீட்டு முறை, விரல்களைப் பிடித்துப் பார்க்கும் வகையிலானது.</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>திறந்த</value>
+    <value>திற</value>
   </data>
   <data name="open_2" xml:space="preserve">
     <value>திற...</value>
@@ -548,7 +548,7 @@
     <value>பேன் நிலை</value>
   </data>
   <data name="paste" xml:space="preserve">
-    <value>பசை</value>
+    <value>ஒட்டு</value>
   </data>
   <data name="pause" xml:space="preserve">
     <value>இடைநிறுத்தம்</value>

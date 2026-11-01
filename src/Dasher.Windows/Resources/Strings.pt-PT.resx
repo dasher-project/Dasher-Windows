@@ -137,7 +137,7 @@ Pode alterar isto a qualquer momento em Definições &gt; Privacidade.</value>
     <value>Copiado para a área de transferência.</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>Cópia</value>
+    <value>Copiar</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>Copiar tudo</value>
@@ -506,7 +506,7 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
     <value>No visionOS, faça um gesto de pinça na tela para começar a escrever, olhe ao redor enquanto mantém o gesto de pinça pressionado para direcionar a escrita e solte para pausar. O modelo de entrada é de pinça e olhar.</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>Aberto</value>
+    <value>Abrir</value>
   </data>
   <data name="open_2" xml:space="preserve">
     <value>Abrir...</value>

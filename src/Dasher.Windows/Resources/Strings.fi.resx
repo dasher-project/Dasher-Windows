@@ -137,7 +137,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Kopioitu leikepöydälle</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>Kopio</value>
+    <value>Kopioi</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>Kopioi kaikki</value>
@@ -506,7 +506,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>VisionOS-käyttöjärjestelmässä nipistä ja pidä sormea pohjalla aloittaaksesi kirjoittamisen, katso ympärillesi nipistämällä ohjataksesi ja vapauta sormi keskeyttääksesi kirjoittamisen. Syöttömalli on nipistämällä-ja-katsomalla-tyyppinen.</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>Auki</value>
+    <value>Avaa</value>
   </data>
   <data name="open_2" xml:space="preserve">
     <value>Avata...</value>

@@ -131,7 +131,7 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
     <value>In die Zwischenablage kopiert.</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>Ausfertigung</value>
+    <value>Kopieren</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>Alles kopieren</value>
@@ -494,7 +494,7 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
     <value>Drücken Sie unter visionOS die Leinwand zusammen und halten Sie sie gedrückt, um mit dem Schreiben zu beginnen. Schauen Sie sich um, während Sie zusammenziehen, um zu steuern, und lassen Sie sie los, um zu pausieren. Das Eingabemodell ist Pinch-and-Look.</value>
   </data>
   <data name="open" xml:space="preserve">
-    <value>auf</value>
+    <value>Öffnen</value>
   </data>
   <data name="open_2" xml:space="preserve">
     <value>Offen...</value>
