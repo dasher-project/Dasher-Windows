@@ -366,7 +366,7 @@ public partial class MainWindow : Window
 
         // RFC 0018: the overlay ships visible in the AXAML so the first
         // rendered frame is already themed + occupied. Localise it now.
-        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher");
+        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher…");
 
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var dataDir = Path.Combine(appData, "Dasher");
@@ -1705,11 +1705,11 @@ public partial class MainWindow : Window
 
             TxtModeLabel.Text = position switch
             {
-                PanePosition.Right => "Right side",
-                PanePosition.Left => "Left side",
-                PanePosition.Bottom => "Bottom",
-                PanePosition.Top => "Top",
-                _ => "Right side",
+                PanePosition.Right => Services.Loc.Tr("layout_right"),
+                PanePosition.Left => Services.Loc.Tr("layout_left"),
+                PanePosition.Bottom => Services.Loc.Tr("layout_bottom"),
+                PanePosition.Top => Services.Loc.Tr("layout_top"),
+                _ => Services.Loc.Tr("layout_right"),
             };
             ModeIcon.Kind = position switch
             {
@@ -1994,7 +1994,7 @@ public partial class MainWindow : Window
 
         // RFC 0018: engine restart is startup-blocking work — show the
         // loading overlay while it runs off the UI thread.
-        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher");
+        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher…");
         StartupOverlayText.IsVisible = true;
         StartupOverlayError.IsVisible = false;
         StartupOverlay.IsVisible = true;
@@ -2552,7 +2552,7 @@ public partial class MainWindow : Window
                 _gameModeActive = true;
                 NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 0);
                 GameIcon.Kind = LucideIconKind.Pause;
-                Services.Loc.Tr("leave");
+                TxtGameLabel.Text = Services.Loc.Tr("leave");
                 var gameBar = this.FindControl<Border>("GameTargetBar");
                 if (gameBar != null) gameBar.IsVisible = true;
             }
