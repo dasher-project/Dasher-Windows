@@ -284,4 +284,84 @@ public class ContextSeedPolicyTests
         Assert.Equal("", d.Text);
         Assert.Equal(0, d.CaretUtf16);
     }
+
+    // ---------------------------------------------------------------------
+    // Paragraph-mark regression (first-paragraph "crazy canvas", Nov 2026):
+    // engine emits "\n" -> VK_RETURN -> 500ms later the UIA read lands with
+    // the caret AT/before the paragraph mark while the engine buffer is the
+    // same text ending "\n". The sentence windows diverged -> re-seed
+    // stripped the just-entered newline -> buffer cleared -> canvas rebuilt
+    // mid-zoom. With gaze + auto-speed that is the runaway; with mouse, the
+    // slowdown. (Outlook keyboard_debug.log evidence, builds .34 AND .35.)
+    // ---------------------------------------------------------------------
+
+    [Fact]
+    public void Paragraph_mark_mirror_caret_before_mark_skips()
+    {
+        // Engine just entered the paragraph; Outlook's read still shows the
+        // caret BEFORE the paragraph mark (\r representation).
+        var d = ContextSeedPolicy.Decide(
+            "Hello my name is Willy!\n",
+            "Hello my name is Willy!\r\n",
+            23); // caret before the \r (24 would be between \r and \n)
+        Assert.Equal(ContextSeedAction.Skip, d.Action);
+    }
+
+    [Fact]
+    public void Paragraph_mark_mirror_read_missing_the_newline_skips()
+    {
+        // UIA lag variant: the read predates the paragraph mark entirely.
+        var d = ContextSeedPolicy.Decide(
+            "Hello my name is Willy!\n",
+            "Hello my name is Willy!",
+            23);
+        Assert.Equal(ContextSeedAction.Skip, d.Action);
+    }
+
+    [Fact]
+    public void Paragraph_mark_mirror_fully_reflected_read_skips()
+    {
+        // BEFORE the mark (caret 36 of 37): the mirror itself.
+        var before = ContextSeedPolicy.Decide(
+            "Hello my name is Willy\n",
+            "Earlier text. Hello my name is Willy\n",
+            36);
+        Assert.Equal(ContextSeedAction.Skip, before.Action);
+
+        // AFTER the settled mark (caret 37): NOT the mirror — covered by the
+        // sentence-equal branch (caret right after a boundary trims to "" on
+        // both sides). Pinned here so a refactor of either branch cannot
+        // silently unskip the settled state (review loop 2).
+        var after = ContextSeedPolicy.Decide(
+            "Hello my name is Willy\n",
+            "Earlier text. Hello my name is Willy\n",
+            37);
+        Assert.Equal(ContextSeedAction.Skip, after.Action);
+    }
+
+    [Fact]
+    public void Target_has_whole_engine_plus_external_text_seeds_lag_disabler()
+    {
+        // The user typed on their PHYSICAL keyboard after Dasher's paragraph:
+        // the read carries text the engine never emitted - a GENUINE context
+        // update (RFC 0015 tier 2). The mirror must not over-skip this.
+        var d = ContextSeedPolicy.Decide(
+            "Hello my name is Willy!\n",
+            "Hello my name is Willy!\r\nHello my &nail,",
+            34); // caret after "Hello " on the new line
+        Assert.Equal(ContextSeedAction.Seed, d.Action);
+    }
+
+    [Fact]
+    public void Engine_buffer_of_just_a_newline_does_not_lock_the_policy()
+    {
+        // Review loop 1 P1: Enter as the FIRST Dasher output leaves the
+        // buffer exactly "\n" - an empty mirror, and EndsWith("") is
+        // trivially true. Without the Length > 1 conjunct the mirror would
+        // skip EVERY read in that state, forever, including the manual
+        // re-anchor escape hatch (the greptile-P1 class MinLagOverlapChars
+        // documents: zero overlap is not evidence of the same text).
+        var d = ContextSeedPolicy.Decide("\n", "Banana", 6);
+        Assert.Equal(ContextSeedAction.Seed, d.Action);
+    }
 }
