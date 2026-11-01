@@ -36,7 +36,7 @@
     <value>Aiutaci a migliorare Dasher</value>
   </data>
   <data name="analytics_body" xml:space="preserve">
-    <value>Share anonymous usage analytics and crash reports? No typed text, clipboard contents or personal information is ever collected. You can change this any time in Settings.</value>
+    <value>Condividere analisi sull'uso e rapporti di crash anonimi? Non vengono mai raccolti testi digitati, contenuti degli appunti o informazioni personali. Puoi modificare questa impostazione in qualsiasi momento nelle Impostazioni.</value>
   </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>Non adesso</value>
@@ -45,7 +45,7 @@
     <value>Condividi analisi anonime e segnalazioni di arresti anomali</value>
   </data>
   <data name="analytics_rationale" xml:space="preserve">
-    <value>Dasher raccoglie analisi anonime e rispettose della privacy per comprendere i modelli di utilizzo e correggere gli arresti anomali. Nessun testo digitato, contenuto degli appunti o informazione personale viene mai raccolto.
+    <value>Dasher raccoglie analisi anonime nel rispetto della privacy per comprendere i modelli di utilizzo e correggere gli arresti anomali. Non vengono mai raccolti testi digitati, contenuti degli appunti o informazioni personali.
 
 Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Privacy.</value>
   </data>
@@ -53,7 +53,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Reimposta ID analisi</value>
   </data>
   <data name="analytics_settings_help" xml:space="preserve">
-    <value>Dasher raccoglie analisi anonime sull'utilizzo e rapporti sugli arresti anomali per comprendere come viene utilizzata l'app e correggere i bug. Nessun testo digitato, contenuto degli appunti o informazione personale viene mai raccolto.</value>
+    <value>Dasher raccoglie analisi sull'utilizzo anonime e rapporti di crash per capire come viene utilizzata l'app e per correggere i bug. Non vengono mai raccolti testi digitati, contenuti degli appunti o informazioni personali.</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Analisi dell'utilizzo anonimo</value>
@@ -65,16 +65,16 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Permanenza a livello di app per selezionare</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
-    <value>Left</value>
+    <value>Sinistra</value>
   </data>
   <data name="arrow_left_tooltip" xml:space="preserve">
-    <value>Move caret left (hold to repeat)</value>
+    <value>Sposta il cursore a sinistra (tieni premuto per ripetere)</value>
   </data>
   <data name="arrow_right_label" xml:space="preserve">
-    <value>Right</value>
+    <value>Giusto</value>
   </data>
   <data name="arrow_right_tooltip" xml:space="preserve">
-    <value>Move caret right (hold to repeat)</value>
+    <value>Sposta il cursore a destra (tieni premuto per ripetere)</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Obiettivo centrato automaticamente</value>
@@ -86,13 +86,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Seleziona automaticamente dopo aver fissato lo sguardo mentre pizzichi. Abilitalo solo se la permanenza del sistema operativo è disattivata.</value>
   </data>
   <data name="back" xml:space="preserve">
-    <value>Back</value>
+    <value>Indietro</value>
   </data>
   <data name="backspace_label" xml:space="preserve">
-    <value>Del</value>
+    <value>del</value>
   </data>
   <data name="backspace_tooltip" xml:space="preserve">
-    <value>Delete (hold to repeat)</value>
+    <value>Elimina (tieni premuto per ripetere)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Cancellare</value>
@@ -116,19 +116,19 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Vicino</value>
   </data>
   <data name="close_settings" xml:space="preserve">
-    <value>Close settings</value>
+    <value>Chiudi impostazioni</value>
   </data>
   <data name="colour_theme" xml:space="preserve">
     <value>Tema del colore</value>
   </data>
   <data name="control" xml:space="preserve">
-    <value>Control</value>
+    <value>Controllo</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
-    <value>Control mode: enabled</value>
+    <value>Modalità di controllo: abilitata</value>
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
-    <value>Control mode</value>
+    <value>Modalità di controllo</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Copiato negli appunti.</value>
@@ -143,31 +143,31 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Copia tutto</value>
   </data>
   <data name="copy_all_clipboard" xml:space="preserve">
-    <value>Copy all (to clipboard)</value>
+    <value>Copia tutto (negli appunti)</value>
   </data>
   <data name="copy_commands" xml:space="preserve">
     <value>Copia comandi</value>
   </data>
   <data name="copy_selection" xml:space="preserve">
-    <value>Copy selection</value>
+    <value>Copia selezione</value>
   </data>
   <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
-    <value>Could not load the file into the engine</value>
+    <value>Impossibile caricare il file nel motore</value>
   </data>
   <data name="could_not_open_the_selected_file" xml:space="preserve">
-    <value>Could not open the selected file.</value>
+    <value>Impossibile aprire il file selezionato.</value>
   </data>
   <data name="could_not_read_the_selected_file" xml:space="preserve">
-    <value>Could not read the selected file.</value>
+    <value>Impossibile leggere il file selezionato.</value>
   </data>
   <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
-    <value>Could not sync your edit with the engine — it may be overwritten</value>
+    <value>Impossibile sincronizzare la tua modifica con il motore — potrebbe essere sovrascritta</value>
   </data>
   <data name="could_not_write_the_export_file" xml:space="preserve">
-    <value>Could not write the export file.</value>
+    <value>Impossibile scrivere il file di esportazione.</value>
   </data>
   <data name="could_not_write_the_training_data" xml:space="preserve">
-    <value>Could not write the training data.</value>
+    <value>Impossibile scrivere i dati di addestramento.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Calibrazione corrente</value>
@@ -182,19 +182,19 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Dasher</value>
   </data>
   <data name="dasher5_config_found" xml:space="preserve">
-    <value>We found your Dasher 5 configuration</value>
+    <value>Abbiamo trovato la tua configurazione Dasher 5</value>
   </data>
   <data name="dasher5_import" xml:space="preserve">
     <value>Dasher 5 Import</value>
   </data>
   <data name="dasher5_import_prompt" xml:space="preserve">
-    <value>Would you like to import these settings into Dasher 6?</value>
+    <value>Vuoi importare queste impostazioni in Dasher 6?</value>
   </data>
   <data name="dasher5_no_data" xml:space="preserve">
-    <value>No Dasher 5 data found on this computer.</value>
+    <value>Nessun dato di Dasher 5 trovato su questo computer.</value>
   </data>
   <data name="dasher5_settings_found" xml:space="preserve">
-    <value>Dasher 5 settings found</value>
+    <value>Impostazioni Dasher 5 trovate</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>Dati Dasher 5 rilevati su questo Mac.</value>
@@ -214,7 +214,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
 Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Privacy.</value>
   </data>
   <data name="dasher_engine_error" xml:space="preserve">
-    <value>Dasher Engine Error</value>
+    <value>Errore del motore Dasher</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>Tastiera Dasher</value>
@@ -251,7 +251,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Fatto</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
-    <value>Hover in one spot to trigger a click, instead of pressing a button or switch.</value>
+    <value>Passa il mouse su un punto fermo per attivare un clic, invece di premere un pulsante o un interruttore.</value>
   </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Sosta per cliccare</value>
@@ -263,16 +263,16 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Abilitare prima l'input dell'inclinazione per accedere alla calibrazione.</value>
   </data>
   <data name="engine_error" xml:space="preserve">
-    <value>Engine Error</value>
+    <value>Errore del motore</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
-    <value>The Dasher engine encountered an internal error and has stopped. Please restart Dasher.</value>
+    <value>Il motore Dasher ha riscontrato un errore interno e si è fermato. Si prega di riavviare Dasher.</value>
   </data>
   <data name="engine_speech_features" xml:space="preserve">
-    <value>Engine Speech Features</value>
+    <value>Funzionalità di sintesi vocale del motore</value>
   </data>
   <data name="exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Uscita</value>
   </data>
   <data name="export_training_text" xml:space="preserve">
     <value>Esporta testo di formazione</value>
@@ -281,10 +281,10 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Sguardo degli occhi</value>
   </data>
   <data name="eye_tracker_device" xml:space="preserve">
-    <value>Eye Tracker Device</value>
+    <value>Dispositivo di tracciamento oculare</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
-    <value>Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.</value>
+    <value>Registro dettagliato delle segnalazioni di bug (righe per campione, scritte in eyegaze.log nella cartella Dasher). Gli eventi di connessione di base vengono sempre registrati.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>Impossibile aprire:</value>
@@ -296,7 +296,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Veloce</value>
   </data>
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
-    <value>File truncated at 4 MB — only the first part is loaded</value>
+    <value>File troncato a 4 MB — viene caricata solo la prima parte</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Per rendere fluttuante la tastiera, consenti a Dasher di essere visualizzato sopra altre app, quindi tocca di nuovo Float.</value>
@@ -314,13 +314,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>File di testo del gioco</value>
   </data>
   <data name="gaze_filter_help" xml:space="preserve">
-    <value>Reduces zoom toward wrong positions while your eyes move to a target</value>
+    <value>Riduce lo zoom verso posizioni sbagliate mentre i tuoi occhi si muovono verso un obiettivo</value>
   </data>
   <data name="gaze_filter_label" xml:space="preserve">
-    <value>Filter gaze (reduces zoom toward wrong positions during eye transit)</value>
+    <value>Filtra lo sguardo (riduce lo zoom verso posizioni errate durante il transito oculare)</value>
   </data>
   <data name="gaze_smoothing" xml:space="preserve">
-    <value>Gaze Smoothing</value>
+    <value>Ammorbidimento dello sguardo</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>Fatto</value>
@@ -341,10 +341,10 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Importa testo di formazione</value>
   </data>
   <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
-    <value>Imported %1 — applies fully on next launch</value>
+    <value>Importato %1 — si applicherà completamente al prossimo avvio</value>
   </data>
   <data name="imported_1_of_training_text" xml:space="preserve">
-    <value>Imported %1 of training text</value>
+    <value>Importato %1 di testo di addestramento</value>
   </data>
   <data name="increase_speed" xml:space="preserve">
     <value>Aumenta la velocità</value>
@@ -365,7 +365,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Tocca (trascina sulla tela)</value>
   </data>
   <data name="input_processing" xml:space="preserve">
-    <value>Input Processing</value>
+    <value>Elaborazione dell'input</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Installa ydotool per utilizzare la modalità tastiera&lt;/b&gt;</value>
@@ -374,13 +374,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>non è installato. Esegui questi comandi, quindi premi Riprova:</value>
   </data>
   <data name="keyboard" xml:space="preserve">
-    <value>Keyboard</value>
+    <value>Tastiera</value>
   </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>_Tastiera</value>
   </data>
   <data name="keyboard_mode_description" xml:space="preserve">
-    <value>Type Dasher's output straight into the app you are pointing at</value>
+    <value>Digita l'output di Dasher direttamente nell'app a cui stai puntando</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Esci dalla modalità tastiera</value>
@@ -392,7 +392,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>opacità modalità tastiera</value>
   </data>
   <data name="keyboard_mode_stopped" xml:space="preserve">
-    <value>Keyboard mode stopped</value>
+    <value>Modalità tastiera interrotta</value>
   </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>Modalità tastiera interrotta: ydotool non è riuscito a iniettare il testo. È ydotool</value>
@@ -401,13 +401,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Attiva la modalità tastiera</value>
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
-    <value>Window transparency when in Keyboard/Direct mode</value>
+    <value>Trasparenza della finestra in modalità Tastiera/Diretta</value>
   </data>
   <data name="language" xml:space="preserve">
-    <value>Language</value>
+    <value>Lingua</value>
   </data>
   <data name="language_locale" xml:space="preserve">
-    <value>Language / Locale</value>
+    <value>Lingua / Area geografica</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Lingua / Localizzazione&lt;/b&gt;</value>
@@ -434,7 +434,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Apprendimento</value>
   </data>
   <data name="leave" xml:space="preserve">
-    <value>Leave</value>
+    <value>Lascia</value>
   </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>Esci dalla modalità di gioco</value>
@@ -443,13 +443,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Leggero</value>
   </data>
   <data name="load_voices" xml:space="preserve">
-    <value>Load Voices</value>
+    <value>Carica voci</value>
   </data>
   <data name="loaded_1_characters" xml:space="preserve">
-    <value>Loaded %1 characters</value>
+    <value>Caricati %1 caratteri</value>
   </data>
   <data name="loading" xml:space="preserve">
-    <value>Loading…</value>
+    <value>Caricamento…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>Lingua</value>
@@ -461,10 +461,10 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Migrazione</value>
   </data>
   <data name="more" xml:space="preserve">
-    <value>More</value>
+    <value>Altro</value>
   </data>
   <data name="more_options" xml:space="preserve">
-    <value>More options</value>
+    <value>Altre opzioni</value>
   </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>Muovi gli occhi mentre pizzichi per sterzare</value>
@@ -473,7 +473,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Nuovo</value>
   </data>
   <data name="new_document" xml:space="preserve">
-    <value>New document</value>
+    <value>Nuovo documento</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>Nuovo messaggio</value>
@@ -488,10 +488,10 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Nessuna impostazione disponibile per questa sezione.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
-    <value>No training data to export yet</value>
+    <value>Ancora nessun dato di addestramento da esportare</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
-    <value>No user training data yet</value>
+    <value>Ancora nessun dato di addestramento dell'utente</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Niente da salvare</value>
@@ -527,7 +527,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Produzione</value>
   </data>
   <data name="output_font" xml:space="preserve">
-    <value>Output Font</value>
+    <value>Carattere di uscita</value>
   </data>
   <data name="output_font_size" xml:space="preserve">
     <value>Dimensione carattere di output</value>
@@ -536,7 +536,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Tocca la tela per iniziare a scrivere.</value>
   </data>
   <data name="pane_position" xml:space="preserve">
-    <value>Pane position</value>
+    <value>Posizione del pane</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>Impasto</value>
@@ -554,10 +554,10 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Pizzica e guarda per scrivere</value>
   </data>
   <data name="pitch" xml:space="preserve">
-    <value>Pitch</value>
+    <value>Tono</value>
   </data>
   <data name="play" xml:space="preserve">
-    <value>Game</value>
+    <value>Gioco</value>
   </data>
   <data name="play_2" xml:space="preserve">
     <value>Giocare</value>
@@ -566,7 +566,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Ingresso al passaggio del puntatore</value>
   </data>
   <data name="preferences" xml:space="preserve">
-    <value>Preferences</value>
+    <value>Preferenze</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Preferenze</value>
@@ -575,13 +575,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Preparazione di Dasher…</value>
   </data>
   <data name="preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Anteprima</value>
   </data>
   <data name="quick_speak" xml:space="preserve">
-    <value>Quick speak</value>
+    <value>Parla veloce</value>
   </data>
   <data name="rate" xml:space="preserve">
-    <value>Rate</value>
+    <value>Tasso</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Reimportare da Dasher 5</value>
@@ -617,10 +617,10 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Reimpostare i dati di allenamento?</value>
   </data>
   <data name="reset_wpm_averages" xml:space="preserve">
-    <value>Reset WPM averages</value>
+    <value>Reimposta le medie WPM</value>
   </data>
   <data name="restarting_engine" xml:space="preserve">
-    <value>Restarting engine…</value>
+    <value>Riavvio del motore…</value>
   </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>Ripristina tutte le impostazioni di Dasher ai valori predefiniti. Questa operazione non può essere annullata.</value>
@@ -635,13 +635,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Salva...</value>
   </data>
   <data name="save_eye_tracker_diagnostics" xml:space="preserve">
-    <value>Save eye-tracker diagnostics</value>
+    <value>Salva la diagnostica dell'eye-tracker</value>
   </data>
   <data name="save_failed" xml:space="preserve">
     <value>Salvataggio non riuscito</value>
   </data>
   <data name="save_file" xml:space="preserve">
-    <value>Save file</value>
+    <value>Salva file</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>Salva il file di testo</value>
@@ -656,7 +656,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Velocità di scansione</value>
   </data>
   <data name="selection_method" xml:space="preserve">
-    <value>Selection Method</value>
+    <value>Metodo di selezione</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>Impostazioni</value>
@@ -683,7 +683,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Mostra la sovrapposizione di debug dell'input</value>
   </data>
   <data name="show_status_bar" xml:space="preserve">
-    <value>Show status bar</value>
+    <value>Mostra barra di stato</value>
   </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>Mostra velocità di digitazione (WPM)</value>
@@ -698,10 +698,10 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Lento</value>
   </data>
   <data name="speak_on_stop" xml:space="preserve">
-    <value>Speak on stop</value>
+    <value>Parla sulla fermata</value>
   </data>
   <data name="speak_words" xml:space="preserve">
-    <value>Speak words</value>
+    <value>Parla parole</value>
   </data>
   <data name="speech" xml:space="preserve">
     <value>Discorso</value>
@@ -713,13 +713,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Continua il discorso</value>
   </data>
   <data name="speech_settings" xml:space="preserve">
-    <value>Speech Settings</value>
+    <value>Impostazioni della voce</value>
   </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;Impostazioni vocali&lt;/b&gt;</value>
   </data>
   <data name="speech_volume" xml:space="preserve">
-    <value>Speech volume</value>
+    <value>Volume del discorso</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>Velocità</value>
@@ -734,13 +734,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Ricominciare da capo</value>
   </data>
   <data name="steering_method" xml:space="preserve">
-    <value>Steering Method</value>
+    <value>Metodo di sterzo</value>
   </data>
   <data name="stop" xml:space="preserve">
     <value>Fermare</value>
   </data>
   <data name="stop_speaking" xml:space="preserve">
-    <value>Stop speaking</value>
+    <value>Smetti di parlare</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Sistema</value>
@@ -752,19 +752,19 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>File di testo</value>
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
-    <value>That file already is your training data.</value>
+    <value>Quel file è già il tuo set di dati di addestramento.</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>La sovrapposizione di debug disegna un pannello verde in alto a sinistra dell'area di disegno che mostra i conteggi degli eventi touch in tempo reale e l'ultimo riportato (x, y). Quando pizzichi e tieni premuto, dovresti vedere touch.began quindi touch.moved con le coordinate che cambiano mentre ti guardi intorno.</value>
   </data>
   <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
-    <value>The file is too large (over 10 MB) to import as training text.</value>
+    <value>Il file è troppo grande (oltre 10 MB) per essere importato come testo di addestramento.</value>
   </data>
   <data name="the_selected_file_is_empty" xml:space="preserve">
-    <value>The selected file is empty.</value>
+    <value>Il file selezionato è vuoto.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
-    <value>This deletes your accumulated training data for every alphabet. Predictions keep the influence of very recent typing.</value>
+    <value>Questo elimina i dati di addestramento accumulati per ogni alfabeto. Le previsioni mantengono l'influenza della digitazione molto recente.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>In questo modo verranno eliminati i dati di allenamento accumulati. Il modello linguistico tornerà alle impostazioni predefinite integrate al prossimo avvio. Questa operazione non può essere annullata.</value>
@@ -779,28 +779,28 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Inclina il tuo dispositivo per tutta la sua gamma di movimento durante la calibrazione.</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
-    <value>Toggle control mode</value>
+    <value>Attiva modalità di controllo</value>
   </data>
   <data name="toggle_game_mode" xml:space="preserve">
-    <value>Toggle game mode</value>
+    <value>Attiva/disattiva modalità di gioco</value>
   </data>
   <data name="toggle_keyboard_mode" xml:space="preserve">
-    <value>Toggle keyboard mode</value>
+    <value>Attiva/disattiva modalità tastiera</value>
   </data>
   <data name="toggle_pane_position" xml:space="preserve">
-    <value>Toggle pane position</value>
+    <value>Attiva/disattiva la posizione del riquadro</value>
   </data>
   <data name="toggle_status_bar" xml:space="preserve">
-    <value>Hide/show status bar</value>
+    <value>Mostra/nascondi la barra di stato</value>
   </data>
   <data name="toolbar_copy_description" xml:space="preserve">
-    <value>Copy all text</value>
+    <value>Copia tutto il testo</value>
   </data>
   <data name="toolbar_cut_description" xml:space="preserve">
-    <value>Cut selection in target app</value>
+    <value>Taglia selezione nell'app di destinazione</value>
   </data>
   <data name="toolbar_game_description" xml:space="preserve">
-    <value>Start game mode</value>
+    <value>Avvia modalità di gioco</value>
   </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>Uscita nuova/chiara</value>
@@ -809,19 +809,19 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Apri il file</value>
   </data>
   <data name="toolbar_paste_description" xml:space="preserve">
-    <value>Paste into target app</value>
+    <value>Incolla nell'app di destinazione</value>
   </data>
   <data name="toolbar_reanchor_description" xml:space="preserve">
-    <value>Re-anchor predictions to the caret (read the sentence around your cursor)</value>
+    <value>Ricollega le previsioni al cursore (leggi la frase intorno al tuo cursore)</value>
   </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>Salva nel file</value>
   </data>
   <data name="toolbar_select_all_description" xml:space="preserve">
-    <value>Select all in target app</value>
+    <value>Seleziona tutto nell'app di destinazione</value>
   </data>
   <data name="toolbar_settings_description" xml:space="preserve">
-    <value>Open settings</value>
+    <value>Apri le impostazioni</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Condividi il testo</value>
@@ -836,13 +836,13 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Dati di allenamento</value>
   </data>
   <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
-    <value>Training data deleted — restart Dasher to fully apply</value>
+    <value>Dati di addestramento cancellati — riavviare Dasher per applicare completamente</value>
   </data>
   <data name="training_data_description" xml:space="preserve">
     <value>L'importazione aggiunge testo al modello linguistico e ai dati di addestramento accumulati (mantenuti durante i riavvii). L'esportazione salva i dati di allenamento per il backup o il trasferimento. Il ripristino elimina tutti i dati di formazione dell'utente: il modello ritorna alle impostazioni predefinite integrate al successivo avvio.</value>
   </data>
   <data name="training_data_exported" xml:space="preserve">
-    <value>Training data exported.</value>
+    <value>Dati di addestramento esportati.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>Esporta dati di allenamento</value>
@@ -863,7 +863,7 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>{0} KB importati: si applica completamente al prossimo lancio (il modello live ha restituito {1})</value>
   </data>
   <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
-    <value>Training is not available yet — try again once the canvas has rendered.</value>
+    <value>L'addestramento non è ancora disponibile — riprova una volta che la tela è stata renderizzata.</value>
   </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>Nessun dato di formazione utente ancora</value>
@@ -881,22 +881,22 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
     <value>Dati di addestramento eliminati ove possibile: {0} elemento/i non riuscito; premere nuovamente Reset per riprovare</value>
   </data>
   <data name="tts_engine" xml:space="preserve">
-    <value>TTS Engine</value>
+    <value>Motore TTS</value>
   </data>
   <data name="tts_no_credentials" xml:space="preserve">
-    <value>No credentials required</value>
+    <value>Nessuna credenziale richiesta</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Velocità di digitazione</value>
   </data>
   <data name="typing_rate_format" xml:space="preserve">
-    <value>{cps} cps · {wpm} wpm</value>
+    <value>{cps} cps · {wpm} ppm</value>
   </data>
   <data name="udp_port" xml:space="preserve">
-    <value>UDP Port</value>
+    <value>Porta UDP</value>
   </data>
   <data name="udp_tracker_help" xml:space="preserve">
-    <value>UDP tracker listens for STREAM_DATA or GazePoint messages</value>
+    <value>Il tracker UDP ascolta i messaggi STREAM_DATA o GazePoint</value>
   </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Usa Dasher come tastiera</value>

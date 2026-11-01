@@ -39,7 +39,7 @@
     <value>Auta parantamaan Dasheria</value>
   </data>
   <data name="analytics_body" xml:space="preserve">
-    <value>Share anonymous usage analytics and crash reports? No typed text, clipboard contents or personal information is ever collected. You can change this any time in Settings.</value>
+    <value>Jaa nimettömiä käyttöanalytiikkoja ja kaatumisraportteja? Ei koskaan kerätä kirjoitettua tekstiä, leikepöydän sisältöjä tai henkilökohtaisia tietoja. Voit muuttaa tätä milloin tahansa asetuksissa.</value>
   </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>Ei nyt</value>
@@ -48,7 +48,7 @@
     <value>Jaa anonyymejä analytiikka- ja virheraportteja</value>
   </data>
   <data name="analytics_rationale" xml:space="preserve">
-    <value>Dasher kerää anonyymejä, yksityisyyttä kunnioittavia analyysejä ymmärtääkseen käyttötapoja ja korjatakseen kaatumiset. Mitään kirjoitettua tekstiä, leikepöydän sisältöä tai henkilökohtaisia ​​tietoja ei koskaan kerätä.
+    <value>Dasher kerää nimettömiä, yksityisyyttä kunnioittavia analytiikkatietoja ymmärtääkseen käyttökuvioita ja korjatakseen kaatumisia. Kirjoitettua tekstiä, leikepöydän sisältöä tai henkilökohtaisia tietoja ei koskaan kerätä.
 
 Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
@@ -56,7 +56,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Nollaa analytiikka</value>
   </data>
   <data name="analytics_settings_help" xml:space="preserve">
-    <value>Dasher kerää anonyymejä käyttöanalytiikkaa ja virheraportteja ymmärtääkseen sovelluksen käyttöä ja korjatakseen vikoja. Mitään kirjoitettua tekstiä, leikepöydän sisältöä tai henkilökohtaisia ​​tietoja ei koskaan kerätä.</value>
+    <value>Dasher kerää nimettömiä käyttöanalytiikka- ja kaatumisraportteja ymmärtääkseen, miten sovellusta käytetään, ja korjatakseen bugeja. Kirjoitettua tekstiä, leikepöydän sisältöä tai henkilökohtaisia tietoja ei koskaan kerätä.</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Anonyymi käyttöanalytiikka</value>
@@ -68,16 +68,16 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Sovellustason viipyminen valintaa varten</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
-    <value>Left</value>
+    <value>Vasen</value>
   </data>
   <data name="arrow_left_tooltip" xml:space="preserve">
-    <value>Move caret left (hold to repeat)</value>
+    <value>Siirrä kohdistinta vasemmalle (pidä painettuna toistaaksesi)</value>
   </data>
   <data name="arrow_right_label" xml:space="preserve">
-    <value>Right</value>
+    <value>Oikea</value>
   </data>
   <data name="arrow_right_tooltip" xml:space="preserve">
-    <value>Move caret right (hold to repeat)</value>
+    <value>Siirrä kohdistinta oikealle (pidä painettuna toistaaksesi)</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Automaattinen keskityskohde</value>
@@ -89,13 +89,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Automaattinen valinta katseen kiinnittämisen jälkeen nipistyksen aikana. Ota käyttöön vain, jos käyttöjärjestelmän viipymä on pois päältä.</value>
   </data>
   <data name="back" xml:space="preserve">
-    <value>Back</value>
+    <value>Takaisin</value>
   </data>
   <data name="backspace_label" xml:space="preserve">
-    <value>Del</value>
+    <value>poista</value>
   </data>
   <data name="backspace_tooltip" xml:space="preserve">
-    <value>Delete (hold to repeat)</value>
+    <value>Poista (pidä painettuna toistaaksesi)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Peruuttaa</value>
@@ -119,19 +119,19 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Sulje</value>
   </data>
   <data name="close_settings" xml:space="preserve">
-    <value>Close settings</value>
+    <value>Sulje asetukset</value>
   </data>
   <data name="colour_theme" xml:space="preserve">
     <value>Väriteema</value>
   </data>
   <data name="control" xml:space="preserve">
-    <value>Control</value>
+    <value>Kontrolli</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
-    <value>Control mode: enabled</value>
+    <value>Ohjaustila: käytössä</value>
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
-    <value>Control mode</value>
+    <value>Ohjaustila</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Kopioitu leikepöydälle</value>
@@ -146,31 +146,31 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Kopioi kaikki</value>
   </data>
   <data name="copy_all_clipboard" xml:space="preserve">
-    <value>Copy all (to clipboard)</value>
+    <value>Kopioi kaikki (leikepöydälle)</value>
   </data>
   <data name="copy_commands" xml:space="preserve">
     <value>Kopioi komennot</value>
   </data>
   <data name="copy_selection" xml:space="preserve">
-    <value>Copy selection</value>
+    <value>Kopioi valinta</value>
   </data>
   <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
-    <value>Could not load the file into the engine</value>
+    <value>Tiedostoa ei voitu ladata moottoriin</value>
   </data>
   <data name="could_not_open_the_selected_file" xml:space="preserve">
-    <value>Could not open the selected file.</value>
+    <value>Valittua tiedostoa ei voitu avata.</value>
   </data>
   <data name="could_not_read_the_selected_file" xml:space="preserve">
-    <value>Could not read the selected file.</value>
+    <value>Valittua tiedostoa ei voitu lukea.</value>
   </data>
   <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
-    <value>Could not sync your edit with the engine — it may be overwritten</value>
+    <value>Muokkaustasi ei voitu synkronoida moottorin kanssa — se saatetaan ylikirjoittaa</value>
   </data>
   <data name="could_not_write_the_export_file" xml:space="preserve">
-    <value>Could not write the export file.</value>
+    <value>Vientiä tiedostoa ei voitu kirjoittaa.</value>
   </data>
   <data name="could_not_write_the_training_data" xml:space="preserve">
-    <value>Could not write the training data.</value>
+    <value>Ei voitu kirjoittaa koulutusdataa.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Nykyinen kalibrointi</value>
@@ -185,19 +185,19 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Dasher</value>
   </data>
   <data name="dasher5_config_found" xml:space="preserve">
-    <value>We found your Dasher 5 configuration</value>
+    <value>Löysimme Dasher 5 -kokoonpanosi</value>
   </data>
   <data name="dasher5_import" xml:space="preserve">
-    <value>Dasher 5 Import</value>
+    <value>Dasher 5 Tuo</value>
   </data>
   <data name="dasher5_import_prompt" xml:space="preserve">
-    <value>Would you like to import these settings into Dasher 6?</value>
+    <value>Haluatko tuoda nämä asetukset Dasher 6:een?</value>
   </data>
   <data name="dasher5_no_data" xml:space="preserve">
-    <value>No Dasher 5 data found on this computer.</value>
+    <value>Tietokoneelta ei löytynyt Dasher 5 -tietoja.</value>
   </data>
   <data name="dasher5_settings_found" xml:space="preserve">
-    <value>Dasher 5 settings found</value>
+    <value>Dasher 5 asetukset löytyivät</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>Dasher 5 -tietoja havaittu tällä Macilla.</value>
@@ -217,7 +217,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
 Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="dasher_engine_error" xml:space="preserve">
-    <value>Dasher Engine Error</value>
+    <value>Dasher-moottorin virhe</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>Dasher-näppäimistö</value>
@@ -254,7 +254,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Tehty</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
-    <value>Hover in one spot to trigger a click, instead of pressing a button or switch.</value>
+    <value>Liikuta kohdistinta yhdessä kohdassa aktivoidaksesi napsautuksen sen sijaan, että painaisit painiketta tai kytkintä.</value>
   </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Viivy napsauttaaksesi</value>
@@ -266,16 +266,16 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Ota kallistustulo ensin käyttöön päästäksesi kalibrointiin.</value>
   </data>
   <data name="engine_error" xml:space="preserve">
-    <value>Engine Error</value>
+    <value>Moottorivirhe</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
-    <value>The Dasher engine encountered an internal error and has stopped. Please restart Dasher.</value>
+    <value>Dasher-moottori kohtasi sisäisen virheen ja on pysähtynyt. Käynnistä Dasher uudelleen.</value>
   </data>
   <data name="engine_speech_features" xml:space="preserve">
-    <value>Engine Speech Features</value>
+    <value>Moottorin puheominaisuudet</value>
   </data>
   <data name="exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Poistu</value>
   </data>
   <data name="export_training_text" xml:space="preserve">
     <value>Vie harjoitusteksti</value>
@@ -284,10 +284,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Silmän katse</value>
   </data>
   <data name="eye_tracker_device" xml:space="preserve">
-    <value>Eye Tracker Device</value>
+    <value>Silmänseurantalaite</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
-    <value>Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.</value>
+    <value>Yksityiskohtainen seurantaloki virheraporteille (näytettä kohden rivit, kirjoitetaan eyegaze.log-tiedostoon Dasher-kansiossa). Perusyhteystapahtumat kirjataan aina.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>Avaaminen epäonnistui@ title Title of a list of documents that are open</value>
@@ -299,7 +299,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Nopeasti</value>
   </data>
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
-    <value>File truncated at 4 MB — only the first part is loaded</value>
+    <value>Tiedosto katkaistu 4 MB kohdalla — vain ensimmäinen osa on ladattu</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Vapauta näppäimistö kellumaan sallimalla Dasherin näkyä muiden sovellusten päällä ja napauta sitten Float uudelleen.</value>
@@ -317,13 +317,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Pelin tekstitiedosto</value>
   </data>
   <data name="gaze_filter_help" xml:space="preserve">
-    <value>Reduces zoom toward wrong positions while your eyes move to a target</value>
+    <value>Vähentää zoomausta väärään kohtaan, kun silmäsi liikkuvat kohteeseen</value>
   </data>
   <data name="gaze_filter_label" xml:space="preserve">
-    <value>Filter gaze (reduces zoom toward wrong positions during eye transit)</value>
+    <value>Suodata katsetta (vähentää zoomausta väärien kohtien suuntaan silmän liikkeen aikana)</value>
   </data>
   <data name="gaze_smoothing" xml:space="preserve">
-    <value>Gaze Smoothing</value>
+    <value>Katseen tasaaminen</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>Selvä</value>
@@ -344,10 +344,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Tuo harjoitusteksti</value>
   </data>
   <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
-    <value>Imported %1 — applies fully on next launch</value>
+    <value>Tuotu %1 — astuu täysin voimaan seuraavalla käynnistyksellä</value>
   </data>
   <data name="imported_1_of_training_text" xml:space="preserve">
-    <value>Imported %1 of training text</value>
+    <value>Tuotu %1 koulutustekstistä</value>
   </data>
   <data name="increase_speed" xml:space="preserve">
     <value>Lisää nopeutta</value>
@@ -368,7 +368,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Kosketa (vedä kankaalla)</value>
   </data>
   <data name="input_processing" xml:space="preserve">
-    <value>Input Processing</value>
+    <value>Syötteen käsittely</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Asenna ydotool käyttääksesi näppäimistötilaa&lt;/b&gt;</value>
@@ -377,13 +377,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>ei ole asennettu. Suorita nämä komennot ja paina sitten Yritä uudelleen:</value>
   </data>
   <data name="keyboard" xml:space="preserve">
-    <value>Keyboard</value>
+    <value>Näppäimistö</value>
   </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>näppäimistö</value>
   </data>
   <data name="keyboard_mode_description" xml:space="preserve">
-    <value>Type Dasher's output straight into the app you are pointing at</value>
+    <value>Kirjoita Dasherin tulos suoraan sovellukseen, johon osoitat</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Vaihda näppäimistötilaan</value>
@@ -395,7 +395,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Näppäimistötilan läpinäkymättömyys</value>
   </data>
   <data name="keyboard_mode_stopped" xml:space="preserve">
-    <value>Keyboard mode stopped</value>
+    <value>Näppäimistötila pysähtyi</value>
   </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>Näppäimistötila pysähtyi: ydotool ei voinut syöttää tekstiä. Onko ydotoold</value>
@@ -404,13 +404,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Ota näppäimistötila käyttöön</value>
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
-    <value>Window transparency when in Keyboard/Direct mode</value>
+    <value>Ikkunan läpinäkyvyys näppäimistö-/suorassa tilassa</value>
   </data>
   <data name="language" xml:space="preserve">
-    <value>Language</value>
+    <value>Kieli</value>
   </data>
   <data name="language_locale" xml:space="preserve">
-    <value>Language / Locale</value>
+    <value>Kieli / Alue</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Kieli /alue&lt;/b&gt;</value>
@@ -437,7 +437,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Oppiminen</value>
   </data>
   <data name="leave" xml:space="preserve">
-    <value>Leave</value>
+    <value>Lähteä</value>
   </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>Poistu pelitilasta</value>
@@ -446,13 +446,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Valo</value>
   </data>
   <data name="load_voices" xml:space="preserve">
-    <value>Load Voices</value>
+    <value>Lataa äänet</value>
   </data>
   <data name="loaded_1_characters" xml:space="preserve">
-    <value>Loaded %1 characters</value>
+    <value>Ladattu %1 merkkiä</value>
   </data>
   <data name="loading" xml:space="preserve">
-    <value>Loading…</value>
+    <value>Ladataan…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>Kieli</value>
@@ -464,10 +464,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Muuttoliike</value>
   </data>
   <data name="more" xml:space="preserve">
-    <value>More</value>
+    <value>Enemmän</value>
   </data>
   <data name="more_options" xml:space="preserve">
-    <value>More options</value>
+    <value>Lisää vaihtoehtoja</value>
   </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>Liikuta silmiäsi samalla nipistämällä ohjataksesi</value>
@@ -476,7 +476,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Uusi</value>
   </data>
   <data name="new_document" xml:space="preserve">
-    <value>New document</value>
+    <value>Uusi asiakirja</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>Uusi viesti</value>
@@ -491,10 +491,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Tälle osiolle ei ole käytettävissä asetuksia.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
-    <value>No training data to export yet</value>
+    <value>Vie lähtömateriaalina ei ole vielä koulutusdataa</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
-    <value>No user training data yet</value>
+    <value>Ei käyttäjäkoulutusdataa vielä</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Ei mitään tallennettavaa</value>
@@ -530,7 +530,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Ulostulo</value>
   </data>
   <data name="output_font" xml:space="preserve">
-    <value>Output Font</value>
+    <value>Tulostusfontti</value>
   </data>
   <data name="output_font_size" xml:space="preserve">
     <value>Tulosteen fonttikoko</value>
@@ -539,7 +539,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Aloita kirjoittaminen koskettamalla kanvasta.</value>
   </data>
   <data name="pane_position" xml:space="preserve">
-    <value>Pane position</value>
+    <value>Sijoita positio</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>Liitä</value>
@@ -557,10 +557,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Nipistä ja katso kirjoittaaksesi</value>
   </data>
   <data name="pitch" xml:space="preserve">
-    <value>Pitch</value>
+    <value>Korkeus</value>
   </data>
   <data name="play" xml:space="preserve">
-    <value>Game</value>
+    <value>Peli</value>
   </data>
   <data name="play_2" xml:space="preserve">
     <value>Toista</value>
@@ -569,13 +569,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Osoittimen leijutussyöttö</value>
   </data>
   <data name="preferences" xml:space="preserve">
-    <value>Preferences</value>
+    <value>Asetukset</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
     <value>Valmistellaan Dasheria…</value>
   </data>
   <data name="preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Esikatselu</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Tietosuoja</value>
@@ -584,10 +584,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>&lt;b&gt;Yksityisyys&lt;/b&gt;</value>
   </data>
   <data name="quick_speak" xml:space="preserve">
-    <value>Quick speak</value>
+    <value>Puhu nopeasti</value>
   </data>
   <data name="rate" xml:space="preserve">
-    <value>Rate</value>
+    <value>Määrä</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Tuo uudelleen Dasher 5:stä</value>
@@ -626,10 +626,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Nollataanko harjoitustiedot?</value>
   </data>
   <data name="reset_wpm_averages" xml:space="preserve">
-    <value>Reset WPM averages</value>
+    <value>Nollaa WPM-keskiarvot</value>
   </data>
   <data name="restarting_engine" xml:space="preserve">
-    <value>Restarting engine…</value>
+    <value>Moottorin uudelleenkäynnistys…</value>
   </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>Palauta kaikki Dasher-asetukset oletusarvoihinsa. Tätä ei voi perua.</value>
@@ -644,13 +644,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Tallentaa...</value>
   </data>
   <data name="save_eye_tracker_diagnostics" xml:space="preserve">
-    <value>Save eye-tracker diagnostics</value>
+    <value>Tallenna silmänseurannan diagnostiikka</value>
   </data>
   <data name="save_failed" xml:space="preserve">
     <value>Tallennus epäonnistui</value>
   </data>
   <data name="save_file" xml:space="preserve">
-    <value>Save file</value>
+    <value>Tallenna tiedosto</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>Tallenna tekstitiedosto</value>
@@ -665,7 +665,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Skannausnopeus</value>
   </data>
   <data name="selection_method" xml:space="preserve">
-    <value>Selection Method</value>
+    <value>Valintamenetelmä</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>Asetukset</value>
@@ -692,7 +692,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Näytä syötteen virheenkorjauspeittokuva</value>
   </data>
   <data name="show_status_bar" xml:space="preserve">
-    <value>Show status bar</value>
+    <value>Näytä tilapalkki</value>
   </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>Näytä kirjoitusnopeus (WPM)</value>
@@ -707,10 +707,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Hidas</value>
   </data>
   <data name="speak_on_stop" xml:space="preserve">
-    <value>Speak on stop</value>
+    <value>Puhu pysäytyksessä</value>
   </data>
   <data name="speak_words" xml:space="preserve">
-    <value>Speak words</value>
+    <value>Puhu sanoja</value>
   </data>
   <data name="speech" xml:space="preserve">
     <value>Puhe</value>
@@ -722,13 +722,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Puhe aiheesta</value>
   </data>
   <data name="speech_settings" xml:space="preserve">
-    <value>Speech Settings</value>
+    <value>Puheasetukset</value>
   </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>Puheasetukset</value>
   </data>
   <data name="speech_volume" xml:space="preserve">
-    <value>Speech volume</value>
+    <value>Puheen äänenvoimakkuus</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>Nopeus</value>
@@ -743,10 +743,10 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Aloita puhtaalta pöydältä</value>
   </data>
   <data name="steering_method" xml:space="preserve">
-    <value>Steering Method</value>
+    <value>Ohjausmenetelmä</value>
   </data>
   <data name="stop_speaking" xml:space="preserve">
-    <value>Stop speaking</value>
+    <value>Lopeta puhuminen</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Järjestelmä</value>
@@ -758,19 +758,19 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Tekstitiedostot</value>
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
-    <value>That file already is your training data.</value>
+    <value>Tuo tiedosto on jo sinun koulutusdatasi.</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>Virheenkorjausnäkymä piirtää vihreän paneelin kankaan vasempaan yläkulmaan, jossa näkyvät reaaliaikaisten kosketustapahtumien määrät ja viimeksi raportoidut arvot (x, y). Kun pidät painettuna, sinun pitäisi nähdä touch.began ja sitten touch.moved muuttuvilla koordinaateilla katsellessasi ympärillesi.</value>
   </data>
   <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
-    <value>The file is too large (over 10 MB) to import as training text.</value>
+    <value>Tiedosto on liian suuri (yli 10 Mt) tuodakseen sen koulutustekstinä.</value>
   </data>
   <data name="the_selected_file_is_empty" xml:space="preserve">
-    <value>The selected file is empty.</value>
+    <value>Valittu tiedosto on tyhjä.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
-    <value>This deletes your accumulated training data for every alphabet. Predictions keep the influence of very recent typing.</value>
+    <value>Tämä poistaa keräämäsi harjoitteludatan jokaiselle aakkoselle. Ennusteet säilyttävät erittäin äskettäisen kirjoittamisen vaikutuksen.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>Tämä poistaa kertyneet harjoitustietosi. Kielimalli palautuu oletusasetuksiin seuraavan käynnistyksen yhteydessä. Tätä ei voi perua.</value>
@@ -785,28 +785,28 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Kallista laitettasi koko liikeradalla kalibroinnin aikana.</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
-    <value>Toggle control mode</value>
+    <value>Vaihda ohjaustilaa</value>
   </data>
   <data name="toggle_game_mode" xml:space="preserve">
-    <value>Toggle game mode</value>
+    <value>Vaihda pelitilaa</value>
   </data>
   <data name="toggle_keyboard_mode" xml:space="preserve">
-    <value>Toggle keyboard mode</value>
+    <value>Vaihda näppäimistötilaa</value>
   </data>
   <data name="toggle_pane_position" xml:space="preserve">
-    <value>Toggle pane position</value>
+    <value>Vaihda ruudun sijaintia</value>
   </data>
   <data name="toggle_status_bar" xml:space="preserve">
-    <value>Hide/show status bar</value>
+    <value>Piilota/näytä tilapalkki</value>
   </data>
   <data name="toolbar_copy_description" xml:space="preserve">
-    <value>Copy all text</value>
+    <value>Kopioi kaikki teksti</value>
   </data>
   <data name="toolbar_cut_description" xml:space="preserve">
-    <value>Cut selection in target app</value>
+    <value>Leikkaa valinta kohdesovelluksessa</value>
   </data>
   <data name="toolbar_game_description" xml:space="preserve">
-    <value>Start game mode</value>
+    <value>Aloita pelitila</value>
   </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>Uusi / selkeä tuloste</value>
@@ -815,19 +815,19 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Avaa tiedosto</value>
   </data>
   <data name="toolbar_paste_description" xml:space="preserve">
-    <value>Paste into target app</value>
+    <value>Liitä kohdesovellukseen</value>
   </data>
   <data name="toolbar_reanchor_description" xml:space="preserve">
-    <value>Re-anchor predictions to the caret (read the sentence around your cursor)</value>
+    <value>Ankkuroi ennusteet uudelleen kohdistimeen (lue lause kohdistimesi ympäriltä)</value>
   </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>Tallenna tiedostoon</value>
   </data>
   <data name="toolbar_select_all_description" xml:space="preserve">
-    <value>Select all in target app</value>
+    <value>Valitse kaikki kohdeohjelmassa</value>
   </data>
   <data name="toolbar_settings_description" xml:space="preserve">
-    <value>Open settings</value>
+    <value>Avaa asetukset</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Jaa teksti</value>
@@ -842,13 +842,13 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Harjoitustiedot</value>
   </data>
   <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
-    <value>Training data deleted — restart Dasher to fully apply</value>
+    <value>Koulutusdata poistettu — käynnistä Dasher uudelleen, jotta muutokset tulevat täysin voimaan</value>
   </data>
   <data name="training_data_description" xml:space="preserve">
     <value>Tuo lisää tekstiä kielimalliin ja kertyneisiin harjoitustietoihisi (säilytetään uudelleenkäynnistysten aikana). Vienti tallentaa harjoitustietosi varmuuskopiointia tai siirtoa varten. Reset poistaa kaikki käyttäjien harjoitustiedot – malli palaa sisäänrakennetuille oletusasetuksiin seuraavan käynnistyksen yhteydessä.</value>
   </data>
   <data name="training_data_exported" xml:space="preserve">
-    <value>Training data exported.</value>
+    <value>Koulutusdata viety.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>Vie koulutustiedot</value>
@@ -869,7 +869,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Tuotu {0} kt – sovelletaan kokonaan seuraavan julkaisun yhteydessä (malli palautettiin {1})</value>
   </data>
   <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
-    <value>Training is not available yet — try again once the canvas has rendered.</value>
+    <value>Koulutus ei ole vielä saatavilla — yritä uudelleen, kun kangas on renderöity.</value>
   </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>Ei vielä käyttäjien koulutustietoja</value>
@@ -887,28 +887,28 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Harjoitustiedot poistettu mahdollisuuksien mukaan – {0} kohde(tta) epäonnistui; paina Reset uudelleen yrittääksesi uudelleen</value>
   </data>
   <data name="tts_engine" xml:space="preserve">
-    <value>TTS Engine</value>
+    <value>TTS-moottori</value>
   </data>
   <data name="tts_no_credentials" xml:space="preserve">
-    <value>No credentials required</value>
+    <value>Ei vaadita tunnistetietoja</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Kirjoitusnopeus</value>
   </data>
   <data name="typing_rate_format" xml:space="preserve">
-    <value>{cps} cps · {wpm} wpm</value>
+    <value>{cps} merkkiä/s · {wpm} sanaa/min</value>
   </data>
   <data name="udp_port" xml:space="preserve">
-    <value>UDP Port</value>
+    <value>UDP-portti</value>
   </data>
   <data name="udp_tracker_help" xml:space="preserve">
-    <value>UDP tracker listens for STREAM_DATA or GazePoint messages</value>
+    <value>UDP-seuranta kuuntelee STREAM_DATA- tai GazePoint-viestejä</value>
   </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Käytä Dasheria näppäimistönä</value>
   </data>
   <data name="volume" xml:space="preserve">
-    <value>Volume</value>
+    <value>Tilavuus</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>Löysimme Dasher 5 -kokoonpanosi tältä Macilta. Aakkoset, värit, nopeusasetukset ja mukautetut tiedostot voidaan tuoda Dasher 6:een.</value>

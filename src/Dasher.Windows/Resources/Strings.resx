@@ -559,7 +559,7 @@ You can change this anytime in Settings &gt; Privacy.</value>
     <value>Open System Settings</value>
   </data>
   <data name="open_text_file" xml:space="preserve">
-    <value>Open Text File</value>
+    <value>Open text file</value>
   </data>
   <data name="output" xml:space="preserve">
     <value>Output</value>
@@ -691,7 +691,7 @@ You can change this anytime in Settings &gt; Privacy.</value>
     <value>Save file</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
-    <value>Save Text File</value>
+    <value>Save text file</value>
   </data>
   <data name="saved" xml:space="preserve">
     <value>Saved</value>

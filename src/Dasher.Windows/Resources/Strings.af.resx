@@ -36,7 +36,7 @@
     <value>Help om Dasher te verbeter</value>
   </data>
   <data name="analytics_body" xml:space="preserve">
-    <value>Share anonymous usage analytics and crash reports? No typed text, clipboard contents or personal information is ever collected. You can change this any time in Settings.</value>
+    <value>Deel anonieme gebruiksanalise en vasloopverslae? Geen getikte teks, knipbordinhoud of persoonlike inligting word ooit versamel nie. Jy kan dit enige tyd in Instellings verander.</value>
   </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>Nie nou nie</value>
@@ -45,7 +45,7 @@
     <value>Deel anonieme analise en ongeluk verslae</value>
   </data>
   <data name="analytics_rationale" xml:space="preserve">
-    <value>Dasher versamel anonieme ontledings wat privaatheid respekteer om gebruikspatrone te verstaan ​​en ineenstortings reg te stel. Geen getikte teks, knipbordinhoud of persoonlike inligting word ooit ingesamel nie.
+    <value>Dasher versamel anonieme, privaatheids-respekteerde analitiese data om gebruikspatrone te verstaan en foutmeldings reg te stel. Geen getikte teks, knipbordinhoud of persoonlike inligting word ooit versamel nie.
 
 Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   </data>
@@ -53,7 +53,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Stel analitiese ID terug</value>
   </data>
   <data name="analytics_settings_help" xml:space="preserve">
-    <value>Dasher samel anonieme gebruiksontledings en ongelukverslae in om te verstaan ​​hoe die toepassing gebruik word en om foute reg te stel. Geen getikte teks, knipbordinhoud of persoonlike inligting word ooit ingesamel nie.</value>
+    <value>Dasher versamel anonieme gebruiksanalitiese data en foutverslae om te verstaan hoe die app gebruik word en om foute reg te stel. Geen getikte teks, knipbordinhoude of persoonlike inligting word ooit versamel nie.</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Anonieme gebruiksanalise</value>
@@ -65,16 +65,16 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Toepassingsvlak-verblyf om te kies</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
-    <value>Left</value>
+    <value>Links</value>
   </data>
   <data name="arrow_left_tooltip" xml:space="preserve">
-    <value>Move caret left (hold to repeat)</value>
+    <value>Beweeg speler links (hou vas om te herhaal)</value>
   </data>
   <data name="arrow_right_label" xml:space="preserve">
-    <value>Right</value>
+    <value>Regs</value>
   </data>
   <data name="arrow_right_tooltip" xml:space="preserve">
-    <value>Move caret right (hold to repeat)</value>
+    <value>Beweeg kursor na regs (hou aan om te herhaal)</value>
   </data>
   <data name="auto" xml:space="preserve">
     <value>Outomaties</value>
@@ -89,13 +89,13 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Outomatiese keuse nadat jy jou blik vasgehou het terwyl jy knyp. Aktiveer slegs as OS-verblyf afgeskakel is.</value>
   </data>
   <data name="back" xml:space="preserve">
-    <value>Back</value>
+    <value>Terug</value>
   </data>
   <data name="backspace_label" xml:space="preserve">
-    <value>Del</value>
+    <value>verwyder</value>
   </data>
   <data name="backspace_tooltip" xml:space="preserve">
-    <value>Delete (hold to repeat)</value>
+    <value>Vee uit (hou aangehou om te herhaal)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Kanselleer</value>
@@ -119,19 +119,19 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Maak toe</value>
   </data>
   <data name="close_settings" xml:space="preserve">
-    <value>Close settings</value>
+    <value>Sluit instellings</value>
   </data>
   <data name="colour_theme" xml:space="preserve">
     <value>Kleurtema</value>
   </data>
   <data name="control" xml:space="preserve">
-    <value>Control</value>
+    <value>Beheer</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
-    <value>Control mode: enabled</value>
+    <value>Beheermodus: aangeskakel</value>
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
-    <value>Control mode</value>
+    <value>Beheermodus</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Knyp gekopiëerde aan knipbord</value>
@@ -146,31 +146,31 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Kopieer Alles</value>
   </data>
   <data name="copy_all_clipboard" xml:space="preserve">
-    <value>Copy all (to clipboard)</value>
+    <value>Kopieer alles (na knipbord)</value>
   </data>
   <data name="copy_commands" xml:space="preserve">
     <value>Kopieer opdragte</value>
   </data>
   <data name="copy_selection" xml:space="preserve">
-    <value>Copy selection</value>
+    <value>Kopieer seleksie</value>
   </data>
   <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
-    <value>Could not load the file into the engine</value>
+    <value>Kon die lêer nie in die enjin laai nie</value>
   </data>
   <data name="could_not_open_the_selected_file" xml:space="preserve">
-    <value>Could not open the selected file.</value>
+    <value>Kon nie die geselekteerde lêer oopmaak nie.</value>
   </data>
   <data name="could_not_read_the_selected_file" xml:space="preserve">
-    <value>Could not read the selected file.</value>
+    <value>Kon nie die geselekteerde lêer lees nie.</value>
   </data>
   <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
-    <value>Could not sync your edit with the engine — it may be overwritten</value>
+    <value>Kon jou wysiging nie met die enjin sinchroniseer nie — dit mag oor geskryf word</value>
   </data>
   <data name="could_not_write_the_export_file" xml:space="preserve">
-    <value>Could not write the export file.</value>
+    <value>Kon nie die uitvoer lêer skryf nie.</value>
   </data>
   <data name="could_not_write_the_training_data" xml:space="preserve">
-    <value>Could not write the training data.</value>
+    <value>Kon nie die opleidingsdata skryf nie.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Huidige Kalibrasie</value>
@@ -185,19 +185,19 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Dasher</value>
   </data>
   <data name="dasher5_config_found" xml:space="preserve">
-    <value>We found your Dasher 5 configuration</value>
+    <value>Ons het jou Dasher 5-konfigurasie gevind</value>
   </data>
   <data name="dasher5_import" xml:space="preserve">
-    <value>Dasher 5 Import</value>
+    <value>Dasher 5 Invoer</value>
   </data>
   <data name="dasher5_import_prompt" xml:space="preserve">
-    <value>Would you like to import these settings into Dasher 6?</value>
+    <value>Wil jy hierdie instellings na Dasher 6 invoer?</value>
   </data>
   <data name="dasher5_no_data" xml:space="preserve">
-    <value>No Dasher 5 data found on this computer.</value>
+    <value>Geen Dasher 5-data op hierdie rekenaar gevind nie.</value>
   </data>
   <data name="dasher5_settings_found" xml:space="preserve">
-    <value>Dasher 5 settings found</value>
+    <value>Dasher 5-instellings gevind</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>Dasher 5-data is op hierdie Mac opgespoor.</value>
@@ -217,7 +217,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
 Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   </data>
   <data name="dasher_engine_error" xml:space="preserve">
-    <value>Dasher Engine Error</value>
+    <value>Dasher-enjinfout</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>Dasher-sleutelbord</value>
@@ -257,7 +257,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Klaar</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
-    <value>Hover in one spot to trigger a click, instead of pressing a button or switch.</value>
+    <value>Sweef op een plek om 'n klik te veroorsaak, in plaas daarvan om 'n knoppie of skakelaar te druk.</value>
   </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Kliek om te kliek</value>
@@ -269,16 +269,16 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Aktiveer eers kantelinvoer om toegang tot kalibrasie te verkry.</value>
   </data>
   <data name="engine_error" xml:space="preserve">
-    <value>Engine Error</value>
+    <value>Enjin Fout</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
-    <value>The Dasher engine encountered an internal error and has stopped. Please restart Dasher.</value>
+    <value>Die Dasher-enjin het 'n interne fout teëgekom en het gestaak. Herbegin asseblief Dasher.</value>
   </data>
   <data name="engine_speech_features" xml:space="preserve">
-    <value>Engine Speech Features</value>
+    <value>Enjin Spraakkenmerke</value>
   </data>
   <data name="exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Verlaat</value>
   </data>
   <data name="export_training_text" xml:space="preserve">
     <value>Voer opleidingsteks uit</value>
@@ -287,10 +287,10 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Oogblik</value>
   </data>
   <data name="eye_tracker_device" xml:space="preserve">
-    <value>Eye Tracker Device</value>
+    <value>Oogopsporingstoestel</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
-    <value>Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.</value>
+    <value>Gedetailleerde opsporingslogboek vir foutverslae (per-voorbeeldlyne, geskryf na eyegaze.log in die Dasher-gids). Basiese verbindingsgebeurtenisse word altyd aangeteken.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>Kon nie spel open nie: %s</value>
@@ -302,7 +302,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Vinnig</value>
   </data>
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
-    <value>File truncated at 4 MB — only the first part is loaded</value>
+    <value>Lêer by 4 MB verkort — net die eerste deel is gelaai</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Om die sleutelbord te laat dryf, laat Dasher toe om oor ander apps te vertoon en tik dan Float weer.</value>
@@ -320,13 +320,13 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Speltekslêer</value>
   </data>
   <data name="gaze_filter_help" xml:space="preserve">
-    <value>Reduces zoom toward wrong positions while your eyes move to a target</value>
+    <value>Verminder inzoomen na verkeerde posisies terwyl jou oë na 'n teiken beweeg</value>
   </data>
   <data name="gaze_filter_label" xml:space="preserve">
-    <value>Filter gaze (reduces zoom toward wrong positions during eye transit)</value>
+    <value>Filtreer kyk (verminder zoom na verkeerde posisies tydens oogbeweging)</value>
   </data>
   <data name="gaze_smoothing" xml:space="preserve">
-    <value>Gaze Smoothing</value>
+    <value>Kyk Gladdering</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>Verstaan</value>
@@ -347,10 +347,10 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Voer opleidingsteks in</value>
   </data>
   <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
-    <value>Imported %1 — applies fully on next launch</value>
+    <value>Ingevoer %1 — geld ten volle by die volgende begin</value>
   </data>
   <data name="imported_1_of_training_text" xml:space="preserve">
-    <value>Imported %1 of training text</value>
+    <value>Ingevoer %1 van opleidingsmateriaal</value>
   </data>
   <data name="increase_speed" xml:space="preserve">
     <value>Verhoog Spoed</value>
@@ -371,7 +371,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Raak (sleep op die doek)</value>
   </data>
   <data name="input_processing" xml:space="preserve">
-    <value>Input Processing</value>
+    <value>Invoerverwerking</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Installeer ydotool om sleutelbordmodus te gebruik&lt;/b&gt;</value>
@@ -380,13 +380,13 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>is nie geïnstalleer. Begin hierdie opdragte, dan druk Herprobeer:</value>
   </data>
   <data name="keyboard" xml:space="preserve">
-    <value>Keyboard</value>
+    <value>Sleutelbord</value>
   </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>Sleutelbord</value>
   </data>
   <data name="keyboard_mode_description" xml:space="preserve">
-    <value>Type Dasher's output straight into the app you are pointing at</value>
+    <value>Tik Dasher se uitvoer regstreeks in die toepassing waarna jy wys</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Verlaat sleutelbordmodus</value>
@@ -398,7 +398,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Sleutelbordmodus ondeursigtigheid</value>
   </data>
   <data name="keyboard_mode_stopped" xml:space="preserve">
-    <value>Keyboard mode stopped</value>
+    <value>Sleutelbordmodus gestop</value>
   </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>Sleutelbordmodus gestop: ydotool kon nie teks inspuit nie. Is die ydotoold</value>
@@ -407,13 +407,13 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Aktiveer sleutelbord</value>
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
-    <value>Window transparency when in Keyboard/Direct mode</value>
+    <value>Vensterdeursigtigheid in Sleutelbord-/Direktoestand</value>
   </data>
   <data name="language" xml:space="preserve">
-    <value>Language</value>
+    <value>Taal</value>
   </data>
   <data name="language_locale" xml:space="preserve">
-    <value>Language / Locale</value>
+    <value>Taal / Streekinstelling</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Taal / Plaaslike&lt;/b&gt;</value>
@@ -440,7 +440,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Leer</value>
   </data>
   <data name="leave" xml:space="preserve">
-    <value>Leave</value>
+    <value>Verlaat</value>
   </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>Verlaat spelmodus</value>
@@ -449,13 +449,13 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Lig</value>
   </data>
   <data name="load_voices" xml:space="preserve">
-    <value>Load Voices</value>
+    <value>Laai Stemmer</value>
   </data>
   <data name="loaded_1_characters" xml:space="preserve">
-    <value>Loaded %1 characters</value>
+    <value>Gelaai %1 karakters</value>
   </data>
   <data name="loading" xml:space="preserve">
-    <value>Loading…</value>
+    <value>Laai…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>Taal</value>
@@ -467,16 +467,16 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Migrasie</value>
   </data>
   <data name="more" xml:space="preserve">
-    <value>More</value>
+    <value>Môre</value>
   </data>
   <data name="more_options" xml:space="preserve">
-    <value>More options</value>
+    <value>Meer opsies</value>
   </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>Beweeg jou oë terwyl jy knyp om te stuur</value>
   </data>
   <data name="new_document" xml:space="preserve">
-    <value>New document</value>
+    <value>Nuwe dokument</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>Nuwe Boodskap</value>
@@ -491,10 +491,10 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Geen instellings beskikbaar vir hierdie afdeling nie.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
-    <value>No training data to export yet</value>
+    <value>Nog geen opleidingsdata om uit te voer nie</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
-    <value>No user training data yet</value>
+    <value>Nog geen gebruikers opleidingsdata nie</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Niks om te spaar nie</value>
@@ -533,7 +533,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Afvoer</value>
   </data>
   <data name="output_font" xml:space="preserve">
-    <value>Output Font</value>
+    <value>Uitset Lettertipe</value>
   </data>
   <data name="output_font_size" xml:space="preserve">
     <value>Uitvoer lettergrootte</value>
@@ -542,7 +542,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Raak die doek aan om te begin skryf.</value>
   </data>
   <data name="pane_position" xml:space="preserve">
-    <value>Pane position</value>
+    <value>Pane posisie</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>Plak</value>
@@ -560,10 +560,10 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Knyp en kyk om te skryf</value>
   </data>
   <data name="pitch" xml:space="preserve">
-    <value>Pitch</value>
+    <value>Werf</value>
   </data>
   <data name="play" xml:space="preserve">
-    <value>Game</value>
+    <value>Speletjie</value>
   </data>
   <data name="play_2" xml:space="preserve">
     <value>Speel</value>
@@ -572,7 +572,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Wyser Sweef Invoer</value>
   </data>
   <data name="preferences" xml:space="preserve">
-    <value>Preferences</value>
+    <value>Voorkeure</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Voorkeure</value>
@@ -581,7 +581,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Dasher word voorberei…</value>
   </data>
   <data name="preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Voorskou</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>Privaatheid</value>
@@ -590,10 +590,10 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>&lt;b&gt;Privaatheid&lt;/b&gt;</value>
   </data>
   <data name="quick_speak" xml:space="preserve">
-    <value>Quick speak</value>
+    <value>Vinnig praat</value>
   </data>
   <data name="rate" xml:space="preserve">
-    <value>Rate</value>
+    <value>Tarief</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Herinvoer vanaf Dasher 5</value>
@@ -632,10 +632,10 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Stel opleidingsdata terug?</value>
   </data>
   <data name="reset_wpm_averages" xml:space="preserve">
-    <value>Reset WPM averages</value>
+    <value>Stel WPM-gemiddeldes terug</value>
   </data>
   <data name="restarting_engine" xml:space="preserve">
-    <value>Restarting engine…</value>
+    <value>Herbegin van enjin…</value>
   </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>Stel alle Dasher-instellings terug na hul verstekwaardes. Dit kan nie ongedaan gemaak word nie.</value>
@@ -650,13 +650,13 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Stoor...</value>
   </data>
   <data name="save_eye_tracker_diagnostics" xml:space="preserve">
-    <value>Save eye-tracker diagnostics</value>
+    <value>Stoor oog-volger diagnostiek</value>
   </data>
   <data name="save_failed" xml:space="preserve">
     <value>Stoor het misluk</value>
   </data>
   <data name="save_file" xml:space="preserve">
-    <value>Save file</value>
+    <value>Stoor lêer</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>Stoor Teks Lêer</value>
@@ -671,7 +671,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Skandeerspoed</value>
   </data>
   <data name="selection_method" xml:space="preserve">
-    <value>Selection Method</value>
+    <value>Seleksiemetode</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>Instellings</value>
@@ -698,7 +698,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Wys invoer-ontfouting-oorleg</value>
   </data>
   <data name="show_status_bar" xml:space="preserve">
-    <value>Show status bar</value>
+    <value>Wys statusbalk</value>
   </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>Wys tikspoed (WPM)</value>
@@ -713,10 +713,10 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Stadig</value>
   </data>
   <data name="speak_on_stop" xml:space="preserve">
-    <value>Speak on stop</value>
+    <value>Praat op stop</value>
   </data>
   <data name="speak_words" xml:space="preserve">
-    <value>Speak words</value>
+    <value>Spreek woorde</value>
   </data>
   <data name="speech" xml:space="preserve">
     <value>Spraak</value>
@@ -728,13 +728,13 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Toespraak oor</value>
   </data>
   <data name="speech_settings" xml:space="preserve">
-    <value>Speech Settings</value>
+    <value>Spraakinstellings</value>
   </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;Spraakinstellings&lt;/b&gt;</value>
   </data>
   <data name="speech_volume" xml:space="preserve">
-    <value>Speech volume</value>
+    <value>Spraakvolume</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>Spoed</value>
@@ -749,10 +749,10 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Begin vars</value>
   </data>
   <data name="steering_method" xml:space="preserve">
-    <value>Steering Method</value>
+    <value>Stuurmetode</value>
   </data>
   <data name="stop_speaking" xml:space="preserve">
-    <value>Stop speaking</value>
+    <value>Hou op praat</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Stelsel</value>
@@ -764,19 +764,19 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>BeeldeName</value>
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
-    <value>That file already is your training data.</value>
+    <value>Daardie lêer is reeds jou opleidingsdata.</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>Die ontfoutingsoorleg teken 'n groen paneel links bo op die doek wat die aantal lewendige aanrakingsgebeurtenisse en die laaste gerapporteerde (x, y) wys. Wanneer jy knyp en hou, behoort jy touch.began en dan touch.moved te sien met veranderende koördinate terwyl jy rondkyk.</value>
   </data>
   <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
-    <value>The file is too large (over 10 MB) to import as training text.</value>
+    <value>Die lêer is te groot (meer as 10 MB) om as opleidingsmateriaal ingevoer te word.</value>
   </data>
   <data name="the_selected_file_is_empty" xml:space="preserve">
-    <value>The selected file is empty.</value>
+    <value>Die geselekteerde lêer is leeg.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
-    <value>This deletes your accumulated training data for every alphabet. Predictions keep the influence of very recent typing.</value>
+    <value>Dit vee jou opgeboude opleidingsdata vir elke alfabet uit. Voorspellings behou die invloed van baie onlangse tikwerk.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>Dit verwyder jou opgehoopte opleidingsdata. Die taalmodel sal terugkeer na ingeboude verstekwaardes met die volgende bekendstelling. Dit kan nie ongedaan gemaak word nie.</value>
@@ -791,28 +791,28 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Kantel jou toestel deur sy volle bewegingsreeks tydens kalibrasie.</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
-    <value>Toggle control mode</value>
+    <value>Skakel beheermodus</value>
   </data>
   <data name="toggle_game_mode" xml:space="preserve">
-    <value>Toggle game mode</value>
+    <value>Skakel speletjie-modus om</value>
   </data>
   <data name="toggle_keyboard_mode" xml:space="preserve">
-    <value>Toggle keyboard mode</value>
+    <value>Skakel sleutelbordmodus</value>
   </data>
   <data name="toggle_pane_position" xml:space="preserve">
-    <value>Toggle pane position</value>
+    <value>Wissel pane-posisie</value>
   </data>
   <data name="toggle_status_bar" xml:space="preserve">
-    <value>Hide/show status bar</value>
+    <value>Versteek/vertroon statusbalk</value>
   </data>
   <data name="toolbar_copy_description" xml:space="preserve">
-    <value>Copy all text</value>
+    <value>Kopieer alle teks</value>
   </data>
   <data name="toolbar_cut_description" xml:space="preserve">
-    <value>Cut selection in target app</value>
+    <value>Sny seleksie in teikenprogram</value>
   </data>
   <data name="toolbar_game_description" xml:space="preserve">
-    <value>Start game mode</value>
+    <value>Begin spelmodus</value>
   </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>Nuwe / duidelike uitvoer</value>
@@ -821,19 +821,19 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Maak lêer oop</value>
   </data>
   <data name="toolbar_paste_description" xml:space="preserve">
-    <value>Paste into target app</value>
+    <value>Plak in teikenprogram</value>
   </data>
   <data name="toolbar_reanchor_description" xml:space="preserve">
-    <value>Re-anchor predictions to the caret (read the sentence around your cursor)</value>
+    <value>Heranker voorspellings na die kollig (lees die sin rondom jou wyser)</value>
   </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>Stoor na lêer</value>
   </data>
   <data name="toolbar_select_all_description" xml:space="preserve">
-    <value>Select all in target app</value>
+    <value>Selekteer alles in teikenapp</value>
   </data>
   <data name="toolbar_settings_description" xml:space="preserve">
-    <value>Open settings</value>
+    <value>Maak instellings oop</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Deel teks</value>
@@ -848,13 +848,13 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Opleidingsdata</value>
   </data>
   <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
-    <value>Training data deleted — restart Dasher to fully apply</value>
+    <value>Opleidingsdata uitgevee — herbegin Dasher om volledig toe te pas</value>
   </data>
   <data name="training_data_description" xml:space="preserve">
     <value>Invoer voeg teks by die taalmodel en jou opgehoopte opleidingsdata (met herbeginsels gehou). Uitvoer stoor jou opleidingsdata vir rugsteun of oordrag. Herstel vee alle gebruikersopleidingsdata uit - die model keer terug na sy ingeboude verstekke met volgende bekendstelling.</value>
   </data>
   <data name="training_data_exported" xml:space="preserve">
-    <value>Training data exported.</value>
+    <value>Opleidingsdata uitgevoer.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>Voer opleidingsdata uit</value>
@@ -875,7 +875,7 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Ingevoerde {0} KB — is ten volle van toepassing op volgende bekendstelling (regstreekse model teruggestuur {1})</value>
   </data>
   <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
-    <value>Training is not available yet — try again once the canvas has rendered.</value>
+    <value>Opleiding is nog nie beskikbaar nie — probeer weer sodra die doek weergawe vertoon het.</value>
   </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>Nog geen gebruikeropleidingsdata nie</value>
@@ -893,22 +893,22 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
     <value>Opleidingsdata uitgevee waar moontlik — {0} item(s) het misluk; druk Herstel weer om weer te probeer</value>
   </data>
   <data name="tts_engine" xml:space="preserve">
-    <value>TTS Engine</value>
+    <value>TTS-enjin</value>
   </data>
   <data name="tts_no_credentials" xml:space="preserve">
-    <value>No credentials required</value>
+    <value>Geen geloofsbriewe benodig nie</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Te tik Tempo</value>
   </data>
   <data name="typing_rate_format" xml:space="preserve">
-    <value>{cps} cps · {wpm} wpm</value>
+    <value>{cps} sps · {wpm} wpm</value>
   </data>
   <data name="udp_port" xml:space="preserve">
-    <value>UDP Port</value>
+    <value>UDP-poort</value>
   </data>
   <data name="udp_tracker_help" xml:space="preserve">
-    <value>UDP tracker listens for STREAM_DATA or GazePoint messages</value>
+    <value>UDP-tracker luister vir STREAM_DATA of GazePoint-boodskappe</value>
   </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Gebruik Dasher as jou sleutelbord</value>

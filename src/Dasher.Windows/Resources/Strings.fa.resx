@@ -36,7 +36,7 @@
     <value>به بهبود Dasher کمک کنید</value>
   </data>
   <data name="analytics_body" xml:space="preserve">
-    <value>Share anonymous usage analytics and crash reports? No typed text, clipboard contents or personal information is ever collected. You can change this any time in Settings.</value>
+    <value>به اشتراک گذاشتن تحلیل‌های استفاده ناشناس و گزارش‌های سقوط برنامه؟ هیچ متن تایپ شده، محتوای کلیپ‌بورد یا اطلاعات شخصی هرگز جمع‌آوری نمی‌شود. شما می‌توانید این موضوع را هر زمان در تنظیمات تغییر دهید.</value>
   </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>الان نه</value>
@@ -45,15 +45,15 @@
     <value>اشتراک‌گذاری گزارش‌های تحلیلی و خرابی ناشناس</value>
   </data>
   <data name="analytics_rationale" xml:space="preserve">
-    <value>Dasher برای درک الگوهای استفاده و رفع خرابی ها، تجزیه و تحلیل های ناشناس و با احترام به حریم خصوصی را جمع آوری می کند. هیچ متن تایپ شده، محتوای کلیپ بورد یا اطلاعات شخصی هرگز جمع آوری نمی شود.
+    <value>داشر تجزیه و تحلیل ناشناس و احترام به حریم خصوصی را جمع‌آوری می‌کند تا الگوهای استفاده را درک کرده و کرش‌ها را برطرف کند. هیچ متن تایپی، محتوای کلیپ‌بورد یا اطلاعات شخصی هرگز جمع‌آوری نمی‌شود.
 
-هر زمان خواستید می‌توانید این مورد را در تنظیمات &gt; حریم خصوصی تغییر دهید.</value>
+شما می‌توانید این تنظیمات را هر زمان که خواستید در تنظیمات &gt; حریم خصوصی تغییر دهید.</value>
   </data>
   <data name="analytics_reset_id" xml:space="preserve">
     <value>برای بازنشانی فیلتر تجزیه و تحلیل ، روی دکمه کلیک کنید</value>
   </data>
   <data name="analytics_settings_help" xml:space="preserve">
-    <value>Dasher تجزیه و تحلیل استفاده ناشناس و گزارش‌های خرابی را جمع‌آوری می‌کند تا بفهمد چگونه از برنامه استفاده می‌شود و اشکالات را برطرف کند. هیچ متن تایپ شده، محتوای کلیپ بورد یا اطلاعات شخصی هرگز جمع آوری نمی شود.</value>
+    <value>داشر آمار استفاده ناشناس و گزارش‌های خرابی را جمع‌آوری می‌کند تا بفهمد برنامه چگونه استفاده می‌شود و باگ‌ها را برطرف کند. هیچ متن تایپ‌شده، محتوای کلیپ‌بورد یا اطلاعات شخصی هرگز جمع‌آوری نمی‌شود.</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>تجزیه و تحلیل استفاده ناشناس</value>
@@ -65,16 +65,16 @@
     <value>اقامت در سطح برنامه برای انتخاب</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
-    <value>Left</value>
+    <value>چپ</value>
   </data>
   <data name="arrow_left_tooltip" xml:space="preserve">
-    <value>Move caret left (hold to repeat)</value>
+    <value>با مکان‌نما به چپ حرکت کنید (برای تکرار نگه دارید)</value>
   </data>
   <data name="arrow_right_label" xml:space="preserve">
-    <value>Right</value>
+    <value>راست</value>
   </data>
   <data name="arrow_right_tooltip" xml:space="preserve">
-    <value>Move caret right (hold to repeat)</value>
+    <value>با مکان‌نما به راست حرکت کنید (برای تکرار نگه دارید)</value>
   </data>
   <data name="auto" xml:space="preserve">
     <value>خودکار</value>
@@ -89,13 +89,13 @@
     <value>انتخاب خودکار پس از ثابت نگه داشتن نگاه هنگام گرفتن دو انگشت. فقط در صورتی فعال شود که OS dwell خاموش باشد.</value>
   </data>
   <data name="back" xml:space="preserve">
-    <value>Back</value>
+    <value>بازگشت</value>
   </data>
   <data name="backspace_label" xml:space="preserve">
-    <value>Del</value>
+    <value>دل</value>
   </data>
   <data name="backspace_tooltip" xml:space="preserve">
-    <value>Delete (hold to repeat)</value>
+    <value>حذف (برای تکرار نگه دارید)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>لغو</value>
@@ -119,19 +119,19 @@
     <value>بستن</value>
   </data>
   <data name="close_settings" xml:space="preserve">
-    <value>Close settings</value>
+    <value>بستن تنظیمات</value>
   </data>
   <data name="colour_theme" xml:space="preserve">
     <value>تم رنگی</value>
   </data>
   <data name="control" xml:space="preserve">
-    <value>Control</value>
+    <value>کنترل</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
-    <value>Control mode: enabled</value>
+    <value>حالت کنترل: فعال</value>
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
-    <value>Control mode</value>
+    <value>حالت کنترل</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>در کلیپ بورد کپی شد.</value>
@@ -146,31 +146,31 @@
     <value>کپی کردن همه</value>
   </data>
   <data name="copy_all_clipboard" xml:space="preserve">
-    <value>Copy all (to clipboard)</value>
+    <value>کپی همه (به حافظه کلیپ‌بورد)</value>
   </data>
   <data name="copy_commands" xml:space="preserve">
     <value>کپی کردن دستورات</value>
   </data>
   <data name="copy_selection" xml:space="preserve">
-    <value>Copy selection</value>
+    <value>کپی کردن انتخاب</value>
   </data>
   <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
-    <value>Could not load the file into the engine</value>
+    <value>نمی‌توان فایل را به موتور بارگذاری کرد</value>
   </data>
   <data name="could_not_open_the_selected_file" xml:space="preserve">
-    <value>Could not open the selected file.</value>
+    <value>امکان باز کردن فایل انتخاب‌شده وجود ندارد.</value>
   </data>
   <data name="could_not_read_the_selected_file" xml:space="preserve">
-    <value>Could not read the selected file.</value>
+    <value>امکان خواندن فایل انتخاب‌شده وجود ندارد.</value>
   </data>
   <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
-    <value>Could not sync your edit with the engine — it may be overwritten</value>
+    <value>امکان همگام‌سازی ویرایش شما با موتور وجود ندارد — ممکن است بازنویسی شود</value>
   </data>
   <data name="could_not_write_the_export_file" xml:space="preserve">
-    <value>Could not write the export file.</value>
+    <value>امکان نوشتن فایل صادرشده وجود نداشت.</value>
   </data>
   <data name="could_not_write_the_training_data" xml:space="preserve">
-    <value>Could not write the training data.</value>
+    <value>امکان نوشتن داده‌های آموزشی وجود نداشت.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>کالیبراسیون جریان</value>
@@ -185,19 +185,19 @@
     <value>دَشِر</value>
   </data>
   <data name="dasher5_config_found" xml:space="preserve">
-    <value>We found your Dasher 5 configuration</value>
+    <value>ما پیکربندی Dasher 5 شما را پیدا کردیم</value>
   </data>
   <data name="dasher5_import" xml:space="preserve">
-    <value>Dasher 5 Import</value>
+    <value>واردات داشر ۵</value>
   </data>
   <data name="dasher5_import_prompt" xml:space="preserve">
-    <value>Would you like to import these settings into Dasher 6?</value>
+    <value>آیا می‌خواهید این تنظیمات را به Dasher 6 وارد کنید؟</value>
   </data>
   <data name="dasher5_no_data" xml:space="preserve">
-    <value>No Dasher 5 data found on this computer.</value>
+    <value>هیچ داده‌ای از Dasher 5 در این رایانه یافت نشد.</value>
   </data>
   <data name="dasher5_settings_found" xml:space="preserve">
-    <value>Dasher 5 settings found</value>
+    <value>پنج تنظیمات داشر یافت شد</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>داده‌های Dasher 5 روی این مک شناسایی شد.</value>
@@ -217,7 +217,7 @@
 می‌توانید این مورد را در هر زمان در تنظیمات &gt; حریم خصوصی تغییر دهید.</value>
   </data>
   <data name="dasher_engine_error" xml:space="preserve">
-    <value>Dasher Engine Error</value>
+    <value>خطای موتور داشر</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>کیبورد دشر</value>
@@ -257,7 +257,7 @@
     <value>انجام شد</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
-    <value>Hover in one spot to trigger a click, instead of pressing a button or switch.</value>
+    <value>در یک نقطه معلق بمانید تا کلیک فعال شود، به جای اینکه دکمه یا سوئیچ را فشار دهید.</value>
   </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>برای کلیک کردن، مکث کنید</value>
@@ -269,16 +269,16 @@
     <value>برای دسترسی به کالیبراسیون، ابتدا ورودی شیب را فعال کنید.</value>
   </data>
   <data name="engine_error" xml:space="preserve">
-    <value>Engine Error</value>
+    <value>خطای موتور</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
-    <value>The Dasher engine encountered an internal error and has stopped. Please restart Dasher.</value>
+    <value>موتور دَشر با یک خطای داخلی مواجه شد و متوقف شد. لطفاً دَشر را دوباره راه‌اندازی کنید.</value>
   </data>
   <data name="engine_speech_features" xml:space="preserve">
-    <value>Engine Speech Features</value>
+    <value>ویژگی‌های گفتاری موتور</value>
   </data>
   <data name="exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>خروج</value>
   </data>
   <data name="export_training_text" xml:space="preserve">
     <value>متن آموزشی را صادر کنید</value>
@@ -287,10 +287,10 @@
     <value>نگاه خیره</value>
   </data>
   <data name="eye_tracker_device" xml:space="preserve">
-    <value>Eye Tracker Device</value>
+    <value>دستگاه دنبال‌کننده چشم</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
-    <value>Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.</value>
+    <value>گزارش پیگیری دقیق برای گزارش‌های باگ (خطوط به ازای هر نمونه، در فایل eyegaze.log در پوشه Dasher نوشته می‌شود). رویدادهای اتصال پایه همیشه ثبت می‌شوند.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>پرونده باز نشد</value>
@@ -302,7 +302,7 @@
     <value>سریع</value>
   </data>
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
-    <value>File truncated at 4 MB — only the first part is loaded</value>
+    <value>پرونده در ۴ مگابایت کوتاه شد — فقط بخش اول بارگذاری شده است</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>برای شناور کردن صفحه‌کلید، به Dasher اجازه دهید روی برنامه‌های دیگر نمایش داده شود، سپس دوباره Float را بزنید.</value>
@@ -320,13 +320,13 @@
     <value>فایل متنی بازی</value>
   </data>
   <data name="gaze_filter_help" xml:space="preserve">
-    <value>Reduces zoom toward wrong positions while your eyes move to a target</value>
+    <value>کاهش بزرگنمایی به سمت موقعیت‌های نادرست در حالی که چشمان شما به یک هدف حرکت می‌کنند</value>
   </data>
   <data name="gaze_filter_label" xml:space="preserve">
-    <value>Filter gaze (reduces zoom toward wrong positions during eye transit)</value>
+    <value>فیلتر نگاه (کاهش بزرگ‌نمایی به سمت موقعیت‌های اشتباه در طول انتقال چشم)</value>
   </data>
   <data name="gaze_smoothing" xml:space="preserve">
-    <value>Gaze Smoothing</value>
+    <value>صاف کردن نگاه</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>گرفتمش.</value>
@@ -347,10 +347,10 @@
     <value>وارد کردن متن آموزشی</value>
   </data>
   <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
-    <value>Imported %1 — applies fully on next launch</value>
+    <value>وارد شده %1 — در راه‌اندازی بعدی به‌طور کامل اعمال می‌شود</value>
   </data>
   <data name="imported_1_of_training_text" xml:space="preserve">
-    <value>Imported %1 of training text</value>
+    <value>%1 از متن آموزشی وارد شد</value>
   </data>
   <data name="increase_speed" xml:space="preserve">
     <value>افزایش سرعت</value>
@@ -371,7 +371,7 @@
     <value>لمس (کشیدن روی بوم)</value>
   </data>
   <data name="input_processing" xml:space="preserve">
-    <value>Input Processing</value>
+    <value>پردازش ورودی</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;برای استفاده از حالت کیبورد، ydotool را نصب کنید&lt;/b&gt;</value>
@@ -380,13 +380,13 @@
     <value>نصب نشده است. این دستورات را اجرا کنید، سپس دوباره امتحان کنید:</value>
   </data>
   <data name="keyboard" xml:space="preserve">
-    <value>Keyboard</value>
+    <value>صفحه‌کلید</value>
   </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>صفحه‌کلید</value>
   </data>
   <data name="keyboard_mode_description" xml:space="preserve">
-    <value>Type Dasher's output straight into the app you are pointing at</value>
+    <value>خروجی داشر را مستقیماً در برنامه‌ای که به آن اشاره می‌کنید تایپ کنید</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>سودهی برای حالت صفحه کلید</value>
@@ -398,7 +398,7 @@
     <value>کدورت حالت صفحه کلید</value>
   </data>
   <data name="keyboard_mode_stopped" xml:space="preserve">
-    <value>Keyboard mode stopped</value>
+    <value>حالت صفحه‌کلید متوقف شد</value>
   </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>حالت صفحه کلید متوقف شد: ydotool نتوانست متن را تزریق کند. آیا ydotool قدیمی است؟</value>
@@ -407,13 +407,13 @@
     <value>فعال کردن حالت صفحه کلید</value>
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
-    <value>Window transparency when in Keyboard/Direct mode</value>
+    <value>شفافیت پنجره هنگام استفاده از حالت صفحه‌کلید/مستقیم</value>
   </data>
   <data name="language" xml:space="preserve">
-    <value>Language</value>
+    <value>زبان</value>
   </data>
   <data name="language_locale" xml:space="preserve">
-    <value>Language / Locale</value>
+    <value>زبان / منطقه</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;زبان / منطقه&lt;/b&gt;</value>
@@ -440,7 +440,7 @@
     <value>یادگیری</value>
   </data>
   <data name="leave" xml:space="preserve">
-    <value>Leave</value>
+    <value>ترک کردن</value>
   </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>حالت بازی را ترک کنید</value>
@@ -449,13 +449,13 @@
     <value>نور</value>
   </data>
   <data name="load_voices" xml:space="preserve">
-    <value>Load Voices</value>
+    <value>بارگذاری صداها</value>
   </data>
   <data name="loaded_1_characters" xml:space="preserve">
-    <value>Loaded %1 characters</value>
+    <value>بارگذاری %1 کاراکتر</value>
   </data>
   <data name="loading" xml:space="preserve">
-    <value>Loading…</value>
+    <value>در حال بارگذاری…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>زبان</value>
@@ -467,10 +467,10 @@
     <value>مهاجرت</value>
   </data>
   <data name="more" xml:space="preserve">
-    <value>More</value>
+    <value>بیشتر</value>
   </data>
   <data name="more_options" xml:space="preserve">
-    <value>More options</value>
+    <value>گزینه‌های بیشتر</value>
   </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>برای هدایت، هنگام نیشگون گرفتن، چشمان خود را حرکت دهید</value>
@@ -479,7 +479,7 @@
     <value>جدید</value>
   </data>
   <data name="new_document" xml:space="preserve">
-    <value>New document</value>
+    <value>سند جدید</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>پیام جدید</value>
@@ -494,10 +494,10 @@
     <value>تنظیماتی برای این بخش وجود ندارد.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
-    <value>No training data to export yet</value>
+    <value>هنوز داده آموزشی برای صادر کردن وجود ندارد</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
-    <value>No user training data yet</value>
+    <value>هنوز داده‌های آموزشی کاربر وجود ندارد</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>چیزی برای ذخیره کردن نیست</value>
@@ -536,7 +536,7 @@
     <value>برون داد</value>
   </data>
   <data name="output_font" xml:space="preserve">
-    <value>Output Font</value>
+    <value>فونت خروجی</value>
   </data>
   <data name="output_font_size" xml:space="preserve">
     <value>اندازه فونت خروجی</value>
@@ -545,7 +545,7 @@
     <value>برای شروع نوشتن، بوم را لمس کنید.</value>
   </data>
   <data name="pane_position" xml:space="preserve">
-    <value>Pane position</value>
+    <value>موقعیت پنل</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>چسباندن</value>
@@ -563,10 +563,10 @@
     <value>برای نوشتن، انگشتتان را به هم نزدیک کنید و نگاه کنید</value>
   </data>
   <data name="pitch" xml:space="preserve">
-    <value>Pitch</value>
+    <value>پِیچ</value>
   </data>
   <data name="play" xml:space="preserve">
-    <value>Game</value>
+    <value>بازی</value>
   </data>
   <data name="play_2" xml:space="preserve">
     <value>شروع</value>
@@ -575,7 +575,7 @@
     <value>ورودی نشانگر موس</value>
   </data>
   <data name="preferences" xml:space="preserve">
-    <value>Preferences</value>
+    <value>تنظیمات</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>مقدماتی</value>
@@ -584,7 +584,7 @@
     <value>در حال آماده‌سازی Dasher…</value>
   </data>
   <data name="preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>پیش‌نمایش</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>حریم خصوصی</value>
@@ -593,10 +593,10 @@
     <value>&lt;b&gt;حریم خصوصی&lt;/b&gt;</value>
   </data>
   <data name="quick_speak" xml:space="preserve">
-    <value>Quick speak</value>
+    <value>زود صحبت کن</value>
   </data>
   <data name="rate" xml:space="preserve">
-    <value>Rate</value>
+    <value>نرخ</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>دوباره از Dasher 5 وارد کنید</value>
@@ -635,10 +635,10 @@
     <value>داده‌های آموزشی را بازنشانی کنید؟</value>
   </data>
   <data name="reset_wpm_averages" xml:space="preserve">
-    <value>Reset WPM averages</value>
+    <value>ریست کردن میانگین‌های WPM</value>
   </data>
   <data name="restarting_engine" xml:space="preserve">
-    <value>Restarting engine…</value>
+    <value>در حال راه‌اندازی مجدد موتور…</value>
   </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>تمام تنظیمات Dasher را به مقادیر پیش‌فرضشان برگردانید. این کار قابل بازگشت نیست.</value>
@@ -653,13 +653,13 @@
     <value>ذخیره...</value>
   </data>
   <data name="save_eye_tracker_diagnostics" xml:space="preserve">
-    <value>Save eye-tracker diagnostics</value>
+    <value>ذخیره تشخیص‌های ردیاب چشم</value>
   </data>
   <data name="save_failed" xml:space="preserve">
     <value>ذخیره ناموفق بود</value>
   </data>
   <data name="save_file" xml:space="preserve">
-    <value>Save file</value>
+    <value>ذخیره کردن فایل</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>ذخیره فایل متنی</value>
@@ -674,7 +674,7 @@
     <value>سرعت اسکن</value>
   </data>
   <data name="selection_method" xml:space="preserve">
-    <value>Selection Method</value>
+    <value>روش انتخاب</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>تنظیمات</value>
@@ -701,7 +701,7 @@
     <value>نمایش ورودی اشکال‌زدایی روی هم افتاده</value>
   </data>
   <data name="show_status_bar" xml:space="preserve">
-    <value>Show status bar</value>
+    <value>نمایش نوار وضعیت</value>
   </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>نمایش نرخ تایپ (WPM)</value>
@@ -716,10 +716,10 @@
     <value>آهسته</value>
   </data>
   <data name="speak_on_stop" xml:space="preserve">
-    <value>Speak on stop</value>
+    <value>صحبت کردن درباره توقف</value>
   </data>
   <data name="speak_words" xml:space="preserve">
-    <value>Speak words</value>
+    <value>حرف بزن</value>
   </data>
   <data name="speech" xml:space="preserve">
     <value>گفتار</value>
@@ -731,13 +731,13 @@
     <value>سخنرانی در مورد</value>
   </data>
   <data name="speech_settings" xml:space="preserve">
-    <value>Speech Settings</value>
+    <value>تنظیمات صدا</value>
   </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;تنظیمات گفتار&lt;/b&gt;</value>
   </data>
   <data name="speech_volume" xml:space="preserve">
-    <value>Speech volume</value>
+    <value>حجم صدا</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>سرعت</value>
@@ -752,13 +752,13 @@
     <value>از نو شروع کنید</value>
   </data>
   <data name="steering_method" xml:space="preserve">
-    <value>Steering Method</value>
+    <value>روش فرمان‌دهی</value>
   </data>
   <data name="stop" xml:space="preserve">
     <value>توقف</value>
   </data>
   <data name="stop_speaking" xml:space="preserve">
-    <value>Stop speaking</value>
+    <value>حرف زدن را متوقف کن</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>سیستم</value>
@@ -770,19 +770,19 @@
     <value>پرونده‌های متنی</value>
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
-    <value>That file already is your training data.</value>
+    <value>آن فایل قبلاً داده‌های آموزشی شما است.</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>لایه اشکال‌زدایی یک پنل سبز در بالا سمت چپ بوم رسم می‌کند که تعداد رویدادهای لمسی زنده و آخرین گزارش‌شده (x، y) را نشان می‌دهد. وقتی انگشت خود را روی صفحه نگه می‌دارید، باید touch.begin و سپس touch.moved را با تغییر مختصات هنگام نگاه کردن به اطراف ببینید.</value>
   </data>
   <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
-    <value>The file is too large (over 10 MB) to import as training text.</value>
+    <value>فایل بیش از حد بزرگ است (بیش از ۱۰ مگابایت) تا به عنوان متن آموزشی وارد شود.</value>
   </data>
   <data name="the_selected_file_is_empty" xml:space="preserve">
-    <value>The selected file is empty.</value>
+    <value>فایل انتخاب‌شده خالی است.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
-    <value>This deletes your accumulated training data for every alphabet. Predictions keep the influence of very recent typing.</value>
+    <value>این داده‌های آموزشی انباشته‌شده شما برای هر الفبا را حذف می‌کند. پیش‌بینی‌ها تأثیر تایپ بسیار اخیر را حفظ می‌کنند.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>این کار داده‌های آموزشی انباشته‌شده شما را حذف می‌کند. مدل زبان در اجرای بعدی به پیش‌فرض‌های داخلی خود باز خواهد گشت. این کار قابل بازگشت نیست.</value>
@@ -797,28 +797,28 @@
     <value>در طول کالیبراسیون، دستگاه خود را در تمام دامنه حرکتی آن کج کنید.</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
-    <value>Toggle control mode</value>
+    <value>تغییر حالت کنترل</value>
   </data>
   <data name="toggle_game_mode" xml:space="preserve">
-    <value>Toggle game mode</value>
+    <value>تغییر حالت بازی</value>
   </data>
   <data name="toggle_keyboard_mode" xml:space="preserve">
-    <value>Toggle keyboard mode</value>
+    <value>تغییر حالت کیبورد</value>
   </data>
   <data name="toggle_pane_position" xml:space="preserve">
-    <value>Toggle pane position</value>
+    <value>تغییر موقعیت پانل</value>
   </data>
   <data name="toggle_status_bar" xml:space="preserve">
-    <value>Hide/show status bar</value>
+    <value>مخفی/نمایش نوار وضعیت</value>
   </data>
   <data name="toolbar_copy_description" xml:space="preserve">
-    <value>Copy all text</value>
+    <value>تمام متن را کپی کنید</value>
   </data>
   <data name="toolbar_cut_description" xml:space="preserve">
-    <value>Cut selection in target app</value>
+    <value>برش انتخاب در برنامه هدف</value>
   </data>
   <data name="toolbar_game_description" xml:space="preserve">
-    <value>Start game mode</value>
+    <value>شروع حالت بازی</value>
   </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>خروجی جدید/پاک کردن</value>
@@ -827,19 +827,19 @@
     <value>باز کردن فایل</value>
   </data>
   <data name="toolbar_paste_description" xml:space="preserve">
-    <value>Paste into target app</value>
+    <value>در برنامه هدف جای‌گذاری کنید</value>
   </data>
   <data name="toolbar_reanchor_description" xml:space="preserve">
-    <value>Re-anchor predictions to the caret (read the sentence around your cursor)</value>
+    <value>پیش‌بینی‌ها را دوباره به مکان‌نما متصل کنید (جمله‌ای که اطراف مکان‌نما است را بخوانید)</value>
   </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>ذخیره در فایل</value>
   </data>
   <data name="toolbar_select_all_description" xml:space="preserve">
-    <value>Select all in target app</value>
+    <value>انتخاب همه در برنامه هدف</value>
   </data>
   <data name="toolbar_settings_description" xml:space="preserve">
-    <value>Open settings</value>
+    <value>باز کردن تنظیمات</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>متن را به اشتراک بگذارید</value>
@@ -854,13 +854,13 @@
     <value>داده‌های آموزشی</value>
   </data>
   <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
-    <value>Training data deleted — restart Dasher to fully apply</value>
+    <value>داده‌های آموزشی حذف شد — برای اعمال کامل، Dasher را مجدداً راه‌اندازی کنید</value>
   </data>
   <data name="training_data_description" xml:space="preserve">
     <value>Import متنی را به مدل زبان و داده‌های آموزشی انباشته‌شده شما اضافه می‌کند (در طول راه‌اندازی مجدد حفظ می‌شود). Export داده های آموزشی شما را برای پشتیبان گیری یا انتقال ذخیره می کند. بازنشانی تمام داده‌های آموزش کاربر را حذف می‌کند - مدل در راه‌اندازی بعدی به پیش‌فرض‌های داخلی خود بازمی‌گردد.</value>
   </data>
   <data name="training_data_exported" xml:space="preserve">
-    <value>Training data exported.</value>
+    <value>داده‌های آموزشی صادر شدند.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>صادرات داده های آموزشی</value>
@@ -881,7 +881,7 @@
     <value>{0} کیلوبایت وارد شده — در راه اندازی بعدی کاملاً اعمال می شود (مدل زنده {1} برگردانده شد)</value>
   </data>
   <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
-    <value>Training is not available yet — try again once the canvas has rendered.</value>
+    <value>آموزش هنوز در دسترس نیست — پس از رندر شدن بوم دوباره امتحان کنید.</value>
   </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>هنوز اطلاعاتی برای آموزش کاربر وجود ندارد</value>
@@ -899,10 +899,10 @@
     <value>در صورت امکان، داده‌های آموزشی حذف شد - {0} مورد (ها) ناموفق بود. دوباره Reset را فشار دهید تا دوباره امتحان کنید</value>
   </data>
   <data name="tts_engine" xml:space="preserve">
-    <value>TTS Engine</value>
+    <value>موتور تبدیل متن به گفتار</value>
   </data>
   <data name="tts_no_credentials" xml:space="preserve">
-    <value>No credentials required</value>
+    <value>نیاز به مدارک ندارد</value>
   </data>
   <data name="turbo" xml:space="preserve">
     <value>توربو</value>
@@ -911,19 +911,19 @@
     <value>نرخ تایپ</value>
   </data>
   <data name="typing_rate_format" xml:space="preserve">
-    <value>{cps} cps · {wpm} wpm</value>
+    <value>{cps} کاراکتر در ثانیه · {wpm} کلمه در دقیقه</value>
   </data>
   <data name="udp_port" xml:space="preserve">
-    <value>UDP Port</value>
+    <value>پورت UDP</value>
   </data>
   <data name="udp_tracker_help" xml:space="preserve">
-    <value>UDP tracker listens for STREAM_DATA or GazePoint messages</value>
+    <value>ردیاب UDP به پیام‌های STREAM_DATA یا GazePoint گوش می‌دهد</value>
   </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>از Dasher به عنوان کیبورد خود استفاده کنید</value>
   </data>
   <data name="volume" xml:space="preserve">
-    <value>Volume</value>
+    <value>حجم</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>ما پیکربندی Dasher 5 شما را در این مک پیدا کردیم. حروف الفبا، رنگ‌ها، تنظیمات سرعت و فایل‌های سفارشی شما را می‌توان به Dasher 6 وارد کرد.</value>
