@@ -538,7 +538,7 @@
             <Button x:Name="KbRightBtn" ToolTip.Tip="{loc:Tr Key=arrow_right_tooltip}">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.ArrowRight}" Size="18"/>
             </Button>
-            <Button x:Name="KbControlBtn" Click="OnToggleControlMode" ToolTip.Tip="{loc:Tr Key=control_mode_tooltip}">
+            <Button x:Name="KbControlBtn" Click="OnToggleControlMode" ToolTip.Tip="{loc:Tr Key=control_nodes_tooltip}">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.MousePointerClick}" Size="18"/>
             </Button>
             <!-- Re-anchor: force a fresh read of the target's sentence around the caret -->
@@ -558,9 +558,6 @@
             </Button>
             <Button Click="OnKbPaste" ToolTip.Tip="{loc:Tr Key=toolbar_paste_description}">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.ClipboardPaste}" Size="18"/>
-            </Button>
-            <Button Click="OnKbSelectAll" ToolTip.Tip="{loc:Tr Key=toolbar_select_all_description}">
-                <LucideIcon Kind="{x:Static lucide:LucideIconKind.TextCursorInput}" Size="18"/>
             </Button>
             <Button Click="OnTogglePrefs" ToolTip.Tip="{loc:Tr Key=settings}">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.Settings}" Size="18"/>

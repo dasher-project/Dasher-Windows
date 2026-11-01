@@ -1493,12 +1493,6 @@ public partial class MainWindow : Window
         SendCtrlChord(VK_KEY_V, "V");
     }
 
-    private void OnKbSelectAll(object? sender, RoutedEventArgs e)
-    {
-        Services.AnalyticsService.CaptureUiAction("ime_toolbar", "select_all");
-        SendCtrlChord(VK_KEY_A, "A");
-    }
-
     private void UpdateWindowMinimum()
     {
         if (_vm == null) return;
