@@ -146,7 +146,7 @@ You can change this anytime in Settings &gt; Privacy.</value>
     <value>Control mode</value>
   </data>
   <data name="control_nodes_tooltip" xml:space="preserve">
-    <value>Control nodes: move, delete, speak, pause</value>
+    <value>Control nodes: move, delete, clear, speak, pause</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Copied to clipboard.</value>

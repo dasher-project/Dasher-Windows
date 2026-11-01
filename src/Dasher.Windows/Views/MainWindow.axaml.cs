@@ -1356,7 +1356,6 @@ public partial class MainWindow : Window
     private const ushort VK_KEY_C = 0x43;
     private const ushort VK_KEY_X = 0x58;
     private const ushort VK_KEY_V = 0x56;
-    private const ushort VK_KEY_A = 0x41;
     private const ushort VK_LEFT = 0x25;
     private const ushort VK_RIGHT = 0x27;
 
