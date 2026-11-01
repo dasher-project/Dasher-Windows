@@ -35,14 +35,25 @@
   <data name="analytics_accept" xml:space="preserve">
     <value>Помогите улучшить Daher</value>
   </data>
+  <data name="analytics_body" xml:space="preserve">
+    <value>Поделиться анонимной аналитикой использования и отчётами об ошибках? Никакой введённой текст, содержимое буфера обмена или личная информация никогда не собирается. Вы можете изменить это в любое время в Настройках.</value>
+  </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>Не сейчас</value>
   </data>
   <data name="analytics_opt_in" xml:space="preserve">
     <value>Делитесь анонимными аналитическими данными и отчетами о сбоях.</value>
   </data>
+  <data name="analytics_rationale" xml:space="preserve">
+    <value>Dasher собирает анонимную, защищающую конфиденциальность аналитику, чтобы понять шаблоны использования и исправлять сбои. Никакой введённой текст, содержимое буфера обмена или личная информация никогда не собирается.
+
+Вы можете изменить это в любое время в Настройках &gt; Конфиденциальность.</value>
+  </data>
   <data name="analytics_reset_id" xml:space="preserve">
     <value>Сбросить идентификатор аналитики</value>
+  </data>
+  <data name="analytics_settings_help" xml:space="preserve">
+    <value>Dasher собирает анонимную аналитику использования и отчёты об ошибках, чтобы понять, как используется приложение, и исправлять ошибки. Никакой введённой текст, содержимое буфера обмена или личная информация никогда не собирается.</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Анонимная аналитика использования</value>
@@ -52,6 +63,18 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>Выбор на уровне приложения</value>
+  </data>
+  <data name="arrow_left_label" xml:space="preserve">
+    <value>Влево</value>
+  </data>
+  <data name="arrow_left_tooltip" xml:space="preserve">
+    <value>Переместить курсор влево (удерживать для повторения)</value>
+  </data>
+  <data name="arrow_right_label" xml:space="preserve">
+    <value>Вправо</value>
+  </data>
+  <data name="arrow_right_tooltip" xml:space="preserve">
+    <value>Переместить курсор вправо (удерживать для повторения)</value>
   </data>
   <data name="auto" xml:space="preserve">
     <value>Авто</value>
@@ -64,6 +87,15 @@
   </data>
   <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
     <value>Автоматический выбор после фиксации взгляда при масштабировании. Включается только в том случае, если параметр «Задержка» в ОС отключен.</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="backspace_label" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="backspace_tooltip" xml:space="preserve">
+    <value>Удалить (удерживать для повторения)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Отмена</value>
@@ -86,8 +118,20 @@
   <data name="close" xml:space="preserve">
     <value>Закрывать</value>
   </data>
+  <data name="close_settings" xml:space="preserve">
+    <value>Закрыть настройки</value>
+  </data>
   <data name="colour_theme" xml:space="preserve">
     <value>Цветовая тема</value>
+  </data>
+  <data name="control" xml:space="preserve">
+    <value>Управление</value>
+  </data>
+  <data name="control_mode_enabled" xml:space="preserve">
+    <value>Режим управления: включён</value>
+  </data>
+  <data name="control_mode_tooltip" xml:space="preserve">
+    <value>Режим управления</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Скопировано в буфер обмена.</value>
@@ -101,8 +145,32 @@
   <data name="copy_all_2" xml:space="preserve">
     <value>Скопировать все</value>
   </data>
+  <data name="copy_all_clipboard" xml:space="preserve">
+    <value>Копировать всё (в буфер обмена)</value>
+  </data>
   <data name="copy_commands" xml:space="preserve">
     <value>Копировать команды</value>
+  </data>
+  <data name="copy_selection" xml:space="preserve">
+    <value>Копировать выделение</value>
+  </data>
+  <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
+    <value>Не удалось загрузить файл в движок</value>
+  </data>
+  <data name="could_not_open_the_selected_file" xml:space="preserve">
+    <value>Не удалось открыть выбранный файл.</value>
+  </data>
+  <data name="could_not_read_the_selected_file" xml:space="preserve">
+    <value>Не удалось прочитать выбранный файл.</value>
+  </data>
+  <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
+    <value>Не удалось синхронизировать ваш редактирование с движком — оно может быть перезаписано</value>
+  </data>
+  <data name="could_not_write_the_export_file" xml:space="preserve">
+    <value>Не удалось записать экспортный файл.</value>
+  </data>
+  <data name="could_not_write_the_training_data" xml:space="preserve">
+    <value>Не удалось записать данные обучения.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Текущая калибровка</value>
@@ -115,6 +183,21 @@
   </data>
   <data name="dasher" xml:space="preserve">
     <value>Дэшер</value>
+  </data>
+  <data name="dasher5_config_found" xml:space="preserve">
+    <value>Мы нашли вашу конфигурацию Dasher 5</value>
+  </data>
+  <data name="dasher5_import" xml:space="preserve">
+    <value>Импорт Dasher 5</value>
+  </data>
+  <data name="dasher5_import_prompt" xml:space="preserve">
+    <value>Хотите импортировать эти настройки в Dasher 6?</value>
+  </data>
+  <data name="dasher5_no_data" xml:space="preserve">
+    <value>Данные Dasher 5 не найдены на этом компьютере.</value>
+  </data>
+  <data name="dasher5_settings_found" xml:space="preserve">
+    <value>Найдены настройки Dasher 5</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>На этом Mac обнаружены данные Dasher 5.</value>
@@ -132,6 +215,9 @@
     <value>Dasher собирает анонимные, конфиденциальные аналитические данные для понимания моделей использования и устранения сбоев. Никакой набранный текст, содержимое буфера обмена или личная информация никогда не собираются.
 
 Вы можете изменить это в любое время в разделе «Настройки» &gt; «Конфиденциальность».</value>
+  </data>
+  <data name="dasher_engine_error" xml:space="preserve">
+    <value>Ошибка движка Dasher</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>Клавиатура Daher</value>
@@ -167,6 +253,9 @@
   <data name="done" xml:space="preserve">
     <value>Сделанный</value>
   </data>
+  <data name="dwell_description" xml:space="preserve">
+    <value>Наведите курсор в одну точку, чтобы вызвать клик, вместо нажатия кнопки или переключателя.</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Дождитесь клика</value>
   </data>
@@ -176,11 +265,29 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Для доступа к калибровке сначала включите ввод данных о наклоне.</value>
   </data>
+  <data name="engine_error" xml:space="preserve">
+    <value>Ошибка движка</value>
+  </data>
+  <data name="engine_error_message" xml:space="preserve">
+    <value>Движок Dasher столкнулся с внутренней ошибкой и остановился. Пожалуйста, перезапустите Dasher.</value>
+  </data>
+  <data name="engine_speech_features" xml:space="preserve">
+    <value>Функции речи движка</value>
+  </data>
+  <data name="exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
   <data name="export_training_text" xml:space="preserve">
     <value>экспорт учебного текста</value>
   </data>
   <data name="eye_gaze" xml:space="preserve">
     <value>Взгляд</value>
+  </data>
+  <data name="eye_tracker_device" xml:space="preserve">
+    <value>Устройство отслеживания глаз</value>
+  </data>
+  <data name="eyegaze_verbose_help" xml:space="preserve">
+    <value>Подробный журнал отслеживания для отчётов об ошибках (строки для каждой выборки, записываются в eyegaze.log в папке Dasher). Базовые события соединения всегда логируются.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>Не удалось открыть:</value>
@@ -190,6 +297,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>Быстрый</value>
+  </data>
+  <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
+    <value>Файл обрезан до 4 МБ — загружается только первая часть</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Чтобы открепить клавиатуру, разрешите Dasher отображаться поверх других приложений, затем снова нажмите Float.</value>
@@ -206,6 +316,15 @@
   <data name="game_text_file" xml:space="preserve">
     <value>Текстовый файл игры</value>
   </data>
+  <data name="gaze_filter_help" xml:space="preserve">
+    <value>Снижает масштаб к неверным позициям, пока ваши глаза двигаются к цели</value>
+  </data>
+  <data name="gaze_filter_label" xml:space="preserve">
+    <value>Фильтр взгляда (снижает масштаб к неверным позициям во время перехода глаз)</value>
+  </data>
+  <data name="gaze_smoothing" xml:space="preserve">
+    <value>Сглаживание взгляда</value>
+  </data>
   <data name="got_it" xml:space="preserve">
     <value>Понятно</value>
   </data>
@@ -220,6 +339,12 @@
   </data>
   <data name="import_training_text" xml:space="preserve">
     <value>Импорт обучающего текста</value>
+  </data>
+  <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
+    <value>Импортировано %1 — полностью применится при следующем запуске</value>
+  </data>
+  <data name="imported_1_of_training_text" xml:space="preserve">
+    <value>Импортировано %1 из обучающего текста</value>
   </data>
   <data name="increase_speed" xml:space="preserve">
     <value>Увеличьте скорость</value>
@@ -239,14 +364,23 @@
   <data name="input_method_touch" xml:space="preserve">
     <value>Коснитесь (перетащите курсор по холсту).</value>
   </data>
+  <data name="input_processing" xml:space="preserve">
+    <value>Обработка ввода</value>
+  </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Установите ydotool для использования режима клавиатуры&lt;/b&gt;</value>
   </data>
   <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
     <value>не установлен. Выполните следующие команды, затем нажмите «Повторить»:</value>
   </data>
+  <data name="keyboard" xml:space="preserve">
+    <value>Клавиатура</value>
+  </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>_Клавиатура</value>
+  </data>
+  <data name="keyboard_mode_description" xml:space="preserve">
+    <value>Вводите вывод Dasher напрямую в приложение, на которое вы указываете</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Выход из режима клавиатуры</value>
@@ -257,11 +391,23 @@
   <data name="keyboard_mode_opacity" xml:space="preserve">
     <value>Прозрачность режима клавиатуры</value>
   </data>
+  <data name="keyboard_mode_stopped" xml:space="preserve">
+    <value>Режим клавиатуры остановлен</value>
+  </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>Режим клавиатуры остановлен: ydotool не удалось внедрить текст. Является ли ydotool неисправным?</value>
   </data>
   <data name="keyboard_mode_title" xml:space="preserve">
     <value>Включить режим клавиатуры</value>
+  </data>
+  <data name="keyboard_mode_transparency_help" xml:space="preserve">
+    <value>Прозрачность окна в режиме Клавиатура/Прямой</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="language_locale" xml:space="preserve">
+    <value>Язык / Локаль</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Язык / Регион&lt;/b&gt;</value>
@@ -287,11 +433,23 @@
   <data name="learning" xml:space="preserve">
     <value>Обучение</value>
   </data>
+  <data name="leave" xml:space="preserve">
+    <value>Покинуть</value>
+  </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>Выйти из игрового режима</value>
   </data>
   <data name="light" xml:space="preserve">
     <value>Свет</value>
+  </data>
+  <data name="load_voices" xml:space="preserve">
+    <value>Загрузить голоса</value>
+  </data>
+  <data name="loaded_1_characters" xml:space="preserve">
+    <value>Загружено %1 символов</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>Загрузка…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>Язык</value>
@@ -302,11 +460,20 @@
   <data name="migration" xml:space="preserve">
     <value>Миграция</value>
   </data>
+  <data name="more" xml:space="preserve">
+    <value>Ещё</value>
+  </data>
+  <data name="more_options" xml:space="preserve">
+    <value>Дополнительные параметры</value>
+  </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>Перемещайте глаза, одновременно используя жест масштабирования для управления.</value>
   </data>
   <data name="new" xml:space="preserve">
     <value>Новый</value>
+  </data>
+  <data name="new_document" xml:space="preserve">
+    <value>Новый документ</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>Новое сообщение</value>
@@ -319,6 +486,12 @@
   </data>
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>Настройки для этого раздела отсутствуют.</value>
+  </data>
+  <data name="no_training_data_to_export_yet" xml:space="preserve">
+    <value>Нет данных обучения для экспорта</value>
+  </data>
+  <data name="no_user_training_data_yet" xml:space="preserve">
+    <value>Нет пользовательских данных обучения</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Сохранить нечего</value>
@@ -356,11 +529,17 @@
   <data name="output" xml:space="preserve">
     <value>Выход</value>
   </data>
+  <data name="output_font" xml:space="preserve">
+    <value>Шрифт вывода</value>
+  </data>
   <data name="output_font_size" xml:space="preserve">
     <value>Размер шрифта при выводе</value>
   </data>
   <data name="output_placeholder" xml:space="preserve">
     <value>Коснитесь холста, чтобы начать писать.</value>
+  </data>
+  <data name="pane_position" xml:space="preserve">
+    <value>Положение панели</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>Вставить</value>
@@ -377,11 +556,20 @@
   <data name="pinch_and_look_to_write" xml:space="preserve">
     <value>Используйте жест «щипок» и «посмотри», чтобы писать.</value>
   </data>
+  <data name="pitch" xml:space="preserve">
+    <value>Тон</value>
+  </data>
+  <data name="play" xml:space="preserve">
+    <value>Игра</value>
+  </data>
   <data name="play_2" xml:space="preserve">
     <value>Играть</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Ввод при наведении указателя</value>
+  </data>
+  <data name="preferences" xml:space="preserve">
+    <value>Настройки</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Настройки</value>
@@ -389,11 +577,20 @@
   <data name="preparing_dasher" xml:space="preserve">
     <value>Подготовка Dasher…</value>
   </data>
+  <data name="preview" xml:space="preserve">
+    <value>Предварительный просмотр</value>
+  </data>
   <data name="privacy" xml:space="preserve">
     <value>Конфиденциальность</value>
   </data>
   <data name="privacy_2" xml:space="preserve">
     <value>&lt;b&gt;Конфиденциальность&lt;/b&gt;</value>
+  </data>
+  <data name="quick_speak" xml:space="preserve">
+    <value>Быстрая речь</value>
+  </data>
+  <data name="rate" xml:space="preserve">
+    <value>Скорость</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Повторный импорт из Dasher 5</value>
@@ -431,6 +628,12 @@
   <data name="reset_training_data_2" xml:space="preserve">
     <value>Сбросить обучающие данные?</value>
   </data>
+  <data name="reset_wpm_averages" xml:space="preserve">
+    <value>Сбросить средние WPM</value>
+  </data>
+  <data name="restarting_engine" xml:space="preserve">
+    <value>Перезапуск движка…</value>
+  </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>Восстановите все настройки Dasher до значений по умолчанию. Это действие необратимо.</value>
   </data>
@@ -443,8 +646,14 @@
   <data name="save_2" xml:space="preserve">
     <value>Сохранять...</value>
   </data>
+  <data name="save_eye_tracker_diagnostics" xml:space="preserve">
+    <value>Сохранить диагностику отслеживания глаз</value>
+  </data>
   <data name="save_failed" xml:space="preserve">
     <value>Сохранение не удалось</value>
+  </data>
+  <data name="save_file" xml:space="preserve">
+    <value>Сохранить файл</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>Сохранить текстовый файл</value>
@@ -457,6 +666,9 @@
   </data>
   <data name="scan_speed" xml:space="preserve">
     <value>Скорость сканирования</value>
+  </data>
+  <data name="selection_method" xml:space="preserve">
+    <value>Метод выбора</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>Настройки</value>
@@ -482,6 +694,9 @@
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>Показать отладочное наложение ввода</value>
   </data>
+  <data name="show_status_bar" xml:space="preserve">
+    <value>Показать статусную строку</value>
+  </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>Показать скорость печати (слов в минуту)</value>
   </data>
@@ -494,6 +709,12 @@
   <data name="slow" xml:space="preserve">
     <value>Медленный</value>
   </data>
+  <data name="speak_on_stop" xml:space="preserve">
+    <value>Говорить при остановке</value>
+  </data>
+  <data name="speak_words" xml:space="preserve">
+    <value>Говорить слова</value>
+  </data>
   <data name="speech" xml:space="preserve">
     <value>Речь</value>
   </data>
@@ -503,8 +724,14 @@
   <data name="speech_on" xml:space="preserve">
     <value>Речь о</value>
   </data>
+  <data name="speech_settings" xml:space="preserve">
+    <value>Настройки речи</value>
+  </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;Настройки речи&lt;/b&gt;</value>
+  </data>
+  <data name="speech_volume" xml:space="preserve">
+    <value>Громкость речи</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>Скорость</value>
@@ -518,8 +745,14 @@
   <data name="start_fresh" xml:space="preserve">
     <value>Начните все заново</value>
   </data>
+  <data name="steering_method" xml:space="preserve">
+    <value>Метод управления</value>
+  </data>
   <data name="stop" xml:space="preserve">
     <value>Останавливаться</value>
+  </data>
+  <data name="stop_speaking" xml:space="preserve">
+    <value>Прекратить говорить</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Система</value>
@@ -530,8 +763,20 @@
   <data name="text_files" xml:space="preserve">
     <value>Текстовые файлы</value>
   </data>
+  <data name="that_file_already_is_your_training_data" xml:space="preserve">
+    <value>Этот файл уже является вашими данными обучения.</value>
+  </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>Всплывающее окно отладки отображает зеленую панель в левом верхнем углу холста, показывающую количество событий касания в реальном времени и последнее зарегистрированное событие (x, y). При нажатии и удержании жеста «щипок» вы должны увидеть touch.began, затем touch.moved с изменяющимися координатами по мере того, как вы осматриваетесь.</value>
+  </data>
+  <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
+    <value>Файл слишком большой (более 10 МБ) для импорта как обучающий текст.</value>
+  </data>
+  <data name="the_selected_file_is_empty" xml:space="preserve">
+    <value>Выбранный файл пуст.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
+    <value>Это удалит ваши накопленные данные обучения для каждого алфавита. Предсказания сохраняют влияние очень недавнего ввода.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>Это удалит ваши накопленные обучающие данные. При следующем запуске языковая модель вернется к встроенным настройкам по умолчанию. Это действие необратимо.</value>
@@ -545,14 +790,50 @@
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>Во время калибровки наклоняйте устройство в полном диапазоне его движений.</value>
   </data>
+  <data name="toggle_control_mode" xml:space="preserve">
+    <value>Переключить режим управления</value>
+  </data>
+  <data name="toggle_game_mode" xml:space="preserve">
+    <value>Переключить режим игры</value>
+  </data>
+  <data name="toggle_keyboard_mode" xml:space="preserve">
+    <value>Переключить режим клавиатуры</value>
+  </data>
+  <data name="toggle_pane_position" xml:space="preserve">
+    <value>Переключить положение панели</value>
+  </data>
+  <data name="toggle_status_bar" xml:space="preserve">
+    <value>Скрыть/показать статусную строку</value>
+  </data>
+  <data name="toolbar_copy_description" xml:space="preserve">
+    <value>Копировать весь текст</value>
+  </data>
+  <data name="toolbar_cut_description" xml:space="preserve">
+    <value>Вырезать выделение в целевом приложении</value>
+  </data>
+  <data name="toolbar_game_description" xml:space="preserve">
+    <value>Запустить режим игры</value>
+  </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>Новый / очищенный вывод</value>
   </data>
   <data name="toolbar_open_description" xml:space="preserve">
     <value>Открыть файл</value>
   </data>
+  <data name="toolbar_paste_description" xml:space="preserve">
+    <value>Вставить в целевое приложение</value>
+  </data>
+  <data name="toolbar_reanchor_description" xml:space="preserve">
+    <value>Переспривязать предсказания к курсору (прочитать предложение вокруг вашего курсора)</value>
+  </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>Сохранить в файл</value>
+  </data>
+  <data name="toolbar_select_all_description" xml:space="preserve">
+    <value>Выбрать всё в целевом приложении</value>
+  </data>
+  <data name="toolbar_settings_description" xml:space="preserve">
+    <value>Открыть настройки</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Поделиться текстом</value>
@@ -566,8 +847,14 @@
   <data name="training_data" xml:space="preserve">
     <value>обучающие данные</value>
   </data>
+  <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
+    <value>Данные обучения удалены — перезапустите Dasher, чтобы полностью применить</value>
+  </data>
   <data name="training_data_description" xml:space="preserve">
     <value>Импорт добавляет текст в языковую модель и накопленные данные обучения (сохраняются при перезапуске). Экспорт сохраняет данные тренировок для резервного копирования или передачи. При сбросе удаляются все данные обучения пользователей — при следующем запуске модель возвращается к встроенным настройкам по умолчанию.</value>
+  </data>
+  <data name="training_data_exported" xml:space="preserve">
+    <value>Данные обучения экспортированы.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>Экспортировать данные обучения</value>
@@ -587,6 +874,9 @@
   <data name="training_imported_restart" xml:space="preserve">
     <value>Импортировано {0} КБ — полностью применяется при следующем запуске (действующая модель возвращена {1})</value>
   </data>
+  <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
+    <value>Обучение пока недоступно — попробуйте снова, когда холст отрисован.</value>
+  </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>Данных по обучению пользователей пока нет.</value>
   </data>
@@ -602,14 +892,32 @@
   <data name="training_reset_partial" xml:space="preserve">
     <value>Данные обучения удалены там, где это удалось — {0} элемент(ов) не удалось; нажмите «Сбросить» ещё раз, чтобы повторить</value>
   </data>
+  <data name="tts_engine" xml:space="preserve">
+    <value>Движок TTS</value>
+  </data>
+  <data name="tts_no_credentials" xml:space="preserve">
+    <value>Не требуется учётные данные</value>
+  </data>
   <data name="turbo" xml:space="preserve">
     <value>Турбо</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Скорость печати</value>
   </data>
+  <data name="typing_rate_format" xml:space="preserve">
+    <value>{cps} cps · {wpm} wpm</value>
+  </data>
+  <data name="udp_port" xml:space="preserve">
+    <value>Порт UDP</value>
+  </data>
+  <data name="udp_tracker_help" xml:space="preserve">
+    <value>UDP-трекер прослушивает сообщения STREAM_DATA или GazePoint</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Используйте Dasher в качестве клавиатуры.</value>
+  </data>
+  <data name="volume" xml:space="preserve">
+    <value>Громкость</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>Мы нашли конфигурацию Dasher 5 на этом Mac. Ваш алфавит, цвета, настройки скорости и пользовательские файлы можно импортировать в Dasher 6.</value>

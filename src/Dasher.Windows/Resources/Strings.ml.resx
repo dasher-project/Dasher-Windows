@@ -38,14 +38,25 @@
   <data name="analytics_accept" xml:space="preserve">
     <value>ഡാഷർ മെച്ചപ്പെടുത്താൻ സഹായിക്കുക</value>
   </data>
+  <data name="analytics_body" xml:space="preserve">
+    <value>അജ്ഞാത ഉപയോഗ വിശകലനങ്ങളും തകരാർ റിപ്പോർട്ടുകളും പങ്കിടണോ? ടൈപ്പ് ചെയ്ത ടെക്സ്റ്റ്, ക്ലിപ്പ്ബോർഡ് ഉള്ളടക്കം അല്ലെങ്കിൽ വ്യക്തിഗത വിവരങ്ങൾ ഒരിക്കലും ശേഖരിക്കില്ല. ഇത് ഏത് സമയത്തും ക്രമീകരണങ്ങളിൽ മാറ്റാം.</value>
+  </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>ഇപ്പോൾ വേണ്ട</value>
   </data>
   <data name="analytics_opt_in" xml:space="preserve">
     <value>അജ്ഞാത വിശകലനങ്ങളും ക്രാഷ് റിപ്പോർട്ടുകളും പങ്കിടുക</value>
   </data>
+  <data name="analytics_rationale" xml:space="preserve">
+    <value>Dasher അജ്ഞാത, സ്വകാര്യത മാനിക്കുന്ന വിശകലനങ്ങൾ ശേഖരിക്കുന്നു ഉപയോഗ മാതൃകകൾ മനസ്സിലാക്കാനും തകരാറുകൾ പരിഹരിക്കാനും. ടൈപ്പ് ചെയ്ത ടെക്സ്റ്റ്, ക്ലിപ്പ്ബോർഡ് ഉള്ളടക്കം, അല്ലെങ്കിൽ വ്യക്തിഗത വിവരങ്ങൾ ഒരിക്കലും ശേഖരിക്കില്ല.
+
+ഇത് ഏത് സമയത്തും ക്രമീകരണങ്ങൾ &gt; സ്വകാര്യതയിൽ മാറ്റാം.</value>
+  </data>
   <data name="analytics_reset_id" xml:space="preserve">
     <value>അനലിറ്റിക്സ് ഐഡി പുനഃസജ്ജമാക്കുക</value>
+  </data>
+  <data name="analytics_settings_help" xml:space="preserve">
+    <value>Dasher അജ്ഞാത ഉപയോഗ വിശകലനങ്ങളും തകരാർ റിപ്പോർട്ടുകളും ശേഖരിക്കുന്നു ആപ്പ് എങ്ങനെ ഉപയോഗിക്കപ്പെടുന്നു എന്ന് മനസ്സിലാക്കാനും ബഗുകൾ പരിഹരിക്കാനും. ടൈപ്പ് ചെയ്ത ടെക്സ്റ്റ്, ക്ലിപ്പ്ബോർഡ് ഉള്ളടക്കം, അല്ലെങ്കിൽ വ്യക്തിഗത വിവരങ്ങൾ ഒരിക്കലും ശേഖരിക്കില്ല.</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>അജ്ഞാത ഉപയോഗ അനലിറ്റിക്സ്</value>
@@ -55,6 +66,18 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>തിരഞ്ഞെടുക്കാൻ ആപ്പ്-ലെവൽ ഡ്വെൽ</value>
+  </data>
+  <data name="arrow_left_label" xml:space="preserve">
+    <value>ഇടത്</value>
+  </data>
+  <data name="arrow_left_tooltip" xml:space="preserve">
+    <value>ക്യാരറ്റ് ഇടത്തേക്ക് നീക്കുക (പുനരാവർത്തിക്കാൻ പിടിക്കുക)</value>
+  </data>
+  <data name="arrow_right_label" xml:space="preserve">
+    <value>വലത്</value>
+  </data>
+  <data name="arrow_right_tooltip" xml:space="preserve">
+    <value>ക്യാരറ്റ് വലത്തേക്ക് നീക്കുക (പുനരാവർത്തിക്കാൻ പിടിക്കുക)</value>
   </data>
   <data name="auto" xml:space="preserve">
     <value>ഓട്ടോ</value>
@@ -67,6 +90,15 @@
   </data>
   <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
     <value>പിഞ്ച് ചെയ്യുമ്പോൾ നോട്ടം ഉറപ്പിച്ച ശേഷം സ്വയമേവ തിരഞ്ഞെടുക്കുക. OS ഡ്വെൽ ഓഫാണെങ്കിൽ മാത്രം പ്രവർത്തനക്ഷമമാക്കുക.</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>തിരികെ</value>
+  </data>
+  <data name="backspace_label" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="backspace_tooltip" xml:space="preserve">
+    <value>നീക്കംചെയ്യുക (പുനരാവർത്തിക്കാൻ പിടിക്കുക)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>റദ്ദാക്കുക</value>
@@ -89,8 +121,20 @@
   <data name="close" xml:space="preserve">
     <value>അടയ്ക്കുക</value>
   </data>
+  <data name="close_settings" xml:space="preserve">
+    <value>ക്രമീകരണങ്ങൾ അടയ്ക്കുക</value>
+  </data>
   <data name="colour_theme" xml:space="preserve">
     <value>കളർ തീം</value>
+  </data>
+  <data name="control" xml:space="preserve">
+    <value>നിയന്ത്രണം</value>
+  </data>
+  <data name="control_mode_enabled" xml:space="preserve">
+    <value>നിയന്ത്രണ മോഡ്: സജീവം</value>
+  </data>
+  <data name="control_mode_tooltip" xml:space="preserve">
+    <value>നിയന്ത്രണ മോഡ്</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി.</value>
@@ -104,8 +148,32 @@
   <data name="copy_all_2" xml:space="preserve">
     <value>എല്ലാം പകർത്തുക</value>
   </data>
+  <data name="copy_all_clipboard" xml:space="preserve">
+    <value>എല്ലാം പകർത്തുക (ക്ലിപ്പ്ബോർഡിലേക്ക്)</value>
+  </data>
   <data name="copy_commands" xml:space="preserve">
     <value>കമാൻഡുകൾ പകർത്തുക</value>
+  </data>
+  <data name="copy_selection" xml:space="preserve">
+    <value>തിരഞ്ഞെടുപ്പ് പകർത്തുക</value>
+  </data>
+  <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
+    <value>ഫയൽ എഞ്ചിനിലേക്ക് ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല</value>
+  </data>
+  <data name="could_not_open_the_selected_file" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത ഫയൽ തുറക്കാൻ കഴിഞ്ഞില്ല.</value>
+  </data>
+  <data name="could_not_read_the_selected_file" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത ഫയൽ വായിക്കാൻ കഴിഞ്ഞില്ല.</value>
+  </data>
+  <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
+    <value>നിങ്ങളുടെ എഡിറ്റ് എഞ്ചിനുമായി സിങ്ക് ചെയ്യാൻ കഴിഞ്ഞില്ല — അത് മറികടക്കപ്പെട്ടിരിക്കാം</value>
+  </data>
+  <data name="could_not_write_the_export_file" xml:space="preserve">
+    <value>എക്സ്പോർട്ട് ഫയൽ എഴുതാൻ കഴിഞ്ഞില്ല.</value>
+  </data>
+  <data name="could_not_write_the_training_data" xml:space="preserve">
+    <value>പരിശീലന ഡാറ്റ എഴുതാൻ കഴിഞ്ഞില്ല.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>നിലവിലെ കാലിബ്രേഷൻ</value>
@@ -118,6 +186,21 @@
   </data>
   <data name="dasher" xml:space="preserve">
     <value>ഡാഷർ</value>
+  </data>
+  <data name="dasher5_config_found" xml:space="preserve">
+    <value>നിങ്ങളുടെ Dasher 5 ക്രമീകരണം കണ്ടെത്തി</value>
+  </data>
+  <data name="dasher5_import" xml:space="preserve">
+    <value>Dasher 5 ഇറക്കുമതി</value>
+  </data>
+  <data name="dasher5_import_prompt" xml:space="preserve">
+    <value>ഈ ക്രമീകരണങ്ങൾ Dasher 6-ലേക്ക് ഇറക്കുമതി ചെയ്യണോ?</value>
+  </data>
+  <data name="dasher5_no_data" xml:space="preserve">
+    <value>ഈ കമ്പ്യൂട്ടറിൽ Dasher 5 ഡാറ്റ കണ്ടെത്തിയില്ല.</value>
+  </data>
+  <data name="dasher5_settings_found" xml:space="preserve">
+    <value>Dasher 5 ക്രമീകരണങ്ങൾ കണ്ടെത്തി</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>ഈ മാക്കിൽ ഡാഷർ 5 ഡാറ്റ കണ്ടെത്തി.</value>
@@ -135,6 +218,9 @@
     <value>ഉപയോഗ പാറ്റേണുകൾ മനസ്സിലാക്കുന്നതിനും ക്രാഷുകൾ പരിഹരിക്കുന്നതിനും ഡാഷർ അജ്ഞാതവും സ്വകാര്യതയെ മാനിക്കുന്നതുമായ അനലിറ്റിക്‌സ് ശേഖരിക്കുന്നു. ടൈപ്പ് ചെയ്‌ത ടെക്‌സ്‌റ്റ്, ക്ലിപ്പ്‌ബോർഡ് ഉള്ളടക്കങ്ങൾ അല്ലെങ്കിൽ വ്യക്തിഗത വിവരങ്ങൾ ഒരിക്കലും ശേഖരിക്കില്ല.
 
 ക്രമീകരണങ്ങൾ &gt; സ്വകാര്യത എന്നതിൽ നിങ്ങൾക്ക് ഇത് എപ്പോൾ വേണമെങ്കിലും മാറ്റാം.</value>
+  </data>
+  <data name="dasher_engine_error" xml:space="preserve">
+    <value>Dasher എഞ്ചിൻ പിശക്</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>ഡാഷർ കീബോർഡ്</value>
@@ -173,6 +259,9 @@
   <data name="done" xml:space="preserve">
     <value>ചെയ്തുകഴിഞ്ഞു</value>
   </data>
+  <data name="dwell_description" xml:space="preserve">
+    <value>ഒരു സ്ഥലത്ത് നിൽക്കുക ക്ലിക്ക് ട്രിഗർ ചെയ്യാൻ, ബട്ടൺ അല്ലെങ്കിൽ സ്വിച്ച് അമർത്തുന്നതിനുപകരം.</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>ക്ലിക്ക് ചെയ്യാൻ താമസിക്കുക</value>
   </data>
@@ -182,11 +271,29 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>കാലിബ്രേഷൻ ആക്‌സസ് ചെയ്യുന്നതിന് ആദ്യം ടിൽറ്റ് ഇൻപുട്ട് പ്രവർത്തനക്ഷമമാക്കുക.</value>
   </data>
+  <data name="engine_error" xml:space="preserve">
+    <value>എഞ്ചിൻ പിശക്</value>
+  </data>
+  <data name="engine_error_message" xml:space="preserve">
+    <value>Dasher എഞ്ചിൻ ഒരു ആഭ്യന്തര പിശക് നേരിട്ടു നിർത്തി. ദയവായി Dasher പുനരാരംഭിക്കുക.</value>
+  </data>
+  <data name="engine_speech_features" xml:space="preserve">
+    <value>എഞ്ചിൻ സംസാര സവിശേഷതകൾ</value>
+  </data>
+  <data name="exit" xml:space="preserve">
+    <value>പുറത്തുകടക്കുക</value>
+  </data>
   <data name="export_training_text" xml:space="preserve">
     <value>പരിശീലന വാചകം കയറ്റുമതി ചെയ്യുക</value>
   </data>
   <data name="eye_gaze" xml:space="preserve">
     <value>ഐ ഗേസ്</value>
+  </data>
+  <data name="eye_tracker_device" xml:space="preserve">
+    <value>ഐ ട്രാക്കർ ഉപകരണം</value>
+  </data>
+  <data name="eyegaze_verbose_help" xml:space="preserve">
+    <value>ബഗ് റിപ്പോർട്ടുകൾക്കായി വിശദമായ ട്രാക്കിംഗ് ലോഗ് (ഓരോ സാമ്പിൾ വരി, Dasher ഫോൾഡറിലെ eyegaze.log-ലേക്ക് എഴുതുന്നു). അടിസ്ഥാന കണക്ഷൻ ഇവന്റുകൾ എല്ലായ്പ്പോഴും ലോഗ് ചെയ്യപ്പെടുന്നു.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>തുറക്കുന്നതിൽ പരാജയപ്പെട്ടു:</value>
@@ -196,6 +303,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>വേഗത</value>
+  </data>
+  <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
+    <value>ഫയൽ 4 MB-ൽ ട്രങ്കേറ്റ് ചെയ്തു — ആദ്യ ഭാഗം മാത്രമേ ലോഡ് ചെയ്യൂ</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>കീബോർഡ് ഫ്ലോട്ട് ചെയ്യാൻ, Dasher-ന് മറ്റ് ആപ്പുകൾക്ക് മുകളിൽ കാണിക്കാൻ അനുവദിക്കുക, തുടർന്ന് Float വീണ്ടും ടാപ്പ് ചെയ്യുക.</value>
@@ -211,6 +321,15 @@
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>ഗെയിം ടെക്സ്റ്റ് ഫയൽ</value>
+  </data>
+  <data name="gaze_filter_help" xml:space="preserve">
+    <value>കണ്ണുകൾ ലക്ഷ്യത്തിലേക്ക് നീങ്ങുമ്പോൾ തെറ്റായ സ്ഥാനങ്ങളിലേക്ക് സൂം കുറയ്ക്കുന്നു</value>
+  </data>
+  <data name="gaze_filter_label" xml:space="preserve">
+    <value>ഗേസ് ഫിൽട്ടർ (കണ്ണ് യാത്രയ്ക്കിടെ തെറ്റായ സ്ഥാനങ്ങളിലേക്ക് സൂം കുറയ്ക്കുന്നു)</value>
+  </data>
+  <data name="gaze_smoothing" xml:space="preserve">
+    <value>ഗേസ് സ്മൂത്തിംഗ്</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>മനസ്സിലായി</value>
@@ -230,6 +349,12 @@
   <data name="import_training_text" xml:space="preserve">
     <value>പരിശീലന വാചകം ഇറക്കുമതി ചെയ്യുക</value>
   </data>
+  <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
+    <value>ഇറക്കുമതി ചെയ്തു %1 — അടുത്ത ലോഞ്ചിൽ പൂർണ്ണമായി പ്രയോഗിക്കും</value>
+  </data>
+  <data name="imported_1_of_training_text" xml:space="preserve">
+    <value>പരിശീലന ടെക്സ്റ്റിന്റെ %1 ഇറക്കുമതി ചെയ്തു</value>
+  </data>
   <data name="increase_speed" xml:space="preserve">
     <value>വേഗത കൂട്ടുക</value>
   </data>
@@ -248,14 +373,23 @@
   <data name="input_method_touch" xml:space="preserve">
     <value>സ്പർശിക്കുക (ക്യാൻവാസിൽ വലിച്ചിടുക)</value>
   </data>
+  <data name="input_processing" xml:space="preserve">
+    <value>ഇൻപുട്ട് പ്രോസസ്സിംഗ്</value>
+  </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;കീബോർഡ് മോഡ് ഉപയോഗിക്കാൻ ydotool ഇൻസ്റ്റാൾ ചെയ്യുക&lt;/b&gt;</value>
   </data>
   <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
     <value>ഇൻസ്റ്റാൾ ചെയ്തിട്ടില്ല. ഈ കമാൻഡുകൾ പ്രവർത്തിപ്പിക്കുക, തുടർന്ന് വീണ്ടും ശ്രമിക്കുക അമർത്തുക:</value>
   </data>
+  <data name="keyboard" xml:space="preserve">
+    <value>കീബോർഡ്</value>
+  </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>_കീബോർഡ്</value>
+  </data>
+  <data name="keyboard_mode_description" xml:space="preserve">
+    <value>Dasher-ന്റെ ഔട്ട്പുട്ട് നേരിട്ട് നിങ്ങൾ സൂചിപ്പിക്കുന്ന ആപ്പിലേക്ക് ടൈപ്പ് ചെയ്യുക</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>കീബോർഡ് മോഡിൽ നിന്ന് പുറത്തുകടക്കുക</value>
@@ -266,11 +400,23 @@
   <data name="keyboard_mode_opacity" xml:space="preserve">
     <value>കീബോർഡ് മോഡ് അതാര്യത</value>
   </data>
+  <data name="keyboard_mode_stopped" xml:space="preserve">
+    <value>കീബോർഡ് മോഡ് നിർത്തി</value>
+  </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>കീബോർഡ് മോഡ് നിർത്തി: ydotool-ന് ടെക്സ്റ്റ് കുത്തിവയ്ക്കാൻ കഴിഞ്ഞില്ല. ydotoold ആണോ?</value>
   </data>
   <data name="keyboard_mode_title" xml:space="preserve">
     <value>കീബോർഡ് മോഡ് പ്രവർത്തനക്ഷമമാക്കുക</value>
+  </data>
+  <data name="keyboard_mode_transparency_help" xml:space="preserve">
+    <value>കീബോർഡ്/ഡയറക്റ്റ് മോഡിൽ വിൻഡോ സുതാര്യത</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>ഭാഷ</value>
+  </data>
+  <data name="language_locale" xml:space="preserve">
+    <value>ഭാഷ / ലോക്കേൽ</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;ഭാഷ / ഭാഷ&lt;/b&gt;</value>
@@ -296,11 +442,23 @@
   <data name="learning" xml:space="preserve">
     <value>പഠനം</value>
   </data>
+  <data name="leave" xml:space="preserve">
+    <value>പുറത്തുകടക്കുക</value>
+  </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>ഗെയിം മോഡ് വിടുക</value>
   </data>
   <data name="light" xml:space="preserve">
     <value>വെളിച്ചം</value>
+  </data>
+  <data name="load_voices" xml:space="preserve">
+    <value>ശബ്ദങ്ങൾ ലോഡ് ചെയ്യുക</value>
+  </data>
+  <data name="loaded_1_characters" xml:space="preserve">
+    <value>%1 പ്രതീകങ്ങൾ ലോഡ് ചെയ്തു</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>ലോഡുചെയ്യുന്നു…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>ഭാഷ</value>
@@ -311,11 +469,20 @@
   <data name="migration" xml:space="preserve">
     <value>മൈഗ്രേഷൻ</value>
   </data>
+  <data name="more" xml:space="preserve">
+    <value>കൂടുതൽ</value>
+  </data>
+  <data name="more_options" xml:space="preserve">
+    <value>കൂടുതൽ ഓപ്ഷനുകൾ</value>
+  </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>സ്റ്റിയർ ചെയ്യാൻ നുള്ളുമ്പോൾ കണ്ണുകൾ ചലിപ്പിക്കുക.</value>
   </data>
   <data name="new" xml:space="preserve">
     <value>പുതിയത്</value>
+  </data>
+  <data name="new_document" xml:space="preserve">
+    <value>പുതിയ ഡോക്യുമെന്റ്</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>പുതിയ സന്ദേശം</value>
@@ -328,6 +495,12 @@
   </data>
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>ഈ വിഭാഗത്തിന് ക്രമീകരണങ്ങളൊന്നും ലഭ്യമല്ല.</value>
+  </data>
+  <data name="no_training_data_to_export_yet" xml:space="preserve">
+    <value>ഇനിയും എക്സ്പോർട്ട് ചെയ്യാനുള്ള പരിശീലന ഡാറ്റ ഇല്ല</value>
+  </data>
+  <data name="no_user_training_data_yet" xml:space="preserve">
+    <value>ഇനിയും ഉപയോക്തൃ പരിശീലന ഡാറ്റ ഇല്ല</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>സംരക്ഷിക്കാൻ ഒന്നുമില്ല.</value>
@@ -365,11 +538,17 @@
   <data name="output" xml:space="preserve">
     <value>ഔട്ട്പുട്ട്</value>
   </data>
+  <data name="output_font" xml:space="preserve">
+    <value>ഔട്ട്പുട്ട് ഫോണ്ട്</value>
+  </data>
   <data name="output_font_size" xml:space="preserve">
     <value>ഔട്ട്‌പുട്ട് ഫോണ്ട് വലുപ്പം</value>
   </data>
   <data name="output_placeholder" xml:space="preserve">
     <value>എഴുതാൻ തുടങ്ങാൻ ക്യാൻവാസിൽ സ്പർശിക്കുക.</value>
+  </data>
+  <data name="pane_position" xml:space="preserve">
+    <value>പാനൽ സ്ഥാനം</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>ഒട്ടിക്കുക</value>
@@ -386,11 +565,20 @@
   <data name="pinch_and_look_to_write" xml:space="preserve">
     <value>എഴുതാൻ പിഞ്ച് ചെയ്ത് നോക്കുക</value>
   </data>
+  <data name="pitch" xml:space="preserve">
+    <value>പിച്ച്</value>
+  </data>
+  <data name="play" xml:space="preserve">
+    <value>ഗെയിം</value>
+  </data>
   <data name="play_2" xml:space="preserve">
     <value>കളിക്കുക</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>പോയിന്റർ ഹോവർ ഇൻപുട്ട്</value>
+  </data>
+  <data name="preferences" xml:space="preserve">
+    <value>ഇഷ്ടാനുസൃതങ്ങൾ</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>മുൻഗണനകൾ</value>
@@ -398,11 +586,20 @@
   <data name="preparing_dasher" xml:space="preserve">
     <value>Dasher തയ്യാറാകുകയാണ്…</value>
   </data>
+  <data name="preview" xml:space="preserve">
+    <value>പ്രിവ്യൂ</value>
+  </data>
   <data name="privacy" xml:space="preserve">
     <value>സ്വകാര്യത</value>
   </data>
   <data name="privacy_2" xml:space="preserve">
     <value>&lt;b&gt;സ്വകാര്യത&lt;/b&gt;</value>
+  </data>
+  <data name="quick_speak" xml:space="preserve">
+    <value>വേഗത്തിൽ സംസാരിക്കുക</value>
+  </data>
+  <data name="rate" xml:space="preserve">
+    <value>റേറ്റ്</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>ഡാഷർ 5-ൽ നിന്ന് വീണ്ടും ഇറക്കുമതി ചെയ്യുക</value>
@@ -440,6 +637,12 @@
   <data name="reset_training_data_2" xml:space="preserve">
     <value>പരിശീലന ഡാറ്റ പുനഃസജ്ജമാക്കണോ?</value>
   </data>
+  <data name="reset_wpm_averages" xml:space="preserve">
+    <value>WPM ശരാശരികൾ പുനഃസജ്ജമാക്കുക</value>
+  </data>
+  <data name="restarting_engine" xml:space="preserve">
+    <value>എഞ്ചിൻ പുനരാരംഭിക്കുന്നു…</value>
+  </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>എല്ലാ ഡാഷർ ക്രമീകരണങ്ങളും അവയുടെ ഡിഫോൾട്ട് മൂല്യങ്ങളിലേക്ക് പുനഃസ്ഥാപിക്കുക. ഇത് പഴയപടിയാക്കാൻ കഴിയില്ല.</value>
   </data>
@@ -452,8 +655,14 @@
   <data name="save_2" xml:space="preserve">
     <value>സംരക്ഷിക്കുക...</value>
   </data>
+  <data name="save_eye_tracker_diagnostics" xml:space="preserve">
+    <value>ഐ-ട്രാക്കർ ഡയഗ്നോസ്റ്റിക്സ് സംരക്ഷിക്കുക</value>
+  </data>
   <data name="save_failed" xml:space="preserve">
     <value>സംരക്ഷിക്കാനായില്ല</value>
+  </data>
+  <data name="save_file" xml:space="preserve">
+    <value>ഫയൽ സംരക്ഷിക്കുക</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>ടെക്സ്റ്റ് ഫയൽ സംരക്ഷിക്കുക</value>
@@ -466,6 +675,9 @@
   </data>
   <data name="scan_speed" xml:space="preserve">
     <value>സ്കാൻ വേഗത</value>
+  </data>
+  <data name="selection_method" xml:space="preserve">
+    <value>തിരഞ്ഞെടുപ്പ് രീതി</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>ക്രമീകരണങ്ങൾ</value>
@@ -491,6 +703,9 @@
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>ഇൻപുട്ട് ഡീബഗ് ഓവർലേ കാണിക്കുക</value>
   </data>
+  <data name="show_status_bar" xml:space="preserve">
+    <value>സ്ഥിതി ബാർ കാണിക്കുക</value>
+  </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>ടൈപ്പിംഗ് നിരക്ക് (WPM) കാണിക്കുക</value>
   </data>
@@ -503,6 +718,12 @@
   <data name="slow" xml:space="preserve">
     <value>പതുക്കെ</value>
   </data>
+  <data name="speak_on_stop" xml:space="preserve">
+    <value>നിർത്തുമ്പോൾ സംസാരിക്കുക</value>
+  </data>
+  <data name="speak_words" xml:space="preserve">
+    <value>വാക്കുകൾ സംസാരിക്കുക</value>
+  </data>
   <data name="speech" xml:space="preserve">
     <value>പ്രസംഗം</value>
   </data>
@@ -512,8 +733,14 @@
   <data name="speech_on" xml:space="preserve">
     <value>പ്രസംഗം ഓണാണ്</value>
   </data>
+  <data name="speech_settings" xml:space="preserve">
+    <value>സംസാര ക്രമീകരണങ്ങൾ</value>
+  </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;സംഭാഷണ ക്രമീകരണങ്ങൾ&lt;/b&gt;</value>
+  </data>
+  <data name="speech_volume" xml:space="preserve">
+    <value>സംസാര വോള്യം</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>വേഗത</value>
@@ -527,8 +754,14 @@
   <data name="start_fresh" xml:space="preserve">
     <value>പുതുതായി തുടങ്ങൂ</value>
   </data>
+  <data name="steering_method" xml:space="preserve">
+    <value>സ്റ്റിയറിംഗ് രീതി</value>
+  </data>
   <data name="stop" xml:space="preserve">
     <value>നിർത്തുക</value>
+  </data>
+  <data name="stop_speaking" xml:space="preserve">
+    <value>സംസാരം നിർത്തുക</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>സിസ്റ്റം</value>
@@ -539,8 +772,20 @@
   <data name="text_files" xml:space="preserve">
     <value>ടെക്സ്റ്റ് ഫയലുകൾ</value>
   </data>
+  <data name="that_file_already_is_your_training_data" xml:space="preserve">
+    <value>ആ ഫയൽ ഇതിനകം നിങ്ങളുടെ പരിശീലന ഡാറ്റയാണ്</value>
+  </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>ഡീബഗ് ഓവർലേ, ക്യാൻവാസിന്റെ മുകളിൽ ഇടതുവശത്ത് ഒരു പച്ച പാനൽ വരയ്ക്കുന്നു, അതിൽ തത്സമയ ടച്ച് ഇവന്റ് എണ്ണങ്ങളും അവസാനം റിപ്പോർട്ട് ചെയ്തതും (x, y) കാണിക്കുന്നു. നിങ്ങൾ പിഞ്ച് ചെയ്ത് പിടിക്കുമ്പോൾ, ചുറ്റും നോക്കുമ്പോൾ മാറുന്ന കോർഡിനേറ്റുകളോടെ touch.began, തുടർന്ന് touch.moved എന്നിവ കാണും.</value>
+  </data>
+  <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
+    <value>ഫയൽ വളരെ വലുതാണ് (10 MB-ൽ കൂടുതലാണ്) പരിശീലന ടെക്സ്റ്റായി ഇറക്കുമതി ചെയ്യാൻ</value>
+  </data>
+  <data name="the_selected_file_is_empty" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത ഫയൽ ശൂന്യമാണ്</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
+    <value>ഇത് ഓരോ അക്ഷരമാലയ്ക്കും നിങ്ങളുടെ സമാഹരിച്ച പരിശീലന ഡാറ്റ ഇല്ലാതാക്കുന്നു. പ്രവചനങ്ങൾ വളരെ അടുത്ത ടൈപ്പിംഗിന്റെ സ്വാധീനം നിലനിർത്തുന്നു.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>ഇത് നിങ്ങളുടെ ശേഖരിച്ച പരിശീലന ഡാറ്റ ഇല്ലാതാക്കുന്നു. അടുത്ത സമാരംഭത്തിൽ ഭാഷാ മോഡൽ ബിൽറ്റ്-ഇൻ ഡിഫോൾട്ടുകളിലേക്ക് മടങ്ങും. ഇത് പഴയപടിയാക്കാൻ കഴിയില്ല.</value>
@@ -554,14 +799,50 @@
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>കാലിബ്രേഷൻ സമയത്ത് നിങ്ങളുടെ ഉപകരണം അതിന്റെ പൂർണ്ണ ചലന പരിധിയിലൂടെ ചരിക്കുക.</value>
   </data>
+  <data name="toggle_control_mode" xml:space="preserve">
+    <value>നിയന്ത്രണ മോഡ് മാറ്റുക</value>
+  </data>
+  <data name="toggle_game_mode" xml:space="preserve">
+    <value>ഗെയിം മോഡ് മാറ്റുക</value>
+  </data>
+  <data name="toggle_keyboard_mode" xml:space="preserve">
+    <value>കീബോർഡ് മോഡ് മാറ്റുക</value>
+  </data>
+  <data name="toggle_pane_position" xml:space="preserve">
+    <value>പാനൽ സ്ഥാനം മാറ്റുക</value>
+  </data>
+  <data name="toggle_status_bar" xml:space="preserve">
+    <value>സ്ഥിതി ബാർ മറയ്ക്കുക/കാണിക്കുക</value>
+  </data>
+  <data name="toolbar_copy_description" xml:space="preserve">
+    <value>എല്ലാ ടെക്സ്റ്റും പകർത്തുക</value>
+  </data>
+  <data name="toolbar_cut_description" xml:space="preserve">
+    <value>ലക്ഷ്യ ആപ്പിൽ തിരഞ്ഞെടുപ്പ് മുറിക്കുക</value>
+  </data>
+  <data name="toolbar_game_description" xml:space="preserve">
+    <value>ഗെയിം മോഡ് ആരംഭിക്കുക</value>
+  </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>പുതിയ / വ്യക്തമായ ഔട്ട്പുട്ട്</value>
   </data>
   <data name="toolbar_open_description" xml:space="preserve">
     <value>ഫയൽ തുറക്കുക</value>
   </data>
+  <data name="toolbar_paste_description" xml:space="preserve">
+    <value>ലക്ഷ്യ ആപ്പിൽ പേസ്റ്റ് ചെയ്യുക</value>
+  </data>
+  <data name="toolbar_reanchor_description" xml:space="preserve">
+    <value>പ്രവചനങ്ങൾ ക്യാരറ്റിലേക്ക് പുനഃസ്ഥാപിക്കുക (നിങ്ങളുടെ കർസറിനുചുറ്റുമുള്ള വാക്യം വായിക്കുക)</value>
+  </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>ഫയലിലേക്ക് സംരക്ഷിക്കുക</value>
+  </data>
+  <data name="toolbar_select_all_description" xml:space="preserve">
+    <value>ലക്ഷ്യ ആപ്പിൽ എല്ലാം തിരഞ്ഞെടുക്കുക</value>
+  </data>
+  <data name="toolbar_settings_description" xml:space="preserve">
+    <value>ക്രമീകരണങ്ങൾ തുറക്കുക</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>ടെക്സ്റ്റ് പങ്കിടുക</value>
@@ -575,8 +856,14 @@
   <data name="training_data" xml:space="preserve">
     <value>പരിശീലന ഡാറ്റ</value>
   </data>
+  <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
+    <value>പരിശീലന ഡാറ്റ ഇല്ലാതാക്കി — Dasher പുനരാരംഭിച്ച് പൂർണ്ണമായി പ്രയോഗിക്കുക</value>
+  </data>
   <data name="training_data_description" xml:space="preserve">
     <value>ഇറക്കുമതി ഭാഷാ മോഡലിലേക്കും നിങ്ങളുടെ പരിശീലന ഡാറ്റയിലേക്കും ടെക്‌സ്‌റ്റ് ചേർക്കുന്നു (പുനരാരംഭിക്കുന്നതിലുടനീളം സൂക്ഷിക്കുന്നു). കയറ്റുമതി നിങ്ങളുടെ പരിശീലന ഡാറ്റ ബാക്കപ്പിനും കൈമാറ്റത്തിനും സംരക്ഷിക്കുന്നു. റീസെറ്റ് എല്ലാ ഉപയോക്തൃ പരിശീലന ഡാറ്റയും ഇല്ലാതാക്കുന്നു - അടുത്ത ലോഞ്ചിൽ മോഡൽ അതിൻ്റെ ബിൽറ്റ്-ഇൻ ഡിഫോൾട്ടുകളിലേക്ക് മടങ്ങുന്നു.</value>
+  </data>
+  <data name="training_data_exported" xml:space="preserve">
+    <value>പരിശീലന ഡാറ്റ എക്സ്പോർട്ട് ചെയ്തു.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>പരിശീലന ഡാറ്റ കയറ്റുമതി ചെയ്യുക</value>
@@ -596,6 +883,9 @@
   <data name="training_imported_restart" xml:space="preserve">
     <value>ഇറക്കുമതി ചെയ്‌ത {0} KB — അടുത്ത ലോഞ്ചിൽ പൂർണ്ണമായും ബാധകമാകും (തത്സമയ മോഡൽ തിരികെ നൽകി {1})</value>
   </data>
+  <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
+    <value>പരിശീലനം ഇപ്പോഴും ലഭ്യമല്ല — ക്യാൻവാസ് റെൻഡർ ചെയ്ത ശേഷം വീണ്ടും ശ്രമിക്കുക</value>
+  </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>ഇതുവരെ ഉപയോക്തൃ പരിശീലന ഡാറ്റകളൊന്നുമില്ല</value>
   </data>
@@ -611,14 +901,32 @@
   <data name="training_reset_partial" xml:space="preserve">
     <value>സാധ്യമാകുന്നിടത്ത് പരിശീലന ഡാറ്റ ഇല്ലാതാക്കി - {0} ഇനം(ങ്ങൾ) പരാജയപ്പെട്ടു; വീണ്ടും ശ്രമിക്കാൻ വീണ്ടും റീസെറ്റ് അമർത്തുക</value>
   </data>
+  <data name="tts_engine" xml:space="preserve">
+    <value>TTS എഞ്ചിൻ</value>
+  </data>
+  <data name="tts_no_credentials" xml:space="preserve">
+    <value>ക്രെഡൻഷ്യലുകൾ ആവശ്യമില്ല</value>
+  </data>
   <data name="turbo" xml:space="preserve">
     <value>ടർബോ</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>ടൈപ്പിംഗ് നിരക്ക്</value>
   </data>
+  <data name="typing_rate_format" xml:space="preserve">
+    <value>{cps} cps · {wpm} wpm</value>
+  </data>
+  <data name="udp_port" xml:space="preserve">
+    <value>UDP പോർട്ട്</value>
+  </data>
+  <data name="udp_tracker_help" xml:space="preserve">
+    <value>UDP ട്രാക്കർ STREAM_DATA അല്ലെങ്കിൽ GazePoint സന്ദേശങ്ങൾ കേൾക്കുന്നു</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>നിങ്ങളുടെ കീബോർഡായി ഡാഷർ ഉപയോഗിക്കുക</value>
+  </data>
+  <data name="volume" xml:space="preserve">
+    <value>വോള്യം</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>ഈ മാക്കിൽ നിങ്ങളുടെ ഡാഷർ 5 കോൺഫിഗറേഷൻ ഞങ്ങൾ കണ്ടെത്തി. നിങ്ങളുടെ അക്ഷരമാല, നിറങ്ങൾ, വേഗത ക്രമീകരണങ്ങൾ, ഇഷ്ടാനുസൃത ഫയലുകൾ എന്നിവ ഡാഷർ 6-ലേക്ക് ഇറക്കുമതി ചെയ്യാൻ കഴിയും.</value>

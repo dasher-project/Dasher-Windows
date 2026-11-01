@@ -35,14 +35,25 @@
   <data name="analytics_accept" xml:space="preserve">
     <value>Dasher کو بہتر بنانے میں مدد کریں۔</value>
   </data>
+  <data name="analytics_body" xml:space="preserve">
+    <value>گمنام استعمال کے تجزیات اور کریش رپورٹس شیئر کریں؟ کوئی ٹائپ شدہ متن، کلپ بورڈ کا مواد یا ذاتی معلومات کبھی جمع نہیں کی جاتی۔ آپ اسے کسی بھی وقت سیٹنگز میں تبدیل کر سکتے ہیں۔</value>
+  </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>ابھی نہیں۔</value>
   </data>
   <data name="analytics_opt_in" xml:space="preserve">
     <value>گمنام تجزیات اور کریش رپورٹس کا اشتراک کریں۔</value>
   </data>
+  <data name="analytics_rationale" xml:space="preserve">
+    <value>Dasher گمنام، پرائیویسی کا احترام کرنے والے تجزیات جمع کرتا ہے تاکہ استعمال کے پیٹرن سمجھے جائیں اور کریشز ٹھیک ہوں۔ کوئی ٹائپ شدہ متن، کلپ بورڈ کا مواد، یا ذاتی معلومات کبھی جمع نہیں کی جاتی۔
+
+آپ اسے کسی بھی وقت سیٹنگز &gt; پرائیویسی میں تبدیل کر سکتے ہیں۔</value>
+  </data>
   <data name="analytics_reset_id" xml:space="preserve">
     <value>تجزیاتی ID کو دوبارہ ترتیب دیں۔</value>
+  </data>
+  <data name="analytics_settings_help" xml:space="preserve">
+    <value>Dasher گمنام استعمال کے تجزیات اور کریش رپورٹس جمع کرتا ہے تاکہ ایپ کے استعمال کو سمجھا جا سکے اور بگز ٹھیک ہوں۔ کوئی ٹائپ شدہ متن، کلپ بورڈ کا مواد، یا ذاتی معلومات کبھی جمع نہیں کی جاتی۔</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>گمنام استعمال کے تجزیات</value>
@@ -52,6 +63,18 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>منتخب کرنے کے لیے ایپ لیول ڈویل</value>
+  </data>
+  <data name="arrow_left_label" xml:space="preserve">
+    <value>بائیں</value>
+  </data>
+  <data name="arrow_left_tooltip" xml:space="preserve">
+    <value>کیریٹ بائیں طرف منتقل کریں (دوبارہ کے لیے دبائے رکھیں)</value>
+  </data>
+  <data name="arrow_right_label" xml:space="preserve">
+    <value>دائیں</value>
+  </data>
+  <data name="arrow_right_tooltip" xml:space="preserve">
+    <value>کیریٹ دائیں طرف منتقل کریں (دوبارہ کے لیے دبائے رکھیں)</value>
   </data>
   <data name="auto" xml:space="preserve">
     <value>آٹو</value>
@@ -64,6 +87,15 @@
   </data>
   <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
     <value>چوٹکی کرتے وقت اپنی نگاہیں ٹھیک کرنے کے بعد خودکار طور پر منتخب کریں۔ صرف اس صورت میں فعال کریں جب OS ڈویل آف ہو۔</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>واپس</value>
+  </data>
+  <data name="backspace_label" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="backspace_tooltip" xml:space="preserve">
+    <value>حذف کریں (دوبارہ کے لیے دبائے رکھیں)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>منسوخ کریں۔</value>
@@ -86,8 +118,20 @@
   <data name="close" xml:space="preserve">
     <value>بند</value>
   </data>
+  <data name="close_settings" xml:space="preserve">
+    <value>سیٹنگز بند کریں</value>
+  </data>
   <data name="colour_theme" xml:space="preserve">
     <value>رنگین تھیم</value>
+  </data>
+  <data name="control" xml:space="preserve">
+    <value>کنٹرول</value>
+  </data>
+  <data name="control_mode_enabled" xml:space="preserve">
+    <value>کنٹرول موڈ: فعال</value>
+  </data>
+  <data name="control_mode_tooltip" xml:space="preserve">
+    <value>کنٹرول موڈ</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>کلپ بورڈ پر کاپی ہو گیا۔</value>
@@ -101,8 +145,32 @@
   <data name="copy_all_2" xml:space="preserve">
     <value>تمام کاپی کریں۔</value>
   </data>
+  <data name="copy_all_clipboard" xml:space="preserve">
+    <value>سب کچھ کاپی کریں (کلپ بورڈ پر)</value>
+  </data>
   <data name="copy_commands" xml:space="preserve">
     <value>کمانڈز کاپی کریں۔</value>
+  </data>
+  <data name="copy_selection" xml:space="preserve">
+    <value>منتخب شدہ کاپی کریں</value>
+  </data>
+  <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
+    <value>فائل کو انجن میں لوڈ نہیں کیا جا سکا</value>
+  </data>
+  <data name="could_not_open_the_selected_file" xml:space="preserve">
+    <value>منتخب فائل نہیں کھولی جا سکی۔</value>
+  </data>
+  <data name="could_not_read_the_selected_file" xml:space="preserve">
+    <value>منتخب فائل نہیں پڑھی جا سکی۔</value>
+  </data>
+  <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
+    <value>آپ کی ترمیم کو انجن کے ساتھ ہم آہنگ نہیں کیا جا سکا — یہ اوور رائٹ ہو سکتی ہے</value>
+  </data>
+  <data name="could_not_write_the_export_file" xml:space="preserve">
+    <value>برآمد فائل نہیں لکھی جا سکی۔</value>
+  </data>
+  <data name="could_not_write_the_training_data" xml:space="preserve">
+    <value>ٹریننگ ڈیٹا نہیں لکھا جا سکا۔</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>موجودہ کیلیبریشن</value>
@@ -115,6 +183,21 @@
   </data>
   <data name="dasher" xml:space="preserve">
     <value>ڈیشر</value>
+  </data>
+  <data name="dasher5_config_found" xml:space="preserve">
+    <value>ہم نے آپ کی Dasher 5 کنفیگریشن پائی ہے</value>
+  </data>
+  <data name="dasher5_import" xml:space="preserve">
+    <value>Dasher 5 درآمد</value>
+  </data>
+  <data name="dasher5_import_prompt" xml:space="preserve">
+    <value>کیا آپ یہ سیٹنگز Dasher 6 میں درآمد کرنا چاہتے ہیں؟</value>
+  </data>
+  <data name="dasher5_no_data" xml:space="preserve">
+    <value>اس کمپیوٹر پر کوئی Dasher 5 ڈیٹا نہیں ملا۔</value>
+  </data>
+  <data name="dasher5_settings_found" xml:space="preserve">
+    <value>Dasher 5 سیٹنگز مل گئیں</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>اس میک پر ڈیشر 5 ڈیٹا کا پتہ چلا۔</value>
@@ -132,6 +215,9 @@
     <value>Dasher استعمال کے نمونوں کو سمجھنے اور کریشوں کو ٹھیک کرنے کے لیے گمنام، رازداری کا احترام کرنے والے تجزیات جمع کرتا ہے۔ کوئی بھی ٹائپ شدہ متن، کلپ بورڈ مواد، یا ذاتی معلومات کبھی جمع نہیں کی جاتی ہیں۔
 
 آپ اسے ترتیبات &gt; رازداری میں کسی بھی وقت تبدیل کر سکتے ہیں۔</value>
+  </data>
+  <data name="dasher_engine_error" xml:space="preserve">
+    <value>Dasher انجن کی خرابی</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>ڈیشر کی بورڈ</value>
@@ -170,6 +256,9 @@
   <data name="done" xml:space="preserve">
     <value>ہو گیا</value>
   </data>
+  <data name="dwell_description" xml:space="preserve">
+    <value>کسی بٹن یا سوئچ کو دبانے کی بجائے ایک جگہ پر ہوور کریں تاکہ کلک ٹرگر ہو۔</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>کلک کرنے کے لئے رہنا</value>
   </data>
@@ -179,11 +268,29 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>کیلیبریشن تک رسائی کے لیے پہلے جھکاؤ ان پٹ کو فعال کریں۔</value>
   </data>
+  <data name="engine_error" xml:space="preserve">
+    <value>انجن کی خرابی</value>
+  </data>
+  <data name="engine_error_message" xml:space="preserve">
+    <value>Dasher انجن نے اندرونی خرابی کا سامنا کیا اور بند ہو گیا۔ براہ کرم Dasher کو دوبارہ شروع کریں۔</value>
+  </data>
+  <data name="engine_speech_features" xml:space="preserve">
+    <value>انجن کی تقریری خصوصیات</value>
+  </data>
+  <data name="exit" xml:space="preserve">
+    <value>باہر نکلیں</value>
+  </data>
   <data name="export_training_text" xml:space="preserve">
     <value>ایکسپورٹ ٹریننگ ٹیکسٹ</value>
   </data>
   <data name="eye_gaze" xml:space="preserve">
     <value>آنکھ کی نگاہ</value>
+  </data>
+  <data name="eye_tracker_device" xml:space="preserve">
+    <value>آئی ٹریکر ڈیوائس</value>
+  </data>
+  <data name="eyegaze_verbose_help" xml:space="preserve">
+    <value>بگ رپورٹس کے لیے تفصیلی ٹریکنگ لاگ (نمونہ وار لائنیں، Dasher فولڈر میں eyegaze.log پر لکھی جاتی ہیں)۔ بنیادی کنکشن ایونٹس ہمیشہ لاگ ہوتے ہیں۔</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>کھولنے میں ناکام:</value>
@@ -193,6 +300,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>تیز</value>
+  </data>
+  <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
+    <value>فائل 4 MB پر کٹ گئی — صرف پہلا حصہ لوڈ ہوا ہے</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>کی بورڈ کو فلوٹ کرنے کے لیے، Dasher کو دوسرے ایپس کے اوپر دکھنے کی اجازت دیں، پھر دوبارہ Float پر ٹیپ کریں۔</value>
@@ -208,6 +318,15 @@
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>کھیل ہی کھیل میں ٹیکسٹ فائل</value>
+  </data>
+  <data name="gaze_filter_help" xml:space="preserve">
+    <value>آپ کی آنکھوں کے ہدف کی طرف حرکت کے دوران غلط مقامات کی طرف زوم کو کم کرتا ہے</value>
+  </data>
+  <data name="gaze_filter_label" xml:space="preserve">
+    <value>گیز فلٹر (آنکھ کے ٹرانزٹ کے دوران غلط مقامات کی طرف زوم کو کم کرتا ہے)</value>
+  </data>
+  <data name="gaze_smoothing" xml:space="preserve">
+    <value>گیز سموتھنگ</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>سمجھ گیا</value>
@@ -227,6 +346,12 @@
   <data name="import_training_text" xml:space="preserve">
     <value>تربیتی متن درآمد کریں۔</value>
   </data>
+  <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
+    <value>درآمد شدہ %1 — اگلے لانچ پر مکمل طور پر لاگو ہوگا</value>
+  </data>
+  <data name="imported_1_of_training_text" xml:space="preserve">
+    <value>درآمد شدہ %1 ٹریننگ ٹیکسٹ کا</value>
+  </data>
   <data name="increase_speed" xml:space="preserve">
     <value>رفتار میں اضافہ کریں۔</value>
   </data>
@@ -245,14 +370,23 @@
   <data name="input_method_touch" xml:space="preserve">
     <value>ٹچ (کینوس پر گھسیٹیں)</value>
   </data>
+  <data name="input_processing" xml:space="preserve">
+    <value>انپٹ پروسیسنگ</value>
+  </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;کی بورڈ موڈ استعمال کرنے کے لیے ydotool انسٹال کریں&lt;/b&gt;</value>
   </data>
   <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
     <value>انسٹال نہیں ہے۔ ان کمانڈز کو چلائیں، پھر دوبارہ کوشش کریں دبائیں:</value>
   </data>
+  <data name="keyboard" xml:space="preserve">
+    <value>کی بورڈ</value>
+  </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>_کی بورڈ</value>
+  </data>
+  <data name="keyboard_mode_description" xml:space="preserve">
+    <value>Dasher کا آؤٹ پٹ سیدھا اس ایپ میں ٹائپ کریں جس کی طرف آپ اشارہ کر رہے ہیں</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>کی بورڈ وضع سے باہر نکلیں۔</value>
@@ -263,11 +397,23 @@
   <data name="keyboard_mode_opacity" xml:space="preserve">
     <value>کی بورڈ موڈ کی دھندلاپن</value>
   </data>
+  <data name="keyboard_mode_stopped" xml:space="preserve">
+    <value>کی بورڈ موڈ بند ہو گیا</value>
+  </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>کی بورڈ موڈ رک گیا: ydotool ٹیکسٹ انجیکشن نہیں کر سکا۔ ydotoold ہے</value>
   </data>
   <data name="keyboard_mode_title" xml:space="preserve">
     <value>کی بورڈ وضع کو فعال کریں۔</value>
+  </data>
+  <data name="keyboard_mode_transparency_help" xml:space="preserve">
+    <value>کی بورڈ/ڈائریکٹ موڈ میں ونڈو کی شفافیت</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>زبان</value>
+  </data>
+  <data name="language_locale" xml:space="preserve">
+    <value>زبان / مقامی</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;زبان / لوکیل&lt;/b&gt;</value>
@@ -293,11 +439,23 @@
   <data name="learning" xml:space="preserve">
     <value>سیکھنا</value>
   </data>
+  <data name="leave" xml:space="preserve">
+    <value>چھوڑیں</value>
+  </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>گیم موڈ چھوڑ دیں۔</value>
   </data>
   <data name="light" xml:space="preserve">
     <value>روشنی</value>
+  </data>
+  <data name="load_voices" xml:space="preserve">
+    <value>آوازیں لوڈ کریں</value>
+  </data>
+  <data name="loaded_1_characters" xml:space="preserve">
+    <value>%1 حروف لوڈ ہوئے</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>لوڈ ہو رہا ہے…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>زبان</value>
@@ -308,11 +466,20 @@
   <data name="migration" xml:space="preserve">
     <value>ہجرت</value>
   </data>
+  <data name="more" xml:space="preserve">
+    <value>مزید</value>
+  </data>
+  <data name="more_options" xml:space="preserve">
+    <value>مزید اختیارات</value>
+  </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>اسٹیئر کرنے کے لیے چوٹکی لگاتے ہوئے اپنی آنکھوں کو حرکت دیں۔</value>
   </data>
   <data name="new" xml:space="preserve">
     <value>نیا</value>
+  </data>
+  <data name="new_document" xml:space="preserve">
+    <value>نیا دستاویز</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>نیا پیغام</value>
@@ -325,6 +492,12 @@
   </data>
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>اس سیکشن کے لیے کوئی ترتیبات دستیاب نہیں ہیں۔</value>
+  </data>
+  <data name="no_training_data_to_export_yet" xml:space="preserve">
+    <value>ابھی تک برآمد کرنے کے لیے کوئی ٹریننگ ڈیٹا نہیں ہے</value>
+  </data>
+  <data name="no_user_training_data_yet" xml:space="preserve">
+    <value>ابھی تک کوئی یوزر ٹریننگ ڈیٹا نہیں ہے</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>بچانے کے لیے کچھ نہیں۔</value>
@@ -362,11 +535,17 @@
   <data name="output" xml:space="preserve">
     <value>آؤٹ پٹ</value>
   </data>
+  <data name="output_font" xml:space="preserve">
+    <value>آؤٹ پٹ فونٹ</value>
+  </data>
   <data name="output_font_size" xml:space="preserve">
     <value>آؤٹ پٹ فونٹ سائز</value>
   </data>
   <data name="output_placeholder" xml:space="preserve">
     <value>لکھنا شروع کرنے کے لیے کینوس کو چھوئے۔</value>
+  </data>
+  <data name="pane_position" xml:space="preserve">
+    <value>پین کی پوزیشن</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>چسپاں کریں۔</value>
@@ -383,20 +562,38 @@
   <data name="pinch_and_look_to_write" xml:space="preserve">
     <value>چٹکی لگائیں اور لکھنے کے لیے دیکھیں</value>
   </data>
+  <data name="pitch" xml:space="preserve">
+    <value>پچ</value>
+  </data>
+  <data name="play" xml:space="preserve">
+    <value>کھیل</value>
+  </data>
   <data name="play_2" xml:space="preserve">
     <value>کھیلیں</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>پوائنٹر ہوور ان پٹ</value>
   </data>
+  <data name="preferences" xml:space="preserve">
+    <value>ترجیحات</value>
+  </data>
   <data name="preparing_dasher" xml:space="preserve">
     <value>ڈیشر تیار ہو رہا ہے…</value>
+  </data>
+  <data name="preview" xml:space="preserve">
+    <value>پریویو</value>
   </data>
   <data name="privacy" xml:space="preserve">
     <value>رازداری</value>
   </data>
   <data name="privacy_2" xml:space="preserve">
     <value>&lt;b&gt;رازداری&lt;/b&gt;</value>
+  </data>
+  <data name="quick_speak" xml:space="preserve">
+    <value>فوری بولیں</value>
+  </data>
+  <data name="rate" xml:space="preserve">
+    <value>رفتار</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Dasher 5 سے دوبارہ درآمد کریں۔</value>
@@ -434,6 +631,12 @@
   <data name="reset_training_data_2" xml:space="preserve">
     <value>ٹریننگ ڈیٹا ری سیٹ کریں؟</value>
   </data>
+  <data name="reset_wpm_averages" xml:space="preserve">
+    <value>WPM اوسط ری سیٹ کریں</value>
+  </data>
+  <data name="restarting_engine" xml:space="preserve">
+    <value>انجن دوبارہ شروع ہو رہا ہے…</value>
+  </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>ڈیشر کی تمام ترتیبات کو ان کی ڈیفالٹ اقدار پر بحال کریں۔ اسے کالعدم نہیں کیا جا سکتا۔</value>
   </data>
@@ -446,8 +649,14 @@
   <data name="save_2" xml:space="preserve">
     <value>محفوظ کریں...</value>
   </data>
+  <data name="save_eye_tracker_diagnostics" xml:space="preserve">
+    <value>آئی ٹریکر کی تشخیص محفوظ کریں</value>
+  </data>
   <data name="save_failed" xml:space="preserve">
     <value>محفوظ کرنا ناکام ہو گیا۔</value>
+  </data>
+  <data name="save_file" xml:space="preserve">
+    <value>فائل محفوظ کریں</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>ٹیکسٹ فائل کو محفوظ کریں۔</value>
@@ -460,6 +669,9 @@
   </data>
   <data name="scan_speed" xml:space="preserve">
     <value>اسکین کی رفتار</value>
+  </data>
+  <data name="selection_method" xml:space="preserve">
+    <value>سلیکشن کا طریقہ</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>ترتیبات</value>
@@ -485,6 +697,9 @@
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>ان پٹ ڈیبگ اوورلے دکھائیں۔</value>
   </data>
+  <data name="show_status_bar" xml:space="preserve">
+    <value>اسٹیٹس بار دکھائیں</value>
+  </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>ٹائپنگ کی شرح دکھائیں (WPM)</value>
   </data>
@@ -497,6 +712,12 @@
   <data name="slow" xml:space="preserve">
     <value>سست</value>
   </data>
+  <data name="speak_on_stop" xml:space="preserve">
+    <value>روکنے پر بولیں</value>
+  </data>
+  <data name="speak_words" xml:space="preserve">
+    <value>الفاظ بولیں</value>
+  </data>
   <data name="speech" xml:space="preserve">
     <value>تقریر</value>
   </data>
@@ -506,8 +727,14 @@
   <data name="speech_on" xml:space="preserve">
     <value>پر تقریر</value>
   </data>
+  <data name="speech_settings" xml:space="preserve">
+    <value>تقریری ترتیبات</value>
+  </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;تقریر کی ترتیبات&lt;/b&gt;</value>
+  </data>
+  <data name="speech_volume" xml:space="preserve">
+    <value>تقریری حجم</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>رفتار</value>
@@ -521,8 +748,14 @@
   <data name="start_fresh" xml:space="preserve">
     <value>نئے سرے سے شروع کریں۔</value>
   </data>
+  <data name="steering_method" xml:space="preserve">
+    <value>اسٹیئرنگ کا طریقہ</value>
+  </data>
   <data name="stop" xml:space="preserve">
     <value>رک جاؤ</value>
+  </data>
+  <data name="stop_speaking" xml:space="preserve">
+    <value>بولنا بند کریں</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>سسٹم</value>
@@ -533,8 +766,20 @@
   <data name="text_files" xml:space="preserve">
     <value>ٹیکسٹ فائلیں</value>
   </data>
+  <data name="that_file_already_is_your_training_data" xml:space="preserve">
+    <value>یہ فائل پہلے ہی آپ کا ٹریننگ ڈیٹا ہے۔</value>
+  </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>ڈیبگ اوورلے کینوس کے اوپر بائیں طرف ایک سبز پینل کھینچتا ہے جو لائیو ٹچ ایونٹ کی گنتی اور آخری رپورٹ (x, y) دکھاتا ہے۔ جب آپ چوٹکی لگاتے اور پکڑتے ہیں تو آپ کو اپنے اردگرد نظر آتے ہی touch.began پھر touch.moved کوآرڈینیٹ بدلتے ہوئے نظر آنا چاہیے۔</value>
+  </data>
+  <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
+    <value>فائل بہت بڑی ہے (10 MB سے زیادہ) تاکہ ٹریننگ ٹیکسٹ کے طور پر درآمد کی جا سکے۔</value>
+  </data>
+  <data name="the_selected_file_is_empty" xml:space="preserve">
+    <value>منتخب فائل خالی ہے۔</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
+    <value>یہ ہر حروف کے لیے آپ کا جمع شدہ ٹریننگ ڈیٹا حذف کر دیتا ہے۔ پیش گوئیاں حالیہ ٹائپنگ کے اثر کو برقرار رکھتی ہیں۔</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>یہ آپ کے جمع کردہ تربیتی ڈیٹا کو حذف کر دیتا ہے۔ اگلی لانچ پر لینگویج ماڈل بلٹ ان ڈیفالٹس پر واپس آجائے گا۔ اسے کالعدم نہیں کیا جا سکتا۔</value>
@@ -548,14 +793,50 @@
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>انشانکن کے دوران اپنے آلے کو حرکت کی پوری رینج کے ذریعے جھکائیں۔</value>
   </data>
+  <data name="toggle_control_mode" xml:space="preserve">
+    <value>کنٹرول موڈ ٹوگل کریں</value>
+  </data>
+  <data name="toggle_game_mode" xml:space="preserve">
+    <value>گیم موڈ ٹوگل کریں</value>
+  </data>
+  <data name="toggle_keyboard_mode" xml:space="preserve">
+    <value>کی بورڈ موڈ ٹوگل کریں</value>
+  </data>
+  <data name="toggle_pane_position" xml:space="preserve">
+    <value>پین کی پوزیشن ٹوگل کریں</value>
+  </data>
+  <data name="toggle_status_bar" xml:space="preserve">
+    <value>اسٹیٹس بار دکھائیں/چھپائیں</value>
+  </data>
+  <data name="toolbar_copy_description" xml:space="preserve">
+    <value>تمام متن کاپی کریں</value>
+  </data>
+  <data name="toolbar_cut_description" xml:space="preserve">
+    <value>ٹارگٹ ایپ میں سلیکشن کاٹیں</value>
+  </data>
+  <data name="toolbar_game_description" xml:space="preserve">
+    <value>گیم موڈ شروع کریں</value>
+  </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>نیا / واضح آؤٹ پٹ</value>
   </data>
   <data name="toolbar_open_description" xml:space="preserve">
     <value>فائل کھولیں۔</value>
   </data>
+  <data name="toolbar_paste_description" xml:space="preserve">
+    <value>ٹارگٹ ایپ میں پیسٹ کریں</value>
+  </data>
+  <data name="toolbar_reanchor_description" xml:space="preserve">
+    <value>پریڈکشنز کو کیریٹ پر دوبارہ اینکر کریں (اپنے کرسر کے ارد گرد جملہ پڑھیں)</value>
+  </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>فائل میں محفوظ کریں۔</value>
+  </data>
+  <data name="toolbar_select_all_description" xml:space="preserve">
+    <value>ٹارگٹ ایپ میں سب کچھ منتخب کریں</value>
+  </data>
+  <data name="toolbar_settings_description" xml:space="preserve">
+    <value>سیٹنگز کھولیں</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>متن کا اشتراک کریں۔</value>
@@ -569,8 +850,14 @@
   <data name="training_data" xml:space="preserve">
     <value>تربیت کا ڈیٹا</value>
   </data>
+  <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
+    <value>ٹریننگ ڈیٹا حذف ہو گیا — مکمل اثر کے لیے Dasher دوبارہ شروع کریں</value>
+  </data>
   <data name="training_data_description" xml:space="preserve">
     <value>درآمد زبان کے ماڈل اور آپ کے جمع کردہ تربیتی ڈیٹا میں متن شامل کرتا ہے (دوبارہ شروع ہونے پر رکھا جاتا ہے)۔ ایکسپورٹ آپ کے تربیتی ڈیٹا کو بیک اپ یا ٹرانسفر کے لیے محفوظ کرتا ہے۔ ری سیٹ کرنے سے صارف کی تربیت کا تمام ڈیٹا حذف ہو جاتا ہے — ماڈل اگلے لانچ پر اپنے پہلے سے طے شدہ ڈیفالٹس پر واپس آجاتا ہے۔</value>
+  </data>
+  <data name="training_data_exported" xml:space="preserve">
+    <value>ٹریننگ ڈیٹا برآمد ہو گیا۔</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>ٹریننگ ڈیٹا برآمد کریں</value>
@@ -590,6 +877,9 @@
   <data name="training_imported_restart" xml:space="preserve">
     <value>{0} کلو بائٹ درآمد ہو گئے — اگلے لانچ پر مکمل لاگو ہوں گے (لائیو ماڈل نے {1} واپس دیا)</value>
   </data>
+  <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
+    <value>ٹریننگ ابھی دستیاب نہیں — جب کینوس رینڈر ہو جائے تو دوبارہ کوشش کریں۔</value>
+  </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>ابھی تک صارف کی تربیت کا کوئی ڈیٹا نہیں ہے۔</value>
   </data>
@@ -605,14 +895,32 @@
   <data name="training_reset_partial" xml:space="preserve">
     <value>جہاں ممکن ہو تربیتی ڈیٹا کو حذف کر دیا گیا — {0} آئٹمز ناکام ہو گئے؛ دوبارہ کوشش کرنے کے لیے دوبارہ ری سیٹ دبائیں۔</value>
   </data>
+  <data name="tts_engine" xml:space="preserve">
+    <value>TTS انجن</value>
+  </data>
+  <data name="tts_no_credentials" xml:space="preserve">
+    <value>کوئی اسناد درکار نہیں</value>
+  </data>
   <data name="turbo" xml:space="preserve">
     <value>ٹربو</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>ٹائپنگ کی شرح</value>
   </data>
+  <data name="typing_rate_format" xml:space="preserve">
+    <value>{cps} cps · {wpm} wpm</value>
+  </data>
+  <data name="udp_port" xml:space="preserve">
+    <value>UDP پورٹ</value>
+  </data>
+  <data name="udp_tracker_help" xml:space="preserve">
+    <value>UDP ٹریکر STREAM_DATA یا GazePoint پیغامات کے لیے سنتا ہے</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Dasher کو اپنے کی بورڈ کے بطور استعمال کریں۔</value>
+  </data>
+  <data name="volume" xml:space="preserve">
+    <value>آواز</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>ہمیں اس میک پر آپ کی Dasher 5 کنفیگریشن ملی ہے۔ آپ کے حروف تہجی، رنگ، رفتار کی ترتیبات، اور حسب ضرورت فائلیں Dasher 6 میں درآمد کی جا سکتی ہیں۔</value>
