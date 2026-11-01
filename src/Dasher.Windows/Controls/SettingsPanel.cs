@@ -251,7 +251,7 @@ public class SettingsPanel : Decorator
 
         var fontLabel = new TextBlock
         {
-            Text = "Output Font",
+            Text = Loc.Tr("output_font"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -276,7 +276,7 @@ public class SettingsPanel : Decorator
 
         var sizeLabel = new TextBlock
         {
-            Text = "Output Font Size",
+            Text = Loc.Tr("output_font_size"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -357,7 +357,7 @@ public class SettingsPanel : Decorator
 
         var label = new TextBlock
         {
-            Text = "Keyboard Mode Opacity",
+            Text = Loc.Tr("keyboard_mode_opacity"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -408,7 +408,7 @@ public class SettingsPanel : Decorator
 
         var help = new TextBlock
         {
-            Text = "Window transparency when in Keyboard/Direct mode",
+            Text = Loc.Tr("keyboard_mode_transparency_help"),
             FontSize = 11,
             Foreground = BrushMuted,
         };
@@ -442,7 +442,7 @@ public class SettingsPanel : Decorator
 
         var resetBtn = new Button
         {
-            Content = "Reset WPM averages",
+            Content = Loc.Tr("reset_wpm_averages"),
             Padding = new Thickness(12, 6),
             FontSize = 12,
             Margin = new Thickness(0, 4, 0, 0),
@@ -500,7 +500,7 @@ public class SettingsPanel : Decorator
 
         var methodLabel = new TextBlock
         {
-            Text = "Steering Method",
+            Text = Loc.Tr("steering_method"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -522,7 +522,7 @@ public class SettingsPanel : Decorator
 
         var selectionLabel = new TextBlock
         {
-            Text = "Selection Method",
+            Text = Loc.Tr("selection_method"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -570,7 +570,7 @@ public class SettingsPanel : Decorator
         // ── Eye tracker sub-picker (visible only when EyeGaze is selected) ──────────
         var trackerLabel = new TextBlock
         {
-            Text = "Eye Tracker Device",
+            Text = Loc.Tr("eye_tracker_device"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -598,7 +598,7 @@ public class SettingsPanel : Decorator
         var portPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
         var portLabel = new TextBlock
         {
-            Text = "UDP Port",
+            Text = Loc.Tr("udp_port"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -619,14 +619,14 @@ public class SettingsPanel : Decorator
         {
             FontSize = 11,
             Foreground = BrushMuted,
-            Text = "UDP tracker listens for STREAM_DATA or GazePoint messages",
+            Text = Loc.Tr("udp_tracker_help"),
             Margin = new Thickness(0, 2, 0, 0),
         };
 
         // ── Gaze filter controls (transit zoom fix; tune for eye tracker latency) ──
         var filterHeader = new TextBlock
         {
-            Text = "Gaze Smoothing",
+            Text = Loc.Tr("gaze_smoothing"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -640,7 +640,7 @@ public class SettingsPanel : Decorator
         };
         var filterToggleLabel = new TextBlock
         {
-            Text = "Filter gaze (reduces zoom toward wrong positions during eye transit)",
+            Text = Loc.Tr("gaze_filter_label"),
             FontSize = 12,
             Foreground = BrushValue,
             VerticalAlignment = VerticalAlignment.Center,
@@ -651,7 +651,7 @@ public class SettingsPanel : Decorator
 
         var gazeFilterHelp = new TextBlock
         {
-            Text = "Reduces zoom toward wrong positions while your eyes move to a target",
+            Text = Loc.Tr("gaze_filter_help"),
             FontSize = 11,
             Foreground = BrushMuted,
             TextWrapping = TextWrapping.Wrap,
@@ -667,7 +667,7 @@ public class SettingsPanel : Decorator
         };
         var diagToggleLabel = new TextBlock
         {
-            Text = "Save eye-tracker diagnostics",
+            Text = Loc.Tr("save_eye_tracker_diagnostics"),
             FontSize = 12,
             Foreground = BrushValue,
             VerticalAlignment = VerticalAlignment.Center,
@@ -677,7 +677,7 @@ public class SettingsPanel : Decorator
         diagTogglePanel.Children.Add(diagToggleLabel);
         var diagHelp = new TextBlock
         {
-            Text = "Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.",
+            Text = Loc.Tr("eyegaze_verbose_help"),
             FontSize = 11,
             Foreground = BrushMuted,
             TextWrapping = TextWrapping.Wrap,
@@ -770,7 +770,7 @@ public class SettingsPanel : Decorator
             if (trackerCombo.SelectedIndex == 1)
             {
                 // UDP
-                trackerHelp.Text = "UDP tracker listens for STREAM_DATA or GazePoint messages";
+                trackerHelp.Text = Loc.Tr("udp_tracker_help");
                 trackerHelp.IsVisible = true;
             }
             else if (trackerCombo.SelectedIndex == 2)
@@ -798,7 +798,7 @@ public class SettingsPanel : Decorator
         // ── Dasher Input Filter (smoothing mode etc.) ─────────────────────────────
         var filterLabel = new TextBlock
         {
-            Text = "Input Processing",
+            Text = Loc.Tr("input_processing"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -1418,7 +1418,7 @@ public class SettingsPanel : Decorator
 
         var header = new TextBlock
         {
-            Text = "Colour Theme",
+            Text = Loc.Tr("colour_theme"),
             FontSize = 13,
             FontWeight = FontWeight.SemiBold,
             Foreground = BrushLabel,
@@ -1588,7 +1588,7 @@ public class SettingsPanel : Decorator
         {
             var reset = new Button
             {
-                Content = "Reset",
+                Content = Loc.Tr("training_reset"),
                 Padding = new Thickness(12, 4),
                 FontSize = 11,
                 Margin = new Thickness(8, 0, 0, 0),
@@ -2019,8 +2019,7 @@ public class SettingsPanel : Decorator
 
         section.Children.Add(new TextBlock
         {
-            Text = "Dasher collects anonymous usage analytics and crash reports to understand how the app is used and to fix bugs. " +
-                   "No typed text, clipboard contents, or personal information is ever collected.",
+            Text = Loc.Tr("analytics_settings_help"),
             FontSize = 12,
             TextWrapping = TextWrapping.Wrap,
             Foreground = BrushValue,
@@ -2109,7 +2108,7 @@ public class SettingsPanel : Decorator
 
         section.Children.Add(new TextBlock
         {
-            Text = "Dasher 5 Import",
+            Text = Loc.Tr("dasher5_import"),
             FontSize = 15,
             FontWeight = FontWeight.SemiBold,
             Foreground = BrushLabel,
@@ -2137,13 +2136,13 @@ public class SettingsPanel : Decorator
             if (!string.IsNullOrEmpty(scan.Speed))
                 section.Children.Add(new TextBlock { Text = $"  Speed: {scan.Speed}", FontSize = 11, Foreground = BrushMuted });
             if (scan.ControlMode)
-                section.Children.Add(new TextBlock { Text = "  Control mode: enabled", FontSize = 11, Foreground = BrushMuted });
+                section.Children.Add(new TextBlock { Text = "  " + Loc.Tr("control_mode_enabled"), FontSize = 11, Foreground = BrushMuted });
             if (scan.CustomFileCount > 0)
                 section.Children.Add(new TextBlock { Text = $"  {scan.CustomFileCount} custom file(s)", FontSize = 11, Foreground = BrushMuted });
 
             var importBtn = new Button
             {
-                Content = "Import from Dasher 5",
+                Content = Loc.Tr("import_from_dasher_5"),
                 Padding = new Thickness(16, 6),
                 FontSize = 12,
                 Margin = new Thickness(0, 8, 0, 0),
@@ -2174,7 +2173,7 @@ public class SettingsPanel : Decorator
         {
             section.Children.Add(new TextBlock
             {
-                Text = "No Dasher 5 data found on this computer.",
+                Text = Loc.Tr("dasher5_no_data"),
                 FontSize = 12,
                 Foreground = BrushMuted,
             });
@@ -2220,7 +2219,7 @@ public class SettingsPanel : Decorator
             var btn = s as Button;
             if (btn != null)
             {
-                btn.Content = "Restarting engine...";
+                btn.Content = Loc.Tr("restarting_engine");
                 btn.IsEnabled = false;
             }
             ResetSettingsRequested?.Invoke();
@@ -2236,7 +2235,7 @@ public class SettingsPanel : Decorator
 
         var engineLabel = new TextBlock
         {
-            Text = "TTS Engine",
+            Text = Loc.Tr("tts_engine"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -2264,7 +2263,7 @@ public class SettingsPanel : Decorator
             {
                 credentialsPanel.Children.Add(new TextBlock
                 {
-                    Text = "No credentials required",
+                    Text = Loc.Tr("tts_no_credentials"),
                     FontSize = 11,
                     Foreground = BrushValue,
                 });
@@ -2353,7 +2352,7 @@ public class SettingsPanel : Decorator
 
         var loadVoicesBtn = new Button
         {
-            Content = "Load Voices",
+            Content = Loc.Tr("load_voices"),
             FontSize = 12,
         };
         voiceBtnRow.Children.Add(loadVoicesBtn);
@@ -2368,7 +2367,7 @@ public class SettingsPanel : Decorator
 
         var previewBtn = new Button
         {
-            Content = "Preview",
+            Content = Loc.Tr("preview"),
             FontSize = 12,
         };
         voiceBtnRow.Children.Add(previewBtn);
@@ -2385,7 +2384,7 @@ public class SettingsPanel : Decorator
 
         var rateLabel = new TextBlock
         {
-            Text = "Rate",
+            Text = Loc.Tr("rate"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -2409,7 +2408,7 @@ public class SettingsPanel : Decorator
 
         var pitchLabel = new TextBlock
         {
-            Text = "Pitch",
+            Text = Loc.Tr("pitch"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -2433,7 +2432,7 @@ public class SettingsPanel : Decorator
 
         var volLabel = new TextBlock
         {
-            Text = "Volume",
+            Text = Loc.Tr("volume"),
             FontSize = 12,
             FontWeight = FontWeight.Medium,
             Foreground = BrushLabel,
@@ -2476,7 +2475,7 @@ public class SettingsPanel : Decorator
         async Task LoadVoicesIntoCombo()
         {
             loadVoicesBtn.IsEnabled = false;
-            voiceCountLabel.Text = "Loading...";
+            voiceCountLabel.Text = Loc.Tr("loading");
             _voiceLoadDepth++;
             // Auto-populated combo population is not a user commit: the
             // SelectedIndex assignments below would fire the handler.
@@ -2584,7 +2583,7 @@ public class SettingsPanel : Decorator
 
         var speakOnStopLabel = new TextBlock
         {
-            Text = "Engine Speech Features",
+            Text = Loc.Tr("engine_speech_features"),
             FontSize = 13,
             FontWeight = FontWeight.Bold,
             Foreground = BrushLabel,
@@ -2595,7 +2594,7 @@ public class SettingsPanel : Decorator
         var speakOnStopRow = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
         var speakOnStopLabel2 = new TextBlock
         {
-            Text = "Speak on stop",
+            Text = Loc.Tr("speak_on_stop"),
             FontSize = 12,
             Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
@@ -2620,7 +2619,7 @@ public class SettingsPanel : Decorator
         var speakWordsRow = new DockPanel { Margin = new Thickness(0, 0, 0, 4) };
         var speakWordsLabel = new TextBlock
         {
-            Text = "Speak words",
+            Text = Loc.Tr("speak_words"),
             FontSize = 12,
             Foreground = BrushLabel,
             VerticalAlignment = VerticalAlignment.Center,
