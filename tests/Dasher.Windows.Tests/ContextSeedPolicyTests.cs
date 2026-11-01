@@ -321,13 +321,22 @@ public class ContextSeedPolicyTests
     [Fact]
     public void Paragraph_mark_mirror_fully_reflected_read_skips()
     {
-        // Settled variant: the read includes the newline and the caret sits
-        // after it, with earlier field text the engine window does not carry.
-        var d = ContextSeedPolicy.Decide(
+        // BEFORE the mark (caret 36 of 37): the mirror itself.
+        var before = ContextSeedPolicy.Decide(
             "Hello my name is Willy\n",
             "Earlier text. Hello my name is Willy\n",
             36);
-        Assert.Equal(ContextSeedAction.Skip, d.Action);
+        Assert.Equal(ContextSeedAction.Skip, before.Action);
+
+        // AFTER the settled mark (caret 37): NOT the mirror — covered by the
+        // sentence-equal branch (caret right after a boundary trims to "" on
+        // both sides). Pinned here so a refactor of either branch cannot
+        // silently unskip the settled state (review loop 2).
+        var after = ContextSeedPolicy.Decide(
+            "Hello my name is Willy\n",
+            "Earlier text. Hello my name is Willy\n",
+            37);
+        Assert.Equal(ContextSeedAction.Skip, after.Action);
     }
 
     [Fact]

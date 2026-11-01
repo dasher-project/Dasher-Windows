@@ -144,6 +144,13 @@ public static class ContextSeedPolicy
         // is not evidence of the same text), permanently, including the
         // manual re-anchor escape hatch. The degenerate buffer falls through
         // to the sentence logic, which handles it correctly.
+        // Coupling note (review loop 2): reads whose caret sits AFTER the
+        // settled mark (targetToCaret ends with the FULL engineFull, "\n"
+        // included) are NOT caught here — mirror = engineFull[..^1] does not
+        // follow from ending with engineFull (prefix/suffix). They are
+        // covered by the sentence-equal branch below (a caret right after a
+        // boundary trims to "" on both sides). Refactoring either branch
+        // must keep that class skipping.
         if (engineFull.Length > 1 && engineFull.EndsWith("\n", StringComparison.Ordinal) &&
             targetToCaret.EndsWith(engineFull[..^1], StringComparison.Ordinal))
             return ContextSeedDecision.Skip("paragraph-mark mirror — engine's newline is the target's; buffers in sync");
