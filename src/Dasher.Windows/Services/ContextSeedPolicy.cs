@@ -138,14 +138,15 @@ public static class ContextSeedPolicy
         // strip the buffer no longer ends "\n", so later Enters compare
         // equal and behave). Tail-anchored like the lag check so earlier
         // field text the engine window doesn't carry cannot break it.
-        if (engineFull.EndsWith("\n", StringComparison.Ordinal))
-        {
-            var mirror = engineFull[..^1];
-            if (targetToCaret.Length >= mirror.Length &&
-                (targetToCaret.EndsWith(mirror, StringComparison.Ordinal) ||
-                 targetToCaret.EndsWith(engineFull, StringComparison.Ordinal)))
-                return ContextSeedDecision.Skip("paragraph-mark mirror — engine's newline is the target's; buffers in sync");
-        }
+        // Length > 1: an engine buffer of just "\n" has an empty mirror, and
+        // EndsWith("") is trivially true — that would skip EVERY read in the
+        // exact greptile-P1 class MinLagOverlapChars documents (zero overlap
+        // is not evidence of the same text), permanently, including the
+        // manual re-anchor escape hatch. The degenerate buffer falls through
+        // to the sentence logic, which handles it correctly.
+        if (engineFull.Length > 1 && engineFull.EndsWith("\n", StringComparison.Ordinal) &&
+            targetToCaret.EndsWith(engineFull[..^1], StringComparison.Ordinal))
+            return ContextSeedDecision.Skip("paragraph-mark mirror — engine's newline is the target's; buffers in sync");
 
         // Lag loop. Paragraph-aware (Nov 2026): when the engine buffer ends
         // with its own "\n" and the target-to-caret ALREADY CONTAINS the

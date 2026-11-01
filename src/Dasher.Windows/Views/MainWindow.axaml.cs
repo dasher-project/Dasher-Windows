@@ -1186,6 +1186,11 @@ public partial class MainWindow : Window
         // after the paragraph ("first paragraph goes crazy, the rest are
         // fine" - the ContextSeedPolicy mirror guard catches the text-level
         // cases; this covers the caret-position churn it cannot see).
+        // Accepted trade-off: a GENUINE click elsewhere within the window is
+        // dropped with no retry - context stays anchored at the paragraph
+        // until the next UIA event. Matches the policy's stated asymmetry (a
+        // false Skip delays re-sync; a false Seed resets the canvas), and a
+        // sub-1.5s deliberate click right after our own Enter is rare.
         const long ParagraphSettleMs = 1500;
         if (reason == "caret moved" && _lastOwnParagraphInject != 0 &&
             Environment.TickCount64 - _lastOwnParagraphInject < ParagraphSettleMs)

@@ -303,7 +303,7 @@ public class ContextSeedPolicyTests
         var d = ContextSeedPolicy.Decide(
             "Hello my name is Willy!\n",
             "Hello my name is Willy!\r\n",
-            23); // caret between the \r and the \n
+            23); // caret before the \r (24 would be between \r and \n)
         Assert.Equal(ContextSeedAction.Skip, d.Action);
     }
 
@@ -331,7 +331,7 @@ public class ContextSeedPolicyTests
     }
 
     [Fact]
-    public void Engine_paragraph_then_target_has_new_external_text_still_seeds()
+    public void Target_has_whole_engine_plus_external_text_seeds_lag_disabler()
     {
         // The user typed on their PHYSICAL keyboard after Dasher's paragraph:
         // the read carries text the engine never emitted - a GENUINE context
@@ -340,6 +340,19 @@ public class ContextSeedPolicyTests
             "Hello my name is Willy!\n",
             "Hello my name is Willy!\r\nHello my &nail,",
             34); // caret after "Hello " on the new line
+        Assert.Equal(ContextSeedAction.Seed, d.Action);
+    }
+
+    [Fact]
+    public void Engine_buffer_of_just_a_newline_does_not_lock_the_policy()
+    {
+        // Review loop 1 P1: Enter as the FIRST Dasher output leaves the
+        // buffer exactly "\n" - an empty mirror, and EndsWith("") is
+        // trivially true. Without the Length > 1 conjunct the mirror would
+        // skip EVERY read in that state, forever, including the manual
+        // re-anchor escape hatch (the greptile-P1 class MinLagOverlapChars
+        // documents: zero overlap is not evidence of the same text).
+        var d = ContextSeedPolicy.Decide("\n", "Banana", 6);
         Assert.Equal(ContextSeedAction.Seed, d.Action);
     }
 }
