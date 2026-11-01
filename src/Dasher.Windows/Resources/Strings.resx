@@ -47,8 +47,16 @@
   <data name="analytics_opt_in" xml:space="preserve">
     <value>Share anonymous analytics and crash reports</value>
   </data>
+  <data name="analytics_rationale" xml:space="preserve">
+    <value>Dasher collects anonymous, privacy-respecting analytics to understand usage patterns and fix crashes. No typed text, clipboard contents, or personal information is ever collected.
+
+You can change this anytime in Settings &gt; Privacy.</value>
+  </data>
   <data name="analytics_reset_id" xml:space="preserve">
     <value>Reset analytics ID</value>
+  </data>
+  <data name="analytics_settings_help" xml:space="preserve">
+    <value>Dasher collects anonymous usage analytics and crash reports to understand how the app is used and to fix bugs. No typed text, clipboard contents, or personal information is ever collected.</value>
   </data>
   <data name="analytics_title" xml:space="preserve">
     <value>Help improve Dasher?</value>
@@ -65,6 +73,18 @@
   <data name="app_name" xml:space="preserve">
     <value>Dasher</value>
   </data>
+  <data name="arrow_left_label" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="arrow_left_tooltip" xml:space="preserve">
+    <value>Move caret left (hold to repeat)</value>
+  </data>
+  <data name="arrow_right_label" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="arrow_right_tooltip" xml:space="preserve">
+    <value>Move caret right (hold to repeat)</value>
+  </data>
   <data name="auto" xml:space="preserve">
     <value>Auto</value>
   </data>
@@ -76,6 +96,15 @@
   </data>
   <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
     <value>Auto-select after fixating your gaze while pinching. Only enable if OS dwell is off.</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="backspace_label" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="backspace_tooltip" xml:space="preserve">
+    <value>Delete (hold to repeat)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -98,11 +127,23 @@
   <data name="close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="close_settings" xml:space="preserve">
+    <value>Close settings</value>
+  </data>
   <data name="colour_theme" xml:space="preserve">
     <value>Colour Theme</value>
   </data>
   <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
     <value>contents or personal information is ever collected. You can change this any </value>
+  </data>
+  <data name="control" xml:space="preserve">
+    <value>Control</value>
+  </data>
+  <data name="control_mode_enabled" xml:space="preserve">
+    <value>Control mode: enabled</value>
+  </data>
+  <data name="control_mode_tooltip" xml:space="preserve">
+    <value>Control mode</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Copied to clipboard.</value>
@@ -116,8 +157,14 @@
   <data name="copy_all_2" xml:space="preserve">
     <value>Copy All</value>
   </data>
+  <data name="copy_all_clipboard" xml:space="preserve">
+    <value>Copy all (to clipboard)</value>
+  </data>
   <data name="copy_commands" xml:space="preserve">
     <value>Copy commands</value>
+  </data>
+  <data name="copy_selection" xml:space="preserve">
+    <value>Copy selection</value>
   </data>
   <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
     <value>Could not load the file into the engine</value>
@@ -149,6 +196,21 @@
   <data name="dasher" xml:space="preserve">
     <value>Dasher </value>
   </data>
+  <data name="dasher5_config_found" xml:space="preserve">
+    <value>We found your Dasher 5 configuration</value>
+  </data>
+  <data name="dasher5_import" xml:space="preserve">
+    <value>Dasher 5 Import</value>
+  </data>
+  <data name="dasher5_import_prompt" xml:space="preserve">
+    <value>Would you like to import these settings into Dasher 6?</value>
+  </data>
+  <data name="dasher5_no_data" xml:space="preserve">
+    <value>No Dasher 5 data found on this computer.</value>
+  </data>
+  <data name="dasher5_settings_found" xml:space="preserve">
+    <value>Dasher 5 settings found</value>
+  </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>Dasher 5 data detected on this Mac.</value>
   </data>
@@ -165,6 +227,9 @@
     <value>Dasher collects anonymous, privacy-respecting analytics to understand usage patterns and fix crashes. No typed text, clipboard contents, or personal information is ever collected.
 
 You can change this anytime in Settings &gt; Privacy.</value>
+  </data>
+  <data name="dasher_engine_error" xml:space="preserve">
+    <value>Dasher Engine Error</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>Dasher Keyboard</value>
@@ -215,11 +280,29 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Enable tilt input first to access calibration.</value>
   </data>
+  <data name="engine_error" xml:space="preserve">
+    <value>Engine Error</value>
+  </data>
+  <data name="engine_error_message" xml:space="preserve">
+    <value>The Dasher engine encountered an internal error and has stopped. Please restart Dasher.</value>
+  </data>
+  <data name="engine_speech_features" xml:space="preserve">
+    <value>Engine Speech Features</value>
+  </data>
+  <data name="exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
   <data name="export_training_text" xml:space="preserve">
     <value>Export Training Text</value>
   </data>
   <data name="eye_gaze" xml:space="preserve">
     <value>Eye Gaze</value>
+  </data>
+  <data name="eye_tracker_device" xml:space="preserve">
+    <value>Eye Tracker Device</value>
+  </data>
+  <data name="eyegaze_verbose_help" xml:space="preserve">
+    <value>Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>Failed to open: </value>
@@ -252,6 +335,15 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Game Text File</value>
+  </data>
+  <data name="gaze_filter_help" xml:space="preserve">
+    <value>Reduces zoom toward wrong positions while your eyes move to a target</value>
+  </data>
+  <data name="gaze_filter_label" xml:space="preserve">
+    <value>Filter gaze (reduces zoom toward wrong positions during eye transit)</value>
+  </data>
+  <data name="gaze_smoothing" xml:space="preserve">
+    <value>Gaze Smoothing</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>Got it</value>
@@ -295,6 +387,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="input_method_touch" xml:space="preserve">
     <value>Touch (drag on the canvas)</value>
   </data>
+  <data name="input_processing" xml:space="preserve">
+    <value>Input Processing</value>
+  </data>
   <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
     <value>Install Dasher via your package manager or build from source to use keyboard mode.</value>
   </data>
@@ -334,6 +429,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="keyboard_mode_title" xml:space="preserve">
     <value>Enable Keyboard Mode</value>
   </data>
+  <data name="keyboard_mode_transparency_help" xml:space="preserve">
+    <value>Window transparency when in Keyboard/Direct mode</value>
+  </data>
   <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
     <value>Keyboard mode types Dasher's output into other applications using ydotool, which </value>
   </data>
@@ -367,14 +465,23 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="learning" xml:space="preserve">
     <value>Learning</value>
   </data>
+  <data name="leave" xml:space="preserve">
+    <value>Leave</value>
+  </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>Leave game mode</value>
   </data>
   <data name="light" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="load_voices" xml:space="preserve">
+    <value>Load Voices</value>
+  </data>
   <data name="loaded_1_characters" xml:space="preserve">
     <value>Loaded %1 characters</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>Loading…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>Language</value>
@@ -385,11 +492,20 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="migration" xml:space="preserve">
     <value>Migration</value>
   </data>
+  <data name="more" xml:space="preserve">
+    <value>More</value>
+  </data>
+  <data name="more_options" xml:space="preserve">
+    <value>More options</value>
+  </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>Move your eyes while pinching to steer</value>
   </data>
   <data name="new" xml:space="preserve">
     <value>New</value>
+  </data>
+  <data name="new_document" xml:space="preserve">
+    <value>New document</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>New Message</value>
@@ -443,16 +559,22 @@ You can change this anytime in Settings &gt; Privacy.</value>
     <value>Open System Settings</value>
   </data>
   <data name="open_text_file" xml:space="preserve">
-    <value>Open Text File</value>
+    <value>Open text file</value>
   </data>
   <data name="output" xml:space="preserve">
     <value>Output</value>
+  </data>
+  <data name="output_font" xml:space="preserve">
+    <value>Output Font</value>
   </data>
   <data name="output_font_size" xml:space="preserve">
     <value>Output Font Size</value>
   </data>
   <data name="output_placeholder" xml:space="preserve">
     <value>Touch the canvas to start writing.</value>
+  </data>
+  <data name="pane_position" xml:space="preserve">
+    <value>Pane position</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>Paste</value>
@@ -468,6 +590,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="pinch_and_look_to_write" xml:space="preserve">
     <value>Pinch and Look to Write</value>
+  </data>
+  <data name="pitch" xml:space="preserve">
+    <value>Pitch</value>
   </data>
   <data name="play" xml:space="preserve">
     <value>Game</value>
@@ -487,11 +612,20 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="preparing_dasher" xml:space="preserve">
     <value>Preparing Dasher…</value>
   </data>
+  <data name="preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
   <data name="privacy" xml:space="preserve">
     <value>Privacy</value>
   </data>
   <data name="privacy_2" xml:space="preserve">
     <value>&lt;b&gt;Privacy&lt;/b&gt;</value>
+  </data>
+  <data name="quick_speak" xml:space="preserve">
+    <value>Quick speak</value>
+  </data>
+  <data name="rate" xml:space="preserve">
+    <value>Rate</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Re-import from Dasher 5</value>
@@ -529,6 +663,12 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="reset_training_data_2" xml:space="preserve">
     <value>Reset Training Data?</value>
   </data>
+  <data name="reset_wpm_averages" xml:space="preserve">
+    <value>Reset WPM averages</value>
+  </data>
+  <data name="restarting_engine" xml:space="preserve">
+    <value>Restarting engine…</value>
+  </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>Restore all Dasher settings to their default values. This cannot be undone.</value>
   </data>
@@ -541,11 +681,17 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="save_2" xml:space="preserve">
     <value>Save...</value>
   </data>
+  <data name="save_eye_tracker_diagnostics" xml:space="preserve">
+    <value>Save eye-tracker diagnostics</value>
+  </data>
   <data name="save_failed" xml:space="preserve">
     <value>Save failed</value>
   </data>
+  <data name="save_file" xml:space="preserve">
+    <value>Save file</value>
+  </data>
   <data name="save_text_file" xml:space="preserve">
-    <value>Save Text File</value>
+    <value>Save text file</value>
   </data>
   <data name="saved" xml:space="preserve">
     <value>Saved</value>
@@ -555,6 +701,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="scan_speed" xml:space="preserve">
     <value>Scan Speed</value>
+  </data>
+  <data name="selection_method" xml:space="preserve">
+    <value>Selection Method</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>service running? See the setup help on the Keyboard button for install commands.</value>
@@ -586,6 +735,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>Show Input Debug Overlay</value>
   </data>
+  <data name="show_status_bar" xml:space="preserve">
+    <value>Show status bar</value>
+  </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>Show typing rate (WPM)</value>
   </data>
@@ -597,6 +749,12 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="slow" xml:space="preserve">
     <value>Slow</value>
+  </data>
+  <data name="speak_on_stop" xml:space="preserve">
+    <value>Speak on stop</value>
+  </data>
+  <data name="speak_words" xml:space="preserve">
+    <value>Speak words</value>
   </data>
   <data name="speech" xml:space="preserve">
     <value>Speech</value>
@@ -613,6 +771,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;Speech Settings&lt;/b&gt;</value>
   </data>
+  <data name="speech_volume" xml:space="preserve">
+    <value>Speech volume</value>
+  </data>
   <data name="speed" xml:space="preserve">
     <value>Speed</value>
   </data>
@@ -625,8 +786,14 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="start_fresh" xml:space="preserve">
     <value>Start fresh</value>
   </data>
+  <data name="steering_method" xml:space="preserve">
+    <value>Steering Method</value>
+  </data>
   <data name="stop" xml:space="preserve">
     <value>Stop</value>
+  </data>
+  <data name="stop_speaking" xml:space="preserve">
+    <value>Stop speaking</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>System</value>
@@ -670,8 +837,26 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="time_under_preferences_privacy" xml:space="preserve">
     <value>time under Preferences → Privacy.</value>
   </data>
+  <data name="toggle_control_mode" xml:space="preserve">
+    <value>Toggle control mode</value>
+  </data>
+  <data name="toggle_game_mode" xml:space="preserve">
+    <value>Toggle game mode</value>
+  </data>
+  <data name="toggle_keyboard_mode" xml:space="preserve">
+    <value>Toggle keyboard mode</value>
+  </data>
+  <data name="toggle_pane_position" xml:space="preserve">
+    <value>Toggle pane position</value>
+  </data>
+  <data name="toggle_status_bar" xml:space="preserve">
+    <value>Hide/show status bar</value>
+  </data>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Copy all text</value>
+  </data>
+  <data name="toolbar_cut_description" xml:space="preserve">
+    <value>Cut selection in target app</value>
   </data>
   <data name="toolbar_game_description" xml:space="preserve">
     <value>Start game mode</value>
@@ -682,8 +867,17 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="toolbar_open_description" xml:space="preserve">
     <value>Open file</value>
   </data>
+  <data name="toolbar_paste_description" xml:space="preserve">
+    <value>Paste into target app</value>
+  </data>
+  <data name="toolbar_reanchor_description" xml:space="preserve">
+    <value>Re-anchor predictions to the caret (read the sentence around your cursor)</value>
+  </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>Save to file</value>
+  </data>
+  <data name="toolbar_select_all_description" xml:space="preserve">
+    <value>Select all in target app</value>
   </data>
   <data name="toolbar_settings_description" xml:space="preserve">
     <value>Open settings</value>
@@ -745,6 +939,12 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="training_reset_partial" xml:space="preserve">
     <value>Deleted training data where possible — {0} item(s) failed; press Reset again to retry</value>
   </data>
+  <data name="tts_engine" xml:space="preserve">
+    <value>TTS Engine</value>
+  </data>
+  <data name="tts_no_credentials" xml:space="preserve">
+    <value>No credentials required</value>
+  </data>
   <data name="turbo" xml:space="preserve">
     <value>Turbo</value>
   </data>
@@ -757,14 +957,26 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="typing_rate_format" xml:space="preserve">
     <value>{cps} cps · {wpm} wpm</value>
   </data>
+  <data name="udp_port" xml:space="preserve">
+    <value>UDP Port</value>
+  </data>
+  <data name="udp_tracker_help" xml:space="preserve">
+    <value>UDP tracker listens for STREAM_DATA or GazePoint messages</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Use Dasher as your keyboard</value>
+  </data>
+  <data name="volume" xml:space="preserve">
+    <value>Volume</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>We found your Dasher 5 configuration on this Mac. Your alphabet, colours, speed settings, and custom files can be imported into Dasher 6.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>What was found</value>
+  </data>
+  <data name="wpm_idle" xml:space="preserve">
+    <value>0 wpm</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>X range:</value>

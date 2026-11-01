@@ -77,7 +77,7 @@ public partial class App : Application
     {
         var dialog = new Window
         {
-            Title = "Help improve Dasher",
+            Title = Loc.Tr("analytics_accept"),
             Width = 440,
             Height = 320,
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
@@ -95,7 +95,7 @@ public partial class App : Application
 
         panel.Children.Add(new TextBlock
         {
-            Text = "Help improve Dasher",
+            Text = Loc.Tr("analytics_accept"),
             FontSize = 18,
             FontWeight = FontWeight.Bold,
             Foreground = ThemeBrushes.TextPrimary,
@@ -103,9 +103,7 @@ public partial class App : Application
 
         panel.Children.Add(new TextBlock
         {
-            Text = "Dasher collects anonymous, privacy-respecting analytics to understand usage patterns and fix crashes. " +
-                   "No typed text, clipboard contents, or personal information is ever collected.\n\n" +
-                   "You can change this anytime in Settings > Privacy.",
+            Text = Loc.Tr("analytics_rationale"),
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
             Foreground = ThemeBrushes.TextSecondary,
@@ -120,7 +118,7 @@ public partial class App : Application
 
         var notNowBtn = new Button
         {
-            Content = "Not now",
+            Content = Loc.Tr("analytics_decline"),
             Padding = new Thickness(20, 8),
             Background = Brushes.Transparent,
             BorderBrush = (Application.Current?.FindResource("BorderLight") as IBrush) ?? Brushes.LightGray,
@@ -129,7 +127,7 @@ public partial class App : Application
 
         var helpBtn = new Button
         {
-            Content = "Help improve Dasher",
+            Content = Loc.Tr("analytics_accept"),
             Padding = new Thickness(20, 8),
             Background = new SolidColorBrush(Color.FromRgb(0x99, 0xD4, 0xCD)),
             Foreground = ThemeBrushes.TextPrimary,

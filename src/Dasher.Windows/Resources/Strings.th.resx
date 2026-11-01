@@ -35,14 +35,25 @@
   <data name="analytics_accept" xml:space="preserve">
     <value>ช่วยปรับปรุง Dasher ให้ดียิ่งขึ้น</value>
   </data>
+  <data name="analytics_body" xml:space="preserve">
+    <value>แชร์การวิเคราะห์การใช้งานและรายงานการล่มแบบไม่ระบุตัวตนหรือไม่? ไม่มีการเก็บข้อความที่พิมพ์ เนื้อหาในคลิปบอร์ด หรือข้อมูลส่วนตัวใด ๆ คุณสามารถเปลี่ยนการตั้งค่านี้ได้ทุกเมื่อในการตั้งค่า</value>
+  </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>ไม่ใช่ตอนนี้</value>
   </data>
   <data name="analytics_opt_in" xml:space="preserve">
     <value>แบ่งปันข้อมูลวิเคราะห์และรายงานข้อผิดพลาดแบบไม่ระบุตัวตน</value>
   </data>
+  <data name="analytics_rationale" xml:space="preserve">
+    <value>Dasher รวบรวมข้อมูลวิเคราะห์แบบไม่ระบุชื่อและเคารพความเป็นส่วนตัวเพื่อเข้าใจรูปแบบการใช้งานและแก้ไขปัญหาแครช ไม่เคยเก็บข้อความที่พิมพ์ เนื้อหาในคลิปบอร์ด หรือข้อมูลส่วนบุคคลใด ๆ
+
+คุณสามารถเปลี่ยนการตั้งค่านี้ได้ทุกเวลาใน การตั้งค่า &gt; ความเป็นส่วนตัว</value>
+  </data>
   <data name="analytics_reset_id" xml:space="preserve">
     <value>รีเซ็ต ID การวิเคราะห์</value>
+  </data>
+  <data name="analytics_settings_help" xml:space="preserve">
+    <value>Dasher รวบรวมการวิเคราะห์การใช้งานแบบไม่ระบุชื่อและรายงานความผิดพลาดเพื่อทำความเข้าใจว่าผู้ใช้แอปอย่างไรและเพื่อแก้ไขบั๊ก ข้อความที่พิมพ์ เนื้อหาในคลิปบอร์ด หรือข้อมูลส่วนบุคคลจะไม่ถูกเก็บรวบรวมเลย</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>การวิเคราะห์การใช้งานแบบไม่ระบุตัวตน</value>
@@ -52,6 +63,18 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>การเลือกเวลาพักระดับแอป</value>
+  </data>
+  <data name="arrow_left_label" xml:space="preserve">
+    <value>ซ้าย</value>
+  </data>
+  <data name="arrow_left_tooltip" xml:space="preserve">
+    <value>เลื่อนเคอร์เซอร์ไปซ้าย (กดค้างเพื่อทำซ้ำ)</value>
+  </data>
+  <data name="arrow_right_label" xml:space="preserve">
+    <value>ขวา</value>
+  </data>
+  <data name="arrow_right_tooltip" xml:space="preserve">
+    <value>เลื่อนเคอร์เซอร์ไปทางขวา (กดค้างเพื่อทำซ้ำ)</value>
   </data>
   <data name="auto" xml:space="preserve">
     <value>อัตโนมัติ</value>
@@ -64,6 +87,15 @@
   </data>
   <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
     <value>เลือกอัตโนมัติหลังจากจ้องมองโดยใช้การบีบนิ้ว เปิดใช้งานเฉพาะเมื่อปิดการตั้งค่าการพักหน้าจอของระบบปฏิบัติการเท่านั้น</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>กลับ</value>
+  </data>
+  <data name="backspace_label" xml:space="preserve">
+    <value>ลบ</value>
+  </data>
+  <data name="backspace_tooltip" xml:space="preserve">
+    <value>ลบ (กดค้างเพื่อทำซ้ำ)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>ยกเลิก</value>
@@ -86,14 +118,26 @@
   <data name="close" xml:space="preserve">
     <value>ปิด</value>
   </data>
+  <data name="close_settings" xml:space="preserve">
+    <value>ปิดการตั้งค่า</value>
+  </data>
   <data name="colour_theme" xml:space="preserve">
     <value>ธีมสี</value>
+  </data>
+  <data name="control" xml:space="preserve">
+    <value>ควบคุม</value>
+  </data>
+  <data name="control_mode_enabled" xml:space="preserve">
+    <value>โหมดควบคุม: เปิดใช้งาน</value>
+  </data>
+  <data name="control_mode_tooltip" xml:space="preserve">
+    <value>โหมดควบคุม</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>คัดลอกไปยังคลิปบอร์ดแล้ว</value>
   </data>
   <data name="copy" xml:space="preserve">
-    <value>สำเนา</value>
+    <value>คัดลอก</value>
   </data>
   <data name="copy_all" xml:space="preserve">
     <value>คัดลอกทั้งหมด</value>
@@ -101,8 +145,32 @@
   <data name="copy_all_2" xml:space="preserve">
     <value>คัดลอกทั้งหมด</value>
   </data>
+  <data name="copy_all_clipboard" xml:space="preserve">
+    <value>คัดลอกทั้งหมด (ไปยังคลิปบอร์ด)</value>
+  </data>
   <data name="copy_commands" xml:space="preserve">
     <value>คัดลอกคำสั่ง</value>
+  </data>
+  <data name="copy_selection" xml:space="preserve">
+    <value>คัดลอกการเลือก</value>
+  </data>
+  <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
+    <value>ไม่สามารถโหลดไฟล์เข้าสู่เอนจินได้</value>
+  </data>
+  <data name="could_not_open_the_selected_file" xml:space="preserve">
+    <value>ไม่สามารถเปิดไฟล์ที่เลือกได้</value>
+  </data>
+  <data name="could_not_read_the_selected_file" xml:space="preserve">
+    <value>ไม่สามารถอ่านไฟล์ที่เลือกได้</value>
+  </data>
+  <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
+    <value>ไม่สามารถซิงค์การแก้ไขของคุณกับเอนจินได้ — อาจถูกเขียนทับ</value>
+  </data>
+  <data name="could_not_write_the_export_file" xml:space="preserve">
+    <value>ไม่สามารถเขียนไฟล์ส่งออกได้</value>
+  </data>
+  <data name="could_not_write_the_training_data" xml:space="preserve">
+    <value>ไม่สามารถเขียนข้อมูลการฝึกได้</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>การสอบเทียบกระแสไฟฟ้า</value>
@@ -115,6 +183,21 @@
   </data>
   <data name="dasher" xml:space="preserve">
     <value>แดชเชอร์</value>
+  </data>
+  <data name="dasher5_config_found" xml:space="preserve">
+    <value>เราพบการกำหนดค่า Dasher 5 ของคุณ</value>
+  </data>
+  <data name="dasher5_import" xml:space="preserve">
+    <value>Dasher 5 นำเข้า</value>
+  </data>
+  <data name="dasher5_import_prompt" xml:space="preserve">
+    <value>คุณต้องการนำเข้าการตั้งค่าเหล่านี้ไปยัง Dasher 6 หรือไม่?</value>
+  </data>
+  <data name="dasher5_no_data" xml:space="preserve">
+    <value>ไม่พบข้อมูล Dasher 5 บนคอมพิวเตอร์เครื่องนี้</value>
+  </data>
+  <data name="dasher5_settings_found" xml:space="preserve">
+    <value>พบการตั้งค่า Dasher 5</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>ตรวจพบข้อมูล Dasher 5 บนเครื่อง Mac นี้</value>
@@ -132,6 +215,9 @@
     <value>Dasher รวบรวมข้อมูลวิเคราะห์แบบไม่ระบุตัวตนและเคารพความเป็นส่วนตัว เพื่อทำความเข้าใจรูปแบบการใช้งานและแก้ไขข้อผิดพลาด ไม่มีการเก็บข้อความที่พิมพ์ เนื้อหาในคลิปบอร์ด หรือข้อมูลส่วนบุคคลใดๆ ทั้งสิ้น
 
 คุณสามารถเปลี่ยนแปลงการตั้งค่านี้ได้ตลอดเวลาใน การตั้งค่า &gt; ความเป็นส่วนตัว</value>
+  </data>
+  <data name="dasher_engine_error" xml:space="preserve">
+    <value>ข้อผิดพลาดของเครื่อง Dasher</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>คีย์บอร์ดแดชเชอร์</value>
@@ -170,6 +256,9 @@
   <data name="done" xml:space="preserve">
     <value>เสร็จแล้ว</value>
   </data>
+  <data name="dwell_description" xml:space="preserve">
+    <value>ลอยค้างอยู่ในตำแหน่งเดียวเพื่อกระตุ้นการคลิก แทนการกดปุ่มหรือตัวสวิตช์</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>เลื่อนเพื่อคลิก</value>
   </data>
@@ -179,11 +268,29 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>เปิดใช้งานการป้อนข้อมูลการเอียงก่อนเพื่อเข้าถึงการปรับเทียบ</value>
   </data>
+  <data name="engine_error" xml:space="preserve">
+    <value>ข้อผิดพลาดของเครื่องยนต์</value>
+  </data>
+  <data name="engine_error_message" xml:space="preserve">
+    <value>เครื่องยนต์ Dasher พบข้อผิดพลาดภายในและหยุดทำงาน กรุณาเริ่ม Dasher ใหม่</value>
+  </data>
+  <data name="engine_speech_features" xml:space="preserve">
+    <value>คุณสมบัติการพูดของเครื่องยนต์</value>
+  </data>
+  <data name="exit" xml:space="preserve">
+    <value>ออก</value>
+  </data>
   <data name="export_training_text" xml:space="preserve">
     <value>ข้อความฝึกอบรมการส่งออก</value>
   </data>
   <data name="eye_gaze" xml:space="preserve">
     <value>การจ้องมองด้วยสายตา</value>
+  </data>
+  <data name="eye_tracker_device" xml:space="preserve">
+    <value>อุปกรณ์ติดตามสายตา</value>
+  </data>
+  <data name="eyegaze_verbose_help" xml:space="preserve">
+    <value>บันทึกการติดตามรายละเอียดสำหรับรายงานบัก (บรรทัดต่อชิ้นตัวอย่าง บันทึกลงในไฟล์ eyegaze.log ในโฟลเดอร์ Dasher) เหตุการณ์การเชื่อมต่อพื้นฐานจะถูกบันทึกเสมอ</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>ไม่สามารถเปิดได้:</value>
@@ -193,6 +300,9 @@
   </data>
   <data name="fast" xml:space="preserve">
     <value>เร็ว</value>
+  </data>
+  <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
+    <value>ไฟล์ถูกตัดที่ 4 MB — โหลดเฉพาะส่วนแรกเท่านั้น</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>หากต้องการลอยคีย์บอร์ด ให้อนุญาต Dasher แสดงเหนือแอปอื่น แล้วแตะ Float อีกครั้ง</value>
@@ -208,6 +318,15 @@
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>ไฟล์ข้อความเกม</value>
+  </data>
+  <data name="gaze_filter_help" xml:space="preserve">
+    <value>ลดการซูมไปยังตำแหน่งที่ผิดขณะดวงตาของคุณเคลื่อนไปยังเป้าหมาย</value>
+  </data>
+  <data name="gaze_filter_label" xml:space="preserve">
+    <value>กรองการจ้องมอง (ลดการซูมไปยังตำแหน่งที่ผิดระหว่างการเคลื่อนที่ของตา)</value>
+  </data>
+  <data name="gaze_smoothing" xml:space="preserve">
+    <value>การปรับความเรียบของการจ้อง</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>เข้าใจแล้ว</value>
@@ -227,6 +346,12 @@
   <data name="import_training_text" xml:space="preserve">
     <value>นำเข้าข้อความฝึกอบรม</value>
   </data>
+  <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
+    <value>นำเข้า %1 — ใช้งานเต็มที่เมื่อเปิดครั้งถัดไป</value>
+  </data>
+  <data name="imported_1_of_training_text" xml:space="preserve">
+    <value>นำเข้า %1 ของข้อความการฝึกอบรม</value>
+  </data>
   <data name="increase_speed" xml:space="preserve">
     <value>เพิ่มความเร็ว</value>
   </data>
@@ -245,14 +370,23 @@
   <data name="input_method_touch" xml:space="preserve">
     <value>แตะ (ลากบนผืนผ้าใบ)</value>
   </data>
+  <data name="input_processing" xml:space="preserve">
+    <value>การประมวลผลข้อมูลนำเข้า</value>
+  </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;ติดตั้ง ydotool เพื่อใช้งานโหมดแป้นพิมพ์&lt;/b&gt;</value>
   </data>
   <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
     <value>ยังไม่ได้ติดตั้ง เรียกใช้คำสั่งเหล่านี้ แล้วกด ลองใหม่:</value>
   </data>
+  <data name="keyboard" xml:space="preserve">
+    <value>คีย์บอร์ด</value>
+  </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>_แป้นพิมพ์</value>
+  </data>
+  <data name="keyboard_mode_description" xml:space="preserve">
+    <value>พิมพ์ผลลัพธ์ของ Dasher ลงโดยตรงในแอปที่คุณกำลังชี้อยู่</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>ออกจากโหมดแป้นพิมพ์</value>
@@ -263,11 +397,23 @@
   <data name="keyboard_mode_opacity" xml:space="preserve">
     <value>ความทึบแสงของโหมดแป้นพิมพ์</value>
   </data>
+  <data name="keyboard_mode_stopped" xml:space="preserve">
+    <value>โหมดคีย์บอร์ดหยุดทำงาน</value>
+  </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>โหมดแป้นพิมพ์หยุดทำงาน: ydotool ไม่สามารถแทรกข้อความได้ ydotoold ทำงานอยู่หรือไม่</value>
   </data>
   <data name="keyboard_mode_title" xml:space="preserve">
     <value>เปิดใช้งานโหมดแป้นพิมพ์</value>
+  </data>
+  <data name="keyboard_mode_transparency_help" xml:space="preserve">
+    <value>ความโปร่งใสของหน้าต่างเมื่ออยู่ในโหมดแป้นพิมพ์/โดยตรง</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>ภาษา</value>
+  </data>
+  <data name="language_locale" xml:space="preserve">
+    <value>ภาษา / ภูมิภาค</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;ภาษา / สถานที่ตั้ง&lt;/b&gt;</value>
@@ -293,11 +439,23 @@
   <data name="learning" xml:space="preserve">
     <value>การเรียนรู้</value>
   </data>
+  <data name="leave" xml:space="preserve">
+    <value>ลา</value>
+  </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>ออกจากโหมดเกม</value>
   </data>
   <data name="light" xml:space="preserve">
     <value>แสงสว่าง</value>
+  </data>
+  <data name="load_voices" xml:space="preserve">
+    <value>โหลดเสียง</value>
+  </data>
+  <data name="loaded_1_characters" xml:space="preserve">
+    <value>โหลดตัวอักษร %1 ตัวเรียบร้อยแล้ว</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>กำลังโหลด…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>ภาษา</value>
@@ -308,11 +466,20 @@
   <data name="migration" xml:space="preserve">
     <value>การย้ายถิ่นฐาน</value>
   </data>
+  <data name="more" xml:space="preserve">
+    <value>เพิ่มเติม</value>
+  </data>
+  <data name="more_options" xml:space="preserve">
+    <value>ตัวเลือกเพิ่มเติม</value>
+  </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>ขยับดวงตาไปพร้อมกับบีบนิ้วเพื่อบังคับทิศทาง</value>
   </data>
   <data name="new" xml:space="preserve">
     <value>ใหม่</value>
+  </data>
+  <data name="new_document" xml:space="preserve">
+    <value>เอกสารใหม่</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>ข้อความใหม่</value>
@@ -325,6 +492,12 @@
   </data>
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>ไม่มีการตั้งค่าใดๆ สำหรับส่วนนี้</value>
+  </data>
+  <data name="no_training_data_to_export_yet" xml:space="preserve">
+    <value>ยังไม่มีข้อมูลการฝึกอบรมให้ส่งออก</value>
+  </data>
+  <data name="no_user_training_data_yet" xml:space="preserve">
+    <value>ยังไม่มีข้อมูลการฝึกอบรมผู้ใช้</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>ไม่มีอะไรให้เก็บ</value>
@@ -362,14 +535,20 @@
   <data name="output" xml:space="preserve">
     <value>เอาต์พุต</value>
   </data>
+  <data name="output_font" xml:space="preserve">
+    <value>ฟอนต์เอาต์พุต</value>
+  </data>
   <data name="output_font_size" xml:space="preserve">
     <value>ขนาดตัวอักษรที่แสดงผล</value>
   </data>
   <data name="output_placeholder" xml:space="preserve">
     <value>แตะที่ผืนผ้าใบเพื่อเริ่มเขียน</value>
   </data>
+  <data name="pane_position" xml:space="preserve">
+    <value>ตำแหน่งแผง</value>
+  </data>
   <data name="paste" xml:space="preserve">
-    <value>แปะ</value>
+    <value>วาง</value>
   </data>
   <data name="pause" xml:space="preserve">
     <value>หยุดชั่วคราว</value>
@@ -383,11 +562,20 @@
   <data name="pinch_and_look_to_write" xml:space="preserve">
     <value>บีบและมองเพื่อเขียน</value>
   </data>
+  <data name="pitch" xml:space="preserve">
+    <value>การโยนบอล</value>
+  </data>
+  <data name="play" xml:space="preserve">
+    <value>เกม</value>
+  </data>
   <data name="play_2" xml:space="preserve">
     <value>เล่น</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>อินพุตเมื่อวางเมาส์เหนือตัวชี้</value>
+  </data>
+  <data name="preferences" xml:space="preserve">
+    <value>การตั้งค่า</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>การตั้งค่า</value>
@@ -395,11 +583,20 @@
   <data name="preparing_dasher" xml:space="preserve">
     <value>กำลังเตรียม Dasher…</value>
   </data>
+  <data name="preview" xml:space="preserve">
+    <value>ตัวอย่างก่อนหน้า</value>
+  </data>
   <data name="privacy" xml:space="preserve">
     <value>ความเป็นส่วนตัว</value>
   </data>
   <data name="privacy_2" xml:space="preserve">
     <value>&lt;b&gt;ความเป็นส่วนตัว&lt;/b&gt;</value>
+  </data>
+  <data name="quick_speak" xml:space="preserve">
+    <value>พูดเร็ว</value>
+  </data>
+  <data name="rate" xml:space="preserve">
+    <value>อัตรา</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>นำเข้าใหม่จาก Dasher 5</value>
@@ -437,6 +634,12 @@
   <data name="reset_training_data_2" xml:space="preserve">
     <value>รีเซ็ตข้อมูลการฝึกอบรมหรือไม่?</value>
   </data>
+  <data name="reset_wpm_averages" xml:space="preserve">
+    <value>รีเซ็ตค่าเฉลี่ย WPM</value>
+  </data>
+  <data name="restarting_engine" xml:space="preserve">
+    <value>กำลังรีสตาร์ทเครื่องยนต์…</value>
+  </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>คืนค่าการตั้งค่า Dasher ทั้งหมดกลับเป็นค่าเริ่มต้น การดำเนินการนี้ไม่สามารถย้อนกลับได้</value>
   </data>
@@ -449,8 +652,14 @@
   <data name="save_2" xml:space="preserve">
     <value>บันทึก...</value>
   </data>
+  <data name="save_eye_tracker_diagnostics" xml:space="preserve">
+    <value>บันทึกการวินิจฉัยตัวติดตามดวงตา</value>
+  </data>
   <data name="save_failed" xml:space="preserve">
     <value>การบันทึกล้มเหลว</value>
+  </data>
+  <data name="save_file" xml:space="preserve">
+    <value>บันทึกไฟล์</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>บันทึกไฟล์ข้อความ</value>
@@ -463,6 +672,9 @@
   </data>
   <data name="scan_speed" xml:space="preserve">
     <value>ความเร็วในการสแกน</value>
+  </data>
+  <data name="selection_method" xml:space="preserve">
+    <value>วิธีการเลือก</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>การตั้งค่า</value>
@@ -488,6 +700,9 @@
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>แสดงโอเวอร์เลย์ดีบักอินพุต</value>
   </data>
+  <data name="show_status_bar" xml:space="preserve">
+    <value>แสดงแถบสถานะ</value>
+  </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>แสดงอัตราการพิมพ์ (คำต่อนาที)</value>
   </data>
@@ -500,6 +715,12 @@
   <data name="slow" xml:space="preserve">
     <value>ช้า</value>
   </data>
+  <data name="speak_on_stop" xml:space="preserve">
+    <value>พูดเมื่อหยุด</value>
+  </data>
+  <data name="speak_words" xml:space="preserve">
+    <value>พูดคำ</value>
+  </data>
   <data name="speech" xml:space="preserve">
     <value>คำพูด</value>
   </data>
@@ -509,8 +730,14 @@
   <data name="speech_on" xml:space="preserve">
     <value>สุนทรพจน์เกี่ยวกับ</value>
   </data>
+  <data name="speech_settings" xml:space="preserve">
+    <value>การตั้งค่าการพูด</value>
+  </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;การตั้งค่าเสียง&lt;/b&gt;</value>
+  </data>
+  <data name="speech_volume" xml:space="preserve">
+    <value>ระดับเสียงพูด</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>ความเร็ว</value>
@@ -524,8 +751,14 @@
   <data name="start_fresh" xml:space="preserve">
     <value>เริ่มต้นใหม่</value>
   </data>
+  <data name="steering_method" xml:space="preserve">
+    <value>วิธีการบังคับเลี้ยว</value>
+  </data>
   <data name="stop" xml:space="preserve">
     <value>หยุด</value>
+  </data>
+  <data name="stop_speaking" xml:space="preserve">
+    <value>หยุดพูด</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>ระบบ</value>
@@ -536,8 +769,20 @@
   <data name="text_files" xml:space="preserve">
     <value>ไฟล์ข้อความ</value>
   </data>
+  <data name="that_file_already_is_your_training_data" xml:space="preserve">
+    <value>ไฟล์นั้นเป็นข้อมูลการฝึกของคุณอยู่แล้ว</value>
+  </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>หน้าต่างดีบักจะแสดงแผงสีเขียวที่มุมซ้ายบนของพื้นที่แสดงผล โดยแสดงจำนวนการสัมผัสแบบเรียลไทม์และตำแหน่งล่าสุดที่รายงาน (x, y) เมื่อคุณบีบนิ้วค้างไว้ คุณจะเห็น touch.began จากนั้น touch.moved พร้อมพิกัดที่เปลี่ยนแปลงไปตามการมองไปรอบๆ</value>
+  </data>
+  <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
+    <value>ไฟล์มีขนาดใหญ่เกินไป (เกิน 10 MB) สำหรับการนำเข้าเป็นข้อความฝึกอบรม</value>
+  </data>
+  <data name="the_selected_file_is_empty" xml:space="preserve">
+    <value>ไฟล์ที่เลือกว่างเปล่า</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
+    <value>นี่จะลบข้อมูลการฝึกสะสมของคุณสำหรับตัวอักษรทุกตัว การทำนายยังคงมีอิทธิพลจากการพิมพ์เมื่อเร็ว ๆ นี้</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>การดำเนินการนี้จะลบข้อมูลการฝึกอบรมที่คุณสะสมไว้ โมเดลภาษาจะกลับไปใช้ค่าเริ่มต้นเมื่อเปิดใช้งานครั้งถัดไป การดำเนินการนี้ไม่สามารถย้อนกลับได้</value>
@@ -551,14 +796,50 @@
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>ระหว่างการปรับเทียบ ให้เอียงอุปกรณ์ของคุณให้สุดช่วงการเคลื่อนไหว</value>
   </data>
+  <data name="toggle_control_mode" xml:space="preserve">
+    <value>สลับโหมดควบคุม</value>
+  </data>
+  <data name="toggle_game_mode" xml:space="preserve">
+    <value>สลับโหมดเกม</value>
+  </data>
+  <data name="toggle_keyboard_mode" xml:space="preserve">
+    <value>สลับโหมดแป้นพิมพ์</value>
+  </data>
+  <data name="toggle_pane_position" xml:space="preserve">
+    <value>สลับตำแหน่งแผง</value>
+  </data>
+  <data name="toggle_status_bar" xml:space="preserve">
+    <value>ซ่อน/แสดงแถบสถานะ</value>
+  </data>
+  <data name="toolbar_copy_description" xml:space="preserve">
+    <value>คัดลอกข้อความทั้งหมด</value>
+  </data>
+  <data name="toolbar_cut_description" xml:space="preserve">
+    <value>ตัดการเลือกในแอปเป้าหมาย</value>
+  </data>
+  <data name="toolbar_game_description" xml:space="preserve">
+    <value>เริ่มโหมดเกม</value>
+  </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>เอาต์พุตใหม่ / ล้างข้อมูล</value>
   </data>
   <data name="toolbar_open_description" xml:space="preserve">
     <value>เปิดไฟล์</value>
   </data>
+  <data name="toolbar_paste_description" xml:space="preserve">
+    <value>วางลงในแอปเป้าหมาย</value>
+  </data>
+  <data name="toolbar_reanchor_description" xml:space="preserve">
+    <value>ปรับทำนายใหม่ให้ตรงกับเคอร์เซอร์ (อ่านประโยครอบๆ ตัวชี้ของคุณ)</value>
+  </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>บันทึกเป็นไฟล์</value>
+  </data>
+  <data name="toolbar_select_all_description" xml:space="preserve">
+    <value>เลือกทั้งหมดในแอปเป้าหมาย</value>
+  </data>
+  <data name="toolbar_settings_description" xml:space="preserve">
+    <value>เปิดการตั้งค่า</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>แชร์ข้อความ</value>
@@ -572,8 +853,14 @@
   <data name="training_data" xml:space="preserve">
     <value>ข้อมูลการฝึกอบรม</value>
   </data>
+  <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
+    <value>ข้อมูลการฝึกถูกลบ — รีสตาร์ท Dasher เพื่อให้มีผลเต็มที่</value>
+  </data>
   <data name="training_data_description" xml:space="preserve">
     <value>การนำเข้าจะเพิ่มข้อความลงในโมเดลภาษาและข้อมูลการฝึกอบรมที่สะสมของคุณ (เก็บไว้ระหว่างการรีสตาร์ท) การส่งออกจะบันทึกข้อมูลการฝึกอบรมของคุณเพื่อสำรองหรือถ่ายโอน การรีเซ็ตจะลบข้อมูลการฝึกผู้ใช้ทั้งหมด โมเดลจะกลับสู่ค่าเริ่มต้นในตัวในการเปิดตัวครั้งถัดไป</value>
+  </data>
+  <data name="training_data_exported" xml:space="preserve">
+    <value>ข้อมูลการฝึกอบรมถูกส่งออกแล้ว</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>ส่งออกข้อมูลการฝึกอบรม</value>
@@ -593,6 +880,9 @@
   <data name="training_imported_restart" xml:space="preserve">
     <value>นำเข้า {0} KB — นำไปใช้โดยสมบูรณ์ในการเปิดตัวครั้งถัดไป (โมเดลสดส่งคืน {1})</value>
   </data>
+  <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
+    <value>การฝึกอบรมยังไม่สามารถใช้งานได้ — ลองอีกครั้งเมื่อผืนผ้าใบถูกเรนเดอร์แล้ว</value>
+  </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>ยังไม่มีข้อมูลการฝึกอบรมของผู้ใช้</value>
   </data>
@@ -608,14 +898,32 @@
   <data name="training_reset_partial" xml:space="preserve">
     <value>ลบข้อมูลการฝึกอบรมเท่าที่ทำได้ — {0} รายการล้มเหลว; กดรีเซ็ตอีกครั้งเพื่อลองใหม่</value>
   </data>
+  <data name="tts_engine" xml:space="preserve">
+    <value>เครื่องยนต์ TTS</value>
+  </data>
+  <data name="tts_no_credentials" xml:space="preserve">
+    <value>ไม่ต้องใช้ข้อมูลประจำตัว</value>
+  </data>
   <data name="turbo" xml:space="preserve">
     <value>เทอร์โบ</value>
   </data>
   <data name="typing_rate" xml:space="preserve">
     <value>อัตราการพิมพ์</value>
   </data>
+  <data name="typing_rate_format" xml:space="preserve">
+    <value>{cps} อักขระต่อวินาที · {wpm} คำต่อนาที</value>
+  </data>
+  <data name="udp_port" xml:space="preserve">
+    <value>พอร์ต UDP</value>
+  </data>
+  <data name="udp_tracker_help" xml:space="preserve">
+    <value>ตัวติดตาม UDP ฟังข้อความ STREAM_DATA หรือ GazePoint</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>ใช้ Dasher เป็นแป้นพิมพ์ของคุณ</value>
+  </data>
+  <data name="volume" xml:space="preserve">
+    <value>ระดับเสียง</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>เราพบการตั้งค่า Dasher 5 ของคุณบน Mac เครื่องนี้แล้ว คุณสามารถนำเข้าตัวอักษร สี การตั้งค่าความเร็ว และไฟล์ที่กำหนดเองของคุณไปยัง Dasher 6 ได้</value>

@@ -366,7 +366,7 @@ public partial class MainWindow : Window
 
         // RFC 0018: the overlay ships visible in the AXAML so the first
         // rendered frame is already themed + occupied. Localise it now.
-        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher");
+        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher…");
 
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var dataDir = Path.Combine(appData, "Dasher");
@@ -529,7 +529,7 @@ public partial class MainWindow : Window
 
         var dialog = new Window
         {
-            Title = "Dasher 5 settings found",
+            Title = Services.Loc.Tr("dasher5_settings_found"),
             Width = 460,
             Height = 400,
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
@@ -545,7 +545,7 @@ public partial class MainWindow : Window
 
         panel.Children.Add(new TextBlock
         {
-            Text = "We found your Dasher 5 configuration",
+            Text = Services.Loc.Tr("dasher5_config_found"),
             FontSize = 16,
             FontWeight = FontWeight.Bold,
             Foreground = ThemeBrushes.TextPrimary,
@@ -573,7 +573,7 @@ public partial class MainWindow : Window
 
         panel.Children.Add(new TextBlock
         {
-            Text = "Would you like to import these settings into Dasher 6?",
+            Text = Services.Loc.Tr("dasher5_import_prompt"),
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
             Foreground = ThemeBrushes.TextSecondary,
@@ -589,7 +589,7 @@ public partial class MainWindow : Window
 
         var laterBtn = new Button
         {
-            Content = "Start fresh",
+            Content = Services.Loc.Tr("start_fresh"),
             Padding = new Thickness(20, 8),
             Background = Brushes.Transparent,
             BorderBrush = new SolidColorBrush(Color.FromRgb(0xE0, 0xE6, 0xE8)),
@@ -597,7 +597,7 @@ public partial class MainWindow : Window
 
         var importBtn = new Button
         {
-            Content = "Import settings",
+            Content = Services.Loc.Tr("import_settings"),
             Padding = new Thickness(20, 8),
             Background = new SolidColorBrush(Color.FromRgb(0x99, 0xD4, 0xCD)),
             Foreground = ThemeBrushes.TextPrimary,
@@ -1665,9 +1665,9 @@ public partial class MainWindow : Window
 
             Topmost = true;
             this.Opacity = _vm.KeyboardModeOpacity;
-            TxtModeLabel.Text = "Keyboard";
+            TxtModeLabel.Text = Services.Loc.Tr("keyboard");
             BtnMode.Classes.Add("accent");
-            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Exit";
+            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = Services.Loc.Tr("exit");
             BtnKeyboard.Classes.Add("accent");
 
             // Prevent Dasher from stealing focus when clicked, so keystrokes
@@ -1705,11 +1705,11 @@ public partial class MainWindow : Window
 
             TxtModeLabel.Text = position switch
             {
-                PanePosition.Right => "Right side",
-                PanePosition.Left => "Left side",
-                PanePosition.Bottom => "Bottom",
-                PanePosition.Top => "Top",
-                _ => "Right side",
+                PanePosition.Right => Services.Loc.Tr("layout_right"),
+                PanePosition.Left => Services.Loc.Tr("layout_left"),
+                PanePosition.Bottom => Services.Loc.Tr("layout_bottom"),
+                PanePosition.Top => Services.Loc.Tr("layout_top"),
+                _ => Services.Loc.Tr("layout_right"),
             };
             ModeIcon.Kind = position switch
             {
@@ -1719,7 +1719,7 @@ public partial class MainWindow : Window
                 _ => LucideIconKind.PanelRight,
             };
             BtnMode.Classes.Remove("accent");
-            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = "Keyboard";
+            if (txtKeyboardLabel != null) txtKeyboardLabel.Text = Services.Loc.Tr("keyboard");
             BtnKeyboard.Classes.Remove("accent");
 
             bool horizontal = position == PanePosition.Right || position == PanePosition.Left;
@@ -1844,7 +1844,7 @@ public partial class MainWindow : Window
     {
         _vm?.ResetTypingStats();
         var label = this.FindControl<TextBlock>("WpmLabel");
-        if (label != null) label.Text = "0 wpm";
+        if (label != null) label.Text = Services.Loc.Tr("wpm_idle");
     }
 
     private void OnEngineFault(object? sender, EventArgs e)
@@ -1865,10 +1865,10 @@ public partial class MainWindow : Window
         {
             try
             {
-                var btn = new Button { Content = "OK", Padding = new Thickness(24, 6), HorizontalAlignment = HorizontalAlignment.Right };
+                var btn = new Button { Content = Services.Loc.Tr("ok"), Padding = new Thickness(24, 6), HorizontalAlignment = HorizontalAlignment.Right };
                 var dialog = new Window
                 {
-                    Title = "Dasher Engine Error",
+                    Title = Services.Loc.Tr("dasher_engine_error"),
                     Width = 400,
                     Height = 180,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
@@ -1885,14 +1885,14 @@ public partial class MainWindow : Window
                             {
                                 new TextBlock
                                 {
-                                    Text = "Engine Error",
+                                    Text = Services.Loc.Tr("engine_error"),
                                     FontSize = 16,
                                     FontWeight = FontWeight.Bold,
                                     Foreground = new SolidColorBrush(Color.FromRgb(0xC0, 0x39, 0x2B)),
                                 },
                                 new TextBlock
                                 {
-                                    Text = "The Dasher engine encountered an internal error and has stopped. Please restart Dasher.",
+                                    Text = Services.Loc.Tr("engine_error_message"),
                                     FontSize = 13,
                                     TextWrapping = TextWrapping.Wrap,
                                 },
@@ -1994,7 +1994,7 @@ public partial class MainWindow : Window
 
         // RFC 0018: engine restart is startup-blocking work — show the
         // loading overlay while it runs off the UI thread.
-        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher");
+        StartupOverlayText.Text = Loc.Tr("preparing_dasher", "Preparing Dasher…");
         StartupOverlayText.IsVisible = true;
         StartupOverlayError.IsVisible = false;
         StartupOverlay.IsVisible = true;
@@ -2153,7 +2153,7 @@ public partial class MainWindow : Window
             {
                 result = await storage.OpenFilePickerAsync(new FilePickerOpenOptions
                 {
-                    Title = "Open text file",
+                    Title = Services.Loc.Tr("open_text_file"),
                     AllowMultiple = false,
                     FileTypeFilter =
                     [
@@ -2192,7 +2192,7 @@ public partial class MainWindow : Window
             {
                 result = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
                 {
-                    Title = "Save text file",
+                    Title = Services.Loc.Tr("save_text_file"),
                     SuggestedFileName = "dasher_output.txt",
                     FileTypeChoices =
                     [
@@ -2519,7 +2519,7 @@ public partial class MainWindow : Window
     {
         var label = this.FindControl<TextBlock>("TxtControlLabel");
         if (label != null)
-            label.Text = _controlModeActive ? "Leave" : "Control";
+            label.Text = _controlModeActive ? Services.Loc.Tr("leave") : Services.Loc.Tr("control");
 
         // Sync mini-bar control button accent state
         if (_controlModeActive)
@@ -2539,7 +2539,7 @@ public partial class MainWindow : Window
             _gameModeActive = false;
             NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 1);
             GameIcon.Kind = LucideIconKind.Gamepad2;
-            TxtGameLabel.Text = "Game";
+            TxtGameLabel.Text = Services.Loc.Tr("play");
             var gameBar = this.FindControl<Border>("GameTargetBar");
             if (gameBar != null) gameBar.IsVisible = false;
         }
@@ -2552,7 +2552,7 @@ public partial class MainWindow : Window
                 _gameModeActive = true;
                 NativeBridge.dasher_game_set_canvas_text(_vm.Handle, 0);
                 GameIcon.Kind = LucideIconKind.Pause;
-                TxtGameLabel.Text = "Leave";
+                TxtGameLabel.Text = Services.Loc.Tr("leave");
                 var gameBar = this.FindControl<Border>("GameTargetBar");
                 if (gameBar != null) gameBar.IsVisible = true;
             }

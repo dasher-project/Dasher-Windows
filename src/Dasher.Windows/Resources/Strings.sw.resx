@@ -35,14 +35,25 @@
   <data name="analytics_accept" xml:space="preserve">
     <value>Saidia kuboresha Dasher</value>
   </data>
+  <data name="analytics_body" xml:space="preserve">
+    <value>Shiriki takwimu za matumizi zisizo na majina na ripoti za ajali? Hakuna maandiko yaliyoandikwa, yaliyomo kwenye kipande cha kunakili au taarifa binafsi yanayokusanywa kamwe. Unaweza kubadilisha hili wakati wowote kwenye Mipangilio.</value>
+  </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>Sio sasa</value>
   </data>
   <data name="analytics_opt_in" xml:space="preserve">
     <value>Shiriki uchanganuzi usiojulikana na ripoti za kuacha kufanya kazi</value>
   </data>
+  <data name="analytics_rationale" xml:space="preserve">
+    <value>Dasher inakusanya uchambuzi wa siri, wa kuheshimu faragha ili kuelewa mifumo ya matumizi na kurekebisha ajali. Hakuna maandishi yaliyoandikwa, yaliyomo kwenye clipboard, au taarifa binafsi yanayokusanywa kamwe.  
+
+Unaweza kubadilisha hili wakati wowote kwenye Mipangilio &gt; Faragha.</value>
+  </data>
   <data name="analytics_reset_id" xml:space="preserve">
     <value>Weka upya kitambulisho cha uchanganuzi</value>
+  </data>
+  <data name="analytics_settings_help" xml:space="preserve">
+    <value>Dasher hukusanya takwimu za matumizi zisizo na majina na ripoti za ajali ili kuelewa jinsi programu inavyotumika na kurekebisha mende. Hakuna maandishi yaliyoandikwa, yaliyomo kwenye clipboard, au taarifa binafsi yanayokusanywa kamwe.</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Uchanganuzi wa matumizi usiojulikana</value>
@@ -52,6 +63,18 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>Weka Kiwango cha Programu ili Chagua</value>
+  </data>
+  <data name="arrow_left_label" xml:space="preserve">
+    <value>Kushoto</value>
+  </data>
+  <data name="arrow_left_tooltip" xml:space="preserve">
+    <value>Hamisha alama ya kuingiza kushoto (shikilia kurudia)</value>
+  </data>
+  <data name="arrow_right_label" xml:space="preserve">
+    <value>Kulia</value>
+  </data>
+  <data name="arrow_right_tooltip" xml:space="preserve">
+    <value>Hamisha alama ya kuingiza kulia (shikilia kurudia)</value>
   </data>
   <data name="auto" xml:space="preserve">
     <value>Otomatiki</value>
@@ -64,6 +87,15 @@
   </data>
   <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
     <value>Chagua kiotomatiki baada ya kuelekeza macho yako unapobanwa. Washa tu ikiwa OS imezimwa.</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Nyuma</value>
+  </data>
+  <data name="backspace_label" xml:space="preserve">
+    <value>futa</value>
+  </data>
+  <data name="backspace_tooltip" xml:space="preserve">
+    <value>Futa (shikilia kurudia)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Ghairi</value>
@@ -86,8 +118,20 @@
   <data name="close" xml:space="preserve">
     <value>Funga</value>
   </data>
+  <data name="close_settings" xml:space="preserve">
+    <value>Funga mipangilio</value>
+  </data>
   <data name="colour_theme" xml:space="preserve">
     <value>Mandhari ya Rangi</value>
+  </data>
+  <data name="control" xml:space="preserve">
+    <value>Udhibiti</value>
+  </data>
+  <data name="control_mode_enabled" xml:space="preserve">
+    <value>Hali ya udhibiti: imewezeshwa</value>
+  </data>
+  <data name="control_mode_tooltip" xml:space="preserve">
+    <value>Hali ya udhibiti</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Imenakiliwa kwenye ubao wa kunakili.</value>
@@ -101,8 +145,32 @@
   <data name="copy_all_2" xml:space="preserve">
     <value>Nakili Zote</value>
   </data>
+  <data name="copy_all_clipboard" xml:space="preserve">
+    <value>Nakili yote (kwenda kwenye clipboard)</value>
+  </data>
   <data name="copy_commands" xml:space="preserve">
     <value>Nakili amri</value>
+  </data>
+  <data name="copy_selection" xml:space="preserve">
+    <value>Nakili uteuzi</value>
+  </data>
+  <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
+    <value>Haiwezi kupakia faili kwenye injini</value>
+  </data>
+  <data name="could_not_open_the_selected_file" xml:space="preserve">
+    <value>Haiwezi kufungua faili iliyochaguliwa.</value>
+  </data>
+  <data name="could_not_read_the_selected_file" xml:space="preserve">
+    <value>Haiwezi kusoma faili iliyochaguliwa.</value>
+  </data>
+  <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
+    <value>Haiwezi kusawazisha hariri yako na injini — inaweza kuandikwa juu yake</value>
+  </data>
+  <data name="could_not_write_the_export_file" xml:space="preserve">
+    <value>Haiwezi kuandika faili la kuuza nje.</value>
+  </data>
+  <data name="could_not_write_the_training_data" xml:space="preserve">
+    <value>Haiwezi kuandika data ya mafunzo.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Urekebishaji wa Sasa</value>
@@ -115,6 +183,21 @@
   </data>
   <data name="dasher" xml:space="preserve">
     <value>Kiashiria</value>
+  </data>
+  <data name="dasher5_config_found" xml:space="preserve">
+    <value>Tumepata usanidi wako wa Dasher 5</value>
+  </data>
+  <data name="dasher5_import" xml:space="preserve">
+    <value>Dasher 5 Ingiza</value>
+  </data>
+  <data name="dasher5_import_prompt" xml:space="preserve">
+    <value>Je, ungependa kuingiza mipangilio hii kwenye Dasher 6?</value>
+  </data>
+  <data name="dasher5_no_data" xml:space="preserve">
+    <value>Hakuna data ya Dasher 5 iliyopatikana kwenye kompyuta hii.</value>
+  </data>
+  <data name="dasher5_settings_found" xml:space="preserve">
+    <value>Mipangilio ya Dasher 5 imepatikana</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>Data ya Dasher 5 imegunduliwa kwenye Mac hii.</value>
@@ -132,6 +215,9 @@
     <value>Dasher hukusanya uchanganuzi usiojulikana, unaoheshimu faragha ili kuelewa mifumo ya matumizi na kurekebisha ajali. Hakuna maandishi yaliyoandikwa, maudhui ya ubao wa kunakili, au taarifa binafsi zinazokusanywa.
 
 Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
+  </data>
+  <data name="dasher_engine_error" xml:space="preserve">
+    <value>Hitilafu ya Injini ya Dasher</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>Kibodi ya Dasher</value>
@@ -167,6 +253,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="done" xml:space="preserve">
     <value>Imekamilika</value>
   </data>
+  <data name="dwell_description" xml:space="preserve">
+    <value>Kaa juu ya sehemu moja ili kusababisha kubofya, badala ya kubonyeza kitufe au swichi.</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Kaa ili kubofya</value>
   </data>
@@ -176,11 +265,29 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Washa ingizo la kuinamisha kwanza ili kufikia urekebishaji.</value>
   </data>
+  <data name="engine_error" xml:space="preserve">
+    <value>Hitilafu ya Injini</value>
+  </data>
+  <data name="engine_error_message" xml:space="preserve">
+    <value>Injini ya Dasher imetokea kosa la ndani na imekoma. Tafadhali anzisha upya Dasher.</value>
+  </data>
+  <data name="engine_speech_features" xml:space="preserve">
+    <value>Sifa za Hotuba za Injini</value>
+  </data>
+  <data name="exit" xml:space="preserve">
+    <value>Toka</value>
+  </data>
   <data name="export_training_text" xml:space="preserve">
     <value>Hamisha Maandishi ya Mafunzo</value>
   </data>
   <data name="eye_gaze" xml:space="preserve">
     <value>Mtazamo wa Macho</value>
+  </data>
+  <data name="eye_tracker_device" xml:space="preserve">
+    <value>Kifaa cha Kufuatilia Macho</value>
+  </data>
+  <data name="eyegaze_verbose_help" xml:space="preserve">
+    <value>Kumbukumbu ya ufuatiliaji wa kina kwa ripoti za hitilafu (mistari ya sampuli kwa sampuli, imeandikwa kwenye eyegaze.log katika folda ya Dasher). Matukio ya msingi ya uhusiano daima yanaingizwa kwenye kumbukumbu.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>Imeshindwa kufungua:</value>
@@ -190,6 +297,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="fast" xml:space="preserve">
     <value>Haraka</value>
+  </data>
+  <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
+    <value>Faili imekatishwa kwa 4 MB — sehemu ya kwanza tu imeload</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Kufanya kibodi iweze kuelea, ruhusu Dasher ionekane juu ya programu nyingine, kisha gusa Float tena.</value>
@@ -205,6 +315,15 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Faili ya Maandishi ya Mchezo</value>
+  </data>
+  <data name="gaze_filter_help" xml:space="preserve">
+    <value>Kupunguza kutilia mkazo kwenye nafasi zisizo sahihi wakati macho yako yanaposogea kwenye lengo</value>
+  </data>
+  <data name="gaze_filter_label" xml:space="preserve">
+    <value>Chuja mtazamo (inapunguza kupanuka kuelekea nafasi zisizo sahihi wakati wa kusogea kwa jicho)</value>
+  </data>
+  <data name="gaze_smoothing" xml:space="preserve">
+    <value>Ulinganifu wa Tazamo</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>Nimeelewa</value>
@@ -224,6 +343,12 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="import_training_text" xml:space="preserve">
     <value>Ingiza Maandishi ya Mafunzo</value>
   </data>
+  <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
+    <value>Iliyohamishwa %1 — inatumika kikamilifu kwenye uzinduzi unaofuata</value>
+  </data>
+  <data name="imported_1_of_training_text" xml:space="preserve">
+    <value>Imeingizwa %1 ya maandiko ya mafunzo</value>
+  </data>
   <data name="increase_speed" xml:space="preserve">
     <value>Ongeza Kasi</value>
   </data>
@@ -242,14 +367,23 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="input_method_touch" xml:space="preserve">
     <value>Gusa (buruta kwenye turubai)</value>
   </data>
+  <data name="input_processing" xml:space="preserve">
+    <value>Uchakavu wa Ingizo</value>
+  </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Sakinisha ydotool ili kutumia hali ya kibodi&lt;/b&gt;</value>
   </data>
   <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
     <value>haijasakinishwa. Endesha amri hizi, kisha bonyeza Jaribu Tena:</value>
   </data>
+  <data name="keyboard" xml:space="preserve">
+    <value>Kibodi</value>
+  </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>Kibodi _</value>
+  </data>
+  <data name="keyboard_mode_description" xml:space="preserve">
+    <value>Andika matokeo ya Dasher moja kwa moja kwenye programu unayoielekeza</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Toka kwenye hali ya kibodi</value>
@@ -260,11 +394,23 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="keyboard_mode_opacity" xml:space="preserve">
     <value>Hali ya kufifia ya kibodi</value>
   </data>
+  <data name="keyboard_mode_stopped" xml:space="preserve">
+    <value>Hali ya kibodi imekoma</value>
+  </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>Hali ya kibodi imesimama: ydotool haikuweza kuingiza maandishi. Je, ydotoold ni</value>
   </data>
   <data name="keyboard_mode_title" xml:space="preserve">
     <value>Washa Hali ya Kibodi</value>
+  </data>
+  <data name="keyboard_mode_transparency_help" xml:space="preserve">
+    <value>Uwiano wa dirisha wakati uko katika Hali ya Kibodi/Moja kwa Moja</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>Lugha</value>
+  </data>
+  <data name="language_locale" xml:space="preserve">
+    <value>Lugha / Eneo</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Lugha / Eneo&lt;/b&gt;</value>
@@ -290,11 +436,23 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="learning" xml:space="preserve">
     <value>Kujifunza</value>
   </data>
+  <data name="leave" xml:space="preserve">
+    <value>Acha</value>
+  </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>Ondoka kwenye hali ya mchezo</value>
   </data>
   <data name="light" xml:space="preserve">
     <value>Mwanga</value>
+  </data>
+  <data name="load_voices" xml:space="preserve">
+    <value>Pakia Sauti</value>
+  </data>
+  <data name="loaded_1_characters" xml:space="preserve">
+    <value>Imebeba herufi %1</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>Inapakia…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>Lugha</value>
@@ -305,11 +463,20 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="migration" xml:space="preserve">
     <value>Uhamiaji</value>
   </data>
+  <data name="more" xml:space="preserve">
+    <value>Zaidi</value>
+  </data>
+  <data name="more_options" xml:space="preserve">
+    <value>Chaguzi zaidi</value>
+  </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>Sogeza macho yako huku ukibana ili kuongoza</value>
   </data>
   <data name="new" xml:space="preserve">
     <value>Mpya</value>
+  </data>
+  <data name="new_document" xml:space="preserve">
+    <value>Hati mpya</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>Ujumbe Mpya</value>
@@ -322,6 +489,12 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>Hakuna mipangilio inayopatikana kwa sehemu hii.</value>
+  </data>
+  <data name="no_training_data_to_export_yet" xml:space="preserve">
+    <value>Hakuna data ya mafunzo ya kusafirisha bado</value>
+  </data>
+  <data name="no_user_training_data_yet" xml:space="preserve">
+    <value>Hakuna data ya mafunzo ya mtumiaji bado</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Hakuna cha kuhifadhi</value>
@@ -359,11 +532,17 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="output" xml:space="preserve">
     <value>Matokeo</value>
   </data>
+  <data name="output_font" xml:space="preserve">
+    <value>Herufi ya Matokeo</value>
+  </data>
   <data name="output_font_size" xml:space="preserve">
     <value>Ukubwa wa Fonti ya Matokeo</value>
   </data>
   <data name="output_placeholder" xml:space="preserve">
     <value>Gusa turubai ili kuanza kuandika.</value>
+  </data>
+  <data name="pane_position" xml:space="preserve">
+    <value>Kipande cha pane</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>Bandika</value>
@@ -380,11 +559,20 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="pinch_and_look_to_write" xml:space="preserve">
     <value>Bana na Uangalie Kuandika</value>
   </data>
+  <data name="pitch" xml:space="preserve">
+    <value>Nguvu</value>
+  </data>
+  <data name="play" xml:space="preserve">
+    <value>Mchezo</value>
+  </data>
   <data name="play_2" xml:space="preserve">
     <value>Cheza</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Ingizo la Kuelea kwa Kielekezi</value>
+  </data>
+  <data name="preferences" xml:space="preserve">
+    <value>Mapendeleo</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Mapendeleo</value>
@@ -392,11 +580,20 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="preparing_dasher" xml:space="preserve">
     <value>Dasher inaandaliwa…</value>
   </data>
+  <data name="preview" xml:space="preserve">
+    <value>Tazama awali</value>
+  </data>
   <data name="privacy" xml:space="preserve">
     <value>Faragha</value>
   </data>
   <data name="privacy_2" xml:space="preserve">
     <value>&lt;b&gt;Faragha&lt;/b&gt;</value>
+  </data>
+  <data name="quick_speak" xml:space="preserve">
+    <value>Sema haraka</value>
+  </data>
+  <data name="rate" xml:space="preserve">
+    <value>Kiwango</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Ingiza tena kutoka Dasher 5</value>
@@ -434,6 +631,12 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="reset_training_data_2" xml:space="preserve">
     <value>Ungependa Kuweka Upya Data ya Mafunzo?</value>
   </data>
+  <data name="reset_wpm_averages" xml:space="preserve">
+    <value>Weka upya wastani wa WPM</value>
+  </data>
+  <data name="restarting_engine" xml:space="preserve">
+    <value>Kuanza upya injini…</value>
+  </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>Rejesha mipangilio yote ya Dasher kwenye thamani zake chaguo-msingi. Hii haiwezi kutenduliwa.</value>
   </data>
@@ -446,8 +649,14 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="save_2" xml:space="preserve">
     <value>Hifadhi...</value>
   </data>
+  <data name="save_eye_tracker_diagnostics" xml:space="preserve">
+    <value>Hifadhi uchambuzi wa kifuatilia macho</value>
+  </data>
   <data name="save_failed" xml:space="preserve">
     <value>Imeshindwa kuhifadhi</value>
+  </data>
+  <data name="save_file" xml:space="preserve">
+    <value>Hifadhi faili</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>Hifadhi Faili ya Maandishi</value>
@@ -460,6 +669,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="scan_speed" xml:space="preserve">
     <value>Kasi ya Kuchanganua</value>
+  </data>
+  <data name="selection_method" xml:space="preserve">
+    <value>Mbinu ya Uchaguzi</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>Mipangilio</value>
@@ -485,6 +697,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>Onyesha Ufunikaji wa Utatuzi wa Hitilafu ya Ingizo</value>
   </data>
+  <data name="show_status_bar" xml:space="preserve">
+    <value>Onyesha bar ya hali</value>
+  </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>Onyesha kiwango cha kuandika (WPM)</value>
   </data>
@@ -497,6 +712,12 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="slow" xml:space="preserve">
     <value>Polepole</value>
   </data>
+  <data name="speak_on_stop" xml:space="preserve">
+    <value>Sema juu ya kuacha</value>
+  </data>
+  <data name="speak_words" xml:space="preserve">
+    <value>Sema maneno</value>
+  </data>
   <data name="speech" xml:space="preserve">
     <value>Hotuba</value>
   </data>
@@ -506,8 +727,14 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="speech_on" xml:space="preserve">
     <value>Hotuba imewashwa</value>
   </data>
+  <data name="speech_settings" xml:space="preserve">
+    <value>Mipangilio ya Hotuba</value>
+  </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;Mipangilio ya Hotuba&lt;/b&gt;</value>
+  </data>
+  <data name="speech_volume" xml:space="preserve">
+    <value>Kiasi cha sauti</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>Kasi</value>
@@ -521,8 +748,14 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="start_fresh" xml:space="preserve">
     <value>Anza upya</value>
   </data>
+  <data name="steering_method" xml:space="preserve">
+    <value>Njia ya Kuendesha</value>
+  </data>
   <data name="stop" xml:space="preserve">
     <value>Simamisha</value>
+  </data>
+  <data name="stop_speaking" xml:space="preserve">
+    <value>Acha kuzungumza</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Mfumo</value>
@@ -533,8 +766,20 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="text_files" xml:space="preserve">
     <value>Faili za maandishi</value>
   </data>
+  <data name="that_file_already_is_your_training_data" xml:space="preserve">
+    <value>Hiyo faili tayari ni data yako ya mafunzo.</value>
+  </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>Sehemu ya juu ya utatuzi huchota paneli ya kijani upande wa juu kushoto wa turubai inayoonyesha hesabu za matukio ya mguso wa moja kwa moja na ya mwisho yaliyoripotiwa (x, y). Unapobanwa na kushikilia, unapaswa kuona touch.began ilianza kisha touch.moved na kubadilisha viwianishi unapoangalia huku na huko.</value>
+  </data>
+  <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
+    <value>Faili ni kubwa sana (zaidi ya MB 10) kuingizwa kama maandiko ya mafunzo.</value>
+  </data>
+  <data name="the_selected_file_is_empty" xml:space="preserve">
+    <value>Faili iliyochaguliwa ni tupu.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
+    <value>Hii inafuta data zako zilizokusanywa za mafunzo kwa kila alfabeti. Utabiri unaendelea kuathiriwa na uandishi wa hivi karibuni.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>Hii hufuta data yako ya mafunzo iliyokusanywa. Mfumo wa lugha utarudi kwenye chaguo-msingi zilizojengewa ndani kwenye uzinduzi unaofuata. Hii haiwezi kutenduliwa.</value>
@@ -548,14 +793,50 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>Tembeza kifaa chako kupitia mwendo wake wote wakati wa urekebishaji.</value>
   </data>
+  <data name="toggle_control_mode" xml:space="preserve">
+    <value>Badilisha hali ya udhibiti</value>
+  </data>
+  <data name="toggle_game_mode" xml:space="preserve">
+    <value>Badilisha hali ya michezo</value>
+  </data>
+  <data name="toggle_keyboard_mode" xml:space="preserve">
+    <value>Badilisha hali ya kibodi</value>
+  </data>
+  <data name="toggle_pane_position" xml:space="preserve">
+    <value>Badilisha nafasi ya dirisha</value>
+  </data>
+  <data name="toggle_status_bar" xml:space="preserve">
+    <value>Ficha/onyesha upau wa hali</value>
+  </data>
+  <data name="toolbar_copy_description" xml:space="preserve">
+    <value>Nakili maandishi yote</value>
+  </data>
+  <data name="toolbar_cut_description" xml:space="preserve">
+    <value>Kata chaguo katika programu lengwa</value>
+  </data>
+  <data name="toolbar_game_description" xml:space="preserve">
+    <value>Anza hali ya mchezo</value>
+  </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>Matokeo mapya / yaliyo wazi</value>
   </data>
   <data name="toolbar_open_description" xml:space="preserve">
     <value>Fungua faili</value>
   </data>
+  <data name="toolbar_paste_description" xml:space="preserve">
+    <value>Bandika kwenye programu lengwa</value>
+  </data>
+  <data name="toolbar_reanchor_description" xml:space="preserve">
+    <value>Reketisha upya utabiri kwenye caret (soma sentensi iliyozunguka kursor yako)</value>
+  </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>Hifadhi kwenye faili</value>
+  </data>
+  <data name="toolbar_select_all_description" xml:space="preserve">
+    <value>Chagua yote katika programu lengwa</value>
+  </data>
+  <data name="toolbar_settings_description" xml:space="preserve">
+    <value>Fungua mipangilio</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Shiriki maandishi</value>
@@ -569,8 +850,14 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="training_data" xml:space="preserve">
     <value>Data ya Mafunzo</value>
   </data>
+  <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
+    <value>Data ya mafunzo imefutwa — anzisha upya Dasher ili kutumia kikamilifu</value>
+  </data>
   <data name="training_data_description" xml:space="preserve">
     <value>Kuingiza huongeza maandishi kwenye mfano wa lugha na data yako ya mafunzo iliyokusanywa (hubaki kwenye kuanzisha upya). Kuhamisha huhifadhi data yako ya mafunzo kwa ajili ya nakala rudufu au uhamisho. Kuweka upya hunfuta data yote ya mafunzo ya mtumiaji — mfano utarudi kwa msingi wake uliyojengwa ndani kwenye uzinduaji ujao.</value>
+  </data>
+  <data name="training_data_exported" xml:space="preserve">
+    <value>Data ya mafunzo imetumwa nje.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>Hamisha data ya mafunzo</value>
@@ -590,6 +877,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="training_imported_restart" xml:space="preserve">
     <value>Imeingizwa {0} KB — itatumika kikamilifu kwenye uzinduzi unaofuata (muundo wa moja kwa moja umerejeshwa {1})</value>
   </data>
+  <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
+    <value>Mafunzo bado hayapatikani — jaribu tena mara tu kioo cha kazi kimeonyeshwa.</value>
+  </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>Hakuna data ya mafunzo ya mtumiaji bado</value>
   </data>
@@ -605,11 +895,29 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="training_reset_partial" xml:space="preserve">
     <value>Data ya mafunzo ilifutwa inapowezekana - {0} kipengee/vipengee havikufaulu; bonyeza Rudisha tena ili kujaribu tena</value>
   </data>
+  <data name="tts_engine" xml:space="preserve">
+    <value>Kifaa cha TTS</value>
+  </data>
+  <data name="tts_no_credentials" xml:space="preserve">
+    <value>Hakuna cheti kinachohitajika</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Kiwango cha kuandika</value>
   </data>
+  <data name="typing_rate_format" xml:space="preserve">
+    <value>{cps} cps · {wpm} wpm</value>
+  </data>
+  <data name="udp_port" xml:space="preserve">
+    <value>Mlango wa UDP</value>
+  </data>
+  <data name="udp_tracker_help" xml:space="preserve">
+    <value>Kirekodi cha UDP kinasikiliza ujumbe wa STREAM_DATA au GazePoint</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Tumia Dasher kama kibodi yako</value>
+  </data>
+  <data name="volume" xml:space="preserve">
+    <value>Kiasi</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>Tulipata usanidi wako wa Dasher 5 kwenye Mac hii. Alfabeti yako, rangi, mipangilio ya kasi, na faili maalum zinaweza kuingizwa kwenye Dasher 6.</value>

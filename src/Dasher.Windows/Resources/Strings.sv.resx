@@ -38,14 +38,25 @@
   <data name="analytics_accept" xml:space="preserve">
     <value>Hjälp till att förbättra Dasher</value>
   </data>
+  <data name="analytics_body" xml:space="preserve">
+    <value>Vill du dela anonyma användningsstatistik och kraschrapporter? Ingen inmatad text, urklippsinnehåll eller personlig information samlas in. Du kan ändra detta när som helst i Inställningar.</value>
+  </data>
   <data name="analytics_decline" xml:space="preserve">
     <value>Inte nu</value>
   </data>
   <data name="analytics_opt_in" xml:space="preserve">
     <value>Dela anonyma analyser och kraschrapporter</value>
   </data>
+  <data name="analytics_rationale" xml:space="preserve">
+    <value>Dasher samlar in anonym, integritetsskyddande statistik för att förstå användningsmönster och åtgärda krascher. Ingen inmatad text, urklippsinnehåll eller personlig information samlas in.
+
+Du kan ändra detta när som helst i Inställningar &gt; Integritet.</value>
+  </data>
   <data name="analytics_reset_id" xml:space="preserve">
     <value>Återställ analys-ID</value>
+  </data>
+  <data name="analytics_settings_help" xml:space="preserve">
+    <value>Dasher samlar in anonym användningsstatistik och kraschrapporter för att förstå hur appen används och för att åtgärda fel. Ingen inmatad text, urklippsinnehåll eller personlig information samlas in.</value>
   </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Anonym användningsanalys</value>
@@ -55,6 +66,18 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>Appnivå-uppehåll för att välja</value>
+  </data>
+  <data name="arrow_left_label" xml:space="preserve">
+    <value>Vänster</value>
+  </data>
+  <data name="arrow_left_tooltip" xml:space="preserve">
+    <value>Flytta markören åt vänster (håll in för upprepa)</value>
+  </data>
+  <data name="arrow_right_label" xml:space="preserve">
+    <value>Höger</value>
+  </data>
+  <data name="arrow_right_tooltip" xml:space="preserve">
+    <value>Flytta markören åt höger (håll in för upprepa)</value>
   </data>
   <data name="auto" xml:space="preserve">
     <value>Bil</value>
@@ -67,6 +90,15 @@
   </data>
   <data name="auto_select_after_fixating_your_gaze_while_pinching_only_ena" xml:space="preserve">
     <value>Välj automatiskt efter att du fixerat blicken medan du nyper. Aktivera endast om OS-dvalen är avstängd.</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Tillbaka</value>
+  </data>
+  <data name="backspace_label" xml:space="preserve">
+    <value>Radera</value>
+  </data>
+  <data name="backspace_tooltip" xml:space="preserve">
+    <value>Radera (håll in för upprepa)</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Avboka</value>
@@ -89,8 +121,20 @@
   <data name="close" xml:space="preserve">
     <value>Nära</value>
   </data>
+  <data name="close_settings" xml:space="preserve">
+    <value>Stäng inställningar</value>
+  </data>
   <data name="colour_theme" xml:space="preserve">
     <value>Färgtema</value>
+  </data>
+  <data name="control" xml:space="preserve">
+    <value>Kontroll</value>
+  </data>
+  <data name="control_mode_enabled" xml:space="preserve">
+    <value>Kontrollläge: aktiverat</value>
+  </data>
+  <data name="control_mode_tooltip" xml:space="preserve">
+    <value>Kontrollläge</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Kopierad till urklipp.</value>
@@ -104,8 +148,32 @@
   <data name="copy_all_2" xml:space="preserve">
     <value>Kopiera alla</value>
   </data>
+  <data name="copy_all_clipboard" xml:space="preserve">
+    <value>Kopiera allt (till urklipp)</value>
+  </data>
   <data name="copy_commands" xml:space="preserve">
     <value>Kopiera kommandon</value>
+  </data>
+  <data name="copy_selection" xml:space="preserve">
+    <value>Kopiera markering</value>
+  </data>
+  <data name="could_not_load_the_file_into_the_engine" xml:space="preserve">
+    <value>Kunde inte ladda filen i motorn</value>
+  </data>
+  <data name="could_not_open_the_selected_file" xml:space="preserve">
+    <value>Kunde inte öppna den valda filen.</value>
+  </data>
+  <data name="could_not_read_the_selected_file" xml:space="preserve">
+    <value>Kunde inte läsa den valda filen.</value>
+  </data>
+  <data name="could_not_sync_your_edit_with_the_engine_it_may_be_overwritt" xml:space="preserve">
+    <value>Kunde inte synkronisera din redigering med motorn — den kan skrivas över</value>
+  </data>
+  <data name="could_not_write_the_export_file" xml:space="preserve">
+    <value>Kunde inte skriva exportfilen.</value>
+  </data>
+  <data name="could_not_write_the_training_data" xml:space="preserve">
+    <value>Kunde inte skriva träningsdata.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Nuvarande kalibrering</value>
@@ -118,6 +186,21 @@
   </data>
   <data name="dasher" xml:space="preserve">
     <value>Dasher</value>
+  </data>
+  <data name="dasher5_config_found" xml:space="preserve">
+    <value>Vi hittade din Dasher 5-konfiguration</value>
+  </data>
+  <data name="dasher5_import" xml:space="preserve">
+    <value>Importera från Dasher 5</value>
+  </data>
+  <data name="dasher5_import_prompt" xml:space="preserve">
+    <value>Vill du importera dessa inställningar till Dasher 6?</value>
+  </data>
+  <data name="dasher5_no_data" xml:space="preserve">
+    <value>Inga Dasher 5-data hittades på denna dator.</value>
+  </data>
+  <data name="dasher5_settings_found" xml:space="preserve">
+    <value>Dasher 5-inställningar hittade</value>
   </data>
   <data name="dasher_5_data_detected_on_this_mac" xml:space="preserve">
     <value>Dasher 5-data upptäcktes på denna Mac.</value>
@@ -135,6 +218,9 @@
     <value>Dasher samlar in anonyma, integritetsskyddande analyser för att förstå användningsmönster och åtgärda krascher. Ingen maskinskriven text, urklippsinnehåll eller personlig information samlas någonsin in.
 
 Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
+  </data>
+  <data name="dasher_engine_error" xml:space="preserve">
+    <value>Dasher-motorsfel</value>
   </data>
   <data name="dasher_keyboard" xml:space="preserve">
     <value>Dasher-tangentbord</value>
@@ -170,6 +256,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="done" xml:space="preserve">
     <value>Gjort</value>
   </data>
+  <data name="dwell_description" xml:space="preserve">
+    <value>Håll blicken på en punkt för att aktivera ett klick, istället för att trycka på en knapp eller en switch.</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Håll nedtryckt för att klicka</value>
   </data>
@@ -179,11 +268,29 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Aktivera lutningsinmatning först för att komma åt kalibrering.</value>
   </data>
+  <data name="engine_error" xml:space="preserve">
+    <value>Motorsfel</value>
+  </data>
+  <data name="engine_error_message" xml:space="preserve">
+    <value>Dasher-motorn stötte på ett internt fel och har stoppat. Starta om Dasher.</value>
+  </data>
+  <data name="engine_speech_features" xml:space="preserve">
+    <value>Motorröstfunktioner</value>
+  </data>
+  <data name="exit" xml:space="preserve">
+    <value>Avsluta</value>
+  </data>
   <data name="export_training_text" xml:space="preserve">
     <value>Exportera utbildningstext</value>
   </data>
   <data name="eye_gaze" xml:space="preserve">
     <value>Ögonblick</value>
+  </data>
+  <data name="eye_tracker_device" xml:space="preserve">
+    <value>Ögaspårningsenhet</value>
+  </data>
+  <data name="eyegaze_verbose_help" xml:space="preserve">
+    <value>Detaljerad spårningslogg för felrapporter (rader per prov, skrivs till eyegaze.log i Dasher-mappen). Grundläggande anslutningshändelser loggas alltid.</value>
   </data>
   <data name="failed_to_open" xml:space="preserve">
     <value>Misslyckades med att öppna:</value>
@@ -193,6 +300,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   </data>
   <data name="fast" xml:space="preserve">
     <value>Snabb</value>
+  </data>
+  <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
+    <value>Fil avklippt vid 4 MB — endast den första delen laddas</value>
   </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>För att lossa tangentbordet, tillåt Dasher att visas över andra appar och tryck på Float igen.</value>
@@ -208,6 +318,15 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Speltextfil</value>
+  </data>
+  <data name="gaze_filter_help" xml:space="preserve">
+    <value>Minskar zoomning mot felaktiga positioner medan dina ögon rör sig mot ett mål</value>
+  </data>
+  <data name="gaze_filter_label" xml:space="preserve">
+    <value>Filtrera blick (minskar zoomning mot felaktiga positioner under ögonrörelser)</value>
+  </data>
+  <data name="gaze_smoothing" xml:space="preserve">
+    <value>Blickutjämning</value>
   </data>
   <data name="got_it" xml:space="preserve">
     <value>Förstod</value>
@@ -227,6 +346,12 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="import_training_text" xml:space="preserve">
     <value>Importera träningstext</value>
   </data>
+  <data name="imported_1_applies_fully_on_next_launch" xml:space="preserve">
+    <value>Importerade %1 — gäller fullt ut vid nästa start</value>
+  </data>
+  <data name="imported_1_of_training_text" xml:space="preserve">
+    <value>Importerade %1 av träningstext</value>
+  </data>
   <data name="increase_speed" xml:space="preserve">
     <value>Öka hastigheten</value>
   </data>
@@ -242,14 +367,23 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="input_method_touch" xml:space="preserve">
     <value>Peka (dra på arbetsytan)</value>
   </data>
+  <data name="input_processing" xml:space="preserve">
+    <value>Inmatningsbehandling</value>
+  </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Installera ydotool för att använda tangentbordsläge&lt;/b&gt;</value>
   </data>
   <data name="isn_t_installed_run_these_commands_then_press_retry" xml:space="preserve">
     <value>är inte installerat. Kör dessa kommandon och tryck sedan på Försök igen:</value>
   </data>
+  <data name="keyboard" xml:space="preserve">
+    <value>Tangentbord</value>
+  </data>
   <data name="keyboard_2" xml:space="preserve">
     <value>_Tangentbord</value>
+  </data>
+  <data name="keyboard_mode_description" xml:space="preserve">
+    <value>Skriv Dashers utdata direkt i appen du pekar på</value>
   </data>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Avsluta tangentbordsläge</value>
@@ -260,11 +394,23 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="keyboard_mode_opacity" xml:space="preserve">
     <value>Opacitet för tangentbordsläge</value>
   </data>
+  <data name="keyboard_mode_stopped" xml:space="preserve">
+    <value>Tangentbordsläge stoppat</value>
+  </data>
   <data name="keyboard_mode_stopped_ydotool_could_not_inject_text_is_the_y" xml:space="preserve">
     <value>Tangentbordsläget stoppades: ydotool kunde inte mata in text. Är ydotoolold</value>
   </data>
   <data name="keyboard_mode_title" xml:space="preserve">
     <value>Aktivera tangentbordsläge</value>
+  </data>
+  <data name="keyboard_mode_transparency_help" xml:space="preserve">
+    <value>Fönstergenomskinlighet i Tangentbord/Direkt-läge</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>Språk</value>
+  </data>
+  <data name="language_locale" xml:space="preserve">
+    <value>Språk / Region</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Språk / Lokalt läge&lt;/b&gt;</value>
@@ -290,11 +436,23 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="learning" xml:space="preserve">
     <value>Inlärning</value>
   </data>
+  <data name="leave" xml:space="preserve">
+    <value>Lämna</value>
+  </data>
   <data name="leave_game_mode" xml:space="preserve">
     <value>Lämna spelläget</value>
   </data>
   <data name="light" xml:space="preserve">
     <value>Ljus</value>
+  </data>
+  <data name="load_voices" xml:space="preserve">
+    <value>Ladda röster</value>
+  </data>
+  <data name="loaded_1_characters" xml:space="preserve">
+    <value>Laddade %1 tecken</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>Laddar…</value>
   </data>
   <data name="locale" xml:space="preserve">
     <value>Språk</value>
@@ -302,11 +460,20 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="locale_2" xml:space="preserve">
     <value>Språk</value>
   </data>
+  <data name="more" xml:space="preserve">
+    <value>Mer</value>
+  </data>
+  <data name="more_options" xml:space="preserve">
+    <value>Fler alternativ</value>
+  </data>
   <data name="move_your_eyes_while_pinching_to_steer" xml:space="preserve">
     <value>Rör ögonen medan du nyper för att styra</value>
   </data>
   <data name="new" xml:space="preserve">
     <value>Ny</value>
+  </data>
+  <data name="new_document" xml:space="preserve">
+    <value>Nytt dokument</value>
   </data>
   <data name="new_message" xml:space="preserve">
     <value>Nytt meddelande</value>
@@ -319,6 +486,12 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   </data>
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>Inga inställningar tillgängliga för det här avsnittet.</value>
+  </data>
+  <data name="no_training_data_to_export_yet" xml:space="preserve">
+    <value>Inga träningsdata att exportera ännu</value>
+  </data>
+  <data name="no_user_training_data_yet" xml:space="preserve">
+    <value>Inga användarträningsdata ännu</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Inget att spara</value>
@@ -353,11 +526,17 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="output" xml:space="preserve">
     <value>Produktion</value>
   </data>
+  <data name="output_font" xml:space="preserve">
+    <value>Utdatafont</value>
+  </data>
   <data name="output_font_size" xml:space="preserve">
     <value>Utmatningsstorlek för teckensnitt</value>
   </data>
   <data name="output_placeholder" xml:space="preserve">
     <value>Tryck på arbetsytan för att börja skriva.</value>
+  </data>
+  <data name="pane_position" xml:space="preserve">
+    <value>Panelposition</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>Klistra</value>
@@ -374,11 +553,20 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="pinch_and_look_to_write" xml:space="preserve">
     <value>Nyp och titta för att skriva</value>
   </data>
+  <data name="pitch" xml:space="preserve">
+    <value>Tonhöjd</value>
+  </data>
+  <data name="play" xml:space="preserve">
+    <value>Spela</value>
+  </data>
   <data name="play_2" xml:space="preserve">
     <value>Spela</value>
   </data>
   <data name="pointer_hover_input" xml:space="preserve">
     <value>Pekare/Hover-inmatning</value>
+  </data>
+  <data name="preferences" xml:space="preserve">
+    <value>Inställningar</value>
   </data>
   <data name="prefs" xml:space="preserve">
     <value>Preferenser</value>
@@ -386,11 +574,20 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="preparing_dasher" xml:space="preserve">
     <value>Förbereder Dasher…</value>
   </data>
+  <data name="preview" xml:space="preserve">
+    <value>Förhandsvisning</value>
+  </data>
   <data name="privacy" xml:space="preserve">
     <value>Privatliv</value>
   </data>
   <data name="privacy_2" xml:space="preserve">
     <value>&lt;b&gt;Integritet&lt;/b&gt;</value>
+  </data>
+  <data name="quick_speak" xml:space="preserve">
+    <value>Snabbtala</value>
+  </data>
+  <data name="rate" xml:space="preserve">
+    <value>Hastighet</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Importera om från Dasher 5</value>
@@ -428,6 +625,12 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="reset_training_data_2" xml:space="preserve">
     <value>Återställa träningsdata?</value>
   </data>
+  <data name="reset_wpm_averages" xml:space="preserve">
+    <value>Återställ WPM-medelvärden</value>
+  </data>
+  <data name="restarting_engine" xml:space="preserve">
+    <value>Startar om motor…</value>
+  </data>
   <data name="restore_all_dasher_settings_to_their_default_values_this_can" xml:space="preserve">
     <value>Återställ alla Dasher-inställningar till standardvärdena. Detta kan inte ångras.</value>
   </data>
@@ -440,8 +643,14 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="save_2" xml:space="preserve">
     <value>Spara...</value>
   </data>
+  <data name="save_eye_tracker_diagnostics" xml:space="preserve">
+    <value>Spara ögaspårningsdiagnostik</value>
+  </data>
   <data name="save_failed" xml:space="preserve">
     <value>Spara misslyckades</value>
+  </data>
+  <data name="save_file" xml:space="preserve">
+    <value>Spara fil</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>Spara textfil</value>
@@ -454,6 +663,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   </data>
   <data name="scan_speed" xml:space="preserve">
     <value>Skanningshastighet</value>
+  </data>
+  <data name="selection_method" xml:space="preserve">
+    <value>Urvalsmetod</value>
   </data>
   <data name="settings" xml:space="preserve">
     <value>Inställningar</value>
@@ -479,6 +691,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>Visa felsökningsöverlägg för inmatning</value>
   </data>
+  <data name="show_status_bar" xml:space="preserve">
+    <value>Visa statusrad</value>
+  </data>
   <data name="show_typing_rate_wpm" xml:space="preserve">
     <value>Visa skrivhastighet (WPM)</value>
   </data>
@@ -491,6 +706,12 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="slow" xml:space="preserve">
     <value>Långsam</value>
   </data>
+  <data name="speak_on_stop" xml:space="preserve">
+    <value>Tala vid stopp</value>
+  </data>
+  <data name="speak_words" xml:space="preserve">
+    <value>Tala ord</value>
+  </data>
   <data name="speech" xml:space="preserve">
     <value>Tal</value>
   </data>
@@ -500,8 +721,14 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="speech_on" xml:space="preserve">
     <value>Tal om</value>
   </data>
+  <data name="speech_settings" xml:space="preserve">
+    <value>Röstinställningar</value>
+  </data>
   <data name="speech_settings_2" xml:space="preserve">
     <value>&lt;b&gt;Talinställningar&lt;/b&gt;</value>
+  </data>
+  <data name="speech_volume" xml:space="preserve">
+    <value>Röstvolym</value>
   </data>
   <data name="speed" xml:space="preserve">
     <value>Hastighet</value>
@@ -515,14 +742,32 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="start_fresh" xml:space="preserve">
     <value>Börja om på nytt</value>
   </data>
+  <data name="steering_method" xml:space="preserve">
+    <value>Styrmetod</value>
+  </data>
   <data name="stop" xml:space="preserve">
     <value>Stopp</value>
+  </data>
+  <data name="stop_speaking" xml:space="preserve">
+    <value>Stoppa tal</value>
   </data>
   <data name="text_files" xml:space="preserve">
     <value>Textfiler</value>
   </data>
+  <data name="that_file_already_is_your_training_data" xml:space="preserve">
+    <value>Den filen är redan dina träningsdata.</value>
+  </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>Felsökningsöverlägget ritar en grön panel uppe till vänster på arbetsytan som visar antal händelser i realtid och de senast rapporterade (x, y). När du nyper och håller nere bör du se touch.began och sedan touch.moved med ändrade koordinater när du tittar dig omkring.</value>
+  </data>
+  <data name="the_file_is_too_large_over_10_mb_to_import_as_training_text" xml:space="preserve">
+    <value>Filen är för stor (över 10 MB) för att importeras som träningstext.</value>
+  </data>
+  <data name="the_selected_file_is_empty" xml:space="preserve">
+    <value>Den valda filen är tom.</value>
+  </data>
+  <data name="this_deletes_your_accumulated_training_data_for_every_alphab" xml:space="preserve">
+    <value>Detta raderar din ackumulerade träningsdata för varje alfabet. Förutsägelser behåller inflytandet från mycket nyligen inmatning.</value>
   </data>
   <data name="this_deletes_your_accumulated_training_data_the_language_mod" xml:space="preserve">
     <value>Detta raderar dina ackumulerade träningsdata. Språkmodellen återgår till inbyggda standardinställningar vid nästa start. Detta kan inte ångras.</value>
@@ -536,14 +781,50 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>Luta enheten genom hela dess rörelseomfång under kalibreringen.</value>
   </data>
+  <data name="toggle_control_mode" xml:space="preserve">
+    <value>Växla kontrollläge</value>
+  </data>
+  <data name="toggle_game_mode" xml:space="preserve">
+    <value>Växla spelläge</value>
+  </data>
+  <data name="toggle_keyboard_mode" xml:space="preserve">
+    <value>Växla tangentbordsläge</value>
+  </data>
+  <data name="toggle_pane_position" xml:space="preserve">
+    <value>Växla panelposition</value>
+  </data>
+  <data name="toggle_status_bar" xml:space="preserve">
+    <value>Dölj/visa statusrad</value>
+  </data>
+  <data name="toolbar_copy_description" xml:space="preserve">
+    <value>Kopiera all text</value>
+  </data>
+  <data name="toolbar_cut_description" xml:space="preserve">
+    <value>Klipp ut markering i målappen</value>
+  </data>
+  <data name="toolbar_game_description" xml:space="preserve">
+    <value>Starta spelläge</value>
+  </data>
   <data name="toolbar_new_description" xml:space="preserve">
     <value>Ny/ren utgång</value>
   </data>
   <data name="toolbar_open_description" xml:space="preserve">
     <value>Öppna filen</value>
   </data>
+  <data name="toolbar_paste_description" xml:space="preserve">
+    <value>Klistra in i målappen</value>
+  </data>
+  <data name="toolbar_reanchor_description" xml:space="preserve">
+    <value>Förankra om förutsägelser till markören (läs meningen runt din cursor)</value>
+  </data>
   <data name="toolbar_save_description" xml:space="preserve">
     <value>Spara till fil</value>
+  </data>
+  <data name="toolbar_select_all_description" xml:space="preserve">
+    <value>Markera allt i målappen</value>
+  </data>
+  <data name="toolbar_settings_description" xml:space="preserve">
+    <value>Öppna inställningar</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Dela text</value>
@@ -557,8 +838,14 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="training_data" xml:space="preserve">
     <value>Träningsdata</value>
   </data>
+  <data name="training_data_deleted_restart_dasher_to_fully_apply" xml:space="preserve">
+    <value>Träningsdata raderad — starta om Dasher för att tillämpa fullt ut</value>
+  </data>
   <data name="training_data_description" xml:space="preserve">
     <value>Import lägger till text till språkmodellen och dina ackumulerade träningsdata (förvaras över omstarter). Export sparar dina träningsdata för säkerhetskopiering eller överföring. Återställning tar bort all användarträningsdata – modellen återgår till sina inbyggda standardinställningar vid nästa lansering.</value>
+  </data>
+  <data name="training_data_exported" xml:space="preserve">
+    <value>Träningsdata exporterad.</value>
   </data>
   <data name="training_export" xml:space="preserve">
     <value>Exportera träningsdata</value>
@@ -578,6 +865,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="training_imported_restart" xml:space="preserve">
     <value>{0} KB importerat — tillämpas fullständigt vid nästa start (livemodellen returnerade {1})</value>
   </data>
+  <data name="training_is_not_available_yet_try_again_once_the_canvas_has_" xml:space="preserve">
+    <value>Träning är inte tillgänglig ännu — försök igen när canvas har renderats.</value>
+  </data>
   <data name="training_none_yet" xml:space="preserve">
     <value>Inga användarträningsdata ännu</value>
   </data>
@@ -593,11 +883,29 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   <data name="training_reset_partial" xml:space="preserve">
     <value>Raderade träningsdata där det är möjligt — {0} objekt(er) misslyckades; tryck på Reset igen för att försöka igen</value>
   </data>
+  <data name="tts_engine" xml:space="preserve">
+    <value>TTS-motor</value>
+  </data>
+  <data name="tts_no_credentials" xml:space="preserve">
+    <value>Inga inloggningsuppgifter krävs</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Skrivhastighet</value>
   </data>
+  <data name="typing_rate_format" xml:space="preserve">
+    <value>{cps} cps · {wpm} wpm</value>
+  </data>
+  <data name="udp_port" xml:space="preserve">
+    <value>UDP-port</value>
+  </data>
+  <data name="udp_tracker_help" xml:space="preserve">
+    <value>UDP-spårare lyssnar på STREAM_DATA- eller GazePoint-meddelanden</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Använd Dasher som tangentbord</value>
+  </data>
+  <data name="volume" xml:space="preserve">
+    <value>Volym</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>Vi hittade din Dasher 5-konfiguration på den här Mac-datorn. Ditt alfabet, dina färger, hastighetsinställningar och anpassade filer kan importeras till Dasher 6.</value>
