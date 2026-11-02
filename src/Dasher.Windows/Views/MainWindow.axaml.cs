@@ -1088,6 +1088,34 @@ public partial class MainWindow : Window
 
     private void OnEngineOutput(object? sender, EngineOutputEventArgs e)
     {
+        // SEH guard (issue #85): the injection chain (EnsureForeground +
+        // SendInput P/Invokes) runs inside the Avalonia message pump via
+        // this handler — an SEH from native code propagates from
+        // DispatchMessage and crashes the app. Catch it here and log.
+        // NOTE: there is no automatic retry — an SEH mid-injection may
+        // desync the engine buffer from the target (the engine committed
+        // output the target never received). The next caret-moved event
+        // triggers a context re-seed via the shadow-compare, which
+        // resynchronizes (the TARGET wins — its text is re-read and used to
+        // re-seed the engine, discarding the phantom committed output).
+        // A forced resync would be cleaner but requires
+        // bumping the seed generation from this handler.
+        try
+        {
+            OnEngineOutputCore(sender, e);
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"OnEngineOutput: SEHException (0x{ex.HResult:X}) — injection chain guarded, continuing");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"OnEngineOutput: {ex.GetType().Name}: {ex.Message} — guarded");
+        }
+    }
+
+    private void OnEngineOutputCore(object? sender, EngineOutputEventArgs e)
+    {
         if (_vm == null || !_vm.IsKeyboardMode) return;
         // A picker dialog owns the foreground mid-session: no injection, and
         // (belt-and-braces, review loop 2) the tracker must not record the
@@ -1292,6 +1320,25 @@ public partial class MainWindow : Window
 
     private void OnEngineCustomAction(string name, System.Collections.Generic.Dictionary<string, string> attrs)
     {
+        // SEH guard (issue #85, review loop 1): select chords inject via
+        // SendInput inside the Avalonia message pump — same crash class
+        // as the output/editing-key paths.
+        try
+        {
+            OnEngineCustomActionCore(name, attrs);
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"select: SEHException (0x{ex.HResult:X}) — guarded, continuing");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"select: {ex.GetType().Name}: {ex.Message} — guarded");
+        }
+    }
+
+    private void OnEngineCustomActionCore(string name, System.Collections.Generic.Dictionary<string, string> attrs)
+    {
         if (name != "select") return;
         if (_pickerSessionActive) return; // keystrokes must not reach a picker dialog
 
@@ -1354,6 +1401,22 @@ public partial class MainWindow : Window
     /// order. The return count is logged - a silent UIPI/elevation block
     /// leaves a diagnostic in keyboard_debug.log.</summary>
     private void SendSelectChord(bool ctrl, bool shift, ushort? arrow, ushort? letter)
+    {
+        try
+        {
+            SendSelectChordCore(ctrl, shift, arrow, letter);
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"select chord: SEHException (0x{ex.HResult:X}) — guarded");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"select chord: {ex.GetType().Name}: {ex.Message} — guarded");
+        }
+    }
+
+    private void SendSelectChordCore(bool ctrl, bool shift, ushort? arrow, ushort? letter)
     {
         const ushort VK_SHIFT = 0x10;
         // presses in order, then releases in reverse
@@ -1479,6 +1542,11 @@ public partial class MainWindow : Window
 
     private void OnEditBackspaceKey(bool reportTelemetry = true)
     {
+        // SEH guard (issue #85): editing-key repeats fire from
+        // DispatcherTimer inside DispatchMessage — an SEH from the
+        // SendInput/EnsureForeground chain propagates and crashes.
+        try
+        {
         // A picker dialog owns the foreground mid-session: injecting
         // keystrokes now would send them into the filename box and retarget
         // the tracker at the dialog (the bug class #73's review spent two
@@ -1494,10 +1562,25 @@ public partial class MainWindow : Window
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "backspace");
             EditorBackspace();
         }
+    
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"edit key: SEHException (0x{ex.HResult:X}) — guarded");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"edit key: {ex.GetType().Name} — guarded");
+        }
     }
 
     private void OnEditArrowLeftKey(bool reportTelemetry = true)
     {
+        // SEH guard (issue #85): editing-key repeats fire from
+        // DispatcherTimer inside DispatchMessage — an SEH from the
+        // SendInput/EnsureForeground chain propagates and crashes.
+        try
+        {
         if (_pickerSessionActive) return;
         if (_vm is { IsKeyboardMode: true })
         {
@@ -1510,10 +1593,25 @@ public partial class MainWindow : Window
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_left");
             EditorMoveCaret(-1);
         }
+    
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"edit key: SEHException (0x{ex.HResult:X}) — guarded");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"edit key: {ex.GetType().Name} — guarded");
+        }
     }
 
     private void OnEditArrowRightKey(bool reportTelemetry = true)
     {
+        // SEH guard (issue #85): editing-key repeats fire from
+        // DispatcherTimer inside DispatchMessage — an SEH from the
+        // SendInput/EnsureForeground chain propagates and crashes.
+        try
+        {
         if (_pickerSessionActive) return;
         if (_vm is { IsKeyboardMode: true })
         {
@@ -1525,6 +1623,16 @@ public partial class MainWindow : Window
         {
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_right");
             EditorMoveCaret(1);
+        }
+    
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"edit key: SEHException (0x{ex.HResult:X}) — guarded");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"edit key: {ex.GetType().Name} — guarded");
         }
     }
 
@@ -1557,6 +1665,24 @@ public partial class MainWindow : Window
     /// can do — same reason v5 implemented them frontend-side.
     /// </summary>
     private void SendCtrlChord(ushort key, string name)
+    {
+        // SEH guard (issue #85): all Ctrl-chord injections run inside the
+        // Avalonia message pump via DispatcherTimer/button handlers.
+        try
+        {
+            SendCtrlChordCore(key, name);
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"ctrl chord: SEHException (0x{ex.HResult:X}) — guarded");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"ctrl chord: {ex.GetType().Name}: {ex.Message} — guarded");
+        }
+    }
+
+    private void SendCtrlChordCore(ushort key, string name)
     {
         _targetTracker.EnsureForeground(OurHwnd());
         var inputs = new INPUT[4];
