@@ -42,6 +42,15 @@ public partial class DasherCanvas : Control
 
     private NativeBridge.MessageCallback? _messageCallback;
     private NativeBridge.LogCallback? _logCallback;
+    /// <summary>RFC 0021: fired on the UI thread when the engine executes a
+    /// registered custom action (the select subtree). Attributes are pre-
+    /// parsed into a dict (the C callback's arrays are valid only during
+    /// the callback).</summary>
+    public event Action<string, System.Collections.Generic.Dictionary<string, string>>? CustomAction;
+
+    private NativeBridge.ActionCallback? _selectActionCallback;
+    private bool _selectActionRegistered;
+
     private NativeBridge.OutputCallback? _outputCallback;
     private NativeBridge.TextSizeCallback? _textSizeCallback;
     private bool _callbacksRegistered;
@@ -98,6 +107,50 @@ public partial class DasherCanvas : Control
         _lastScreenWidth = 0;
         _lastScreenHeight = 0;
         _outputDirty = true; // fresh handle: read OutputText once on first Tick
+
+        // RFC 0021: register the select action BEFORE any set_screen_size
+        // (the documented timing constraint - the control box parses
+        // control.xml at realize, and without a handler the Select subtree
+        // is gated out). Must happen on EVERY handle (including the
+        // Reset-and-replace path).
+        try
+        {
+            _selectActionCallback = new NativeBridge.ActionCallback(OnCustomAction);
+            NativeBridge.dasher_register_action(_handle, "select", _selectActionCallback, IntPtr.Zero);
+            _selectActionRegistered = true;
+        }
+        catch (EntryPointNotFoundException)
+        {
+            // engine older than the select action - subtree stays gated
+        }
+    }
+
+    private void OnCustomAction(string name, int attrCount, IntPtr attrKeys, IntPtr attrValues, IntPtr userData)
+    {
+        // Fires on the engine frame thread; the attributes are valid only
+        // during this callback - copy, then marshal to the UI thread.
+        var attrs = new System.Collections.Generic.Dictionary<string, string>(attrCount);
+        try
+        {
+            var keys = new IntPtr[attrCount];
+            var values = new IntPtr[attrCount];
+            System.Runtime.InteropServices.Marshal.Copy(attrKeys, keys, 0, attrCount);
+            System.Runtime.InteropServices.Marshal.Copy(attrValues, values, 0, attrCount);
+            for (var i = 0; i < attrCount; i++)
+            {
+                var k = keys[i] != IntPtr.Zero ? System.Runtime.InteropServices.Marshal.PtrToStringUTF8(keys[i]) : null;
+                var v = values[i] != IntPtr.Zero ? System.Runtime.InteropServices.Marshal.PtrToStringUTF8(values[i]) : null;
+                if (k != null) attrs[k] = v ?? "";
+            }
+        }
+        catch { }
+
+        var handler = CustomAction;
+        if (handler != null)
+        {
+            try { Avalonia.Threading.Dispatcher.UIThread.Post(() => handler(name, attrs)); }
+            catch { }
+        }
     }
 
     /// <summary>

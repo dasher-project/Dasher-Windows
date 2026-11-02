@@ -121,6 +121,7 @@ public partial class MainWindow : Window
         RestoreWindowGeometry();
         TrackNormalStateGeometry();
         WireEditingKeyRepeat();
+        WireCustomActions();
     }
 
     /// <summary>
@@ -1268,6 +1269,98 @@ public partial class MainWindow : Window
         // 200 chars of a private email or message).
         KbLog($"Context seed ({reason}): {decision.Text.Length} of {context.Text.Length} chars, caret u16={decision.CaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, decision.Text, byteOffset);
+    }
+
+
+    // ── RFC 0021 select dispatch ─────────────────────────────────────────
+
+    private void WireCustomActions()
+    {
+        var canvas = this.FindControl<Controls.DasherCanvas>("DasherCanvas");
+        if (canvas == null) return;
+        canvas.CustomAction += OnEngineCustomAction;
+    }
+
+    private void OnEngineCustomAction(string name, System.Collections.Generic.Dictionary<string, string> attrs)
+    {
+        if (name != "select") return;
+        if (_pickerSessionActive) return; // keystrokes must not reach a picker dialog
+
+        var parsed = Services.SelectActions.Parse(
+            attrs.TryGetValue("dist", out var d) ? d : null,
+            attrs.TryGetValue("forward", out var f) ? f : null);
+        if (parsed is not { } action)
+        {
+            KbLog($"select: unknown attributes dist={d ?? "(null)"} forward={f ?? "(null)"} - no-op");
+            return;
+        }
+        var (dist, dir) = action;
+
+        Services.AnalyticsService.CaptureUiAction("control_tree", "select",
+            $"dist={dist},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
+
+        if (_vm is { IsKeyboardMode: true })
+        {
+            // Direct mode: native OS selection in the TARGET (the target's
+            // own Copy/Cut/Delete then act on it without further work).
+            var ks = Services.SelectActions.Keystroke(dist, dir);
+            _targetTracker.EnsureForeground(OurHwnd());
+            SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
+
+            // RFC 0021 / #79 interaction: the caret events our selection
+            // keystrokes provoke land in the existing caret-moved debounce;
+            // a backward paragraph select changes the caret-anchored
+            // sentence window and would re-seed mid-selection. Extend the
+            // settle-window pattern to select chords.
+            _lastOwnParagraphInject = Environment.TickCount64;
+        }
+        else
+        {
+            // Editor mode: measured selection over the pane text with the
+            // active-end state machine (SelectActions.EditorBounds).
+            var box = MessageArea;
+            if (box == null) return;
+            var text = box.Text ?? "";
+            var hadSelection = box.SelectionStart != box.SelectionEnd;
+            var (start, end) = Services.SelectActions.EditorBounds(
+                text, box.SelectionStart, box.SelectionEnd, dist, dir, hadSelection);
+            // Suppress the editor-sync while setting the selection: a
+            // selection change with identical text is not a user edit.
+            box.SelectionStart = start;
+            box.SelectionEnd = end;
+        }
+    }
+
+    /// <summary>Send a Shift(+Ctrl)+Arrow chord or Ctrl+<letter> to the
+    /// target (SendInput — same machinery as the strip's editing keys).</summary>
+    private void SendSelectChord(bool ctrl, bool shift, ushort? arrow, ushort? letter)
+    {
+        const ushort VK_SHIFT = 0x10, VK_CONTROL = 0x11;
+        const uint KEYEVENTF_KEYUP = 0x0002;
+
+        void Key(ushort vk, bool up)
+        {
+            NativeInput(vk, up ? KEYEVENTF_KEYUP : 0);
+        }
+
+        if (shift) Key(VK_SHIFT, false);
+        if (ctrl) Key(VK_CONTROL, false);
+        if (arrow is { } a) { Key(a, false); Key(a, true); }
+        if (letter is { } l) { Key(l, false); Key(l, true); }
+        if (ctrl) Key(VK_CONTROL, true);
+        if (shift) Key(VK_SHIFT, true);
+
+        KbLog($"  select chord: ctrl={ctrl} shift={shift} arrow={arrow?.ToString("X") ?? "-"} letter={letter?.ToString() ?? "-"}");
+    }
+
+    private void NativeInput(ushort vk, uint flags)
+    {
+        // Reuses the INPUT struct machinery already declared for SendVirtualKey.
+        var inputs = new INPUT[1];
+        inputs[0].type = INPUT_KEYBOARD;
+        inputs[0].u.ki.wVk = vk;
+        inputs[0].u.ki.dwFlags = flags;
+        SendInput(1, inputs, Marshal.SizeOf<INPUT>());
     }
 
     private int _contextSeedGeneration;

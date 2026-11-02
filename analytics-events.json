@@ -5,40 +5,100 @@
   "default_properties": {
     "description": "Automatically appended to every event from every frontend",
     "properties": {
-      "platform": { "type": "string", "examples": ["windows", "macos", "ios", "visionos", "linux"] },
-      "app_variant": { "type": "string", "examples": ["dasher-windows", "dasher-mac", "dasher-ios", "dasher-gtk"] },
-      "app_version": { "type": "string", "example": "0.1.0-preview9" },
-      "os_version": { "type": "string", "example": "Microsoft Windows 10.0.19045" },
-      "$os": { "type": "string", "const": "Windows", "description": "The posthog-dotnet SDK sends no $os context, so it is set explicitly — keeps OS breakdowns consistent with the Apple/Android SDKs." },
-      "$geoip_disable": { "type": "boolean", "const": true, "description": "Sent on every event (including crashes): PostHog Cloud must not derive location from the client IP (RFC 0001: no location data)." }
+      "platform": {
+        "type": "string",
+        "examples": [
+          "windows",
+          "macos",
+          "ios",
+          "visionos",
+          "linux"
+        ]
+      },
+      "app_variant": {
+        "type": "string",
+        "examples": [
+          "dasher-windows",
+          "dasher-mac",
+          "dasher-ios",
+          "dasher-gtk"
+        ]
+      },
+      "app_version": {
+        "type": "string",
+        "example": "0.1.0-preview9"
+      },
+      "os_version": {
+        "type": "string",
+        "example": "Microsoft Windows 10.0.19045"
+      },
+      "$os": {
+        "type": "string",
+        "const": "Windows",
+        "description": "The posthog-dotnet SDK sends no $os context, so it is set explicitly — keeps OS breakdowns consistent with the Apple/Android SDKs."
+      },
+      "$geoip_disable": {
+        "type": "boolean",
+        "const": true,
+        "description": "Sent on every event (including crashes): PostHog Cloud must not derive location from the client IP (RFC 0001: no location data)."
+      }
     }
   },
   "events": {
     "app_launched": {
       "description": "App starts (after opt-in)",
       "properties": {
-        "locale": { "type": "string", "example": "en-GB" }
+        "locale": {
+          "type": "string",
+          "example": "en-GB"
+        }
       },
       "pii": false
     },
     "input_method_changed": {
       "description": "User selects input method",
       "properties": {
-        "method": { "type": "string", "enum": ["pointer", "touch", "switch", "joystick", "eye_gaze", "tilt"] }
+        "method": {
+          "type": "string",
+          "enum": [
+            "pointer",
+            "touch",
+            "switch",
+            "joystick",
+            "eye_gaze",
+            "tilt"
+          ]
+        }
       },
       "pii": false
     },
     "alphabet_selected": {
       "description": "User picks alphabet",
       "properties": {
-        "alphabet_id": { "type": "string", "example": "English with limited punctuation" }
+        "alphabet_id": {
+          "type": "string",
+          "example": "English with limited punctuation"
+        }
       },
       "pii": false
     },
     "settings_viewed": {
       "description": "User opens a settings tab",
       "properties": {
-        "tab_name": { "type": "string", "enum": ["Input", "Language", "Customization", "Speed", "Output", "Speech", "Privacy", "Appearance", "Advanced"] }
+        "tab_name": {
+          "type": "string",
+          "enum": [
+            "Input",
+            "Language",
+            "Customization",
+            "Speed",
+            "Output",
+            "Speech",
+            "Privacy",
+            "Appearance",
+            "Advanced"
+          ]
+        }
       },
       "pii": false
     },
@@ -55,29 +115,114 @@
     "crash": {
       "description": "Uncaught exception",
       "properties": {
-        "stack_trace": { "type": "string", "note": "May contain file paths but not user text" },
-        "exception_type": { "type": "string", "note": "Original exception type name; set explicitly on deferred reports where the SDK's native typing names the SavedCrashException wrapper instead (#60)" },
-        "source": { "type": "string", "note": "Where the exception was caught (e.g. Program.Main)" },
-        "engine_log_tail": { "type": "string", "note": "Deferred reports only: last engine diagnostic lines captured with the crash" }
+        "stack_trace": {
+          "type": "string",
+          "note": "May contain file paths but not user text"
+        },
+        "exception_type": {
+          "type": "string",
+          "note": "Original exception type name; set explicitly on deferred reports where the SDK's native typing names the SavedCrashException wrapper instead (#60)"
+        },
+        "source": {
+          "type": "string",
+          "note": "Where the exception was caught (e.g. Program.Main)"
+        },
+        "engine_log_tail": {
+          "type": "string",
+          "note": "Deferred reports only: last engine diagnostic lines captured with the crash"
+        }
       },
       "pii": false
     },
     "ui_action": {
       "description": "RFC 0001 2026-10-28 amendment: the user activated a control in the main UI (anything outside the settings windows). Opt-in gated like every event.",
       "properties": {
-        "surface": { "type": "string", "enum": ["main_toolbar", "status_bar", "ime_toolbar"], "description": "ime_toolbar = the keyboard (direct-entry) mode mini-bar. status_bar also covers the bottom message-pane header (speak / copy / new / paste / enter-direct-mode controls). The RFC's ime_topbar surface has no Windows equivalent and is therefore never emitted." },
-        "action": { "type": "string", "description": "Fixed vocabulary; new identifiers require a schema update. select_all: retained for historical events, no emitter since #80 (mini-bar button removed)", "enum": ["new", "open", "save", "settings", "copy", "copy_selection", "cut", "paste", "select_all", "speak", "stop_speak", "speed_up", "speed_down", "backspace", "arrow_left", "arrow_right", "layout", "direct_mode", "game_mode", "control_mode", "reanchor", "hide"] },
-        "state": { "type": "string", "enum": ["on", "off", "right", "left", "bottom", "top"], "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position" }
+        "surface": {
+          "type": "string",
+          "enum": [
+            "main_toolbar",
+            "status_bar",
+            "ime_toolbar"
+          ],
+          "description": "ime_toolbar = the keyboard (direct-entry) mode mini-bar. status_bar also covers the bottom message-pane header (speak / copy / new / paste / enter-direct-mode controls). The RFC's ime_topbar surface has no Windows equivalent and is therefore never emitted."
+        },
+        "action": {
+          "type": "string",
+          "description": "Fixed vocabulary; new identifiers require a schema update. select_all: retained for historical events, no emitter since #80 (mini-bar button removed)",
+          "enum": [
+            "new",
+            "open",
+            "save",
+            "settings",
+            "copy",
+            "copy_selection",
+            "cut",
+            "paste",
+            "select_all",
+            "speak",
+            "stop_speak",
+            "speed_up",
+            "speed_down",
+            "backspace",
+            "arrow_left",
+            "arrow_right",
+            "layout",
+            "direct_mode",
+            "game_mode",
+            "control_mode",
+            "reanchor",
+            "hide"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "on",
+            "off",
+            "right",
+            "left",
+            "bottom",
+            "top"
+          ],
+          "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position"
+        }
       },
       "pii": false
     },
     "setting_changed": {
       "description": "RFC 0001 2026-10-28 amendment: the user committed a settings change at the widget site. Programmatic changes (engine init, defaults, migrations) never emit this.",
       "properties": {
-        "setting_id": { "type": "string", "description": "Canonical identifier: the DasherCore parameter display name (e.g. Max Speed (bits/sec)) or the frontend setting key (e.g. output_font_size, access_method). Locale caveat: engine parameter display names follow the UI locale (RFC 0003), so the same setting may report under its translated name — frontend keys are locale-stable. Speech engine credentials are deliberately excluded (secrets).", "example": "Max Speed (bits/sec)" },
-        "value_type": { "type": "string", "enum": ["bool", "number", "enum", "string"] },
-        "value": { "type": ["boolean", "number", "string"], "description": "Present only for bool/number/enum values from a fixed vocabulary. OMITTED for string settings - free text is never collected" },
-        "surface": { "type": "string", "enum": ["settings", "main_ui", "ime"], "description": "Where the change was made. Windows currently emits settings and main_ui only" }
+        "setting_id": {
+          "type": "string",
+          "description": "Canonical identifier: the DasherCore parameter display name (e.g. Max Speed (bits/sec)) or the frontend setting key (e.g. output_font_size, access_method). Locale caveat: engine parameter display names follow the UI locale (RFC 0003), so the same setting may report under its translated name — frontend keys are locale-stable. Speech engine credentials are deliberately excluded (secrets).",
+          "example": "Max Speed (bits/sec)"
+        },
+        "value_type": {
+          "type": "string",
+          "enum": [
+            "bool",
+            "number",
+            "enum",
+            "string"
+          ]
+        },
+        "value": {
+          "type": [
+            "boolean",
+            "number",
+            "string"
+          ],
+          "description": "Present only for bool/number/enum values from a fixed vocabulary. OMITTED for string settings - free text is never collected"
+        },
+        "surface": {
+          "type": "string",
+          "enum": [
+            "settings",
+            "main_ui",
+            "ime"
+          ],
+          "description": "Where the change was made. Windows currently emits settings and main_ui only"
+        }
       },
       "pii": false
     }

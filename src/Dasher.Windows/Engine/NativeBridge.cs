@@ -196,8 +196,24 @@ public static class NativeBridge
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void OutputCallback(int event_type, IntPtr text, IntPtr user_data);
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void ActionCallback(
+        [MarshalAs(UnmanagedType.LPStr)] string name,
+        int attrCount,
+        IntPtr attrKeys,
+        IntPtr attrValues,
+        IntPtr userData);
+
+
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_set_output_callback(IntPtr ctx, OutputCallback callback, IntPtr user_data);
+
+
+    [DllImport("dasher", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void dasher_register_action(IntPtr ctx,
+        [MarshalAs(UnmanagedType.LPStr)] string name,
+        ActionCallback callback,
+        IntPtr userData);
 
     // Message callback
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
