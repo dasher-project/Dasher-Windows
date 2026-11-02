@@ -280,7 +280,12 @@ public static class SelectActions
     /// <summary>Editor-mode delete range (pure): the (start, end) UTF-16
     /// span the delete removes, ordered. The active end is the caret;
     /// backward deletes end AT the caret, forward deletes start AT it
-    /// (nothing behind/beyond the caret is touched).</summary>
+    /// (nothing behind/beyond the caret is touched). NOTE: measured from
+    /// the CARET, not an existing selection — replacing the selection is
+    /// the plain Delete editing key's job (same deliberate divergence as
+    /// the backspace editing key, EditorKeyActions.Backspace); the
+    /// control-tree delete is a measured-distance operation by design.
+    /// </summary>
     public static (int Start, int End) DeleteBounds(string text, int caret, SelectDistance dist, SelectDirection dir)
     {
         var i = Math.Clamp(caret, 0, text.Length);

@@ -1362,11 +1362,19 @@ public partial class MainWindow : Window
         var (dist, dir) = action;
         var forward = dir == Services.SelectDirection.Forward;
         // Sentence has no Windows chord and no UIA unit: every direct-mode
-        // path falls back to paragraph granularity (logged per action).
+        // path falls back to paragraph granularity (logged + flagged in
+        // telemetry so field data never reads sentence-accurate when the
+        // applied granularity was paragraph).
         var chordDist = dist == Services.SelectDistance.Sentence
             ? Services.SelectDistance.Paragraph : dist;
+        var sentenceFallback = dist == Services.SelectDistance.Sentence ? ",fallback=paragraph" : "";
         if (dist == Services.SelectDistance.Sentence)
             KbLog($"{name}: sentence granularity has no direct-mode mapping - paragraph fallback");
+        // Reentrancy (review loop 1): dwell-repeat can fire a second action
+        // while the first awaits UIA. A generation counter supersedes the
+        // in-flight action — the late continuation must not apply its
+        // result (double mutation) after a newer action started.
+        var generation = ++_unitActionGeneration;
 
         if (_vm is { IsKeyboardMode: true })
         {
@@ -1377,6 +1385,10 @@ public partial class MainWindow : Window
             // and UIA selections provoke land in the existing caret-moved
             // debounce; timestamp BEFORE acting (the established #79
             // ordering) so our own injections never re-seed mid-action.
+            // NOTE: since the unit-action work this guard is armed for
+            // EVERY direct-mode unit action (not only paragraph-ish ones)
+            // — a deliberately wide suppression window: our own caret
+            // moves must never re-seed, whatever the granularity.
             _lastOwnParagraphInject = Environment.TickCount64;
 
             if (name == "select")
@@ -1392,10 +1404,12 @@ public partial class MainWindow : Window
                             _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
                     {
                         Services.AnalyticsService.CaptureUiAction("control_tree", "select",
-                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia");
+                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia{sentenceFallback}");
                         return;
                     }
                     KbLog("  select paragraph: no TextPattern - chord fallback (line-class targets extend by line)");
+                    // post-await: superseded or picker-opened → no chords
+                    if (generation != _unitActionGeneration || _pickerSessionActive) return;
                 }
                 var ks = Services.SelectActions.Keystroke(chordDist, dir);
                 SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
@@ -1403,6 +1417,8 @@ public partial class MainWindow : Window
                 // exposure for this codebase (existing chords inject Ctrl only) —
                 // repeated Shift injection can trigger Windows Sticky/Filter Keys
                 // prompts in some configurations; watch for it in tester feedback.
+                Services.AnalyticsService.CaptureUiAction("control_tree", "select",
+                    $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")}{sentenceFallback}");
             }
             else if (name == "move")
             {
@@ -1415,10 +1431,12 @@ public partial class MainWindow : Window
                             _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
                     {
                         Services.AnalyticsService.CaptureUiAction("control_tree", "move",
-                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia");
+                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia{sentenceFallback}");
                         return;
                     }
                     KbLog("  move paragraph: no TextPattern - chord fallback");
+                    // post-await: superseded or picker-opened → no chords
+                    if (generation != _unitActionGeneration || _pickerSessionActive) return;
                 }
                 if (Services.SelectActions.CaretKeystroke(chordDist, dir) is { } k)
                     SendSelectChord(k.Ctrl, k.Shift, k.Arrow, k.Letter);
@@ -1432,12 +1450,18 @@ public partial class MainWindow : Window
                     if (await Services.TargetTextActions.SelectUnitSpanAsync(
                             _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
                     {
+                        // Post-await guards (review loop 1): a newer action
+                        // (dwell-repeat) supersedes this one, and a picker
+                        // opened mid-await must not receive the Delete key.
+                        if (generation != _unitActionGeneration || _pickerSessionActive) return;
                         SendVirtualKey(VK_DELETE);
                         Services.AnalyticsService.CaptureUiAction("control_tree", "delete",
-                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia");
+                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia{sentenceFallback}");
                         return;
                     }
                     KbLog("  delete paragraph: no TextPattern - chord composition fallback");
+                    // post-await: superseded or picker-opened → no chords
+                    if (generation != _unitActionGeneration || _pickerSessionActive) return;
                 }
                 foreach (var step in Services.SelectActions.DeleteKeystrokes(chordDist, dir))
                     SendSelectChord(step.Ctrl, step.Shift, step.Arrow, step.Letter);
@@ -1445,7 +1469,7 @@ public partial class MainWindow : Window
 
             if (name != "select")
                 Services.AnalyticsService.CaptureUiAction("control_tree", name,
-                    $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")}");
+                    $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")}{sentenceFallback}");
         }
         else
         {
@@ -1536,6 +1560,12 @@ public partial class MainWindow : Window
     }
 
     private int _contextSeedGeneration;
+
+    /// <summary>Serialises direct-mode unit actions (review loop 1):
+    /// incremented at every dispatch; a continuation that observes a newer
+    /// generation has been superseded by a dwell-repeat action and must not
+    /// apply further mutations (fallback chords, the delete key).</summary>
+    private int _unitActionGeneration;
 
     /// <summary>TickCount64 of our last VK_RETURN injection (paragraph settle guard).</summary>
     private long _lastOwnParagraphInject;

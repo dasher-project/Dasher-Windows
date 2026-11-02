@@ -232,4 +232,30 @@ public class SentenceWindowTests
         var f = SentenceWindow.SentenceBound(text, 2, SelectDirection.Forward);
         Assert.NotEqual(1, f);
     }
+
+    [Fact]
+    public void SentenceBound_treats_crlf_as_one_boundary_backward()
+    {
+        // review loop 1: the editor pane contains \r\n after Enter — a
+        // caret must never land between the \r and the \n
+        var text = "One.\r\nTwo.";
+        // start of "Two" (6) → previous sentence start (0), one press
+        Assert.Equal(0, SentenceWindow.SentenceBound(text, 6, SelectDirection.Backward));
+        // from mid-"Two": start of "Two"
+        Assert.Equal(6, SentenceWindow.SentenceBound(text, 8, SelectDirection.Backward));
+        // from ON the separator (\n at 5): previous sentence start
+        Assert.Equal(0, SentenceWindow.SentenceBound(text, 5, SelectDirection.Backward));
+    }
+
+    [Fact]
+    public void SentenceBound_treats_crlf_as_one_boundary_forward()
+    {
+        var text = "One.\r\nTwo.";
+        // from the '.' ending "One": lands after the full \r\n (start of "Two")
+        Assert.Equal(6, SentenceWindow.SentenceBound(text, 3, SelectDirection.Forward));
+        // from ON the \r: skips the whole unit, lands after "Two." (= end)
+        Assert.Equal(10, SentenceWindow.SentenceBound(text, 4, SelectDirection.Forward));
+        // from ON the \n: same
+        Assert.Equal(10, SentenceWindow.SentenceBound(text, 5, SelectDirection.Forward));
+    }
 }
