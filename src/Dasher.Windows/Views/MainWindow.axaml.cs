@@ -121,10 +121,9 @@ public partial class MainWindow : Window
         RestoreWindowGeometry();
         TrackNormalStateGeometry();
         WireEditingKeyRepeat();
-        // WireCustomActions moved to OnOpened (review loop 3): _canvas is
-        // null in the constructor (populated by OnOpened's FindControl), so
-        // the ctor-time call silently no-opped and no select event ever
-        // reached a subscriber.
+        // (the custom-action wiring moved to OnOpened - review loop 3:
+        // _canvas is null in the constructor, so the ctor-time call saw
+        // null and no select event ever reached a subscriber)
     }
 
     /// <summary>
