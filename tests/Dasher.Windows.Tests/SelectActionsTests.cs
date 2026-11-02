@@ -165,13 +165,15 @@ public class SelectActionsTests
     [Fact]
     public void Chained_paragraph_forward_steps_blank_lines_one_at_a_time()
     {
-        // Review loop 3: Ctrl+Shift+Down stops at each paragraph mark -
+        // Review loop 3: Ctrl+Shift+Down stops at each paragraph mark —
         // one separator per press; blank paragraphs are stepped, not swallowed.
-        var text = "a\n\nb\nc"; // blank line between a and b
+        var text = "a\n\nb\nc"; // indices: a=0, \n=1, \n=2, b=3, \n=4, c=5
+        // from the first \n: skip it, select to the second \n (the blank line's end)
         var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Paragraph, SelectDirection.Forward, false);
-        Assert.Equal(1, s1); Assert.Equal(3, e1); // to the second \n (the blank line's)
+        Assert.Equal(1, s1); Assert.Equal(2, e1); // selects just the blank line
+        // from the second \n: skip it, select to after b
         var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Forward, true);
-        Assert.Equal(1, s2); Assert.Equal(5, e2); // past the blank to after b
+        Assert.Equal(1, s2); Assert.Equal(4, e2); // to the \n after b
     }
 
     [Fact]
