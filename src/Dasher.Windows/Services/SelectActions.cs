@@ -99,7 +99,8 @@ public static class SelectActions
         // extended, and monotonic selection is safer for eye-gaze users
         // who cannot easily undo an accidental shrink. Direct mode uses
         // real Shift+Arrow keystrokes and DOES shrink (mode divergence
-        // is documented in RFC 0021's platform table).
+        // is documented in the RFC 0021 governance document's platform
+        // table: dasher-project/governance/rfcs/0021-control-select-subtree.md).
         var anchor = hadSelection
             ? (dir == SelectDirection.Backward ? selectionEnd : selectionStart)
             : Math.Clamp(selectionEnd, 0, text.Length);

@@ -1096,8 +1096,9 @@ public partial class MainWindow : Window
         // desync the engine buffer from the target (the engine committed
         // output the target never received). The next caret-moved event
         // triggers a context re-seed via the shadow-compare, which
-        // resynchronizes (the engine buffer wins — text is re-read from
-        // the target). A forced resync would be cleaner but requires
+        // resynchronizes (the TARGET wins — its text is re-read and used to
+        // re-seed the engine, discarding the phantom committed output).
+        // A forced resync would be cleaner but requires
         // bumping the seed generation from this handler.
         try
         {
