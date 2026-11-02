@@ -1305,7 +1305,6 @@ public partial class MainWindow : Window
             // own Copy/Cut/Delete then act on it without further work).
             var ks = Services.SelectActions.Keystroke(dist, dir);
             _targetTracker.EnsureForeground(OurHwnd());
-            SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
 
             // RFC 0021 / #79 interaction: the caret events our selection
             // keystrokes provoke land in the existing caret-moved debounce;

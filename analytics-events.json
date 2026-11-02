@@ -142,7 +142,8 @@
           "enum": [
             "main_toolbar",
             "status_bar",
-            "ime_toolbar"
+            "ime_toolbar",
+            "control_tree"
           ],
           "description": "ime_toolbar = the keyboard (direct-entry) mode mini-bar. status_bar also covers the bottom message-pane header (speak / copy / new / paste / enter-direct-mode controls). The RFC's ime_topbar surface has no Windows equivalent and is therefore never emitted."
         },
@@ -171,7 +172,8 @@
             "game_mode",
             "control_mode",
             "reanchor",
-            "hide"
+            "hide",
+            "select"
           ]
         },
         "state": {
@@ -184,7 +186,7 @@
             "bottom",
             "top"
           ],
-          "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position"
+          "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position For select: \"dist=<char|word|paragraph|all>,forward=<yes|no>\"."
         }
       },
       "pii": false
@@ -219,7 +221,8 @@
           "enum": [
             "settings",
             "main_ui",
-            "ime"
+            "ime",
+            "control_tree"
           ],
           "description": "Where the change was made. Windows currently emits settings and main_ui only"
         }

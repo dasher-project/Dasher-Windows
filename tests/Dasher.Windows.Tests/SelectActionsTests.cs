@@ -76,17 +76,71 @@ public class SelectActionsTests
     }
 
     [Fact]
-    public void Extend_active_end_forward_then_backward_shrinks()
+    public void Extend_active_end_backward_collapses_to_anchor()
     {
         var text = "hello world";
-        // cold: select char forward from 5 → (5,6); active end = 6
         var (s1, e1) = SelectActions.EditorBounds(text, 5, 5, SelectDistance.Char, SelectDirection.Forward, false);
-        // extend backward from active end 6 → (5,6) anchor 5 → (5,6) shrink to (5,5)?? no:
-        // backward from active 6 → target 5 → (5,6) stays... one more backward → (4,6)??
-        // active-end semantics: anchor=5, active=6; backward → target 5 → ordered (5,5)? no target<=anchor → (5,5)
-        // that collapses - correct Shift+Arrow behaviour is shrink by one: (5,6)→(5,5)
+        Assert.Equal(5, s1); Assert.Equal(6, e1);
         var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Char, SelectDirection.Backward, true);
-        Assert.Equal(5, s2); Assert.Equal(5, e2); // collapsed to anchor
+        Assert.Equal(5, s2); Assert.Equal(5, e2);
+    }
+
+    [Fact]
+    public void Empty_text_is_safe_for_all_distances()
+    {
+        foreach (var dist in new[] { SelectDistance.Char, SelectDistance.Word, SelectDistance.Paragraph, SelectDistance.All })
+            foreach (var dir in new[] { SelectDirection.Backward, SelectDirection.Forward })
+            {
+                var (s, e) = SelectActions.EditorBounds("", 0, 0, dist, dir, false);
+                Assert.Equal(0, s); Assert.Equal(0, e);
+            }
+    }
+
+    [Fact]
+    public void Char_backward_from_zero_and_forward_from_end_clamp()
+    {
+        Assert.Equal((0, 0), SelectActions.EditorBounds("abc", 0, 0, SelectDistance.Char, SelectDirection.Backward, false));
+        Assert.Equal((3, 3), SelectActions.EditorBounds("abc", 3, 3, SelectDistance.Char, SelectDirection.Forward, false));
+    }
+
+    [Fact]
+    public void Word_forward_at_end_of_text_no_ops()
+    {
+        var (s, e) = SelectActions.EditorBounds("one", 3, 3, SelectDistance.Word, SelectDirection.Forward, false);
+        Assert.Equal(3, s); Assert.Equal(3, e);
+    }
+
+    [Fact]
+    public void Paragraph_forward_in_last_paragraph_selects_to_end()
+    {
+        var (s, e) = SelectActions.EditorBounds("first\nlast", 6, 6, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(6, s); Assert.Equal(10, e);
+    }
+
+    [Fact]
+    public void Paragraph_forward_stops_before_cr_on_crlf()
+    {
+        // Avalonia TextBox inserts \r\n; the selection must not include \r
+        var (s, e) = SelectActions.EditorBounds("first\r\nsecond", 2, 2, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(2, s); Assert.Equal(5, e); // stops at 5 (the \r), not 6 (the \n)
+    }
+
+    [Fact]
+    public void Char_selection_is_surrogate_safe()
+    {
+        var emoji = "\U0001F600";
+        var text = $"a{emoji}b";
+        var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Char, SelectDirection.Forward, false);
+        Assert.Equal(1, s1); Assert.Equal(3, e1);
+        var (s2, e2) = SelectActions.EditorBounds(text, 3, 3, SelectDistance.Char, SelectDirection.Backward, false);
+        Assert.Equal(1, s2); Assert.Equal(3, e2);
+    }
+
+    [Fact]
+    public void Parse_rejects_case_mismatches()
+    {
+        Assert.Null(SelectActions.Parse("Char", "yes"));
+        Assert.Null(SelectActions.Parse("char", "Yes"));
     }
 
     [Fact]

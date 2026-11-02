@@ -93,12 +93,31 @@ public static class SelectActions
         var active = hadSelection ? selectionEnd : anchor;
         var target = dist switch
         {
-            SelectDistance.Char => Math.Clamp(active + (dir == SelectDirection.Backward ? -1 : 1), 0, text.Length),
+            SelectDistance.Char => StepCodePoint(text, active, dir),
             SelectDistance.Word => WordBound(text, active, dir),
             SelectDistance.Paragraph => ParagraphBound(text, active, dir),
             _ => active,
         };
         return target <= anchor ? (target, anchor) : (anchor, target);
+    }
+
+
+    /// <summary>Move by one CODE POINT, never landing on the low half of a
+    /// surrogate pair (the corruption class EditorKeyActions defends
+    /// against; a mid-pair selection boundary feeds the same class of bug
+    /// downstream).</summary>
+    private static int StepCodePoint(string text, int from, SelectDirection dir)
+    {
+        var i = Math.Clamp(from, 0, text.Length);
+        if (dir == SelectDirection.Forward)
+        {
+            if (i >= text.Length) return text.Length;
+            var step = char.IsHighSurrogate(text[i]) && i + 1 < text.Length && char.IsLowSurrogate(text[i + 1]) ? 2 : 1;
+            return Math.Min(i + step, text.Length);
+        }
+        if (i <= 0) return 0;
+        var back = i >= 2 && char.IsLowSurrogate(text[i - 1]) && char.IsHighSurrogate(text[i - 2]) ? 2 : 1;
+        return Math.Max(i - back, 0);
     }
 
     /// <summary>Next/previous word boundary (skips the current run of
@@ -116,6 +135,14 @@ public static class SelectActions
             while (i > 0 && char.IsWhiteSpace(text[i - 1])) i--;
             while (i > 0 && !char.IsWhiteSpace(text[i - 1])) i--;
         }
+        return SnapToCodePoint(text, i, dir);
+    }
+
+    /// <summary>Snap a bound so it never splits a surrogate pair.</summary>
+    private static int SnapToCodePoint(string text, int i, SelectDirection dir)
+    {
+        if (i > 0 && i < text.Length && char.IsLowSurrogate(text[i]) && char.IsHighSurrogate(text[i - 1]))
+            return dir == SelectDirection.Backward ? i - 1 : i + 1;
         return i;
     }
 
@@ -126,9 +153,13 @@ public static class SelectActions
         if (dir == SelectDirection.Forward)
         {
             var nl = text.IndexOf('\n', i);
-            return nl < 0 ? text.Length : nl;
+            if (nl < 0) return text.Length;
+            // \r\n: the selection must stop before the \r, not include it
+            // (Avalonia TextBox inserts \r\n for Enter while the engine
+            // pushes \n - review loop 1 on the select frontend).
+            return nl > 0 && text[nl - 1] == '\r' ? nl - 1 : nl;
         }
         var prev = text.LastIndexOf('\n', Math.Max(0, i - 1));
-        return prev < 0 ? 0 : prev + 1;
+        return SnapToCodePoint(text, prev < 0 ? 0 : prev + 1, dir);
     }
 }

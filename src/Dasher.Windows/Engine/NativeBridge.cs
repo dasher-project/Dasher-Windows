@@ -209,7 +209,7 @@ public static class NativeBridge
     public static extern void dasher_set_output_callback(IntPtr ctx, OutputCallback callback, IntPtr user_data);
 
 
-    [DllImport("dasher", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void dasher_register_action(IntPtr ctx,
         [MarshalAs(UnmanagedType.LPStr)] string name,
         ActionCallback callback,

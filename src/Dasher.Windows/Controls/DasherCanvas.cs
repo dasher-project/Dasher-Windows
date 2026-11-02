@@ -49,7 +49,6 @@ public partial class DasherCanvas : Control
     public event Action<string, System.Collections.Generic.Dictionary<string, string>>? CustomAction;
 
     private NativeBridge.ActionCallback? _selectActionCallback;
-    private bool _selectActionRegistered;
 
     private NativeBridge.OutputCallback? _outputCallback;
     private NativeBridge.TextSizeCallback? _textSizeCallback;
@@ -117,7 +116,6 @@ public partial class DasherCanvas : Control
         {
             _selectActionCallback = new NativeBridge.ActionCallback(OnCustomAction);
             NativeBridge.dasher_register_action(_handle, "select", _selectActionCallback, IntPtr.Zero);
-            _selectActionRegistered = true;
         }
         catch (EntryPointNotFoundException)
         {
@@ -129,9 +127,10 @@ public partial class DasherCanvas : Control
     {
         // Fires on the engine frame thread; the attributes are valid only
         // during this callback - copy, then marshal to the UI thread.
-        var attrs = new System.Collections.Generic.Dictionary<string, string>(attrCount);
+        System.Collections.Generic.Dictionary<string, string> attrs = new();
         try
         {
+            attrs = new System.Collections.Generic.Dictionary<string, string>(Math.Max(0, attrCount));
             var keys = new IntPtr[attrCount];
             var values = new IntPtr[attrCount];
             System.Runtime.InteropServices.Marshal.Copy(attrKeys, keys, 0, attrCount);
