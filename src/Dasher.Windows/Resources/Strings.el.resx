@@ -14,6 +14,9 @@
   <data name="about" xml:space="preserve">
     <value>Σχετικά</value>
   </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>Ντάσερ {0}</value>
+  </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>Αποδοχή συμβάντων κατάδειξης/δείκτη ως είσοδο Dasher. Ενεργοποίηση για παρακολούθηση ματιών ή εξωτερικούς δείκτες.</value>
   </data>
@@ -25,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>Αυτόματη προσαρμογή ταχύτητας</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>Προηγμένη καταγραφή</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>Αναλυτική καταγραφή διαγνωστικών για αναφορές σφαλμάτων (γραμμές ανιχνευτή ματιών ανά δείγμα, ιχνηλατήσεις πλήκτρων, αναγνώσεις UIA). Τα βασικά γεγονότα σύνδεσης καταγράφονται πάντα. Μπορεί να δημιουργήσει μεγάλα αρχεία καταγραφής.</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>Προηγμένες ρυθμίσεις</value>
@@ -58,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>Το Dasher συλλέγει ανώνυμα αναλυτικά στοιχεία χρήσης και αναφορές σφαλμάτων για να κατανοήσει πώς χρησιμοποιείται η εφαρμογή και να διορθώσει σφάλματα. Δεν συλλέγονται ποτέ πληκτρολογημένα κείμενα, περιεχόμενο πρόχειρου ή προσωπικές πληροφορίες.</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>Βοηθήστε να βελτιωθεί το Dasher;</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>Ανώνυμο αναγνωριστικό: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Ανώνυμα αναλυτικά στοιχεία χρήσης</value>
   </data>
@@ -66,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>Παραμονή σε επίπεδο εφαρμογής για επιλογή</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>Εμφάνιση</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>Αριστερά</value>
@@ -100,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>Διαγραφή (πατήστε παρατεταμένα για επανάληψη)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>Βαθμονόμηση κλίσης</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>Ματαίωση</value>
   </data>
@@ -115,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>Σαφής</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>Καθαρισμός αρχείων καταγραφής</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>Κάντε κλικ για να ρυθμίσετε τη λειτουργία πληκτρολογίου (χρειάζεται ydotool)</value>
   </data>
@@ -127,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>Θέμα χρώματος</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>περιεχόμενο ή προσωπικές πληροφορίες συλλέγονται ποτέ. Μπορείτε να αλλάξετε αυτό οποιαδήποτε</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>Έλεγχος</value>
   </data>
@@ -135,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>Λειτουργία ελέγχου</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>Κόμβοι ελέγχου: μετακίνηση, διαγραφή, καθαρισμός, ομιλία, παύση</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Αντιγράφηκε στο Πρόχειρο.</value>
@@ -177,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Βαθμονόμηση ρεύματος</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} προσαρμοσμένα αρχεία</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>Προσαρμογή</value>
@@ -237,15 +270,30 @@
   <data name="dasher_quit_unexpectedly" xml:space="preserve">
     <value>Ο Ντάσερ παραιτήθηκε απροσδόκητα.</value>
   </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>Dasher v6</value>
+  </data>
   <data name="dasher_v6_2" xml:space="preserve">
     <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
 </value>
+  </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>Νεκρή ζώνη: {0} px</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Μείωση ταχύτητας</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>Αθέτηση</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>Αλφάβητο: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>Χρώμα: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>Ταχύτητα: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>Διαγνωστικά</value>
@@ -259,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>Κράτα τον δείκτη σε ένα σημείο για να ενεργοποιήσεις ένα κλικ, αντί να πατήσεις ένα κουμπί ή διακόπτη.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>Διάρκεια Παραμονής</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Συγκεντρωθείτε για να κάνετε κλικ</value>
   </data>
@@ -268,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Ενεργοποιήστε πρώτα την εισαγωγή κλίσης για να αποκτήσετε πρόσβαση στη βαθμονόμηση.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>Ο Dasher δεν μπορούσε να ξεκινήσει</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>Σφάλμα Κινητήρα</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>Η μηχανή Dasher αντιμετώπισε ένα εσωτερικό σφάλμα και έχει σταματήσει. Παρακαλώ επανεκκινήστε το Dasher.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>Παρακαλώ δοκιμάστε να το επανεγκαταστήσετε, ή αναφέρετε αυτό σε ένα θέμα στο GitHub.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>Χαρακτηριστικά Ομιλίας Κινητήρα</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>Σφάλμα: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>Σφάλμα φόρτωσης ρυθμίσεων: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>Έξοδος</value>
@@ -286,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>Βλέμμα</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η σύνδεση με το eye tracker κατά την εκκίνηση. Ελέγξτε τη συσκευή και δοκιμάστε να την επιλέξετε ξανά στις Ρυθμίσεις &gt; Εισαγωγή.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>Συσκευή Παρακολούθησης Ματιών</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η σύνδεση στο {0}. Ελέγξτε ότι η συσκευή είναι συνδεδεμένη και τα προγράμματα οδήγησης είναι εγκατεστημένα.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η σύνδεση στο {0}. Βεβαιωθείτε ότι το tobii_stream_engine.dll είναι εγκατεστημένο και ότι είναι συνδεδεμένη μια συσκευή Tobii.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>Λεπτομερές αρχείο παρακολούθησης για αναφορές σφαλμάτων (γραμμές ανά δείγμα, γραμμένες στο eyegaze.log στον φάκελο Dasher). Βασικά γεγονότα σύνδεσης καταγράφονται πάντα.</value>
@@ -304,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>Το αρχείο αποκοπεί στα 4 MB — φορτώθηκε μόνο το πρώτο μέρος</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>Κανονικός έλεγχος</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>Λειτουργία εξομάλυνσης</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>Η κατασκευή Flatpak ή AppImage δεν μπορεί να παρέχει.</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Για να αιωρήσετε το πληκτρολόγιο, επιτρέψτε στο Dasher να εμφανίζεται πάνω από άλλες εφαρμογές και πατήστε ξανά Float.</value>
   </data>
@@ -315,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>Λειτουργία παιχνιδιού</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>Παιχνίδι Έξω</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Αρχείο κειμένου παιχνιδιού</value>
@@ -358,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>Εισαγωγή</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>Ενεργό φίλτρο εισόδου κινητήρα (ρύθμιση μέσω μεθόδου επιλογής ή σύνθετων ρυθμίσεων)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>Διαχείριση από τον κινητήρα — αλλαγή μέσω της ρύθμισης Μέθοδος επιλογής</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>Άμεσος δείκτης — ελάχιστη επεξεργασία</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>Χωρίς φιλτράρισμα — για καθαρές συσκευές εισόδου</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>Εξομάλυνση εισόδου — μειώνει το jitter για θορυβώδη είσοδο (βλέμμα, παρακολούθηση κεφαλιού)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>Μειώνει τις μικρές κινήσεις του δείκτη για πιο σταθερό ζουμ</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>Τυπικός συνεχής έλεγχος (προεπιλογή)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>Η τυπική μέθοδος διεύθυνσης — μετακινήστε το δείκτη για ζουμ</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>Joystick / gamepad (εκτροπή ενός μοχλού για οδήγηση)</value>
   </data>
@@ -372,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>Επεξεργασία εισόδου</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>Εγκαταστήστε το Dasher μέσω του διαχειριστή πακέτων σας ή κατασκευάστε από τον πηγαίο κώδικα για να χρησιμοποιήσετε τη λειτουργία πληκτρολογίου.</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Εγκαταστήστε το ydotool για να χρησιμοποιήσετε τη λειτουργία πληκτρολογίου&lt;/b&gt;</value>
@@ -391,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Λειτουργία πλήκτρων</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>Λειτουργία πληκτρολογίου: κρύψτε το παράθυρο εξόδου και πληκτρολογήστε το κείμενο του Dasher απευθείας σε</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;Η λειτουργία πληκτρολογίου δεν είναι διαθέσιμη σε αυτήν την έκδοση&lt;/b&gt;</value>
   </data>
@@ -408,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>Διαφάνεια παραθύρου όταν είναι σε λειτουργία Πληκτρολογίου/Άμεσης</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>Ο τρόπος πληκτρολογίου πληκτρολογεί την έξοδο του Dasher σε άλλες εφαρμογές χρησιμοποιώντας το ydotool, το οποίο</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(Αθέτηση)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Γλώσσα</value>
@@ -493,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>Δεν υπάρχουν διαθέσιμες ρυθμίσεις για αυτήν την ενότητα.</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>Δεν υπάρχει διαθέσιμος κινητήρας ομιλίας. Δημιουργήστε με τη λειτουργία TTS του συστήματος ή ρυθμίστε μια φωνή cloud στις Προτιμήσεις.</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Δεν υπάρχει ακόμη δεδομένα εκπαίδευσης προς εξαγωγή</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Δεν υπάρχουν ακόμη δεδομένα εκπαίδευσης χρήστη</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>Δεν βρέθηκαν φωνές</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Δεν υπάρχει τίποτα για αποθήκευση</value>
@@ -565,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>Ρίψη</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>Ψηλά</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>Χαμηλός</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>Μέσον</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>Πολύ ψηλά</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>Πολύ Χαμηλό</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>Παιχνίδι</value>
   </data>
@@ -597,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>Ρυθμός</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>Μέσον</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>Πολύ Γρήγορο</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>Πολύ αργό</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Επανεισαγωγή από το Dasher 5</value>
@@ -676,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>Μέθοδος Επιλογής</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>Η υπηρεσία λειτουργεί; Δείτε τη βοήθεια εγκατάστασης στο κουμπί Πληκτρολόγιο για εντολές εγκατάστασης.</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>Ρυθμίσεις</value>
   </data>
@@ -694,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>Ρυθμίσεις (ταχύτητα, χρώματα, λειτουργία ελέγχου, μοντέλο γλώσσας)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>Χρόνος διευθέτησης: {0} ms</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>Μερίδιο</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>Μοιραστείτε ανώνυμα αναλυτικά στοιχεία χρήσης και αναφορές σφαλμάτων; Καμία πληκτρολογημένη κειμένου, πρόχειρο</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>Εμφάνιση επικάλυψης εντοπισμού σφαλμάτων εισόδου</value>
@@ -751,6 +910,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>Ξεκινήστε από την αρχή</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>Ο Dasher απέτυχε να ξεκινήσει:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>Μέθοδος Διεύθυνσης</value>
   </data>
@@ -759,6 +922,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>Σταμάτα να μιλάς</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>Ρύθμιση Διακόπτη</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Σύστημα</value>
@@ -771,6 +937,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>Αυτό το αρχείο είναι ήδη τα δεδομένα εκπαίδευσής σας.</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>η εφαρμογή στην οποία δείχνετε (χρειάζεται ydotool)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>Η επικάλυψη εντοπισμού σφαλμάτων σχεδιάζει ένα πράσινο πλαίσιο επάνω αριστερά στον καμβά που δείχνει τον αριθμό των ζωντανών συμβάντων αφής και το τελευταίο που αναφέρθηκε (x, y). Όταν τραβάτε παρατεταμένα τα δάχτυλα, θα πρέπει να δείτε το touch.began και στη συνέχεια το touch.move με μεταβαλλόμενες συντεταγμένες καθώς κοιτάτε τριγύρω.</value>
@@ -790,11 +959,32 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>Βαθμονόμηση κλίσης</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>Κρατήστε τη συσκευή κάθετα, στη συνέχεια κλίνετε προς τα εμπρός και πίσω</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>Κλίση αριστερά και δεξιά σε όλο το εύρος</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>Κινηθείτε αργά και ομαλά μέσα από όλες τις θέσεις</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>Ρυθμίσεις Κλίσης</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>Γείρετε τη συσκευή σας τώρα...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>Γείρετε τη συσκευή σας σε όλο το εύρος κίνησής της κατά τη διάρκεια της βαθμονόμησης.</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>χρόνος κάτω από Προτιμήσεις → Απόρρητο.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>Σφάλμα παρακολούθησης ματιών</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>Ειδοποίηση παρακολούθησης ματιών</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Εναλλαγή λειτουργίας ελέγχου</value>
@@ -843,6 +1033,18 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Κοινή χρήση κειμένου</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>οφθαλμοφανής</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Tobii (Μηχανή Ροής)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP Gaze Tracker (δίκτυο)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (εγγενής)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>Εκπαίδευση</value>
@@ -907,6 +1109,9 @@
   <data name="turbo" xml:space="preserve">
     <value>Τούρμπο</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>Η πληκτρολόγηση σε άλλες εφαρμογές απαιτεί πρόσβαση στο /dev/uinput, το οποίο είναι περιορισμένο σε sandbox.</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Ρυθμός πληκτρολόγησης</value>
   </data>
@@ -919,17 +1124,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>Ο διακομιστής UDP ακούει για μηνύματα STREAM_DATA ή GazePoint</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Το Dasher {0} είναι διαθέσιμο (εκτελείτε v{1}). Πατήστε για λήψη — απενεργοποιήστε το στις Ρυθμίσεις &gt; Απόρρητο.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>Διατίθεται ενημέρωση Dasher</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Χρησιμοποιήστε το Dasher ως πληκτρολόγιό σας</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>Φωνή</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} φωνές</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>Όγκος</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>Προειδοποίηση Dasher</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>Βρήκαμε τη διαμόρφωση του Dasher 5 σε αυτόν τον Mac. Το αλφάβητο, τα χρώματα, οι ρυθμίσεις ταχύτητας και τα προσαρμοσμένα αρχεία σας μπορούν να εισαχθούν στο Dasher 6.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>Τι βρέθηκε</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} wpm</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>μέγιστο {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>Εύρος Χ:</value>
@@ -939,6 +1165,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>βρέθηκε το ydotool. Η λειτουργία πληκτρολογίου είναι έτοιμη.</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>Το ydotool εξακολουθεί να μην είναι διαθέσιμο. Βεβαιωθείτε ότι είναι εγκατεστημένο και ότι η υπηρεσία ydotool λειτουργεί.</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>Μπορείτε να κάνετε εισαγωγή αργότερα στις Ρυθμίσεις &gt; Απόρρητο και μετεγκατάσταση</value>

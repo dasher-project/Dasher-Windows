@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (th). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f ตัวอักษรต่อวินาที · %2$d คำต่อวินาที</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>รายงานข้อผิดพลาดถูกบันทึกไว้ที่ ~/Library/Logs/DiagnosticReports/Dasher-*.ips หากคุณสามารถแชร์รายงานนี้ใน GitHub issue จะช่วยให้เราแก้ไขข้อผิดพลาดได้ง่ายขึ้น</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>เกี่ยวกับ</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>แดชเชอร์ {0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>รับเหตุการณ์การวางเมาส์เหนือวัตถุ/การชี้เมาส์เป็นอินพุตของ Dasher เปิดใช้งานสำหรับการติดตามสายตาหรือตัวชี้ภายนอก</value>
@@ -22,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>ปรับความเร็วอัตโนมัติ</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>การบันทึกขั้นสูง</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>การบันทึกการวินิจฉัยอย่างละเอียดสำหรับรายงานบั๊ก (บรรทัดเครื่องติดตามตาต่อชิ้นงาน, การติดตามการกดแป้นพิมพ์, การอ่าน UIA) เหตุการณ์การเชื่อมต่อพื้นฐานจะถูกบันทึกตลอดเวลา ซึ่งอาจสร้างไฟล์บันทึกขนาดใหญ่</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>การตั้งค่าขั้นสูง</value>
@@ -55,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>Dasher รวบรวมการวิเคราะห์การใช้งานแบบไม่ระบุชื่อและรายงานความผิดพลาดเพื่อทำความเข้าใจว่าผู้ใช้แอปอย่างไรและเพื่อแก้ไขบั๊ก ข้อความที่พิมพ์ เนื้อหาในคลิปบอร์ด หรือข้อมูลส่วนบุคคลจะไม่ถูกเก็บรวบรวมเลย</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>ช่วยปรับปรุง Dasher หรือไม่?</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>รหัสที่ไม่ระบุชื่อ: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>การวิเคราะห์การใช้งานแบบไม่ระบุตัวตน</value>
   </data>
@@ -63,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>การเลือกเวลาพักระดับแอป</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>รูปลักษณ์</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>ซ้าย</value>
@@ -97,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>ลบ (กดค้างเพื่อทำซ้ำ)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>ปรับเทียง</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>ยกเลิก</value>
   </data>
@@ -112,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>ชัดเจน</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>ล้างบันทึก</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>คลิกเพื่อตั้งค่าโหมดแป้นพิมพ์ (ต้องใช้ ydotool)</value>
   </data>
@@ -124,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>ธีมสี</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>เนื้อหาหรือข้อมูลส่วนบุคคลถูกเก็บรวบรวมอยู่ตลอดเวลา คุณสามารถเปลี่ยนแปลงสิ่งนี้ได้ทุกเมื่อ</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>ควบคุม</value>
   </data>
@@ -132,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>โหมดควบคุม</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>โหนดควบคุม: ย้าย, ลบ, ล้าง, พูด, หยุดชั่วคราว</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>คัดลอกไปยังคลิปบอร์ดแล้ว</value>
@@ -174,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>การสอบเทียบกระแสไฟฟ้า</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} ไฟล์ที่กำหนดเอง</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>การปรับแต่ง</value>
@@ -241,11 +277,23 @@
     <value>&lt;big&gt;&lt;b&gt;แดชเชอร์ เวอร์ชัน 6&lt;/b&gt;&lt;/big&gt;
 </value>
   </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>โซนตาย: {0} px</value>
+  </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>ลดความเร็ว</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>ค่าเริ่มต้น</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>ตัวอักษร: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>สี: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>ความเร็ว: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>การวินิจฉัยโรค</value>
@@ -259,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>ลอยค้างอยู่ในตำแหน่งเดียวเพื่อกระตุ้นการคลิก แทนการกดปุ่มหรือตัวสวิตช์</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>ระยะเวลาอยู่อาศัย</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>เลื่อนเพื่อคลิก</value>
   </data>
@@ -268,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>เปิดใช้งานการป้อนข้อมูลการเอียงก่อนเพื่อเข้าถึงการปรับเทียบ</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>Dasher ไม่สามารถเริ่มต้นได้</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>ข้อผิดพลาดของเครื่องยนต์</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>เครื่องยนต์ Dasher พบข้อผิดพลาดภายในและหยุดทำงาน กรุณาเริ่ม Dasher ใหม่</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>กรุณาลองติดตั้งใหม่อีกครั้ง หรือรายงานปัญหานี้ใน GitHub issue</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>คุณสมบัติการพูดของเครื่องยนต์</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>ข้อผิดพลาด: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>เกิดข้อผิดพลาดในการโหลดการตั้งค่า: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>ออก</value>
@@ -286,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>การจ้องมองด้วยสายตา</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>ไม่สามารถเชื่อมต่อกับเครื่องติดตามดวงตาเมื่อเริ่มต้น ตรวจสอบอุปกรณ์และลองเลือกใหม่ใน การตั้งค่า &gt; อินพุต</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>อุปกรณ์ติดตามสายตา</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>ไม่สามารถเชื่อมต่อกับ {0} ตรวจสอบว่าอุปกรณ์เชื่อมต่ออยู่และติดตั้งไดรเวอร์แล้ว</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>ไม่สามารถเชื่อมต่อกับ {0} ตรวจสอบให้แน่ใจว่าได้ติดตั้ง tobii_stream_engine.dll และเชื่อมต่ออุปกรณ์ Tobii แล้ว</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>บันทึกการติดตามรายละเอียดสำหรับรายงานบัก (บรรทัดต่อชิ้นตัวอย่าง บันทึกลงในไฟล์ eyegaze.log ในโฟลเดอร์ Dasher) เหตุการณ์การเชื่อมต่อพื้นฐานจะถูกบันทึกเสมอ</value>
@@ -304,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>ไฟล์ถูกตัดที่ 4 MB — โหลดเฉพาะส่วนแรกเท่านั้น</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>การควบคุมปกติ</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>โหมดการปรับให้เรียบ</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>การสร้าง Flatpak หรือ AppImage ไม่สามารถให้ได้</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>หากต้องการลอยคีย์บอร์ด ให้อนุญาต Dasher แสดงเหนือแอปอื่น แล้วแตะ Float อีกครั้ง</value>
   </data>
@@ -315,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>โหมดเกม</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>เกมเริ่ม</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>ไฟล์ข้อความเกม</value>
@@ -358,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>ป้อนข้อมูล</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>ตัวกรองการป้อนข้อมูลเครื่องยนต์ที่ใช้งานอยู่ (ตั้งค่าผ่านวิธีการเลือกหรือการตั้งค่าขั้นสูง)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>จัดการโดยเครื่องยนต์ — เปลี่ยนผ่านการตั้งค่า วิธีการเลือก</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>ตัวชี้โดยตรง — การประมวลผลขั้นต่ำ</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>ไม่มีการกรอง — สำหรับอุปกรณ์อินพุตที่ปลอดภัย</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>การปรับอินพุตให้เรียบ — ลดการกระวนกระวายใจสำหรับอินพุตที่มีเสียงรบกวน (การจ้องมอง การติดตามศีรษะ)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>ลดการเคลื่อนไหวของตัวชี้เล็กๆ เพื่อการซูมที่มั่นคงยิ่งขึ้น</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>การควบคุมต่อเนื่องมาตรฐาน (ค่าเริ่มต้น)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>วิธีการเลี้ยวมาตรฐาน — เลื่อนตัวชี้เพื่อซูม</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>จอยสติ๊ก / เกมแพด (ใช้การขยับจอยสติ๊กเพื่อบังคับทิศทาง)</value>
   </data>
@@ -372,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>การประมวลผลข้อมูลนำเข้า</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>ติดตั้ง Dasher ผ่านตัวจัดการแพ็กเกจของคุณหรือสร้างจากซอร์สโค้ดเพื่อใช้งานโหมดคีย์บอร์ด</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;ติดตั้ง ydotool เพื่อใช้งานโหมดแป้นพิมพ์&lt;/b&gt;</value>
@@ -391,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>ออกจากโหมดแป้นพิมพ์</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>โหมดคีย์บอร์ด: ซ่อนแผงผลลัพธ์และพิมพ์ข้อความของ Dasher โดยตรงเข้าไป</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;โหมดแป้นพิมพ์ไม่พร้อมใช้งานในเวอร์ชันนี้&lt;/b&gt;</value>
   </data>
@@ -408,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>ความโปร่งใสของหน้าต่างเมื่ออยู่ในโหมดแป้นพิมพ์/โดยตรง</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>โหมดคีย์บอร์ดพิมพ์เอาต์พุตของ Dasher ลงในแอปพลิเคชันอื่นโดยใช้ ydotool ซึ่ง</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(ค่าเริ่มต้น)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>ภาษา</value>
@@ -493,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>ไม่มีการตั้งค่าใดๆ สำหรับส่วนนี้</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>ไม่มีเครื่องยนต์การพูดพร้อมใช้งาน สร้างด้วยฟีเจอร์ TTS ของระบบ หรือตั้งค่าเสียงคลาวด์ในการตั้งค่า</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>ยังไม่มีข้อมูลการฝึกอบรมให้ส่งออก</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>ยังไม่มีข้อมูลการฝึกอบรมผู้ใช้</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>ไม่พบเสียง</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>ไม่มีอะไรให้เก็บ</value>
@@ -565,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>การโยนบอล</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>สูง</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>ต่ำ</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>ปานกลาง</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>สูงมาก</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>ต่ำมาก</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>เกม</value>
   </data>
@@ -597,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>อัตรา</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>ปานกลาง</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>เร็วมาก</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>ช้ามาก</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>นำเข้าใหม่จาก Dasher 5</value>
@@ -676,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>วิธีการเลือก</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>บริการกำลังทำงานอยู่หรือไม่? ดูความช่วยเหลือการตั้งค่าที่ปุ่มแป้นพิมพ์สำหรับคำสั่งติดตั้ง</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>การตั้งค่า</value>
   </data>
@@ -694,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>การตั้งค่า (ความเร็ว สี โหมดควบคุม รูปแบบภาษา)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>เวลาตั้งค่า: {0} มิลลิวินาที</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>แบ่งปัน</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>แชร์การวิเคราะห์การใช้งานแบบไม่ระบุชื่อและรายงานการล่ม? ไม่มีข้อความที่พิมพ์, คลิปบอร์ด</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>แสดงโอเวอร์เลย์ดีบักอินพุต</value>
@@ -751,6 +910,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>เริ่มต้นใหม่</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>Dasher ไม่สามารถเริ่มต้นได้:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>วิธีการบังคับเลี้ยว</value>
   </data>
@@ -759,6 +922,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>หยุดพูด</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>การตั้งค่าสวิตช์</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>ระบบ</value>
@@ -771,6 +937,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>ไฟล์นั้นเป็นข้อมูลการฝึกของคุณอยู่แล้ว</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>แอปที่คุณกำลังชี้อยู่ (ต้องการ ydotool)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>หน้าต่างดีบักจะแสดงแผงสีเขียวที่มุมซ้ายบนของพื้นที่แสดงผล โดยแสดงจำนวนการสัมผัสแบบเรียลไทม์และตำแหน่งล่าสุดที่รายงาน (x, y) เมื่อคุณบีบนิ้วค้างไว้ คุณจะเห็น touch.began จากนั้น touch.moved พร้อมพิกัดที่เปลี่ยนแปลงไปตามการมองไปรอบๆ</value>
@@ -790,11 +959,32 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>การสอบเทียบความเอียง</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>ถืออุปกรณ์ในแนวตั้ง แล้วค่อยเอียงไปด้านหน้าและด้านหลัง</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>เอียงซ้ายและขวาในช่วงเต็ม</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>เคลื่อนไหวช้า ๆ และราบรื่นผ่านทุกท่าทาง</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>การตั้งค่าการเอียง</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>เอียงอุปกรณ์ของคุณตอนนี้...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>ระหว่างการปรับเทียบ ให้เอียงอุปกรณ์ของคุณให้สุดช่วงการเคลื่อนไหว</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>เวลาอยู่ภายใต้ การตั้งค่า → ความเป็นส่วนตัว</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>ข้อผิดพลาดของตัวติดตามตา</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>ประกาศเกี่ยวกับการติดตามดวงตา</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>สลับโหมดควบคุม</value>
@@ -843,6 +1033,18 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>แชร์ข้อความ</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>สายตา</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Tobii (เครื่องยนต์สตรีม)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP Gaze Tracker (เครือข่าย)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (ดั้งเดิม)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>การฝึกอบรม</value>
@@ -907,6 +1109,9 @@
   <data name="turbo" xml:space="preserve">
     <value>เทอร์โบ</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>การพิมพ์ลงในแอปพลิเคชันอื่นต้องการการเข้าถึง /dev/uinput ซึ่งถูกจำกัดโดย sandbox</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>อัตราการพิมพ์</value>
   </data>
@@ -919,17 +1124,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>ตัวติดตาม UDP ฟังข้อความ STREAM_DATA หรือ GazePoint</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} ใช้งานได้ (คุณกำลังใช้งาน v{1}) แตะเพื่อดาวน์โหลด — ปิดการใช้งานในการตั้งค่า &gt; ความเป็นส่วนตัว</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>มีการอัปเดต Dasher</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>ใช้ Dasher เป็นแป้นพิมพ์ของคุณ</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>เสียง</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} เสียง</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>ระดับเสียง</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>คำเตือนแดชเชอร์</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>เราพบการตั้งค่า Dasher 5 ของคุณบน Mac เครื่องนี้แล้ว คุณสามารถนำเข้าตัวอักษร สี การตั้งค่าความเร็ว และไฟล์ที่กำหนดเองของคุณไปยัง Dasher 6 ได้</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>สิ่งที่พบ</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} รอบต่อนาที</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>สูงสุด {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>ช่วง X:</value>
@@ -939,6 +1165,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>พบ ydotool แล้ว โหมดแป้นพิมพ์พร้อมใช้งาน</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool ยังไม่พร้อมใช้งาน ตรวจสอบให้แน่ใจว่ามีการติดตั้งและบริการ ydotool กำลังทำงานอยู่</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>คุณสามารถนำเข้าในภายหลังได้ที่ การตั้งค่า &gt; ความเป็นส่วนตัวและการย้ายข้อมูล</value>

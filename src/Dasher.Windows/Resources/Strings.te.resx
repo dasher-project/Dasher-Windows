@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (te). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f cps · %2$d wpm</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>క్రాష్ రిపోర్ట్ ~/Library/Logs/DiagnosticReports/Dasher-*.ips లో సేవ్ చేయబడింది. మీరు దానిని గిట్‌హబ్ ఇష్యూలో పంచుకోగలిగితే, బగ్‌ను సరిచేయడానికి అది మాకు సహాయపడుతుంది.</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>గురించి</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>డాషర్ {0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>హోవర్/పాయింటర్ ఈవెంట్‌లను డాషర్ ఇన్‌పుట్‌గా స్వీకరించండి. కంటి ట్రాకింగ్ లేదా బాహ్య పాయింటర్‌ల కోసం ఎనేబుల్ చేయండి.</value>
@@ -22,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>వేగాన్ని స్వయంచాలకంగా సర్దుబాటు చేయండి</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>అధునిక లాగింగ్</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>బగ్ రిపోర్టుల కోసం వివరణాత్మక డయాగ్నస్టిక్ లాగింగ్ (ప్రతి సాంపిల్ ఐ-ట్రాకర్ లైన్లు, కీస్ట్రోక్ ట్రేస్‌లు, UIA రీడ్స్). మౌలిక కనెక్షన్ ఈవెంట్స్ ఎల్లప్పుడూ లాగ్ చేయబడతాయి. పెద్ద లాగ్ ఫైళ్లు ఉత్పత్తి చేయవచ్చు.</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>అధునాతన సెట్టింగ్‌లు</value>
@@ -55,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>Dasher యాప్ ఎలా ఉపయోగించబడుతుందో అర్థం చేసుకోవడానికి మరియు బగ్‌లను సరిచేయడానికి అనామక వినియోగ విశ్లేషణలు మరియు క్రాష్ నివేదికలను సేకరిస్తుంది. టైప్ చేసిన టెక్స్ట్, క్లిప్‌బోర్డ్ కంటెంట్ లేదా వ్యక్తిగత సమాచారం ఎప్పుడూ సేకరించబడదు.</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>డాషర్‌ను మెరుగుపరచడంలో సహాయం చేయాలా?</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>అనామక ID: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>అనామక వినియోగ విశ్లేషణలు</value>
   </data>
@@ -63,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>ఎంచుకోవడానికి యాప్-స్థాయి నివాసం</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>ఆకೃತಿ</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>ఎడమ</value>
@@ -97,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>తొలగించండి (పునరావృతం చేయడానికి పట్టుకోండి)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>తిరగడం సరిచేయండి</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>రద్దు చేయండి</value>
   </data>
@@ -112,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>స్పష్టం</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>లాగ్‌లను క్లియర్ చేయండి</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>కీబోర్డ్ మోడ్‌ను సెటప్ చేయడానికి క్లిక్ చేయండి (ydotool అవసరం)</value>
   </data>
@@ -124,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>రంగు థీమ్</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>విషయాలు లేదా వ్యక్తిగత సమాచారం ఎప్పుడూ సేకరించబడదు. మీరు దీన్ని ఎప్పుడైనా మార్చుకోవచ్చు</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>నియంత్రణ</value>
   </data>
@@ -132,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>నియంత్రణ మోడ్</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>నియంత్రణ నోడ్ల్స్: కదిలించండి, తొలగించండి, క్లియర్ చేయండి, మాట్లాడండి, ఆపు</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>క్లిప్‌బోర్డ్‌కు కాపీ చేయబడింది.</value>
@@ -174,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>ప్రస్తుత క్రమాంకనం</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} అనుకూల ఫైల్(లు)</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>అనుకూలీకరణ</value>
@@ -241,11 +277,23 @@
     <value>&lt;big&gt;&lt;b&gt;డాషర్ v6&lt;/b&gt;&lt;/big&gt;
 </value>
   </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>డెడ్ జోన్: {0} px</value>
+  </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>వేగాన్ని తగ్గించండి</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>డిఫాల్ట్</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>అక్షరం: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>రంగు: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>వేగం: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>రోగ నిర్ధారణలు</value>
@@ -259,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>బటన్ లేదా స్విచ్‌ను నొక్కడానికి బదులుగా, క్లిక్‌ను ప్రేరేపించడానికి ఒక చోట హోవర్ చేయండి.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>తిరగే వ్యవధి</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>క్లిక్ చేయడానికి డ్వెల్ చేయండి</value>
   </data>
@@ -268,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>కాలిబ్రేషన్‌ను యాక్సెస్ చేయడానికి ముందుగా టిల్ట్ ఇన్‌పుట్‌ను ఎనేబుల్ చేయండి.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>డాషర్ ప్రారంభించలేకపోయాడు</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>ఇంజిన్ లోపం</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>Dasher ఇంజిన్ అంతర్గత లోపాన్ని ఎదుర్కొంది మరియు ఆగిపోయింది. దయచేసి Dasher‌ను మళ్లీ ప్రారంభించండి.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>దయచేసి మళ్లీ ఇన్స్టాల్ చేయాలని ప్రయత్నించండి, లేక GitHub ఇష్యూ లో దీనిని రిపోర్ట్ చేయండి.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>ఇంజిన్ వాయిస్ ఫీచర్లు</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>లోపం: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>సెట్టింగ్‌లను లోడ్ చేయడంలో లోపం: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>నిష్క్రమించండి</value>
@@ -286,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>కంటి చూపు</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>స్టార్ట్‌అప్‌లో ఐ ట్రాకర్‌కి కనెక్ట్ కాలేదు. డివైస్‌ని పరిశీలించండి మరియు సెట్టింగ్‌లు &gt; ఇన్‌పుట్‌లో తిరిగి ఎంచుకోవడానికి ప్రయత్నించండి.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>కన్ను ట్రాకర్ డివైస్</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>{0}కి కనెక్ట్ చేయడం సాధ్యపడలేదు. పరికరం కనెక్ట్ చేయబడిందో మరియు డ్రైవర్లు ఇన్‌స్టాల్ చేయబడిందో తనిఖీ చేయండి.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>{0}కి కనెక్ట్ చేయడం సాధ్యపడలేదు. tobii_stream_engine.dll ఇన్‌స్టాల్ చేయబడిందని మరియు Tobii పరికరం కనెక్ట్ చేయబడిందని నిర్ధారించుకోండి.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>బగ్ నివేదికల కోసం వివరణాత్మక ట్రాకింగ్ లాగ్ (ప్రతి నమూనా వరుసలు, Dasher ఫోల్డర్‌లో eyegaze.log లో రాయబడతాయి). ప్రాథమిక కనెక్షన్ ఈవెంట్‌లు ఎల్లప్పుడూ లాగ్ చేయబడతాయి.</value>
@@ -304,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>ఫైల్ 4 MB వద్ద ఛేదించబడింది — మొదటి భాగం మాత్రమే లోడ్ చేయబడింది</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>సాధారణ నియంత్రణ</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>స్మూతింగ్ మోడ్</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>ఫ్లాట్‌ప్యాక్ లేదా యాప్‌ఇమేజ్ బిల్డ్ అందించలేవు.</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>కీబోర్డ్‌ను ఫ్లోట్ చేయడానికి, Dasher ను ఇతర యాప్‌ల పైన చూపించడానికి అనుమతించం, ఆపై Float ను మళ్లీ ట్యాప్ చేయం.</value>
   </data>
@@ -315,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>గేమ్ మోడ్</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>గేమ్ ఆన్</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>గేమ్ టెక్స్ట్ ఫైల్</value>
@@ -358,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>ఇన్‌పుట్</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>సక్రియ ఇంజిన్ ఇన్‌పుట్ ఫిల్టర్ (ఎంపిక పద్ధతి లేదా అధునాతన సెట్టింగ్‌ల ద్వారా సెట్ చేయబడింది)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>ఇంజిన్ ద్వారా నిర్వహించబడుతుంది — ఎంపిక పద్ధతి సెట్టింగ్ ద్వారా మార్చండి</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>డైరెక్ట్ పాయింటర్ - కనిష్ట ప్రాసెసింగ్</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>ఫిల్టరింగ్ లేదు — శుభ్రమైన ఇన్‌పుట్ डివైసెస్ కోసం</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>ఇన్‌పుట్ స్మూత్టింగ్ - ధ్వనించే ఇన్‌పుట్ కోసం జిట్టర్‌ను తగ్గిస్తుంది (కంటి చూపులు, తల ట్రాకింగ్)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>స్థిరమైన జూమ్ కోసం చిన్న పాయింటర్ కదలికలను తగ్గిస్తుంది</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>ప్రామాణిక నిరంతర నియంత్రణ (డిఫాల్ట్)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>ప్రామాణిక స్టీరింగ్ పద్ధతి — పాయింటర్‌ను జూమ్ చేయడానికి తరలించండి</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>జాయ్‌స్టిక్ / గేమ్‌ప్యాడ్ (నడపడానికి స్టిక్‌ను పక్కకు తిప్పండి)</value>
   </data>
@@ -372,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>ఇన్‌పుట్ ప్రాసెసింగ్</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>కీబోర్డ్ మోడ్ ఉపయోగించడానికి డాషర్‌ను మీ ప్యాకేజ్ మేనేజర్ ద్వారా ఇన్స్టాల్ చేయండి లేదా సోర్స్ నుంచి బిల్డ్ చేయండి.</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;కీబోర్డ్ మోడ్‌ను ఉపయోగించడానికి ydotoolను ఇన్‌స్టాల్ చేయండి&lt;/b&gt;</value>
@@ -391,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>కీబోర్డ్ మోడ్ నుండి నిష్క్రమించండి</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>కీబోర్డ్ మోడ్: అవుట్‌పుట్ ప్యాన్‌ను దాచివేసి ద్యాషర్ టెక్స్ట్ను నేరుగా టైప్ చేయడం</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;ఈ బిల్డ్‌లో కీబోర్డ్ మోడ్ అందుబాటులో లేదు&lt;/b&gt;</value>
   </data>
@@ -408,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>కీబోర్డ్/డైరెక్ట్ మోడ్‌లో విండో పారదర్శకత</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>కీబోర్డ్ మోడ్ డాషర్ యొక్క అవుట్‌పుట్‌ను ydotool ఉపయోగించి ఇతర అనువర్తనాల్లో టైప్ చేస్తుంది, ఇది</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(డిఫాల్ట్)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>భాష</value>
@@ -493,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>ఈ విభాగానికి ఎలాంటి సెట్టింగ్‌లు అందుబాటులో లేవు.</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>ఎటువంటి మాటల ఇంజిన్ అందుబాటులో లేదు. సిస్టమ్ TTS ఫీచర్‌తో నిర్మించండి లేదా ప్రీఫరెన్సెస్‌లో క్లౌడ్ వాయిస్‌ను సెట్ చేయండి.</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>ఇంకా ఎగుమతి చేయడానికి ట్రెయినింగ్ డేటా లేదు</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>ఇంకా వినియోగదారు ట్రెయినింగ్ డేటా లేదు</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>స్వరాలు ఏవీ కనుగొనబడలేదు</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>కాపాడటానికి ఏమీ లేదు</value>
@@ -565,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>పిచ్</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>అధిక</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>తక్కువ</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>మధ్యమ</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>చాలా ఎక్కువ</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>చాలా తక్కువ</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>ఆట</value>
   </data>
@@ -597,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>రేట్</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>మధ్యమ</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>చాలా వేగంగా</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>చాలా స్లో</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>డాషర్ 5 నుండి తిరిగి దిగుమతి చేసుకోండి</value>
@@ -676,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>ఎంపిక పద్ధతి</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>సేవ నడుస్తావా? ఇన్‌స్టాల్ ఆదేశాల కోసం కీబోర్డ్ బటన్ పై సెటప్ సహాయాన్ని చూడండి.</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>సెట్టింగ్‌లు</value>
   </data>
@@ -694,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>సెట్టింగ్‌లు (వేగం, రంగులు, నియంత్రణ మోడ్, భాషా నమూనా)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>స్థిరపడే సమయం: {0} ms</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>పంచుకోండి</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>గోప్యమైన వాడుక విశ్లేషణలు మరియు క్రాష్ నివేదికలను పంచుకోవాలా? టైపింగ్ చేసిన టెక్స్ట్, క్లిప్‌బోర్డు లేదు</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>ఇన్‌పుట్ డీబగ్ ఓవర్‌లేను చూపించు</value>
@@ -751,6 +910,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>కొత్తగా ప్రారంభించండి</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>డాషర్ ప్రారంభించడంలో విఫలమైంది:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>స్టీరింగ్ పద్ధతి</value>
   </data>
@@ -759,6 +922,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>మాట్లాడటాన్ని ఆపండి</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>స్విచ్ సెటప్</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>వ్యవస్థ</value>
@@ -771,6 +937,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>ఆ ఫైల్ ఇప్పటికే మీ ట్రెయినింగ్ డేటా.</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>మీరు సూచిస్తున్న యాప్ (ydotool అవసరం)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>డీబగ్ ఓవర్‌లే, కాన్వాస్‌కు ఎగువ ఎడమ వైపున ఒక ఆకుపచ్చ ప్యానెల్‌ను గీస్తుంది, అది లైవ్ టచ్ ఈవెంట్ కౌంట్‌లను మరియు చివరిగా నివేదించబడిన (x, y) విలువను చూపుతుంది. మీరు పించ్ చేసి పట్టుకున్నప్పుడు, మీరు చుట్టూ చూస్తున్న కొద్దీ మారుతున్న కోఆర్డినేట్‌లతో పాటు 'touch.began' ఆపై 'touch.moved' అని కనిపించాలి.</value>
@@ -790,11 +959,32 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>టిల్ట్ క్రమాంకనం</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>ఉపకరణాన్ని నెమ్మదిగా నిలబెట్టుకొని ముందు మరియు వెనకకి తిప్పండి</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>పూర్తి పరిధిలో ఎడమ మరియు కుడి వైపుకు వంచండి</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>అన్ని స్థితుల ద్వారా మెల్లగా మరియు సజావుగా కదలండి</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>తరిగిన అమరికలు</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>ఇప్పుడు మీ పరికరాన్ని వంచండి...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>క్రమాంకనం సమయంలో మీ పరికరాన్ని దాని పూర్తి కదలిక పరిధిలో వంచండి.</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>సమయం ప్రాధాన్యతలు → గోప్యత కింద.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>కంటి ట్రాకర్ లోపం</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>కంటి దృష్టి ట్రాకర్ నోటీసు</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>నియంత్రణ మోడ్‌ను టోగుల్ చేయండి</value>
@@ -843,6 +1033,18 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>టెక్స్ట్‌ను పంచుకోండి</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>కంటిచూపు</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>టోబి (స్ట్రీమ్ ఇంజిన్)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP చూపుల ట్రాకర్ (నెట్‌వర్క్)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>విండోస్ ఐ ట్రాకర్ (స్థానిక)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>శిక్షణ</value>
@@ -907,6 +1109,9 @@
   <data name="turbo" xml:space="preserve">
     <value>టర్బో</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>ఇతర అనువర్తనాల్లో టైపింగ్ చేయడానికి /dev/uinput కు యాక్సెస్ అవసరం, ఇది ఒక సాండ్‌బాక్స్‌లో ఉంచబడింది</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>టైపింగ్ రేటు</value>
   </data>
@@ -919,17 +1124,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>UDP ట్రాకర్ STREAM_DATA లేదా GazePoint సందేశాల కోసం వినేస్తుంది</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>డాషర్ {0} అందుబాటులో ఉంది (మీరు v{1}ని నడుపుతున్నారు). డౌన్‌లోడ్ చేయడానికి నొక్కండి — సెట్టింగ్‌లు &gt; గోప్యతలో నిలిపివేయండి.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>డాషర్ నవీకరణ లభ్యం</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>మీ కీబోర్డ్‌గా డాషర్‌ను ఉపయోగించండి</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>కానుక</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} స్వరాలు</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>వాల్యూమ్</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>డాషర్ హెచ్చరిక</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>ఈ Macలో మీ Dasher 5 కాన్ఫిగరేషన్‌ను మేము కనుగొన్నాము. మీ అక్షరమాల, రంగులు, వేగపు సెట్టింగ్‌లు మరియు కస్టమ్ ఫైల్‌లను Dasher 6లోకి దిగుమతి చేసుకోవచ్చు.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>ఏమి కనుగొనబడింది</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} wpm</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>గరిష్టంగా {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>X పరిధి:</value>
@@ -939,6 +1165,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>ydotool కనుగొనబడింది. కీబోర్డ్ మోడ్ సిద్ధంగా ఉంది.</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool ఇంకా అందుబాటులో లేదు. ఇది ఇన్‌స్టాల్ అయినట్లు మరియు ydotool సర్వీస్ నడుస్తున్నదనగా నిర్ధారించుకోండి.</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>మీరు తర్వాత సెట్టింగ్స్ &gt; ప్రైవసీ &amp; మైగ్రేషన్‌లో దిగుమతి చేసుకోవచ్చు</value>

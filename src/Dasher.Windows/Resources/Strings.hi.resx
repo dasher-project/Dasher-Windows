@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (hi). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f cps · %2$d wpm</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>क्रैश रिपोर्ट ~/Library/Logs/DiagnosticReports/Dasher-*.ips में सेव हो गई है। अगर आप इसे GitHub इश्यू में शेयर कर सकते हैं, तो इससे हमें बग ठीक करने में मदद मिलेगी।</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>परिचय</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>डैशर {0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>डैशर इनपुट के रूप में होवर/पॉइंटर इवेंट स्वीकार करें। आई ट्रैकिंग या बाहरी पॉइंटर के लिए इसे सक्षम करें।</value>
@@ -22,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>गति को स्वचालित रूप से समायोजित करें</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>उन्नत लॉगिंग</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>बग रिपोर्ट के लिए विस्तृत डायग्नॉस्टिक लॉगिंग (प्रत्येक नमूने की आई-ट्रैकर लाइन्स, कीस्ट्रोक ट्रेसेस, UIA रीड्स)। बुनियादी कनेक्शन इवेंट्स हमेशा लॉग किए जाते हैं। बड़े लॉग फाइलें उत्पन्न हो सकती हैं।</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>एडवांस सेटिंग</value>
@@ -55,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>डैशर अनाम उपयोग विश्लेषण और क्रैश रिपोर्ट इकट्ठा करता है ताकि यह समझा जा सके कि ऐप का उपयोग कैसे किया जाता है और बग्स को ठीक किया जा सके। कभी भी टाइप किया गया टेक्स्ट, क्लिपबोर्ड सामग्री, या व्यक्तिगत जानकारी इकट्ठा नहीं की जाती।</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>डैशर को सुधारने में मदद करें?</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>अनाम आईडी: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>अनाम उपयोग विश्लेषण</value>
   </data>
@@ -63,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>ऐप-स्तर पर रहने का चयन करें</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>दिखावट</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>बाँया</value>
@@ -97,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>हटाएँ (दोहराने के लिए दबाएँ रखें)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>झुकाव को कैलिब्रेट करें</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>रद्द करना</value>
   </data>
@@ -112,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>स्पष्ट</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>लॉग साफ करें</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>कीबोर्ड मोड सेट अप करने के लिए क्लिक करें (ydotool की आवश्यकता है)</value>
   </data>
@@ -124,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>रंग थीम</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>सामग्री या व्यक्तिगत जानकारी कभी भी एकत्रित की जाती है। आप इसे कभी भी बदल सकते हैं</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>नियंत्रण</value>
   </data>
@@ -132,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>नियंत्रण मोड</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>कंट्रोल नोड्स: स्थानांतरित करें, हटाएँ, साफ़ करें, बोलें, विराम दें</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>क्लिपबोर्ड पर कॉपी कर लिया गया है</value>
@@ -174,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>वर्तमान अंशांकन</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} कस्टम फ़ाइल(फ़ाइलें)</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>अनुकूलन</value>
@@ -241,11 +277,23 @@
     <value>&lt;big&gt;&lt;b&gt;डैशर v6&lt;/b&gt;&lt;/big&gt;
 </value>
   </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>मृत क्षेत्र: {0} px</value>
+  </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>गति कम करें</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>गलती करना</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>वर्णमाला: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>रंग: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>गति: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>निदान</value>
@@ -259,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>किसी बटन या स्विच को दबाने के बजाय, क्लिक को सक्रिय करने के लिए एक ही जगह पर होवर करें।</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>ठहराव अवधि</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>क्लिक करने के लिए निवास करें</value>
   </data>
@@ -268,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>कैलिब्रेशन तक पहुंचने के लिए पहले टिल्ट इनपुट को सक्षम करें।</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>डैशर शुरू नहीं हो सका</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>इंजिन त्रुटि</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>डैशर इंजन में आंतरिक त्रुटि हुई है और यह बंद हो गया है। कृपया डैशर को पुनः शुरू करें।</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>कृपया पुनः इंस्टॉल करने का प्रयास करें, या इसे GitHub इश्यू में रिपोर्ट करें।</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>इंजन भाषण विशेषताएँ</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>त्रुटि: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>सेटिंग लोड करने में त्रुटि: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>बाहर निकलें</value>
@@ -286,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>आँखों की नज़र</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>स्टार्टअप पर आई ट्रैकर से कनेक्ट नहीं हो सका। डिवाइस की जांच करें और सेटिंग्स &gt; इनपुट में इसे फिर से चुनने का प्रयास करें।</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>आंख ट्रैकर डिवाइस</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>{0} से कनेक्ट नहीं हो सका. जांचें कि डिवाइस कनेक्ट है और ड्राइवर स्थापित हैं।</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>{0} से कनेक्ट नहीं हो सका. सुनिश्चित करें कि tobii_stream_engine.dll स्थापित है और एक Tobii डिवाइस जुड़ा हुआ है।</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>बग रिपोर्टों के लिए विस्तृत ट्रैकिंग लॉग (प्रति-सैंपल पंक्तियाँ, Dasher फ़ोल्डर में eyegaze.log में लिखी जाती हैं)। बुनियादी कनेक्शन घटनाएँ हमेशा लॉग की जाती हैं।</value>
@@ -304,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>फाइल 4 एमबी पर संक्षिप्त कर दी गई — केवल पहला हिस्सा लोड किया गया है</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>सामान्य नियंत्रण</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>स्मूथिंग मोड</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>Flatpak या AppImage बिल्ड प्रदान नहीं कर सकते।</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>कीबोर्ड को फ़्लोट करने के लिए, Dasher को अन्य ऐप्स के ऊपर दिखाने की अनुमति दें, फिर Float पर फिर से टैप करें।</value>
   </data>
@@ -315,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>खेल मोड:</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>गेम चालू</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>गेम टेक्स्ट फ़ाइल</value>
@@ -358,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>इनपुट</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>सक्रिय इंजन इनपुट फ़िल्टर (चयन विधि या उन्नत सेटिंग्स के माध्यम से सेट)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>इंजन द्वारा प्रबंधित - चयन विधि सेटिंग के माध्यम से परिवर्तन</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>प्रत्यक्ष सूचक - न्यूनतम प्रसंस्करण</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>कोई फ़िल्टरिंग नहीं - साफ़ इनपुट डिवाइस के लिए</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>इनपुट स्मूथिंग - शोर इनपुट के लिए घबराहट कम कर देता है (आंख टकटकी, सिर ट्रैकिंग)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>स्थिर ज़ूम के लिए छोटे सूचक आंदोलनों को कम करता है</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>मानक सतत नियंत्रण (डिफ़ॉल्ट)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>मानक स्टीयरिंग विधि - ज़ूम करने के लिए पॉइंटर को घुमाएँ</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>जॉयस्टिक / गेमपैड (स्टीयरिंग के लिए स्टिक को डिफ्लेक्ट करें)</value>
   </data>
@@ -372,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>इनपुट प्रसंस्करण</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>कीबोर्ड मोड का उपयोग करने के लिए अपने पैकेज मैनेजर के माध्यम से Dasher इंस्टॉल करें या स्रोत से बनाएं।</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;कीबोर्ड मोड का उपयोग करने के लिए ydotool इंस्टॉल करें&lt;/b&gt;</value>
@@ -391,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>कुंजीपट मोड में स्विच करें</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>कीबोर्ड मोड: आउटपुट पेन छिपाएँ और सीधे डैशर का टेक्स्ट टाइप करें</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;इस बिल्ड में कीबोर्ड मोड उपलब्ध नहीं है&lt;/b&gt;</value>
   </data>
@@ -408,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>कीबोर्ड/डायरेक्ट मोड में विंडो पारदर्शिता</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>कीबोर्ड मोड ydotool का उपयोग करके Dasher का आउटपुट अन्य एप्लिकेशन में टाइप करता है, जो</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(गलती करना)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>भाषा</value>
@@ -493,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>इस सेक्शन के लिए कोई सेटिंग उपलब्ध नहीं है।</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>कोई स्पीच इंजन उपलब्ध नहीं है। सिस्टम TTS फीचर के साथ बिल्ड करें, या प्रेफरेंस में क्लाउड वॉइस सेट करें।</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>निर्यात करने के लिए अभी कोई प्रशिक्षण डेटा नहीं है</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>अभी तक कोई उपयोगकर्ता प्रशिक्षण डेटा नहीं</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>कोई आवाज़ नहीं मिली</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>बचाने के लिए कुछ नहीं</value>
@@ -565,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>पिच</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>उच्च</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>कम</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>मध्यम</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>बहुत ऊँचा</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>बहुत कम</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>खेल</value>
   </data>
@@ -597,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>दर</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>मध्यम</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>बहुत तेज</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>बहुत धीमी गति से</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>डैशर 5 से पुनः आयात करें</value>
@@ -676,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>चयन विधि</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>सेवा चल रही है? इंस्टॉल कमांड के लिए कीबोर्ड बटन पर सेटअप मदद देखें।</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>सेटिंग्स</value>
   </data>
@@ -694,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>सेटिंग्स (गति, रंग, नियंत्रण मोड, भाषा मॉडल)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>निपटान समय: {0} एमएस</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>शेयर करना</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>गुमनाम उपयोग एनालिटिक्स और क्रैश रिपोर्ट साझा करें? कोई टाइप किया हुआ पाठ, क्लिपबोर्ड नहीं</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>इनपुट डिबग ओवरले दिखाएँ</value>
@@ -751,6 +910,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>नए सिरे से शुरुआत करें</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>डैशर प्रारंभ करने में विफल:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>स्टीयरिंग विधि</value>
   </data>
@@ -759,6 +922,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>बोलना बंद करो</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>स्विच सेटअप</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>प्रणाली</value>
@@ -771,6 +937,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>वह फ़ाइल पहले से ही आपका प्रशिक्षण डेटा है।</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>जिस ऐप की आप ओर इशारा कर रहे हैं (को ydotool की आवश्यकता है)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>डीबग ओवरले कैनवास के ऊपरी-बाएँ कोने में एक हरा पैनल बनाता है जो लाइव टच इवेंट की संख्या और अंतिम रिपोर्ट किए गए (x, y) मान दिखाता है। जब आप पिंच करके दबाए रखेंगे, तो आपको touch.began और फिर touch.moved दिखाई देंगे, और जैसे-जैसे आप चारों ओर देखेंगे, निर्देशांक बदलते रहेंगे।</value>
@@ -790,11 +959,32 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>झुकाव अंशांकन</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>डिवाइस को सीधा पकड़ें, फिर आगे और पीछे झुकाएँ</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>पूरा दायरा ले कर बाएँ और दाएँ झुकाएँ</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>सभी स्थितियों में धीरे और सहजता से जाएँ</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>झुकाव सेटिंग्स</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>अब अपने डिवाइस को झुकाएं...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>कैलिब्रेशन के दौरान अपने डिवाइस को उसकी पूरी गति सीमा तक झुकाएं।</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>समय प्रेफरेंसेस → गोपनीयता के अंतर्गत।</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>आई ट्रैकर त्रुटि</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>आई ट्रैकर नोटिस</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>कंट्रोल मोड बदलें</value>
@@ -843,6 +1033,18 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>पाठ साझा करें</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>चक्षुबोधक</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>टोबी (स्ट्रीम इंजन)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>यूडीपी गेज़ ट्रैकर (नेटवर्क)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>विंडोज़ आई ट्रैकर (देशी)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>प्रशिक्षण</value>
@@ -907,6 +1109,9 @@
   <data name="turbo" xml:space="preserve">
     <value>टर्बो</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>अन्य ऐप्लिकेशन में टाइप करने के लिए /dev/uinput तक पहुँच की आवश्यकता होती है, जो एक सैंडबॉक्स्ड है</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>टाइपिंग दर</value>
   </data>
@@ -919,17 +1124,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>यूडीपी ट्रैकर STREAM_DATA या GazePoint संदेशों के लिए सुनता है</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>डैशर {0} उपलब्ध है (आप v{1} चला रहे हैं)। डाउनलोड करने के लिए टैप करें - सेटिंग्स &gt; गोपनीयता में अक्षम करें।</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>डैशर अद्यतन उपलब्ध है</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>डैशर को अपने कीबोर्ड के रूप में उपयोग करें</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>आवाज़</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} आवाजें</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>वॉल्यूम</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>डैशर चेतावनी</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>हमें इस मैक पर आपका डैशर 5 कॉन्फ़िगरेशन मिल गया है। आपके अक्षर, रंग, गति सेटिंग्स और कस्टम फ़ाइलें डैशर 6 में आयात की जा सकती हैं।</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>जो पाया गया</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} शब्द प्रति मिनट</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>अधिकतम {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>एक्स रेंज:</value>
@@ -939,6 +1165,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>ydotool मिला। कीबोर्ड मोड तैयार है।</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool अभी भी उपलब्ध नहीं है। सुनिश्चित करें कि यह इंस्टॉल किया गया है और ydotool सेवा चल रही है।</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>आप बाद में सेटिंग्स &gt; गोपनीयता और माइग्रेशन में जाकर इसे आयात कर सकते हैं।</value>

@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (ta). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f cps · %2$d wpm</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>செயலிழப்பு அறிக்கை ~/Library/Logs/DiagnosticReports/Dasher-*.ips என்ற கோப்பில் சேமிக்கப்பட்டுள்ளது. அதை நீங்கள் ஒரு GitHub சிக்கலாகப் பகிர்ந்தால், அந்தப் பிழையைச் சரிசெய்ய எங்களுக்கு அது உதவும்.</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>பற்றி</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>டாஷர் {0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>ஹோவர்/பாயிண்டர் நிகழ்வுகளை டாஷர் உள்ளீடாக ஏற்றுக்கொள்ளுங்கள். கண் கண்காணிப்பு அல்லது வெளிப்புற பாயிண்டர்களுக்காக இதைச் செயல்படுத்துங்கள்.</value>
@@ -22,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>வேகத்தை தானாகவே சரிசெய்யவும்</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>மேம்பட்ட பதிவு</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>தூளிழப்பு அறிக்கைகளுக்கான விரிவான விபரமான ஆய்வு பதிவு செய்யும் (ஒவ்வொரு மாதிரிப் பின்தொடர்பு கண்-கண்காணிப்பாளர் வரிசைகள், விசைப்பலகை அழுத்தக் குறிப்புகள், UIA வாசிப்புகள்). அடிப்படை இணைப்பு நிகழ்வுகள் எப்போதும் பதிவு செய்யப்படுகின்றன. பெரிய பதிவு கோப்புகளை உருவாக்கலாம்.</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>மேம்பட்ட அமைப்புகள்</value>
@@ -55,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>Dasher பயன்பாட்டு அநாமதேய பகுப்பாய்வு மற்றும் பிழை அறிக்கைகளை சேகரித்து பயன்பாடு எப்படி பயன்படுத்தப்படுகிறது என்பதைப் புரிந்து பிழைகளை சரிசெய்கிறது. தட்டச்சு செய்யப்பட்ட உரை, கிளிப்போர்டு உள்ளடக்கம் அல்லது தனிப்பட்ட தகவல்கள் எதுவும் சேகரிக்கப்படாது.</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>டாஷர் மேம்படுத்த உதவ விரும்புகிறீர்களா?</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>அநாமதேய ஐடி: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>அநாமதேய பயன்பாட்டு பகுப்பாய்வு</value>
   </data>
@@ -63,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>தேர்ந்தெடுக்க வேண்டிய செயலி அளவிலான தங்கு நேரம்.</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>உறுப்பின சுயவிபரம்</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>இடது</value>
@@ -97,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>அழி (மீண்டும் செய்ய பிடித்துக்கொள்ளவும்)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>சாய்வை சரிசெய்</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>ரத்துசெய்</value>
   </data>
@@ -112,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>தெளிவான</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>பதிவுகளை அழிக்கவும்</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>விசைப்பலகை பயன்முறையை அமைக்க கிளிக் செய்யவும் (ydotool தேவை)</value>
   </data>
@@ -124,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>வண்ண தீம்</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>உள்ளடக்கம் அல்லது தனிப்பட்ட தகவல்கள் எப்போதும் சேகரிக்கப்படவில்லை. நீங்கள் இதை எப்போதும் மாற்றலாம்</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>கட்டுப்பாடு</value>
   </data>
@@ -132,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>கட்டுப்பாட்டு முறை</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>கட்டுப்பாட்டு நொட்ஸ்: நகர்த்து, அகற்று, சுத்தம் செய், பேசுக, இடைநிறுத்து</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது.</value>
@@ -174,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>தற்போதைய அளவுத்திருத்தம்</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} தனிப்பயன் கோப்பு(கள்)</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>தனிப்பயனாக்கம்</value>
@@ -241,11 +277,23 @@
     <value>&lt;big&gt;&lt;b&gt;டாஷர் v6&lt;/b&gt;&lt;/big&gt;
 </value>
   </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>இறந்த பகுதி: {0} px</value>
+  </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>வேகத்தைக் குறைக்கவும்</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>இயல்புநிலை</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>எழுத்துக்கள்: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>நிறம்: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>வேகம்: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>நோயறிதல்</value>
@@ -259,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>ஒரு இடத்தில் நிலைநிறுத்தி கிளிக் செய்யவும், பொத்தான் அல்லது ஸ்விட்ச் அழுத்தாமல்.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>தங்கும் காலம்</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>கிளிக் செய்ய தங்குங்கள்</value>
   </data>
@@ -268,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>அளவுத்திருத்தத்தை அணுக, முதலில் சாய்வு உள்ளீட்டை இயக்கவும்.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>டாஷர் துவங்க முடியவில்லை</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>இயந்திர பிழை</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>Dasher இயந்திரம் உள் பிழையை சந்தித்து நிறுத்தப்பட்டது. தயவுசெய்து Dasher-ஐ மீண்டும் தொடங்கவும்.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>தயவுசெய்து மீண்டும் நிறுவ முயற்சிக்கவும், அல்லது இதை GitHub பிரச்சனைச் சுட்டியில் அறிக்கையிடவும்.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>இயந்திர பேச்சு அம்சங்கள்</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>பிழை: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>அமைப்புகளை ஏற்றுவதில் பிழை: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>வெளியேறு</value>
@@ -286,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>கண் பார்வை</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>துவக்கத்தில் கண் கண்காணிப்பாளரை இணைக்க முடியவில்லை. சாதனத்தை சரிபார்த்து, அமைப்புகள் &gt; உள்ளீடு இல் மீண்டும் தேர்வுசெய்ய முயற்சிக்கவும்.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>கண் கண்காணிப்பு சாதனம்</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>{0} உடன் இணைக்க முடியவில்லை. சாதனம் இணைக்கப்பட்டுள்ளதா மற்றும் இயக்கிகள் நிறுவப்பட்டுள்ளதா என சரிபார்க்கவும்.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>{0} உடன் இணைக்க முடியவில்லை. tobii_stream_engine.dll நிறுவப்பட்டுள்ளதையும், Tobii சாதனம் இணைக்கப்பட்டுள்ளதையும் உறுதிசெய்யவும்.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>பிழை அறிக்கைகளுக்கான விரிவான கண்காணிப்பு பதிவு (ஒவ்வொரு மாதிரிக்கும் வரிகள், Dasher கோப்புறையில் eyegaze.log-ல் எழுதப்படும்). அடிப்படை இணைப்பு நிகழ்வுகள் எப்போதும் பதிவு செய்யப்படும்.</value>
@@ -304,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>கோப்பு 4 MB-இல் வெட்டப்பட்டது — முதல் பகுதி மட்டுமே ஏற்றப்படும்</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>இயல்பான கட்டுப்பாடு</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>மென்மையான பயன்முறை</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>Flatpak அல்லது AppImage கட்டமைப்பு வழங்க முடியாது.</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>விசைப்பலகையை மிதக்கச் செய்ய, Dasher ஐ பிற பயன்பாடுகளின் மேல் காட்ட அனுமதித்து, பின்னர் Float ஐ மீண்டும் தட்டவும்.</value>
   </data>
@@ -315,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>விளையாட்டு முறை</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>விளையாட்டு தொடங்கியது</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>விளையாட்டு உரை கோப்பு</value>
@@ -358,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>உள்ளீடு</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>செயலில் உள்ள என்ஜின் உள்ளீட்டு வடிகட்டி (தேர்வு முறை அல்லது மேம்பட்ட அமைப்புகள் மூலம் அமைக்கப்பட்டது)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>எஞ்சினால் நிர்வகிக்கப்படுகிறது — தேர்வுக் குறிப்பு அமைப்பின் மூலம் மாற்றம்</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>நேரடி சுட்டிக்காட்டி - குறைந்தபட்ச செயலாக்கம்</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>சுழற்சி இல்லாமல் — தூய நுழைவு சாதனங்களுக்காக</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>உள்ளீடு மென்மையாக்குதல் - சத்தமில்லாத உள்ளீட்டிற்கான நடுக்கத்தைக் குறைக்கிறது (கண் பார்வை, தலை கண்காணிப்பு)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>ஒரு நிலையான ஜூம் செய்ய சிறிய சுட்டி இயக்கங்களை குறைக்கிறது</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>நிலையான தொடர்ச்சியான கட்டுப்பாடு (இயல்புநிலை)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>நிலையான திசைமாற்றி முறை — சுட்டியை பெரிதாக்க நகர்த்தவும்</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>ஜாய்ஸ்டிக் / கேம்பேட் (திசை திருப்புவதற்கு ஸ்டிக்கை ஒரு பக்கமாகத் திருப்பவும்)</value>
   </data>
@@ -372,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>உள்ளீடு செயலாக்கம்</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>கீபோர்டு முறையை பயன்படுத்த, உங்கள் பேக்கேஜ் மேலாளரை வழியாக Dasherஐ நிறுவவோ அல்லது மூலத்திலிருந்து கட்டவோ செய்யுங்கள்.</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;விசைப்பலகை பயன்முறையைப் பயன்படுத்த ydotool-ஐ நிறுவவும்&lt;/b&gt;</value>
@@ -391,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>விசைப்பலகை பயன்முறையிலிருந்து வெளியேறு</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>கீபோர்டு முறை: வெளியீட்டு பணியை மறைத்து டாஷரின் உரையை நேரடியாக உள்ளிடவும்</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;இந்த உருவாக்கத்தில் விசைப்பலகை பயன்முறை கிடைக்காது&lt;/b&gt;</value>
   </data>
@@ -408,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>விசைப்பலகை/நேரடி முறையில் சாளரத்தின் வெளிப்படைத்தன்மை</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>கீபோர்டு முறை டாஷர் வெளியீட்டை ydotool பயன்படுத்தி பிற பயன்பாடுகளில் தட்டச்சு செய்கிறது, இது</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(இயல்புநிலை)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>மொழி</value>
@@ -493,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>இந்தப் பகுதிக்கு அமைப்புகள் எதுவும் கிடைக்கவில்லை.</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>எந்த வாக்கிய இயந்திரத்தையும் பயன்படுத்த முடியவில்லை. கணினியின் TTS அம்சத்துடன் உருவாக்கவும், அல்லது விருப்பங்களில் மேக குரலை அமைக்கவும்.</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>இன்னும் ஏற்றுமதி செய்ய பயிற்சி தரவு இல்லை</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>இன்னும் பயனர் பயிற்சி தரவு இல்லை</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>குரல்கள் இல்லை</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>காப்பாற்ற ஒன்றுமில்லை</value>
@@ -565,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>சுருதி</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>உயர்</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>குறைந்த</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>நடுத்தர</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>மிக உயர்ந்தது</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>மிகக் குறைவு</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>விளையாட்டு</value>
   </data>
@@ -597,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>விகிதம்</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>நடுத்தர</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>மிக வேகமாக</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>மிக மெதுவாக</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>டேஷர் 5 இலிருந்து மீண்டும் இறக்குமதி செய்யவும்</value>
@@ -676,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>தேர்வு முறை</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>சேவை இயங்குகிறதா? நிறுவல் கட்டளைகளுக்காக விசைப்பலகை பொத்தானில் அமைப்பு உதவியைப் பார்க்கவும்.</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>அமைப்புகள்</value>
   </data>
@@ -694,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>அமைப்புகள் (வேகம், வண்ணங்கள், கட்டுப்பாட்டு முறை, மொழி மாதிரி)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>நிலையாகும் நேரம்: {0} மி.வி.</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>பகிர்</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>அறியப்படாத பயன்பாட்டு பகுப்பாய்வுகள் மற்றும் இடர் அறிக்கைகளை பகிர்வதா? எந்த தட்டப்பட்ட உரையும், கிளிப்போர்டும் இல்லை</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>உள்ளீட்டுப் பிழைத்திருத்த மேலடுக்குக் காட்சியைக் காட்டு</value>
@@ -751,6 +910,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>புதிதாகத் தொடங்குங்கள்</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>டாஷர் துவங்குவதில் தோல்வி அடைந்தது:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>நிர்வாக முறை</value>
   </data>
@@ -759,6 +922,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>பேச்சை நிறுத்து</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>சுவிட்ச் அமைப்பு</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>அமைப்பு</value>
@@ -771,6 +937,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>அந்த கோப்பு ஏற்கனவே உங்கள் பயிற்சி தரவாக உள்ளது.</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>நீங்கள் குறியும் செயலியில் (ydotool தேவை)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>பிழைத்திருத்த மேலடுக்கு, கேன்வாஸின் மேல் இடதுபுறத்தில் ஒரு பச்சை நிறப் பலகையை வரைகிறது. அது நிகழ்நேரத் தொடு நிகழ்வுகளின் எண்ணிக்கையையும், கடைசியாகப் பதிவு செய்யப்பட்ட (x, y) ஆயத்தொலைவுகளையும் காட்டுகிறது. நீங்கள் விரலைச் சுருக்கிப் பிடிக்கும்போது, நீங்கள் சுற்றிலும் பார்க்கும்போது ஆயத்தொலைவுகள் மாறிக்கொண்டே, 'touch.began' மற்றும் அதைத் தொடர்ந்து 'touch.moved' நிகழ்வுகளைக் காண்பீர்கள்.</value>
@@ -790,11 +959,32 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>சாய்வு அளவுத்திருத்தம்</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>சாதனத்தை நிலையாக தட்டிக்கொண்டு, பிறகு முன்னும் பின்னும் சாய்த்துக் கொள்ளுங்கள்</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>முழு பரப்பளவிலும் இடதுக்கு வலது பக்கத்துக்கு சாய்க்கவும்</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>அனைத்து நிலைகளிலும் மெதுவாகவும் சீராகவும் நகருங்கள்</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>செருக்கு அமைப்புகள்</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>உங்கள் சாதனத்தை இப்போது சாய்க்கவும்...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>அளவுத்திருத்தத்தின் போது உங்கள் சாதனத்தை அதன் முழு இயக்க வரம்பிலும் சாய்க்கவும்.</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>Preferences → Privacy இல் நேரம்.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>கண் டிராக்கர் பிழை</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>கண் கண்காணிப்பாளர் அறிவிப்பு</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>கட்டுப்பாட்டு முறையை மாற்று</value>
@@ -843,6 +1033,18 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>உரையைப் பகிரவும்</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>கண்பார்வை</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>டோபி (ஸ்ட்ரீம் என்ஜின்)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP கேஸ் டிராக்கர் (நெட்வொர்க்)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>விண்டோஸ் ஐ டிராக்கர் (சொந்தம்)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>பயிற்சி</value>
@@ -907,6 +1109,9 @@
   <data name="turbo" xml:space="preserve">
     <value>டர்போ</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>மற்ற பயன்பாடுகளுக்கு டைப் செய்ய /dev/uinputக்கு அணுகல் தேவை, அது ஒரு சாம்sandboxed ஆகும்</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>தட்டச்சு விகிதம்</value>
   </data>
@@ -919,17 +1124,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>UDP tracker listens for STREAM_DATA or GazePoint messages</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} கிடைக்கிறது (நீங்கள் v{1}ஐ இயக்குகிறீர்கள்). பதிவிறக்குவதற்கு தட்டவும் — அமைப்புகள் &gt; தனியுரிமை என்பதில் முடக்கவும்.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>Dasher புதுப்பிப்பு உள்ளது</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>டேஷரை உங்கள் விசைப்பலகையாகப் பயன்படுத்தவும்.</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>குரல்</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} குரல்கள்</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>ஒலி</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>டாசர் எச்சரிக்கை</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>இந்த மேக்கில் உங்கள் டேஷர் 5 உள்ளமைப்பைக் கண்டறிந்துள்ளோம். உங்கள் எழுத்துக்கள், வண்ணங்கள், வேக அமைப்புகள் மற்றும் தனிப்பயன் கோப்புகளை டேஷர் 6-இல் இறக்குமதி செய்யலாம்.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>கண்டுபிடிக்கப்பட்டது</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} wpm</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>அதிகபட்சம் {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>X வரம்பு:</value>
@@ -939,6 +1165,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>ydotool கண்டறியப்பட்டது. விசைப்பலகை பயன்முறை தயாராக உள்ளது.</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool இன்னும் கிடைக்கும் நிலையில் இல்லை. அது நிறுவப்பட்டுள்ளதை உறுதிப்படுத்தவும், ydotool சேவை செயலிழக்காமல் இயங்குகிறது என்பதைக் 확인 செய்யவும்.</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>அமைப்புகள் &gt; தனியுரிமை மற்றும் இடமாற்றம் என்பதில் நீங்கள் பின்னர் இறக்குமதி செய்யலாம்.</value>

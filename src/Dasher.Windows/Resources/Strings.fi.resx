@@ -14,6 +14,9 @@
   <data name="about" xml:space="preserve">
     <value>Tietoa</value>
   </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>Dasher {0}</value>
+  </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>Hyväksy leijutus-/osoitintapahtumat Dasher-syötteenä. Ota käyttöön silmänseurantaa tai ulkoisia osoittimia varten.</value>
   </data>
@@ -25,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>Mukauta nopeutta automaattisesti</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>Edistynyt lokitus</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>Yksityiskohtainen diagnostiikkaloki bugiraportteja varten (näytteen mukaan silmälaitteen rivit, näppäinpainallusten jäljet, UIA-lukemat). Perusyhteystapahtumat kirjataan aina. Voi tuottaa suuria lokitiedostoja.</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>Lisäasetukset</value>
@@ -58,6 +67,12 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="analytics_settings_help" xml:space="preserve">
     <value>Dasher kerää nimettömiä käyttöanalytiikka- ja kaatumisraportteja ymmärtääkseen, miten sovellusta käytetään, ja korjatakseen bugeja. Kirjoitettua tekstiä, leikepöydän sisältöä tai henkilökohtaisia tietoja ei koskaan kerätä.</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>Auttaako parantamaan Dasheria?</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>Nimetön tunnus: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Anonyymi käyttöanalytiikka</value>
   </data>
@@ -66,6 +81,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>Sovellustason viipyminen valintaa varten</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>Ulkonäkö</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>Vasen</value>
@@ -78,6 +96,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="arrow_right_tooltip" xml:space="preserve">
     <value>Siirrä kohdistinta oikealle (pidä painettuna toistaaksesi)</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>Auto</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Automaattinen keskityskohde</value>
@@ -97,6 +118,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="backspace_tooltip" xml:space="preserve">
     <value>Poista (pidä painettuna toistaaksesi)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>Kalibroi kallistus</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>Peruuttaa</value>
   </data>
@@ -112,6 +136,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="clear" xml:space="preserve">
     <value>Tyhjennä</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>Tyhjennä lokit</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>Napsauta asettaaksesi näppäimistötilan (tarvitsee ydotoolin)</value>
   </data>
@@ -124,6 +151,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="colour_theme" xml:space="preserve">
     <value>Väriteema</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>sisältöä tai henkilötietoja koskaan kerätä. Voit muuttaa tätä milloin tahansa</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>Kontrolli</value>
   </data>
@@ -132,6 +162,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>Ohjaustila</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>Ohjaussolmut: siirrä, poista, tyhjennä, puhu, tauko</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Kopioitu leikepöydälle</value>
@@ -174,6 +207,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Nykyinen kalibrointi</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} mukautettua tiedostoa</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>Ulkoasu</value>
@@ -234,15 +270,30 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="dasher_quit_unexpectedly" xml:space="preserve">
     <value>Dasher lopetti yllättäen</value>
   </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>Dasher v6</value>
+  </data>
   <data name="dasher_v6_2" xml:space="preserve">
     <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
 </value>
+  </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>Kuollut alue: {0} px</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Vähennä nopeutta</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>Oletus</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>Aakkoset: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>Väri: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>Nopeus: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>Diagnostiikka</value>
@@ -256,6 +307,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="dwell_description" xml:space="preserve">
     <value>Liikuta kohdistinta yhdessä kohdassa aktivoidaksesi napsautuksen sen sijaan, että painaisit painiketta tai kytkintä.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>Oleskeluaika</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Viivy napsauttaaksesi</value>
   </data>
@@ -265,14 +319,26 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Ota kallistustulo ensin käyttöön päästäksesi kalibrointiin.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>Dasher ei voinut käynnistyä</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>Moottorivirhe</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>Dasher-moottori kohtasi sisäisen virheen ja on pysähtynyt. Käynnistä Dasher uudelleen.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>Yritä asentaa uudelleen tai ilmoita tästä GitHub-ongelmassa.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>Moottorin puheominaisuudet</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>Virhe: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>Virhe ladattaessa asetuksia: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>Poistu</value>
@@ -283,8 +349,17 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="eye_gaze" xml:space="preserve">
     <value>Silmän katse</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>Ei saatu yhteyttä katseenseurantaan käynnistyksen yhteydessä. Tarkista laite ja yritä valita se uudelleen kohdassa Asetukset &gt; Tulo.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>Silmänseurantalaite</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>Ei voitu muodostaa yhteyttä verkkoon {0}. Tarkista, että laite on kytketty ja ajurit asennettu.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>Ei voitu muodostaa yhteyttä kohteeseen {0}. Varmista, että tobii_stream_engine.dll on asennettu ja Tobii-laite on liitetty.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>Yksityiskohtainen seurantaloki virheraporteille (näytettä kohden rivit, kirjoitetaan eyegaze.log-tiedostoon Dasher-kansiossa). Perusyhteystapahtumat kirjataan aina.</value>
@@ -301,6 +376,15 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>Tiedosto katkaistu 4 MB kohdalla — vain ensimmäinen osa on ladattu</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>Normaali ohjaus</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>Tasoitustila</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>Flatpak- tai AppImage-rakenne ei voi tarjota.</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Vapauta näppäimistö kellumaan sallimalla Dasherin näkyä muiden sovellusten päällä ja napauta sitten Float uudelleen.</value>
   </data>
@@ -312,6 +396,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>pelitila</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>Peli käyntiin</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Pelin tekstitiedosto</value>
@@ -355,6 +442,30 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="input" xml:space="preserve">
     <value>Syöttö</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>Aktiivinen moottorin syöttösuodatin (asetettu valintamenetelmän tai lisäasetusten kautta)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>Moottorin hallinnassa — muuta valintamenetelmä-asetuksen kautta</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>Suora osoitin – minimaalinen käsittely</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>Ei suodatusta – puhtaille syöttölaitteille</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>Sisääntulon tasoitus – vähentää värinää meluisan syöttämisen yhteydessä (silmien katselu, pään seuranta)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>Vaimentaa pieniä osoittimen liikkeitä tasaisemman zoomin saavuttamiseksi</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>Vakio jatkuva ohjaus (oletus)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>Vakioohjaustapa – siirrä osoitinta zoomataksesi</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>Joystick / peliohjain (ohjaa ohjataksesi ohjainta ohjaamalla sitä)</value>
   </data>
@@ -369,6 +480,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>Syötteen käsittely</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>Asenna Dasher pakettienhallinnan kautta tai käännä lähdekoodista käyttääksesi näppäimistötilaa.</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Asenna ydotool käyttääksesi näppäimistötilaa&lt;/b&gt;</value>
@@ -388,6 +502,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Vaihda näppäimistötilaan</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>Näppäimistötila: piilota tulospaneeli ja kirjoita Dasherin teksti suoraan</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;Näppäimistötila ei ole käytettävissä tässä koontiversiossa&lt;/b&gt;</value>
   </data>
@@ -405,6 +522,12 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>Ikkunan läpinäkyvyys näppäimistö-/suorassa tilassa</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>Näppäimistötila kirjoittaa Dasherin tulosteen muihin sovelluksiin käyttämällä ydotoolia, joka</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(oletus)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Kieli</value>
@@ -490,17 +613,26 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>Tälle osiolle ei ole käytettävissä asetuksia.</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>Puheentunnistusta ei ole saatavilla. Rakenna järjestelmän TTS-ominaisuudella tai määritä pilvipuhe Asetuksissa.</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Vie lähtömateriaalina ei ole vielä koulutusdataa</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Ei käyttäjäkoulutusdataa vielä</value>
   </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>Ääniä ei löytynyt</value>
+  </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Ei mitään tallennettavaa</value>
   </data>
   <data name="nothing_to_share" xml:space="preserve">
     <value>Ei mitään jaettavaa</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
     <value>VisionOS-käyttöjärjestelmässä nipistä ja pidä sormea pohjalla aloittaaksesi kirjoittamisen, katso ympärillesi nipistämällä ohjataksesi ja vapauta sormi keskeyttääksesi kirjoittamisen. Syöttömalli on nipistämällä-ja-katsomalla-tyyppinen.</value>
@@ -559,6 +691,21 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="pitch" xml:space="preserve">
     <value>Korkeus</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>Korkea</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>Matala</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>Keskikokoinen</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>Erittäin korkea</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>Erittäin alhainen</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>Peli</value>
   </data>
@@ -569,6 +716,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Osoittimen leijutussyöttö</value>
   </data>
   <data name="preferences" xml:space="preserve">
+    <value>Asetukset</value>
+  </data>
+  <data name="prefs" xml:space="preserve">
     <value>Asetukset</value>
   </data>
   <data name="preparing_dasher" xml:space="preserve">
@@ -588,6 +738,15 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="rate" xml:space="preserve">
     <value>Määrä</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>Keskikokoinen</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>Erittäin nopea</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>Erittäin hidas</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Tuo uudelleen Dasher 5:stä</value>
@@ -667,6 +826,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="selection_method" xml:space="preserve">
     <value>Valintamenetelmä</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>Palvelu käynnissä? Katso asennusohjeet näppäimistön painikkeen ohjeesta.</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>Asetukset</value>
   </data>
@@ -685,8 +847,14 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>Asetukset (nopeus, värit, ohjaustila, kielimalli)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>Asetusaika: {0} ms</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>Jakaa</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>Jaa anonyymejä käyttöanalytiikka- ja kaatumisraportteja? Ei kirjoitettua tekstiä, leikepöytä</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>Näytä syötteen virheenkorjauspeittokuva</value>
@@ -742,11 +910,21 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="start_fresh" xml:space="preserve">
     <value>Aloita puhtaalta pöydältä</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>Dasher ei käynnistynyt:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>Ohjausmenetelmä</value>
   </data>
+  <data name="stop" xml:space="preserve">
+    <value>Pysähdy</value>
+  </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>Lopeta puhuminen</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>Kytkimen asetukset</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Järjestelmä</value>
@@ -759,6 +937,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>Tuo tiedosto on jo sinun koulutusdatasi.</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>sovellus, johon osoitat (tarvitsee ydotoolin)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>Virheenkorjausnäkymä piirtää vihreän paneelin kankaan vasempaan yläkulmaan, jossa näkyvät reaaliaikaisten kosketustapahtumien määrät ja viimeksi raportoidut arvot (x, y). Kun pidät painettuna, sinun pitäisi nähdä touch.began ja sitten touch.moved muuttuvilla koordinaateilla katsellessasi ympärillesi.</value>
@@ -778,11 +959,32 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="tilt_calibration" xml:space="preserve">
     <value>Kallistuksen kalibrointi</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>Pidä laitetta pystysuorassa, kallista sitten eteen- ja taaksepäin</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>Kallista vasemmalle ja oikealle koko liikeradalla</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>Liiku hitaasti ja sulavasti kaikkien asentojen läpi</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>Kallistusasetukset</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>Kallista laitettasi nyt...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>Kallista laitettasi koko liikeradalla kalibroinnin aikana.</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>aika Asetukset → Tietosuoja.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>Eye Tracker Error</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>Eye tracker huomautus</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Vaihda ohjaustilaa</value>
@@ -831,6 +1033,18 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Jaa teksti</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>silmiinpistävä</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Tobii (Stream Engine)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP Gaze Tracker (verkko)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (alkuperäinen)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>Koulutus</value>
@@ -892,6 +1106,12 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="tts_no_credentials" xml:space="preserve">
     <value>Ei vaadita tunnistetietoja</value>
   </data>
+  <data name="turbo" xml:space="preserve">
+    <value>Turbo</value>
+  </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>Kirjoittaminen muihin sovelluksiin vaatii pääsyn /dev/uinputiin, mikä on hiekkalaatikossa</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Kirjoitusnopeus</value>
   </data>
@@ -904,17 +1124,38 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="udp_tracker_help" xml:space="preserve">
     <value>UDP-seuranta kuuntelee STREAM_DATA- tai GazePoint-viestejä</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} on saatavilla (käytät v{1}). Lataa napauttamalla — poista käytöstä kohdassa Asetukset &gt; Tietosuoja.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>Dasher-päivitys saatavilla</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Käytä Dasheria näppäimistönä</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>Ääni</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} ääntä</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>Tilavuus</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>Dasher Varoitus</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>Löysimme Dasher 5 -kokoonpanosi tältä Macilta. Aakkoset, värit, nopeusasetukset ja mukautetut tiedostot voidaan tuoda Dasher 6:een.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>Mitä löytyi</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} wpm</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>enintään {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>X-alue:</value>
@@ -924,6 +1165,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>ydotool löytyi. Näppäimistötila on valmis.</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool ei ole vielä saatavilla. Varmista, että se on asennettu ja että ydotool-palvelu on käynnissä.</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>Voit tuoda sen myöhemmin kohdassa Asetukset &gt; Tietosuoja ja siirto</value>

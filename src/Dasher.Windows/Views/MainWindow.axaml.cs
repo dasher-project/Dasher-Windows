@@ -511,7 +511,7 @@ public partial class MainWindow : Window
                 // RFC 0018: on failure show the error on the overlay —
                 // never back to a blank window.
                 StartupOverlayText.IsVisible = false;
-                StartupOverlayError.Text = $"Dasher failed to start:\n{error}";
+                StartupOverlayError.Text = string.Format(Services.Loc.Tr("startup_error_format"), error);
                 StartupOverlayError.IsVisible = true;
             });
             return;
@@ -809,8 +809,8 @@ public partial class MainWindow : Window
             var ok = await _canvas.InitializeEyeGazeAsync(trackerType, config.UdpPort);
             if (!ok)
             {
-                ToastNotifier.Show("Eye Tracker Error",
-                    $"Could not connect to eye tracker on startup. Check the device and try re-selecting it in Settings > Input.",
+                ToastNotifier.Show(Services.Loc.Tr("toast_eye_tracker_error"),
+                    Services.Loc.Tr("eye_tracker_connect_failed_format"),
                     isWarning: true);
             }
         }
@@ -2041,7 +2041,7 @@ public partial class MainWindow : Window
 
     private void OnEngineMessage(object? sender, EngineMessageEventArgs e)
     {
-        var title = e.IsWarning ? "Dasher Warning" : "Dasher";
+        var title = e.IsWarning ? Services.Loc.Tr("warning_title") : "Dasher";
         ToastNotifier.Show(title, e.Text, e.IsWarning);
     }
 
@@ -2065,7 +2065,7 @@ public partial class MainWindow : Window
         // the mini-bar has no room for max/avg.
         var miniBarWpm = this.FindControl<TextBlock>("MiniBarWpm");
         if (miniBarWpm != null && _vm.IsKeyboardMode)
-            miniBarWpm.Text = $"{(int)_vm.CurrentWpm} wpm";
+            miniBarWpm.Text = string.Format(Services.Loc.Tr("wpm_format"), (int)_vm.CurrentWpm);
 
         // Game mode: show WPM in game target bar
         if (_gameModeActive)
@@ -2100,7 +2100,7 @@ public partial class MainWindow : Window
     {
         _vm?.ResetTypingStats();
         var label = this.FindControl<TextBlock>("WpmLabel");
-        if (label != null) label.Text = Services.Loc.Tr("wpm_idle");
+        if (label != null) label.Text = string.Format(Services.Loc.Tr("wpm_format"), 0);
     }
 
     private void OnEngineFault(object? sender, EventArgs e)
@@ -2431,7 +2431,7 @@ public partial class MainWindow : Window
         {
             if (ex is not OperationCanceledException)
                 Services.AnalyticsService.WriteCrashFile(ex, "open file picker");
-            Services.ToastNotifier.Show("Open failed", ex.Message, isWarning: true);
+            Services.ToastNotifier.Show(Services.Loc.Tr("open_failed"), ex.Message, isWarning: true);
         }
     }
 
@@ -2467,7 +2467,7 @@ public partial class MainWindow : Window
         {
             if (ex is not OperationCanceledException)
                 Services.AnalyticsService.WriteCrashFile(ex, "save file picker");
-            Services.ToastNotifier.Show("Save failed", ex.Message, isWarning: true);
+            Services.ToastNotifier.Show(Services.Loc.Tr("save_failed"), ex.Message, isWarning: true);
         }
     }
 
@@ -2546,11 +2546,12 @@ public partial class MainWindow : Window
                     EyeGazeIntegration.TrackerType.UdpGazeTracker => "UDP Gaze Tracker",
                     _ => "Eye tracker",
                 };
-                ToastNotifier.Show("Eye Tracker Error",
-                    $"Could not connect to {trackerName}. " +
-                    (args.trackerType == EyeGazeIntegration.TrackerType.TobiiStreamEngine
-                        ? "Make sure tobii_stream_engine.dll is installed and a Tobii device is connected."
-                        : "Check the device is connected and drivers are installed."),
+                ToastNotifier.Show(Services.Loc.Tr("toast_eye_tracker_error"),
+                    string.Format(
+                        args.trackerType == EyeGazeIntegration.TrackerType.TobiiStreamEngine
+                            ? Services.Loc.Tr("eye_tracker_reconnect_tobii_format")
+                            : Services.Loc.Tr("eye_tracker_reconnect_generic_format"),
+                        trackerName),
                     isWarning: true);
             }
             var methodName = args.trackerType switch
@@ -2834,8 +2835,8 @@ public partial class MainWindow : Window
         var correctText = correct > 0 ? target[..Math.Min(correct, target.Length)] : "";
         var remaining = correct < target.Length ? target[Math.Min(correct, target.Length)..] : "";
 
-        gameTarget.Text = $"{correctText}[{wrong}]{remaining}\n{(int)_vm.CurrentWpm} wpm" + 
-            (_vm.MaxWpm > 0 ? $"  max {(int)_vm.MaxWpm}" : "");
+        gameTarget.Text = $"{correctText}[{wrong}]{remaining}\n{string.Format(Services.Loc.Tr("wpm_format"), (int)_vm.CurrentWpm)}" + 
+            (_vm.MaxWpm > 0 ? "  " + string.Format(Services.Loc.Tr("wpm_max_format"), (int)_vm.MaxWpm) : "");
     }
 
     private static string FindCoreDataDir()
@@ -2907,8 +2908,8 @@ public partial class MainWindow : Window
             var url = info.ReleaseUrl;
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
                 ToastNotifier.Show(
-                    "Dasher update available",
-                    $"Dasher {info.LatestTag} is available (you're running v{info.CurrentVersion}). Tap to download — disable in Settings > Privacy.",
+                    Services.Loc.Tr("update_available_title"),
+                    string.Format(Services.Loc.Tr("update_available_body_format"), info.LatestTag, info.CurrentVersion),
                     url));
         }
         catch { }

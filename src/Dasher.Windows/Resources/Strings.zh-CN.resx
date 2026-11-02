@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (zh-CN). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f 字符/秒 · %2$d 单词/分钟</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>崩溃报告已保存到 ~/Library/Logs/DiagnosticReports/Dasher-*.ips。如果您可以在 GitHub 问题中分享它，它将帮助我们修复该错误。</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>关于</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>冲刺者{0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>接受悬停/指针事件作为 Dasher 输入。启用眼动追踪或外部指针。</value>
@@ -22,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>自动适应速度</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>高级日志记录</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>用于错误报告的详细诊断日志记录（每个样本的眼动追踪器数据行、按键跟踪、UIA读取）。基本的连接事件总是会被记录。可能会生成较大的日志文件。</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>高级设置</value>
@@ -55,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>Dasher 收集匿名的使用分析和崩溃报告，以了解应用程序的使用情况并修复错误。绝不收集任何输入的文本、剪贴板内容或个人信息。</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>帮助改进Dasher吗？</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>匿名 ID：{0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>匿名使用分析</value>
   </data>
@@ -63,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>应用程序级停留选择</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>外观</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>左</value>
@@ -97,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>删除（长按以重复）</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>校准倾斜</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>取消</value>
   </data>
@@ -112,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>清除</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>清除日志</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>点击设置键盘模式（需要 ydotool）</value>
   </data>
@@ -124,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>颜色主题</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>内容或个人信息是否被收集。您可以随时更改此设置</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>控制</value>
   </data>
@@ -132,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>控制模式</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>控制节点：移动、删除、清除、说话、暂停</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>已复制到剪贴板。</value>
@@ -174,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>电流校准</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} 个自定义文件</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>定制</value>
@@ -234,15 +270,30 @@
   <data name="dasher_quit_unexpectedly" xml:space="preserve">
     <value>Dasher 意外退出</value>
   </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>Dasher v6</value>
+  </data>
   <data name="dasher_v6_2" xml:space="preserve">
     <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
 </value>
+  </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>盲区：{0} 像素</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>降低速度</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>默认</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>字母：{0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>颜色：{0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>速度：{0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>诊断</value>
@@ -256,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>悬停在一个位置以触发点击，而不是按按钮或开关。</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>停留时间</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>停留点击</value>
   </data>
@@ -265,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>首先启用倾斜输入以访问校准。</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>Dasher无法启动</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>引擎错误</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>Dasher 引擎遇到内部错误并已停止。请重新启动 Dasher。</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>请尝试重新安装，或者在 GitHub 问题中报告此问题。</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>引擎语音功能</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>错误：{0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>加载设置时出错：{0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>退出</value>
@@ -283,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>目光凝视</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>启动时无法连接到眼动仪。请检查设备并尝试在“设置 &gt; 输入”中重新选择它。</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>眼动追踪器</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>无法连接到{0}。检查设备是否已连接以及驱动程序是否已安装。</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>无法连接到{0}。确保已安装 tobii_stream_engine.dll 并连接了 Tobii 设备。</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>用于错误报告的详细跟踪日志（每个样本的行，写入 Dasher 文件夹中的 eyegaze.log）。基本连接事件始终会被记录。</value>
@@ -301,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>文件在 4 MB 时被截断——只加载了前一部分</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>正常控制</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>平滑模式</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>Flatpak 或 AppImage 构建无法提供。</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>要悬浮键盘，请允许 Dasher 在其他应用上方显示，然后再次点击“悬浮”。</value>
   </data>
@@ -312,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>游戏模式</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>开游戏</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>游戏文本文件</value>
@@ -355,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>输入</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>主动发动机输入滤波器（通过选择方法或高级设置进行设置）</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>由引擎管理 — 通过“选择方法”设置进行更改</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>直接指针——最少的处理</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>无滤波——用于干净的输入设备</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>输入平滑——减少噪声输入的抖动（眼睛注视、头部跟踪）</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>抑制小指针移动以获得更稳定的变焦</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>标准连续控制（默认）</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>标准转向方式——移动指针进行缩放</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>游戏手柄/操纵杆（拨动操纵杆来控制方向）</value>
   </data>
@@ -369,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>输入处理</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>通过你的包管理器安装 Dasher，或从源代码构建以使用键盘模式。</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>安装 ydotool 以使用键盘模式。</value>
@@ -388,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>退出键盘模式</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>键盘模式：隐藏输出面板并直接输入Dasher的文本</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;此版本不支持键盘模式&lt;/b&gt;</value>
   </data>
@@ -405,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>键盘/直接模式下的窗口透明度</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>键盘模式使用 ydotool 将 Dasher 的输出输入到其他应用程序中，该模式</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(默认)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>语言</value>
@@ -490,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>此部分暂无设置选项。</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>没有可用的语音引擎。请使用系统 TTS 功能构建，或在偏好设置中设置云端语音。</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>暂无可导出的训练数据</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>尚无用户训练数据</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>没有找到声音</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>已无可挽救</value>
@@ -562,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>音调</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>低的</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>中等的</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>非常高</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>非常低</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>游戏</value>
   </data>
@@ -594,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>费率</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>中等的</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>非常快</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>非常慢</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>从 Dasher 5 重新导入</value>
@@ -673,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>选择方法</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>服务正在运行吗？请在键盘按钮上的设置帮助中查看安装命令。</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>设置</value>
   </data>
@@ -691,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>设置（速度、颜色、控制模式、语言模型）</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>稳定时间：{0} 毫秒</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>分享</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>分享匿名使用分析和崩溃报告？不包括输入的文本和剪贴板内容</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>显示输入调试覆盖</value>
@@ -748,6 +910,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>重新开始</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>Dasher 启动失败：
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>转向方法</value>
   </data>
@@ -756,6 +922,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>停止说话</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>开关设置</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>系统</value>
@@ -768,6 +937,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>那个文件已经是你的训练数据了。</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>你指的那个应用程序（需要 ydotool）</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>调试覆盖层在画布的左上角绘制一个绿色面板，显示实时触摸事件计数和最后报告的 (x, y)。当您捏住并按住时，您应该会看到 touch.began 然后 touch.moved ，并且当您环顾四周时，坐标会发生变化。</value>
@@ -787,11 +959,32 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>倾斜校准</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>将设备竖直握住，然后前后倾斜</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>左右倾斜至全范围</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>在所有姿势中缓慢而平滑地移动</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>倾斜设置</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>现在倾斜您的设备...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>在校准过程中，在整个运动范围内倾斜您的设备。</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>时间在“偏好设置 → 隐私”下。</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>眼动仪错误</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>眼动仪注意事项</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>切换控制模式</value>
@@ -840,6 +1033,18 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>分享文本</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>眼睛直观的</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Tobii（流引擎）</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP 视线追踪器（网络）</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows 眼动追踪器（本机）</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>训练</value>
@@ -904,6 +1109,9 @@
   <data name="turbo" xml:space="preserve">
     <value>涡轮</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>在其他应用程序中输入需要访问 /dev/uinput，而这在沙箱环境中</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>打字速度</value>
   </data>
@@ -916,17 +1124,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>UDP 追踪器监听 STREAM_DATA 或 GazePoint 消息</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} 可用（您正在运行 v{1}）。点击下载 — 在“设置”&gt;“隐私”中禁用。</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>Dasher 更新可用</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>使用 Dasher 作为键盘</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>声音</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} 个声音</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>音量</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>冲刺警告</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>我们在这台 Mac 上找到了您的 Dasher 5 配置。您的字母表、颜色、速度设置和自定义文件都可以导入到 Dasher 6 中。</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>发现了什么</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} 转/分钟</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>最大{0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>X范围：</value>
@@ -936,6 +1165,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>已找到 ydotool。键盘模式已准备就绪。</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool 仍然不可用。请确保它已安装并且 ydotool 服务正在运行。</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>您可以稍后在“设置”&gt;“隐私和迁移”中导入</value>

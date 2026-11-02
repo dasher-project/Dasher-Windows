@@ -111,7 +111,7 @@ public class SettingsPanel : Decorator
             _panel.Children.Clear();
             _panel.Children.Add(new TextBlock
             {
-                Text = $"Error loading settings: {ex.Message}",
+                Text = string.Format(Loc.Tr("error_loading_settings_format"), ex.Message),
                 FontSize = 12,
                 Foreground = new SolidColorBrush(Color.FromRgb(0xEB, 0x5B, 0x5C)),
                 Margin = new Thickness(16),
@@ -583,10 +583,10 @@ public class SettingsPanel : Decorator
             HorizontalAlignment = HorizontalAlignment.Left,
             FontSize = 12,
         };
-        trackerCombo.Items.Add("Windows Eye Tracker (native)");
-        trackerCombo.Items.Add("UDP Gaze Tracker (network)");
-        trackerCombo.Items.Add("eyetuitive");
-        trackerCombo.Items.Add("Tobii (Stream Engine)");
+        trackerCombo.Items.Add(Loc.Tr("tracker_windows_native"));
+        trackerCombo.Items.Add(Loc.Tr("tracker_udp_network"));
+        trackerCombo.Items.Add(Loc.Tr("tracker_eyetuitive"));
+        trackerCombo.Items.Add(Loc.Tr("tracker_tobii_stream"));
         trackerCombo.SelectedIndex = config.EyeTrackerType switch
         {
             "UdpGaze" => 1,
@@ -730,11 +730,11 @@ public class SettingsPanel : Decorator
             Minimum = 0, Maximum = 30, Value = config.GazeDeadZonePx,
             Width = 180, FontSize = 12,
         };
-        var deadZoneLabel = new TextBlock { Text = $"Dead zone: {config.GazeDeadZonePx:F0} px", FontSize = 11, Foreground = BrushValue };
+        var deadZoneLabel = new TextBlock { Text = string.Format(Loc.Tr("dead_zone_format"), $"{config.GazeDeadZonePx:F0}"), FontSize = 11, Foreground = BrushValue };
         deadZoneSlider.PropertyChanged += (s, e) =>
         {
             if (e.Property.Name == "Value")
-                deadZoneLabel.Text = $"Dead zone: {deadZoneSlider.Value:F0} px";
+                deadZoneLabel.Text = string.Format(Loc.Tr("dead_zone_format"), $"{deadZoneSlider.Value:F0}");
         };
 
         var settleSlider = new Slider
@@ -742,11 +742,11 @@ public class SettingsPanel : Decorator
             Minimum = 0, Maximum = 300, Value = config.GazeSettleMs,
             Width = 180, FontSize = 12,
         };
-        var settleLabel = new TextBlock { Text = $"Settle time: {config.GazeSettleMs:F0} ms", FontSize = 11, Foreground = BrushValue };
+        var settleLabel = new TextBlock { Text = string.Format(Loc.Tr("settle_time_format"), $"{config.GazeSettleMs:F0}"), FontSize = 11, Foreground = BrushValue };
         settleSlider.PropertyChanged += (s, e) =>
         {
             if (e.Property.Name == "Value")
-                settleLabel.Text = $"Settle time: {settleSlider.Value:F0} ms";
+                settleLabel.Text = string.Format(Loc.Tr("settle_time_format"), $"{settleSlider.Value:F0}");
         };
 
         void SaveFilterConfig()
@@ -853,21 +853,21 @@ public class SettingsPanel : Decorator
         // "Normal Control" for those made the app LOOK like it had forgotten
         // the user's choice ("always defaults to Normal Control") while the
         // engine was actually running it — so append the live value.
-        var filterOptions = new List<(string Name, string Help)>
+        var filterOptions = new List<(string Name, string Display, string Help)>
         {
-            ("Normal Control", "Standard continuous control (default)"),
-            ("Smoothing Mode", "Input smoothing — reduces jitter for noisy input (eye gaze, head tracking)"),
-            ("Direct Mode", "Direct pointer — minimal processing"),
+            ("Normal Control", Loc.Tr("filter_name_normal"), Loc.Tr("input_filter_standard")),
+            ("Smoothing Mode", Loc.Tr("filter_name_smoothing"), Loc.Tr("input_filter_smoothing")),
+            ("Direct Mode", Loc.Tr("direct_mode"), Loc.Tr("input_filter_direct")),
         };
 
         var currentFilterPtr = NativeBridge.dasher_get_string_parameter(_handle, ParameterKeys.SP_INPUT_FILTER);
         var currentFilter = currentFilterPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(currentFilterPtr) ?? "Normal Control" : "Normal Control";
         if (!string.IsNullOrEmpty(currentFilter) &&
             filterOptions.All(f => f.Name != currentFilter))
-            filterOptions.Add((currentFilter, "Active engine input filter (set via Selection Method or advanced settings)"));
+            filterOptions.Add((currentFilter, currentFilter, Loc.Tr("input_filter_active")));
 
-        foreach (var (name, _) in filterOptions)
-            filterCombo.Items.Add(name);
+        foreach (var (_, display, _) in filterOptions)
+            filterCombo.Items.Add(display);
         filterCombo.SelectedIndex = filterOptions.FindIndex(f => f.Name == currentFilter);
         if (filterCombo.SelectedIndex < 0) filterCombo.SelectedIndex = 0;
 
@@ -2070,13 +2070,14 @@ public class SettingsPanel : Decorator
         toggleRow.Margin = new Thickness(0, 8, 0, 0);
         section.Children.Add(toggleRow);
 
-        section.Children.Add(new TextBlock
+        var anonIdText = new TextBlock
         {
-            Text = $"Anonymous ID: {AnalyticsService.AnonymousId}",
+            Text = string.Format(Loc.Tr("anonymous_id_format"), AnalyticsService.AnonymousId),
             FontSize = 11,
             Foreground = BrushMuted,
             Margin = new Thickness(0, 4, 0, 0),
-        });
+        };
+        section.Children.Add(anonIdText);
 
         var resetBtn = new Button
         {
@@ -2092,11 +2093,7 @@ public class SettingsPanel : Decorator
         {
             AnalyticsService.ResetAnonymousId();
             // Refresh the ID display
-            foreach (var child in section.Children)
-            {
-                if (child is TextBlock tb && tb.Text?.StartsWith("Anonymous ID:") == true)
-                    tb.Text = $"Anonymous ID: {AnalyticsService.AnonymousId}";
-            }
+            anonIdText.Text = string.Format(Loc.Tr("anonymous_id_format"), AnalyticsService.AnonymousId);
         };
         section.Children.Add(resetBtn);
 
@@ -2113,7 +2110,7 @@ public class SettingsPanel : Decorator
         // section exists.
         section.Children.Add(new TextBlock
         {
-            Text = $"Dasher {UpdateChecker.GetCurrentVersion()}",
+            Text = string.Format(Loc.Tr("about_version_format"), UpdateChecker.GetCurrentVersion()),
             FontSize = 11,
             Foreground = BrushMuted,
             Margin = new Thickness(0, 8, 0, 0),
@@ -2165,15 +2162,15 @@ public class SettingsPanel : Decorator
             });
 
             if (!string.IsNullOrEmpty(scan.Alphabet))
-                section.Children.Add(new TextBlock { Text = $"  Alphabet: {scan.Alphabet}", FontSize = 11, Foreground = BrushMuted });
+                section.Children.Add(new TextBlock { Text = "  " + string.Format(Loc.Tr("diag_alphabet_format"), scan.Alphabet), FontSize = 11, Foreground = BrushMuted });
             if (!string.IsNullOrEmpty(scan.Colour))
-                section.Children.Add(new TextBlock { Text = $"  Colour: {scan.Colour}", FontSize = 11, Foreground = BrushMuted });
+                section.Children.Add(new TextBlock { Text = "  " + string.Format(Loc.Tr("diag_colour_format"), scan.Colour), FontSize = 11, Foreground = BrushMuted });
             if (!string.IsNullOrEmpty(scan.Speed))
-                section.Children.Add(new TextBlock { Text = $"  Speed: {scan.Speed}", FontSize = 11, Foreground = BrushMuted });
+                section.Children.Add(new TextBlock { Text = "  " + string.Format(Loc.Tr("diag_speed_format"), scan.Speed), FontSize = 11, Foreground = BrushMuted });
             if (scan.ControlMode)
                 section.Children.Add(new TextBlock { Text = "  " + Loc.Tr("control_mode_enabled"), FontSize = 11, Foreground = BrushMuted });
             if (scan.CustomFileCount > 0)
-                section.Children.Add(new TextBlock { Text = $"  {scan.CustomFileCount} custom file(s)", FontSize = 11, Foreground = BrushMuted });
+                section.Children.Add(new TextBlock { Text = "  " + string.Format(Loc.Tr("custom_files_format"), scan.CustomFileCount), FontSize = 11, Foreground = BrushMuted });
 
             var importBtn = new Button
             {
@@ -2433,7 +2430,7 @@ public class SettingsPanel : Decorator
             FontSize = 12,
             HorizontalAlignment = HorizontalAlignment.Left,
         };
-        var rateNames = new[] { "Very Slow", "Slow", "Medium", "Fast", "Very Fast" };
+        var rateNames = new[] { Loc.Tr("rate_very_slow"), Loc.Tr("slow"), Loc.Tr("rate_medium"), Loc.Tr("fast"), Loc.Tr("rate_very_fast") };
         var rateValues = Enum.GetValues<DotNetTtsWrapper.Models.SpeechRate>();
         foreach (var r in rateNames)
             rateCombo.Items.Add(r);
@@ -2457,7 +2454,7 @@ public class SettingsPanel : Decorator
             FontSize = 12,
             HorizontalAlignment = HorizontalAlignment.Left,
         };
-        var pitchNames = new[] { "Very Low", "Low", "Medium", "High", "Very High" };
+        var pitchNames = new[] { Loc.Tr("pitch_very_low"), Loc.Tr("pitch_low"), Loc.Tr("pitch_medium"), Loc.Tr("pitch_high"), Loc.Tr("pitch_very_high") };
         var pitchValues = Enum.GetValues<DotNetTtsWrapper.Models.SpeechPitch>();
         foreach (var p in pitchNames)
             pitchCombo.Items.Add(p);
@@ -2519,10 +2516,10 @@ public class SettingsPanel : Decorator
             {
                 await svc.LoadVoicesAsync();
                 voiceCountLabel.Text = svc.AvailableVoices.Count > 0
-                    ? $"{svc.AvailableVoices.Count} voices"
-                    : "No voices found";
+                    ? string.Format(Loc.Tr("voices_count_format"), svc.AvailableVoices.Count)
+                    : Loc.Tr("no_voices_found");
                 voiceCombo.Items.Clear();
-                voiceCombo.Items.Add("(Default)");
+                voiceCombo.Items.Add(Loc.Tr("label_default"));
                 foreach (var v in svc.AvailableVoices)
                     voiceCombo.Items.Add(v.Name);
                 if (!string.IsNullOrEmpty(svc.SelectedVoiceId))
@@ -2534,7 +2531,7 @@ public class SettingsPanel : Decorator
             }
             catch (Exception ex)
             {
-                voiceCountLabel.Text = $"Error: {ex.Message}";
+                voiceCountLabel.Text = string.Format(Loc.Tr("error_format"), ex.Message);
             }
             finally
             {

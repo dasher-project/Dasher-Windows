@@ -14,6 +14,9 @@
   <data name="about" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>Dasher {0}</value>
+  </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>Accept hover/pointer events as Dasher input. Enable for eye tracking or external pointers.</value>
   </data>
@@ -67,6 +70,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="analytics_title" xml:space="preserve">
     <value>Help improve Dasher?</value>
   </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>Anonymous ID: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Anonymous usage analytics</value>
   </data>
@@ -78,6 +84,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="app_name" xml:space="preserve">
     <value>Dasher</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>Appearance</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>Left</value>
@@ -111,6 +120,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="backspace_tooltip" xml:space="preserve">
     <value>Delete (hold to repeat)</value>
+  </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>Calibrate Tilt</value>
   </data>
   <data name="cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -199,6 +211,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="current_calibration" xml:space="preserve">
     <value>Current Calibration</value>
   </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} custom file(s)</value>
+  </data>
   <data name="customization" xml:space="preserve">
     <value>Customization</value>
   </data>
@@ -265,11 +280,23 @@ You can change this anytime in Settings &gt; Privacy.</value>
     <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
 </value>
   </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>Dead zone: {0} px</value>
+  </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Decrease Speed</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>Default</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>Alphabet: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>Colour: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>Speed: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>Diagnostics</value>
@@ -283,6 +310,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="dwell_description" xml:space="preserve">
     <value>Hover in one spot to trigger a click, instead of pressing a button or switch.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>Dwell Duration</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Dwell to click</value>
   </data>
@@ -292,14 +322,26 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Enable tilt input first to access calibration.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>Dasher could not start</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>Engine Error</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>The Dasher engine encountered an internal error and has stopped. Please restart Dasher.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>Please try reinstalling, or report this in a GitHub issue.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>Engine Speech Features</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>Error: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>Error loading settings: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>Exit</value>
@@ -310,8 +352,17 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="eye_gaze" xml:space="preserve">
     <value>Eye Gaze</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>Could not connect to eye tracker on startup. Check the device and try re-selecting it in Settings &gt; Input.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>Eye Tracker Device</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>Could not connect to {0}. Check the device is connected and drivers are installed.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>Could not connect to {0}. Make sure tobii_stream_engine.dll is installed and a Tobii device is connected.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>Detailed tracking log for bug reports (per-sample lines, written to eyegaze.log in the Dasher folder). Basic connection events are always logged.</value>
@@ -327,6 +378,12 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>File truncated at 4 MB — only the first part is loaded</value>
+  </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>Normal Control</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>Smoothing Mode</value>
   </data>
   <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
     <value>Flatpak or AppImage build can't provide.
@@ -344,6 +401,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>Game Mode</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>Game On</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Game Text File</value>
@@ -386,6 +446,30 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="input" xml:space="preserve">
     <value>Input</value>
+  </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>Active engine input filter (set via Selection Method or advanced settings)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>Managed by the engine — change via the Selection Method setting</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>Direct pointer — minimal processing</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>No filtering — for clean input devices</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>Input smoothing — reduces jitter for noisy input (eye gaze, head tracking)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>Dampens small pointer movements for a steadier zoom</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>Standard continuous control (default)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>The standard steering method — move the pointer to zoom</value>
   </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>Joystick / gamepad (deflect a stick to steer)</value>
@@ -446,6 +530,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
     <value>Keyboard mode types Dasher's output into other applications using ydotool, which </value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(Default)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Language</value>
@@ -540,6 +627,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>No user training data yet</value>
   </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>No voices found</value>
+  </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Nothing to save</value>
   </data>
@@ -606,6 +696,21 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="pitch" xml:space="preserve">
     <value>Pitch</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>Very High</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>Very Low</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>Game</value>
   </data>
@@ -638,6 +743,15 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="rate" xml:space="preserve">
     <value>Rate</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>Very Fast</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>Very Slow</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Re-import from Dasher 5</value>
@@ -738,6 +852,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>Settings (speed, colours, control mode, language model)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>Settle time: {0} ms</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>Share</value>
   </data>
@@ -798,6 +915,10 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="start_fresh" xml:space="preserve">
     <value>Start fresh</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>Dasher failed to start:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>Steering Method</value>
   </data>
@@ -806,6 +927,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>Stop speaking</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>Switch Setup</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>System</value>
@@ -840,6 +964,18 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="tilt_calibration" xml:space="preserve">
     <value>Tilt Calibration</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>Hold the device upright, then tilt forward and back</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>Tilt left and right through the full range</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>Move slowly and smoothly through all positions</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>Tilt Settings</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>Tilt your device now...</value>
   </data>
@@ -848,6 +984,12 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="time_under_preferences_privacy" xml:space="preserve">
     <value>time under Preferences → Privacy.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>Eye Tracker Error</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>Eye tracker notice</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Toggle control mode</value>
@@ -896,6 +1038,18 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Share text</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>eyetuitive</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Tobii (Stream Engine)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP Gaze Tracker (network)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (native)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>Training</value>
@@ -975,11 +1129,26 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="udp_tracker_help" xml:space="preserve">
     <value>UDP tracker listens for STREAM_DATA or GazePoint messages</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} is available (you're running v{1}). Tap to download — disable in Settings &gt; Privacy.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>Dasher update available</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Use Dasher as your keyboard</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>Voice</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} voices</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>Volume</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>Dasher Warning</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>We found your Dasher 5 configuration on this Mac. Your alphabet, colours, speed settings, and custom files can be imported into Dasher 6.</value>
@@ -987,8 +1156,11 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="what_was_found" xml:space="preserve">
     <value>What was found</value>
   </data>
-  <data name="wpm_idle" xml:space="preserve">
-    <value>0 wpm</value>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} wpm</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>max {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>X range:</value>

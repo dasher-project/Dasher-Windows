@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (nl). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f cps · %2$d wpm</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>Er is een crashrapport opgeslagen in ~/Library/Logs/DiagnosticReports/Dasher-*.ips. Als je dit rapport kunt delen via een GitHub-issue, helpt dat ons om de bug te verhelpen.</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>Over</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>Dasher {0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>Accepteer hover-/aanwijzergebeurtenissen als Dasher-input. Schakel deze functie in voor oogtracking of externe aanwijzers.</value>
@@ -22,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>Snelheid automatisch aanpassen</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>Geavanceerde logging</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>Gedetailleerde diagnostische logging voor bugrapporten (per-voorbeeld eye-tracker lijnen, toetsaanslagtraces, UIA-lezingen). Basis verbindingsgebeurtenissen worden altijd gelogd. Kan grote logbestanden genereren.</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>Geavanceerde instellingen</value>
@@ -55,6 +67,12 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="analytics_settings_help" xml:space="preserve">
     <value>Dasher verzamelt anonieme gebruiksstatistieken en crashrapporten om te begrijpen hoe de app wordt gebruikt en om bugs te verhelpen. Er worden nooit getypte tekst, klembordinhoud of persoonlijke informatie verzameld.</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>Helpen Dasher te verbeteren?</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>Anonieme ID: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Anonieme gebruiksanalyses</value>
   </data>
@@ -63,6 +81,9 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>App-niveau verblijftijd om te selecteren</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>Uiterlijk</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>Links</value>
@@ -75,6 +96,12 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="arrow_right_tooltip" xml:space="preserve">
     <value>Verplaats cursor naar rechts (ingedrukt houden om te herhalen)</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="auto_centre_target" xml:space="preserve">
+    <value>Auto-Centre Doel</value>
   </data>
   <data name="auto_select_after_fixating_only_enable_if_os_dwell_is_off" xml:space="preserve">
     <value>Automatisch selecteren na fixatie. Alleen inschakelen als OS dwell is uitgeschakeld.</value>
@@ -91,6 +118,9 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="backspace_tooltip" xml:space="preserve">
     <value>Verwijderen (ingedrukt houden om te herhalen)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>Kalibreer Kanteling</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>Annuleren</value>
   </data>
@@ -106,6 +136,9 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="clear" xml:space="preserve">
     <value>Duidelijk</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>Logs wissen</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>Klik hier om de toetsenbordmodus in te stellen (hiervoor is ydotool nodig).</value>
   </data>
@@ -118,6 +151,9 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="colour_theme" xml:space="preserve">
     <value>Kleurenthema</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>inhoud of persoonlijke informatie ooit wordt verzameld. U kunt dit op elk moment wijzigen</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>Controle</value>
   </data>
@@ -126,6 +162,9 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>Bedieningsmodus</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>Controleknopen: verplaatsen, verwijderen, wissen, spreken, pauzeren</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Gekopieerd naar het klembord.</value>
@@ -168,6 +207,9 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Huidige kalibratie</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} aangepast bestand(en)</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>Aanpassing</value>
@@ -228,15 +270,30 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="dasher_quit_unexpectedly" xml:space="preserve">
     <value>Dasher nam onverwacht ontslag.</value>
   </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>Dasher v6</value>
+  </data>
   <data name="dasher_v6_2" xml:space="preserve">
     <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
 </value>
+  </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>Dode zone: {0} px</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Verlaag de snelheid</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>Standaard</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>Alfabet: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>Kleur: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>Snelheid: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>Diagnostiek</value>
@@ -250,6 +307,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="dwell_description" xml:space="preserve">
     <value>Zweef op één plek om een klik te activeren, in plaats van een knop of schakelaar in te drukken.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>Verblijfsduur</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Blijf staan om te klikken</value>
   </data>
@@ -259,14 +319,26 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Schakel eerst de kantelinput in om toegang te krijgen tot de kalibratie.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>Dasher kon niet starten</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>Motorfout</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>De Dasher-engine is een interne fout tegengekomen en is gestopt. Start Dasher alstublieft opnieuw.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>Probeer het opnieuw te installeren, of meld dit in een GitHub-issue.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>Motorspraakfuncties</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>Fout: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>Fout bij het laden van instellingen: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>Afsluiten</value>
@@ -277,8 +349,17 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="eye_gaze" xml:space="preserve">
     <value>Oogcontact</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>Kan geen verbinding maken met eye tracker bij opstarten. Controleer het apparaat en probeer het opnieuw te selecteren in Instellingen &gt; Invoer.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>Oogvolgapparaat</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>Kan geen verbinding maken met {0}. Controleer of het apparaat is aangesloten en de stuurprogramma's zijn geïnstalleerd.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>Kan geen verbinding maken met {0}. Zorg ervoor dat tobii_stream_engine.dll is geïnstalleerd en dat er een Tobii-apparaat is aangesloten.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>Gedetailleerd volglogboek voor bugrapporten (per-staal regels, geschreven naar eyegaze.log in de Dasher-map). Basis verbindingsgebeurtenissen worden altijd gelogd.</value>
@@ -295,6 +376,15 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>Bestand afgebroken bij 4 MB — alleen het eerste deel is geladen</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>Normale bediening</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>Gladmakende modus</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>Flatpak- of AppImage-build kan niet leveren.</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Om het toetsenbord te laten zweven, geef je Dasher toestemming om over andere apps te verschijnen en tik je opnieuw op Float.</value>
   </data>
@@ -306,6 +396,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>Spelmodus</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>Spel Aan</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Speltekstbestand</value>
@@ -349,6 +442,30 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="input" xml:space="preserve">
     <value>Invoer</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>Actief motoringangsfilter (ingesteld via Selectiemethode of geavanceerde instellingen)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>Beheerd door de motor — wijzig via de instelling Selectiemethode</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>Directe aanwijzer — minimale verwerking</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>Geen filtering — voor schone invoerapparaten</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>Ingangsverzachting — vermindert jitter bij invoer met ruis (oogbesturing, hoofd volgen)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>Dempt kleine aanwijzersbewegingen voor een stabielere zoom</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>Standaard continue regeling (standaard)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>De standaardstuurmethode — beweeg de aanwijzer om in te zoomen</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>Joystick / gamepad (een stick bewegen om te sturen)</value>
   </data>
@@ -363,6 +480,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>Invoer Verwerking</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>Installeer Dasher via je pakketbeheerder of bouw het vanaf de bron om het toetsenbordmodus te gebruiken.</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Installeer ydotool om de toetsenbordmodus te gebruiken&lt;/b&gt;</value>
@@ -382,6 +502,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Toetsenbordmodus verlaten</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>Toetsenbordmodus: verberg het uitvoervenster en typ Dashers tekst rechtstreeks in</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;De toetsenbordmodus is niet beschikbaar in deze build&lt;/b&gt;</value>
   </data>
@@ -399,6 +522,12 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>Venster transparantie in Toetsenbord/Direct-modus</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>Het toetsenbordmodus typt de uitvoer van Dasher in andere toepassingen met ydotool, wat</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(Standaard)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Taal</value>
@@ -484,11 +613,17 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>Er zijn geen instellingen beschikbaar voor dit gedeelte.</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>Geen spraakengine beschikbaar. Bouw met de systeem-TTS-functie, of stel een cloudstem in via Voorkeuren.</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Nog geen trainingsgegevens om te exporteren</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Nog geen trainingsgegevens van gebruikers</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>Geen stemmen gevonden</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Niets te redden</value>
@@ -496,8 +631,17 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="nothing_to_share" xml:space="preserve">
     <value>Niets te delen</value>
   </data>
+  <data name="ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="on_visionos_pinch_and_hold_on_the_canvas_to_start_writing_lo" xml:space="preserve">
     <value>Op visionOS begin je met typen door je vinger op het canvas te houden, rond te kijken terwijl je je vinger erop houdt om te sturen, en los te laten om te pauzeren. Het invoermodel is 'knijpen en kijken'.</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="open_2" xml:space="preserve">
+    <value>Open...</value>
   </data>
   <data name="open_failed" xml:space="preserve">
     <value>Openen mislukt</value>
@@ -547,6 +691,21 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="pitch" xml:space="preserve">
     <value>Pitch</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>Hoog</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>Laag</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>Zeer hoog</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>Zeer laag</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>Spel</value>
   </data>
@@ -568,11 +727,26 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="preview" xml:space="preserve">
     <value>Voorbeeld</value>
   </data>
+  <data name="privacy" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="privacy_2" xml:space="preserve">
+    <value>&lt;b&gt;Privacy&lt;/b&gt;</value>
+  </data>
   <data name="quick_speak" xml:space="preserve">
     <value>Snel spreken</value>
   </data>
   <data name="rate" xml:space="preserve">
     <value>Tarief</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>Zeer snel</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>Heel langzaam</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Opnieuw importeren vanuit Dasher 5</value>
@@ -582,6 +756,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="release_the_pinch_to_pause" xml:space="preserve">
     <value>Laat los om te pauzeren</value>
+  </data>
+  <data name="reset" xml:space="preserve">
+    <value>Resetten</value>
   </data>
   <data name="reset_all_settings_to_defaults" xml:space="preserve">
     <value>Alle instellingen terugzetten naar de standaardwaarden</value>
@@ -649,6 +826,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="selection_method" xml:space="preserve">
     <value>Selectiemethode</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>Service actief? Zie de installatiehulp op de toetsenbordknop voor installatiescripts.</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>Instellingen</value>
   </data>
@@ -667,8 +847,14 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>Instellingen (snelheid, kleuren, bedieningsmodus, taalmodel)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>Settle-tijd: {0} ms</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>Deel</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>Anonieme gebruiksstatistieken en crashrapporten delen? Geen getypte tekst, klembord</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>Toon invoerfoutopsporingsoverlay</value>
@@ -724,11 +910,21 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="start_fresh" xml:space="preserve">
     <value>Begin opnieuw</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>Dasher kon niet starten:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>Stuurmethode</value>
   </data>
+  <data name="stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>Stop met praten</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>Schakelaarconfiguratie</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Systeem</value>
@@ -741,6 +937,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>Dat bestand is al je trainingsgegevens.</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>de app waar je naar wijst (heeft ydotool nodig)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>De debug-overlay tekent een groen paneel linksboven in het canvas met live tellingen van aanraakgebeurtenissen en de laatst gerapporteerde (x, y)-coördinaten. Wanneer je knijpt en vasthoudt, zie je eerst touch.began en vervolgens touch.moved, waarbij de coördinaten veranderen terwijl je rondkijkt.</value>
@@ -760,11 +959,32 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="tilt_calibration" xml:space="preserve">
     <value>Kantelkalibratie</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>Houd het apparaat rechtop, kantel het vervolgens naar voren en achteren</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>Kantel naar links en rechts door het volledige bereik</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>Beweeg langzaam en soepel door alle posities</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>Kantelinstellingen</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>Kantel uw apparaat nu...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>Kantel uw apparaat tijdens de kalibratie door het volledige bewegingsbereik.</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>tijd onder Voorkeuren → Privacy.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>Eye Tracker-fout</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>Oogvolger bericht</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Schakel bedieningsmodus</value>
@@ -813,6 +1033,18 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Deel tekst</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>oogtuïtief</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Tobii (streamengine)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP Gaze Tracker (netwerk)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (native)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>Opleiding</value>
@@ -874,6 +1106,12 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="tts_no_credentials" xml:space="preserve">
     <value>Geen referenties vereist</value>
   </data>
+  <data name="turbo" xml:space="preserve">
+    <value>Turbo</value>
+  </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>Typen in andere applicaties vereist toegang tot /dev/uinput, wat een sandboxed</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Typsnelheid</value>
   </data>
@@ -886,17 +1124,38 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="udp_tracker_help" xml:space="preserve">
     <value>UDP-tracker luistert naar STREAM_DATA- of GazePoint-berichten</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} is beschikbaar (u gebruikt v{1}). Tik om te downloaden – schakel uit in Instellingen &gt; Privacy.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>Dasher-update beschikbaar</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Gebruik Dasher als je toetsenbord.</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>Stem</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} stemmen</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>Volume</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>Dasher-waarschuwing</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>We hebben je Dasher 5-configuratie op deze Mac gevonden. Je alfabet, kleuren, snelheidsinstellingen en aangepaste bestanden kunnen worden geïmporteerd in Dasher 6.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>Wat werd gevonden?</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} wpm</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>maximaal {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>X-bereik:</value>
@@ -906,6 +1165,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>ydotool gevonden. Toetsenbordmodus is gereed.</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool is nog steeds niet beschikbaar. Zorg ervoor dat het is geïnstalleerd en dat de ydotool-service actief is.</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>Je kunt de gegevens later importeren via Instellingen &gt; Privacy en migratie.</value>
