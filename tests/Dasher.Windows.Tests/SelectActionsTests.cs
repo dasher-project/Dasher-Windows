@@ -195,6 +195,18 @@ public class SelectActionsTests
     }
 
     [Fact]
+    public void Chained_paragraph_backward_over_leading_blank_line()
+    {
+        // Review loop 1: the LastIndexOf clamp re-found the separator at
+        // position 0 when the skip landed there — stalled at (1,4) forever.
+        var text = "\naaa"; // leading blank line
+        var (s1, e1) = SelectActions.EditorBounds(text, 4, 4, SelectDistance.Paragraph, SelectDirection.Backward, false);
+        Assert.Equal(1, s1); Assert.Equal(4, e1); // to after the \n
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Backward, true);
+        Assert.Equal(0, s2); Assert.Equal(4, e2); // chained: to position 0
+    }
+
+    [Fact]
     public void Parse_rejects_case_mismatches()
     {
         Assert.Null(SelectActions.Parse("Char", "yes"));

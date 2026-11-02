@@ -89,11 +89,17 @@ public static class SelectActions
         // table maps it to TextBox.SelectAll, not shift-to-boundary).
         if (dist == SelectDistance.All) return (0, text.Length);
 
-        // Anchor/active (issue #84 + RFC 0021 state machine): the ANCHOR is
-        // the fixed end (where the user started selecting); the ACTIVE end is
-        // where they're extending. Avalonia's SelectionStart is always the
-        // lower bound, so for BACKWARD selections the anchor is SelectionEnd
-        // and the active is SelectionStart (and vice versa for forward).
+        // Anchor/active (issue #84 + RFC 0021 state machine): this is a
+        // STATELESS grow-only model — the anchor is the end OPPOSITE the
+        // extension direction, the active is the end being extended. This
+        // diverges from Windows Shift+Arrow (which shrinks on direction
+        // reversal): a forward-then-backward sequence grows the selection
+        // rather than collapsing it. That is a deliberate AAC choice — a
+        // stateless pure function cannot track which end the user last
+        // extended, and monotonic selection is safer for eye-gaze users
+        // who cannot easily undo an accidental shrink. Direct mode uses
+        // real Shift+Arrow keystrokes and DOES shrink (mode divergence
+        // is documented in RFC 0021's platform table).
         var anchor = hadSelection
             ? (dir == SelectDirection.Backward ? selectionEnd : selectionStart)
             : Math.Clamp(selectionEnd, 0, text.Length);
@@ -185,7 +191,10 @@ public static class SelectActions
             i--; // step back onto the \n
             if (i > 0 && text[i - 1] == '\r') i--; // \r\n as a unit
         }
-        var prev = text.LastIndexOf('\n', Math.Max(0, i - 1));
+        // When the skip left i at 0 (leading blank line), the previous
+        // paragraph starts at 0 — LastIndexOf at position 0 would re-find
+        // the separator the skip just consumed (review loop 1 stall).
+        var prev = i > 0 ? text.LastIndexOf('\n', i - 1) : -1;
         return SnapToCodePoint(text, prev < 0 ? 0 : prev + 1, dir);
     }
 }
