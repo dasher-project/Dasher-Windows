@@ -90,13 +90,15 @@ public static class ContextSeedPolicy
     /// with a large length discontinuity is reading a DIFFERENT FIELD —
     /// seeding from it teleports the canvas (the huge "figure out where I
     /// am" jumps). Non-caret-moved reads (focus/foreground change — a new
-    /// target is expected) are always accepted. After
-    /// <see cref="FlapHysteresisLimit"/> consecutive distrusts the new source
-    /// is adopted (a permanent source switch must not freeze the context).
+    /// target is expected) are always accepted. When the SAME off-baseline
+    /// source is distrusted <see cref="FlapHysteresisLimit"/> times in a row
+    /// (adoption happens on the limit-th qualifying read), the switch looks
+    /// permanent (the element path stopped being offered) and the new source
+    /// is adopted rather than freezing the context forever.
     /// </summary>
     public static ReadTrust EvaluateReadTrust(
         string? prevSource, int prevLength, string newSource, int newLength,
-        bool isCaretMovedReason, int consecutiveDistrusts)
+        bool isCaretMovedReason, int consecutiveDistrusts, string? lastDistrustedSource)
     {
         if (!isCaretMovedReason)
             return ReadTrust.Accept;
@@ -107,7 +109,11 @@ public static class ContextSeedPolicy
         // discontinuity. The 668 ↔ 10,981 field case is ~16x either way.
         if (Math.Abs(newLength - prevLength) <= SourceFlapMinDiscontinuity)
             return ReadTrust.Accept;
-        return consecutiveDistrusts + 1 >= FlapHysteresisLimit
+        // consistency: only consecutive distrusts of the SAME source count
+        // toward adoption (a toplevel/win32 mix must not adopt whichever
+        // came third)
+        var effective = lastDistrustedSource == newSource ? consecutiveDistrusts : 0;
+        return effective + 1 >= FlapHysteresisLimit
             ? ReadTrust.AcceptAfterHysteresis
             : ReadTrust.Distrust;
     }

@@ -1297,18 +1297,20 @@ public partial class MainWindow : Window
             _lastReadSource = null; // different window: the baseline means nothing
         var trust = Services.ContextSeedPolicy.EvaluateReadTrust(
             _lastReadSource, _lastReadLength, context.Source, context.Text.Length,
-            reason == "caret moved", _flapDistrustCount);
+            reason == "caret moved", _flapDistrustCount, _lastDistrustedSource);
         if (trust == Services.ContextSeedPolicy.ReadTrust.Distrust)
         {
             _flapDistrustCount++;
+            _lastDistrustedSource = context.Source;
             KbLog($"Context seed ({reason}): read source flapped " +
                   $"({_lastReadSource}/{_lastReadLength} chars → {context.Source}/{context.Text.Length} chars) " +
                   $"— different field, keeping context (distrust #{_flapDistrustCount})");
             return; // baseline NOT updated: the flap must not become the new normal
         }
         if (trust == Services.ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis)
-            KbLog($"Context seed ({reason}): source switch looks PERMANENT ({_lastReadSource} → {context.Source}) — adopting after {_flapDistrustCount} distrusts");
+            KbLog($"Context seed ({reason}): source switch looks PERMANENT ({_lastReadSource} → {context.Source}) — adopting");
         _flapDistrustCount = 0;
+        _lastDistrustedSource = null;
         _lastReadSource = context.Source;
         _lastReadLength = context.Text.Length;
         _lastReadTarget = _targetTracker.Current;
@@ -1624,10 +1626,11 @@ public partial class MainWindow : Window
     private int _lastReadLength;
     private IntPtr _lastReadTarget;
 
-    /// <summary>Consecutive read-trust distrusts (#91 hysteresis: a
-    /// permanent source switch is adopted after
-    /// ContextSeedPolicy.FlapHysteresisLimit).</summary>
+    /// <summary>Consecutive read-trust distrusts of the SAME source (#91
+    /// hysteresis: a permanent source switch is adopted on the
+    /// ContextSeedPolicy.FlapHysteresisLimit-th qualifying read).</summary>
     private int _flapDistrustCount;
+    private string? _lastDistrustedSource;
 
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;

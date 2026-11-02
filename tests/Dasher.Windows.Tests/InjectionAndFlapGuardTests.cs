@@ -96,19 +96,19 @@ public class InjectionAndFlapGuardTests
     {
         // focused compose field (668) → top-level document (10,981)
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, isCaretMovedReason: true, consecutiveDistrusts: 0));
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 0, null));
         // and back
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("toplevel", 10981, "element", 668, true, 0));
+            ContextSeedPolicy.EvaluateReadTrust("toplevel", 10981, "element", 668, true, 0, null));
     }
 
     [Fact]
     public void Trust_ignores_same_source_reads()
     {
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "element", 5000, true, 0));
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "element", 5000, true, 0, null));
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("toplevel", 10981, "toplevel", 40, true, 0));
+            ContextSeedPolicy.EvaluateReadTrust("toplevel", 10981, "toplevel", 40, true, 0, null));
     }
 
     [Fact]
@@ -116,16 +116,16 @@ public class InjectionAndFlapGuardTests
     {
         // both views of the same short field: equivalent text, no teleport
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("element", 120, "toplevel", 130, true, 0));
+            ContextSeedPolicy.EvaluateReadTrust("element", 120, "toplevel", 130, true, 0, null));
     }
 
     [Fact]
     public void Trust_ignores_first_read_no_baseline()
     {
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust(null, 0, "toplevel", 10981, true, 0));
+            ContextSeedPolicy.EvaluateReadTrust(null, 0, "toplevel", 10981, true, 0, null));
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("", 0, "element", 668, true, 0));
+            ContextSeedPolicy.EvaluateReadTrust("", 0, "element", 668, true, 0, null));
     }
 
     [Fact]
@@ -133,19 +133,30 @@ public class InjectionAndFlapGuardTests
     {
         // a new target is expected on focus/foreground reasons — no gate
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, isCaretMovedReason: false, consecutiveDistrusts: 0));
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, false, 0, null));
     }
 
     [Fact]
     public void Trust_adopts_permanent_source_switch_after_hysteresis()
     {
-        // distrust #1 and #2...
+        // distrust #1 and #2 (same distrusted source)...
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 0));
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 0, null));
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 1));
-        // ...then the switch is judged permanent: accept and reset
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 1, "toplevel"));
+        // ...then the switch is judged permanent: adopt on the 3rd qualifying read
         Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 2));
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 2, "toplevel"));
+    }
+
+    [Fact]
+    public void Trust_hysteresis_requires_a_consistent_distrusted_source()
+    {
+        // alternating off-baseline sources must not accumulate toward
+        // adoption (toplevel/win32 mixing adopts neither)
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 2, "win32"));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "win32", 5000, true, 2, "toplevel"));
     }
 }
