@@ -24,10 +24,22 @@ public class SelectActionsTests
     [Fact]
     public void Parse_rejects_unknown_values()
     {
-        Assert.Null(SelectActions.Parse("sentence", "yes")); // deferred granularity
+        Assert.Null(SelectActions.Parse("line", "yes")); // not in the control tree vocabulary
         Assert.Null(SelectActions.Parse("char", "maybe"));
         Assert.Null(SelectActions.Parse(null, "yes"));
         Assert.Null(SelectActions.Parse("char", null));
+    }
+
+    [Fact]
+    public void Parse_accepts_sentence_for_move_delete()
+    {
+        // RFC 0021 amendment: move/delete carry sentence leaves; select
+        // doesn't, but the parser is shared and accepts it (direct mode
+        // falls back to paragraph, editor mode measures it).
+        var r = SelectActions.Parse("sentence", "no");
+        Assert.NotNull(r);
+        Assert.Equal(SelectDistance.Sentence, r!.Value.Distance);
+        Assert.Equal(SelectDirection.Backward, r.Value.Direction);
     }
 
     // ── Keystroke ─────────────────────────────────────────────────────────
@@ -251,6 +263,145 @@ public class SelectActionsTests
         Assert.Equal(0, s); Assert.Equal(9, e);
         var (s2, e2) = SelectActions.EditorBounds("some text", 4, 4, SelectDistance.All, SelectDirection.Backward, false);
         Assert.Equal(0, s2); Assert.Equal(9, e2);
+    }
+
+    // ── RFC 0021 amendment: move/delete (#88) ───────────────────────────
+
+    [Fact]
+    public void CaretKeystroke_maps_all_direct_mode_dists()
+    {
+        // char: bare arrows
+        var cb = SelectActions.CaretKeystroke(SelectDistance.Char, SelectDirection.Backward)!.Value;
+        Assert.False(cb.Shift);
+        Assert.Equal((ushort)0x25, cb.Arrow);
+        Assert.Equal((ushort)0x27, SelectActions.CaretKeystroke(SelectDistance.Char, SelectDirection.Forward)!.Value.Arrow);
+        // word: Ctrl+arrows, no shift
+        var w = SelectActions.CaretKeystroke(SelectDistance.Word, SelectDirection.Forward)!.Value;
+        Assert.True(w.Ctrl); Assert.False(w.Shift); Assert.Equal((ushort)0x27, w.Arrow);
+        // paragraph: Ctrl+Up/Down
+        Assert.Equal((ushort)0x26, SelectActions.CaretKeystroke(SelectDistance.Paragraph, SelectDirection.Backward)!.Value.Arrow);
+        Assert.Equal((ushort)0x28, SelectActions.CaretKeystroke(SelectDistance.Paragraph, SelectDirection.Forward)!.Value.Arrow);
+        // all: Ctrl+Home/End
+        var home = SelectActions.CaretKeystroke(SelectDistance.All, SelectDirection.Backward)!.Value;
+        Assert.True(home.Ctrl); Assert.False(home.Shift); Assert.Equal((ushort)0x24, home.Arrow);
+        Assert.Equal((ushort)0x23, SelectActions.CaretKeystroke(SelectDistance.All, SelectDirection.Forward)!.Value.Arrow);
+        // sentence: no chord (callers fall back)
+        Assert.Null(SelectActions.CaretKeystroke(SelectDistance.Sentence, SelectDirection.Forward));
+    }
+
+    [Fact]
+    public void DeleteKeystrokes_char_word_are_single_chords()
+    {
+        var cb = SelectActions.DeleteKeystrokes(SelectDistance.Char, SelectDirection.Backward);
+        Assert.Single(cb);
+        Assert.Equal((ushort)0x08, cb[0].Arrow); // Backspace
+        var cf = SelectActions.DeleteKeystrokes(SelectDistance.Char, SelectDirection.Forward);
+        Assert.Equal((ushort)0x2E, cf[0].Arrow); // Delete
+
+        var wb = SelectActions.DeleteKeystrokes(SelectDistance.Word, SelectDirection.Backward);
+        Assert.Single(wb);
+        Assert.True(wb[0].Ctrl); Assert.Equal((ushort)0x08, wb[0].Arrow); // Ctrl+Backspace
+        var wf = SelectActions.DeleteKeystrokes(SelectDistance.Word, SelectDirection.Forward);
+        Assert.True(wf[0].Ctrl); Assert.Equal((ushort)0x2E, wf[0].Arrow); // Ctrl+Delete
+    }
+
+    [Fact]
+    public void DeleteKeystrokes_paragraph_and_sentence_compose_select_then_delete()
+    {
+        foreach (var dist in new[] { SelectDistance.Paragraph, SelectDistance.Sentence })
+        {
+            var back = SelectActions.DeleteKeystrokes(dist, SelectDirection.Backward);
+            Assert.Equal(2, back.Count);
+            // step 1: Ctrl+Shift+Up (select to paragraph start)
+            Assert.True(back[0].Ctrl && back[0].Shift);
+            Assert.Equal((ushort)0x26, back[0].Arrow);
+            // step 2: Delete
+            Assert.False(back[1].Ctrl || back[1].Shift);
+            Assert.Equal((ushort)0x2E, back[1].Arrow);
+
+            var fwd = SelectActions.DeleteKeystrokes(dist, SelectDirection.Forward);
+            Assert.Equal((ushort)0x28, fwd[0].Arrow); // Ctrl+Shift+Down
+        }
+    }
+
+    [Fact]
+    public void DeleteKeystrokes_all_is_select_all_then_delete()
+    {
+        var all = SelectActions.DeleteKeystrokes(SelectDistance.All, SelectDirection.Backward);
+        Assert.Equal(2, all.Count);
+        Assert.True(all[0].Ctrl); Assert.False(all[0].Shift);
+        Assert.Equal((ushort)0x41, all[0].Letter); // 'A'
+        Assert.Equal((ushort)0x2E, all[1].Arrow);
+    }
+
+    [Fact]
+    public void EditCaret_moves_by_each_dist()
+    {
+        var text = "One. Two.\nThree four";
+        // char
+        Assert.Equal(4, SelectActions.EditCaret(text, 3, SelectDistance.Char, SelectDirection.Forward));
+        Assert.Equal(2, SelectActions.EditCaret(text, 3, SelectDistance.Char, SelectDirection.Backward));
+        // word: to the next word start
+        Assert.Equal(5, SelectActions.EditCaret(text, 3, SelectDistance.Word, SelectDirection.Forward));
+        // paragraph: stops AT the newline position (selection excludes it)
+        Assert.Equal(9, SelectActions.EditCaret(text, 3, SelectDistance.Paragraph, SelectDirection.Forward));
+        // sentence: forward from on the '.' after "One" lands just after the
+        // NEXT boundary (the '.' after "Two")
+        Assert.Equal(9, SelectActions.EditCaret(text, 3, SelectDistance.Sentence, SelectDirection.Forward));
+        // all
+        Assert.Equal(0, SelectActions.EditCaret(text, 7, SelectDistance.All, SelectDirection.Backward));
+        Assert.Equal(text.Length, SelectActions.EditCaret(text, 7, SelectDistance.All, SelectDirection.Forward));
+    }
+
+    [Fact]
+    public void EditCaret_sentence_backward_reaches_previous_sentence_and_chains()
+    {
+        var text = "One. Two. Three";
+        // caret mid-Three: backward → start of Three
+        Assert.Equal(10, SelectActions.EditCaret(text, 13, SelectDistance.Sentence, SelectDirection.Backward));
+        // from that start: chained → start of Two
+        Assert.Equal(5, SelectActions.EditCaret(text, 10, SelectDistance.Sentence, SelectDirection.Backward));
+        // chained again → start of One
+        Assert.Equal(0, SelectActions.EditCaret(text, 5, SelectDistance.Sentence, SelectDirection.Backward));
+        // at text start: stays
+        Assert.Equal(0, SelectActions.EditCaret(text, 0, SelectDistance.Sentence, SelectDirection.Backward));
+    }
+
+    [Fact]
+    public void DeleteBounds_backward_ends_at_caret_and_forward_starts_at_it()
+    {
+        var text = "hello world again";
+        var wb = SelectActions.DeleteBounds(text, 11, SelectDistance.Word, SelectDirection.Backward);
+        Assert.Equal(6, wb.Start); Assert.Equal(11, wb.End);
+        var wf = SelectActions.DeleteBounds(text, 6, SelectDistance.Word, SelectDirection.Forward);
+        Assert.Equal(6, wf.Start); Assert.Equal(12, wf.End); // includes the trailing space (Ctrl+Delete semantics)
+
+        var pb = SelectActions.DeleteBounds("first\nsecond\nthird", 12, SelectDistance.Paragraph, SelectDirection.Backward);
+        Assert.Equal(6, pb.Start); Assert.Equal(12, pb.End);
+
+        var all = SelectActions.DeleteBounds("some text", 4, SelectDistance.All, SelectDirection.Forward);
+        Assert.Equal(0, all.Start); Assert.Equal(9, all.End);
+    }
+
+    [Fact]
+    public void DeleteBounds_char_backward_one_code_point()
+    {
+        // emoji (surrogate pair) before the caret: deletes BOTH halves
+        var text = "a😀b";
+        var (s, e) = SelectActions.DeleteBounds(text, 3, SelectDistance.Char, SelectDirection.Backward);
+        Assert.Equal(1, s); Assert.Equal(3, e);
+        // and forward from 1 skips the pair whole
+        var (s2, e2) = SelectActions.DeleteBounds(text, 1, SelectDistance.Char, SelectDirection.Forward);
+        Assert.Equal(1, s2); Assert.Equal(3, e2);
+    }
+
+    [Fact]
+    public void DeleteBounds_empty_range_at_document_edge_is_noop()
+    {
+        var (s, e) = SelectActions.DeleteBounds("abc", 0, SelectDistance.Char, SelectDirection.Backward);
+        Assert.Equal(0, s); Assert.Equal(0, e);
+        var (s2, e2) = SelectActions.DeleteBounds("abc", 3, SelectDistance.Word, SelectDirection.Forward);
+        Assert.Equal(3, s2); Assert.Equal(3, e2);
     }
 }
 

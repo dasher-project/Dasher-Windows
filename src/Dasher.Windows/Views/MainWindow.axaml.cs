@@ -114,6 +114,7 @@ public partial class MainWindow : Window
     private const uint KEYEVENTF_KEYUP = 0x0002;
     private const ushort VK_BACK = 0x08;
     private const ushort VK_RETURN = 0x0D;
+    private const ushort VK_DELETE = 0x2E;
 
     public MainWindow()
     {
@@ -1320,26 +1321,34 @@ public partial class MainWindow : Window
 
     private void OnEngineCustomAction(string name, System.Collections.Generic.Dictionary<string, string> attrs)
     {
-        // SEH guard (issue #85, review loop 1): select chords inject via
-        // SendInput inside the Avalonia message pump — same crash class
-        // as the output/editing-key paths.
+        // SEH guard (issue #85, review loop 1): chords inject via SendInput
+        // inside the Avalonia message pump — same crash class as the
+        // output/editing-key paths. Unit actions (#88/#89) await UIA with a
+        // hard timeout, so the guard wraps an async core; fire-and-forget —
+        // the dispatcher must never block the pump on a hung provider.
+        _ = DispatchCustomActionSafe(name, attrs);
+    }
+
+    private async System.Threading.Tasks.Task DispatchCustomActionSafe(
+        string name, System.Collections.Generic.Dictionary<string, string> attrs)
+    {
         try
         {
-            OnEngineCustomActionCore(name, attrs);
+            await OnEngineCustomActionCore(name, attrs);
         }
         catch (System.Runtime.InteropServices.SEHException ex)
         {
-            KbLog($"select: SEHException (0x{ex.HResult:X}) — guarded, continuing");
+            KbLog($"{name}: SEHException (0x{ex.HResult:X}) — guarded, continuing");
         }
         catch (Exception ex)
         {
-            KbLog($"select: {ex.GetType().Name}: {ex.Message} — guarded");
+            KbLog($"{name}: {ex.GetType().Name}: {ex.Message} — guarded");
         }
     }
 
-    private void OnEngineCustomActionCore(string name, System.Collections.Generic.Dictionary<string, string> attrs)
+    private async System.Threading.Tasks.Task OnEngineCustomActionCore(string name, System.Collections.Generic.Dictionary<string, string> attrs)
     {
-        if (name != "select") return;
+        if (name != "select" && name != "move" && name != "delete") return;
         if (_pickerSessionActive) return; // keystrokes must not reach a picker dialog
 
         var parsed = Services.SelectActions.Parse(
@@ -1347,49 +1356,135 @@ public partial class MainWindow : Window
             attrs.TryGetValue("forward", out var f) ? f : null);
         if (parsed is not { } action)
         {
-            KbLog($"select: unknown attributes dist={d ?? "(null)"} forward={f ?? "(null)"} - no-op");
+            KbLog($"{name}: unknown attributes dist={d ?? "(null)"} forward={f ?? "(null)"} - no-op");
             return;
         }
         var (dist, dir) = action;
+        var forward = dir == Services.SelectDirection.Forward;
+        // Sentence has no Windows chord and no UIA unit: every direct-mode
+        // path falls back to paragraph granularity (logged per action).
+        var chordDist = dist == Services.SelectDistance.Sentence
+            ? Services.SelectDistance.Paragraph : dist;
+        if (dist == Services.SelectDistance.Sentence)
+            KbLog($"{name}: sentence granularity has no direct-mode mapping - paragraph fallback");
 
         if (_vm is { IsKeyboardMode: true })
         {
-            // Direct mode: native OS selection in the TARGET (the target's
-            // own Copy/Cut/Delete then act on it without further work).
-            var ks = Services.SelectActions.Keystroke(dist, dir);
+            // Direct mode: native OS operations in the TARGET.
             _targetTracker.EnsureForeground(OurHwnd());
 
-            // RFC 0021 / #79 interaction: the caret events our selection
-            // keystrokes provoke land in the existing caret-moved debounce;
-            // a backward paragraph select changes the caret-anchored
-            // sentence window and would re-seed mid-selection. Extend the
-            // settle-window pattern to select chords. Timestamp BEFORE the
-            // send (the established #79 ordering).
+            // RFC 0021 / #79 interaction: the caret events our keystrokes
+            // and UIA selections provoke land in the existing caret-moved
+            // debounce; timestamp BEFORE acting (the established #79
+            // ordering) so our own injections never re-seed mid-action.
             _lastOwnParagraphInject = Environment.TickCount64;
-            SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
-            // Field-test note (review loops 2-4): Shift-key injection is new
-            // exposure for this codebase (existing chords inject Ctrl only) —
-            // repeated Shift injection can trigger Windows Sticky/Filter Keys
-            // prompts in some configurations; watch for it in tester feedback.
-            Services.AnalyticsService.CaptureUiAction("control_tree", "select",
-                $"dist={dist.ToString().ToLowerInvariant()},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
+
+            if (name == "select")
+            {
+                if (dist == Services.SelectDistance.Paragraph)
+                {
+                    // #89: Ctrl+Shift+Up/Down is line-granular in
+                    // line-class controls (browsers, plain edits) — the
+                    // field-reported "Select Paragraph doesn't select the
+                    // whole paragraph". TextPattern is paragraph-exact
+                    // where the pattern exists; chords remain the fallback.
+                    if (await Services.TargetTextActions.ExtendSelectionAsync(
+                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
+                    {
+                        Services.AnalyticsService.CaptureUiAction("control_tree", "select",
+                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia");
+                        return;
+                    }
+                    KbLog("  select paragraph: no TextPattern - chord fallback (line-class targets extend by line)");
+                }
+                var ks = Services.SelectActions.Keystroke(chordDist, dir);
+                SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
+                // Field-test note (review loops 2-4): Shift-key injection is new
+                // exposure for this codebase (existing chords inject Ctrl only) —
+                // repeated Shift injection can trigger Windows Sticky/Filter Keys
+                // prompts in some configurations; watch for it in tester feedback.
+            }
+            else if (name == "move")
+            {
+                if (chordDist == Services.SelectDistance.Paragraph)
+                {
+                    // Caret-by-paragraph chords are line-granular in
+                    // line-class controls too — TextPattern-first, same as
+                    // the select path.
+                    if (await Services.TargetTextActions.MoveCaretAsync(
+                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
+                    {
+                        Services.AnalyticsService.CaptureUiAction("control_tree", "move",
+                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia");
+                        return;
+                    }
+                    KbLog("  move paragraph: no TextPattern - chord fallback");
+                }
+                if (Services.SelectActions.CaretKeystroke(chordDist, dir) is { } k)
+                    SendSelectChord(k.Ctrl, k.Shift, k.Arrow, k.Letter);
+            }
+            else // delete
+            {
+                if (chordDist == Services.SelectDistance.Paragraph)
+                {
+                    // Precise unit span via TextPattern, then the Delete
+                    // key (UIA cannot modify text — select + native key).
+                    if (await Services.TargetTextActions.SelectUnitSpanAsync(
+                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
+                    {
+                        SendVirtualKey(VK_DELETE);
+                        Services.AnalyticsService.CaptureUiAction("control_tree", "delete",
+                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia");
+                        return;
+                    }
+                    KbLog("  delete paragraph: no TextPattern - chord composition fallback");
+                }
+                foreach (var step in Services.SelectActions.DeleteKeystrokes(chordDist, dir))
+                    SendSelectChord(step.Ctrl, step.Shift, step.Arrow, step.Letter);
+            }
+
+            if (name != "select")
+                Services.AnalyticsService.CaptureUiAction("control_tree", name,
+                    $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")}");
         }
         else
         {
-            // Editor mode: measured selection over the pane text with the
-            // active-end state machine (SelectActions.EditorBounds).
+            // Editor mode: measured over the pane text.
             var box = MessageArea;
             if (box == null) return;
             var text = box.Text ?? "";
-            var hadSelection = box.SelectionStart != box.SelectionEnd;
-            var (start, end) = Services.SelectActions.EditorBounds(
-                text, box.SelectionStart, box.SelectionEnd, dist, dir, hadSelection);
-            // Suppress the editor-sync while setting the selection: a
-            // selection change with identical text is not a user edit.
-            box.SelectionStart = start;
-            box.SelectionEnd = end;
-            Services.AnalyticsService.CaptureUiAction("control_tree", "select",
-                $"dist={dist.ToString().ToLowerInvariant()},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
+
+            if (name == "select")
+            {
+                // Active-end state machine (SelectActions.EditorBounds).
+                var hadSelection = box.SelectionStart != box.SelectionEnd;
+                var (start, end) = Services.SelectActions.EditorBounds(
+                    text, box.SelectionStart, box.SelectionEnd, dist, dir, hadSelection);
+                // Suppress the editor-sync while setting the selection: a
+                // selection change with identical text is not a user edit.
+                box.SelectionStart = start;
+                box.SelectionEnd = end;
+            }
+            else if (name == "move")
+            {
+                // CaretIndex re-anchors the model when text is in sync
+                // (RFC 0019 clause 3 — same as the arrow editing keys).
+                box.CaretIndex = Services.SelectActions.EditCaret(text, box.CaretIndex, dist, dir);
+            }
+            else // delete
+            {
+                // Applied as a USER edit: TextChanged seeds the engine
+                // (RFC 0019 clause 4 — same as the backspace editing key).
+                var (start, end) = Services.SelectActions.DeleteBounds(text, box.CaretIndex, dist, dir);
+                if (end > start && start >= 0 && end <= text.Length)
+                {
+                    box.Text = text.Remove(start, end - start);
+                    box.CaretIndex = start;
+                }
+            }
+
+            Services.AnalyticsService.CaptureUiAction("control_tree", name,
+                $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")}");
         }
     }
 

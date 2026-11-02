@@ -189,4 +189,47 @@ public class SentenceWindowTests
         Assert.Equal("Hello", text);
         Assert.Equal(5, caret);
     }
+
+    // ── SentenceBound (RFC 0021 move/delete, same boundary set as Trim) ──
+
+    [Fact]
+    public void SentenceBound_backward_reaches_current_then_previous_sentence()
+    {
+        var text = "One. Two. Three";
+        Assert.Equal(10, SentenceWindow.SentenceBound(text, 13, SelectDirection.Backward)); // start of "Three"
+        Assert.Equal(5, SentenceWindow.SentenceBound(text, 10, SelectDirection.Backward)); // chained: start of "Two"
+        Assert.Equal(0, SentenceWindow.SentenceBound(text, 5, SelectDirection.Backward)); // chained: start of "One"
+        Assert.Equal(0, SentenceWindow.SentenceBound(text, 0, SelectDirection.Backward)); // clamped at start
+    }
+
+    [Fact]
+    public void SentenceBound_backward_sitting_after_boundary_steps_to_previous()
+    {
+        // caret just after the '.' of "One." → previous sentence start
+        Assert.Equal(0, SentenceWindow.SentenceBound("One. Two.", 4, SelectDirection.Backward));
+    }
+
+    [Fact]
+    public void SentenceBound_forward_lands_after_next_boundary()
+    {
+        var text = "One. Two. Three";
+        // mid "One": forward lands after the '.' that ends "One"
+        Assert.Equal(4, SentenceWindow.SentenceBound(text, 2, SelectDirection.Forward));
+        // sitting ON a boundary: skips it, lands after the NEXT one
+        Assert.Equal(9, SentenceWindow.SentenceBound(text, 3, SelectDirection.Forward));
+        // no further boundary: end of text
+        Assert.Equal(text.Length, SentenceWindow.SentenceBound(text, 10, SelectDirection.Forward));
+    }
+
+    [Fact]
+    public void SentenceBound_never_splits_a_surrogate_pair()
+    {
+        var text = "😀. Two";
+        // backward from inside "Two" must never land mid-pair (index 1)
+        var b = SentenceWindow.SentenceBound(text, 5, SelectDirection.Backward);
+        Assert.NotEqual(1, b);
+        // forward from just after the emoji must also not land mid-pair
+        var f = SentenceWindow.SentenceBound(text, 2, SelectDirection.Forward);
+        Assert.NotEqual(1, f);
+    }
 }

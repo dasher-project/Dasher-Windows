@@ -72,4 +72,62 @@ public static class SentenceWindow
         var trimmed = text[start..caret];
         return (trimmed, trimmed.Length); // caret at end of trimmed text
     }
+
+    /// <summary>
+    /// Start/end of the adjacent sentence for caret moves and measured
+    /// deletes (RFC 0021 move/delete migration). Same boundary set as
+    /// <see cref="Trim"/> — one notion of "sentence" across seeding,
+    /// selection, move and delete. Forward lands just AFTER the next
+    /// boundary at/after <paramref name="from"/> (chained moves advance
+    /// sentence by sentence, skipping a boundary the position sits on —
+    /// mirroring ParagraphBound); backward lands at the START of the
+    /// current/previous sentence. Surrogate-safe.
+    /// </summary>
+    public static int SentenceBound(string text, int from, SelectDirection dir)
+    {
+        var i = Math.Clamp(from, 0, text.Length);
+        if (dir == SelectDirection.Forward)
+        {
+            // skip a boundary the position sits on (chained moves)
+            if (i < text.Length && IsBoundary(text[i])) i++;
+            for (var k = i; k < text.Length; k++)
+            {
+                if (IsBoundary(text[k]))
+                    return Snap(text, k + 1, dir);
+            }
+            return text.Length;
+        }
+        // Backward: land at the START of the sentence containing (or
+        // preceding) the position; chained presses from a sentence start
+        // must reach the PREVIOUS sentence (the stall class issue #84
+        // fixed for paragraphs).
+        if (i > 0 && IsBoundary(text[i - 1])) i--; // sitting after a boundary: step onto it
+        var prev = -1;
+        for (var k = i - 1; k >= 0; k--)
+        {
+            if (IsBoundary(text[k])) { prev = k; break; }
+        }
+        var start = prev < 0 ? 0 : prev + 1;
+        // sentence start skips the whitespace after its boundary
+        while (start < i && char.IsWhiteSpace(text[start])) start++;
+        // chained: already AT this sentence's start → the previous one
+        if (start == Math.Clamp(from, 0, text.Length) && prev > 0)
+        {
+            var before = -1;
+            for (var k = prev - 1; k >= 0; k--)
+            {
+                if (IsBoundary(text[k])) { before = k; break; }
+            }
+            start = before < 0 ? 0 : before + 1;
+            while (start < prev && char.IsWhiteSpace(text[start])) start++;
+        }
+        return Snap(text, start, dir);
+    }
+
+    private static bool IsBoundary(char c) => Boundaries.Contains(c);
+
+    private static int Snap(string text, int i, SelectDirection dir) =>
+        i > 0 && i < text.Length && char.IsLowSurrogate(text[i]) && char.IsHighSurrogate(text[i - 1])
+            ? (dir == SelectDirection.Backward ? i - 1 : i + 1)
+            : i;
 }
