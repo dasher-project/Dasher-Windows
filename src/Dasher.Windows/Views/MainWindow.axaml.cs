@@ -1313,6 +1313,10 @@ public partial class MainWindow : Window
             // send (the established #79 ordering).
             _lastOwnParagraphInject = Environment.TickCount64;
             SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
+            // Field-test note (review loops 2-4): Shift-key injection is new
+            // exposure for this codebase (existing chords inject Ctrl only) —
+            // repeated Shift injection can trigger Windows Sticky/Filter Keys
+            // prompts in some configurations; watch for it in tester feedback.
             Services.AnalyticsService.CaptureUiAction("control_tree", "select",
                 $"dist={dist.ToString().ToLowerInvariant()},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
         }
@@ -1320,11 +1324,6 @@ public partial class MainWindow : Window
         {
             // Editor mode: measured selection over the pane text with the
             // active-end state machine (SelectActions.EditorBounds).
-            // Field-test note (review loop 2): direct mode's Shift-key
-            // injection is new exposure for this codebase (existing chords
-            // inject Ctrl only) - repeated Shift injection can trigger
-            // Windows Sticky/Filter Keys prompts in some configurations;
-            // watch for it in tester feedback.
             var box = MessageArea;
             if (box == null) return;
             var text = box.Text ?? "";

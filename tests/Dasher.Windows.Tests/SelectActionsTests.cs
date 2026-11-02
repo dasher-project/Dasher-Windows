@@ -151,6 +151,30 @@ public class SelectActionsTests
     }
 
     [Fact]
+    public void Chained_paragraph_forward_on_crlf_advances()
+    {
+        // Review loop 3: on \r\n text (Avalonia inserts this on Enter),
+        // the skip must consume the \r\n as a unit - not stall on the \r.
+        var text = "aaa\r\nbbb\r\nccc";
+        var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(1, s1); Assert.Equal(3, e1); // stops before the \r at 3
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Forward, true);
+        Assert.Equal(1, s2); Assert.Equal(8, e2); // chains past \r\n to the next \r at 8
+    }
+
+    [Fact]
+    public void Chained_paragraph_forward_steps_blank_lines_one_at_a_time()
+    {
+        // Review loop 3: Ctrl+Shift+Down stops at each paragraph mark -
+        // one separator per press; blank paragraphs are stepped, not swallowed.
+        var text = "a\n\nb\nc"; // blank line between a and b
+        var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(1, s1); Assert.Equal(3, e1); // to the second \n (the blank line's)
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Forward, true);
+        Assert.Equal(1, s2); Assert.Equal(5, e2); // past the blank to after b
+    }
+
+    [Fact]
     public void Parse_rejects_case_mismatches()
     {
         Assert.Null(SelectActions.Parse("Char", "yes"));
@@ -232,13 +256,25 @@ public class SelectWiringContractTests
         var src = System.IO.File.ReadAllText(System.IO.Path.Combine(
             root, "src", "Dasher.Windows", "Controls", "DasherCanvas.cs"));
         var regIdx = src.IndexOf("dasher_register_action", StringComparison.Ordinal);
-        var screenIdx = src.IndexOf("dasher_set_screen_size", StringComparison.Ordinal);
         Assert.True(regIdx >= 0, "dasher_register_action call not found in DasherCanvas");
-        Assert.True(screenIdx < 0 || regIdx < screenIdx || IsInInitialize(src, regIdx, screenIdx),
-            "the select registration must be in Initialize (before any set_screen_size path)");
+
+        // Presence + Initialize-method-membership (structural, not dataflow):
+        // the registration must sit inside the Initialize method body, and
+        // every dasher_set_screen_size call site lives in StartEngine /
+        // RealizeOffUiThreadAsync / TrySetScreenSize — all called after
+        // Initialize completes.
+        var initStart = src.IndexOf("public void Initialize(", StringComparison.Ordinal);
+        var initEnd = src.IndexOf("private void", initStart, StringComparison.Ordinal);
+        Assert.True(initStart >= 0 && regIdx > initStart && regIdx < initEnd,
+            "the select registration must be inside the Initialize method body");
     }
 
-    private static bool IsInInitialize(string src, int regIdx, int screenIdx) => true; // both in Initialize; ordering within the method is enforced by the Initialize-body scan below
+    // Ordering within Initialize is verified structurally: the registration
+    // sits inside the Initialize method body (before its closing brace), and
+    // every dasher_set_screen_size call site in the file is in StartEngine,
+    // RealizeOffUiThreadAsync, or TrySetScreenSize - all called after
+    // Initialize. A full dataflow assertion is overkill for a source
+    // contract; presence + method-membership is the right granularity.
 
     private static string RepoRoot()
     {
