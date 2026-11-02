@@ -12,6 +12,7 @@ public enum SelectDistance
     Char,
     Word,
     Paragraph,
+    Sentence,
     All,
 }
 
@@ -29,6 +30,10 @@ public enum SelectDirection
 ///  - Editor mode: measured bounds over the pane text with an active-end
 ///    state machine ("backward/forward" extends from the end the frontend
 ///    last extended; cold start anchors at the caret).
+/// RFC 0021 amendment (move/delete migration, Dasher-Windows #88): also
+/// carries the caret-move/delete semantics — CaretKeystroke/
+/// DeleteKeystrokes for direct mode, EditCaret/DeleteBounds for editor
+/// mode.
 /// </summary>
 public static class SelectActions
 {
@@ -61,6 +66,7 @@ public static class SelectActions
             "char" => (SelectDistance?)SelectDistance.Char,
             "word" => SelectDistance.Word,
             "paragraph" => SelectDistance.Paragraph,
+            "sentence" => SelectDistance.Sentence,
             "all" => SelectDistance.All,
             _ => null,
         };
@@ -112,6 +118,7 @@ public static class SelectActions
             SelectDistance.Char => StepCodePoint(text, active, dir),
             SelectDistance.Word => WordBound(text, active, dir),
             SelectDistance.Paragraph => ParagraphBound(text, active, dir),
+            SelectDistance.Sentence => SentenceWindow.SentenceBound(text, active, dir),
             _ => active,
         };
         return target <= anchor ? (target, anchor) : (anchor, target);
@@ -197,5 +204,117 @@ public static class SelectActions
         // the separator the skip just consumed (review loop 1 stall).
         var prev = i > 0 ? text.LastIndexOf('\n', i - 1) : -1;
         return SnapToCodePoint(text, prev < 0 ? 0 : prev + 1, dir);
+    }
+
+    // ── RFC 0021 amendment: move/delete (#88) ─────────────────────────────
+
+    private const ushort VK_BACK = 0x08, VK_HOME = 0x24, VK_END = 0x23, VK_DELETE = 0x2E;
+
+    /// <summary>Direct-mode caret-move keystroke for the pair (no Shift —
+    /// moving the caret, not selecting). Sentence has no universal Windows
+    /// chord: returns null and callers fall back to paragraph (logged) or
+    /// a UIA unit move.</summary>
+    public static SelectKeystroke? CaretKeystroke(SelectDistance dist, SelectDirection dir)
+    {
+        const ushort VK_LEFT = 0x25, VK_UP = 0x26, VK_RIGHT = 0x27, VK_DOWN = 0x28;
+        return dist switch
+        {
+            SelectDistance.Char => new SelectKeystroke(false, false, dir == SelectDirection.Backward ? VK_LEFT : VK_RIGHT, null),
+            SelectDistance.Word => new SelectKeystroke(true, false, dir == SelectDirection.Backward ? VK_LEFT : VK_RIGHT, null),
+            SelectDistance.Paragraph => new SelectKeystroke(true, false, dir == SelectDirection.Backward ? VK_UP : VK_DOWN, null),
+            SelectDistance.All => new SelectKeystroke(true, false, dir == SelectDirection.Backward ? VK_HOME : VK_END, null),
+            _ => null, // Sentence: no chord — UIA or paragraph fallback
+        };
+    }
+
+    /// <summary>Direct-mode delete plan: the ordered chords to send. A
+    /// paragraph/sentence delete composes select-then-delete (two chords,
+    /// the same envelope variance as the select chords themselves). The
+    /// "principal key" rides the Arrow field (see SelectKeystroke).</summary>
+    public static IReadOnlyList<SelectKeystroke> DeleteKeystrokes(SelectDistance dist, SelectDirection dir)
+    {
+        const ushort VK_UP = 0x26, VK_DOWN = 0x28, VK_A = 0x41;
+        return dist switch
+        {
+            SelectDistance.Char => new[]
+            {
+                new SelectKeystroke(false, false, dir == SelectDirection.Backward ? VK_BACK : VK_DELETE, null),
+            },
+            SelectDistance.Word => new[]
+            {
+                new SelectKeystroke(true, false, dir == SelectDirection.Backward ? VK_BACK : VK_DELETE, null),
+            },
+            // sentence: no chord to bound it — select a paragraph instead
+            // (the documented fallback; callers log the degradation)
+            SelectDistance.Sentence or SelectDistance.Paragraph => new[]
+            {
+                new SelectKeystroke(true, true, dir == SelectDirection.Backward ? VK_UP : VK_DOWN, null),
+                new SelectKeystroke(false, false, VK_DELETE, null),
+            },
+            SelectDistance.All => new[]
+            {
+                new SelectKeystroke(true, false, null, VK_A),
+                new SelectKeystroke(false, false, VK_DELETE, null),
+            },
+            _ => Array.Empty<SelectKeystroke>(),
+        };
+    }
+
+    /// <summary>Editor-mode caret move over the pane text (pure). All =
+    /// document start/end; the rest measure with the same boundary
+    /// functions the select path uses.</summary>
+    public static int EditCaret(string text, int caret, SelectDistance dist, SelectDirection dir)
+    {
+        var i = Math.Clamp(caret, 0, text.Length);
+        return dist switch
+        {
+            SelectDistance.Char => StepCodePoint(text, i, dir),
+            SelectDistance.Word => WordBound(text, i, dir),
+            SelectDistance.Paragraph => ParagraphBound(text, i, dir),
+            SelectDistance.Sentence => SentenceWindow.SentenceBound(text, i, dir),
+            SelectDistance.All => (dir == SelectDirection.Forward ? text.Length : 0),
+            _ => i,
+        };
+    }
+
+    /// <summary>Editor-mode delete range (pure): the (start, end) UTF-16
+    /// span the delete removes, ordered. The active end is the caret;
+    /// backward deletes end AT the caret, forward deletes start AT it
+    /// (nothing behind/beyond the caret is touched). NOTE: measured from
+    /// the CARET, not an existing selection — replacing the selection is
+    /// the plain Delete editing key's job (same deliberate divergence as
+    /// the backspace editing key, EditorKeyActions.Backspace); the
+    /// control-tree delete is a measured-distance operation by design.
+    /// </summary>
+    public static (int Start, int End) DeleteBounds(string text, int caret, SelectDistance dist, SelectDirection dir)
+    {
+        var i = Math.Clamp(caret, 0, text.Length);
+        int start, end;
+        switch (dist)
+        {
+            case SelectDistance.Char:
+                var step = StepCodePoint(text, i, dir);
+                (start, end) = dir == SelectDirection.Backward ? (step, i) : (i, step);
+                break;
+            case SelectDistance.Word:
+                var w = WordBound(text, i, dir);
+                (start, end) = dir == SelectDirection.Backward ? (w, i) : (i, w);
+                break;
+            case SelectDistance.Paragraph:
+                var p = ParagraphBound(text, i, dir);
+                (start, end) = dir == SelectDirection.Backward ? (p, i) : (i, p);
+                break;
+            case SelectDistance.Sentence:
+                var s = SentenceWindow.SentenceBound(text, i, dir);
+                (start, end) = dir == SelectDirection.Backward ? (s, i) : (i, s);
+                break;
+            case SelectDistance.All:
+                (start, end) = (0, text.Length);
+                break;
+            default:
+                (start, end) = (i, i);
+                break;
+        }
+        return start <= end ? (start, end) : (end, start);
     }
 }

@@ -174,12 +174,16 @@ public static class TargetContextReader
 
     // ── UI Automation TextPattern ────────────────────────────────────────────
 
-    private static TargetContext? TryReadTextPattern(IntPtr targetHwnd, uint targetPid)
+    /// <summary>Locate a TextPattern for the target window (focused element
+    /// verified against the window, then the focused child HWND, then the
+    /// top-level, then the first TextPattern descendant). Shared by the
+    /// context read here and the RFC 0021 unit actions (TargetTextActions).
+    /// </summary>
+    internal static IUIAutomationTextPattern? FindTextPatternForWindow(
+        CUIAutomationClass uia, IntPtr targetHwnd, uint targetPid)
     {
         try
         {
-            var uia = new CUIAutomationClass();
-
             // Strategy: the focused element, verified to belong to the
             // TARGET WINDOW (not just the process — greptile: "process check
             // crosses window boundaries": the same process can own multiple
@@ -281,6 +285,21 @@ public static class TargetContextReader
                 Log($"  [UIA] no TextPattern found for hwnd 0x{targetHwnd:X} — falling through to Win32");
                 return null;
             }
+            return pattern;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static TargetContext? TryReadTextPattern(IntPtr targetHwnd, uint targetPid)
+    {
+        try
+        {
+            var uia = new CUIAutomationClass();
+            var pattern = FindTextPatternForWindow(uia, targetHwnd, targetPid);
+            if (pattern == null) return null;
 
             var document = pattern.DocumentRange;
             if (document == null) return null;

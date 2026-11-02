@@ -112,10 +112,15 @@ public partial class DasherCanvas : Control
         // control.xml at realize, and without a handler the Select subtree
         // is gated out). Must happen on EVERY handle (including the
         // Reset-and-replace path).
+        // RFC 0021 amendment (#88): move and delete ride the same surface -
+        // the engine's old built-ins only mutated engine-side state and
+        // never reached the target, so they were visible-but-dead nodes.
         try
         {
             _selectActionCallback = new NativeBridge.ActionCallback(OnCustomAction);
             NativeBridge.dasher_register_action(_handle, "select", _selectActionCallback, IntPtr.Zero);
+            NativeBridge.dasher_register_action(_handle, "move", _selectActionCallback, IntPtr.Zero);
+            NativeBridge.dasher_register_action(_handle, "delete", _selectActionCallback, IntPtr.Zero);
         }
         catch (EntryPointNotFoundException)
         {

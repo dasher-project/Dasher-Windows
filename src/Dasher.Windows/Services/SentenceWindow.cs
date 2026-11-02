@@ -72,4 +72,73 @@ public static class SentenceWindow
         var trimmed = text[start..caret];
         return (trimmed, trimmed.Length); // caret at end of trimmed text
     }
+
+    /// <summary>
+    /// Start/end of the adjacent sentence for caret moves and measured
+    /// deletes (RFC 0021 move/delete migration). Same boundary set as
+    /// <see cref="Trim"/> — one notion of "sentence" across seeding,
+    /// selection, move and delete. Forward lands just AFTER the next
+    /// boundary at/after <paramref name="from"/> (chained moves advance
+    /// sentence by sentence, skipping a boundary the position sits on —
+    /// mirroring ParagraphBound); backward lands at the START of the
+    /// current/previous sentence. \r\n counts as ONE boundary (the
+    /// ParagraphBound fix class — a caret must never land between the \r
+    /// and the \n). Surrogate-safe.
+    /// </summary>
+    public static int SentenceBound(string text, int from, SelectDirection dir)
+    {
+        var i = Math.Clamp(from, 0, text.Length);
+        if (dir == SelectDirection.Forward)
+        {
+            // skip a boundary unit the position sits on (chained moves);
+            // \r\n is one unit
+            if (i < text.Length && IsBoundary(text[i]))
+                i += (text[i] == '\r' && i + 1 < text.Length && text[i + 1] == '\n') ? 2 : 1;
+            for (var k = i; k < text.Length; k++)
+            {
+                if (!IsBoundary(text[k])) continue;
+                var after = (text[k] == '\r' && k + 1 < text.Length && text[k + 1] == '\n') ? k + 2 : k + 1;
+                return Snap(text, after, dir);
+            }
+            return text.Length;
+        }
+        // Backward: land at the START of the sentence containing (or
+        // preceding) the position; chained presses from a sentence start
+        // must reach the PREVIOUS sentence (the stall class issue #84
+        // fixed for paragraphs). \r\n steps back as one unit.
+        if (i > 1 && text[i - 1] == '\n' && text[i - 2] == '\r')
+            i -= 2; // sitting after a \r\n: step onto the unit start
+        else if (i > 0 && IsBoundary(text[i - 1]))
+            i--; // sitting after a single boundary: step onto it
+        var prev = -1;
+        for (var k = i - 1; k >= 0; k--)
+        {
+            if (IsBoundary(text[k])) { prev = k; break; }
+        }
+        var start = prev < 0 ? 0 : prev + 1;
+        // sentence start skips the separator whitespace after its boundary —
+        // bounded by the ORIGINAL position (not the stepped i): stepping
+        // back onto a \r\n must still skip it (review loop 1: bounding by i
+        // returned a caret position between the \r and the \n).
+        while (start < from && start < text.Length && char.IsWhiteSpace(text[start])) start++;
+        // chained: already AT this sentence's start → the previous one
+        if (start == Math.Clamp(from, 0, text.Length) && prev > 0)
+        {
+            var before = -1;
+            for (var k = prev - 1; k >= 0; k--)
+            {
+                if (IsBoundary(text[k])) { before = k; break; }
+            }
+            start = before < 0 ? 0 : before + 1;
+            while (start < prev && char.IsWhiteSpace(text[start])) start++;
+        }
+        return Snap(text, start, dir);
+    }
+
+    private static bool IsBoundary(char c) => Boundaries.Contains(c);
+
+    private static int Snap(string text, int i, SelectDirection dir) =>
+        i > 0 && i < text.Length && char.IsLowSurrogate(text[i]) && char.IsHighSurrogate(text[i - 1])
+            ? (dir == SelectDirection.Backward ? i - 1 : i + 1)
+            : i;
 }

@@ -189,4 +189,73 @@ public class SentenceWindowTests
         Assert.Equal("Hello", text);
         Assert.Equal(5, caret);
     }
+
+    // ── SentenceBound (RFC 0021 move/delete, same boundary set as Trim) ──
+
+    [Fact]
+    public void SentenceBound_backward_reaches_current_then_previous_sentence()
+    {
+        var text = "One. Two. Three";
+        Assert.Equal(10, SentenceWindow.SentenceBound(text, 13, SelectDirection.Backward)); // start of "Three"
+        Assert.Equal(5, SentenceWindow.SentenceBound(text, 10, SelectDirection.Backward)); // chained: start of "Two"
+        Assert.Equal(0, SentenceWindow.SentenceBound(text, 5, SelectDirection.Backward)); // chained: start of "One"
+        Assert.Equal(0, SentenceWindow.SentenceBound(text, 0, SelectDirection.Backward)); // clamped at start
+    }
+
+    [Fact]
+    public void SentenceBound_backward_sitting_after_boundary_steps_to_previous()
+    {
+        // caret just after the '.' of "One." → previous sentence start
+        Assert.Equal(0, SentenceWindow.SentenceBound("One. Two.", 4, SelectDirection.Backward));
+    }
+
+    [Fact]
+    public void SentenceBound_forward_lands_after_next_boundary()
+    {
+        var text = "One. Two. Three";
+        // mid "One": forward lands after the '.' that ends "One"
+        Assert.Equal(4, SentenceWindow.SentenceBound(text, 2, SelectDirection.Forward));
+        // sitting ON a boundary: skips it, lands after the NEXT one
+        Assert.Equal(9, SentenceWindow.SentenceBound(text, 3, SelectDirection.Forward));
+        // no further boundary: end of text
+        Assert.Equal(text.Length, SentenceWindow.SentenceBound(text, 10, SelectDirection.Forward));
+    }
+
+    [Fact]
+    public void SentenceBound_never_splits_a_surrogate_pair()
+    {
+        var text = "😀. Two";
+        // backward from inside "Two" must never land mid-pair (index 1)
+        var b = SentenceWindow.SentenceBound(text, 5, SelectDirection.Backward);
+        Assert.NotEqual(1, b);
+        // forward from just after the emoji must also not land mid-pair
+        var f = SentenceWindow.SentenceBound(text, 2, SelectDirection.Forward);
+        Assert.NotEqual(1, f);
+    }
+
+    [Fact]
+    public void SentenceBound_treats_crlf_as_one_boundary_backward()
+    {
+        // review loop 1: the editor pane contains \r\n after Enter — a
+        // caret must never land between the \r and the \n
+        var text = "One.\r\nTwo.";
+        // start of "Two" (6) → previous sentence start (0), one press
+        Assert.Equal(0, SentenceWindow.SentenceBound(text, 6, SelectDirection.Backward));
+        // from mid-"Two": start of "Two"
+        Assert.Equal(6, SentenceWindow.SentenceBound(text, 8, SelectDirection.Backward));
+        // from ON the separator (\n at 5): previous sentence start
+        Assert.Equal(0, SentenceWindow.SentenceBound(text, 5, SelectDirection.Backward));
+    }
+
+    [Fact]
+    public void SentenceBound_treats_crlf_as_one_boundary_forward()
+    {
+        var text = "One.\r\nTwo.";
+        // from the '.' ending "One": lands after the full \r\n (start of "Two")
+        Assert.Equal(6, SentenceWindow.SentenceBound(text, 3, SelectDirection.Forward));
+        // from ON the \r: skips the whole unit, lands after "Two." (= end)
+        Assert.Equal(10, SentenceWindow.SentenceBound(text, 4, SelectDirection.Forward));
+        // from ON the \n: same
+        Assert.Equal(10, SentenceWindow.SentenceBound(text, 5, SelectDirection.Forward));
+    }
 }
