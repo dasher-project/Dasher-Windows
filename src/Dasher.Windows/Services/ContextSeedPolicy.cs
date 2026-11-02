@@ -63,6 +63,72 @@ public readonly record struct ContextSeedDecision
 /// </summary>
 public static class ContextSeedPolicy
 {
+    /// <summary>Verdict of the read-trust gate (issue #91).</summary>
+    public enum ReadTrust
+    {
+        /// <summary>The read is trusted: use it (and adopt it as the new
+        /// baseline).</summary>
+        Accept,
+
+        /// <summary>The read flapped to a different UIA source with a large
+        /// length discontinuity — a different field; keep the engine context
+        /// (baseline unchanged).</summary>
+        Distrust,
+
+        /// <summary>Distrusted too many times consecutively with a consistent
+        /// new source: the switch is probably permanent (the element path
+        /// stopped being offered) — accept and reset the baseline rather
+        /// than freezing the context forever.</summary>
+        AcceptAfterHysteresis,
+    }
+
+    /// <summary>
+    /// Read-trust gate (issue #91, log-confirmed 2026-11-02): new Outlook
+    /// (WebView2) exposes DIFFERENT text through the focused-element UIA path
+    /// (~670 chars, the compose field) and the top-level path (~11k chars,
+    /// the whole document). A caret-moved read that flaps to the OTHER source
+    /// with a large length discontinuity is reading a DIFFERENT FIELD —
+    /// seeding from it teleports the canvas (the huge "figure out where I
+    /// am" jumps). Non-caret-moved reads (focus/foreground change — a new
+    /// target is expected) are always accepted. When the SAME off-baseline
+    /// source is distrusted <see cref="FlapHysteresisLimit"/> times in a row
+    /// (adoption happens on the limit-th qualifying read), the switch looks
+    /// permanent (the element path stopped being offered) and the new source
+    /// is adopted rather than freezing the context forever.
+    /// </summary>
+    public static ReadTrust EvaluateReadTrust(
+        string? prevSource, int prevLength, string newSource, int newLength,
+        bool isCaretMovedReason, int consecutiveDistrusts, string? lastDistrustedSource)
+    {
+        if (!isCaretMovedReason)
+            return ReadTrust.Accept;
+        if (string.IsNullOrEmpty(prevSource) || prevSource == newSource)
+            return ReadTrust.Accept;
+        // A genuine target/field switch changes the text wholesale; a flap
+        // between two views of the SAME window shows up as a wild length
+        // discontinuity. The 668 ↔ 10,981 field case is ~16x either way.
+        if (Math.Abs(newLength - prevLength) <= SourceFlapMinDiscontinuity)
+            return ReadTrust.Accept;
+        // consistency: only consecutive distrusts of the SAME source count
+        // toward adoption (a toplevel/win32 mix must not adopt whichever
+        // came third)
+        var effective = lastDistrustedSource == newSource ? consecutiveDistrusts : 0;
+        return effective + 1 >= FlapHysteresisLimit
+            ? ReadTrust.AcceptAfterHysteresis
+            : ReadTrust.Distrust;
+    }
+
+    /// <summary>Length discontinuity (UTF-16 units) beyond which a
+    /// source-flapped read is treated as a different field rather than the
+    /// same field seen twice. Comfortably above any single-keystroke edit
+    /// or lag; far below the observed 10k-document flip.</summary>
+    public const int SourceFlapMinDiscontinuity = 300;
+
+    /// <summary>Consecutive distrusts after which a consistent new source is
+    /// adopted (permanent source switch — e.g. the element path stopped
+    /// being offered mid-session — must not freeze the context forever).</summary>
+    public const int FlapHysteresisLimit = 3;
+
     /// <summary>
     /// Maximum full-text lag (UTF-16 code units, after normalisation) still
     /// attributed to a stale read.

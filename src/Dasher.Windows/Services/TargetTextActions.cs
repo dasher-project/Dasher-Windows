@@ -150,7 +150,7 @@ public static class TargetTextActions
             if (pid == 0) return false;
 
             var uia = new CUIAutomationClass();
-            var pattern = TargetContextReader.FindTextPatternForWindow(uia, targetHwnd, pid);
+            var pattern = TargetContextReader.FindTextPatternForWindow(uia, targetHwnd, pid, out _);
             if (pattern == null)
             {
                 Log($"  [TextAction:{name}] no TextPattern — caller falls back to chords");

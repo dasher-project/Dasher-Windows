@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Dasher.Windows.Services;
 
@@ -168,8 +169,23 @@ public sealed class KeyboardTargetTracker : IDisposable
     /// arrived at their real target); when Dasher itself holds the keyboard
     /// focus the recorded target is restored, escalating through
     /// AttachThreadInput when it lives on another thread.
+    ///
+    /// Returns true when it is safe to inject (foreground already the
+    /// target, or restored). Returns false when the restore could not be
+    /// confirmed within the escalation budget — callers must SKIP the
+    /// injection (typing pauses; the UI never wedges).
+    ///
+    /// Fail-soft (issue #90, log-confirmed 2026-11-02): the escalation is a
+    /// synchronous cross-thread input-queue handshake — AttachThreadInput
+    /// couples our queue to the target's, and if the target is not pumping
+    /// (Heide's freeze: a stuck physical Ctrl turned every injected char
+    /// into a shortcut chord that choked Outlook's WebView2 host for 10m49s)
+    /// the handshake blocks the UI thread for as long as the target stays
+    /// busy. The escalation now runs on a background thread with a hard
+    /// Join budget; a hung escalation never blocks the caller, and while one
+    /// is in flight further injections are skipped rather than queued.
     /// </summary>
-    public void EnsureForeground(IntPtr ourHwnd)
+    public bool EnsureForeground(IntPtr ourHwnd)
     {
         var fg = GetForegroundWindow();
         Log($"EnsureForeground: fg=0x{fg:X} us=0x{ourHwnd:X} target=0x{_target:X}");
@@ -187,31 +203,72 @@ public sealed class KeyboardTargetTracker : IDisposable
             {
                 Log("  foreground is target, tracking it");
             }
+            return true;
         }
-        else if (_target != IntPtr.Zero)
-        {
-            Log("  → Dasher has focus, restoring target...");
-            var targetThread = GetWindowThreadProcessId(_target, out _);
-            var ourThread = GetCurrentThreadId();
 
-            if (targetThread != 0 && targetThread != ourThread)
+        if (_target == IntPtr.Zero)
+        {
+            Log("  → no known target window!");
+            return false;
+        }
+
+        if (fg == IntPtr.Zero)
+            Log("  → foreground unknown (screensaver/secure desktop?) — attempting restore");
+
+        Log("  → Dasher has focus, restoring target...");
+        var targetThread = GetWindowThreadProcessId(_target, out _);
+        var ourThread = GetCurrentThreadId();
+
+        // Same-thread restore: SetForegroundWindow alone (posts to our own
+        // queue — cannot block on another thread's pump).
+        if (targetThread == 0 || targetThread == ourThread)
+        {
+            var set = SetForegroundWindow(_target);
+            Log($"  → SetForegroundWindow={set}");
+            return set;
+        }
+
+        // Cross-thread: attach/set/detach on a background thread, bounded.
+        if (Interlocked.Exchange(ref _escalationBusy, 1) == 1)
+        {
+            Log("  → escalation already in flight (previous restore hung?) — skipping injection");
+            return false;
+        }
+
+        var escalation = new Thread(() =>
+        {
+            try
             {
                 var attached = AttachThreadInput(ourThread, targetThread, true);
                 var set = SetForegroundWindow(_target);
                 AttachThreadInput(ourThread, targetThread, false);
                 Log($"  → AttachThreadInput={attached} SetForegroundWindow={set}");
             }
-            else
+            catch { }
+            finally
             {
-                var set = SetForegroundWindow(_target);
-                Log($"  → SetForegroundWindow={set}");
+                Volatile.Write(ref _escalationBusy, 0);
             }
-        }
-        else
+        })
+        { IsBackground = true, Name = "fg-restore" };
+        escalation.Start();
+
+        if (!escalation.Join(EscalationBudgetMs))
         {
-            Log("  → no known target window!");
+            Log($"  → restore did not complete within {EscalationBudgetMs}ms — skipping injection this event (no UI block)");
+            // The thread stays busy (flag held) until it completes; further
+            // calls skip injection rather than stacking hung handshakes.
+            return false;
         }
+        return true;
     }
+
+    /// <summary>Hard budget for the cross-thread focus-restore handshake.
+    /// Long enough for a healthy target (observed: single-digit ms); short
+    /// enough that a choked target costs one skipped event, not the UI.</summary>
+    private const int EscalationBudgetMs = 250;
+
+    private int _escalationBusy;
 
     public void Dispose() => Remove();
 
