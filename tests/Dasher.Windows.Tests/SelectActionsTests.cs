@@ -137,6 +137,20 @@ public class SelectActionsTests
     }
 
     [Fact]
+    public void Chained_paragraph_forward_advances_past_separator()
+    {
+        // Review loop 2: the bound must not re-find the same newline when
+        // the active end sits on it (Ctrl+Shift+Down chains paragraphs).
+        var text = "aaa\nbbb\nccc";
+        // first: from 1 → to the first \n (3)
+        var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(1, s1); Assert.Equal(3, e1);
+        // chained: from active end 3 (on the \n) → past it → to the second \n (7)
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Forward, true);
+        Assert.Equal(1, s2); Assert.Equal(7, e2);
+    }
+
+    [Fact]
     public void Parse_rejects_case_mismatches()
     {
         Assert.Null(SelectActions.Parse("Char", "yes"));

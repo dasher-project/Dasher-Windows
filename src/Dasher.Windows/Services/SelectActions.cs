@@ -146,12 +146,17 @@ public static class SelectActions
         return i;
     }
 
-    /// <summary>Start/end of the current paragraph (\n-delimited).</summary>
+    /// <summary>Start/end of the current paragraph (\n-delimited). When the
+    /// active end already sits at the paragraph separator, a chained
+    /// forward-paragraph advances past it (Ctrl+Shift+Down chains into the
+    /// next paragraph - the bound must not re-find the same newline).</summary>
     internal static int ParagraphBound(string text, int from, SelectDirection dir)
     {
         var i = Math.Clamp(from, 0, text.Length);
         if (dir == SelectDirection.Forward)
         {
+            // skip a separator we're already sitting on (\n, or \n preceded by \r)
+            while (i < text.Length && (text[i] == '\n' || (i > 0 && text[i - 1] == '\r' && text[i] == '\n'))) i++;
             var nl = text.IndexOf('\n', i);
             if (nl < 0) return text.Length;
             // \r\n: the selection must stop before the \r, not include it

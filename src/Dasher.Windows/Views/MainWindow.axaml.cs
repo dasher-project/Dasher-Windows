@@ -1276,9 +1276,8 @@ public partial class MainWindow : Window
 
     private void WireCustomActions()
     {
-        var canvas = this.FindControl<Controls.DasherCanvas>("DasherCanvas");
-        if (canvas == null) return;
-        canvas.CustomAction += OnEngineCustomAction;
+        if (_canvas == null) return;
+        _canvas.CustomAction += OnEngineCustomAction;
     }
 
     private void OnEngineCustomAction(string name, System.Collections.Generic.Dictionary<string, string> attrs)
@@ -1296,9 +1295,6 @@ public partial class MainWindow : Window
         }
         var (dist, dir) = action;
 
-        Services.AnalyticsService.CaptureUiAction("control_tree", "select",
-            $"dist={dist},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
-
         if (_vm is { IsKeyboardMode: true })
         {
             // Direct mode: native OS selection in the TARGET (the target's
@@ -1310,13 +1306,22 @@ public partial class MainWindow : Window
             // keystrokes provoke land in the existing caret-moved debounce;
             // a backward paragraph select changes the caret-anchored
             // sentence window and would re-seed mid-selection. Extend the
-            // settle-window pattern to select chords.
+            // settle-window pattern to select chords. Timestamp BEFORE the
+            // send (the established #79 ordering).
             _lastOwnParagraphInject = Environment.TickCount64;
+            SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
+            Services.AnalyticsService.CaptureUiAction("control_tree", "select",
+                $"dist={dist.ToString().ToLowerInvariant()},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
         }
         else
         {
             // Editor mode: measured selection over the pane text with the
             // active-end state machine (SelectActions.EditorBounds).
+            // Field-test note (review loop 2): direct mode's Shift-key
+            // injection is new exposure for this codebase (existing chords
+            // inject Ctrl only) - repeated Shift injection can trigger
+            // Windows Sticky/Filter Keys prompts in some configurations;
+            // watch for it in tester feedback.
             var box = MessageArea;
             if (box == null) return;
             var text = box.Text ?? "";
@@ -1327,39 +1332,40 @@ public partial class MainWindow : Window
             // selection change with identical text is not a user edit.
             box.SelectionStart = start;
             box.SelectionEnd = end;
+            Services.AnalyticsService.CaptureUiAction("control_tree", "select",
+                $"dist={dist.ToString().ToLowerInvariant()},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
         }
     }
 
     /// <summary>Send a Shift(+Ctrl)+Arrow chord or Ctrl+<letter> to the
-    /// target (SendInput — same machinery as the strip's editing keys).</summary>
+    /// target as ONE atomic SendInput (events within a single call are
+    /// non-interleaved - the documented Windows contract; splitting them
+    /// across calls lets concurrent input land between Shift-down and
+    /// Arrow-down). Mirrors SendCtrlChord's atomicity. Releases in reverse
+    /// order. The return count is logged - a silent UIPI/elevation block
+    /// leaves a diagnostic in keyboard_debug.log.</summary>
     private void SendSelectChord(bool ctrl, bool shift, ushort? arrow, ushort? letter)
     {
-        const ushort VK_SHIFT = 0x10, VK_CONTROL = 0x11;
-        const uint KEYEVENTF_KEYUP = 0x0002;
+        const ushort VK_SHIFT = 0x10;
+        // presses in order, then releases in reverse
+        var keys = new System.Collections.Generic.List<ushort>();
+        if (shift) keys.Add(VK_SHIFT);
+        if (ctrl) keys.Add(VK_CONTROL);
+        if (arrow is { } a) keys.Add(a);
+        if (letter is { } l) keys.Add(l);
+        for (var i = keys.Count - 1; i >= 0; i--) keys.Add(keys[i]);
 
-        void Key(ushort vk, bool up)
+        var inputs = new INPUT[keys.Count];
+        for (var i = 0; i < keys.Count; i++)
         {
-            NativeInput(vk, up ? KEYEVENTF_KEYUP : 0);
+            inputs[i].type = INPUT_KEYBOARD;
+            inputs[i].u.ki.wVk = keys[i];
+            if (i >= keys.Count / 2) inputs[i].u.ki.dwFlags = KEYEVENTF_KEYUP;
         }
 
-        if (shift) Key(VK_SHIFT, false);
-        if (ctrl) Key(VK_CONTROL, false);
-        if (arrow is { } a) { Key(a, false); Key(a, true); }
-        if (letter is { } l) { Key(l, false); Key(l, true); }
-        if (ctrl) Key(VK_CONTROL, true);
-        if (shift) Key(VK_SHIFT, true);
-
-        KbLog($"  select chord: ctrl={ctrl} shift={shift} arrow={arrow?.ToString("X") ?? "-"} letter={letter?.ToString() ?? "-"}");
-    }
-
-    private void NativeInput(ushort vk, uint flags)
-    {
-        // Reuses the INPUT struct machinery already declared for SendVirtualKey.
-        var inputs = new INPUT[1];
-        inputs[0].type = INPUT_KEYBOARD;
-        inputs[0].u.ki.wVk = vk;
-        inputs[0].u.ki.dwFlags = flags;
-        SendInput(1, inputs, Marshal.SizeOf<INPUT>());
+        var sent = SendInput((uint)keys.Count, inputs, Marshal.SizeOf<INPUT>());
+        KbLog($"  select chord: ctrl={ctrl} shift={shift} arrow={arrow?.ToString("X") ?? "-"} " +
+              $"letter={letter?.ToString() ?? "-"} sent={sent}/{keys.Count}");
     }
 
     private int _contextSeedGeneration;
