@@ -63,28 +63,53 @@ public readonly record struct ContextSeedDecision
 /// </summary>
 public static class ContextSeedPolicy
 {
-    /// <summary>
-    /// Read-source flap distrust (issue #91, log-confirmed 2026-11-02): new
-    /// Outlook (WebView2) exposes DIFFERENT text through the focused-element
-    /// UIA path (~670 chars, the compose field) and the top-level path
-    /// (~11k chars, the whole document). When a caret-moved read flaps to
-    /// the OTHER source with a large length discontinuity, it is reading a
-    /// DIFFERENT FIELD — seeding from it teleports the canvas (the huge
-    /// "figure out where I am" jumps). Same-source reads and small
-    /// discontinuities (genuine edits) never trip this.
-    /// </summary>
-    /// <param name="prevSource">source of the last accepted read</param>
-    /// <param name="prevLength">its text length</param>
-    /// <param name="newSource">source of the new read</param>
-    /// <param name="newLength">its text length</param>
-    public static bool SourceFlapDistrust(string? prevSource, int prevLength, string newSource, int newLength)
+    /// <summary>Verdict of the read-trust gate (issue #91).</summary>
+    public enum ReadTrust
     {
+        /// <summary>The read is trusted: use it (and adopt it as the new
+        /// baseline).</summary>
+        Accept,
+
+        /// <summary>The read flapped to a different UIA source with a large
+        /// length discontinuity — a different field; keep the engine context
+        /// (baseline unchanged).</summary>
+        Distrust,
+
+        /// <summary>Distrusted too many times consecutively with a consistent
+        /// new source: the switch is probably permanent (the element path
+        /// stopped being offered) — accept and reset the baseline rather
+        /// than freezing the context forever.</summary>
+        AcceptAfterHysteresis,
+    }
+
+    /// <summary>
+    /// Read-trust gate (issue #91, log-confirmed 2026-11-02): new Outlook
+    /// (WebView2) exposes DIFFERENT text through the focused-element UIA path
+    /// (~670 chars, the compose field) and the top-level path (~11k chars,
+    /// the whole document). A caret-moved read that flaps to the OTHER source
+    /// with a large length discontinuity is reading a DIFFERENT FIELD —
+    /// seeding from it teleports the canvas (the huge "figure out where I
+    /// am" jumps). Non-caret-moved reads (focus/foreground change — a new
+    /// target is expected) are always accepted. After
+    /// <see cref="FlapHysteresisLimit"/> consecutive distrusts the new source
+    /// is adopted (a permanent source switch must not freeze the context).
+    /// </summary>
+    public static ReadTrust EvaluateReadTrust(
+        string? prevSource, int prevLength, string newSource, int newLength,
+        bool isCaretMovedReason, int consecutiveDistrusts)
+    {
+        if (!isCaretMovedReason)
+            return ReadTrust.Accept;
         if (string.IsNullOrEmpty(prevSource) || prevSource == newSource)
-            return false;
+            return ReadTrust.Accept;
         // A genuine target/field switch changes the text wholesale; a flap
         // between two views of the SAME window shows up as a wild length
-        // ratio. The 668 ↔ 10,981 field case is ~16x either way.
-        return Math.Abs(newLength - prevLength) > SourceFlapMinDiscontinuity;
+        // discontinuity. The 668 ↔ 10,981 field case is ~16x either way.
+        if (Math.Abs(newLength - prevLength) <= SourceFlapMinDiscontinuity)
+            return ReadTrust.Accept;
+        return consecutiveDistrusts + 1 >= FlapHysteresisLimit
+            ? ReadTrust.AcceptAfterHysteresis
+            : ReadTrust.Distrust;
     }
 
     /// <summary>Length discontinuity (UTF-16 units) beyond which a
@@ -92,6 +117,11 @@ public static class ContextSeedPolicy
     /// same field seen twice. Comfortably above any single-keystroke edit
     /// or lag; far below the observed 10k-document flip.</summary>
     public const int SourceFlapMinDiscontinuity = 300;
+
+    /// <summary>Consecutive distrusts after which a consistent new source is
+    /// adopted (permanent source switch — e.g. the element path stopped
+    /// being offered mid-session — must not freeze the context forever).</summary>
+    public const int FlapHysteresisLimit = 3;
 
     /// <summary>
     /// Maximum full-text lag (UTF-16 code units, after normalisation) still

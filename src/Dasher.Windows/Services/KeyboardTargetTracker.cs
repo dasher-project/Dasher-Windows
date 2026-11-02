@@ -212,6 +212,9 @@ public sealed class KeyboardTargetTracker : IDisposable
             return false;
         }
 
+        if (fg == IntPtr.Zero)
+            Log("  → foreground unknown (screensaver/secure desktop?) — attempting restore");
+
         Log("  → Dasher has focus, restoring target...");
         var targetThread = GetWindowThreadProcessId(_target, out _);
         var ourThread = GetCurrentThreadId();

@@ -295,8 +295,9 @@ public static class TargetContextReader
             }
             return pattern;
         }
-        catch
+        catch (Exception ex)
         {
+            Log($"  [UIA] pattern discovery threw: {ex.Message}");
             return null;
         }
     }
