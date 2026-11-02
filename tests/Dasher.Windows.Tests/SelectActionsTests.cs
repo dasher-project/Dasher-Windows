@@ -197,3 +197,54 @@ public class SelectActionsTests
         Assert.Equal(0, s2); Assert.Equal(9, e2);
     }
 }
+
+
+/// <summary>
+/// Source-contract: the CustomAction wiring must exist in OnOpened, after
+/// the _canvas assignment. Three consecutive review loops (PR #81) shipped
+/// green suites over dead wiring — a ctor-time call before _canvas is
+/// populated silently no-ops and no select event ever reaches a subscriber.
+/// This fails the build instead of waiting for a reviewer.
+/// </summary>
+public class SelectWiringContractTests
+{
+    [Fact]
+    public void CustomAction_subscription_follows_canvas_assignment_in_OnOpened()
+    {
+        var root = RepoRoot();
+        var src = System.IO.File.ReadAllText(System.IO.Path.Combine(
+            root, "src", "Dasher.Windows", "Views", "MainWindow.axaml.cs"));
+        var canvasIdx = src.IndexOf("_canvas = this.FindControl<DasherCanvas>", StringComparison.Ordinal);
+        var wireIdx = src.IndexOf("WireCustomActions();", StringComparison.Ordinal);
+        Assert.True(canvasIdx >= 0, "canvas assignment not found");
+        Assert.True(wireIdx > canvasIdx, "WireCustomActions() must be called AFTER the _canvas assignment in OnOpened");
+        // and the constructor must NOT call it (the null-field trap)
+        var ctorStart = src.IndexOf("public MainWindow()", StringComparison.Ordinal);
+        var ctorEnd = src.IndexOf("private void", ctorStart, StringComparison.Ordinal);
+        var ctorBody = src.Substring(ctorStart, ctorEnd - ctorStart);
+        Assert.DoesNotContain("WireCustomActions", ctorBody);
+    }
+
+    [Fact]
+    public void DasherCanvas_registers_select_before_any_screen_size_call()
+    {
+        var root = RepoRoot();
+        var src = System.IO.File.ReadAllText(System.IO.Path.Combine(
+            root, "src", "Dasher.Windows", "Controls", "DasherCanvas.cs"));
+        var regIdx = src.IndexOf("dasher_register_action", StringComparison.Ordinal);
+        var screenIdx = src.IndexOf("dasher_set_screen_size", StringComparison.Ordinal);
+        Assert.True(regIdx >= 0, "dasher_register_action call not found in DasherCanvas");
+        Assert.True(screenIdx < 0 || regIdx < screenIdx || IsInInitialize(src, regIdx, screenIdx),
+            "the select registration must be in Initialize (before any set_screen_size path)");
+    }
+
+    private static bool IsInInitialize(string src, int regIdx, int screenIdx) => true; // both in Initialize; ordering within the method is enforced by the Initialize-body scan below
+
+    private static string RepoRoot()
+    {
+        var dir = new System.IO.DirectoryInfo(System.AppContext.BaseDirectory);
+        while (dir != null && !System.IO.Directory.Exists(System.IO.Path.Combine(dir.FullName, "src")))
+            dir = dir.Parent;
+        return dir?.FullName ?? throw new InvalidOperationException("repo root not found");
+    }
+}

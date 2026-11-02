@@ -121,7 +121,10 @@ public partial class MainWindow : Window
         RestoreWindowGeometry();
         TrackNormalStateGeometry();
         WireEditingKeyRepeat();
-        WireCustomActions();
+        // WireCustomActions moved to OnOpened (review loop 3): _canvas is
+        // null in the constructor (populated by OnOpened's FindControl), so
+        // the ctor-time call silently no-opped and no select event ever
+        // reached a subscriber.
     }
 
     /// <summary>
@@ -355,6 +358,7 @@ public partial class MainWindow : Window
         base.OnOpened(e);
 
         _canvas = this.FindControl<DasherCanvas>("DasherCanvas");
+        WireCustomActions(); // after _canvas is populated - the ctor-time call saw null (review loop 3)
         _vm = DataContext as MainWindowViewModel;
         if (_canvas == null || _vm == null) return;
 

@@ -146,22 +146,26 @@ public static class SelectActions
         return i;
     }
 
-    /// <summary>Start/end of the current paragraph (\n-delimited). When the
-    /// active end already sits at the paragraph separator, a chained
-    /// forward-paragraph advances past it (Ctrl+Shift+Down chains into the
-    /// next paragraph - the bound must not re-find the same newline).</summary>
+    /// <summary>Start/end of the current paragraph (\n-delimited). A chained
+    /// forward-paragraph advances past exactly ONE separator (\r\n as a
+    /// unit), so Ctrl+Shift+Down steps paragraph by paragraph — including
+    /// blank ones — rather than stalling or swallowing them.</summary>
     internal static int ParagraphBound(string text, int from, SelectDirection dir)
     {
         var i = Math.Clamp(from, 0, text.Length);
         if (dir == SelectDirection.Forward)
         {
-            // skip a separator we're already sitting on (\n, or \n preceded by \r)
-            while (i < text.Length && (text[i] == '\n' || (i > 0 && text[i - 1] == '\r' && text[i] == '\n'))) i++;
+            // skip exactly one separator the active end sits on: a \n, or
+            // the \r of a \r\n pair (the loop-2 version checked the wrong
+            // position — text[i-1]=='\r' when text[i]=='\n' — and never
+            // matched \r on \r\n text, so chained selects stalled there)
+            if (i < text.Length && text[i] == '\r' && i + 1 < text.Length && text[i + 1] == '\n') i += 2;
+            else if (i < text.Length && text[i] == '\n') i++;
             var nl = text.IndexOf('\n', i);
             if (nl < 0) return text.Length;
             // \r\n: the selection must stop before the \r, not include it
             // (Avalonia TextBox inserts \r\n for Enter while the engine
-            // pushes \n - review loop 1 on the select frontend).
+            // pushes \n — review loop 1 on the select frontend).
             return nl > 0 && text[nl - 1] == '\r' ? nl - 1 : nl;
         }
         var prev = text.LastIndexOf('\n', Math.Max(0, i - 1));

@@ -186,7 +186,7 @@
             "bottom",
             "top"
           ],
-          "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position For select actions: \"dist=<char|word|paragraph|all>,forward=<yes|no>\"."
+          "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position. For select actions: \"dist=<char|word|paragraph|all>,forward=<yes|no>\"."
         }
       },
       "pii": false
@@ -221,8 +221,7 @@
           "enum": [
             "settings",
             "main_ui",
-            "ime",
-            "control_tree"
+            "ime"
           ],
           "description": "Where the change was made. Windows currently emits settings and main_ui only"
         }
