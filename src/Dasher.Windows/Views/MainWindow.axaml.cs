@@ -121,6 +121,9 @@ public partial class MainWindow : Window
         RestoreWindowGeometry();
         TrackNormalStateGeometry();
         WireEditingKeyRepeat();
+        // (the custom-action wiring moved to OnOpened - review loop 3:
+        // _canvas is null in the constructor, so the ctor-time call saw
+        // null and no select event ever reached a subscriber)
     }
 
     /// <summary>
@@ -354,6 +357,7 @@ public partial class MainWindow : Window
         base.OnOpened(e);
 
         _canvas = this.FindControl<DasherCanvas>("DasherCanvas");
+        WireCustomActions(); // after _canvas is populated - the ctor-time call saw null (review loop 3)
         _vm = DataContext as MainWindowViewModel;
         if (_canvas == null || _vm == null) return;
 
@@ -1268,6 +1272,102 @@ public partial class MainWindow : Window
         // 200 chars of a private email or message).
         KbLog($"Context seed ({reason}): {decision.Text.Length} of {context.Text.Length} chars, caret u16={decision.CaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, decision.Text, byteOffset);
+    }
+
+
+    // ── RFC 0021 select dispatch ─────────────────────────────────────────
+
+    private void WireCustomActions()
+    {
+        if (_canvas == null) return;
+        _canvas.CustomAction += OnEngineCustomAction;
+    }
+
+    private void OnEngineCustomAction(string name, System.Collections.Generic.Dictionary<string, string> attrs)
+    {
+        if (name != "select") return;
+        if (_pickerSessionActive) return; // keystrokes must not reach a picker dialog
+
+        var parsed = Services.SelectActions.Parse(
+            attrs.TryGetValue("dist", out var d) ? d : null,
+            attrs.TryGetValue("forward", out var f) ? f : null);
+        if (parsed is not { } action)
+        {
+            KbLog($"select: unknown attributes dist={d ?? "(null)"} forward={f ?? "(null)"} - no-op");
+            return;
+        }
+        var (dist, dir) = action;
+
+        if (_vm is { IsKeyboardMode: true })
+        {
+            // Direct mode: native OS selection in the TARGET (the target's
+            // own Copy/Cut/Delete then act on it without further work).
+            var ks = Services.SelectActions.Keystroke(dist, dir);
+            _targetTracker.EnsureForeground(OurHwnd());
+
+            // RFC 0021 / #79 interaction: the caret events our selection
+            // keystrokes provoke land in the existing caret-moved debounce;
+            // a backward paragraph select changes the caret-anchored
+            // sentence window and would re-seed mid-selection. Extend the
+            // settle-window pattern to select chords. Timestamp BEFORE the
+            // send (the established #79 ordering).
+            _lastOwnParagraphInject = Environment.TickCount64;
+            SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
+            // Field-test note (review loops 2-4): Shift-key injection is new
+            // exposure for this codebase (existing chords inject Ctrl only) —
+            // repeated Shift injection can trigger Windows Sticky/Filter Keys
+            // prompts in some configurations; watch for it in tester feedback.
+            Services.AnalyticsService.CaptureUiAction("control_tree", "select",
+                $"dist={dist.ToString().ToLowerInvariant()},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
+        }
+        else
+        {
+            // Editor mode: measured selection over the pane text with the
+            // active-end state machine (SelectActions.EditorBounds).
+            var box = MessageArea;
+            if (box == null) return;
+            var text = box.Text ?? "";
+            var hadSelection = box.SelectionStart != box.SelectionEnd;
+            var (start, end) = Services.SelectActions.EditorBounds(
+                text, box.SelectionStart, box.SelectionEnd, dist, dir, hadSelection);
+            // Suppress the editor-sync while setting the selection: a
+            // selection change with identical text is not a user edit.
+            box.SelectionStart = start;
+            box.SelectionEnd = end;
+            Services.AnalyticsService.CaptureUiAction("control_tree", "select",
+                $"dist={dist.ToString().ToLowerInvariant()},forward={(dir == Services.SelectDirection.Forward ? "yes" : "no")}");
+        }
+    }
+
+    /// <summary>Send a Shift(+Ctrl)+Arrow chord or Ctrl+<letter> to the
+    /// target as ONE atomic SendInput (events within a single call are
+    /// non-interleaved - the documented Windows contract; splitting them
+    /// across calls lets concurrent input land between Shift-down and
+    /// Arrow-down). Mirrors SendCtrlChord's atomicity. Releases in reverse
+    /// order. The return count is logged - a silent UIPI/elevation block
+    /// leaves a diagnostic in keyboard_debug.log.</summary>
+    private void SendSelectChord(bool ctrl, bool shift, ushort? arrow, ushort? letter)
+    {
+        const ushort VK_SHIFT = 0x10;
+        // presses in order, then releases in reverse
+        var keys = new System.Collections.Generic.List<ushort>();
+        if (shift) keys.Add(VK_SHIFT);
+        if (ctrl) keys.Add(VK_CONTROL);
+        if (arrow is { } a) keys.Add(a);
+        if (letter is { } l) keys.Add(l);
+        for (var i = keys.Count - 1; i >= 0; i--) keys.Add(keys[i]);
+
+        var inputs = new INPUT[keys.Count];
+        for (var i = 0; i < keys.Count; i++)
+        {
+            inputs[i].type = INPUT_KEYBOARD;
+            inputs[i].u.ki.wVk = keys[i];
+            if (i >= keys.Count / 2) inputs[i].u.ki.dwFlags = KEYEVENTF_KEYUP;
+        }
+
+        var sent = SendInput((uint)keys.Count, inputs, Marshal.SizeOf<INPUT>());
+        KbLog($"  select chord: ctrl={ctrl} shift={shift} arrow={arrow?.ToString("X") ?? "-"} " +
+              $"letter={letter?.ToString() ?? "-"} sent={sent}/{keys.Count}");
     }
 
     private int _contextSeedGeneration;

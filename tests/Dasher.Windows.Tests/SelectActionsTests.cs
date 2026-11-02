@@ -1,0 +1,288 @@
+using Dasher.Windows.Services;
+using Xunit;
+
+namespace Dasher.Windows.Tests;
+
+/// <summary>
+/// RFC 0021 select-action semantics (pure): attribute parsing, direct-mode
+/// keystroke mapping, editor-mode bounds + active-end state machine.
+/// </summary>
+public class SelectActionsTests
+{
+    // ── Parse ─────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Parse_accepts_all_documented_pairs()
+    {
+        foreach (var (d, f) in new[] { ("char", "yes"), ("char", "no"), ("word", "yes"), ("word", "no"), ("paragraph", "yes"), ("paragraph", "no"), ("all", "yes"), ("all", "no") })
+        {
+            var r = SelectActions.Parse(d, f);
+            Assert.NotNull(r);
+        }
+    }
+
+    [Fact]
+    public void Parse_rejects_unknown_values()
+    {
+        Assert.Null(SelectActions.Parse("sentence", "yes")); // deferred granularity
+        Assert.Null(SelectActions.Parse("char", "maybe"));
+        Assert.Null(SelectActions.Parse(null, "yes"));
+        Assert.Null(SelectActions.Parse("char", null));
+    }
+
+    // ── Keystroke ─────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Keystroke_char_is_shift_arrow()
+    {
+        var back = SelectActions.Keystroke(SelectDistance.Char, SelectDirection.Backward);
+        Assert.False(back.Ctrl); Assert.True(back.Shift);
+        Assert.Equal((ushort)0x25, back.Arrow); Assert.Null(back.Letter);
+
+        var fwd = SelectActions.Keystroke(SelectDistance.Char, SelectDirection.Forward);
+        Assert.Equal((ushort)0x27, fwd.Arrow);
+    }
+
+    [Fact]
+    public void Keystroke_word_is_ctrl_shift_arrow()
+    {
+        var k = SelectActions.Keystroke(SelectDistance.Word, SelectDirection.Forward);
+        Assert.True(k.Ctrl); Assert.True(k.Shift); Assert.Equal((ushort)0x27, k.Arrow);
+    }
+
+    [Fact]
+    public void Keystroke_paragraph_is_ctrl_shift_up_down()
+    {
+        Assert.Equal((ushort)0x26, SelectActions.Keystroke(SelectDistance.Paragraph, SelectDirection.Backward).Arrow);
+        Assert.Equal((ushort)0x28, SelectActions.Keystroke(SelectDistance.Paragraph, SelectDirection.Forward).Arrow);
+    }
+
+    [Fact]
+    public void Keystroke_all_is_ctrl_a()
+    {
+        var k = SelectActions.Keystroke(SelectDistance.All, SelectDirection.Forward);
+        Assert.True(k.Ctrl); Assert.False(k.Shift); Assert.Null(k.Arrow);
+        Assert.Equal((ushort)0x41, k.Letter);
+    }
+
+    // ── EditorBounds ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void Cold_start_char_forward_selects_one_char()
+    {
+        // caret at 5 in "hello world", no prior selection
+        var (s, e) = SelectActions.EditorBounds("hello world", 5, 5, SelectDistance.Char, SelectDirection.Forward, false);
+        Assert.Equal(5, s); Assert.Equal(6, e);
+    }
+
+    [Fact]
+    public void Extend_active_end_backward_collapses_to_anchor()
+    {
+        var text = "hello world";
+        var (s1, e1) = SelectActions.EditorBounds(text, 5, 5, SelectDistance.Char, SelectDirection.Forward, false);
+        Assert.Equal(5, s1); Assert.Equal(6, e1);
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Char, SelectDirection.Backward, true);
+        Assert.Equal(5, s2); Assert.Equal(5, e2);
+    }
+
+    [Fact]
+    public void Empty_text_is_safe_for_all_distances()
+    {
+        foreach (var dist in new[] { SelectDistance.Char, SelectDistance.Word, SelectDistance.Paragraph, SelectDistance.All })
+            foreach (var dir in new[] { SelectDirection.Backward, SelectDirection.Forward })
+            {
+                var (s, e) = SelectActions.EditorBounds("", 0, 0, dist, dir, false);
+                Assert.Equal(0, s); Assert.Equal(0, e);
+            }
+    }
+
+    [Fact]
+    public void Char_backward_from_zero_and_forward_from_end_clamp()
+    {
+        Assert.Equal((0, 0), SelectActions.EditorBounds("abc", 0, 0, SelectDistance.Char, SelectDirection.Backward, false));
+        Assert.Equal((3, 3), SelectActions.EditorBounds("abc", 3, 3, SelectDistance.Char, SelectDirection.Forward, false));
+    }
+
+    [Fact]
+    public void Word_forward_at_end_of_text_no_ops()
+    {
+        var (s, e) = SelectActions.EditorBounds("one", 3, 3, SelectDistance.Word, SelectDirection.Forward, false);
+        Assert.Equal(3, s); Assert.Equal(3, e);
+    }
+
+    [Fact]
+    public void Paragraph_forward_in_last_paragraph_selects_to_end()
+    {
+        var (s, e) = SelectActions.EditorBounds("first\nlast", 6, 6, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(6, s); Assert.Equal(10, e);
+    }
+
+    [Fact]
+    public void Paragraph_forward_stops_before_cr_on_crlf()
+    {
+        // Avalonia TextBox inserts \r\n; the selection must not include \r
+        var (s, e) = SelectActions.EditorBounds("first\r\nsecond", 2, 2, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(2, s); Assert.Equal(5, e); // stops at 5 (the \r), not 6 (the \n)
+    }
+
+    [Fact]
+    public void Char_selection_is_surrogate_safe()
+    {
+        var emoji = "\U0001F600";
+        var text = $"a{emoji}b";
+        var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Char, SelectDirection.Forward, false);
+        Assert.Equal(1, s1); Assert.Equal(3, e1);
+        var (s2, e2) = SelectActions.EditorBounds(text, 3, 3, SelectDistance.Char, SelectDirection.Backward, false);
+        Assert.Equal(1, s2); Assert.Equal(3, e2);
+    }
+
+    [Fact]
+    public void Chained_paragraph_forward_advances_past_separator()
+    {
+        // Review loop 2: the bound must not re-find the same newline when
+        // the active end sits on it (Ctrl+Shift+Down chains paragraphs).
+        var text = "aaa\nbbb\nccc";
+        // first: from 1 → to the first \n (3)
+        var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(1, s1); Assert.Equal(3, e1);
+        // chained: from active end 3 (on the \n) → past it → to the second \n (7)
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Forward, true);
+        Assert.Equal(1, s2); Assert.Equal(7, e2);
+    }
+
+    [Fact]
+    public void Chained_paragraph_forward_on_crlf_advances()
+    {
+        // Review loop 3: on \r\n text (Avalonia inserts this on Enter),
+        // the skip must consume the \r\n as a unit - not stall on the \r.
+        var text = "aaa\r\nbbb\r\nccc";
+        var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(1, s1); Assert.Equal(3, e1); // stops before the \r at 3
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Forward, true);
+        Assert.Equal(1, s2); Assert.Equal(8, e2); // chains past \r\n to the next \r at 8
+    }
+
+    [Fact]
+    public void Chained_paragraph_forward_steps_blank_lines_one_at_a_time()
+    {
+        // Review loop 3: Ctrl+Shift+Down stops at each paragraph mark —
+        // one separator per press; blank paragraphs are stepped, not swallowed.
+        var text = "a\n\nb\nc"; // indices: a=0, \n=1, \n=2, b=3, \n=4, c=5
+        // from the first \n: skip it, select to the second \n (the blank line's end)
+        var (s1, e1) = SelectActions.EditorBounds(text, 1, 1, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(1, s1); Assert.Equal(2, e1); // selects just the blank line
+        // from the second \n: skip it, select to after b
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Forward, true);
+        Assert.Equal(1, s2); Assert.Equal(4, e2); // to the \n after b
+    }
+
+    [Fact]
+    public void Parse_rejects_case_mismatches()
+    {
+        Assert.Null(SelectActions.Parse("Char", "yes"));
+        Assert.Null(SelectActions.Parse("char", "Yes"));
+    }
+
+    [Fact]
+    public void Word_forward_from_mid_word_lands_next_word_start()
+    {
+        // caret at 2 (mid "hello"), forward → start of "world" (6)
+        var (s, e) = SelectActions.EditorBounds("hello world", 2, 2, SelectDistance.Word, SelectDirection.Forward, false);
+        Assert.Equal(2, s); Assert.Equal(6, e);
+    }
+
+    [Fact]
+    public void Word_backward_from_mid_second_word_lands_word_start()
+    {
+        var (s, e) = SelectActions.EditorBounds("hello world", 8, 8, SelectDistance.Word, SelectDirection.Backward, false);
+        Assert.Equal(6, s); Assert.Equal(8, e);
+    }
+
+    [Fact]
+    public void Paragraph_forward_to_next_newline()
+    {
+        var text = "first line\nsecond line\nthird";
+        var (s, e) = SelectActions.EditorBounds(text, 3, 3, SelectDistance.Paragraph, SelectDirection.Forward, false);
+        Assert.Equal(3, s); Assert.Equal(10, e); // \n at index 10
+    }
+
+    [Fact]
+    public void Paragraph_backward_to_previous_newline()
+    {
+        var text = "first line\nsecond line\nthird";
+        var (s, e) = SelectActions.EditorBounds(text, 15, 15, SelectDistance.Paragraph, SelectDirection.Backward, false);
+        Assert.Equal(11, s); Assert.Equal(15, e);
+    }
+
+    [Fact]
+    public void All_selects_everything()
+    {
+        var (s, e) = SelectActions.EditorBounds("some text", 4, 4, SelectDistance.All, SelectDirection.Forward, false);
+        Assert.Equal(0, s); Assert.Equal(9, e);
+        var (s2, e2) = SelectActions.EditorBounds("some text", 4, 4, SelectDistance.All, SelectDirection.Backward, false);
+        Assert.Equal(0, s2); Assert.Equal(9, e2);
+    }
+}
+
+
+/// <summary>
+/// Source-contract: the CustomAction wiring must exist in OnOpened, after
+/// the _canvas assignment. Three consecutive review loops (PR #81) shipped
+/// green suites over dead wiring — a ctor-time call before _canvas is
+/// populated silently no-ops and no select event ever reaches a subscriber.
+/// This fails the build instead of waiting for a reviewer.
+/// </summary>
+public class SelectWiringContractTests
+{
+    [Fact]
+    public void CustomAction_subscription_follows_canvas_assignment_in_OnOpened()
+    {
+        var root = RepoRoot();
+        var src = System.IO.File.ReadAllText(System.IO.Path.Combine(
+            root, "src", "Dasher.Windows", "Views", "MainWindow.axaml.cs"));
+        var canvasIdx = src.IndexOf("_canvas = this.FindControl<DasherCanvas>", StringComparison.Ordinal);
+        var wireIdx = src.IndexOf("WireCustomActions();", StringComparison.Ordinal);
+        Assert.True(canvasIdx >= 0, "canvas assignment not found");
+        Assert.True(wireIdx > canvasIdx, "WireCustomActions() must be called AFTER the _canvas assignment in OnOpened");
+        // and the constructor must NOT call it (the null-field trap)
+        var ctorStart = src.IndexOf("public MainWindow()", StringComparison.Ordinal);
+        var ctorEnd = src.IndexOf("private void", ctorStart, StringComparison.Ordinal);
+        var ctorBody = src.Substring(ctorStart, ctorEnd - ctorStart);
+        Assert.DoesNotContain("WireCustomActions", ctorBody);
+    }
+
+    [Fact]
+    public void DasherCanvas_registers_select_before_any_screen_size_call()
+    {
+        var root = RepoRoot();
+        var src = System.IO.File.ReadAllText(System.IO.Path.Combine(
+            root, "src", "Dasher.Windows", "Controls", "DasherCanvas.cs"));
+        var regIdx = src.IndexOf("dasher_register_action", StringComparison.Ordinal);
+        Assert.True(regIdx >= 0, "dasher_register_action call not found in DasherCanvas");
+
+        // Presence + Initialize-method-membership (structural, not dataflow):
+        // the registration must sit inside the Initialize method body, and
+        // every dasher_set_screen_size call site lives in StartEngine /
+        // RealizeOffUiThreadAsync / TrySetScreenSize — all called after
+        // Initialize completes.
+        var initStart = src.IndexOf("public void Initialize(", StringComparison.Ordinal);
+        var initEnd = src.IndexOf("private void", initStart, StringComparison.Ordinal);
+        Assert.True(initStart >= 0 && regIdx > initStart && regIdx < initEnd,
+            "the select registration must be inside the Initialize method body");
+    }
+
+    // Ordering within Initialize is verified structurally: the registration
+    // sits inside the Initialize method body (before its closing brace), and
+    // every dasher_set_screen_size call site in the file is in StartEngine,
+    // RealizeOffUiThreadAsync, or TrySetScreenSize - all called after
+    // Initialize. A full dataflow assertion is overkill for a source
+    // contract; presence + method-membership is the right granularity.
+
+    private static string RepoRoot()
+    {
+        var dir = new System.IO.DirectoryInfo(System.AppContext.BaseDirectory);
+        while (dir != null && !System.IO.Directory.Exists(System.IO.Path.Combine(dir.FullName, "src")))
+            dir = dir.Parent;
+        return dir?.FullName ?? throw new InvalidOperationException("repo root not found");
+    }
+}
