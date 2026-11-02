@@ -76,13 +76,15 @@ public class SelectActionsTests
     }
 
     [Fact]
-    public void Extend_active_end_backward_collapses_to_anchor()
+    public void Extend_active_end_backward_extends_from_the_start()
     {
         var text = "hello world";
         var (s1, e1) = SelectActions.EditorBounds(text, 5, 5, SelectDistance.Char, SelectDirection.Forward, false);
         Assert.Equal(5, s1); Assert.Equal(6, e1);
+        // backward from (5,6): anchor=6 (fixed end), active=5 (extending end)
+        // step back → 4. Result: (4,6) — backward selections anchor at the END
         var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Char, SelectDirection.Backward, true);
-        Assert.Equal(5, s2); Assert.Equal(5, e2);
+        Assert.Equal(4, s2); Assert.Equal(6, e2);
     }
 
     [Fact]
@@ -174,6 +176,22 @@ public class SelectActionsTests
         // from the second \n: skip it, select to after b
         var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Forward, true);
         Assert.Equal(1, s2); Assert.Equal(4, e2); // to the \n after b
+    }
+
+    [Fact]
+    public void Chained_paragraph_backward_steps_one_at_a_time()
+    {
+        // Issue #84: chained backward selects stalled at the same paragraph.
+        var text = "aaa\nbbb\nccc"; // \n at 3 and 7
+        // from 10: first backward → 8 (start of ccc)
+        var (s1, e1) = SelectActions.EditorBounds(text, 10, 10, SelectDistance.Paragraph, SelectDirection.Backward, false);
+        Assert.Equal(8, s1); Assert.Equal(10, e1);
+        // from active end 8 (sitting right after the \n at 7): skip it → 4 (start of bbb)
+        var (s2, e2) = SelectActions.EditorBounds(text, s1, e1, SelectDistance.Paragraph, SelectDirection.Backward, true);
+        Assert.Equal(4, s2); Assert.Equal(10, e2);
+        // from 4: third backward → 0 (start of aaa)
+        var (s3, e3) = SelectActions.EditorBounds(text, s2, e2, SelectDistance.Paragraph, SelectDirection.Backward, true);
+        Assert.Equal(0, s3); Assert.Equal(10, e3);
     }
 
     [Fact]

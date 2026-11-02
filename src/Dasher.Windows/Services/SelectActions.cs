@@ -89,8 +89,17 @@ public static class SelectActions
         // table maps it to TextBox.SelectAll, not shift-to-boundary).
         if (dist == SelectDistance.All) return (0, text.Length);
 
-        var anchor = hadSelection ? selectionStart : Math.Clamp(selectionEnd, 0, text.Length);
-        var active = hadSelection ? selectionEnd : anchor;
+        // Anchor/active (issue #84 + RFC 0021 state machine): the ANCHOR is
+        // the fixed end (where the user started selecting); the ACTIVE end is
+        // where they're extending. Avalonia's SelectionStart is always the
+        // lower bound, so for BACKWARD selections the anchor is SelectionEnd
+        // and the active is SelectionStart (and vice versa for forward).
+        var anchor = hadSelection
+            ? (dir == SelectDirection.Backward ? selectionEnd : selectionStart)
+            : Math.Clamp(selectionEnd, 0, text.Length);
+        var active = hadSelection
+            ? (dir == SelectDirection.Backward ? selectionStart : selectionEnd)
+            : anchor;
         var target = dist switch
         {
             SelectDistance.Char => StepCodePoint(text, active, dir),
@@ -167,6 +176,14 @@ public static class SelectActions
             // (Avalonia TextBox inserts \r\n for Enter while the engine
             // pushes \n — review loop 1 on the select frontend).
             return nl > 0 && text[nl - 1] == '\r' ? nl - 1 : nl;
+        }
+        // Backward: skip one separator the active end sits immediately
+        // after (mirrors the forward branch; without this, chained backward
+        // selects stall at the same paragraph — issue #84)
+        if (i > 0 && text[i - 1] == '\n')
+        {
+            i--; // step back onto the \n
+            if (i > 0 && text[i - 1] == '\r') i--; // \r\n as a unit
         }
         var prev = text.LastIndexOf('\n', Math.Max(0, i - 1));
         return SnapToCodePoint(text, prev < 0 ? 0 : prev + 1, dir);

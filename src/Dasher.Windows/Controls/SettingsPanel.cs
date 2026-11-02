@@ -792,8 +792,8 @@ public class SettingsPanel : Decorator
             filterHeader.IsVisible = isEyeGaze;
             filterTogglePanel.IsVisible = isEyeGaze;
             gazeFilterHelp.IsVisible = isEyeGaze;
-            advLogPanel.IsVisible = isEyeGaze;
-            advLogHelp.IsVisible = isEyeGaze;
+            advLogPanel.IsVisible = true;  // always visible: gates keyboard logging too
+            advLogHelp.IsVisible = true;
             deadZoneSlider.IsVisible = isEyeGaze;
             deadZoneLabel.IsVisible = isEyeGaze;
             settleSlider.IsVisible = isEyeGaze;
@@ -978,6 +978,7 @@ public class SettingsPanel : Decorator
         panel.Children.Add(gazeFilterHelp);
         panel.Children.Add(advLogPanel);
         panel.Children.Add(advLogHelp);
+        panel.Children.Add(logMgrPanel);
         panel.Children.Add(deadZoneSlider);
         panel.Children.Add(deadZoneLabel);
         panel.Children.Add(settleSlider);

@@ -1088,6 +1088,27 @@ public partial class MainWindow : Window
 
     private void OnEngineOutput(object? sender, EngineOutputEventArgs e)
     {
+        // SEH guard (issue #85): the injection chain (EnsureForeground +
+        // SendInput P/Invokes) runs inside the Avalonia message pump via
+        // this handler — an SEH from native code propagates from
+        // DispatchMessage and crashes the app. Catch it here, log, and
+        // let the next frame retry.
+        try
+        {
+            OnEngineOutputCore(sender, e);
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"OnEngineOutput: SEHException (0x{ex.HResult:X}) — injection chain guarded, continuing");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"OnEngineOutput: {ex.GetType().Name}: {ex.Message} — guarded");
+        }
+    }
+
+    private void OnEngineOutputCore(object? sender, EngineOutputEventArgs e)
+    {
         if (_vm == null || !_vm.IsKeyboardMode) return;
         // A picker dialog owns the foreground mid-session: no injection, and
         // (belt-and-braces, review loop 2) the tracker must not record the
@@ -1479,6 +1500,11 @@ public partial class MainWindow : Window
 
     private void OnEditBackspaceKey(bool reportTelemetry = true)
     {
+        // SEH guard (issue #85): editing-key repeats fire from
+        // DispatcherTimer inside DispatchMessage — an SEH from the
+        // SendInput/EnsureForeground chain propagates and crashes.
+        try
+        {
         // A picker dialog owns the foreground mid-session: injecting
         // keystrokes now would send them into the filename box and retarget
         // the tracker at the dialog (the bug class #73's review spent two
@@ -1494,10 +1520,25 @@ public partial class MainWindow : Window
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "backspace");
             EditorBackspace();
         }
+    
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"edit key: SEHException (0x{ex.HResult:X}) — guarded");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"edit key: {ex.GetType().Name} — guarded");
+        }
     }
 
     private void OnEditArrowLeftKey(bool reportTelemetry = true)
     {
+        // SEH guard (issue #85): editing-key repeats fire from
+        // DispatcherTimer inside DispatchMessage — an SEH from the
+        // SendInput/EnsureForeground chain propagates and crashes.
+        try
+        {
         if (_pickerSessionActive) return;
         if (_vm is { IsKeyboardMode: true })
         {
@@ -1510,10 +1551,25 @@ public partial class MainWindow : Window
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_left");
             EditorMoveCaret(-1);
         }
+    
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"edit key: SEHException (0x{ex.HResult:X}) — guarded");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"edit key: {ex.GetType().Name} — guarded");
+        }
     }
 
     private void OnEditArrowRightKey(bool reportTelemetry = true)
     {
+        // SEH guard (issue #85): editing-key repeats fire from
+        // DispatcherTimer inside DispatchMessage — an SEH from the
+        // SendInput/EnsureForeground chain propagates and crashes.
+        try
+        {
         if (_pickerSessionActive) return;
         if (_vm is { IsKeyboardMode: true })
         {
@@ -1525,6 +1581,16 @@ public partial class MainWindow : Window
         {
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("status_bar", "arrow_right");
             EditorMoveCaret(1);
+        }
+    
+        }
+        catch (System.Runtime.InteropServices.SEHException ex)
+        {
+            KbLog($"edit key: SEHException (0x{ex.HResult:X}) — guarded");
+        }
+        catch (Exception ex)
+        {
+            KbLog($"edit key: {ex.GetType().Name} — guarded");
         }
     }
 
