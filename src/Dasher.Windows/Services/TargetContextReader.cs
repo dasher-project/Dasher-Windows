@@ -30,6 +30,8 @@ public static class TargetContextReader
     // seeding path is remote-debugged via %APPDATA%\Dasher\keyboard_debug.log.
     private static void Log(string msg)
     {
+        // Same gate as MainWindow.KbLog: indented = verbose, skip when off
+        if (msg.StartsWith("  ") && !LogManager.AdvancedLogging) return;
         try
         {
             var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";

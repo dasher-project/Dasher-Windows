@@ -26,6 +26,12 @@
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>Adapt Speed Automatically</value>
   </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>Advanced logging</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>Detailed diagnostic logging for bug reports (per-sample eye-tracker lines, keystroke traces, UIA reads). Basic connection events are always logged. May generate large log files.</value>
+  </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>Advanced settings</value>
   </data>
@@ -120,6 +126,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="clear" xml:space="preserve">
     <value>Clear</value>
+  </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>Clear logs</value>
   </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>Click to set up keyboard mode (needs ydotool)</value>

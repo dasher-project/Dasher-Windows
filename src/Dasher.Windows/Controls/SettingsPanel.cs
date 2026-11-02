@@ -657,39 +657,73 @@ public class SettingsPanel : Decorator
             TextWrapping = TextWrapping.Wrap,
         };
 
-        // Eye-tracker diagnostics toggle: detailed per-sample logging to
-        // %APPDATA%\Dasher\eyegaze.log (off by default; lifecycle events
-        // always logged). The file to attach to bug reports.
-        var diagToggle = new ToggleSwitch
+        // ── Advanced logging toggle (consolidates the old eyegaze-specific
+        // one; November 2026 field lesson: a 40MB keyboard_debug.log spanning
+        // every build is unparseable). When ON: verbose per-sample eyegaze
+        // logging, SendInput/UIA read traces, engine frame timing. When OFF:
+        // basic lifecycle events only (engine created, tracker connected,
+        // errors — the minimum for remote debugging).
+        var advLogToggle = new ToggleSwitch
         {
-            IsChecked = config.GazeDiagnostics,
-            OnContent = "", OffContent = "", MinWidth = 0, Height = 24,
+            IsChecked = config.GazeDiagnostics, // migrates the old setting
         };
-        var diagToggleLabel = new TextBlock
+        var advLogLabel = new TextBlock
         {
-            Text = Loc.Tr("save_eye_tracker_diagnostics"),
+            Text = Loc.Tr("advanced_logging", "Advanced logging"),
             FontSize = 12,
-            Foreground = BrushValue,
             VerticalAlignment = VerticalAlignment.Center,
         };
-        var diagTogglePanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-        diagTogglePanel.Children.Add(diagToggle);
-        diagTogglePanel.Children.Add(diagToggleLabel);
-        var diagHelp = new TextBlock
+        var advLogHelp = new TextBlock
         {
-            Text = Loc.Tr("eyegaze_verbose_help"),
+            Text = Loc.Tr("advanced_logging_help",
+                "Detailed diagnostic logging for bug reports (per-sample eye-tracker lines, keystroke traces, UIA reads). " +
+                "Basic connection events are always logged. May generate large log files."),
             FontSize = 11,
             Foreground = BrushMuted,
             TextWrapping = TextWrapping.Wrap,
         };
-        diagToggle.PropertyChanged += (s, e) =>
+        advLogToggle.PropertyChanged += (s2, e2) =>
         {
-            if (e.Property.Name != "IsChecked") return;
+            if (e2.Property.Name != "IsChecked") return;
             var cfg = AccessConfiguration.Load();
-            cfg.GazeDiagnostics = diagToggle.IsChecked == true;
+            cfg.GazeDiagnostics = advLogToggle.IsChecked == true;
             cfg.Save();
             EyeGaze.EyeGazeLogger.Verbose = cfg.GazeDiagnostics;
+            Services.LogManager.SetAdvancedLogging(cfg.GazeDiagnostics);
         };
+        // apply at panel build (settings may have loaded from disk)
+        EyeGaze.EyeGazeLogger.Verbose = config.GazeDiagnostics;
+        Services.LogManager.SetAdvancedLogging(config.GazeDiagnostics);
+
+        var advLogPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        advLogPanel.Children.Add(advLogToggle);
+        advLogPanel.Children.Add(advLogLabel);
+
+        // ── Log files: total size + clear button (field lesson: testers
+        // can't be asked to navigate %APPDATA% by hand) ────────────────────
+        var logSizeLabel = new TextBlock
+        {
+            Text = $"{Services.LogManager.GetTotalLogSize()}",
+            FontSize = 11,
+            Foreground = BrushMuted,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        var clearLogsBtn = new Button
+        {
+            Content = Loc.Tr("clear_logs", "Clear logs"),
+            FontSize = 11,
+            Padding = new Thickness(12, 4, 12, 4),
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left,
+        };
+        clearLogsBtn.Click += (s2, e2) =>
+        {
+            Services.LogManager.ClearLogs();
+            logSizeLabel.Text = Services.LogManager.GetTotalLogSize();
+        };
+        var logMgrPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        logMgrPanel.Children.Add(clearLogsBtn);
+        logMgrPanel.Children.Add(logSizeLabel);
+
 
         var deadZoneSlider = new Slider
         {
@@ -758,8 +792,8 @@ public class SettingsPanel : Decorator
             filterHeader.IsVisible = isEyeGaze;
             filterTogglePanel.IsVisible = isEyeGaze;
             gazeFilterHelp.IsVisible = isEyeGaze;
-            diagTogglePanel.IsVisible = isEyeGaze;
-            diagHelp.IsVisible = isEyeGaze;
+            advLogPanel.IsVisible = isEyeGaze;
+            advLogHelp.IsVisible = isEyeGaze;
             deadZoneSlider.IsVisible = isEyeGaze;
             deadZoneLabel.IsVisible = isEyeGaze;
             settleSlider.IsVisible = isEyeGaze;
@@ -942,8 +976,8 @@ public class SettingsPanel : Decorator
         panel.Children.Add(filterHeader);
         panel.Children.Add(filterTogglePanel);
         panel.Children.Add(gazeFilterHelp);
-        panel.Children.Add(diagTogglePanel);
-        panel.Children.Add(diagHelp);
+        panel.Children.Add(advLogPanel);
+        panel.Children.Add(advLogHelp);
         panel.Children.Add(deadZoneSlider);
         panel.Children.Add(deadZoneLabel);
         panel.Children.Add(settleSlider);
