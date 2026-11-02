@@ -889,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>ప్రసంగం</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>హలో, ఇది ఎంచుకున్న కন্ঠపు ప్రివ్యూ.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>వాయిస్ సెట్టింగ్‌లు</value>
   </data>
@@ -1036,6 +1039,9 @@
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>కంటిచూపు</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>ఐ ట్రాకర్</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>టోబి (స్ట్రీమ్ ఇంజిన్)</value>

@@ -889,6 +889,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   <data name="speech_on" xml:space="preserve">
     <value>Toespraak oor</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Hallo, hierdie is 'n voorskou van die geselekteerde stem.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Spraakinstellings</value>
   </data>
@@ -1036,6 +1039,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>oogtoesig</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Oogspoorsnyer</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (stroomenjin)</value>

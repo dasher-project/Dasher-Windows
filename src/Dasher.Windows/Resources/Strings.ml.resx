@@ -889,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>പ്രസംഗം ഓണാണ്</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>ഹലോ, ഇത് തിരഞ്ഞെടുത്ത ശബ്ദത്തിൻ്റെ പ്രിവ്യൂ ആണ്.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>സംസാര ക്രമീകരണങ്ങൾ</value>
   </data>
@@ -1036,6 +1039,9 @@
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>കണ്ണടച്ച</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>ഐ ട്രാക്കർ</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>ടോബി (സ്ട്രീം എഞ്ചിൻ)</value>

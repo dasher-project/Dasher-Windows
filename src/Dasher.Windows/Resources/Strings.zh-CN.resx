@@ -889,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>演讲内容</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>您好，这是所选语音的预览。</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>语音设置</value>
   </data>
@@ -1036,6 +1039,9 @@
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>眼睛直观的</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>眼动仪</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii（流引擎）</value>

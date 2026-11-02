@@ -2542,9 +2542,9 @@ public partial class MainWindow : Window
                 var trackerName = args.trackerType switch
                 {
                     EyeGazeIntegration.TrackerType.TobiiStreamEngine => "Tobii Stream Engine",
-                    EyeGazeIntegration.TrackerType.Eyetuitive => "eyetuitive",
+                    EyeGazeIntegration.TrackerType.Eyetuitive => Services.Loc.Tr("tracker_eyetuitive"),
                     EyeGazeIntegration.TrackerType.UdpGazeTracker => "UDP Gaze Tracker",
-                    _ => "Eye tracker",
+                    _ => Services.Loc.Tr("tracker_generic"),
                 };
                 ToastNotifier.Show(Services.Loc.Tr("toast_eye_tracker_error"),
                     string.Format(

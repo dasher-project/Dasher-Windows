@@ -889,6 +889,9 @@ Puedes cambiar esta configuración en cualquier momento en Ajustes &gt; Privacid
   <data name="speech_on" xml:space="preserve">
     <value>Discurso sobre</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Hola, esta es una vista previa de la voz seleccionada.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Configuración de voz</value>
   </data>
@@ -1036,6 +1039,9 @@ Puedes cambiar esta configuración en cualquier momento en Ajustes &gt; Privacid
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>ojotuitivo</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Seguimiento ocular</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (motor de corriente)</value>

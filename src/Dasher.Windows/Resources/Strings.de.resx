@@ -889,6 +889,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   <data name="speech_on" xml:space="preserve">
     <value>Rede weiter</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Hallo, dies ist eine Vorschau der ausgewählten Stimme.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Spracheinstellungen</value>
   </data>
@@ -1036,6 +1039,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>Augentuitiv</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Augen-Tracker</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (Stream Engine)</value>

@@ -889,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>ભાષણ ચાલુ</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>હેલો, આ પસંદ કરેલ અવાજનું પૂર્વાવલોકન છે.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>વક્તવ્ય સેટિંગ્સ</value>
   </data>
@@ -1036,6 +1039,9 @@
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>આંખે</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>આંખ ટ્રેકર</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>ટોબી (સ્ટ્રીમ એન્જિન)</value>

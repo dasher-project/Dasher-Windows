@@ -889,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>Речь о</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Здравствуйте, это предварительный просмотр выбранного голоса.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Настройки речи</value>
   </data>
@@ -1036,6 +1039,9 @@
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>интуитивно понятный</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Трекер глаз</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Тобии (Stream Engine)</value>

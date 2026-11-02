@@ -889,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>สุนทรพจน์เกี่ยวกับ</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>สวัสดี นี่คือตัวอย่างของเสียงที่เลือก</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>การตั้งค่าการพูด</value>
   </data>
@@ -1036,6 +1039,9 @@
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>สายตา</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>เครื่องติดตามดวงตา</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (เครื่องยนต์สตรีม)</value>

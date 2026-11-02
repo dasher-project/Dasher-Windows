@@ -889,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>ஸ்டெப் ஆன்</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>வணக்கம், இது தேர்ந்தெடுக்கப்பட்ட குரியின் முன்னோட்டம்.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>பேச்சு அமைப்புகள்</value>
   </data>
@@ -1036,6 +1039,9 @@
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>கண்பார்வை</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>கண் கண்காணிப்பான்</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>டோபி (ஸ்ட்ரீம் என்ஜின்)</value>

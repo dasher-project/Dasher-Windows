@@ -889,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>Ομιλία στο</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Γεια σας, αυτή είναι μια προεπισκόπηση της επιλεγμένης φωνής.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Ρυθμίσεις Ομιλίας</value>
   </data>
@@ -1036,6 +1039,9 @@
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>οφθαλμοφανής</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Παρακολούθηση ματιού</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (Μηχανή Ροής)</value>

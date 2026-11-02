@@ -2566,7 +2566,7 @@ public class SettingsPanel : Decorator
             if (svc.IsSpeaking)
                 svc.Stop();
             else
-                _ = svc.SpeakAsync("Hello, this is a preview of the selected voice.");
+                _ = svc.SpeakAsync(Loc.Tr("speech_preview_sentence"));
         };
 
         rateCombo.SelectionChanged += (s, e) =>
@@ -2575,7 +2575,7 @@ public class SettingsPanel : Decorator
             {
                 svc.SpeechRate = rateValues[rateCombo.SelectedIndex];
                 svc.SaveSettings();
-                AnalyticsService.CaptureSettingChanged("speech_rate", "enum", rateNames[rateCombo.SelectedIndex]);
+                AnalyticsService.CaptureSettingChanged("speech_rate", "enum", rateValues[rateCombo.SelectedIndex].ToString());
             }
         };
 
@@ -2585,7 +2585,7 @@ public class SettingsPanel : Decorator
             {
                 svc.SpeechPitch = pitchValues[pitchCombo.SelectedIndex];
                 svc.SaveSettings();
-                AnalyticsService.CaptureSettingChanged("speech_pitch", "enum", pitchNames[pitchCombo.SelectedIndex]);
+                AnalyticsService.CaptureSettingChanged("speech_pitch", "enum", pitchValues[pitchCombo.SelectedIndex].ToString());
             }
         };
 

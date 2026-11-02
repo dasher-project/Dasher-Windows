@@ -894,6 +894,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="speech_on" xml:space="preserve">
     <value>Speech on</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Hello, this is a preview of the selected voice.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Speech Settings</value>
   </data>
@@ -1041,6 +1044,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>eyetuitive</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Eye tracker</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (Stream Engine)</value>

@@ -889,6 +889,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   <data name="speech_on" xml:space="preserve">
     <value>Inkulumo ivuliwe</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Sawubona, lokhu ukubuka kuqala kwezwi elikhethiwe.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Izilungiselelo Zokukhuluma</value>
   </data>
@@ -1035,6 +1038,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>eyetuitive</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>I-Eye Tracker</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>I-Tobii (Injini Yokusakaza)</value>

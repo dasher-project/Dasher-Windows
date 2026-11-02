@@ -889,6 +889,9 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   <data name="speech_on" xml:space="preserve">
     <value>Discurso sobre</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Olá, esta é uma pré-visualização da voz selecionada.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Definições de Fala</value>
   </data>
@@ -1036,6 +1039,9 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>eyetuitive</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Rastreador ocular</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (Motor de Stream)</value>

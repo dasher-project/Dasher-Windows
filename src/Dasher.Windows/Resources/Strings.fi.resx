@@ -889,6 +889,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="speech_on" xml:space="preserve">
     <value>Puhe aiheesta</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Hei, tämä on esikatselu valitusta äänestä.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Puheasetukset</value>
   </data>
@@ -1036,6 +1039,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>silmiinpistävä</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Silmänseurantalaite</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (Stream Engine)</value>

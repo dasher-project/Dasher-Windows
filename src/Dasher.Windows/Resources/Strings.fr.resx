@@ -890,6 +890,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="speech_on" xml:space="preserve">
     <value>Discours sur</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Bonjour, ceci est un aperçu de la voix sélectionnée.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Paramètres de discours</value>
   </data>
@@ -1037,6 +1040,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>eyetuitive</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Suivi oculaire</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (moteur de flux)</value>

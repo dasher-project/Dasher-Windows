@@ -889,6 +889,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="speech_on" xml:space="preserve">
     <value>Hotuba imewashwa</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Hujambo, hii ni onyesho la kukagua sauti iliyochaguliwa.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Mipangilio ya Hotuba</value>
   </data>
@@ -1035,6 +1038,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="tracker_eyetuitive" xml:space="preserve">
     <value>macho</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Kifuatilia macho</value>
   </data>
   <data name="tracker_tobii_stream" xml:space="preserve">
     <value>Tobii (Injini ya Mkondo)</value>
