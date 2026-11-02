@@ -14,6 +14,9 @@
   <data name="about" xml:space="preserve">
     <value>من نحن</value>
   </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>داشر {0}</value>
+  </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>قبول أحداث التمرير/المؤشر كمدخلات لـ Dasher. تفعيل خاصية تتبع العين أو المؤشرات الخارجية.</value>
   </data>
@@ -25,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>ضبط السرعة تلقائيًا</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>التسجيل المتقدم</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>تسجيل تشخيصي مفصل لتقارير الأخطاء (أسطر جهاز تتبع العين لكل عينة، تتبعات ضربات المفاتيح، قراءات UIA). يتم دائمًا تسجيل أحداث الاتصال الأساسية. قد يتم توليد ملفات سجل كبيرة.</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>الإعدادات المتقدمة</value>
@@ -58,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>يقوم Dasher بجمع تحليلات الاستخدام المجهولة وتقارير الأعطال لفهم كيفية استخدام التطبيق وإصلاح الأخطاء. لا يتم جمع أي نص مكتوب أو محتويات الحافظة أو معلومات شخصية أبدًا.</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>هل تساعد في تحسين داشر؟</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>معرف مجهول: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>تحليلات الاستخدام المجهولة</value>
   </data>
@@ -66,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>تحديد مستوى التطبيق</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>المظهر</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>يسار</value>
@@ -100,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>حذف (اضغط مطولًا للتكرار)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>معايرة الميل</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>يلغي</value>
   </data>
@@ -115,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>واضح</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>مسح السجلات</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>انقر لإعداد وضع لوحة المفاتيح (يحتاج إلى ydotool)</value>
   </data>
@@ -127,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>نظام الألوان</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>يتم جمع المحتوى أو المعلومات الشخصية في أي وقت. يمكنك تغيير هذا في أي</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>تحكم</value>
   </data>
@@ -135,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>وضع التحكم</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>عقد التحكم: تحريك، حذف، مسح، تحدث، توقف مؤقت</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>منسوخة إلى الحافظة.</value>
@@ -177,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>معايرة التيار</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} ملف (ملفات) مخصصة</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>التخصيص</value>
@@ -237,15 +270,30 @@
   <data name="dasher_quit_unexpectedly" xml:space="preserve">
     <value>استقال داشر بشكل غير متوقع</value>
   </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>داشر v6</value>
+  </data>
   <data name="dasher_v6_2" xml:space="preserve">
     <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
 </value>
+  </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>المنطقة الميتة: {0} بكسل</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>تقليل السرعة</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>تقصير</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>الأبجدية: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>اللون: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>السرعة: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>التشخيص</value>
@@ -259,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>حوم في مكان واحد لتفعيل النقر، بدلاً من الضغط على زر أو مفتاح.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>مدة الإقامة</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>اسكن للنقر</value>
   </data>
@@ -268,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>قم بتمكين إدخال الإمالة أولاً للوصول إلى المعايرة.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>لم يتمكن Dasher من البدء</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>خطأ المحرك</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>واجهة محرك داشير قد واجهت خطأ داخلي وتوقفت. يرجى إعادة تشغيل داشير.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>يرجى محاولة إعادة التثبيت، أو الإبلاغ عن هذا في مشكلة على GitHub.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>ميزات محرك الكلام</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>خطأ: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>خطأ في تحميل الإعدادات: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>خروج</value>
@@ -286,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>نظرة العين</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>تعذر الاتصال بجهاز تعقب العين عند بدء التشغيل. تحقق من الجهاز وحاول إعادة تحديده في الإعدادات &gt; الإدخال.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>جهاز تتبع العين</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>تعذر الاتصال بـ {0}. تحقق من توصيل الجهاز وتثبيت برامج التشغيل.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>تعذر الاتصال بـ {0}. تأكد من تثبيت tobii_stream_engine.dll ومن توصيل جهاز Tobii.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>سجل تتبع مفصل لتقارير الأخطاء (أسطر لكل عينة، مكتوبة في eyegaze.log في مجلد Dasher). يتم دائمًا تسجيل أحداث الاتصال الأساسية.</value>
@@ -304,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>تم اقتطاع الملف عند 4 ميغابايت — تم تحميل الجزء الأول فقط</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>التحكم العادي</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>وضع التنعيم</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>لا يمكن أن يوفر بناء Flatpak أو AppImage.</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>لتحريك لوحة المفاتيح عائمة، اسمح لـ Dasher بالعرض فوق التطبيقات الأخرى، ثم اضغط Float مرة أخرى.</value>
   </data>
@@ -315,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>نمط اللعب</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>ابدأ اللعبة</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>ملف نص اللعبة</value>
@@ -358,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>مدخل</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>مرشح إدخال المحرك النشط (يتم ضبطه عبر طريقة التحديد أو الإعدادات المتقدمة)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>تتم إدارته بواسطة المحرك - يتم التغيير عبر إعداد طريقة التحديد</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>المؤشر المباشر — الحد الأدنى من المعالجة</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>لا توجد تصفية — لأجهزة الإدخال النظيفة</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>تجانس الإدخال - يقلل من الارتعاش للإدخال الصاخب (نظرة العين، تتبع الرأس)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>يخفف حركات المؤشر الصغيرة للحصول على تكبير/تصغير أكثر ثباتًا</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>التحكم المستمر القياسي (الافتراضي)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>طريقة التوجيه القياسية — حرك المؤشر للتكبير</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>عصا التحكم / لوحة الألعاب (تحريك عصا التحكم للتوجيه)</value>
   </data>
@@ -372,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>معالجة الإدخال</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>قم بتثبيت Dasher عبر مدير الحزم الخاص بك أو قم بالبناء من المصدر لاستخدام وضع لوحة المفاتيح.</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;تثبيت ydotool لاستخدام وضع لوحة المفاتيح&lt;/b&gt;</value>
@@ -391,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>الخروج من وضع لوحة المفاتيح</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>وضع لوحة المفاتيح: إخفاء جزء الإخراج وكتابة نص داشر مباشرةً في</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;وضع لوحة المفاتيح غير متوفر في هذا الإصدار&lt;/b&gt;</value>
   </data>
@@ -408,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>شفافية النافذة عند وضع لوحة المفاتيح/الوضع المباشر</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>وضع لوحة المفاتيح يكتب إخراج داشر في تطبيقات أخرى باستخدام ydotool، والذي</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(تقصير)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>لغة</value>
@@ -493,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>لا توجد إعدادات متاحة لهذا القسم.</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>لا يوجد محرك تحويل نص إلى كلام متاح. قم بالبناء باستخدام ميزة تحويل النص إلى كلام في النظام، أو قم بإعداد صوت سحابي في التفضيلات.</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>لا توجد بيانات تدريب للتصدير بعد</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>لا توجد بيانات تدريب للمستخدم بعد</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>لم يتم العثور على أصوات</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>لا يوجد شيء للحفظ</value>
@@ -565,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>نغمة</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>عالي</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>قليل</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>واسطة</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>عالية جدًا</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>منخفض جدًا</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>لعبة</value>
   </data>
@@ -597,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>معدل</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>واسطة</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>سريع جدًا</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>بطيء جدًا</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>إعادة الاستيراد من Dasher 5</value>
@@ -676,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>طريقة الاختيار</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>هل الخدمة تعمل؟ انظر مساعدة الإعداد على زر لوحة المفاتيح لأوامر التثبيت.</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>إعدادات</value>
   </data>
@@ -694,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>الإعدادات (السرعة، الألوان، وضع التحكم، نموذج اللغة)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>وقت التسوية: {0} مللي ثانية</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>يشارك</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>مشاركة تحليلات الاستخدام والتقارير عن الأعطال بشكل مجهول؟ لا نص مكتوب، ولا الحافظة</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>عرض طبقة تصحيح الأخطاء للإدخال</value>
@@ -730,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>خطاب حول</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>مرحبًا، هذه معاينة للصوت المحدد.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>إعدادات الكلام</value>
   </data>
@@ -751,6 +913,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>ابدأ من جديد</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>فشل Dasher في البدء:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>طريقة التوجيه</value>
   </data>
@@ -759,6 +925,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>توقف عن الكلام</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>إعداد المحول</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>نظام</value>
@@ -771,6 +940,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>ذلك الملف هو بالفعل بيانات تدريبك.</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>التطبيق الذي تشير إليه (يحتاج إلى ydotool)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>تعرض نافذة تصحيح الأخطاء لوحة خضراء أعلى يسار اللوحة، تُظهر عدد أحداث اللمس المباشرة وآخر إحداثيات (س، ص). عند الضغط مع الاستمرار، سترى touch.began ثم touch.moved مع تغير الإحداثيات أثناء تحريك المؤشر.</value>
@@ -790,11 +962,35 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>معايرة الميل</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>امسك الجهاز بشكل عمودي، ثم أماله للأمام والخلف</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>مال إلى اليسار واليمين عبر النطاق الكامل</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>تحرك ببطء وبسلاسة عبر جميع الوضعيات</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>إعدادات الميل</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>قم بإمالة جهازك الآن...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>قم بإمالة جهازك عبر نطاق حركته الكامل أثناء المعايرة.</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>الوقت تحت التفضيلات → الخصوصية.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>خطأ في تعقب العين</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>إشعار تعقب العين</value>
+  </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>لا يمكن استئناف متتبع العين بشكل كامل ({0}). قد يتم تشغيل التتبع بسرعة ودقة أقل - حاول تشغيل Dasher كمسؤول.</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>تبديل وضع التحكم</value>
@@ -843,6 +1039,21 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>مشاركة النص</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>com.eyetuitive</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>متعقب العين</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>توبّي (محرك البث)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP Gaze Tracker (شبكة)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (أصلي)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>تمرين</value>
@@ -907,6 +1118,9 @@
   <data name="turbo" xml:space="preserve">
     <value>توربيني</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>الكتابة في تطبيقات أخرى تتطلب الوصول إلى /dev/uinput، وهو ما يتم في بيئة محصورة</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>معدل الطباعة</value>
   </data>
@@ -919,17 +1133,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>يستمع متعقّب UDP لرسائل STREAM_DATA أو GazePoint</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} متاح (أنت تقوم بتشغيل الإصدار v{1}). انقر للتنزيل - قم بتعطيله في الإعدادات &gt; الخصوصية.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>تحديث داشر متاح</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>استخدم داشر كلوحة مفاتيح</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>صوت</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} أصوات</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>الحجم</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>تحذير داشر</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>لقد وجدنا إعدادات برنامج Dasher 5 الخاصة بك على هذا الجهاز. يمكنك استيراد حروفك الأبجدية وألوانك وإعدادات السرعة وملفاتك المخصصة إلى برنامج Dasher 6.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>ما تم العثور عليه</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} كلمة في الدقيقة</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>الحد الأقصى {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>نطاق X:</value>
@@ -939,6 +1174,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>تم العثور على ydotool. وضع لوحة المفاتيح جاهز.</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool لا يزال غير متاح. تأكد من تثبيته وأن خدمة ydotool تعمل.</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>يمكنك الاستيراد لاحقًا من خلال الإعدادات &gt; الخصوصية والترحيل</value>

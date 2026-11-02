@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (fa). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f نویسه در ثانیه · %2$d کلمه در دقیقه</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>یک گزارش خرابی در ~/Library/Logs/DiagnosticReports/Dasher-*.ips ذخیره شد. اگر بتوانید آن را در یک مشکل GitHub به اشتراک بگذارید، به ما در رفع اشکال کمک می‌کند.</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>درباره</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>دشر {0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>رویدادهای شناور/اشاره‌گر را به عنوان ورودی Dasher بپذیرید. برای ردیابی چشم یا اشاره‌گرهای خارجی فعال کنید.</value>
@@ -22,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>سرعت را به صورت خودکار تنظیم کنید</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>ثبت پیشرفته</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>ضبط لاگ‌های تشخیصی دقیق برای گزارش‌های باگ (خطوط دستگاه ردیاب چشم برای هر نمونه، ردیابی کلیدهای فشرده شده، خواندن‌های UIA). رویدادهای اتصال پایه همیشه ثبت می‌شوند. ممکن است فایل‌های لاگ بزرگی ایجاد کند.</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>تنظیمات پیشرفته</value>
@@ -55,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>داشر آمار استفاده ناشناس و گزارش‌های خرابی را جمع‌آوری می‌کند تا بفهمد برنامه چگونه استفاده می‌شود و باگ‌ها را برطرف کند. هیچ متن تایپ‌شده، محتوای کلیپ‌بورد یا اطلاعات شخصی هرگز جمع‌آوری نمی‌شود.</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>کمک به بهبود داشِر؟</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>شناسه ناشناس: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>تجزیه و تحلیل استفاده ناشناس</value>
   </data>
@@ -63,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>اقامت در سطح برنامه برای انتخاب</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>ظاهر</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>چپ</value>
@@ -97,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>حذف (برای تکرار نگه دارید)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>تنظیم شیب</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>لغو</value>
   </data>
@@ -112,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>پاک کردن</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>پاک کردن لاگ‌ها</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>برای تنظیم حالت صفحه‌کلید کلیک کنید (به ydotool نیاز دارد)</value>
   </data>
@@ -124,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>تم رنگی</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>محتوا یا اطلاعات شخصی هرگز جمع‌آوری نمی‌شود. شما می‌توانید این را هر زمان تغییر دهید</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>کنترل</value>
   </data>
@@ -132,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>حالت کنترل</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>گره‌های کنترل: حرکت، حذف، پاک کردن، صحبت کردن، مکث</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>در کلیپ بورد کپی شد.</value>
@@ -174,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>کالیبراسیون جریان</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} فایل(های) سفارشی</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>سفارشی سازی</value>
@@ -241,11 +277,23 @@
     <value>&lt;big&gt;&lt;b&gt;داشر نسخه ۶&lt;/b&gt;&lt;/big&gt; 
 </value>
   </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>منطقه مرده: {0} پیکسل</value>
+  </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>کاهش سرعت</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>پیش‌فرض</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>الفبا: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>رنگ: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>سرعت: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>تشخیص</value>
@@ -259,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>در یک نقطه معلق بمانید تا کلیک فعال شود، به جای اینکه دکمه یا سوئیچ را فشار دهید.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>مدت اقامت</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>برای کلیک کردن، مکث کنید</value>
   </data>
@@ -268,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>برای دسترسی به کالیبراسیون، ابتدا ورودی شیب را فعال کنید.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>داشر نمی‌توانست شروع کند</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>خطای موتور</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>موتور دَشر با یک خطای داخلی مواجه شد و متوقف شد. لطفاً دَشر را دوباره راه‌اندازی کنید.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>لطفاً دوباره نصب کردن را امتحان کنید، یا این را در یک مسئله‌ی GitHub گزارش دهید.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>ویژگی‌های گفتاری موتور</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>خطا: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>خطا در بارگیری تنظیمات: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>خروج</value>
@@ -286,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>نگاه خیره</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>در هنگام راه اندازی به ردیاب چشم متصل نشد. دستگاه را بررسی کنید و سعی کنید دوباره آن را در تنظیمات &gt; ورودی انتخاب کنید.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>دستگاه دنبال‌کننده چشم</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>به {0} متصل نشد. بررسی کنید که دستگاه متصل است و درایورها نصب شده اند.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>به {0} متصل نشد. مطمئن شوید tobii_stream_engine.dll نصب شده است و دستگاه Tobii متصل است.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>گزارش پیگیری دقیق برای گزارش‌های باگ (خطوط به ازای هر نمونه، در فایل eyegaze.log در پوشه Dasher نوشته می‌شود). رویدادهای اتصال پایه همیشه ثبت می‌شوند.</value>
@@ -304,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>پرونده در ۴ مگابایت کوتاه شد — فقط بخش اول بارگذاری شده است</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>کنترل عادی</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>حالت صاف کردن</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>ساخت Flatpak یا AppImage نمی‌تواند ارائه دهد.</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>برای شناور کردن صفحه‌کلید، به Dasher اجازه دهید روی برنامه‌های دیگر نمایش داده شود، سپس دوباره Float را بزنید.</value>
   </data>
@@ -315,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>حالت بازی</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>بازی آغاز شد</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>فایل متنی بازی</value>
@@ -358,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>ورودی</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>فیلتر ورودی موتور فعال (تنظیم از طریق روش انتخاب یا تنظیمات پیشرفته)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>توسط موتور مدیریت می شود - از طریق تنظیم روش انتخاب تغییر دهید</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>اشاره گر مستقیم - حداقل پردازش</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>بدون فیلتر - برای دستگاه های ورودی تمیز</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>صاف کردن ورودی - لرزش را برای ورودی پر سر و صدا کاهش می دهد (نگاه چشم، ردیابی سر)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>حرکات اشاره گر کوچک را برای زوم ثابت تر کاهش می دهد</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>کنترل مداوم استاندارد (پیش‌فرض)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>روش استاندارد فرمان - نشانگر را به سمت بزرگنمایی حرکت دهید</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>جوی‌استیک / گیم‌پد (برای هدایت، دسته را منحرف کنید)</value>
   </data>
@@ -372,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>پردازش ورودی</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>برای استفاده از حالت کیبورد، Dasher را از طریق مدیر بسته خود نصب کنید یا از سورس بسازید.</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;برای استفاده از حالت کیبورد، ydotool را نصب کنید&lt;/b&gt;</value>
@@ -391,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>سودهی برای حالت صفحه کلید</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>حالت کیبورد: پنل خروجی را مخفی کنید و متن داشر را مستقیماً وارد کنید</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;حالت صفحه‌کلید در این بیلد در دسترس نیست&lt;/b&gt;</value>
   </data>
@@ -408,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>شفافیت پنجره هنگام استفاده از حالت صفحه‌کلید/مستقیم</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>حالت صفحه‌کلید خروجی Dasher را با استفاده از ydotool به برنامه‌های دیگر وارد می‌کند، که</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(پیش فرض)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>زبان</value>
@@ -493,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>تنظیماتی برای این بخش وجود ندارد.</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>هیچ موتور گفتاری در دسترس نیست. با ویژگی TTS سیستم بسازید، یا یک صدای ابری در تنظیمات راه‌اندازی کنید.</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>هنوز داده آموزشی برای صادر کردن وجود ندارد</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>هنوز داده‌های آموزشی کاربر وجود ندارد</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>هیچ صدایی پیدا نشد</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>چیزی برای ذخیره کردن نیست</value>
@@ -565,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>پِیچ</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>بالا</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>کم</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>متوسط</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>بسیار بالا</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>خیلی کم</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>بازی</value>
   </data>
@@ -597,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>نرخ</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>متوسط</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>خیلی سریع</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>خیلی آهسته</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>دوباره از Dasher 5 وارد کنید</value>
@@ -676,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>روش انتخاب</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>سرویس در حال اجرا است؟ راهنمای نصب را از دکمه کیبورد برای دستورات نصب ببینید.</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>تنظیمات</value>
   </data>
@@ -694,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>تنظیمات (سرعت، رنگ‌ها، حالت کنترل، مدل زبان)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>زمان تسویه: {0} ms</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>اشتراک گذاری</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>اشتراک‌گذاری تحلیل‌های استفاده ناشناس و گزارش‌های خرابی؟ بدون متن تایپ‌شده، کلیپ‌بورد</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>نمایش ورودی اشکال‌زدایی روی هم افتاده</value>
@@ -730,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>سخنرانی در مورد</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>سلام، این یک پیش‌نمایش از صدای انتخاب‌شده است.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>تنظیمات صدا</value>
   </data>
@@ -751,6 +913,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>از نو شروع کنید</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>داشر شروع نکرد:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>روش فرمان‌دهی</value>
   </data>
@@ -759,6 +925,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>حرف زدن را متوقف کن</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>تنظیم سوئیچ</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>سیستم</value>
@@ -771,6 +940,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>آن فایل قبلاً داده‌های آموزشی شما است.</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>برنامه‌ای که به آن اشاره می‌کنید (به ydotool نیاز دارد)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>لایه اشکال‌زدایی یک پنل سبز در بالا سمت چپ بوم رسم می‌کند که تعداد رویدادهای لمسی زنده و آخرین گزارش‌شده (x، y) را نشان می‌دهد. وقتی انگشت خود را روی صفحه نگه می‌دارید، باید touch.begin و سپس touch.moved را با تغییر مختصات هنگام نگاه کردن به اطراف ببینید.</value>
@@ -790,11 +962,35 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>کالیبراسیون شیب</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>دستگاه را عمودی نگه دارید، سپس به جلو و عقب خم کنید</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>با تمام دامنه به چپ و راست خم شوید</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>به آرامی و روان از تمام موقعیت‌ها عبور کنید</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>تنظیمات کج شدن</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>همین الان دستگاه خود را کج کنید...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>در طول کالیبراسیون، دستگاه خود را در تمام دامنه حرکتی آن کج کنید.</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>زمان در تنظیمات → حریم خصوصی.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>خطای ردیاب چشم</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>اطلاعیه ردیاب چشم</value>
+  </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>ردیاب چشم نمی تواند به طور کامل از سر گرفته شود ({0}). ردیابی ممکن است با سرعت و دقت کمتری اجرا شود - سعی کنید Dasher را به عنوان سرپرست اجرا کنید.</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>تغییر حالت کنترل</value>
@@ -843,6 +1039,21 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>متن را به اشتراک بگذارید</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>چشم انداز</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>ردیاب چشم</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Tobii (موتور جریان)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP Gaze Tracker (شبکه)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (بومی)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>آموزش</value>
@@ -907,6 +1118,9 @@
   <data name="turbo" xml:space="preserve">
     <value>توربو</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>تایپ کردن در برنامه‌های دیگر نیاز به دسترسی به /dev/uinput دارد، که در یک محیط سندباکس شده است</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>نرخ تایپ</value>
   </data>
@@ -919,17 +1133,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>ردیاب UDP به پیام‌های STREAM_DATA یا GazePoint گوش می‌دهد</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} در دسترس است (شما v{1} را اجرا می کنید). برای دانلود ضربه بزنید — در تنظیمات &gt; حریم خصوصی غیرفعال کنید.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>به روز رسانی Dasher موجود است</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>از Dasher به عنوان کیبورد خود استفاده کنید</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>صدا</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} صدا</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>حجم</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>هشدار داشیر</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>ما پیکربندی Dasher 5 شما را در این مک پیدا کردیم. حروف الفبا، رنگ‌ها، تنظیمات سرعت و فایل‌های سفارشی شما را می‌توان به Dasher 6 وارد کرد.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>چه چیزی پیدا شد؟</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} wpm</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>حداکثر {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>محدوده ایکس:</value>
@@ -939,6 +1174,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>ابزار ydotool پیدا شد. حالت صفحه کلید آماده است.</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool هنوز در دسترس نیست. مطمئن شوید که نصب شده و سرویس ydotool در حال اجرا است.</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>می‌توانید بعداً در تنظیمات &gt; حریم خصوصی و مهاجرت وارد کنید</value>

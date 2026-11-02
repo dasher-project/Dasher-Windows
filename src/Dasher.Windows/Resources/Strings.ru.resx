@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (ru). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f знаков/с · %2$d слов/мин</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>Отчет о сбое сохранен в ~/Library/Logs/DiagnosticReports/Dasher-*.ips. Если вы можете поделиться им в сообщении об ошибке на GitHub, это поможет нам исправить ошибку.</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>О</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>Дашер {0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>Принимайте события наведения курсора/указания в качестве входных данных Dasher. Включите эту функцию для отслеживания взгляда или использования внешних указателей.</value>
@@ -22,6 +28,12 @@
   </data>
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>Автоматическая регулировка скорости</value>
+  </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>Расширенное ведение журнала</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>Подробное диагностическое ведение журналов для отчетов о багах (строки трекера взгляда для каждого образца, следы нажатий клавиш, чтения UIA). Основные события подключения всегда записываются. Может создавать большие файлы журналов.</value>
   </data>
   <data name="advanced_settings" xml:space="preserve">
     <value>Расширенные настройки</value>
@@ -55,6 +67,12 @@
   <data name="analytics_settings_help" xml:space="preserve">
     <value>Dasher собирает анонимную аналитику использования и отчёты об ошибках, чтобы понять, как используется приложение, и исправлять ошибки. Никакой введённой текст, содержимое буфера обмена или личная информация никогда не собирается.</value>
   </data>
+  <data name="analytics_title" xml:space="preserve">
+    <value>Помочь улучшить Dasher?</value>
+  </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>Анонимный идентификатор: {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Анонимная аналитика использования</value>
   </data>
@@ -63,6 +81,9 @@
   </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>Выбор на уровне приложения</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>Внешность</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>Влево</value>
@@ -97,6 +118,9 @@
   <data name="backspace_tooltip" xml:space="preserve">
     <value>Удалить (удерживать для повторения)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>Калибровать наклон</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
@@ -112,6 +136,9 @@
   <data name="clear" xml:space="preserve">
     <value>Прозрачный</value>
   </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>Очистить журналы</value>
+  </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>Нажмите, чтобы настроить режим клавиатуры (требуется ydotool)</value>
   </data>
@@ -124,6 +151,9 @@
   <data name="colour_theme" xml:space="preserve">
     <value>Цветовая тема</value>
   </data>
+  <data name="contents_or_personal_information_is_ever_collected_you_can_c" xml:space="preserve">
+    <value>содержимое или личная информация когда-либо собирается. Вы можете изменить это в любое</value>
+  </data>
   <data name="control" xml:space="preserve">
     <value>Управление</value>
   </data>
@@ -132,6 +162,9 @@
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>Режим управления</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>Управляющие узлы: переместить, удалить, очистить, говорить, пауза</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Скопировано в буфер обмена.</value>
@@ -174,6 +207,9 @@
   </data>
   <data name="current_calibration" xml:space="preserve">
     <value>Текущая калибровка</value>
+  </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} пользовательских файлов</value>
   </data>
   <data name="customization" xml:space="preserve">
     <value>Настройка</value>
@@ -234,15 +270,30 @@
   <data name="dasher_quit_unexpectedly" xml:space="preserve">
     <value>Дэшер неожиданно уволился.</value>
   </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>Дэшер v6</value>
+  </data>
   <data name="dasher_v6_2" xml:space="preserve">
     <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;
 </value>
+  </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>Мертвая зона: {0} пикселей.</value>
   </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Снизьте скорость</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>По умолчанию</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>Алфавит: {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>Цвет: {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>Скорость: {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>Диагностика</value>
@@ -256,6 +307,9 @@
   <data name="dwell_description" xml:space="preserve">
     <value>Наведите курсор в одну точку, чтобы вызвать клик, вместо нажатия кнопки или переключателя.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>Длительность пребывания</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Дождитесь клика</value>
   </data>
@@ -265,14 +319,26 @@
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Для доступа к калибровке сначала включите ввод данных о наклоне.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>Dasher не мог запуститься</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>Ошибка движка</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>Движок Dasher столкнулся с внутренней ошибкой и остановился. Пожалуйста, перезапустите Dasher.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>Пожалуйста, попробуйте переустановить или сообщите об этом в вопросе на GitHub.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>Функции речи движка</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>Ошибка: {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>Ошибка загрузки настроек: {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>Выход</value>
@@ -283,8 +349,17 @@
   <data name="eye_gaze" xml:space="preserve">
     <value>Взгляд</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>Не удалось подключиться к айтрекеру при запуске. Проверьте устройство и попробуйте повторно выбрать его в «Настройки» &gt; «Вход».</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>Устройство отслеживания глаз</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>Не удалось подключиться к {0}. Проверьте, подключено ли устройство и установлены ли драйверы.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>Не удалось подключиться к {0}. Убедитесь, что файл tobii_stream_engine.dll установлен и устройство Tobii подключено.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>Подробный журнал отслеживания для отчётов об ошибках (строки для каждой выборки, записываются в eyegaze.log в папке Dasher). Базовые события соединения всегда логируются.</value>
@@ -301,6 +376,15 @@
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>Файл обрезан до 4 МБ — загружается только первая часть</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>Нормальный контроль</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>Режим сглаживания</value>
+  </data>
+  <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
+    <value>Flatpak или сборка AppImage не могут предоставить.</value>
+  </data>
   <data name="float_needs_permission" xml:space="preserve">
     <value>Чтобы открепить клавиатуру, разрешите Dasher отображаться поверх других приложений, затем снова нажмите Float.</value>
   </data>
@@ -312,6 +396,9 @@
   </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>Игровой режим</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>Игра началась</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Текстовый файл игры</value>
@@ -327,6 +414,9 @@
   </data>
   <data name="got_it" xml:space="preserve">
     <value>Понятно</value>
+  </data>
+  <data name="gtk_edition" xml:space="preserve">
+    <value>Редакция GTK</value>
   </data>
   <data name="import_adds_text_to_the_language_model_appends_to_existing_l" xml:space="preserve">
     <value>Функция «Импорт» добавляет текст в языковую модель (дополняет существующее обучение). Функция «Экспорт» сохраняет накопленные обучающие данные для резервного копирования или переноса. Функция «Сброс» удаляет пользовательские обучающие данные — при следующем запуске модель возвращается к своим встроенным настройкам по умолчанию.</value>
@@ -352,6 +442,30 @@
   <data name="input" xml:space="preserve">
     <value>Вход</value>
   </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>Фильтр активного ввода двигателя (устанавливается через метод выбора или расширенные настройки)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>Управляется движком — изменение через настройку «Метод выбора».</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>Прямой указатель — минимальная обработка</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>Никакой фильтрации — для чистых устройств ввода</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>Сглаживание ввода — уменьшает дрожание шумного ввода (пристальный взгляд, отслеживание головы).</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>Подавляет небольшие движения указателя для более стабильного увеличения</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>Стандартное непрерывное управление (по умолчанию)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>Стандартный метод управления — переместите указатель для увеличения.</value>
+  </data>
   <data name="input_method_joystick" xml:space="preserve">
     <value>Джойстик / геймпад (для управления отклонением стика)</value>
   </data>
@@ -366,6 +480,9 @@
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>Обработка ввода</value>
+  </data>
+  <data name="install_dasher_via_your_package_manager_or_build_from_source" xml:space="preserve">
+    <value>Установите Dasher с помощью вашего менеджера пакетов или соберите из исходников, чтобы использовать режим клавиатуры.</value>
   </data>
   <data name="install_ydotool_to_use_keyboard_mode" xml:space="preserve">
     <value>&lt;b&gt;Установите ydotool для использования режима клавиатуры&lt;/b&gt;</value>
@@ -385,6 +502,9 @@
   <data name="keyboard_mode_exit" xml:space="preserve">
     <value>Выход из режима клавиатуры</value>
   </data>
+  <data name="keyboard_mode_hide_the_output_pane_and_type_dasher_s_text_st" xml:space="preserve">
+    <value>Режим клавиатуры: скрыть панель вывода и вводить текст Dasher напрямую</value>
+  </data>
   <data name="keyboard_mode_isn_t_available_in_this_build" xml:space="preserve">
     <value>&lt;b&gt;Режим клавиатуры недоступен в этой сборке&lt;/b&gt;</value>
   </data>
@@ -402,6 +522,12 @@
   </data>
   <data name="keyboard_mode_transparency_help" xml:space="preserve">
     <value>Прозрачность окна в режиме Клавиатура/Прямой</value>
+  </data>
+  <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
+    <value>Режим клавиатуры вводит вывод Dasher в другие приложения с помощью ydotool, который</value>
+  </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(По умолчанию)</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Язык</value>
@@ -487,11 +613,17 @@
   <data name="no_settings_available_for_this_section" xml:space="preserve">
     <value>Настройки для этого раздела отсутствуют.</value>
   </data>
+  <data name="no_speech_engine_available_build_with_the_system_tts_feature" xml:space="preserve">
+    <value>Двигатель речи недоступен. Соберите с функцией TTS системы или настройте облачный голос в настройках.</value>
+  </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Нет данных обучения для экспорта</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Нет пользовательских данных обучения</value>
+  </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>Голоса не найдены</value>
   </data>
   <data name="nothing_to_save" xml:space="preserve">
     <value>Сохранить нечего</value>
@@ -559,6 +691,21 @@
   <data name="pitch" xml:space="preserve">
     <value>Тон</value>
   </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>Высокий</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>Низкий</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>Середина</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>Очень высокий</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>Очень низкий</value>
+  </data>
   <data name="play" xml:space="preserve">
     <value>Игра</value>
   </data>
@@ -591,6 +738,15 @@
   </data>
   <data name="rate" xml:space="preserve">
     <value>Скорость</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>Середина</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>Очень быстро</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>Очень медленно</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Повторный импорт из Dasher 5</value>
@@ -670,6 +826,9 @@
   <data name="selection_method" xml:space="preserve">
     <value>Метод выбора</value>
   </data>
+  <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
+    <value>Служба запущена? Смотрите справку по настройке на кнопке Клавиатура для команд установки.</value>
+  </data>
   <data name="settings" xml:space="preserve">
     <value>Настройки</value>
   </data>
@@ -688,8 +847,14 @@
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>Настройки (скорость, цвета, режим управления, языковая модель)</value>
   </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>Время установления: {0} мс</value>
+  </data>
   <data name="share" xml:space="preserve">
     <value>Делиться</value>
+  </data>
+  <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
+    <value>Делиться анонимной аналитикой использования и отчетами о сбоях? Ни введенного текста, ни буфера обмена</value>
   </data>
   <data name="show_input_debug_overlay" xml:space="preserve">
     <value>Показать отладочное наложение ввода</value>
@@ -724,6 +889,9 @@
   <data name="speech_on" xml:space="preserve">
     <value>Речь о</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Здравствуйте, это предварительный просмотр выбранного голоса.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Настройки речи</value>
   </data>
@@ -745,6 +913,10 @@
   <data name="start_fresh" xml:space="preserve">
     <value>Начните все заново</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>Не удалось запустить Dasher:
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>Метод управления</value>
   </data>
@@ -753,6 +925,9 @@
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>Прекратить говорить</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>Настройка переключателя</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Система</value>
@@ -765,6 +940,9 @@
   </data>
   <data name="that_file_already_is_your_training_data" xml:space="preserve">
     <value>Этот файл уже является вашими данными обучения.</value>
+  </data>
+  <data name="the_app_you_are_pointing_at_needs_ydotool" xml:space="preserve">
+    <value>приложение, на которое вы указываете (требуется ydotool)</value>
   </data>
   <data name="the_debug_overlay_draws_a_green_panel_top_left_of_the_canvas" xml:space="preserve">
     <value>Всплывающее окно отладки отображает зеленую панель в левом верхнем углу холста, показывающую количество событий касания в реальном времени и последнее зарегистрированное событие (x, y). При нажатии и удержании жеста «щипок» вы должны увидеть touch.began, затем touch.moved с изменяющимися координатами по мере того, как вы осматриваетесь.</value>
@@ -784,11 +962,35 @@
   <data name="tilt_calibration" xml:space="preserve">
     <value>Калибровка наклона</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>Держите устройство вертикально, затем наклоняйте вперед и назад</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>Наклоняйте влево и вправо на весь диапазон</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>Двигайтесь медленно и плавно через все позиции</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>Настройки наклона</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>Наклоните устройство прямо сейчас...</value>
   </data>
   <data name="tilt_your_device_through_its_full_range_of_motion_during_cal" xml:space="preserve">
     <value>Во время калибровки наклоняйте устройство в полном диапазоне его движений.</value>
+  </data>
+  <data name="time_under_preferences_privacy" xml:space="preserve">
+    <value>время в Настройках → Конфиденциальность.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>Ошибка трекера глаз</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>Уведомление о айтрекере</value>
+  </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Не удалось полностью возобновить работу айтрекера ({0}). Отслеживание может работать с меньшей скоростью и точностью — попробуйте запустить Dasher от имени администратора.</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Переключить режим управления</value>
@@ -837,6 +1039,21 @@
   </data>
   <data name="toolbar_share_description" xml:space="preserve">
     <value>Поделиться текстом</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>интуитивно понятный</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Трекер глаз</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Тобии (Stream Engine)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP-трекер взгляда (сеть)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (родной)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>Обучение</value>
@@ -901,6 +1118,9 @@
   <data name="turbo" xml:space="preserve">
     <value>Турбо</value>
   </data>
+  <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
+    <value>Ввод в другие приложения требует доступа к /dev/uinput, который изолирован</value>
+  </data>
   <data name="typing_rate" xml:space="preserve">
     <value>Скорость печати</value>
   </data>
@@ -913,17 +1133,38 @@
   <data name="udp_tracker_help" xml:space="preserve">
     <value>UDP-трекер прослушивает сообщения STREAM_DATA или GazePoint</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} доступен (вы используете версию v{1}). Нажмите, чтобы скачать — отключить в Настройки &gt; Конфиденциальность.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>Доступно обновление Dasher</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Используйте Dasher в качестве клавиатуры.</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>Голос</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} голосов</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>Громкость</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>Дашер Предупреждение</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>Мы нашли конфигурацию Dasher 5 на этом Mac. Ваш алфавит, цвета, настройки скорости и пользовательские файлы можно импортировать в Dasher 6.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>Что было найдено</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} слов в минуту</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>максимум {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>Диапазон X:</value>
@@ -933,6 +1174,9 @@
   </data>
   <data name="ydotool_found_keyboard_mode_is_ready" xml:space="preserve">
     <value>Инструмент ydotool найден. Режим клавиатуры готов.</value>
+  </data>
+  <data name="ydotool_still_isn_t_available_make_sure_it_s_installed_and_t" xml:space="preserve">
+    <value>ydotool всё ещё недоступен. Убедитесь, что он установлен и служба ydotool запущена.</value>
   </data>
   <data name="you_can_import_later_in_settings_privacy_migration" xml:space="preserve">
     <value>Импорт можно осуществить позже в разделе «Настройки» &gt; «Конфиденциальность и миграция».</value>

@@ -74,7 +74,7 @@ namespace Dasher.Windows.Controls
             if (_gazeWarned) return;
             _gazeWarned = true;
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-                Services.ToastNotifier.Show("Eye tracker notice", message, isWarning: true));
+                Services.ToastNotifier.Show(Services.Loc.Tr("toast_eye_tracker_notice"), message, isWarning: true));
         }
 
         public void DisableEyeGaze()

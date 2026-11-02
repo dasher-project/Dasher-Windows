@@ -5,11 +5,17 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <!-- Generated from shared-resources/ui-strings.json (fr). Do not edit by hand. -->
+  <data name="1_1f_cps_2_d_wpm" xml:space="preserve">
+    <value>%1$.1f cps · %2$d mpm</value>
+  </data>
   <data name="a_crash_report_was_saved_to_library_logs_diagnosticreports_d" xml:space="preserve">
     <value>Un rapport d'erreur a été enregistré dans ~/Library/Logs/DiagnosticReports/Dasher-*.ips. Si vous pouvez le partager dans un problème GitHub, cela nous aide à corriger le bug.</value>
   </data>
   <data name="about" xml:space="preserve">
     <value>À propos</value>
+  </data>
+  <data name="about_version_format" xml:space="preserve">
+    <value>Dasher {0}</value>
   </data>
   <data name="accept_hover_pointer_events_as_dasher_input_enable_for_eye_t" xml:space="preserve">
     <value>Acceptez les événements de survol/pointeur comme entrée Dasher. Activez le suivi oculaire ou les pointeurs externes.</value>
@@ -23,8 +29,20 @@
   <data name="adapt_speed_automatically" xml:space="preserve">
     <value>Adapter automatiquement la vitesse</value>
   </data>
+  <data name="advanced_logging" xml:space="preserve">
+    <value>Journalisation avancée</value>
+  </data>
+  <data name="advanced_logging_help" xml:space="preserve">
+    <value>Journalisation diagnostique détaillée pour les rapports de bogues (lignes de suivi oculaire par échantillon, traces de frappes, lectures UIA). Les événements de connexion de base sont toujours enregistrés. Peut générer de gros fichiers journaux.</value>
+  </data>
+  <data name="advanced_settings" xml:space="preserve">
+    <value>Paramètres avancés</value>
+  </data>
   <data name="all_dasher_settings_will_be_restored_to_their_default_values" xml:space="preserve">
     <value>Tous les paramètres Dasher seront restaurés à leurs valeurs par défaut. Cela ne peut pas être annulé.</value>
+  </data>
+  <data name="alphabet" xml:space="preserve">
+    <value>Alphabet</value>
   </data>
   <data name="analytics_accept" xml:space="preserve">
     <value>Aidez-nous à améliorer Dasher</value>
@@ -52,11 +70,20 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="analytics_title" xml:space="preserve">
     <value>Aider à améliorer Dasher ?</value>
   </data>
+  <data name="anonymous_id_format" xml:space="preserve">
+    <value>Identifiant anonyme : {0}</value>
+  </data>
   <data name="anonymous_usage_analytics" xml:space="preserve">
     <value>Analyse d'utilisation anonyme</value>
   </data>
+  <data name="anonymous_usage_analytics_help_us_understand_how_dasher_is_u" xml:space="preserve">
+    <value>Les analyses d'utilisation anonymes nous aident à comprendre comment Dasher est utilisé et à corriger les plantages. Aucune saisie de texte, contenu du presse-papiers ou information personnelle n'est jamais collectée. Vous pouvez vous désinscrire à tout moment dans Réglages → Confidentialité.</value>
+  </data>
   <data name="app_level_dwell_to_select" xml:space="preserve">
     <value>Maintien au niveau de l'application à sélectionner</value>
+  </data>
+  <data name="appearance" xml:space="preserve">
+    <value>Apparence</value>
   </data>
   <data name="arrow_left_label" xml:space="preserve">
     <value>Gauche</value>
@@ -69,6 +96,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="arrow_right_tooltip" xml:space="preserve">
     <value>Déplacer le curseur vers la droite (maintenir pour répéter)</value>
+  </data>
+  <data name="auto" xml:space="preserve">
+    <value>Voiture</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Cible de centrage automatique</value>
@@ -88,6 +118,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="backspace_tooltip" xml:space="preserve">
     <value>Supprimer (maintenir pour répéter)</value>
   </data>
+  <data name="calibrate_tilt" xml:space="preserve">
+    <value>Calibrer l'inclinaison</value>
+  </data>
   <data name="cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
@@ -102,6 +135,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="clear" xml:space="preserve">
     <value>Clair</value>
+  </data>
+  <data name="clear_logs" xml:space="preserve">
+    <value>Effacer les journaux</value>
   </data>
   <data name="click_to_set_up_keyboard_mode_needs_ydotool" xml:space="preserve">
     <value>Cliquez pour configurer le mode clavier (nécessite ydotool)</value>
@@ -126,6 +162,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="control_mode_tooltip" xml:space="preserve">
     <value>Mode de contrôle</value>
+  </data>
+  <data name="control_nodes_tooltip" xml:space="preserve">
+    <value>Nœuds de contrôle : déplacer, supprimer, effacer, parler, pause</value>
   </data>
   <data name="copied_to_clipboard" xml:space="preserve">
     <value>Copié dans le presse-papiers.</value>
@@ -169,11 +208,17 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="current_calibration" xml:space="preserve">
     <value>Calibrage actuel</value>
   </data>
+  <data name="custom_files_format" xml:space="preserve">
+    <value>{0} fichier(s) personnalisé(s)</value>
+  </data>
   <data name="customization" xml:space="preserve">
     <value>Personnalisation</value>
   </data>
   <data name="dark" xml:space="preserve">
     <value>Sombre</value>
+  </data>
+  <data name="dasher" xml:space="preserve">
+    <value>Dasher</value>
   </data>
   <data name="dasher5_config_found" xml:space="preserve">
     <value>Nous avons trouvé votre configuration Dasher 5</value>
@@ -225,11 +270,29 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="dasher_quit_unexpectedly" xml:space="preserve">
     <value>Dasher a quitté de façon inattendue</value>
   </data>
+  <data name="dasher_v6" xml:space="preserve">
+    <value>Dasher v6</value>
+  </data>
+  <data name="dasher_v6_2" xml:space="preserve">
+    <value>&lt;big&gt;&lt;b&gt;Dasher v6&lt;/b&gt;&lt;/big&gt;</value>
+  </data>
+  <data name="dead_zone_format" xml:space="preserve">
+    <value>Zone morte : {0} px</value>
+  </data>
   <data name="decrease_speed" xml:space="preserve">
     <value>Diminuer la vitesse</value>
   </data>
   <data name="default" xml:space="preserve">
     <value>Défaut</value>
+  </data>
+  <data name="diag_alphabet_format" xml:space="preserve">
+    <value>Lettre : {0}</value>
+  </data>
+  <data name="diag_colour_format" xml:space="preserve">
+    <value>Couleur : {0}</value>
+  </data>
+  <data name="diag_speed_format" xml:space="preserve">
+    <value>Vitesse : {0}</value>
   </data>
   <data name="diagnostics" xml:space="preserve">
     <value>Diagnostic</value>
@@ -243,6 +306,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="dwell_description" xml:space="preserve">
     <value>Survolez un endroit pour déclencher un clic, au lieu d’appuyer sur un bouton ou un interrupteur.</value>
   </data>
+  <data name="dwell_duration" xml:space="preserve">
+    <value>Durée de séjour</value>
+  </data>
   <data name="dwell_to_click" xml:space="preserve">
     <value>Stationnement pour cliquer</value>
   </data>
@@ -252,14 +318,26 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="enable_tilt_input_first_to_access_calibration" xml:space="preserve">
     <value>Activez d’abord la saisie de l’inclinaison pour accéder à l’étalonnage.</value>
   </data>
+  <data name="engine_could_not_start" xml:space="preserve">
+    <value>Dasher ne pouvait pas démarrer</value>
+  </data>
   <data name="engine_error" xml:space="preserve">
     <value>Erreur du moteur</value>
   </data>
   <data name="engine_error_message" xml:space="preserve">
     <value>Le moteur Dasher a rencontré une erreur interne et s'est arrêté. Veuillez redémarrer Dasher.</value>
   </data>
+  <data name="engine_reinstall_or_report" xml:space="preserve">
+    <value>Veuillez essayer de réinstaller, ou signaler cela dans un problème GitHub.</value>
+  </data>
   <data name="engine_speech_features" xml:space="preserve">
     <value>Fonctionnalités de la voix du moteur</value>
+  </data>
+  <data name="error_format" xml:space="preserve">
+    <value>Erreur : {0}</value>
+  </data>
+  <data name="error_loading_settings_format" xml:space="preserve">
+    <value>Erreur de chargement des paramètres : {0}</value>
   </data>
   <data name="exit" xml:space="preserve">
     <value>Sortie</value>
@@ -270,8 +348,17 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="eye_gaze" xml:space="preserve">
     <value>Regard des yeux</value>
   </data>
+  <data name="eye_tracker_connect_failed_format" xml:space="preserve">
+    <value>Impossible de se connecter à l'eye tracker au démarrage. Vérifiez l'appareil et essayez de le resélectionner dans Paramètres &gt; Entrée.</value>
+  </data>
   <data name="eye_tracker_device" xml:space="preserve">
     <value>Dispositif de suivi oculaire</value>
+  </data>
+  <data name="eye_tracker_reconnect_generic_format" xml:space="preserve">
+    <value>Impossible de se connecter à {0}. Vérifiez que le périphérique est connecté et que les pilotes sont installés.</value>
+  </data>
+  <data name="eye_tracker_reconnect_tobii_format" xml:space="preserve">
+    <value>Impossible de se connecter à {0}. Assurez-vous que tobii_stream_engine.dll est installé et qu'un appareil Tobii est connecté.</value>
   </data>
   <data name="eyegaze_verbose_help" xml:space="preserve">
     <value>Journal de suivi détaillé pour les rapports de bogues (lignes par échantillon, écrites dans eyegaze.log dans le dossier Dasher). Les événements de connexion de base sont toujours enregistrés.</value>
@@ -288,6 +375,12 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="file_truncated_at_4_mb_only_the_first_part_is_loaded" xml:space="preserve">
     <value>Fichier tronqué à 4 Mo — seule la première partie est chargée</value>
   </data>
+  <data name="filter_name_normal" xml:space="preserve">
+    <value>Contrôle normal</value>
+  </data>
+  <data name="filter_name_smoothing" xml:space="preserve">
+    <value>Mode de lissage</value>
+  </data>
   <data name="flatpak_or_appimage_build_can_t_provide" xml:space="preserve">
     <value>Flatpak ou AppImage ne peut pas fournir.
 
@@ -299,8 +392,14 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="full_access_lets_dasher_speak_what_you_write_and_remember_yo" xml:space="preserve">
     <value>L'accès complet permet à Dasher de dire ce que vous écrivez et de mémoriser votre formation. Le clavier fonctionne toujours pour une saisie de base sans lui.</value>
   </data>
+  <data name="game_mode" xml:space="preserve">
+    <value>Mode de jeu</value>
+  </data>
   <data name="game_mode_2" xml:space="preserve">
     <value>Mode jeu</value>
+  </data>
+  <data name="game_on" xml:space="preserve">
+    <value>C'est parti</value>
   </data>
   <data name="game_text_file" xml:space="preserve">
     <value>Fichier texte du jeu</value>
@@ -343,6 +442,42 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="input" xml:space="preserve">
     <value>Saisir</value>
+  </data>
+  <data name="input_filter_active" xml:space="preserve">
+    <value>Filtre d'entrée de moteur actif (défini via la méthode de sélection ou les paramètres avancés)</value>
+  </data>
+  <data name="input_filter_active_help" xml:space="preserve">
+    <value>Géré par le moteur — modification via le paramètre Méthode de sélection</value>
+  </data>
+  <data name="input_filter_direct" xml:space="preserve">
+    <value>Pointeur direct – traitement minimal</value>
+  </data>
+  <data name="input_filter_direct_help" xml:space="preserve">
+    <value>Pas de filtrage — pour des périphériques d'entrée propres</value>
+  </data>
+  <data name="input_filter_smoothing" xml:space="preserve">
+    <value>Lissage des entrées : réduit la gigue en cas de saisie bruyante (regard oculaire, suivi de la tête)</value>
+  </data>
+  <data name="input_filter_smoothing_help" xml:space="preserve">
+    <value>Amortit les petits mouvements du pointeur pour un zoom plus stable</value>
+  </data>
+  <data name="input_filter_standard" xml:space="preserve">
+    <value>Contrôle continu standard (par défaut)</value>
+  </data>
+  <data name="input_filter_standard_help" xml:space="preserve">
+    <value>La méthode de pilotage standard : déplacez le pointeur pour zoomer</value>
+  </data>
+  <data name="input_method_joystick" xml:space="preserve">
+    <value>Joystick / manette (dévier un stick pour diriger)</value>
+  </data>
+  <data name="input_method_tilt" xml:space="preserve">
+    <value>Incliner (tenir l'appareil, incliner pour diriger)</value>
+  </data>
+  <data name="input_method_title" xml:space="preserve">
+    <value>Méthode de saisie</value>
+  </data>
+  <data name="input_method_touch" xml:space="preserve">
+    <value>Touchez (faites glisser sur la toile)</value>
   </data>
   <data name="input_processing" xml:space="preserve">
     <value>Traitement des entrées</value>
@@ -392,6 +527,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="keyboard_mode_types_dasher_s_output_into_other_applications_" xml:space="preserve">
     <value>Le mode clavier saisit la sortie de Dasher dans d'autres applications via ydotool, qui </value>
   </data>
+  <data name="label_default" xml:space="preserve">
+    <value>(Défaut)</value>
+  </data>
   <data name="language" xml:space="preserve">
     <value>Langue</value>
   </data>
@@ -425,6 +563,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="leave" xml:space="preserve">
     <value>Partir</value>
   </data>
+  <data name="leave_game_mode" xml:space="preserve">
+    <value>Quitter le mode de jeu</value>
+  </data>
   <data name="light" xml:space="preserve">
     <value>Lumière</value>
   </data>
@@ -442,6 +583,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="locale_2" xml:space="preserve">
     <value>Langue</value>
+  </data>
+  <data name="migration" xml:space="preserve">
+    <value>Migration</value>
   </data>
   <data name="more" xml:space="preserve">
     <value>Plus</value>
@@ -479,6 +623,15 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Pas encore de données de formation utilisateur</value>
   </data>
+  <data name="no_voices_found" xml:space="preserve">
+    <value>Aucune voix trouvée</value>
+  </data>
+  <data name="nothing_to_save" xml:space="preserve">
+    <value>Rien à sauvegarder</value>
+  </data>
+  <data name="nothing_to_share" xml:space="preserve">
+    <value>Rien à partager</value>
+  </data>
   <data name="ok" xml:space="preserve">
     <value>D'ACCORD</value>
   </data>
@@ -490,6 +643,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="open_2" xml:space="preserve">
     <value>Ouvrir...</value>
+  </data>
+  <data name="open_failed" xml:space="preserve">
+    <value>Ouverture échouée</value>
   </data>
   <data name="open_keyboard_settings" xml:space="preserve">
     <value>Ouvrir les paramètres du clavier</value>
@@ -512,11 +668,17 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="output_font_size" xml:space="preserve">
     <value>Taille de la police de sortie</value>
   </data>
+  <data name="output_placeholder" xml:space="preserve">
+    <value>Touchez la toile pour commencer à écrire.</value>
+  </data>
   <data name="pane_position" xml:space="preserve">
     <value>Position du panneau</value>
   </data>
   <data name="paste" xml:space="preserve">
     <value>Coller</value>
+  </data>
+  <data name="pause" xml:space="preserve">
+    <value>Pause</value>
   </data>
   <data name="pause_when_looking_away" xml:space="preserve">
     <value>Pause en détournant le regard</value>
@@ -529,6 +691,21 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="pitch" xml:space="preserve">
     <value>Ton</value>
+  </data>
+  <data name="pitch_high" xml:space="preserve">
+    <value>Haut</value>
+  </data>
+  <data name="pitch_low" xml:space="preserve">
+    <value>Faible</value>
+  </data>
+  <data name="pitch_medium" xml:space="preserve">
+    <value>Moyen</value>
+  </data>
+  <data name="pitch_very_high" xml:space="preserve">
+    <value>Très élevé</value>
+  </data>
+  <data name="pitch_very_low" xml:space="preserve">
+    <value>Très faible</value>
   </data>
   <data name="play" xml:space="preserve">
     <value>Jeu</value>
@@ -562,6 +739,15 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="rate" xml:space="preserve">
     <value>Taux</value>
+  </data>
+  <data name="rate_medium" xml:space="preserve">
+    <value>Moyen</value>
+  </data>
+  <data name="rate_very_fast" xml:space="preserve">
+    <value>Très rapide</value>
+  </data>
+  <data name="rate_very_slow" xml:space="preserve">
+    <value>Très lent</value>
   </data>
   <data name="re_import_from_dasher_5" xml:space="preserve">
     <value>Réimporter depuis Dasher 5</value>
@@ -620,11 +806,17 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="save_eye_tracker_diagnostics" xml:space="preserve">
     <value>Enregistrer les diagnostics de suivi oculaire</value>
   </data>
+  <data name="save_failed" xml:space="preserve">
+    <value>Échec de l'enregistrement</value>
+  </data>
   <data name="save_file" xml:space="preserve">
     <value>Enregistrer le fichier</value>
   </data>
   <data name="save_text_file" xml:space="preserve">
     <value>Enregistrer le fichier texte</value>
+  </data>
+  <data name="saved" xml:space="preserve">
+    <value>Enregistré</value>
   </data>
   <data name="saved_2" xml:space="preserve">
     <value>Enregistré : </value>
@@ -644,11 +836,23 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="settings_2" xml:space="preserve">
     <value>Paramètres...</value>
   </data>
+  <data name="settings_reset" xml:space="preserve">
+    <value>Réinitialiser tous les paramètres par défaut</value>
+  </data>
+  <data name="settings_reset_2" xml:space="preserve">
+    <value>Paramètres réinitialisés</value>
+  </data>
   <data name="settings_reset_confirm" xml:space="preserve">
     <value>Réinitialiser tous les paramètres du moteur à leurs valeurs par défaut ?</value>
   </data>
   <data name="settings_speed_colours_control_mode_language_model" xml:space="preserve">
     <value>Paramètres (vitesse, couleurs, mode de contrôle, modèle de langue)</value>
+  </data>
+  <data name="settle_time_format" xml:space="preserve">
+    <value>Temps de stabilisation : {0} ms</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>Partager</value>
   </data>
   <data name="share_anonymous_usage_analytics_and_crash_reports_no_typed_t" xml:space="preserve">
     <value>Partager des statistiques d'utilisation anonymes et des rapports de plantage ? Aucun texte saisi, aucun </value>
@@ -686,6 +890,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="speech_on" xml:space="preserve">
     <value>Discours sur</value>
   </data>
+  <data name="speech_preview_sentence" xml:space="preserve">
+    <value>Bonjour, ceci est un aperçu de la voix sélectionnée.</value>
+  </data>
   <data name="speech_settings" xml:space="preserve">
     <value>Paramètres de discours</value>
   </data>
@@ -707,6 +914,10 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="start_fresh" xml:space="preserve">
     <value>Repartir à neuf</value>
   </data>
+  <data name="startup_error_format" xml:space="preserve">
+    <value>Dasher n'a pas réussi à démarrer :
+{0}</value>
+  </data>
   <data name="steering_method" xml:space="preserve">
     <value>Méthode de direction</value>
   </data>
@@ -715,6 +926,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="stop_speaking" xml:space="preserve">
     <value>Arrête de parler</value>
+  </data>
+  <data name="switch_setup" xml:space="preserve">
+    <value>Configuration du commutateur</value>
   </data>
   <data name="system" xml:space="preserve">
     <value>Système</value>
@@ -749,6 +963,18 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="tilt_calibration" xml:space="preserve">
     <value>Calibrage de l'inclinaison</value>
   </data>
+  <data name="tilt_instructions_1" xml:space="preserve">
+    <value>Tenez l'appareil verticalement, puis penchez-le en avant et en arrière</value>
+  </data>
+  <data name="tilt_instructions_2" xml:space="preserve">
+    <value>Inclinez-vous à gauche et à droite sur toute la plage</value>
+  </data>
+  <data name="tilt_instructions_3" xml:space="preserve">
+    <value>Déplacez-vous lentement et en douceur à travers toutes les positions</value>
+  </data>
+  <data name="tilt_settings" xml:space="preserve">
+    <value>Paramètres d'inclinaison</value>
+  </data>
   <data name="tilt_your_device_now" xml:space="preserve">
     <value>Inclinez votre appareil maintenant...</value>
   </data>
@@ -757,6 +983,15 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="time_under_preferences_privacy" xml:space="preserve">
     <value>moment dans Préférences → Confidentialité.</value>
+  </data>
+  <data name="toast_eye_tracker_error" xml:space="preserve">
+    <value>Erreur de suivi oculaire</value>
+  </data>
+  <data name="toast_eye_tracker_notice" xml:space="preserve">
+    <value>Avis de suivi oculaire</value>
+  </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Le suivi oculaire n'a pas pu être entièrement repris ({0}). Le suivi peut fonctionner à une vitesse et une précision réduites — essayez d'exécuter Dasher en tant qu'administrateur.</value>
   </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Basculer le mode de contrôle</value>
@@ -782,17 +1017,44 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="toolbar_game_description" xml:space="preserve">
     <value>Démarrer le mode de jeu</value>
   </data>
+  <data name="toolbar_new_description" xml:space="preserve">
+    <value>Nouvelle sortie / sortie claire</value>
+  </data>
+  <data name="toolbar_open_description" xml:space="preserve">
+    <value>Ouvrir le fichier</value>
+  </data>
   <data name="toolbar_paste_description" xml:space="preserve">
     <value>Coller dans l'application cible</value>
   </data>
   <data name="toolbar_reanchor_description" xml:space="preserve">
     <value>Re-ancrer les prédictions à la caret (lisez la phrase autour de votre curseur)</value>
   </data>
+  <data name="toolbar_save_description" xml:space="preserve">
+    <value>Enregistrer dans le fichier</value>
+  </data>
   <data name="toolbar_select_all_description" xml:space="preserve">
     <value>Tout sélectionner dans l'application cible</value>
   </data>
   <data name="toolbar_settings_description" xml:space="preserve">
     <value>Ouvrir les paramètres</value>
+  </data>
+  <data name="toolbar_share_description" xml:space="preserve">
+    <value>Partager le texte</value>
+  </data>
+  <data name="tracker_eyetuitive" xml:space="preserve">
+    <value>eyetuitive</value>
+  </data>
+  <data name="tracker_generic" xml:space="preserve">
+    <value>Suivi oculaire</value>
+  </data>
+  <data name="tracker_tobii_stream" xml:space="preserve">
+    <value>Tobii (moteur de flux)</value>
+  </data>
+  <data name="tracker_udp_network" xml:space="preserve">
+    <value>UDP Gaze Tracker (réseau)</value>
+  </data>
+  <data name="tracker_windows_native" xml:space="preserve">
+    <value>Windows Eye Tracker (natif)</value>
   </data>
   <data name="training" xml:space="preserve">
     <value>Entraînement</value>
@@ -854,6 +1116,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="tts_no_credentials" xml:space="preserve">
     <value>Aucune identification requise</value>
   </data>
+  <data name="turbo" xml:space="preserve">
+    <value>Turbo</value>
+  </data>
   <data name="typing_into_other_applications_needs_access_to_dev_uinput_wh" xml:space="preserve">
     <value>La saisie dans d'autres applications nécessite l'accès à /dev/uinput, ce qu'un </value>
   </data>
@@ -869,17 +1134,38 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="udp_tracker_help" xml:space="preserve">
     <value>Le tracker UDP écoute les messages STREAM_DATA ou GazePoint</value>
   </data>
+  <data name="update_available_body_format" xml:space="preserve">
+    <value>Dasher {0} est disponible (vous exécutez v{1}). Appuyez pour télécharger – désactivez dans Paramètres &gt; Confidentialité.</value>
+  </data>
+  <data name="update_available_title" xml:space="preserve">
+    <value>Mise à jour Dasher disponible</value>
+  </data>
   <data name="use_dasher_as_your_keyboard" xml:space="preserve">
     <value>Utilisez Dasher comme clavier</value>
   </data>
+  <data name="voice" xml:space="preserve">
+    <value>Voix</value>
+  </data>
+  <data name="voices_count_format" xml:space="preserve">
+    <value>{0} voix</value>
+  </data>
   <data name="volume" xml:space="preserve">
     <value>Volume</value>
+  </data>
+  <data name="warning_title" xml:space="preserve">
+    <value>Avertissement Dasher</value>
   </data>
   <data name="we_found_your_dasher_5_configuration_on_this_mac_your_alphab" xml:space="preserve">
     <value>Nous avons trouvé votre configuration Dasher 5 sur ce Mac. Votre alphabet, vos couleurs, vos paramètres de vitesse et vos fichiers personnalisés peuvent être importés dans Dasher 6.</value>
   </data>
   <data name="what_was_found" xml:space="preserve">
     <value>Ce qui a été trouvé</value>
+  </data>
+  <data name="wpm_format" xml:space="preserve">
+    <value>{0} mots par minute</value>
+  </data>
+  <data name="wpm_max_format" xml:space="preserve">
+    <value>maximum {0}</value>
   </data>
   <data name="x_range" xml:space="preserve">
     <value>Gamme X :</value>
