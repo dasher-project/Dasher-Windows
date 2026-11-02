@@ -30,6 +30,8 @@ public static class TargetContextReader
     // seeding path is remote-debugged via %APPDATA%\Dasher\keyboard_debug.log.
     private static void Log(string msg)
     {
+        // Same gate as MainWindow.KbLog: indented = verbose, skip when off
+        if (msg.StartsWith("  ") && !LogManager.AdvancedLogging) return;
         try
         {
             var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
@@ -192,7 +194,7 @@ public static class TargetContextReader
                 if (focused != null && BelongsToTargetWindow(uia, focused, targetHwnd))
                 {
                     element = focused;
-                    Log($"[UIA] focused element class='{focused.CurrentClassName}' in target window — using it");
+                    Log($"  [UIA] focused element class='{focused.CurrentClassName}' in target window — using it");
                 }
             }
             catch { /* GetFocusedElement can throw on hung providers */ }
@@ -226,7 +228,7 @@ public static class TargetContextReader
                 {
                     element = uia.ElementFromHandle(targetHwnd);
                     if (element != null)
-                        Log($"[UIA] top-level 0x{targetHwnd:X} class='{element.CurrentClassName}' — trying TextPattern on it");
+                        Log($"  [UIA] top-level 0x{targetHwnd:X} class='{element.CurrentClassName}' — trying TextPattern on it");
                 }
                 catch (Exception ex)
                 {
@@ -249,7 +251,7 @@ public static class TargetContextReader
                 // Last resort: search descendants for the first element
                 // with TextPattern (greptile: "top-level lookup misses
                 // focused controls"). Bounded by the read timeout.
-                Log($"[UIA] element class='{element.CurrentClassName}' no TextPattern — searching descendants");
+                Log($"  [UIA] element class='{element.CurrentClassName}' no TextPattern — searching descendants");
                 try
                 {
                     var condition = uia.CreatePropertyCondition(
@@ -268,7 +270,7 @@ public static class TargetContextReader
                         pattern = descendant.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)
                             as IUIAutomationTextPattern;
                         if (pattern != null)
-                            Log($"[UIA] descendant class='{descendant.CurrentClassName}' has TextPattern");
+                            Log($"  [UIA] descendant class='{descendant.CurrentClassName}' has TextPattern");
                     }
                 }
                 catch { /* FindFirst can timeout on unresponsive providers */ }
@@ -276,7 +278,7 @@ public static class TargetContextReader
 
             if (pattern == null)
             {
-                Log($"[UIA] no TextPattern found for hwnd 0x{targetHwnd:X} — falling through to Win32");
+                Log($"  [UIA] no TextPattern found for hwnd 0x{targetHwnd:X} — falling through to Win32");
                 return null;
             }
 
@@ -305,7 +307,7 @@ public static class TargetContextReader
                         var active = 0;
                         caretRange = tp2.GetCaretRange(out active);
                         if (caretRange != null)
-                            Log($"[UIA] caret via GetCaretRange (active={active})");
+                            Log($"  [UIA] caret via GetCaretRange (active={active})");
                     }
                 }
                 catch { /* no TextPattern2 — selection-based fallback below */ }
@@ -380,7 +382,7 @@ public static class TargetContextReader
                                 ? startLen   // collapsed
                                 : selEndLen, // non-collapsed → active end
                             0, text.Length);
-                        Log($"[UIA] caret via selection: start={startLen} end={selEndLen} → {caretUtf16}");
+                        Log($"  [UIA] caret via selection: start={startLen} end={selEndLen} → {caretUtf16}");
                     }
                 }
             }
@@ -389,7 +391,7 @@ public static class TargetContextReader
                 caretUtf16 = text.Length;
             }
 
-            Log($"[UIA] read {text.Length} chars, caret16={caretUtf16}");
+            Log($"  [UIA] read {text.Length} chars, caret16={caretUtf16}");
             return new TargetContext(text, caretUtf16);
         }
         catch (Exception ex)
@@ -513,7 +515,7 @@ public static class TargetContextReader
             if (!cn.Equals("Edit", StringComparison.OrdinalIgnoreCase) &&
                 !cn.StartsWith("RICHEDIT", StringComparison.OrdinalIgnoreCase))
             {
-                Log($"[Win32] hwnd 0x{edit:X} class='{cn}' — not an edit control");
+                Log($"  [Win32] hwnd 0x{edit:X} class='{cn}' — not an edit control");
                 return null;
             }
 

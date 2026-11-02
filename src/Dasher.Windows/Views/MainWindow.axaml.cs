@@ -491,6 +491,7 @@ public partial class MainWindow : Window
 
             var accessConfig = AccessConfiguration.Load();
             accessConfig.Apply(_vm.Handle);
+            Services.LogManager.SetAdvancedLogging(accessConfig.GazeDiagnostics);
 
             needsMigration = await Task.Run(() =>
                 V5MigrationService.HasV5Data && !V5MigrationService.HasBeenOffered);
@@ -1045,6 +1046,12 @@ public partial class MainWindow : Window
 
     private static void KbLog(string msg)
     {
+        // Advanced-logging gate (RFC: the November 2026 log-management
+        // consolidation): indented messages (two-space prefix) are verbose
+        // traces — SendInput details, UIA read internals — and are only
+        // written when advanced logging is on. Everything else (lifecycle,
+        // errors, seeds) always logs.
+        if (msg.StartsWith("  ") && !Services.LogManager.AdvancedLogging) return;
         var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
         try { File.AppendAllText(KbLogPath, line); } catch { }
     }

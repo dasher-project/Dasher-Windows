@@ -233,6 +233,9 @@ public sealed class KeyboardTargetTracker : IDisposable
 
     private static void Log(string msg)
     {
+        // Same gate as MainWindow.KbLog
+        if (msg.StartsWith("  ") && !Services.LogManager.AdvancedLogging) return;
+
         try { File.AppendAllText(LogPath, $"{DateTime.Now:HH:mm:ss.fff} [tracker] {msg}\n"); } catch { }
     }
 
