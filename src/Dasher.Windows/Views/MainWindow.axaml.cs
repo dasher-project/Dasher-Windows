@@ -1285,6 +1285,24 @@ public partial class MainWindow : Window
             return;
         }
 
+        // SOURCE-FLAP GUARD (#91, log-confirmed): new Outlook exposes the
+        // compose field (~670 chars) through the focused-element path and
+        // the whole document (~11k) through the top-level path; a caret-
+        // moved read that flaps to the other source is a DIFFERENT FIELD —
+        // seeding it teleports the canvas. Focus/foreground changes are
+        // exempt (a new target is expected there) and reset the baseline.
+        if (reason == "caret moved" &&
+            Services.ContextSeedPolicy.SourceFlapDistrust(
+                _lastReadSource, _lastReadLength, context.Source, context.Text.Length))
+        {
+            KbLog($"Context seed ({reason}): read source flapped " +
+                  $"({_lastReadSource}/{_lastReadLength} chars → {context.Source}/{context.Text.Length} chars) " +
+                  "— different field, keeping context");
+            return; // baseline NOT updated: the flap must not become the new normal
+        }
+        _lastReadSource = context.Source;
+        _lastReadLength = context.Text.Length;
+
         // Shadow-compare (#58): the engine buffer vs the target field, both
         // sentence-trimmed and normalised, decides whether a re-seed is
         // warranted at all. Every skip reason maps to a canvas-reset class
@@ -1386,7 +1404,7 @@ public partial class MainWindow : Window
         if (_vm is { IsKeyboardMode: true })
         {
             // Direct mode: native OS operations in the TARGET.
-            _targetTracker.EnsureForeground(OurHwnd());
+            if (!_targetTracker.EnsureForeground(OurHwnd())) return;
 
             // RFC 0021 / #79 interaction: the caret events our keystrokes
             // and UIA selections provoke land in the existing caret-moved
@@ -1555,23 +1573,31 @@ public partial class MainWindow : Window
     private void SendSelectChordCore(bool ctrl, bool shift, ushort? arrow, ushort? letter)
     {
         const ushort VK_SHIFT = 0x10;
-        // presses in order, then releases in reverse
+        // presses in order, then releases in reverse; the modifier shield
+        // (#90) wraps the whole chord — held Ctrl/Alt/Win released first and
+        // restored last, all in the same atomic SendInput
         var keys = new System.Collections.Generic.List<ushort>();
-        if (shift) keys.Add(VK_SHIFT);
-        if (ctrl) keys.Add(VK_CONTROL);
-        if (arrow is { } a) keys.Add(a);
-        if (letter is { } l) keys.Add(l);
-        for (var i = keys.Count - 1; i >= 0; i--) keys.Add(keys[i]);
+        var shield = HeldShieldModifiers();
+        keys.AddRange(shield);
+        var pressCount = 0;
+        if (shift) { keys.Add(VK_SHIFT); pressCount++; }
+        if (ctrl) { keys.Add(VK_CONTROL); pressCount++; }
+        if (arrow is { } a) { keys.Add(a); pressCount++; }
+        if (letter is { } l) { keys.Add(l); pressCount++; }
+        for (var i = 0; i < pressCount; i++) keys.Add(keys[shield.Count + pressCount - 1 - i]);
+        keys.AddRange(shield);
 
         var inputs = new INPUT[keys.Count];
         for (var i = 0; i < keys.Count; i++)
         {
             inputs[i].type = INPUT_KEYBOARD;
             inputs[i].u.ki.wVk = keys[i];
-            if (i >= keys.Count / 2) inputs[i].u.ki.dwFlags = KEYEVENTF_KEYUP;
+            // everything at or after the shield + presses is a release
+            if (i >= shield.Count + pressCount) inputs[i].u.ki.dwFlags = KEYEVENTF_KEYUP;
         }
 
         var sent = SendInput((uint)keys.Count, inputs, Marshal.SizeOf<INPUT>());
+        if (shield.Count > 0) KbLog($"  modifier shield: released {shield.Count} held modifier(s) around chord and restored");
         KbLog($"  select chord: ctrl={ctrl} shift={shift} arrow={arrow?.ToString("X") ?? "-"} " +
               $"letter={letter?.ToString() ?? "-"} sent={sent}/{keys.Count}");
     }
@@ -1593,12 +1619,21 @@ public partial class MainWindow : Window
     /// <summary>TickCount64 of our last VK_RETURN injection (paragraph settle guard).</summary>
     private long _lastOwnParagraphInject;
 
+    /// <summary>Last accepted target read's source + length (#91 source-flap
+    /// guard baseline; null source = no baseline yet).</summary>
+    private string? _lastReadSource;
+    private int _lastReadLength;
+
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
 
     private void SendTextToForeground(string text)
     {
-        _targetTracker.EnsureForeground(OurHwnd());
+        if (!_targetTracker.EnsureForeground(OurHwnd()))
+        {
+            KbLog($"  insert skipped ({text.Length} char(s)): target not foreground and restore unavailable");
+            return;
+        }
 
         foreach (char c in text)
         {
@@ -1628,7 +1663,11 @@ public partial class MainWindow : Window
     {
         if (count <= 0) return;
 
-        _targetTracker.EnsureForeground(OurHwnd());
+        if (!_targetTracker.EnsureForeground(OurHwnd()))
+        {
+            KbLog($"  {count} backspace(s) skipped: target not foreground and restore unavailable");
+            return;
+        }
 
         for (var i = 0; i < count; i++)
             SendVirtualKey(VK_BACK);
@@ -1639,36 +1678,83 @@ public partial class MainWindow : Window
 
     private void SendUnicodeChar(char c)
     {
-        var inputs = new INPUT[2];
+        // Modifier shield (#90): release held Ctrl/Alt/Win around the char
+        // IN THE SAME atomic SendInput — a stuck physical Ctrl must not turn
+        // every typed character into a shortcut chord in the target.
+        var shield = HeldShieldModifiers();
+        var n = shield.Count;
+        var inputs = new INPUT[2 + 2 * n];
 
-        inputs[0].type = INPUT_KEYBOARD;
-        inputs[0].u.ki.wScan = c;
-        inputs[0].u.ki.dwFlags = KEYEVENTF_UNICODE;
+        for (var i = 0; i < n; i++)
+        {
+            inputs[i].type = INPUT_KEYBOARD;
+            inputs[i].u.ki.wVk = shield[i];
+            inputs[i].u.ki.dwFlags = KEYEVENTF_KEYUP;
+        }
+        inputs[n].type = INPUT_KEYBOARD;
+        inputs[n].u.ki.wScan = c;
+        inputs[n].u.ki.dwFlags = KEYEVENTF_UNICODE;
 
-        inputs[1].type = INPUT_KEYBOARD;
-        inputs[1].u.ki.wScan = c;
-        inputs[1].u.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
+        inputs[n + 1].type = INPUT_KEYBOARD;
+        inputs[n + 1].u.ki.wScan = c;
+        inputs[n + 1].u.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
+
+        for (var i = 0; i < n; i++)
+        {
+            inputs[n + 2 + i].type = INPUT_KEYBOARD;
+            inputs[n + 2 + i].u.ki.wVk = shield[i];
+        }
 
         var cbSize = Marshal.SizeOf<INPUT>();
-        var sent = SendInput(2, inputs, cbSize);
-        KbLog($"  SendInput('{c}'): cbSize={cbSize} sent={sent} (expected 2)");
+        var sent = SendInput((uint)inputs.Length, inputs, cbSize);
+        if (n > 0) KbLog($"  modifier shield: released {n} held modifier(s) around '{c}' and restored");
+        KbLog($"  SendInput('{c}'): cbSize={cbSize} sent={sent} (expected {inputs.Length})");
     }
 
     private void SendVirtualKey(ushort vk)
     {
-        var inputs = new INPUT[2];
+        var shield = HeldShieldModifiers();
+        var n = shield.Count;
+        var inputs = new INPUT[2 + 2 * n];
 
-        inputs[0].type = INPUT_KEYBOARD;
-        inputs[0].u.ki.wVk = vk;
+        for (var i = 0; i < n; i++)
+        {
+            inputs[i].type = INPUT_KEYBOARD;
+            inputs[i].u.ki.wVk = shield[i];
+            inputs[i].u.ki.dwFlags = KEYEVENTF_KEYUP;
+        }
+        inputs[n].type = INPUT_KEYBOARD;
+        inputs[n].u.ki.wVk = vk;
 
-        inputs[1].type = INPUT_KEYBOARD;
-        inputs[1].u.ki.wVk = vk;
-        inputs[1].u.ki.dwFlags = KEYEVENTF_KEYUP;
+        inputs[n + 1].type = INPUT_KEYBOARD;
+        inputs[n + 1].u.ki.wVk = vk;
+        inputs[n + 1].u.ki.dwFlags = KEYEVENTF_KEYUP;
+
+        for (var i = 0; i < n; i++)
+        {
+            inputs[n + 2 + i].type = INPUT_KEYBOARD;
+            inputs[n + 2 + i].u.ki.wVk = shield[i];
+        }
 
         var cbSize = Marshal.SizeOf<INPUT>();
-        var sent = SendInput(2, inputs, cbSize);
-        KbLog($"  SendInput(VK 0x{vk:X}): cbSize={cbSize} sent={sent} (expected 2)");
+        var sent = SendInput((uint)inputs.Length, inputs, cbSize);
+        if (n > 0) KbLog($"  modifier shield: released {n} held modifier(s) around VK 0x{vk:X} and restored");
+        KbLog($"  SendInput(VK 0x{vk:X}): cbSize={cbSize} sent={sent} (expected {inputs.Length})");
     }
+
+    [DllImport("user32.dll")]
+    private static extern short GetAsyncKeyState(int vKey);
+
+    private static bool IsDown(short asyncState) => (asyncState & 0x8000) != 0;
+
+    /// <summary>Held Ctrl/Alt/Win modifiers to release-and-restore around an
+    /// injection (see InjectionShield — Shift is deliberately excluded).</summary>
+    private static System.Collections.Generic.IReadOnlyList<ushort> HeldShieldModifiers() =>
+        Services.InjectionShield.HeldModifiers(
+            IsDown(GetAsyncKeyState(Services.InjectionShield.VK_CONTROL)),
+            IsDown(GetAsyncKeyState(Services.InjectionShield.VK_MENU)),
+            IsDown(GetAsyncKeyState(Services.InjectionShield.VK_LWIN)),
+            IsDown(GetAsyncKeyState(Services.InjectionShield.VK_RWIN)));
 
     private const ushort VK_CONTROL = 0x11;
     private const ushort VK_KEY_C = 0x43;
@@ -1733,7 +1819,7 @@ public partial class MainWindow : Window
         if (_vm is { IsKeyboardMode: true })
         {
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("ime_toolbar", "arrow_left");
-            _targetTracker.EnsureForeground(OurHwnd());
+            if (!_targetTracker.EnsureForeground(OurHwnd())) return;
             SendVirtualKey(VK_LEFT);
         }
         else
@@ -1764,7 +1850,7 @@ public partial class MainWindow : Window
         if (_vm is { IsKeyboardMode: true })
         {
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("ime_toolbar", "arrow_right");
-            _targetTracker.EnsureForeground(OurHwnd());
+            if (!_targetTracker.EnsureForeground(OurHwnd())) return;
             SendVirtualKey(VK_RIGHT);
         }
         else
@@ -1832,22 +1918,42 @@ public partial class MainWindow : Window
 
     private void SendCtrlChordCore(ushort key, string name)
     {
-        _targetTracker.EnsureForeground(OurHwnd());
-        var inputs = new INPUT[4];
+        if (!_targetTracker.EnsureForeground(OurHwnd()))
+        {
+            KbLog($"  Ctrl+{name} skipped: target not foreground and restore unavailable");
+            return;
+        }
+        // Modifier shield (#90): held Ctrl/Alt/Win released first and
+        // restored last, same atomic SendInput as the chord itself.
+        var shield = HeldShieldModifiers();
+        var n = shield.Count;
+        var inputs = new INPUT[4 + 2 * n];
 
-        inputs[0].type = INPUT_KEYBOARD;
-        inputs[0].u.ki.wVk = VK_CONTROL;
-        inputs[1].type = INPUT_KEYBOARD;
-        inputs[1].u.ki.wVk = key;
-        inputs[2].type = INPUT_KEYBOARD;
-        inputs[2].u.ki.wVk = key;
-        inputs[2].u.ki.dwFlags = KEYEVENTF_KEYUP;
-        inputs[3].type = INPUT_KEYBOARD;
-        inputs[3].u.ki.wVk = VK_CONTROL;
-        inputs[3].u.ki.dwFlags = KEYEVENTF_KEYUP;
+        for (var i = 0; i < n; i++)
+        {
+            inputs[i].type = INPUT_KEYBOARD;
+            inputs[i].u.ki.wVk = shield[i];
+            inputs[i].u.ki.dwFlags = KEYEVENTF_KEYUP;
+        }
+        inputs[n].type = INPUT_KEYBOARD;
+        inputs[n].u.ki.wVk = VK_CONTROL;
+        inputs[n + 1].type = INPUT_KEYBOARD;
+        inputs[n + 1].u.ki.wVk = key;
+        inputs[n + 2].type = INPUT_KEYBOARD;
+        inputs[n + 2].u.ki.wVk = key;
+        inputs[n + 2].u.ki.dwFlags = KEYEVENTF_KEYUP;
+        inputs[n + 3].type = INPUT_KEYBOARD;
+        inputs[n + 3].u.ki.wVk = VK_CONTROL;
+        inputs[n + 3].u.ki.dwFlags = KEYEVENTF_KEYUP;
+        for (var i = 0; i < n; i++)
+        {
+            inputs[n + 4 + i].type = INPUT_KEYBOARD;
+            inputs[n + 4 + i].u.ki.wVk = shield[i];
+        }
 
         var cbSize = Marshal.SizeOf<INPUT>();
-        SendInput(4, inputs, cbSize);
+        SendInput((uint)inputs.Length, inputs, cbSize);
+        if (n > 0) KbLog($"  modifier shield: released {n} held modifier(s) around Ctrl+{name} and restored");
         KbLog($"  Ctrl+{name} sent to target 0x{_targetTracker.Current:X}");
     }
 

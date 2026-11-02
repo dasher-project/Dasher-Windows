@@ -24,7 +24,7 @@ namespace Dasher.Windows.Services;
 /// </summary>
 public static class TargetContextReader
 {
-    public sealed record TargetContext(string Text, int CaretUtf16);
+    public sealed record TargetContext(string Text, int CaretUtf16, string Source = "unknown");
 
     // Diagnostic logging to the same file MainWindow.KbLog uses — the
     // seeding path is remote-debugged via %APPDATA%\Dasher\keyboard_debug.log.
@@ -178,10 +178,16 @@ public static class TargetContextReader
     /// verified against the window, then the focused child HWND, then the
     /// top-level, then the first TextPattern descendant). Shared by the
     /// context read here and the RFC 0021 unit actions (TargetTextActions).
+    /// <paramref name="source"/> reports WHICH path produced the pattern —
+    /// "element" vs "toplevel". Issue #91: new Outlook (WebView2) exposes
+    /// DIFFERENT text through the two (compose field ~670 chars vs whole
+    /// document ~11k), and a read that flaps between them re-seeds the
+    /// engine to a different field — the huge canvas jumps.
     /// </summary>
     internal static IUIAutomationTextPattern? FindTextPatternForWindow(
-        CUIAutomationClass uia, IntPtr targetHwnd, uint targetPid)
+        CUIAutomationClass uia, IntPtr targetHwnd, uint targetPid, out string source)
     {
+        source = "toplevel";
         try
         {
             // Strategy: the focused element, verified to belong to the
@@ -198,6 +204,7 @@ public static class TargetContextReader
                 if (focused != null && BelongsToTargetWindow(uia, focused, targetHwnd))
                 {
                     element = focused;
+                    source = "element";
                     Log($"  [UIA] focused element class='{focused.CurrentClassName}' in target window — using it");
                 }
             }
@@ -216,6 +223,7 @@ public static class TargetContextReader
                         if (child != null && child.CurrentProcessId == (int)targetPid)
                         {
                             element = child;
+                            source = "element";
                             Log($"[UIA] focused child 0x{focusedHwnd:X} class='{child.CurrentClassName}' — using it");
                         }
                     }
@@ -298,7 +306,7 @@ public static class TargetContextReader
         try
         {
             var uia = new CUIAutomationClass();
-            var pattern = FindTextPatternForWindow(uia, targetHwnd, targetPid);
+            var pattern = FindTextPatternForWindow(uia, targetHwnd, targetPid, out var source);
             if (pattern == null) return null;
 
             var document = pattern.DocumentRange;
@@ -410,8 +418,8 @@ public static class TargetContextReader
                 caretUtf16 = text.Length;
             }
 
-            Log($"  [UIA] read {text.Length} chars, caret16={caretUtf16}");
-            return new TargetContext(text, caretUtf16);
+            Log($"  [UIA] read {text.Length} chars, caret16={caretUtf16}, source={source}");
+            return new TargetContext(text, caretUtf16, source);
         }
         catch (Exception ex)
         {
@@ -551,7 +559,7 @@ public static class TargetContextReader
             int caret = Math.Clamp(selEnd, 0, buffer.Length);
 
             Log($"[Win32] read {buffer.Length} chars, caret={caret}");
-            return new TargetContext(buffer.ToString(), caret);
+            return new TargetContext(buffer.ToString(), caret, "win32");
         }
         catch (Exception ex)
         {

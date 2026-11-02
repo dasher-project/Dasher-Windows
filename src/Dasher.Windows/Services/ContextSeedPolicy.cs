@@ -64,6 +64,36 @@ public readonly record struct ContextSeedDecision
 public static class ContextSeedPolicy
 {
     /// <summary>
+    /// Read-source flap distrust (issue #91, log-confirmed 2026-11-02): new
+    /// Outlook (WebView2) exposes DIFFERENT text through the focused-element
+    /// UIA path (~670 chars, the compose field) and the top-level path
+    /// (~11k chars, the whole document). When a caret-moved read flaps to
+    /// the OTHER source with a large length discontinuity, it is reading a
+    /// DIFFERENT FIELD — seeding from it teleports the canvas (the huge
+    /// "figure out where I am" jumps). Same-source reads and small
+    /// discontinuities (genuine edits) never trip this.
+    /// </summary>
+    /// <param name="prevSource">source of the last accepted read</param>
+    /// <param name="prevLength">its text length</param>
+    /// <param name="newSource">source of the new read</param>
+    /// <param name="newLength">its text length</param>
+    public static bool SourceFlapDistrust(string? prevSource, int prevLength, string newSource, int newLength)
+    {
+        if (string.IsNullOrEmpty(prevSource) || prevSource == newSource)
+            return false;
+        // A genuine target/field switch changes the text wholesale; a flap
+        // between two views of the SAME window shows up as a wild length
+        // ratio. The 668 ↔ 10,981 field case is ~16x either way.
+        return Math.Abs(newLength - prevLength) > SourceFlapMinDiscontinuity;
+    }
+
+    /// <summary>Length discontinuity (UTF-16 units) beyond which a
+    /// source-flapped read is treated as a different field rather than the
+    /// same field seen twice. Comfortably above any single-keystroke edit
+    /// or lag; far below the observed 10k-document flip.</summary>
+    public const int SourceFlapMinDiscontinuity = 300;
+
+    /// <summary>
     /// Maximum full-text lag (UTF-16 code units, after normalisation) still
     /// attributed to a stale read.
     ///
