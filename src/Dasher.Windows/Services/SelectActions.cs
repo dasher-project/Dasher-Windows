@@ -233,7 +233,7 @@ public static class SelectActions
     /// "principal key" rides the Arrow field (see SelectKeystroke).</summary>
     public static IReadOnlyList<SelectKeystroke> DeleteKeystrokes(SelectDistance dist, SelectDirection dir)
     {
-        const ushort VK_LEFT = 0x25, VK_UP = 0x26, VK_RIGHT = 0x27, VK_DOWN = 0x28, VK_A = 0x41;
+        const ushort VK_UP = 0x26, VK_DOWN = 0x28, VK_A = 0x41;
         return dist switch
         {
             SelectDistance.Char => new[]

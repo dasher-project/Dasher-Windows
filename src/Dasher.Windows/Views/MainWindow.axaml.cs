@@ -1373,8 +1373,15 @@ public partial class MainWindow : Window
         // Reentrancy (review loop 1): dwell-repeat can fire a second action
         // while the first awaits UIA. A generation counter supersedes the
         // in-flight action — the late continuation must not apply its
-        // result (double mutation) after a newer action started.
+        // result (double mutation) after a newer action started. The
+        // in-flight UIA op itself is superseded through the same box
+        // (review loop 2: the generation guard alone cannot stop the op's
+        // own Select() landing from stale data).
         var generation = ++_unitActionGeneration;
+        if (_inFlightUnitAction is { } previous) System.Threading.Volatile.Write(ref previous.Value, true);
+        var inFlight = new System.Runtime.CompilerServices.StrongBox<bool>();
+        _inFlightUnitAction = inFlight;
+        bool Superseded() => System.Threading.Volatile.Read(ref inFlight.Value);
 
         if (_vm is { IsKeyboardMode: true })
         {
@@ -1393,23 +1400,28 @@ public partial class MainWindow : Window
 
             if (name == "select")
             {
-                if (dist == Services.SelectDistance.Paragraph)
+                if (chordDist == Services.SelectDistance.Paragraph)
                 {
                     // #89: Ctrl+Shift+Up/Down is line-granular in
                     // line-class controls (browsers, plain edits) — the
                     // field-reported "Select Paragraph doesn't select the
                     // whole paragraph". TextPattern is paragraph-exact
                     // where the pattern exists; chords remain the fallback.
+                    // (chordDist, not dist: a sentence select degrades to
+                    // paragraph and must still get the UIA path — review
+                    // loop 2 caught select gating on dist while move/delete
+                    // gated on chordDist.)
                     if (await Services.TargetTextActions.ExtendSelectionAsync(
-                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
+                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward, superseded: Superseded))
                     {
                         Services.AnalyticsService.CaptureUiAction("control_tree", "select",
                             $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia{sentenceFallback}");
                         return;
                     }
                     KbLog("  select paragraph: no TextPattern - chord fallback (line-class targets extend by line)");
-                    // post-await: superseded or picker-opened → no chords
-                    if (generation != _unitActionGeneration || _pickerSessionActive) return;
+                    // post-await: superseded, picker-opened or focus lost → no chords
+                    if (generation != _unitActionGeneration || _pickerSessionActive ||
+                        !_targetTracker.TargetIsForegroundOrUnknown(OurHwnd())) return;
                 }
                 var ks = Services.SelectActions.Keystroke(chordDist, dir);
                 SendSelectChord(ks.Ctrl, ks.Shift, ks.Arrow, ks.Letter);
@@ -1428,15 +1440,16 @@ public partial class MainWindow : Window
                     // line-class controls too — TextPattern-first, same as
                     // the select path.
                     if (await Services.TargetTextActions.MoveCaretAsync(
-                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
+                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward, superseded: Superseded))
                     {
                         Services.AnalyticsService.CaptureUiAction("control_tree", "move",
                             $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia{sentenceFallback}");
                         return;
                     }
                     KbLog("  move paragraph: no TextPattern - chord fallback");
-                    // post-await: superseded or picker-opened → no chords
-                    if (generation != _unitActionGeneration || _pickerSessionActive) return;
+                    // post-await: superseded, picker-opened or focus lost → no chords
+                    if (generation != _unitActionGeneration || _pickerSessionActive ||
+                        !_targetTracker.TargetIsForegroundOrUnknown(OurHwnd())) return;
                 }
                 if (Services.SelectActions.CaretKeystroke(chordDist, dir) is { } k)
                     SendSelectChord(k.Ctrl, k.Shift, k.Arrow, k.Letter);
@@ -1448,20 +1461,24 @@ public partial class MainWindow : Window
                     // Precise unit span via TextPattern, then the Delete
                     // key (UIA cannot modify text — select + native key).
                     if (await Services.TargetTextActions.SelectUnitSpanAsync(
-                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward))
+                            _targetTracker.Current, Services.TargetTextActions.Unit.Paragraph, forward, superseded: Superseded))
                     {
                         // Post-await guards (review loop 1): a newer action
-                        // (dwell-repeat) supersedes this one, and a picker
-                        // opened mid-await must not receive the Delete key.
-                        if (generation != _unitActionGeneration || _pickerSessionActive) return;
+                        // (dwell-repeat) supersedes this one, a picker opened
+                        // mid-await must not receive the Delete key, and the
+                        // foreground must still be the target (review loop 2:
+                        // focus can change during the 300ms UIA window).
+                        if (generation != _unitActionGeneration || _pickerSessionActive ||
+                            !_targetTracker.TargetIsForegroundOrUnknown(OurHwnd())) return;
                         SendVirtualKey(VK_DELETE);
                         Services.AnalyticsService.CaptureUiAction("control_tree", "delete",
                             $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia{sentenceFallback}");
                         return;
                     }
                     KbLog("  delete paragraph: no TextPattern - chord composition fallback");
-                    // post-await: superseded or picker-opened → no chords
-                    if (generation != _unitActionGeneration || _pickerSessionActive) return;
+                    // post-await: superseded, picker-opened or focus lost → no chords
+                    if (generation != _unitActionGeneration || _pickerSessionActive ||
+                        !_targetTracker.TargetIsForegroundOrUnknown(OurHwnd())) return;
                 }
                 foreach (var step in Services.SelectActions.DeleteKeystrokes(chordDist, dir))
                     SendSelectChord(step.Ctrl, step.Shift, step.Arrow, step.Letter);
@@ -1566,6 +1583,12 @@ public partial class MainWindow : Window
     /// generation has been superseded by a dwell-repeat action and must not
     /// apply further mutations (fallback chords, the delete key).</summary>
     private int _unitActionGeneration;
+
+    /// <summary>The in-flight UIA unit op's supersede flag (review loop 2):
+    /// set by the next dispatch on the UI thread, read by the op on its STA
+    /// thread immediately before its Select() — the op-side half of the
+    /// double-mutation guard.</summary>
+    private System.Runtime.CompilerServices.StrongBox<bool>? _inFlightUnitAction;
 
     /// <summary>TickCount64 of our last VK_RETURN injection (paragraph settle guard).</summary>
     private long _lastOwnParagraphInject;

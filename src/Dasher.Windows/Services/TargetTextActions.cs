@@ -48,9 +48,11 @@ public static class TargetTextActions
     /// <summary>
     /// Extend the target's selection by one unit at the endpoint the
     /// selection reports as its first range (paragraph-accurate select;
-    /// the #89 fix). True = applied.
+    /// the #89 fix). True = applied. <paramref name="superseded"/> is
+    /// checked immediately before the mutation: a newer action dispatched
+    /// while this op was in flight wins, and the stale op must not apply.
     /// </summary>
-    public static Task<bool> ExtendSelectionAsync(IntPtr targetHwnd, Unit unit, bool forward, int timeoutMs = 300)
+    public static Task<bool> ExtendSelectionAsync(IntPtr targetHwnd, Unit unit, bool forward, int timeoutMs = 300, Func<bool>? superseded = null)
         => RunAsync(targetHwnd, timeoutMs, (range, aborted) =>
         {
             var r = range.Clone();
@@ -59,7 +61,7 @@ public static class TargetTextActions
                 UnitValue(unit),
                 forward ? 1 : -1);
             if (moved == 0) { Log($"  [TextAction] at document edge (moved=0)"); return false; }
-            if (aborted()) { Log("  [TextAction] aborted before Select (timeout) — result discarded"); return false; }
+            if (aborted() || (superseded?.Invoke() ?? false)) { Log("  [TextAction] aborted/superseded before Select — result discarded"); return false; }
             r.Select();
             return true;
         }, $"extend-selection unit={unit} forward={forward}");
@@ -67,15 +69,16 @@ public static class TargetTextActions
     /// <summary>
     /// Move the target's caret by one unit (degenerate-range move + Select;
     /// used by the move action's paragraph dist where chords are
-    /// line-granular). True = applied.
+    /// line-granular). True = applied. See
+    /// <see cref="ExtendSelectionAsync"/> for <paramref name="superseded"/>.
     /// </summary>
-    public static Task<bool> MoveCaretAsync(IntPtr targetHwnd, Unit unit, bool forward, int timeoutMs = 300)
+    public static Task<bool> MoveCaretAsync(IntPtr targetHwnd, Unit unit, bool forward, int timeoutMs = 300, Func<bool>? superseded = null)
         => RunAsync(targetHwnd, timeoutMs, (range, aborted) =>
         {
             var r = range.Clone();
             var moved = r.Move(UnitValue(unit), forward ? 1 : -1);
             if (moved == 0) { Log($"  [TextAction] at document edge (moved=0)"); return false; }
-            if (aborted()) { Log("  [TextAction] aborted before Select (timeout) — result discarded"); return false; }
+            if (aborted() || (superseded?.Invoke() ?? false)) { Log("  [TextAction] aborted/superseded before Select — result discarded"); return false; }
             r.Select();
             return true;
         }, $"move-caret unit={unit} forward={forward}");
@@ -91,8 +94,8 @@ public static class TargetTextActions
     /// GetCaretRange) is the documented follow-up if field use wants the
     /// caret-anchored semantics. True = selection applied.
     /// </summary>
-    public static Task<bool> SelectUnitSpanAsync(IntPtr targetHwnd, Unit unit, bool forward, int timeoutMs = 300)
-        => ExtendSelectionAsync(targetHwnd, unit, forward, timeoutMs);
+    public static Task<bool> SelectUnitSpanAsync(IntPtr targetHwnd, Unit unit, bool forward, int timeoutMs = 300, Func<bool>? superseded = null)
+        => ExtendSelectionAsync(targetHwnd, unit, forward, timeoutMs, superseded);
 
     // ── machinery (the ReadAsync pattern, applied to MUTATING actions) ──────
     //
