@@ -988,6 +988,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Isaziso somsingathi wamehlo</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Isilandeleli samehlo asikwazanga ukuqaliswa kabusha ngokugcwele ({0}). Ukulandelela kungase kusebenze ngesivinini esincishisiwe nokunemba — zama ukusebenzisa i-Dasher njengomlawuli.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Shintsha imodi yokulawula</value>
   </data>

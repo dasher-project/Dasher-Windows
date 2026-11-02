@@ -990,6 +990,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Avis de suivi oculaire</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Le suivi oculaire n'a pas pu être entièrement repris ({0}). Le suivi peut fonctionner à une vitesse et une précision réduites — essayez d'exécuter Dasher en tant qu'administrateur.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Basculer le mode de contrôle</value>
   </data>

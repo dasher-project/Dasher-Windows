@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>আই ট্র্যাকার নোটিশ</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>চোখ ট্র্যাকারটি সম্পূর্ণরূপে পুনরায় শুরু করা যায়নি ({0})। ট্র্যাকিং কম গতিতে এবং কম সঠিকতার সঙ্গে চলতে পারে — প্রশাসকের হিসাবে Dasher চালানোর চেষ্টা করুন।</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>নিয়ন্ত্রণ মোড টগল করুন</value>
   </data>

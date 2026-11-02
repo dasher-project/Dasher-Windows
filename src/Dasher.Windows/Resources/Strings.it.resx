@@ -989,6 +989,9 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Avviso sull'eye tracker</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Il tracciatore oculare non può essere completamente ripreso ({0}). Il tracciamento potrebbe funzionare a velocità e precisione ridotte — prova a eseguire Dasher come amministratore.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Attiva modalità di controllo</value>
   </data>

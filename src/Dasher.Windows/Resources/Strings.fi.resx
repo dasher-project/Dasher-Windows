@@ -989,6 +989,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Eye tracker huomautus</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Silmänseurantaa ei voitu jatkaa kokonaan ({0}). Seuranta voi toimia pienemmällä nopeudella ja tarkkuudella – kokeile käyttää Dasheria järjestelmänvalvojana.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Vaihda ohjaustilaa</value>
   </data>

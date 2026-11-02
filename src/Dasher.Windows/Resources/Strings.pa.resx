@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>ਅੱਖ ਟਰੈਕਰ ਨੋਟਿਸ</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>ਅੱਖਾਂ ਦਾ ਟਰੈਕਰ ਪੂਰੀ ਤਰ੍ਹਾਂ ਮੁੜ ਸ਼ੁਰੂ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ ({0})। ਟ੍ਰੈਕਿੰਗ ਘੱਟ ਗਤੀ ਅਤੇ ਸ਼ੁੱਧਤਾ 'ਤੇ ਚੱਲ ਸਕਦੀ ਹੈ — ਡੈਸ਼ਰ ਨੂੰ ਪ੍ਰਸ਼ਾਸਕ ਵਜੋਂ ਚਲਾਉਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>ਕੰਟਰੋਲ ਮੋਡ ਟੌਗਲ ਕਰੋ</value>
   </data>

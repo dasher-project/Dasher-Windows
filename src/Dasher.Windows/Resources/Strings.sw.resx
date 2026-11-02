@@ -988,6 +988,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Notisi ya kufuatilia macho</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Kifuatilia macho hakikuweza kurejeshwa kikamilifu ({0}). Ufuatiliaji unaweza kukimbia kwa kasi iliyopunguzwa na usahihi - jaribu kuendesha Dasher kama msimamizi.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Badilisha hali ya udhibiti</value>
   </data>

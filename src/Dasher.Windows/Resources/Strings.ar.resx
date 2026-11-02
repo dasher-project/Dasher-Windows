@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>إشعار تعقب العين</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>لا يمكن استئناف متتبع العين بشكل كامل ({0}). قد يتم تشغيل التتبع بسرعة ودقة أقل - حاول تشغيل Dasher كمسؤول.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>تبديل وضع التحكم</value>
   </data>

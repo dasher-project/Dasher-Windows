@@ -989,6 +989,9 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Uwaga dotycząca śledzenia wzroku</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Nie można w pełni wznowić śledzenia wzroku ({0}). Śledzenie może działać ze zmniejszoną szybkością i dokładnością — spróbuj uruchomić Dasher jako administrator.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Przełącz tryb sterowania</value>
   </data>

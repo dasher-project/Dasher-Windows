@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>眼动仪注意事项</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>眼动仪无法完全恢复 ({0})。跟踪的运行速度和准确性可能会降低 - 尝试以管理员身份运行 Dasher。</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>切换控制模式</value>
   </data>

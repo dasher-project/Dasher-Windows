@@ -989,6 +989,9 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Szemkövető megjegyzés</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>A szemkövetőt nem lehetett teljesen újraindítani ({0}). A követés csökkentett sebességgel és pontossággal futhat – próbálja meg rendszergazdaként futtatni a Dashert.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Váltás vezérlési módra</value>
   </data>

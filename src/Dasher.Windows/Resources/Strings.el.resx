@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Ειδοποίηση παρακολούθησης ματιών</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η πλήρης συνέχιση του προγράμματος παρακολούθησης ματιών ({0}). Η παρακολούθηση μπορεί να εκτελείται με μειωμένη ταχύτητα και ακρίβεια — δοκιμάστε να εκτελέσετε το Dasher ως διαχειριστή.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Εναλλαγή λειτουργίας ελέγχου</value>
   </data>

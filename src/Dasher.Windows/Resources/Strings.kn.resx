@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>ಐ ಟ್ರ್ಯಾಕರ್ ಸೂಚನೆ</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>ಕಣ್ಣಿನ ಟ್ರ್ಯಾಕರ್ ಅನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಪುನರಾರಂಭಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ ({0}). ಟ್ರ್ಯಾಕಿಂಗ್ ಕಡಿಮೆ ವೇಗ ಮತ್ತು ನಿಖರತೆಯಲ್ಲಿ ಚಲಿಸಬಹುದು - ಡ್ಯಾಶರ್ ಅನ್ನು ನಿರ್ವಾಹಕರಾಗಿ ಚಲಾಯಿಸಲು ಪ್ರಯತ್ನಿಸಿ.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>ನಿಯಂತ್ರಣ ಮೋಡ್ ನೇರಿಸಿಕೊಂಡು ಬದಲಾಯಿಸಿ</value>
   </data>

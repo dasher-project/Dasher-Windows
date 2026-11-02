@@ -989,6 +989,9 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Upozornění na sledování očí</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Sledovač očí nebylo možné plně obnovit ({0}). Sledování může probíhat sníženou rychlostí a přesností — zkuste spustit Dasher jako správce.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Přepnout režim ovládání</value>
   </data>

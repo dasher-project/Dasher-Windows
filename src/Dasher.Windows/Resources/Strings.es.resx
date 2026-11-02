@@ -989,6 +989,9 @@ Puedes cambiar esta configuración en cualquier momento en Ajustes &gt; Privacid
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Aviso de seguimiento ocular</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>No se pudo reanudar completamente el rastreador ocular ({0}). El seguimiento puede funcionar a velocidad y precisión reducidas; intente ejecutar Dasher como administrador.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Alternar modo de control</value>
   </data>

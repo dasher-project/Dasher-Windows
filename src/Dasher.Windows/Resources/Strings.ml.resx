@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>ഐ ട്രാക്കർ അറിയിപ്പ്</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>ഐ ട്രാക്കർ പൂർണ്ണമായി പുനരാരംഭിക്കാനായില്ല ({0}). ട്രാക്കിംഗ് കുറഞ്ഞ വേഗതയിലും കൃത്യതയിലും പ്രവർത്തിക്കാം - ഡാഷർ അഡ്മിനിസ്ട്രേറ്ററായി പ്രവർത്തിപ്പിക്കാൻ ശ്രമിക്കുക.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>നിയന്ത്രണ മോഡ് മാറ്റുക</value>
   </data>

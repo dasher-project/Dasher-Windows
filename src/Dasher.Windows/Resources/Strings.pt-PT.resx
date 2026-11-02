@@ -989,6 +989,9 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Aviso de rastreador ocular</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>O rastreador ocular não pôde ser totalmente retomado ({0}). O rastreio pode funcionar a uma velocidade e precisão reduzidas — tente executar o Dasher como administrador.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Alternar modo de controlo</value>
   </data>

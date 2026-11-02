@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>આંખ ટ્રેકરની સૂચના</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>આંખ ટ્રેકર સંપૂર્ણપણે ફરી શરૂ કરી શકાયું નથી ({0}). ટ્રેકિંગ ઓછી ઝડપ અને ચોકસાઈથી ચાલી શકે છે — ડેશરને એડમિનિસ્ટ્રેટર તરીકે ચલાવવાનો પ્રયાસ કરો.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>કંટ્રોલ મોડ ટૉગલ કરો</value>
   </data>

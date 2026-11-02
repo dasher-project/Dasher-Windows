@@ -989,6 +989,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Hinweis zum Eyetracker</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Der Eyetracker konnte nicht vollständig fortgesetzt werden ({0}). Das Tracking läuft möglicherweise mit reduzierter Geschwindigkeit und Genauigkeit ab – versuchen Sie, Dasher als Administrator auszuführen.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Steuermodus umschalten</value>
   </data>

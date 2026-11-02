@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>आई ट्रैकर नोटिस</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>आई ट्रैकर को पूरी तरह से फिर से शुरू नहीं किया जा सका ({0})। ट्रैकिंग कम गति और सटीकता से चल सकती है - डैशर को व्यवस्थापक के रूप में चलाने का प्रयास करें।</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>कंट्रोल मोड बदलें</value>
   </data>

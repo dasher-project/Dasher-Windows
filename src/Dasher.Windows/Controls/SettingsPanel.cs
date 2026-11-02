@@ -2430,6 +2430,7 @@ public class SettingsPanel : Decorator
             FontSize = 12,
             HorizontalAlignment = HorizontalAlignment.Left,
         };
+        // slow/fast deliberately reuse the shared keys (dedup); the rest are rate_*
         var rateNames = new[] { Loc.Tr("rate_very_slow"), Loc.Tr("slow"), Loc.Tr("rate_medium"), Loc.Tr("fast"), Loc.Tr("rate_very_fast") };
         var rateValues = Enum.GetValues<DotNetTtsWrapper.Models.SpeechRate>();
         foreach (var r in rateNames)

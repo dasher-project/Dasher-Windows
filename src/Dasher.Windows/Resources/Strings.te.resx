@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>కంటి దృష్టి ట్రాకర్ నోటీసు</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>కంటి ట్రాకర్‌ను పూర్తిగా పునఃప్రారంభించలేము ({0}). ట్రాకింగ్ తగ్గిన వేగం మరియు ఖచ్చితత్వంతో నడిచే అవకాశం ఉంది — Dasher ను నిర్వాహకుడిగా (Administrator) இயக்கడానికి ప్రయత్నించండి.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>నియంత్రణ మోడ్‌ను టోగుల్ చేయండి</value>
   </data>

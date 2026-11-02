@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>اطلاعیه ردیاب چشم</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>ردیاب چشم نمی تواند به طور کامل از سر گرفته شود ({0}). ردیابی ممکن است با سرعت و دقت کمتری اجرا شود - سعی کنید Dasher را به عنوان سرپرست اجرا کنید.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>تغییر حالت کنترل</value>
   </data>

@@ -2835,7 +2835,7 @@ public partial class MainWindow : Window
         var correctText = correct > 0 ? target[..Math.Min(correct, target.Length)] : "";
         var remaining = correct < target.Length ? target[Math.Min(correct, target.Length)..] : "";
 
-        gameTarget.Text = $"{correctText}[{wrong}]{remaining}\n{string.Format(Services.Loc.Tr("wpm_format"), (int)_vm.CurrentWpm)}" + 
+        gameTarget.Text = $"{correctText}[{wrong}]{remaining}\n{string.Format(Services.Loc.Tr("wpm_format"), (int)_vm.CurrentWpm)}" +
             (_vm.MaxWpm > 0 ? "  " + string.Format(Services.Loc.Tr("wpm_max_format"), (int)_vm.MaxWpm) : "");
     }
 

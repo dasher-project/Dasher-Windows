@@ -988,6 +988,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>डोळ्यांचा ट्रॅकर नोटीस</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>डोळ्यांचा ट्रॅकर पूर्णपणे पुन्हा सुरू केले जाऊ शकले नाही ({0}). ट्रॅकिंग कमी गती आणि अचूकतेने चालू शकते — Dasher प्रशासक म्हणून चालवून पाहा.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>नियंत्रण मोड टॉगल करा</value>
   </data>

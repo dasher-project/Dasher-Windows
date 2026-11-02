@@ -994,6 +994,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Eye tracker notice</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>The eye tracker could not be fully resumed ({0}). Tracking may run at reduced speed and accuracy — try running Dasher as administrator.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Toggle control mode</value>
   </data>

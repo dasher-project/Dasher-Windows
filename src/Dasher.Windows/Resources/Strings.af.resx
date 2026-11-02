@@ -989,6 +989,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Eye tracker kennisgewing</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Die oogopsporing kon nie volledig hervat word nie ({0}). Opsporing mag teen verminderde spoed en akkuraatheid werk — probeer om Dasher as administrateur te laat loop.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Skakel beheermodus</value>
   </data>

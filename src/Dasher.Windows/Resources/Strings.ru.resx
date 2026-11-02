@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Уведомление о айтрекере</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Не удалось полностью возобновить работу айтрекера ({0}). Отслеживание может работать с меньшей скоростью и точностью — попробуйте запустить Dasher от имени администратора.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Переключить режим управления</value>
   </data>

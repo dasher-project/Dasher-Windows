@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>கண் கண்காணிப்பாளர் அறிவிப்பு</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>ஐ டிராக்கரை முழுமையாக மீண்டும் தொடங்க முடியவில்லை ({0}). கண்காணிப்பு குறைந்த வேகத்திலும் துல்லியத்திலும் இயங்கலாம் - Dasher ஐ நிர்வாகியாக இயக்க முயற்சிக்கவும்.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>கட்டுப்பாட்டு முறையை மாற்று</value>
   </data>

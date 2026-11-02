@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>آئی ٹریکر نوٹس</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>آنکھ کے ٹریکر کو مکمل طور پر دوبارہ شروع نہیں کیا جا سکا ({0})۔ ٹریکنگ کم رفتار اور کم درستگی کے ساتھ چل سکتی ہے — Dasher کو ایڈمنسٹریٹر کے طور پر چلانے کی کوشش کریں۔</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>کنٹرول موڈ ٹوگل کریں</value>
   </data>

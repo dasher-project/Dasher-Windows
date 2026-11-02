@@ -989,6 +989,9 @@
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>ประกาศเกี่ยวกับการติดตามดวงตา</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>ไม่สามารถเริ่มการติดตามสายตาได้เต็มที่ ({0}) การติดตามอาจทำงานด้วยความเร็วและความแม่นยำน้อยลง — ลองเรียกใช้ Dasher ในฐานะผู้ดูแลระบบ</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>สลับโหมดควบคุม</value>
   </data>

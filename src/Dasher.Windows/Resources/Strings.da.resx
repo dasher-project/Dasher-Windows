@@ -989,6 +989,9 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
   <data name="toast_eye_tracker_notice" xml:space="preserve">
     <value>Eye tracker-meddelelse</value>
   </data>
+  <data name="tobii_degraded_warning_format" xml:space="preserve">
+    <value>Eye Tracker kunne ikke genoptages fuldt ud ({0}). Sporing kan køre med reduceret hastighed og nøjagtighed - prøv at køre Dasher som administrator.</value>
+  </data>
   <data name="toggle_control_mode" xml:space="preserve">
     <value>Skift kontroltilstand</value>
   </data>

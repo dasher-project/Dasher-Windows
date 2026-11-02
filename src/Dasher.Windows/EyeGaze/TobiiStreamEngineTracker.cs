@@ -248,8 +248,7 @@ public sealed class TobiiStreamEngineTracker : IEyeTrackerService
                 {
                     EyeGazeLogger.Log($"Tobii: resume_device still failing ({rdResult}: {GetTobiiError(rdResult)}) — continuing in possibly degraded mode");
                     Warning?.Invoke(
-                        $"The eye tracker could not be fully resumed ({GetTobiiError(rdResult)}). " +
-                        "Tracking may run at reduced speed and accuracy — try running Dasher as administrator.");
+                        string.Format(Services.Loc.Tr("tobii_degraded_warning_format"), GetTobiiError(rdResult)));
                 }
                 else
                 {
