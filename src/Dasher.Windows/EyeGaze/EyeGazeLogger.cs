@@ -26,7 +26,7 @@ public static class EyeGazeLogger
 
     // Buffered writing: queue messages and flush on a timer to avoid
     // disk I/O on the gaze callback hot path.
-    private static readonly BlockingCollection<string> _queue = new(1024);
+    private static BlockingCollection<string> _queue = new(1024);
     private static Thread? _writerThread;
     private static int _writerStarted;
 
@@ -94,5 +94,24 @@ public static class EyeGazeLogger
             Name = "EyeGazeLogger",
         };
         _writerThread.Start();
+    }
+
+    /// <summary>
+    /// Close the writer so LogManager.ClearLogs can delete the file (the
+    /// background thread's StreamWriter holds it open). Signals the queue to
+    /// complete, waits for the drain, then resets so the next Log() call
+    /// restarts the writer fresh.
+    /// </summary>
+    public static void CloseWriter()
+    {
+        try
+        {
+            _queue.CompleteAdding();
+            _writerThread?.Join(2000); // wait for drain + dispose
+        }
+        catch { }
+        _writerThread = null;
+        _writerStarted = 0;
+        _queue = new System.Collections.Concurrent.BlockingCollection<string>();
     }
 }

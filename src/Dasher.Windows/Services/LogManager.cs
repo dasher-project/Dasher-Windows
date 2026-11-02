@@ -53,8 +53,12 @@ public static class LogManager
         try
         {
             Directory.CreateDirectory(DasherDir);
+            TruncateOversized();          // BEFORE rotation: an oversized
+                                          // live log must not become an
+                                          // oversized archive
+            TruncateArchives();           // existing archives from older
+                                          // versions may exceed the cap
             RotateOnVersionChange(currentVersion);
-            TruncateOversized();
             PruneOldArchives();
         }
         catch { }
@@ -74,6 +78,8 @@ public static class LogManager
         long freed = 0;
         try
         {
+            // EyeGazeLogger holds its file open — close it first
+            EyeGaze.EyeGazeLogger.CloseWriter();
             foreach (var name in ManagedLogs)
             {
                 var path = Path.Combine(DasherDir, name);
@@ -175,6 +181,26 @@ public static class LogManager
                 File.WriteAllLines(path, recent);
             }
             catch { }
+        }
+    }
+
+
+    private static void TruncateArchives()
+    {
+        foreach (var pattern in new[] { "keyboard_debug.v*.log", "eyegaze.v*.log" })
+        {
+            foreach (var path in Directory.GetFiles(DasherDir, pattern))
+            {
+                try
+                {
+                    var info = new FileInfo(path);
+                    if (info.Length <= MaxLogBytes) continue;
+                    var lines = File.ReadAllLines(path);
+                    var keep = Math.Min(lines.Length, 1000);
+                    File.WriteAllLines(path, lines[^keep..]);
+                }
+                catch { }
+            }
         }
     }
 

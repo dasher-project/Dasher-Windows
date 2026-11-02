@@ -27,7 +27,9 @@ public partial class App : Application
     {
         // Log rotation + version-change cleanup (must run before any writes)
         var asm = System.Reflection.Assembly.GetExecutingAssembly();
-        var ver = asm.GetName().Version?.ToString(3) ?? "unknown";
+        var ver = System.Reflection.CustomAttributeExtensions
+            .GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>(asm)
+            ?.InformationalVersion.Split('+')[0] ?? asm.GetName().Version?.ToString(3) ?? "unknown";
         Services.LogManager.Initialize(ver);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
