@@ -316,10 +316,10 @@
                  it all") and stretches back to one row when wide. -->
             <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <Button Width="32" Height="32" CornerRadius="16" Background="{DynamicResource ControlBg}" BorderThickness="0"
-                        VerticalAlignment="Center" Click="OnBack" ToolTip.Tip="{loc:Tr Key=back}">
+                        VerticalAlignment="Center" Click="OnBack" ToolTip.Tip="{loc:Tr Key=back}" Margin="4,3">
                     <LucideIcon Kind="{x:Static lucide:LucideIconKind.ChevronLeft}" Size="16" Foreground="{DynamicResource TextMuted}"/>
                 </Button>
-                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,3"/>
                 <ComboBox x:Name="LangPicker"
                           Classes="ui-lang-select"
                           ItemsSource="{Binding Languages}"
@@ -327,11 +327,11 @@
                           SelectionChanged="OnLanguageChanged"
                           BorderThickness="0"
                           Background="Transparent"
-                          VerticalAlignment="Center"/>
+                          VerticalAlignment="Center" Margin="4,3"/>
 
-                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,3"/>
 
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="4,3">
                     <TextBlock Classes="ui-nav-label" Text="{loc:Tr Key=speed}"/>
                     <Border BorderBrush="{DynamicResource BorderLight}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}" Height="28">
                         <StackPanel Orientation="Horizontal">
@@ -346,29 +346,29 @@
                     </Border>
                 </StackPanel>
 
-                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,3"/>
 
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="4,3">
                     <TextBlock Classes="ui-nav-label" Text="{loc:Tr Key=auto}"/>
                     <ToggleSwitch x:Name="AutoSpeedToggle" IsChecked="{Binding AutoSpeed}" OnContent="" OffContent="" MinWidth="0" Height="26" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,3"/>
 
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="4,3">
                     <TextBlock Classes="ui-nav-label" Text="{loc:Tr Key=learning}"/>
                     <ToggleSwitch x:Name="LearningToggle" IsChecked="{Binding Learning}" OnContent="" OffContent="" MinWidth="0" Height="26" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,3"/>
 
-                <TextBlock x:Name="WpmLabel" FontSize="11" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center" MinWidth="80"/>
+                <TextBlock x:Name="WpmLabel" FontSize="11" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center" MinWidth="80" Margin="4,3"/>
 
-                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,0"/>
+                <Rectangle Width="1" Height="24" Fill="{DynamicResource BorderLight}" Margin="8,3"/>
 
                 <Button Width="28" Height="28" CornerRadius="14" Background="Transparent" BorderThickness="0"
                         VerticalAlignment="Center" Click="OnToggleStatusBar"
-                        ToolTip.Tip="{loc:Tr Key=toggle_status_bar}">
+                        ToolTip.Tip="{loc:Tr Key=toggle_status_bar}" Margin="4,3">
                     <LucideIcon Kind="{x:Static lucide:LucideIconKind.ChevronDown}" Size="16" Foreground="{DynamicResource TextMuted}"/>
                 </Button>
             </WrapPanel>
@@ -397,19 +397,19 @@
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.ChevronLeft}" Size="16" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
 
-                            <Button x:Name="PaneEyeModeBtn" Classes="ui-circle-btn" Click="OnToggleMode" ToolTip.Tip="{loc:Tr Key=toggle_pane_position}">
+                            <Button x:Name="PaneEyeModeBtn" Classes="ui-circle-btn" Click="OnToggleMode" ToolTip.Tip="{loc:Tr Key=toggle_pane_position}" Margin="4,3">
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.Eye}" Size="18" Foreground="{DynamicResource TextSecondary}"/>
                             </Button>
 
-                            <Button Classes="ui-circle-btn" Click="OnQuickSpeak" ToolTip.Tip="{loc:Tr Key=quick_speak}">
+                            <Button Classes="ui-circle-btn" Click="OnQuickSpeak" ToolTip.Tip="{loc:Tr Key=quick_speak}" Margin="4,3">
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.Volume2}" Size="18" Foreground="{DynamicResource TextSecondary}"/>
                             </Button>
 
-                            <Button Classes="ui-circle-btn" Click="OnStopSpeak" ToolTip.Tip="{loc:Tr Key=stop_speaking}">
+                            <Button Classes="ui-circle-btn" Click="OnStopSpeak" ToolTip.Tip="{loc:Tr Key=stop_speaking}" Margin="4,3">
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.CircleStop}" Size="18" Foreground="{DynamicResource TextSecondary}"/>
                             </Button>
 
-                            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" ToolTip.Tip="{loc:Tr Key=speech_volume}">
+                            <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" ToolTip.Tip="{loc:Tr Key=speech_volume}" Margin="4,3">
                                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.Volume1}" Size="14" Foreground="{DynamicResource TextMuted}"/>
                                 <Slider x:Name="SpeakVolumeSlider" Minimum="0" Maximum="100" Width="60"
                                         VerticalAlignment="Center"
@@ -417,9 +417,9 @@
                                         ToolTip.Tip="{loc:Tr Key=speech_volume}"/>
                             </StackPanel>
 
-                            <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
+                            <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center" Margin="4,3"/>
 
-                            <StackPanel Orientation="Horizontal" Spacing="6">
+                            <StackPanel Orientation="Horizontal" Spacing="6" Margin="4,3">
                                 <Button x:Name="BtnNewSession" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" Click="OnNewSession" ToolTip.Tip="{loc:Tr Key=new_session_tooltip}">
                                     <StackPanel Spacing="2" VerticalAlignment="Center">
                                         <LucideIcon Kind="{x:Static lucide:LucideIconKind.FilePlus}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
@@ -446,28 +446,28 @@
                                 </Button>
                             </StackPanel>
 
-                            <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center"/>
+                            <Rectangle Width="1" Height="20" Fill="{DynamicResource BorderLight}" VerticalAlignment="Center" Margin="4,3"/>
 
-                            <Button x:Name="PaneBackspaceBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="{loc:Tr Key=backspace_tooltip}">
+                            <Button x:Name="PaneBackspaceBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="{loc:Tr Key=backspace_tooltip}" Margin="4,3">
                                 <StackPanel Spacing="2" VerticalAlignment="Center">
                                     <LucideIcon Kind="{x:Static lucide:LucideIconKind.Delete}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
                                     <TextBlock Text="{loc:Tr Key=backspace_label}" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button x:Name="PaneLeftBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="{loc:Tr Key=arrow_left_tooltip}">
+                            <Button x:Name="PaneLeftBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="{loc:Tr Key=arrow_left_tooltip}" Margin="4,3">
                                 <StackPanel Spacing="2" VerticalAlignment="Center">
                                     <LucideIcon Kind="{x:Static lucide:LucideIconKind.ArrowLeft}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
                                     <TextBlock Text="{loc:Tr Key=arrow_left_label}" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button x:Name="PaneRightBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="{loc:Tr Key=arrow_right_tooltip}">
+                            <Button x:Name="PaneRightBtn" Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="{loc:Tr Key=arrow_right_tooltip}" Margin="4,3">
                                 <StackPanel Spacing="2" VerticalAlignment="Center">
                                     <LucideIcon Kind="{x:Static lucide:LucideIconKind.ArrowRight}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
                                     <TextBlock Text="{loc:Tr Key=arrow_right_label}" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="{loc:Tr Key=more_options}">
+                            <Button Width="46" Height="44" CornerRadius="6" Background="{DynamicResource ControlBg}" BorderThickness="0" ToolTip.Tip="{loc:Tr Key=more_options}" Margin="4,3">
                                 <StackPanel Spacing="2" VerticalAlignment="Center">
                                     <LucideIcon Kind="{x:Static lucide:LucideIconKind.EllipsisVertical}" Size="16" Foreground="{DynamicResource TextSecondary}"/>
                                     <TextBlock Text="{loc:Tr Key=more}" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>

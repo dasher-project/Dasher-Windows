@@ -904,15 +904,18 @@ public partial class MainWindow : Window
             _suppressEditorSync = true;
             try
             {
-                // Caret preservation (clause 4): a caret at the end of the
-                // old text follows the growth (zooming at the caret keeps the
-                // caret with the new text); otherwise it stays at its index,
-                // clamped. Insert/delete-position math against the engine
-                // offset can refine this later if users need it.
+                // Caret behaviour on engine pushes (clause 4, refined by
+                // field request): when the text GROWS (zooming forward =
+                // writing), the caret follows to the end of the new text —
+                // the user is writing and expects to see the caret with the
+                // writing, not parked where they last left it mid-text.
+                // When the text SHRINKS (zoom-back = deleting), the caret
+                // stays at its index, clamped (the deletion may happen
+                // elsewhere; clamping is the least surprising behaviour).
                 var oldCaret = box.CaretIndex;
                 var oldLen = (box.Text ?? "").Length;
                 box.Text = newText;
-                box.CaretIndex = oldCaret >= oldLen
+                box.CaretIndex = newText.Length >= oldLen
                     ? newText.Length
                     : Math.Min(oldCaret, newText.Length);
             }
