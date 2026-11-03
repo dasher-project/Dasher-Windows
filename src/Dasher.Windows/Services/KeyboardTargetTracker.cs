@@ -247,12 +247,19 @@ public sealed class KeyboardTargetTracker : IDisposable
         var ourThread = GetCurrentThreadId();
 
         // Same-thread restore: SetForegroundWindow alone (posts to our own
-        // queue — cannot block on another thread's pump).
+        // queue — cannot block on another thread's pump). #106: verify the
+        // async switch landed; the return value alone is not trustworthy.
         if (targetThread == 0 || targetThread == ourThread)
         {
             var set = SetForegroundWindow(_target);
-            Log($"  → SetForegroundWindow={set}");
-            return set;
+            var verified = false;
+            for (var waited = 0; waited < ForegroundSettleBudgetMs && !verified; waited += 10)
+            {
+                verified = GetForegroundWindow() == _target;
+                if (!verified) Thread.Sleep(10);
+            }
+            Log($"  → SetForegroundWindow={set} verified={verified}");
+            return verified;
         }
 
         // Cross-thread: attach/set/detach on a background thread, bounded.
@@ -270,6 +277,18 @@ public sealed class KeyboardTargetTracker : IDisposable
                 var set = SetForegroundWindow(_target);
                 AttachThreadInput(ourThread, targetThread, false);
                 Log($"  → AttachThreadInput={attached} SetForegroundWindow={set}");
+                // #106: the switch is ASYNC — verify it landed (poll here on
+                // this background thread, never the UI thread). The field
+                // logs show the handshake "succeeding" while the next
+                // SendInput lands with the foreground STILL Dasher — the
+                // keystrokes went into Dasher itself ("arrows and delete
+                // just aren't doing anything in the target").
+                for (var waited = 0; waited < ForegroundSettleBudgetMs; waited += 10)
+                {
+                    if (GetForegroundWindow() == _target) return;
+                    Thread.Sleep(10);
+                }
+                Log($"  → switch never landed within {ForegroundSettleBudgetMs}ms (fg=0x{GetForegroundWindow():X})");
             }
             catch { }
             finally
@@ -280,20 +299,31 @@ public sealed class KeyboardTargetTracker : IDisposable
         { IsBackground = true, Name = "fg-restore" };
         escalation.Start();
 
-        if (!escalation.Join(EscalationBudgetMs))
+        if (!escalation.Join(EscalationBudgetMs + ForegroundSettleBudgetMs))
         {
-            Log($"  → restore did not complete within {EscalationBudgetMs}ms — skipping injection this event (no UI block)");
+            Log($"  → restore did not complete within {EscalationBudgetMs + ForegroundSettleBudgetMs}ms — skipping injection this event (no UI block)");
             // The thread stays busy (flag held) until it completes; further
             // calls skip injection rather than stacking hung handshakes.
             return false;
         }
-        return true;
+
+        // Trust only the verified foreground, never SetForegroundWindow's
+        // return value (it lies about async switches).
+        var landed = GetForegroundWindow() == _target;
+        if (!landed)
+            Log("  → handshake completed but foreground is not the target — skipping injection this event");
+        return landed;
     }
 
     /// <summary>Hard budget for the cross-thread focus-restore handshake.
     /// Long enough for a healthy target (observed: single-digit ms); short
     /// enough that a choked target costs one skipped event, not the UI.</summary>
     private const int EscalationBudgetMs = 250;
+
+    /// <summary>#106: budget for the ASYNC foreground switch to settle after
+    /// the handshake reports success (SetForegroundWindow returns before the
+    /// switch lands). The verification poll runs on the escalation thread.</summary>
+    private const int ForegroundSettleBudgetMs = 150;
 
     private int _escalationBusy;
 
