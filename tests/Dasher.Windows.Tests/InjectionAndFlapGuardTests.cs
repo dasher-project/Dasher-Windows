@@ -250,3 +250,45 @@ public class InjectionAndFlapGuardTests
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "win32", 5000, 5000, true, 2, "toplevel"));
     }
 }
+
+/// <summary>
+/// #107: the engine-ahead guard's reflection check — a deliberate caret move
+/// back into already-written text must seed, not skip.
+/// </summary>
+public class EngineAheadReflectionTests
+{
+    [Fact]
+    public void Caret_clicked_back_into_written_text_seeds()
+    {
+        // Field case: engine buffer "In recent saide  t ne" (21 chars, the
+        // user typed it); the caret clicks back to position 15 where the
+        // local sentence is "In recent saide " and the target after the
+        // caret carries the engine's pending tail "t ne" — reflected.
+        var engine = "In recent saide  t ne";
+        var target = "Hello What are you doing feature the \nIn recent saide  t ne";
+        var decision = ContextSeedPolicy.Decide(engine, target, 36 + 15); // click 15 into the second line
+        Assert.Equal(ContextSeedAction.Seed, decision.Action);
+    }
+
+    [Fact]
+    public void Genuine_lag_still_skips()
+    {
+        // The target read is TRUNCATED (UIA lag: the tail hasn't arrived);
+        // the lag loop catches this (tail-anchored) and skips.
+        var engine = "Hello world this is a tes";
+        var target = "Hello world "; // the read stopped before "this is a tes"
+        var decision = ContextSeedPolicy.Decide(engine, target, 12);
+        Assert.Equal(ContextSeedAction.Skip, decision.Action);
+    }
+
+    [Fact]
+    public void Caret_at_boundary_mid_buffer_still_seeds_empty()
+    {
+        // The pinned historical case: the trimmed target sentence is empty
+        // while the engine has output past the boundary — genuine re-anchor.
+        var engine = "Hello world. More"; // engine wrote past the period
+        var target = "Hello world. More text here";
+        var decision = ContextSeedPolicy.Decide(engine, target, 12); // just past the period
+        Assert.Equal(ContextSeedAction.Seed, decision.Action);
+    }
+}
