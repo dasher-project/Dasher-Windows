@@ -1191,7 +1191,7 @@ public partial class MainWindow : Window
         if (_vm is not { IsKeyboardMode: true }) return;
         Services.AnalyticsService.CaptureUiAction("ime_toolbar", "reanchor");
         KbLog("Manual re-anchor requested");
-        _ = SeedContextFromTargetAsync("manual re-anchor");
+        _ = SeedContextFromTargetAsync(ManualReanchorReason);
     }
 
     /// <summary>
@@ -1300,7 +1300,7 @@ public partial class MainWindow : Window
             // a MANUAL re-anchor is an explicit user command ("force a fresh
             // read + seed... wants certainty") — never gated (review loop 1
             // on #97: v2's every-reason gating would have betrayed it)
-            sameTargetWindow: _targetTracker.Current == _lastReadTarget && reason != "manual re-anchor",
+            sameTargetWindow: _targetTracker.Current == _lastReadTarget && reason != ManualReanchorReason,
             consecutiveDistrusts: _flapDistrustCount, lastDistrustedSource: _lastDistrustedSource);
         if (trust == Services.ContextSeedPolicy.ReadTrust.Distrust)
         {
@@ -1607,6 +1607,12 @@ public partial class MainWindow : Window
     }
 
     private int _contextSeedGeneration;
+
+    /// <summary>Seed reason for the mini-bar's manual re-anchor button.
+    /// Shared constant: the read-trust gate exempts this reason (an
+    /// explicit user command must never be gated) — a one-site rename would
+    /// silently disable the exemption (fails safe: reverts to gating).</summary>
+    private const string ManualReanchorReason = "manual re-anchor";
 
     /// <summary>Serialises direct-mode unit actions (review loop 1):
     /// incremented at every dispatch; a continuation that observes a newer

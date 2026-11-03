@@ -203,4 +203,19 @@ public class InjectionAndFlapGuardTests
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "win32", 5000, 5000, true, 2, "toplevel"));
     }
+
+    [Fact]
+    public void Trust_hysteresis_adopts_via_transient_garbage_rule_too()
+    {
+        // review loop 2: the hysteresis tail must be rule-agnostic — a
+        // GENUINELY empty new field (focus into an empty compose with a
+        // long baseline) distrusts as transient garbage, then adopts on
+        // the 3rd consistent read instead of freezing the old context
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 0, null));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 1, "element"));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 2, "element"));
+    }
 }
