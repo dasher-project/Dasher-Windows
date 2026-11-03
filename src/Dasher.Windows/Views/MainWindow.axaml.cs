@@ -1386,17 +1386,48 @@ public partial class MainWindow : Window
         // legitimately sits AHEAD of the deliberately-moved caret — the
         // target-lag guard in Decide() would wait for a catch-up that never
         // comes (the LEFT-arrow re-anchor miss, log-confirmed 2026-11-03).
-        // Truncate the engine text to the read caret so the comparison
-        // anchors at where the user actually is.
-        if (ownCaretMoveRecent && context.CaretUtf16 < engineFullText.Length)
+        // Map the FIELD caret into BUFFER coordinates (the buffer holds the
+        // sentence window from the last seed: buffer position = field caret
+        // minus the seeded window start — NOT the raw field caret, unless the
+        // window happened to start at 0) and truncate the engine text there
+        // so the comparison anchors at where the user actually is.
+        var bufferCaretIdx = -1;
+        if (ownCaretMoveRecent && _seededWindowStartUtf16 >= 0)
         {
-            engineFullText = engineFullText[..context.CaretUtf16];
-            KbLog($"Context seed ({reason}): own-caret-move window — engine text truncated to caret ({engineFullText.Length} chars) for compare");
+            bufferCaretIdx = Math.Clamp(context.CaretUtf16 - _seededWindowStartUtf16, 0, engineFullText.Length);
+            if (bufferCaretIdx < engineFullText.Length)
+            {
+                engineFullText = engineFullText[..bufferCaretIdx];
+                KbLog($"Context seed ({reason}): own-caret-move window — engine text truncated to caret (buffer idx {bufferCaretIdx}) for compare");
+            }
         }
         var decision = ContextSeedPolicy.Decide(engineFullText, context.Text, context.CaretUtf16);
         if (decision.Action == ContextSeedAction.Skip)
         {
-            KbLog($"Context seed ({reason}): {decision.Reason}");
+            // #103 completion: within the own-caret-move window, a sentence
+            // match still means the USER'S CARET MOVED — the engine's anchor
+            // sits at the buffer end (the old caret), not the new one. Move
+            // the offset instead of skipping: buffer-absolute is safe here
+            // because seeding is sentence-windowed (the buffer IS the seeded
+            // window plus subsequent output, and bufferCaretIdx above is its
+            // buffer-absolute index — the exact case the policy docs said
+            // set_offset was wrongly withheld for; the historical bug passed
+            // sentence-relative offsets into a multi-sentence buffer, which
+            // cannot happen with windowed seeding + the explicit index).
+            // Without this, an arrow WITHIN the sentence left the canvas
+            // anchored at the old position (the field-reported "arrows
+            // mostly don't re-anchor").
+            if (ownCaretMoveRecent && bufferCaretIdx >= 0 &&
+                decision.Reason.Contains("matching position"))
+            {
+                var moveBytes = NativeBridge.dasher_byte_offset_from_utf16(engineFullText, bufferCaretIdx);
+                NativeBridge.dasher_set_offset(_vm.Handle, moveBytes);
+                KbLog($"Context seed ({reason}): own-caret-move — sentence matched, engine offset moved to caret (buffer idx {bufferCaretIdx}, byte={moveBytes})");
+            }
+            else
+            {
+                KbLog($"Context seed ({reason}): {decision.Reason}");
+            }
             return;
         }
 
@@ -1408,6 +1439,10 @@ public partial class MainWindow : Window
         // 200 chars of a private email or message).
         KbLog($"Context seed ({reason}): {decision.Text.Length} of {context.Text.Length} chars, caret u16={decision.CaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, decision.Text, byteOffset);
+        // #103: remember where the seeded window starts (field-absolute) so
+        // later own-caret-move offsets can map the field caret into buffer
+        // coordinates: window start = caret minus the window's own length.
+        _seededWindowStartUtf16 = decision.CaretUtf16 - decision.Text.Length;
     }
 
 
@@ -1725,6 +1760,11 @@ public partial class MainWindow : Window
     /// caret-glitch guards stand down — the user asked for the move.</summary>
     private long _lastOwnCaretMoveInject;
     private const long OwnCaretMoveWindowMs = 2000;
+
+    /// <summary>#103: field-absolute start of the sentence window at the
+    /// last seed (buffer coordinates = field caret minus this). -1 = no seed
+    /// yet this session.</summary>
+    private int _seededWindowStartUtf16 = -1;
 
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
