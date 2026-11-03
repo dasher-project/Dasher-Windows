@@ -207,14 +207,18 @@ public class InjectionAndFlapGuardTests
         // every 3rd distrust, re-anchoring the canvas once per cycle. v3:
         // the armed adoption NEVER lands if the next read doesn't confirm
         // the same source at a similar length.
-        // armed for toplevel/11454; the next read flips BACK to element → no adoption
+        // armed for element/647; the next read is toplevel → no adoption
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 3, "toplevel",
                 pendingAdoptionSource: "element", pendingAdoptionLength: 647));
-        // armed but the confirming read's length drifted too far → no adoption
+        // armed for toplevel but the confirming read's length drifted too far → no adoption
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 3, "toplevel",
                 pendingAdoptionSource: "toplevel", pendingAdoptionLength: 290));
+        // boundary: drift of exactly 300 confirms
+        Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 3, "toplevel",
+                pendingAdoptionSource: "toplevel", pendingAdoptionLength: 11154));
     }
 
     [Fact]

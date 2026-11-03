@@ -1222,9 +1222,11 @@ public partial class MainWindow : Window
         // (#101) Quiet period after a distrust: the read churn behind
         // incoherent reads competes with the zoom loop (the field-reported
         // "constant tiny stutter while switching tasks"). Suppress further
-        // attempts briefly. The manual re-anchor bypasses — an explicit
-        // user command must always read.
+        // attempts briefly — same-window only (a genuine app switch is
+        // exempt: its first read is the highest-value one). The manual
+        // re-anchor always bypasses — an explicit user command must read.
         if (reason != ManualReanchorReason &&
+            _targetTracker.Current == _lastReadTarget &&
             Environment.TickCount64 < _distrustQuietUntil)
         {
             KbLog($"Context seed ({reason}): quiet period after distrust — skipping read");

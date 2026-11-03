@@ -87,6 +87,10 @@ public partial class DasherCanvas : Control
         // Drop the wall-clock baseline so the pause gap is not fed to the
         // engine as one huge time delta on resume.
         _lastWallMs = -1;
+        // #99 (review loop 1): a minimize while paused (Settings open) can
+        // kill the compositor chain; revive immediately on resume instead
+        // of waiting for the watchdog's first staleness tick.
+        EnsureFrameLoop();
     }
 
     public void Initialize(string dataDir, string userDir)
@@ -202,8 +206,14 @@ public partial class DasherCanvas : Control
         // the queued RAF; nothing re-arms on restore). A slow heartbeat
         // re-arms it via the staleness-gated EnsureFrameLoop — self-healing
         // without window events, and free when the loop is healthy.
-        _frameWatchdog ??= new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
-        _frameWatchdog.Tick += (s, e) => EnsureFrameLoop();
+        // Subscribe exactly once per timer (review loop 1: StartFrameLoop is
+        // reachable repeatedly in one canvas lifetime — Settings > Reset —
+        // and a bare `Tick +=` would stack handlers per reset).
+        if (_frameWatchdog == null)
+        {
+            _frameWatchdog = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+            _frameWatchdog.Tick += (s, e) => EnsureFrameLoop();
+        }
         _frameWatchdog.Start();
 
         // Generation token: a compositor callback queued before Shutdown()
@@ -260,7 +270,7 @@ public partial class DasherCanvas : Control
     /// double a healthy loop (a live chain delivers a frame every ~16ms; a
     /// kick while healthy would queue a second callback per vsync and grow
     /// the chain exponentially — the 750ms gate makes that impossible).</summary>
-    public void EnsureFrameLoop()
+    private void EnsureFrameLoop()
     {
         if (!_frameLoopRunning || _handle == IntPtr.Zero || _paused) return;
         if (Environment.TickCount64 - _lastFrameDeliveredAt < FrameStaleMs) return; // alive
@@ -516,6 +526,7 @@ public partial class DasherCanvas : Control
             _frameLoopRunning = false;
             _frameLoopGeneration++; // invalidate any still-queued compositor callback
             _fallbackTimer?.Stop();
+            _frameWatchdog?.Stop(); // review loop 1: don't tick a dead loop all session
             EngineFaultDetected?.Invoke(this, EventArgs.Empty);
             return;
         }
