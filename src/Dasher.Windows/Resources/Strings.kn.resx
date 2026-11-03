@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>ಎಲ್ಲಾ ಪಠ್ಯವನ್ನು ನಕಲಿಸಿ</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>ಗುರಿ ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ಆಯ್ಕೆಯನ್ನು ನಕಲಿಸಿ</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>ಗುರಿ ಆ್ಯಪ್‌ನಲ್ಲಿ ಆಯ್ಕೆ ಕತ್ತರಿಸಿ</value>
   </data>

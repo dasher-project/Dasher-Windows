@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>تمام متن را کپی کنید</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>کپی انتخاب در برنامه هدف</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>برش انتخاب در برنامه هدف</value>
   </data>

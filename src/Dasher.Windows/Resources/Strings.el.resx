@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Αντέγραψε όλο το κείμενο</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Αντιγράψτε την επιλογή στην εφαρμογή προορισμού</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Αποκοπή επιλογής στην εφαρμογή προορισμού</value>
   </data>

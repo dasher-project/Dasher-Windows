@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>എല്ലാ ടെക്സ്റ്റും പകർത്തുക</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>ടാർഗെറ്റ് ആപ്പിൽ തിരഞ്ഞെടുക്കൽ പകർത്തുക</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>ലക്ഷ്യ ആപ്പിൽ തിരഞ്ഞെടുപ്പ് മുറിക്കുക</value>
   </data>

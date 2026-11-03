@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>सभी पाठ कॉपी करें</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>लक्ष्य ऐप में चयन की प्रतिलिपि बनाएँ</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>लक्ष्य ऐप में चयन काटें</value>
   </data>

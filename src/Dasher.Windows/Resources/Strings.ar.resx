@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>انسخ كل النص</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>نسخ التحديد في التطبيق المستهدف</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>قص التحديد في التطبيق المستهدف</value>
   </data>

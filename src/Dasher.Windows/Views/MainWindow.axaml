@@ -549,8 +549,11 @@
             <Button x:Name="KbNewSession" Click="OnNewSession" ToolTip.Tip="{loc:Tr Key=new_session_tooltip}">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.FilePlus}" Size="18"/>
             </Button>
-            <!-- RFC 0015 clipboard bridge: act on the TARGET's selection -->
-            <Button x:Name="KbCopyBtn" Click="OnKbCopy" ToolTip.Tip="{loc:Tr Key=copy_all_clipboard}">
+            <!-- RFC 0015 clipboard bridge: act on the TARGET's selection
+                 (issue #95: Copy was the odd one out, copying the engine
+                 buffer; now matches its Cut/Paste siblings — the editor
+                 toolbar keeps the pane-copy affordances) -->
+            <Button x:Name="KbCopyBtn" Click="OnKbCopy" ToolTip.Tip="{loc:Tr Key=toolbar_copy_target_description}">
                 <LucideIcon Kind="{x:Static lucide:LucideIconKind.Copy}" Size="18"/>
             </Button>
             <Button Click="OnKbCut" ToolTip.Tip="{loc:Tr Key=toolbar_cut_description}">

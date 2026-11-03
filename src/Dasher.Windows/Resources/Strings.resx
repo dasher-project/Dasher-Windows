@@ -1015,6 +1015,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Copy all text</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Copy selection in target app</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Cut selection in target app</value>
   </data>

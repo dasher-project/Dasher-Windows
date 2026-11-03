@@ -1010,6 +1010,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Kopieer alle teks</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Kopieer seleksie in teikentoepassing</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Sny seleksie in teikenprogram</value>
   </data>

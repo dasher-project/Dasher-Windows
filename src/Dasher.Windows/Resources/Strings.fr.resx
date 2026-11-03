@@ -1011,6 +1011,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Copier tout le texte</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Copier la sélection dans l'application cible</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Couper la sélection dans l'application cible</value>
   </data>

@@ -1010,6 +1010,9 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Kopírovat veškerý text</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Zkopírujte výběr v cílové aplikaci</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Vyjmout výběr v cílové aplikaci</value>
   </data>

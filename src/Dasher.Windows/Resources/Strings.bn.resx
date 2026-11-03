@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>সকল লেখা কপি করুন</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>লক্ষ্য অ্যাপে নির্বাচন অনুলিপি করুন</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>টার্গেট অ্যাপে নির্বাচন কেটে দিন</value>
   </data>

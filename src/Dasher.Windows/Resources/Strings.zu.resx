@@ -1009,6 +1009,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Khopisha wonke umbhalo</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Kopisha okukhethiwe kuhlelo lokusebenza oluqondiwe</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Sika ukukhethwa kuhlelo lokusebenza oluqondiwe</value>
   </data>

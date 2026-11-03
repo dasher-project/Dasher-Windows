@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>تمام متن کاپی کریں</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>ٹارگٹ ایپ میں سلیکشن کاپی کریں۔</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>ٹارگٹ ایپ میں سلیکشن کاٹیں</value>
   </data>

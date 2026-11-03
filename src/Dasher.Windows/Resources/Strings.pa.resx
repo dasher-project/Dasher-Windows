@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>ਸਭ ਟੈਕਸਟ ਕਾਪੀ ਕਰੋ</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>ਟਾਰਗਿਟ ਐਪ ਵਿੱਚ ਚੋਣ ਨੂੰ ਕਾਪੀ ਕਰੋ</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>ਟਾਰਗੇਟ ਐਪ ਵਿੱਚ ਚੋਣ ਕੱਟੋ</value>
   </data>

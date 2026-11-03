@@ -83,46 +83,97 @@ public static class ContextSeedPolicy
     }
 
     /// <summary>
-    /// Read-trust gate (issue #91, log-confirmed 2026-11-02): new Outlook
-    /// (WebView2) exposes DIFFERENT text through the focused-element UIA path
-    /// (~670 chars, the compose field) and the top-level path (~11k chars,
-    /// the whole document). A caret-moved read that flaps to the OTHER source
-    /// with a large length discontinuity is reading a DIFFERENT FIELD —
-    /// seeding from it teleports the canvas (the huge "figure out where I
-    /// am" jumps). Non-caret-moved reads (focus/foreground change — a new
-    /// target is expected) are always accepted. When the SAME off-baseline
-    /// source is distrusted <see cref="FlapHysteresisLimit"/> times in a row
-    /// (adoption happens on the limit-th qualifying read), the switch looks
-    /// permanent (the element path stopped being offered) and the new source
-    /// is adopted rather than freezing the context forever.
+    /// Read-trust gate v2 (issues #91 + #97, field-confirmed 2026-11-02/03).
+    /// A re-seed is expensive for the user (canvas re-anchor); the gate
+    /// distrusts reads that describe a DIFFERENT reality than the baseline:
+    ///
+    ///  1. TARGET CHANGE: a read from a different window is always accepted
+    ///     (a new target is a new world — no gate).
+    ///  2. SOURCE FLAP: same window, different UIA source (element vs
+    ///     toplevel) with a large length discontinuity — new Outlook's
+    ///     compose field (~670 chars) vs whole document (~11k), the #91 case.
+    ///  3. SAME-SOURCE SWING: same window, same source, but the text length
+    ///     swings wildly (Word's focused element returning 14 / 887 / 13,280
+    ///     chars for the same document — the #97 Word storm). Either a big
+    ///     absolute delta or a >=4x ratio (relative swings on short texts).
+    ///  4. TRANSIENT GARBAGE: a very short read with the caret collapsed at
+    ///     the start against a long baseline (the 0/3/14-char reads) — UIA
+    ///     mid-transition noise, not a real context change.
+    ///
+    /// Distrust never lasts forever: after <see cref="FlapHysteresisLimit"/>
+    /// consecutive distrusts of the SAME source, the new state is adopted
+    /// (a permanent switch — e.g. a different document opened in the same
+    /// Word window — converges in ~3 reads instead of freezing the context).
     /// </summary>
     public static ReadTrust EvaluateReadTrust(
-        string? prevSource, int prevLength, string newSource, int newLength,
-        bool isCaretMovedReason, int consecutiveDistrusts, string? lastDistrustedSource)
+        string? prevSource, int prevLength,
+        string newSource, int newLength, int newCaret,
+        bool sameTargetWindow,
+        int consecutiveDistrusts, string? lastDistrustedSource)
     {
-        if (!isCaretMovedReason)
+        if (!sameTargetWindow)
+            return ReadTrust.Accept;               // genuinely different window
+        if (string.IsNullOrEmpty(prevSource))
+            return ReadTrust.Accept;               // no baseline yet
+
+        var distrust = false;
+
+        // (2) source flap with a large discontinuity
+        if (prevSource != newSource &&
+            Math.Abs(newLength - prevLength) > SourceFlapMinDiscontinuity)
+            distrust = true;
+
+        // (3) same-source wild swing: big absolute delta OR >=4x ratio —
+        // the ratio only applies when BOTH texts are substantial (>=50
+        // chars); tiny fields may legitimately empty (12→3 is a keystroke
+        // class change, not a swing)
+        if (!distrust)
+        {
+            var delta = Math.Abs(newLength - prevLength);
+            var ratioApplies = Math.Min(newLength, prevLength) >= SameSourceSwingRatioMinChars;
+            var ratio = prevLength > 0 ? Math.Max(newLength, prevLength) / (double)Math.Min(newLength, prevLength) : 1.0;
+            if (delta > SameSourceSwingMinChars || (ratioApplies && ratio >= SameSourceSwingRatio))
+                distrust = true;
+        }
+
+        // (4) transient garbage: tiny read, caret at the start, long baseline
+        if (!distrust &&
+            newLength < TransientReadMaxChars && newCaret <= TransientReadMaxCaret && prevLength > TransientBaselineMinChars)
+            distrust = true;
+
+        if (!distrust)
             return ReadTrust.Accept;
-        if (string.IsNullOrEmpty(prevSource) || prevSource == newSource)
-            return ReadTrust.Accept;
-        // A genuine target/field switch changes the text wholesale; a flap
-        // between two views of the SAME window shows up as a wild length
-        // discontinuity. The 668 ↔ 10,981 field case is ~16x either way.
-        if (Math.Abs(newLength - prevLength) <= SourceFlapMinDiscontinuity)
-            return ReadTrust.Accept;
+
         // consistency: only consecutive distrusts of the SAME source count
-        // toward adoption (a toplevel/win32 mix must not adopt whichever
-        // came third)
+        // toward adoption (an alternating mix adopts neither)
         var effective = lastDistrustedSource == newSource ? consecutiveDistrusts : 0;
         return effective + 1 >= FlapHysteresisLimit
             ? ReadTrust.AcceptAfterHysteresis
             : ReadTrust.Distrust;
     }
 
-    /// <summary>Length discontinuity (UTF-16 units) beyond which a
-    /// source-flapped read is treated as a different field rather than the
-    /// same field seen twice. Comfortably above any single-keystroke edit
-    /// or lag; far below the observed 10k-document flip.</summary>
+    /// <summary>Length discontinuity (UTF-16 units) for the source-flap case.
+    /// Comfortably above any keystroke or lag; far below the observed 10k
+    /// document flip.</summary>
     public const int SourceFlapMinDiscontinuity = 300;
+
+    /// <summary>Same-source swing thresholds (either trips): absolute delta
+    /// for large texts, ratio for short ones. Word storm observed: deltas of
+    /// 1k–12k and ratios up to 200x; typing moves the length by 1–2.</summary>
+    public const int SameSourceSwingMinChars = 1500;
+    public const double SameSourceSwingRatio = 4.0;
+
+    /// <summary>The ratio rule only applies when BOTH lengths are at least
+    /// this — below it, tiny fields legitimately swing (emptying a 12-char
+    /// field is a 4x ratio but not a context teleport).</summary>
+    public const int SameSourceSwingRatioMinChars = 50;
+
+    /// <summary>Transient-garbage shape: reads this short with the caret
+    /// collapsed this close to the start, against a baseline this long, are
+    /// UIA mid-transition noise (observed: 0/3/14-char reads, caret 0–3).</summary>
+    public const int TransientReadMaxChars = 20;
+    public const int TransientReadMaxCaret = 3;
+    public const int TransientBaselineMinChars = 50;
 
     /// <summary>Consecutive distrusts after which a consistent new source is
     /// adopted (permanent source switch — e.g. the element path stopped

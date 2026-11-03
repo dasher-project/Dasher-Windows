@@ -1285,30 +1285,31 @@ public partial class MainWindow : Window
             return;
         }
 
-        // READ-TRUST GATE (#91, log-confirmed): new Outlook exposes the
-        // compose field (~670 chars) through the focused-element path and
-        // the whole document (~11k) through the top-level path; a caret-
-        // moved read that flaps to the other source is a DIFFERENT FIELD —
-        // seeding it teleports the canvas. A target-window change clears
-        // the baseline (a new target is a new world); focus/foreground
-        // reads are exempt by reason; sustained distrusts adopt the new
-        // source (a permanent switch must not freeze the context).
-        if (_targetTracker.Current != _lastReadTarget)
-            _lastReadSource = null; // different window: the baseline means nothing
+        // READ-TRUST GATE v2 (#91 + #97, field-confirmed): distrust reads
+        // that describe a different reality than the baseline — source
+        // flaps, same-source wild swings, transient garbage reads — for
+        // EVERY reason when the target window is unchanged. (v1 exempted
+        // focus/foreground reasons; the #97 logs showed WebView2 internal
+        // focus churn carrying incoherent reads to seeds through exactly
+        // that exemption — "focus changed"/"foreground changed" within the
+        // same Outlook window. A genuinely different window is still exempt
+        // by the sameTargetWindow check.) Hysteresis adopts a consistent
+        // new state after FlapHysteresisLimit distrusts.
         var trust = Services.ContextSeedPolicy.EvaluateReadTrust(
-            _lastReadSource, _lastReadLength, context.Source, context.Text.Length,
-            reason == "caret moved", _flapDistrustCount, _lastDistrustedSource);
+            _lastReadSource, _lastReadLength, context.Source, context.Text.Length, context.CaretUtf16,
+            sameTargetWindow: _targetTracker.Current == _lastReadTarget,
+            consecutiveDistrusts: _flapDistrustCount, lastDistrustedSource: _lastDistrustedSource);
         if (trust == Services.ContextSeedPolicy.ReadTrust.Distrust)
         {
             _flapDistrustCount++;
             _lastDistrustedSource = context.Source;
-            KbLog($"Context seed ({reason}): read source flapped " +
-                  $"({_lastReadSource}/{_lastReadLength} chars → {context.Source}/{context.Text.Length} chars) " +
-                  $"— different field, keeping context (distrust #{_flapDistrustCount})");
+            KbLog($"Context seed ({reason}): incoherent read " +
+                  $"({_lastReadSource}/{_lastReadLength} chars → {context.Source}/{context.Text.Length} chars, caret {context.CaretUtf16}, same window) " +
+                  $"— keeping context (distrust #{_flapDistrustCount})");
             return; // baseline NOT updated: the flap must not become the new normal
         }
         if (trust == Services.ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis)
-            KbLog($"Context seed ({reason}): source switch looks PERMANENT ({_lastReadSource} → {context.Source}) — adopting");
+            KbLog($"Context seed ({reason}): state switch looks PERMANENT ({_lastReadSource}/{_lastReadLength} → {context.Source}/{context.Text.Length}) — adopting");
         _flapDistrustCount = 0;
         _lastDistrustedSource = null;
         _lastReadSource = context.Source;
@@ -1954,10 +1955,12 @@ public partial class MainWindow : Window
     {
         if (_vm == null || _vm.Handle == IntPtr.Zero) return;
         Services.AnalyticsService.CaptureUiAction("ime_toolbar", "copy");
-        // Copy ALL engine text via the system clipboard (v5 toolbar Copy).
-        var text = _vm.OutputText;
-        if (!string.IsNullOrEmpty(text))
-            SetClipboardText(text);
+        // Copy the TARGET's OS selection (Ctrl+C) — same contract as the
+        // strip's Cut/Paste chords and the RFC 0021 workflow (Select word →
+        // Copy). The old behaviour copied the engine's whole output buffer,
+        // which is not "what you selected" from the user's point of view
+        // (issue #95). Editor mode keeps its own pane-copy button.
+        SendCtrlChord(VK_KEY_C, "C");
     }
 
     private void OnKbCut(object? sender, RoutedEventArgs e)

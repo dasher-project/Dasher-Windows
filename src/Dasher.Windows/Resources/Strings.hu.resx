@@ -1010,6 +1010,9 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Másoljon minden szöveget</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Kijelölés másolása a célalkalmazásban</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Kivágás a célalkalmazásban</value>
   </data>

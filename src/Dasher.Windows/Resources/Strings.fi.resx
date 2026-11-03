@@ -1010,6 +1010,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Kopioi kaikki teksti</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Kopioi valinta kohdesovellukseen</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Leikkaa valinta kohdesovelluksessa</value>
   </data>

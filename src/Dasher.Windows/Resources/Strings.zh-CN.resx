@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>复制所有文本</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>复制目标应用程序中的选择</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>在目标应用中剪切所选内容</value>
   </data>
