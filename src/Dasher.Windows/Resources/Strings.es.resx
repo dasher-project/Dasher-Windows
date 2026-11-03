@@ -1010,6 +1010,9 @@ Puedes cambiar esta configuración en cualquier momento en Ajustes &gt; Privacid
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Copiar todo el texto</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Copiar selección en la aplicación de destino</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Cortar selección en la aplicación de destino</value>
   </data>

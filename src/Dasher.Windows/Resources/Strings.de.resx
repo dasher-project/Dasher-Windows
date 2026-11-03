@@ -1010,6 +1010,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Alles kopieren</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Auswahl in Ziel-App kopieren</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Auswahl in der Zielanwendung ausschneiden</value>
   </data>

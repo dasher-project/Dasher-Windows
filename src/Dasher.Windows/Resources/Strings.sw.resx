@@ -1009,6 +1009,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Nakili maandishi yote</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Nakili uteuzi katika programu lengwa</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Kata chaguo katika programu lengwa</value>
   </data>

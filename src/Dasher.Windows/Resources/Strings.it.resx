@@ -1010,6 +1010,9 @@ Puoi modificare questa impostazione in qualsiasi momento in Impostazioni &gt; Pr
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Copia tutto il testo</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Copia la selezione nell'app di destinazione</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Taglia selezione nell'app di destinazione</value>
   </data>

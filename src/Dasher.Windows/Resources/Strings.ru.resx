@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Копировать весь текст</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Копировать выделение в целевом приложении</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Вырезать выделение в целевом приложении</value>
   </data>

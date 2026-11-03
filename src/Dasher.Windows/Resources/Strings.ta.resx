@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>அனைத்து உரையையும் நகலெடு</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>இலக்கு பயன்பாட்டில் தேர்வை நகலெடுக்கவும்</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>இலக்கு பயன்பாட்டில் தேர்வை வெட்டு</value>
   </data>

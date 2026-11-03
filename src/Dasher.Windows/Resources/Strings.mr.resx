@@ -1009,6 +1009,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>सर्व मजकूर कॉपी करा</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>लक्ष्य ॲपमध्ये निवड कॉपी करा</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>लक्ष्य अॅपमध्ये निवड कापून टाका</value>
   </data>

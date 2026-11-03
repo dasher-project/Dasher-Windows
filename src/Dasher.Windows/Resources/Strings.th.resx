@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>คัดลอกข้อความทั้งหมด</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>คัดลอกการเลือกในแอปเป้าหมาย</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>ตัดการเลือกในแอปเป้าหมาย</value>
   </data>

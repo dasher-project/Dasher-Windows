@@ -79,6 +79,33 @@ public sealed class KeyboardTargetTracker : IDisposable
         Remove(); // idempotent
         _ourHwnd = ourHwnd;
 
+        // Initial-target seeding (#96, field-confirmed 2026-11-02): the
+        // hooks only fire on focus CHANGES, so after a restart the tracker
+        // had no target until the next focus event — ~10 seconds of dropped
+        // keystrokes while the user was already parked in their typing
+        // target ("no known target window" × N in the log, then the engine
+        // buffer desynced from the target). If the CURRENT foreground is
+        // already a non-Dasher window, that is where typing will land —
+        // record it up front. ONLY when no target is remembered yet:
+        // ResumeTargetTracking re-Installs after a picker dialog closes and
+        // relies on the remembered target (its TrySetForeground restores
+        // it) — capturing the dying dialog's HWND here would reintroduce
+        // the "dead dialog as target" bug that path fixed (review loop 1).
+        try
+        {
+            if (_target == IntPtr.Zero)
+            {
+                var fg = GetForegroundWindow();
+                var root = fg == IntPtr.Zero ? IntPtr.Zero : TargetWindowIdentity.RootOf(fg);
+                if (root != IntPtr.Zero && root != ourHwnd)
+                {
+                    _target = root;
+                    Log($"Install: initial target from foreground = 0x{root:X}");
+                }
+            }
+        }
+        catch { /* never block install on this optimisation */ }
+
         _proc = (hook, eventType, hwnd, idObject, idChild, thread, time) =>
         {
             if (hwnd == IntPtr.Zero) return;

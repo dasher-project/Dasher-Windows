@@ -89,64 +89,108 @@ public class InjectionAndFlapGuardTests
         }, plan.Select(e => (e.Vk, e.Up)).ToArray());
     }
 
-    // ── ContextSeedPolicy.EvaluateReadTrust (#91) ─────────────────────────
+    // ── ContextSeedPolicy.EvaluateReadTrust (#91 + #97) ───────────────────
 
     [Fact]
-    public void Trust_distrusts_the_observed_outlook_case()
+    public void Trust_distrusts_the_observed_outlook_source_flap()
     {
-        // focused compose field (668) → top-level document (10,981)
+        // focused compose field (647) → top-level document (11,454), same window
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 0, null));
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, newCaret: 4651, sameTargetWindow: true, consecutiveDistrusts: 0, lastDistrustedSource: null));
         // and back
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("toplevel", 10981, "element", 668, true, 0, null));
+            ContextSeedPolicy.EvaluateReadTrust("toplevel", 11454, "element", 647, 601, true, 0, null));
     }
 
     [Fact]
-    public void Trust_ignores_same_source_reads()
+    public void Trust_gates_focus_churn_inside_the_same_window()
     {
-        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "element", 5000, true, 0, null));
-        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("toplevel", 10981, "toplevel", 40, true, 0, null));
+        // THE #97 HOLE: the same flap arriving via a focus/foreground reason
+        // within the same window must be distrusted too (v1 exempted these;
+        // WebView2 focus churn carried incoherent reads straight to seeds)
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("toplevel", 11422, "element", 647, 601, sameTargetWindow: true, 0, null));
     }
 
     [Fact]
-    public void Trust_ignores_small_discontinuities_across_sources()
+    public void Trust_accepts_a_genuinely_different_window()
     {
-        // both views of the same short field: equivalent text, no teleport
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("element", 120, "toplevel", 130, true, 0, null));
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, sameTargetWindow: false, 0, null));
+    }
+
+    [Fact]
+    public void Trust_distrusts_the_observed_word_same_source_swings()
+    {
+        // #97 Word storm: same 'element' source, wildly different lengths
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 13280, 102, true, 0, null));   // big delta
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 13280, "element", 14, 14, true, 0, null));     // big collapse
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 198, "element", 1225, 883, true, 0, null));    // ratio-only case (6.2x)
+    }
+
+    [Fact]
+    public void Trust_distrusts_transient_garbage_reads()
+    {
+        // the 0/3/14-char reads with caret at the start against a long baseline
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 3, 3, true, 0, null));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 3045, "element", 14, 14, true, 0, null));
+        // same shape against a SHORT baseline is a plausible empty field — accept
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
+            ContextSeedPolicy.EvaluateReadTrust("element", 12, "element", 3, 3, true, 0, null));
+    }
+
+    [Fact]
+    public void Trust_distrusts_garbage_short_baseline_then_real_field()
+    {
+        // review loop 1 residual: a 14-char garbage read that slipped into
+        // the baseline (caret 14 > the transient guard's caret bar) must
+        // not let the REAL 887-char read straight through to a seed
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 14, "element", 887, 320, true, 0, null));
+        // while a genuine small-field growth stays accepted (delta < 100)
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
+            ContextSeedPolicy.EvaluateReadTrust("element", 12, "element", 48, 48, true, 0, null));
+    }
+
+    [Fact]
+    public void Trust_ignores_same_source_and_normal_growth()
+    {
+        // typing: length changes by a char or two, same source
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
+            ContextSeedPolicy.EvaluateReadTrust("element", 668, "element", 670, 670, true, 0, null));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
+            ContextSeedPolicy.EvaluateReadTrust("toplevel", 10981, "toplevel", 10983, 10983, true, 0, null));
+        // equivalent text through the other source (short field, no discontinuity)
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
+            ContextSeedPolicy.EvaluateReadTrust("element", 120, "toplevel", 130, 130, true, 0, null));
     }
 
     [Fact]
     public void Trust_ignores_first_read_no_baseline()
     {
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust(null, 0, "toplevel", 10981, true, 0, null));
+            ContextSeedPolicy.EvaluateReadTrust(null, 0, "toplevel", 10981, 10981, true, 0, null));
         Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("", 0, "element", 668, true, 0, null));
+            ContextSeedPolicy.EvaluateReadTrust("", 0, "element", 668, 668, true, 0, null));
     }
 
     [Fact]
-    public void Trust_accepts_focus_change_reads_unconditionally()
-    {
-        // a new target is expected on focus/foreground reasons — no gate
-        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, false, 0, null));
-    }
-
-    [Fact]
-    public void Trust_adopts_permanent_source_switch_after_hysteresis()
+    public void Trust_adopts_permanent_switch_after_hysteresis()
     {
         // distrust #1 and #2 (same distrusted source)...
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 0, null));
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 0, null));
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 1, "toplevel"));
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 1, "toplevel"));
         // ...then the switch is judged permanent: adopt on the 3rd qualifying read
+        // (a different document opened in the SAME Word window converges here)
         Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 2, "toplevel"));
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 2, "toplevel"));
     }
 
     [Fact]
@@ -155,8 +199,23 @@ public class InjectionAndFlapGuardTests
         // alternating off-baseline sources must not accumulate toward
         // adoption (toplevel/win32 mixing adopts neither)
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "toplevel", 10981, true, 2, "win32"));
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 2, "win32"));
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 668, "win32", 5000, true, 2, "toplevel"));
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "win32", 5000, 5000, true, 2, "toplevel"));
+    }
+
+    [Fact]
+    public void Trust_hysteresis_adopts_via_transient_garbage_rule_too()
+    {
+        // review loop 2: the hysteresis tail must be rule-agnostic — a
+        // GENUINELY empty new field (focus into an empty compose with a
+        // long baseline) distrusts as transient garbage, then adopts on
+        // the 3rd consistent read instead of freezing the old context
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 0, null));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 1, "element"));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 2, "element"));
     }
 }

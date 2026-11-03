@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>అన్ని టెక్స్ట్‌ను కాపీ చేయండి</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>లక్ష్య యాప్‌లో ఎంపికను కాపీ చేయండి</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>లక్ష్య యాప్‌లో ఎంపికను కట్ చేయండి</value>
   </data>

@@ -1010,6 +1010,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Kopieer alle tekst</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Kopieer selectie in doel-app</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Verwijder selectie in doelapp</value>
   </data>

@@ -1010,6 +1010,9 @@
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>તમમત ટેક્સ્ટ નકલ કરો</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>લક્ષ્ય એપ્લિકેશનમાં પસંદગીની નકલ કરો</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>ટાર્ગેટ એપમાં પસંદગી કાપો</value>
   </data>

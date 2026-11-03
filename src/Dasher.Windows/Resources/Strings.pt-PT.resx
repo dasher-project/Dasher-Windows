@@ -1010,6 +1010,9 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   <data name="toolbar_copy_description" xml:space="preserve">
     <value>Copiar todo o texto</value>
   </data>
+  <data name="toolbar_copy_target_description" xml:space="preserve">
+    <value>Copiar seleção na aplicação de destino</value>
+  </data>
   <data name="toolbar_cut_description" xml:space="preserve">
     <value>Cortar seleção na aplicação alvo</value>
   </data>
