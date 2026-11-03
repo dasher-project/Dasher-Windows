@@ -308,6 +308,24 @@ public partial class MainWindow : Window
             if (WindowState == WindowState.Normal && e.ClientSize.Width > 0)
                 _lastNormalSize = e.ClientSize;
         };
+
+        // #105 (field-confirmed: the v0.1.41 watchdog did not survive
+        // minimize→restore in the field): the WINDOW knows when it is
+        // restored — revive the canvas frame loop deterministically in the
+        // same event, instead of betting on the watchdog's staleness tick
+        // (which may never fire if the timer itself is throttled while
+        // minimized, or if the witness was refreshed at the minimize
+        // boundary by a still-pending RAF).
+        var lastState = WindowState;
+        PropertyChanged += (_, e) =>
+        {
+            if (e.Property.Name != nameof(WindowState)) return;
+            var wasMinimized = lastState == WindowState.Minimized;
+            lastState = WindowState;
+            if (wasMinimized && WindowState != WindowState.Minimized)
+                _canvas?.ForceFrameLoopRevive();
+        };
+        Activated += (_, _) => _canvas?.ForceFrameLoopRevive();
     }
 
     private void SeedTrackers(PixelPoint position, Size size)
@@ -1269,14 +1287,20 @@ public partial class MainWindow : Window
 
         if (_vm.Handle == IntPtr.Zero) return;
 
-        // CARET-GLITCH GUARD: Outlook's UIA returns caret position 0 or 1
-        // during rapid text transitions (insert → delete → insert), even when
-        // the user is typing at position 27+. The sentence window then reads
-        // from the WRONG position (beginning of text instead of the typing
-        // point) → bogus re-seed → canvas jumps. If the caret is near the
-        // START of a long text AND this is a selection-watch event (the user
-        // is mid-typing, not clicking), the read is glitched — skip.
-        if (reason == "caret moved" &&
+        // CARET-GLITCH GUARD (#104, field-confirmed 2026-11-03): Outlook's
+        // UIA returns caret position 0 or 1 during rapid text transitions —
+        // and those glitch reads arrive via EVERY reason (WebView2 focus
+        // churn carries them through focus/foreground, which the v1 guard
+        // did not cover: caret-0 via "caret moved" was skipped while caret-0
+        // via "foreground changed" was SEEDED — the 3-jump cluster
+        // mid-typing). The guard now covers every reason EXCEPT the manual
+        // re-anchor and our own caret moves (#103: after OUR arrow/Home/End,
+        // a position-0..2 read is a deliberate re-anchor, not a glitch).
+        var ownCaretMoveRecent = reason != ManualReanchorReason &&
+            _lastOwnCaretMoveInject != 0 &&
+            Environment.TickCount64 - _lastOwnCaretMoveInject < OwnCaretMoveWindowMs;
+        if (reason != ManualReanchorReason &&
+            !ownCaretMoveRecent &&
             context != null &&
             context.CaretUtf16 < 3 &&
             context.Text.Length > 10)
@@ -1358,6 +1382,17 @@ public partial class MainWindow : Window
         // engine is buffer-absolute, the trimmed sentence is not).
         var enginePtr = NativeBridge.dasher_get_output_text(_vm.Handle);
         var engineFullText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
+        // #103: after our own arrow/Home/End injection the engine buffer
+        // legitimately sits AHEAD of the deliberately-moved caret — the
+        // target-lag guard in Decide() would wait for a catch-up that never
+        // comes (the LEFT-arrow re-anchor miss, log-confirmed 2026-11-03).
+        // Truncate the engine text to the read caret so the comparison
+        // anchors at where the user actually is.
+        if (ownCaretMoveRecent && context.CaretUtf16 < engineFullText.Length)
+        {
+            engineFullText = engineFullText[..context.CaretUtf16];
+            KbLog($"Context seed ({reason}): own-caret-move window — engine text truncated to caret ({engineFullText.Length} chars) for compare");
+        }
         var decision = ContextSeedPolicy.Decide(engineFullText, context.Text, context.CaretUtf16);
         if (decision.Action == ContextSeedAction.Skip)
         {
@@ -1685,6 +1720,12 @@ public partial class MainWindow : Window
     private long _distrustQuietUntil;
     private const long DistrustQuietMs = 500;
 
+    /// <summary>#103: TickCount64 of our last arrow/Home/End injection (a
+    /// deliberate target-caret move). Within the window, the target-lag and
+    /// caret-glitch guards stand down — the user asked for the move.</summary>
+    private long _lastOwnCaretMoveInject;
+    private const long OwnCaretMoveWindowMs = 2000;
+
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
 
@@ -1776,6 +1817,11 @@ public partial class MainWindow : Window
     {
         var inputs = BuildShieldedVkInputs(HeldShieldModifiers(), new[] { vk },
             out var count, out var shieldCount);
+        // #103: our own arrow/Home/End injections move the TARGET caret on
+        // purpose — the guards that protect against UIA noise during typing
+        // (target-lag, caret-glitch) must not eat the resulting read.
+        if (vk is 0x25 or 0x26 or 0x27 or 0x28 or 0x24 or 0x23)
+            _lastOwnCaretMoveInject = Environment.TickCount64;
         var cbSize = Marshal.SizeOf<INPUT>();
         var sent = SendInput((uint)count, inputs, cbSize);
         if (shieldCount > 0) KbLog($"  modifier shield: released {shieldCount} held modifier(s) around VK 0x{vk:X} and restored");
