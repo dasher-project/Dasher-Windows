@@ -196,6 +196,15 @@ public partial class DasherCanvas : Control
         _frameLoopRunning = true;
         _lastWallMs = -1;
         _firstFrameRaised = false;
+        _lastFrameDeliveredAt = Environment.TickCount64;
+
+        // #99 watchdog: the compositor loop can die silently (minimize drops
+        // the queued RAF; nothing re-arms on restore). A slow heartbeat
+        // re-arms it via the staleness-gated EnsureFrameLoop — self-healing
+        // without window events, and free when the loop is healthy.
+        _frameWatchdog ??= new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+        _frameWatchdog.Tick += (s, e) => EnsureFrameLoop();
+        _frameWatchdog.Start();
 
         // Generation token: a compositor callback queued before Shutdown()
         // (e.g. Settings > Reset destroying and recreating the engine on this
@@ -235,8 +244,44 @@ public partial class DasherCanvas : Control
         }
 
         if (_frameLoopRunning && generation == _frameLoopGeneration)
+        {
+            _lastFrameDeliveredAt = Environment.TickCount64;
             TopLevel.GetTopLevel(this)?.RequestAnimationFrame(ts => OnAnimationFrame(ts, generation));
+        }
     }
+
+    /// <summary>Re-arm the compositor frame loop if it has stalled (#99,
+    /// field-confirmed 2026-11-03). The loop rides RequestAnimationFrame and
+    /// re-arms inside each delivered frame — when the window is MINIMIZED the
+    /// compositor stops delivering frames, and if the queued callback is
+    /// dropped rather than deferred (observed), the chain dies: on restore
+    /// the engine stops stepping, the canvas renders stale ("doesn't
+    /// predict", no crash) until restart. Staleness-gated so it can never
+    /// double a healthy loop (a live chain delivers a frame every ~16ms; a
+    /// kick while healthy would queue a second callback per vsync and grow
+    /// the chain exponentially — the 750ms gate makes that impossible).</summary>
+    public void EnsureFrameLoop()
+    {
+        if (!_frameLoopRunning || _handle == IntPtr.Zero || _paused) return;
+        if (Environment.TickCount64 - _lastFrameDeliveredAt < FrameStaleMs) return; // alive
+
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+        _lastFrameDeliveredAt = Environment.TickCount64; // one kick per stale window
+        topLevel.RequestAnimationFrame(ts => OnAnimationFrame(ts, _frameLoopGeneration));
+    }
+
+    /// <summary>How long without a delivered frame before the loop counts as
+    /// stalled (~45 missed vsyncs: minimize, sleep, compositor hiccup).</summary>
+    private const long FrameStaleMs = 750;
+
+    /// <summary>TickCount64 of the last delivered RAF callback — the
+    /// staleness witness (updated on every frame the compositor delivers).</summary>
+    private long _lastFrameDeliveredAt;
+
+    /// <summary>#99: slow heartbeat that revives the compositor frame loop
+    /// after a silent death (minimize/restore).</summary>
+    private DispatcherTimer? _frameWatchdog;
 
     private void StepFrame()
     {
@@ -262,6 +307,7 @@ public partial class DasherCanvas : Control
         _frameLoopRunning = false;
         _frameLoopGeneration++; // invalidate any still-queued compositor callback
         _fallbackTimer?.Stop();
+        _frameWatchdog?.Stop();
         if (_handle != IntPtr.Zero)
         {
             NativeBridge.dasher_destroy(_handle);

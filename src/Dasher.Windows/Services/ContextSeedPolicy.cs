@@ -63,7 +63,6 @@ public readonly record struct ContextSeedDecision
 /// </summary>
 public static class ContextSeedPolicy
 {
-    /// <summary>Verdict of the read-trust gate (issue #91).</summary>
     public enum ReadTrust
     {
         /// <summary>The read is trusted: use it (and adopt it as the new
@@ -75,41 +74,39 @@ public static class ContextSeedPolicy
         /// (baseline unchanged).</summary>
         Distrust,
 
-        /// <summary>Distrusted too many times consecutively with a consistent
-        /// new source: the switch is probably permanent (the element path
-        /// stopped being offered) — accept and reset the baseline rather
-        /// than freezing the context forever.</summary>
+        /// <summary>A PENDING adoption was confirmed by a stable repeat read
+        /// — adopt and reset the baseline.</summary>
         AcceptAfterHysteresis,
     }
 
     /// <summary>
-    /// Read-trust gate v2 (issues #91 + #97, field-confirmed 2026-11-02/03).
-    /// A re-seed is expensive for the user (canvas re-anchor); the gate
-    /// distrusts reads that describe a DIFFERENT reality than the baseline:
+    /// Read-trust gate v3 (issues #91 + #97 + #100, field-confirmed
+    /// 2026-11-02/03/04). A re-seed is expensive for the user (canvas
+    /// re-anchor); the gate distrusts reads that describe a DIFFERENT
+    /// reality than the baseline:
     ///
-    ///  1. TARGET CHANGE: a read from a different window is always accepted
-    ///     (a new target is a new world — no gate).
-    ///  2. SOURCE FLAP: same window, different UIA source (element vs
-    ///     toplevel) with a large length discontinuity — new Outlook's
-    ///     compose field (~670 chars) vs whole document (~11k), the #91 case.
-    ///  3. SAME-SOURCE SWING: same window, same source, but the text length
-    ///     swings wildly (Word's focused element returning 14 / 887 / 13,280
-    ///     chars for the same document — the #97 Word storm). Either a big
-    ///     absolute delta or a >=4x ratio (relative swings on short texts).
-    ///  4. TRANSIENT GARBAGE: a very short read with the caret collapsed at
-    ///     the start against a long baseline (the 0/3/14-char reads) — UIA
-    ///     mid-transition noise, not a real context change.
+    ///  1. TARGET CHANGE: a read from a different window is always accepted.
+    ///  2. SOURCE FLAP: same window, different UIA source with a large
+    ///     length discontinuity (the #91 case).
+    ///  3. SAME-SOURCE SWING: same window+source, wildly different length
+    ///     (the #97 Word storm).
+    ///  4. TRANSIENT GARBAGE: tiny read, caret at the start, long baseline.
     ///
-    /// Distrust never lasts forever: after <see cref="FlapHysteresisLimit"/>
-    /// consecutive distrusts of the SAME source, the new state is adopted
-    /// (a permanent switch — e.g. a different document opened in the same
-    /// Word window — converges in ~3 reads instead of freezing the context).
+    /// Recovery from sustained distrust (a permanent switch — a different
+    /// document in the same window) requires a STABILITY CONFIRMATION
+    /// (#100): after <see cref="FlapHysteresisLimit"/> distrusts of the same
+    /// source, the adoption is PENDING until the NEXT read confirms the same
+    /// source at a similar length. A flapping source that alternates never
+    /// confirms — v2 adopted every 3rd distrust, which re-anchored the
+    /// canvas once per flap cycle (~1 jump per long email, the field
+    /// report); v3 means a flap produces ZERO jumps.
     /// </summary>
     public static ReadTrust EvaluateReadTrust(
         string? prevSource, int prevLength,
         string newSource, int newLength, int newCaret,
         bool sameTargetWindow,
-        int consecutiveDistrusts, string? lastDistrustedSource)
+        int consecutiveDistrusts, string? lastDistrustedSource,
+        string? pendingAdoptionSource = null, int pendingAdoptionLength = -1)
     {
         if (!sameTargetWindow)
             return ReadTrust.Accept;               // genuinely different window
@@ -146,11 +143,20 @@ public static class ContextSeedPolicy
             return ReadTrust.Accept;
 
         // consistency: only consecutive distrusts of the SAME source count
-        // toward adoption (an alternating mix adopts neither)
         var effective = lastDistrustedSource == newSource ? consecutiveDistrusts : 0;
-        return effective + 1 >= FlapHysteresisLimit
-            ? ReadTrust.AcceptAfterHysteresis
-            : ReadTrust.Distrust;
+
+        // (#100) stability confirmation: reaching the threshold ARMS the
+        // adoption; it lands only when the next read confirms the same
+        // source at a similar length. A flip back to the baseline before
+        // confirmation leaves the adoption disarmed (the caller's pending
+        // state is simply never confirmed).
+        if (effective + 1 >= FlapHysteresisLimit)
+        {
+            var confirmsPending = pendingAdoptionSource == newSource &&
+                                  Math.Abs(newLength - pendingAdoptionLength) <= PendingAdoptionMaxLengthDrift;
+            return confirmsPending ? ReadTrust.AcceptAfterHysteresis : ReadTrust.Distrust;
+        }
+        return ReadTrust.Distrust;
     }
 
     /// <summary>Length discontinuity (UTF-16 units) for the source-flap case.
@@ -181,10 +187,14 @@ public static class ContextSeedPolicy
     public const int TransientReadMaxCaret = 3;
     public const int TransientBaselineMinChars = 50;
 
-    /// <summary>Consecutive distrusts after which a consistent new source is
-    /// adopted (permanent source switch — e.g. the element path stopped
-    /// being offered mid-session — must not freeze the context forever).</summary>
+    /// <summary>Consecutive distrusts (of the same source) after which the
+    /// adoption becomes PENDING — it lands on the next confirming read (#100).</summary>
     public const int FlapHysteresisLimit = 3;
+
+    /// <summary>Maximum length drift between the arming distrust read and
+    /// the confirming read for the adoption to land (a stable state repeats
+    /// at a similar length; a flap re-reads a different field each time).</summary>
+    public const int PendingAdoptionMaxLengthDrift = 300;
 
     /// <summary>
     /// Maximum full-text lag (UTF-16 code units, after normalisation) still
