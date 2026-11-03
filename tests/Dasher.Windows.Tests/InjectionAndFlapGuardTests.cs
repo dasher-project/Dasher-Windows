@@ -182,15 +182,61 @@ public class InjectionAndFlapGuardTests
     [Fact]
     public void Trust_adopts_permanent_switch_after_hysteresis()
     {
-        // distrust #1 and #2 (same distrusted source)...
+        // distrust #1 and #2 (same distrusted source)... at #3 the threshold
+        // ARMS the adoption (no pending recorded yet — v3 confirmation not
+        // attempted); the ARMED state (recorded by the caller from #3's
+        // read) must then be CONFIRMED by the next stable read
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 0, null));
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 1, "toplevel"));
-        // ...then the switch is judged permanent: adopt on the 3rd qualifying read
-        // (a different document opened in the SAME Word window converges here)
-        Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
+        // threshold reached but nothing armed yet → still distrust
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 2, "toplevel"));
+        // the caller armed (toplevel/11454) from that read; the NEXT read
+        // confirming the same state → adopt
+        Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 3, "toplevel",
+                pendingAdoptionSource: "toplevel", pendingAdoptionLength: 11454));
+    }
+
+    [Fact]
+    public void Trust_adoption_requires_stability_not_just_count()
+    {
+        // #100 — the field-reported ping-pong: a sustained flap adopted
+        // every 3rd distrust, re-anchoring the canvas once per cycle. v3:
+        // the armed adoption NEVER lands if the next read doesn't confirm
+        // the same source at a similar length.
+        // armed for element/647; the next read is toplevel → no adoption
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 3, "toplevel",
+                pendingAdoptionSource: "element", pendingAdoptionLength: 647));
+        // armed for toplevel but the confirming read's length drifted too far → no adoption
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 3, "toplevel",
+                pendingAdoptionSource: "toplevel", pendingAdoptionLength: 290));
+        // boundary: drift of exactly 300 confirms
+        Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 3, "toplevel",
+                pendingAdoptionSource: "toplevel", pendingAdoptionLength: 11154));
+    }
+
+    [Fact]
+    public void Trust_hysteresis_adopts_via_transient_garbage_rule_too()
+    {
+        // the hysteresis tail is rule-agnostic — a GENUINELY empty new
+        // field (focus into an empty compose with a long baseline)
+        // distrusts as transient garbage, then arms, then adopts on the
+        // confirming read instead of freezing the old context
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 0, null));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 1, "element"));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 2, "element"));
+        Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
+            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 3, "element",
+                pendingAdoptionSource: "element", pendingAdoptionLength: 0));
     }
 
     [Fact]
@@ -202,20 +248,5 @@ public class InjectionAndFlapGuardTests
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "toplevel", 11454, 4651, true, 2, "win32"));
         Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
             ContextSeedPolicy.EvaluateReadTrust("element", 647, "win32", 5000, 5000, true, 2, "toplevel"));
-    }
-
-    [Fact]
-    public void Trust_hysteresis_adopts_via_transient_garbage_rule_too()
-    {
-        // review loop 2: the hysteresis tail must be rule-agnostic — a
-        // GENUINELY empty new field (focus into an empty compose with a
-        // long baseline) distrusts as transient garbage, then adopts on
-        // the 3rd consistent read instead of freezing the old context
-        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 0, null));
-        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
-            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 1, "element"));
-        Assert.Equal(ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis,
-            ContextSeedPolicy.EvaluateReadTrust("element", 647, "element", 0, 0, true, 2, "element"));
     }
 }

@@ -1219,6 +1219,20 @@ public partial class MainWindow : Window
         await Task.Delay(500); // let the target's caret settle AND the user finish their word
         if (generation != _contextSeedGeneration) return; // superseded
 
+        // (#101) Quiet period after a distrust: the read churn behind
+        // incoherent reads competes with the zoom loop (the field-reported
+        // "constant tiny stutter while switching tasks"). Suppress further
+        // attempts briefly — same-window only (a genuine app switch is
+        // exempt: its first read is the highest-value one). The manual
+        // re-anchor always bypasses — an explicit user command must read.
+        if (reason != ManualReanchorReason &&
+            _targetTracker.Current == _lastReadTarget &&
+            Environment.TickCount64 < _distrustQuietUntil)
+        {
+            KbLog($"Context seed ({reason}): quiet period after distrust — skipping read");
+            return;
+        }
+
         // Paragraph-settle guard (Nov 2026 field evidence): our own VK_RETURN
         // makes Outlook rewrite the paragraph mark and relocate its caret over
         // the next ~second; reads in that window legitimately differ from the
@@ -1301,20 +1315,37 @@ public partial class MainWindow : Window
             // read + seed... wants certainty") — never gated (review loop 1
             // on #97: v2's every-reason gating would have betrayed it)
             sameTargetWindow: _targetTracker.Current == _lastReadTarget && reason != ManualReanchorReason,
-            consecutiveDistrusts: _flapDistrustCount, lastDistrustedSource: _lastDistrustedSource);
+            consecutiveDistrusts: _flapDistrustCount, lastDistrustedSource: _lastDistrustedSource,
+            pendingAdoptionSource: _pendingAdoptionSource, pendingAdoptionLength: _pendingAdoptionLength);
         if (trust == Services.ContextSeedPolicy.ReadTrust.Distrust)
         {
             _flapDistrustCount++;
             _lastDistrustedSource = context.Source;
+            // (#100) arming: reaching the threshold records the pending state;
+            // the NEXT read must confirm the same source at a similar length
+            // before the adoption lands. A flap never confirms.
+            if (_flapDistrustCount >= Services.ContextSeedPolicy.FlapHysteresisLimit)
+            {
+                _pendingAdoptionSource = context.Source;
+                _pendingAdoptionLength = context.Text.Length;
+            }
+            // (#101) quiet period: the churn that produces incoherent reads
+            // also fires a fresh read attempt per event — while rejected,
+            // they still cost a background UIA round-trip and compete with
+            // the zoom loop (the field-reported "constant tiny stutter
+            // while switching tasks"). Suppress further attempts briefly.
+            _distrustQuietUntil = Environment.TickCount64 + DistrustQuietMs;
             KbLog($"Context seed ({reason}): incoherent read " +
                   $"({_lastReadSource}/{_lastReadLength} chars → {context.Source}/{context.Text.Length} chars, caret {context.CaretUtf16}, same window) " +
-                  $"— keeping context (distrust #{_flapDistrustCount})");
+                  $"— keeping context (distrust #{_flapDistrustCount}, quiet {DistrustQuietMs}ms)");
             return; // baseline NOT updated: the flap must not become the new normal
         }
         if (trust == Services.ContextSeedPolicy.ReadTrust.AcceptAfterHysteresis)
-            KbLog($"Context seed ({reason}): state switch looks PERMANENT ({_lastReadSource}/{_lastReadLength} → {context.Source}/{context.Text.Length}) — adopting");
+            KbLog($"Context seed ({reason}): state switch CONFIRMED stable ({_lastReadSource}/{_lastReadLength} → {context.Source}/{context.Text.Length}) — adopting");
         _flapDistrustCount = 0;
         _lastDistrustedSource = null;
+        _pendingAdoptionSource = null;
+        _pendingAdoptionLength = -1;
         _lastReadSource = context.Source;
         _lastReadLength = context.Text.Length;
         _lastReadTarget = _targetTracker.Current;
@@ -1641,6 +1672,18 @@ public partial class MainWindow : Window
     /// ContextSeedPolicy.FlapHysteresisLimit-th qualifying read).</summary>
     private int _flapDistrustCount;
     private string? _lastDistrustedSource;
+
+    /// <summary>#100: the ARMED adoption (source + length of the
+    /// threshold-crossing read) — lands only if the next read confirms
+    /// the same state (same source, similar length).</summary>
+    private string? _pendingAdoptionSource;
+    private int _pendingAdoptionLength = -1;
+
+    /// <summary>#101: suppress read attempts until this TickCount64 (set
+    /// after a distrust — the churn costs a UIA round-trip per event and
+    /// competes with the zoom loop). Manual re-anchor always bypasses.</summary>
+    private long _distrustQuietUntil;
+    private const long DistrustQuietMs = 500;
 
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
