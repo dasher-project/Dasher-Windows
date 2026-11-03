@@ -124,13 +124,14 @@ public static class ContextSeedPolicy
             distrust = true;
 
         // (3) same-source wild swing: big absolute delta OR >=4x ratio —
-        // the ratio only applies when BOTH texts are substantial (>=50
-        // chars); tiny fields may legitimately empty (12→3 is a keystroke
-        // class change, not a swing)
+        // the ratio applies when BOTH texts are substantial (>=50 chars),
+        // OR when the delta is beyond typo scale (>100: a garbage short
+        // baseline like 14 chars reading the real 887-char field back)
         if (!distrust)
         {
             var delta = Math.Abs(newLength - prevLength);
-            var ratioApplies = Math.Min(newLength, prevLength) >= SameSourceSwingRatioMinChars;
+            var ratioApplies = Math.Min(newLength, prevLength) >= SameSourceSwingRatioMinChars
+                               || delta > SameSourceSwingRatioMinDelta;
             var ratio = prevLength > 0 ? Math.Max(newLength, prevLength) / (double)Math.Min(newLength, prevLength) : 1.0;
             if (delta > SameSourceSwingMinChars || (ratioApplies && ratio >= SameSourceSwingRatio))
                 distrust = true;
@@ -167,6 +168,11 @@ public static class ContextSeedPolicy
     /// this — below it, tiny fields legitimately swing (emptying a 12-char
     /// field is a 4x ratio but not a context teleport).</summary>
     public const int SameSourceSwingRatioMinChars = 50;
+
+    /// <summary>Below the substantial-text bar, a ratio still counts when
+    /// the delta exceeds typo scale — a garbage short read (14 chars)
+    /// followed by the real field (887) must distrust, not seed.</summary>
+    public const int SameSourceSwingRatioMinDelta = 100;
 
     /// <summary>Transient-garbage shape: reads this short with the caret
     /// collapsed this close to the start, against a baseline this long, are

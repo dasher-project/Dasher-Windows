@@ -86,15 +86,22 @@ public sealed class KeyboardTargetTracker : IDisposable
         // target ("no known target window" × N in the log, then the engine
         // buffer desynced from the target). If the CURRENT foreground is
         // already a non-Dasher window, that is where typing will land —
-        // record it up front.
+        // record it up front. ONLY when no target is remembered yet:
+        // ResumeTargetTracking re-Installs after a picker dialog closes and
+        // relies on the remembered target (its TrySetForeground restores
+        // it) — capturing the dying dialog's HWND here would reintroduce
+        // the "dead dialog as target" bug that path fixed (review loop 1).
         try
         {
-            var fg = GetForegroundWindow();
-            var root = fg == IntPtr.Zero ? IntPtr.Zero : TargetWindowIdentity.RootOf(fg);
-            if (root != IntPtr.Zero && root != ourHwnd)
+            if (_target == IntPtr.Zero)
             {
-                _target = root;
-                Log($"Install: initial target from foreground = 0x{root:X}");
+                var fg = GetForegroundWindow();
+                var root = fg == IntPtr.Zero ? IntPtr.Zero : TargetWindowIdentity.RootOf(fg);
+                if (root != IntPtr.Zero && root != ourHwnd)
+                {
+                    _target = root;
+                    Log($"Install: initial target from foreground = 0x{root:X}");
+                }
             }
         }
         catch { /* never block install on this optimisation */ }

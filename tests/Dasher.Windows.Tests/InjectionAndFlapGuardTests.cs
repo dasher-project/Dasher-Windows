@@ -145,6 +145,19 @@ public class InjectionAndFlapGuardTests
     }
 
     [Fact]
+    public void Trust_distrusts_garbage_short_baseline_then_real_field()
+    {
+        // review loop 1 residual: a 14-char garbage read that slipped into
+        // the baseline (caret 14 > the transient guard's caret bar) must
+        // not let the REAL 887-char read straight through to a seed
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Distrust,
+            ContextSeedPolicy.EvaluateReadTrust("element", 14, "element", 887, 320, true, 0, null));
+        // while a genuine small-field growth stays accepted (delta < 100)
+        Assert.Equal(ContextSeedPolicy.ReadTrust.Accept,
+            ContextSeedPolicy.EvaluateReadTrust("element", 12, "element", 48, 48, true, 0, null));
+    }
+
+    [Fact]
     public void Trust_ignores_same_source_and_normal_growth()
     {
         // typing: length changes by a char or two, same source

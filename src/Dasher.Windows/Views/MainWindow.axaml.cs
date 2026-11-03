@@ -1297,7 +1297,10 @@ public partial class MainWindow : Window
         // new state after FlapHysteresisLimit distrusts.
         var trust = Services.ContextSeedPolicy.EvaluateReadTrust(
             _lastReadSource, _lastReadLength, context.Source, context.Text.Length, context.CaretUtf16,
-            sameTargetWindow: _targetTracker.Current == _lastReadTarget,
+            // a MANUAL re-anchor is an explicit user command ("force a fresh
+            // read + seed... wants certainty") — never gated (review loop 1
+            // on #97: v2's every-reason gating would have betrayed it)
+            sameTargetWindow: _targetTracker.Current == _lastReadTarget && reason != "manual re-anchor",
             consecutiveDistrusts: _flapDistrustCount, lastDistrustedSource: _lastDistrustedSource);
         if (trust == Services.ContextSeedPolicy.ReadTrust.Distrust)
         {
