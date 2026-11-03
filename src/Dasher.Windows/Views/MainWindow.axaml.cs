@@ -2038,6 +2038,9 @@ public partial class MainWindow : Window
         if (text == box.Text) return;
         box.Text = text;
         box.CaretIndex = caret;
+        // Same focus issue as EditorMoveCaret: keep the caret visible after
+        // a strip-button press.
+        box.Focus();
     }
 
     /// <summary>Caret move in the editor pane; the CaretIndexProperty handler
@@ -2048,6 +2051,11 @@ public partial class MainWindow : Window
         var box = MessageArea;
         if (box == null) return;
         box.CaretIndex = Services.EditorKeyActions.MoveCaret(box.Text ?? "", box.CaretIndex, delta);
+        // The strip button took focus off the pane — Avalonia hides the
+        // caret in an unfocused TextBox, so the move is invisible until the
+        // user clicks back in (field report: "caret doesn't move in the
+        // writing area but the canvas does"). Refocus so the caret shows.
+        box.Focus();
     }
 
     /// <summary>
