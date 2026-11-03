@@ -1427,6 +1427,26 @@ public partial class MainWindow : Window
                 NativeBridge.dasher_set_offset(_vm.Handle, moveBytes);
                 KbLog($"Context seed ({reason}): own-caret-move — sentence matched, engine offset moved to caret (buffer idx {bufferCaretIdx}, byte={moveBytes})");
             }
+            else if (decision.Reason.Contains("matching position") &&
+                     _seededWindowStartUtf16 >= 0)
+            {
+                // The same anchor-follow for DELIBERATE caret moves we didn't
+                // inject (mouse clicks in the target — the #103 gap: the
+                // own-caret-move window only opens for OUR arrows). A mouse
+                // click within the current sentence passes every guard, the
+                // compare says "already there", and the canvas stays anchored
+                // at the old position — the field-reported "SOMETIMES cursor
+                // movement doesn't update the canvas, it just misses it".
+                // Same coordinate math as above, guarded to same-window.
+                var clickBufferIdx = Math.Clamp(
+                    context.CaretUtf16 - _seededWindowStartUtf16, 0, engineFullText.Length);
+                var clickBytes = NativeBridge.dasher_byte_offset_from_utf16(engineFullText, clickBufferIdx);
+                if (clickBytes != NativeBridge.dasher_get_offset(_vm.Handle))
+                {
+                    NativeBridge.dasher_set_offset(_vm.Handle, clickBytes);
+                    KbLog($"Context seed ({reason}): sentence matched, engine offset followed caret click (buffer idx {clickBufferIdx}, byte={clickBytes})");
+                }
+            }
             else
             {
                 KbLog($"Context seed ({reason}): {decision.Reason}");
