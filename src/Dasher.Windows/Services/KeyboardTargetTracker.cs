@@ -125,16 +125,16 @@ public sealed class KeyboardTargetTracker : IDisposable
                 {
                     _target = root;
                     Log($"Install: initial target from foreground = 0x{root:X}");
+                    Raise("typing into new target"); // seed the canvas immediately
                 }
                 else if (root == ourHwnd)
                 {
-                    // foreground is Dasher (fresh launch): try the persisted
-                    // target from the previous session
                     var remembered = TargetWindowIdentity.RootOf(_rememberedTarget);
                     if (remembered != IntPtr.Zero && remembered != ourHwnd && IsWindow(remembered))
                     {
                         _target = remembered;
                         Log($"Install: restored remembered target = 0x{remembered:X}");
+                        Raise("typing into new target"); // seed the canvas immediately
                     }
                 }
             }
