@@ -11,6 +11,12 @@ public class AccessConfiguration
     public string EyeTrackerType { get; set; } = "WindowsNative";
     public int UdpPort { get; set; } = 5555;
 
+    /// <summary>#96-launch: the last keyboard-mode target window handle from
+    /// the previous session. At Install time, if the foreground is Dasher
+    /// (fresh launch), the tracker bridges to this target if it still exists
+    /// — killing the "no known target window" dead period.</summary>
+    public long LastTargetHwnd { get; set; }
+
     // ── Gaze filter (transit zoom fix; Juan's Tobii PCEye + TD Control) ────
 
     /// <summary>Minimum px movement before sending (0 = always send).</summary>

@@ -435,8 +435,18 @@ public partial class MainWindow : Window
         {
             if (_pickerSessionActive) return; // a picker dialog, not the user's target
             ArmSelectionWatch();
+            // #96-launch: persist the target so the next session can bridge
+            var settings = AccessConfiguration.Load();
+            settings.LastTargetHwnd = _targetTracker.Current.ToInt64();
+            settings.Save();
             _ = SeedContextFromTargetAsync(reason);
         };
+
+        // #96-launch: seed the tracker with the previous session's target
+        // (validated at Install time — stale HWNDs are rejected by IsWindow)
+        var lastTarget = AccessConfiguration.Load().LastTargetHwnd;
+        if (lastTarget != 0)
+            _targetTracker.SetRememberedTarget(new IntPtr(lastTarget));
 
         // Native pickers (training import/export, Open, Save) coordinate
         // through PickerSession: window styles normalized, target tracking

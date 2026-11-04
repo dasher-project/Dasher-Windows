@@ -30,6 +30,13 @@ public sealed class KeyboardTargetTracker : IDisposable
     /// <summary>The rooted HWND of the tracked target window.</summary>
     public IntPtr Current => _target;
 
+    /// <summary>#96-launch: set the remembered target from the previous
+    /// session's persisted settings (the caller loads it from disk). The
+    /// tracker uses it at Install time when the foreground is Dasher itself
+    /// (fresh launch) — bridging to the user's typing target without
+    /// waiting for the first focus event.</summary>
+    public void SetRememberedTarget(IntPtr target) => _rememberedTarget = target;
+
     /// <summary>
     /// True when the tracked target is still the foreground window (or the
     /// foreground is unknown/transient and cannot be judged). Call this at
@@ -52,6 +59,14 @@ public sealed class KeyboardTargetTracker : IDisposable
     /// <summary>Raised on the UI thread with a diagnostic reason.</summary>
     public event Action<string>? TargetChanged;
 
+    /// <summary>#96-launch: the last target from the previous session,
+    /// persisted so a fresh launch with Dasher as foreground can bridge to
+    /// the user's typing target without waiting for a focus event.</summary>
+    private IntPtr _rememberedTarget;
+
+    [DllImport("user32.dll")]
+    private static extern bool IsWindow(IntPtr hWnd);
+
     /// <summary>
     /// Record the currently-foreground window as the target (mode entry,
     /// Deactivated fallback). No-op for our own window or when foreground
@@ -66,6 +81,7 @@ public sealed class KeyboardTargetTracker : IDisposable
 
         if (root == _target) return false;
         _target = root;
+        _rememberedTarget = root; // #96-launch: persist for next session
         Log($"Record: target = 0x{root:X}");
         return true;
     }
@@ -91,6 +107,14 @@ public sealed class KeyboardTargetTracker : IDisposable
         // relies on the remembered target (its TrySetForeground restores
         // it) — capturing the dying dialog's HWND here would reintroduce
         // the "dead dialog as target" bug that path fixed (review loop 1).
+        //
+        // #96-launch variant (v0.1.42 field-confirmed 2026-11-04): when the
+        // foreground IS Dasher (fresh launch — the user just started the
+        // app), the capture skips — and the v0.1.42 log showed the user
+        // zooming into a targetless tracker for 27 seconds ("no known
+        // target window!" on every insert). The remembered target from the
+        // previous session bridges the gap: if the foreground is Dasher but
+        // we have a persisted target that still exists, use it.
         try
         {
             if (_target == IntPtr.Zero)
@@ -101,6 +125,17 @@ public sealed class KeyboardTargetTracker : IDisposable
                 {
                     _target = root;
                     Log($"Install: initial target from foreground = 0x{root:X}");
+                }
+                else if (root == ourHwnd)
+                {
+                    // foreground is Dasher (fresh launch): try the persisted
+                    // target from the previous session
+                    var remembered = TargetWindowIdentity.RootOf(_rememberedTarget);
+                    if (remembered != IntPtr.Zero && remembered != ourHwnd && IsWindow(remembered))
+                    {
+                        _target = remembered;
+                        Log($"Install: restored remembered target = 0x{remembered:X}");
+                    }
                 }
             }
         }
