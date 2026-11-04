@@ -67,6 +67,9 @@ public sealed class KeyboardTargetTracker : IDisposable
     [DllImport("user32.dll")]
     private static extern bool IsWindow(IntPtr hWnd);
 
+    [DllImport("user32.dll")]
+    private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, IntPtr dwExtraInfo);
+
     /// <summary>
     /// Record the currently-foreground window as the target (mode entry,
     /// Deactivated fallback). No-op for our own window or when foreground
@@ -275,6 +278,11 @@ public sealed class KeyboardTargetTracker : IDisposable
             {
                 Log("  foreground is target, tracking it");
             }
+            if (_switchFailStreak > 0)
+            {
+                Log("  → fast path hit — switch fail streak reset");
+                _switchFailStreak = 0;
+            }
             return true;
         }
 
@@ -314,11 +322,38 @@ public sealed class KeyboardTargetTracker : IDisposable
             return false;
         }
 
+        // #108 backoff: repeated switch failures mean Windows won't let us
+        // transfer foreground right now. Stop retrying every keystroke (the
+        // 150ms Join per attempt is the visible "canvas stuttering") and
+        // wait for the user to click into the target (which fires a focus
+        // event, lands on the fast path, and resets the streak naturally).
+        if (_switchFailStreak >= SwitchFailStreakLimit &&
+            Environment.TickCount64 < _switchBackoffUntil)
+        {
+            Volatile.Write(ref _escalationBusy, 0); // release the flag we just took
+            Log("  → switch backoff (recent failures) — skipping injection, click into the target to resume");
+            return false;
+        }
+
         var escalation = new Thread(() =>
         {
             try
             {
                 var attached = AttachThreadInput(ourThread, targetThread, true);
+                if (!attached)
+                {
+                    Log("  → AttachThreadInput failed — trying SetForegroundWindow alone");
+                }
+                // Foreground-lock unlock (the classic Windows workaround): a
+                // synthetic ALT press tells Windows "the user interacted with
+                // this process", granting foreground-transfer permission.
+                // Without it, SetForegroundWindow returns TRUE while the
+                // switch silently doesn't happen (the #106 verification
+                // catches this, but the switch then NEVER lands — the
+                // field-reported "every keystroke skipped for 6+ seconds").
+                keybd_event(0x12 /* VK_MENU */, 0, 0, IntPtr.Zero);
+                keybd_event(0x12, 0, 2 /* KEYEVENTF_KEYUP */, IntPtr.Zero);
+
                 var set = SetForegroundWindow(_target);
                 AttachThreadInput(ourThread, targetThread, false);
                 Log($"  → AttachThreadInput={attached} SetForegroundWindow={set}");
@@ -356,7 +391,17 @@ public sealed class KeyboardTargetTracker : IDisposable
         // return value (it lies about async switches).
         var landed = GetForegroundWindow() == _target;
         if (!landed)
-            Log("  → handshake completed but foreground is not the target — skipping injection this event");
+        {
+            _switchFailStreak++;
+            if (_switchFailStreak >= SwitchFailStreakLimit)
+                _switchBackoffUntil = Environment.TickCount64 + SwitchBackoffMs;
+            Log($"  → handshake completed but foreground is not the target (fail #{_switchFailStreak}) — skipping injection this event");
+        }
+        else
+        {
+            if (_switchFailStreak > 0) Log($"  → switch landed (was fail #{_switchFailStreak}) — streak reset");
+            _switchFailStreak = 0;
+        }
         return landed;
     }
 
@@ -371,6 +416,15 @@ public sealed class KeyboardTargetTracker : IDisposable
     private const int ForegroundSettleBudgetMs = 150;
 
     private int _escalationBusy;
+
+    /// <summary>#108: consecutive switch failures — after 3, back off for
+    /// 3 seconds (stop the retry-per-keystroke stutter; the user's click
+    /// into the target resets it naturally via a focus event).</summary>
+    private int _switchFailStreak;
+    private long _switchBackoffUntil;
+
+    private const int SwitchFailStreakLimit = 3;
+    private const long SwitchBackoffMs = 3000;
 
     public void Dispose() => Remove();
 
