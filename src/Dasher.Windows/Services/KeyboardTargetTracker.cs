@@ -125,7 +125,16 @@ public sealed class KeyboardTargetTracker : IDisposable
                 {
                     _target = root;
                     Log($"Install: initial target from foreground = 0x{root:X}");
-                    Raise("typing into new target"); // seed the canvas immediately
+                    // NO Raise here (v0.1.43 regression, field-confirmed
+                    // 2026-11-04): an Install-time read in Outlook fires
+                    // before the UIA tree settles and grabs the top-level
+                    // document (11k chars) instead of the focused compose
+                    // element (52 chars) — seeding a massive wrong-source
+                    // context = THE canvas jump on restore+click. The seed
+                    // should wait for the first genuine focus event (which
+                    // arrives with the user's click into the target — the
+                    // same one-click they need anyway for the Windows
+                    // foreground constraint). The HWND alone bridges typing.
                 }
                 else if (root == ourHwnd)
                 {
@@ -134,7 +143,8 @@ public sealed class KeyboardTargetTracker : IDisposable
                     {
                         _target = remembered;
                         Log($"Install: restored remembered target = 0x{remembered:X}");
-                        Raise("typing into new target"); // seed the canvas immediately
+                        // Same: no Raise — the HWND bridges typing, the seed
+                        // waits for the genuine focus event.
                     }
                 }
             }
