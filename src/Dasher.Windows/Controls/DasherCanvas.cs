@@ -307,9 +307,13 @@ public partial class DasherCanvas : Control
         // makes exactly one chain survive any number of kicks: the old
         // chain's next callback no-ops on the stale generation, the new one
         // takes over. Cost: one frame of overlap at most, invisible.
-        _frameLoopGeneration++;
+        // Review loop 2: the generation MUST be captured into a local —
+        // reading the field inside the lambda evaluates at CALLBACK time,
+        // so two rapid revives both pass the final generation check and
+        // BOTH chains survive (the exact bug the bump exists to prevent).
+        var reviveGeneration = ++_frameLoopGeneration;
         _lastFrameDeliveredAt = Environment.TickCount64;
-        topLevel.RequestAnimationFrame(ts => OnAnimationFrame(ts, _frameLoopGeneration));
+        topLevel.RequestAnimationFrame(ts => OnAnimationFrame(ts, reviveGeneration));
     }
 
     /// <summary>How long without a delivered frame before the loop counts as
