@@ -1042,6 +1042,10 @@ public partial class MainWindow : Window
         _imeRecheckTimer?.Stop();
         var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(paneText, box.CaretIndex);
         NativeBridge.dasher_seed_buffer(vm.Handle, paneText, caretBytes);
+        // #103 (review loop 1): the buffer-coordinate baseline must track
+        // this re-seed — a stale window start maps the next arrow's caret
+        // into the wrong buffer position
+        _seededWindowStartUtf16 = 0; // pane seeding is buffer-absolute (whole text)
         KbLog($"Editor sync: seeded {paneText.Length} chars, caret u16={box.CaretIndex} → byte={caretBytes}");
     }
 
@@ -1060,6 +1064,7 @@ public partial class MainWindow : Window
             _vm.IsKeyboardMode || !ReferenceEquals(sender, BtnNewSession) ? "ime_toolbar" : "status_bar",
             "new");
         NativeBridge.dasher_reset(_vm.Handle);
+        _seededWindowStartUtf16 = -1; // #103 review: the buffer-coordinate baseline died with the buffer
         KbLog("New session: engine reset (buffer + context)");
     }
 
@@ -1880,13 +1885,15 @@ public partial class MainWindow : Window
     {
         var inputs = BuildShieldedVkInputs(HeldShieldModifiers(), new[] { vk },
             out var count, out var shieldCount);
-        // #103: our own arrow/Home/End injections move the TARGET caret on
-        // purpose — the guards that protect against UIA noise during typing
-        // (target-lag, caret-glitch) must not eat the resulting read.
-        if (vk is 0x25 or 0x26 or 0x27 or 0x28 or 0x24 or 0x23)
+        var sent = SendInput((uint)count, inputs, Marshal.SizeOf<INPUT>());
+        // #103 (review loop 1): our own arrow/Home/End injections move the
+        // TARGET caret on purpose — the guards that protect against UIA noise
+        // during typing stand down in the resulting window. Stamp ONLY on a
+        // confirmed send: a failed injection (UIPI block) would open the
+        // window with the guards down while nothing actually moved.
+        if (sent == count && vk is 0x25 or 0x26 or 0x27 or 0x28 or 0x24 or 0x23)
             _lastOwnCaretMoveInject = Environment.TickCount64;
         var cbSize = Marshal.SizeOf<INPUT>();
-        var sent = SendInput((uint)count, inputs, cbSize);
         if (shieldCount > 0) KbLog($"  modifier shield: released {shieldCount} held modifier(s) around VK 0x{vk:X} and restored");
         KbLog($"  SendInput(VK 0x{vk:X}): cbSize={cbSize} sent={sent} (expected {count})");
     }
@@ -2811,6 +2818,7 @@ public partial class MainWindow : Window
         Services.AnalyticsService.CaptureUiAction("main_toolbar", "new");
         if (_canvas == null || _vm == null) return;
         NativeBridge.dasher_reset(_vm.Handle);
+        _seededWindowStartUtf16 = -1; // #103 review: baseline died with the buffer
         _vm.OutputText = "";
     }
 

@@ -298,6 +298,16 @@ public partial class DasherCanvas : Control
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel == null) return;
         LogFrameLoop("forced revive (window state change)");
+        // Review loop 1: reap any live chain first. The unguarded Activated
+        // hook fires on EVERY Dasher control click (speed slider, mini-bar
+        // toggles — inactive→active transitions); without the generation
+        // bump each kick adds one permanent RAF chain for the rest of the
+        // session (exactly the "grow the chain" class the staleness gate
+        // exists to prevent — and this method bypasses that gate). Bumping
+        // makes exactly one chain survive any number of kicks: the old
+        // chain's next callback no-ops on the stale generation, the new one
+        // takes over. Cost: one frame of overlap at most, invisible.
+        _frameLoopGeneration++;
         _lastFrameDeliveredAt = Environment.TickCount64;
         topLevel.RequestAnimationFrame(ts => OnAnimationFrame(ts, _frameLoopGeneration));
     }
