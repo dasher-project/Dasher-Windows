@@ -37,6 +37,12 @@ public class SettingsPanel : Decorator
 {
     private IntPtr _handle;
     private readonly StackPanel _panel;
+
+    /// <summary>Logging controls, built in the Input builder (they share the
+    /// AccessConfiguration load) but displayed under Privacy (settings IA).</summary>
+    private StackPanel? _advLogPanel;
+    private TextBlock? _advLogHelp;
+    private StackPanel? _logMgrPanel;
     private string _currentCategory = "";
     private readonly Dictionary<string, List<ParameterDisplayInfo>> _groups = new();
 
@@ -698,6 +704,11 @@ public class SettingsPanel : Decorator
         var advLogPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
         advLogPanel.Children.Add(advLogToggle);
         advLogPanel.Children.Add(advLogLabel);
+        // shared fields: the logging controls are BUILT here (they share the
+        // AccessConfiguration load) but DISPLAYED in the Privacy section
+        // (settings IA move).
+        _advLogPanel = advLogPanel;
+        _advLogHelp = advLogHelp;
 
         // ── Log files: total size + clear button (field lesson: testers
         // can't be asked to navigate %APPDATA% by hand) ────────────────────
@@ -723,6 +734,7 @@ public class SettingsPanel : Decorator
         var logMgrPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
         logMgrPanel.Children.Add(clearLogsBtn);
         logMgrPanel.Children.Add(logSizeLabel);
+        _logMgrPanel = logMgrPanel;
 
 
         var deadZoneSlider = new Slider
@@ -976,9 +988,9 @@ public class SettingsPanel : Decorator
         panel.Children.Add(filterHeader);
         panel.Children.Add(filterTogglePanel);
         panel.Children.Add(gazeFilterHelp);
-        panel.Children.Add(advLogPanel);
-        panel.Children.Add(advLogHelp);
-        panel.Children.Add(logMgrPanel);
+        // Logging settings moved to Privacy (settings IA: diagnostics are a
+        // privacy-adjacent concern — "what data does Dasher record about me"
+        // — and Input was carrying an unrelated group).
         panel.Children.Add(deadZoneSlider);
         panel.Children.Add(deadZoneLabel);
         panel.Children.Add(settleSlider);
@@ -2078,6 +2090,24 @@ public class SettingsPanel : Decorator
             Margin = new Thickness(0, 4, 0, 0),
         };
         section.Children.Add(anonIdText);
+
+        // Logging group (moved from Input — settings IA: diagnostics are a
+        // privacy-adjacent concern, and Input was carrying an unrelated
+        // group; "what does Dasher record about me" lives with the analytics
+        // answer). The controls themselves are built in the input section's
+        // builder (they share the AccessConfiguration load); re-parent them
+        // here via the shared fields.
+        section.Children.Add(new TextBlock
+        {
+            Text = Loc.Tr("diagnostics", "Diagnostics"),
+            FontSize = 15,
+            FontWeight = FontWeight.SemiBold,
+            Foreground = BrushLabel,
+            Margin = new Thickness(0, 16, 0, 0),
+        });
+        section.Children.Add(_advLogPanel);
+        section.Children.Add(_advLogHelp);
+        section.Children.Add(_logMgrPanel);
 
         var resetBtn = new Button
         {

@@ -322,9 +322,23 @@ public static class ContextSeedPolicy
         // (seedText must be non-empty: StartsWith("") is trivially true, and
         // an empty sentence with divergent full texts is a genuine context
         // change — e.g. focusing a fresh empty field must clear old context.)
+        // REFLECTION CHECK (#107, field-confirmed 2026-11-04): if the
+        // "pending" chars (the engine's beyond-seedText tail) ARE already in
+        // the target right after the caret, the output IS reflected and the
+        // caret simply moved BACK into already-written text — a genuine
+        // re-anchor, not a stale read. The lag loop has this check (the
+        // "targetAfterCaret.StartsWith" clause); the sentence-level guard
+        // lacked it, so a mouse click back into mid-text (the engine's own
+        // output) was swallowed every time — the field-reported "click on
+        // 'feature' works, click at the end of 't ne' does nothing".
         if (seedText.Length > 0 &&
             engineSentence.Length > seedText.Length && engineSentence.StartsWith(seedText, StringComparison.Ordinal))
+        {
+            var pending = engineSentence[seedText.Length..];
+            if (targetAfterCaret.StartsWith(pending, StringComparison.Ordinal))
+                return ContextSeedDecision.Seed(seedText, seedText.Length); // reflected: genuine move back
             return ContextSeedDecision.Skip($"engine ahead of target read ({engineSentence.Length} vs {seedText.Length} chars) — output not yet reflected");
+        }
 
         // Benign divergence: a trailing space the engine hasn't absorbed yet.
         // The next character output settles both buffers.

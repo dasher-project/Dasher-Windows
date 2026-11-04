@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
@@ -260,8 +261,8 @@ public partial class DasherCanvas : Control
         }
     }
 
-    /// <summary>Re-arm the compositor frame loop if it has stalled (#99,
-    /// field-confirmed 2026-11-03). The loop rides RequestAnimationFrame and
+    /// <summary>Re-arm the compositor frame loop if it has stalled (#99/#105,
+    /// field-confirmed 2026-11-03/04). The loop rides RequestAnimationFrame and
     /// re-arms inside each delivered frame — when the window is MINIMIZED the
     /// compositor stops delivering frames, and if the queued callback is
     /// dropped rather than deferred (observed), the chain dies: on restore
@@ -269,8 +270,10 @@ public partial class DasherCanvas : Control
     /// predict", no crash) until restart. Staleness-gated so it can never
     /// double a healthy loop (a live chain delivers a frame every ~16ms; a
     /// kick while healthy would queue a second callback per vsync and grow
-    /// the chain exponentially — the 750ms gate makes that impossible).</summary>
-    private void EnsureFrameLoop()
+    /// the chain exponentially — the 750ms gate makes that impossible).
+    /// Logged (#105: the v0.1.41 watchdog was silent in the field logs —
+    /// inconclusive whether it fired; every kick now leaves a line).</summary>
+    internal void EnsureFrameLoop()
     {
         if (!_frameLoopRunning || _handle == IntPtr.Zero || _paused) return;
         if (Environment.TickCount64 - _lastFrameDeliveredAt < FrameStaleMs) return; // alive
@@ -278,7 +281,39 @@ public partial class DasherCanvas : Control
         var topLevel = TopLevel.GetTopLevel(this);
         if (topLevel == null) return;
         _lastFrameDeliveredAt = Environment.TickCount64; // one kick per stale window
+        LogFrameLoop($"kick: stale for {FrameStaleMs}ms+ — re-arming RAF");
         topLevel.RequestAnimationFrame(ts => OnAnimationFrame(ts, _frameLoopGeneration));
+    }
+
+    /// <summary>Deterministic revive (#105): the watchdog is a backstop, but
+    /// the WINDOW knows when it is restored — MainWindow calls this on
+    /// WindowState/Activated changes so the loop revives in the same event
+    /// that un-minimizes, not on the watchdog's next staleness tick. This
+    /// bypasses the staleness gate deliberately (a fresh restore may still
+    /// carry a recent-enough witness from the minimize boundary while the
+    /// chain itself is dead — the v0.1.41 field failure).</summary>
+    internal void ForceFrameLoopRevive()
+    {
+        if (!_frameLoopRunning || _handle == IntPtr.Zero) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+        LogFrameLoop("forced revive (window state change)");
+        // Review loop 1: reap any live chain first. The unguarded Activated
+        // hook fires on EVERY Dasher control click (speed slider, mini-bar
+        // toggles — inactive→active transitions); without the generation
+        // bump each kick adds one permanent RAF chain for the rest of the
+        // session (exactly the "grow the chain" class the staleness gate
+        // exists to prevent — and this method bypasses that gate). Bumping
+        // makes exactly one chain survive any number of kicks: the old
+        // chain's next callback no-ops on the stale generation, the new one
+        // takes over. Cost: one frame of overlap at most, invisible.
+        // Review loop 2: the generation MUST be captured into a local —
+        // reading the field inside the lambda evaluates at CALLBACK time,
+        // so two rapid revives both pass the final generation check and
+        // BOTH chains survive (the exact bug the bump exists to prevent).
+        var reviveGeneration = ++_frameLoopGeneration;
+        _lastFrameDeliveredAt = Environment.TickCount64;
+        topLevel.RequestAnimationFrame(ts => OnAnimationFrame(ts, reviveGeneration));
     }
 
     /// <summary>How long without a delivered frame before the loop counts as
@@ -292,6 +327,22 @@ public partial class DasherCanvas : Control
     /// <summary>#99: slow heartbeat that revives the compositor frame loop
     /// after a silent death (minimize/restore).</summary>
     private DispatcherTimer? _frameWatchdog;
+
+    /// <summary>#105: frame-loop lifecycle lines to keyboard_debug.log (the
+    /// v0.1.41 watchdog was silent in the field logs — every kick/revive now
+    /// leaves evidence). Lifecycle-gated (not advanced-only): the minimize
+    /// bug is diagnosed from these lines.</summary>
+    private static void LogFrameLoop(string msg)
+    {
+        try
+        {
+            var line = $"{DateTime.Now:HH:mm:ss.fff} [FrameLoop] {msg}{Environment.NewLine}";
+            File.AppendAllText(Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Dasher", "keyboard_debug.log"), line);
+        }
+        catch { }
+    }
 
     private void StepFrame()
     {

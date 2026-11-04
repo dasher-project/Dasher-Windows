@@ -308,6 +308,24 @@ public partial class MainWindow : Window
             if (WindowState == WindowState.Normal && e.ClientSize.Width > 0)
                 _lastNormalSize = e.ClientSize;
         };
+
+        // #105 (field-confirmed: the v0.1.41 watchdog did not survive
+        // minimize→restore in the field): the WINDOW knows when it is
+        // restored — revive the canvas frame loop deterministically in the
+        // same event, instead of betting on the watchdog's staleness tick
+        // (which may never fire if the timer itself is throttled while
+        // minimized, or if the witness was refreshed at the minimize
+        // boundary by a still-pending RAF).
+        var lastState = WindowState;
+        PropertyChanged += (_, e) =>
+        {
+            if (e.Property.Name != nameof(WindowState)) return;
+            var wasMinimized = lastState == WindowState.Minimized;
+            lastState = WindowState;
+            if (wasMinimized && WindowState != WindowState.Minimized)
+                _canvas?.ForceFrameLoopRevive();
+        };
+        Activated += (_, _) => _canvas?.ForceFrameLoopRevive();
     }
 
     private void SeedTrackers(PixelPoint position, Size size)
@@ -886,15 +904,18 @@ public partial class MainWindow : Window
             _suppressEditorSync = true;
             try
             {
-                // Caret preservation (clause 4): a caret at the end of the
-                // old text follows the growth (zooming at the caret keeps the
-                // caret with the new text); otherwise it stays at its index,
-                // clamped. Insert/delete-position math against the engine
-                // offset can refine this later if users need it.
+                // Caret behaviour on engine pushes (clause 4, refined by
+                // field request): when the text GROWS (zooming forward =
+                // writing), the caret follows to the end of the new text —
+                // the user is writing and expects to see the caret with the
+                // writing, not parked where they last left it mid-text.
+                // When the text SHRINKS (zoom-back = deleting), the caret
+                // stays at its index, clamped (the deletion may happen
+                // elsewhere; clamping is the least surprising behaviour).
                 var oldCaret = box.CaretIndex;
                 var oldLen = (box.Text ?? "").Length;
                 box.Text = newText;
-                box.CaretIndex = oldCaret >= oldLen
+                box.CaretIndex = newText.Length >= oldLen
                     ? newText.Length
                     : Math.Min(oldCaret, newText.Length);
             }
@@ -1021,6 +1042,10 @@ public partial class MainWindow : Window
         _imeRecheckTimer?.Stop();
         var caretBytes = NativeBridge.dasher_byte_offset_from_utf16(paneText, box.CaretIndex);
         NativeBridge.dasher_seed_buffer(vm.Handle, paneText, caretBytes);
+        // #103 (review loop 1): the buffer-coordinate baseline must track
+        // this re-seed — a stale window start maps the next arrow's caret
+        // into the wrong buffer position
+        _seededWindowStartUtf16 = 0; // pane seeding is buffer-absolute (whole text)
         KbLog($"Editor sync: seeded {paneText.Length} chars, caret u16={box.CaretIndex} → byte={caretBytes}");
     }
 
@@ -1039,6 +1064,7 @@ public partial class MainWindow : Window
             _vm.IsKeyboardMode || !ReferenceEquals(sender, BtnNewSession) ? "ime_toolbar" : "status_bar",
             "new");
         NativeBridge.dasher_reset(_vm.Handle);
+        _seededWindowStartUtf16 = -1; // #103 review: the buffer-coordinate baseline died with the buffer
         KbLog("New session: engine reset (buffer + context)");
     }
 
@@ -1269,14 +1295,20 @@ public partial class MainWindow : Window
 
         if (_vm.Handle == IntPtr.Zero) return;
 
-        // CARET-GLITCH GUARD: Outlook's UIA returns caret position 0 or 1
-        // during rapid text transitions (insert → delete → insert), even when
-        // the user is typing at position 27+. The sentence window then reads
-        // from the WRONG position (beginning of text instead of the typing
-        // point) → bogus re-seed → canvas jumps. If the caret is near the
-        // START of a long text AND this is a selection-watch event (the user
-        // is mid-typing, not clicking), the read is glitched — skip.
-        if (reason == "caret moved" &&
+        // CARET-GLITCH GUARD (#104, field-confirmed 2026-11-03): Outlook's
+        // UIA returns caret position 0 or 1 during rapid text transitions —
+        // and those glitch reads arrive via EVERY reason (WebView2 focus
+        // churn carries them through focus/foreground, which the v1 guard
+        // did not cover: caret-0 via "caret moved" was skipped while caret-0
+        // via "foreground changed" was SEEDED — the 3-jump cluster
+        // mid-typing). The guard now covers every reason EXCEPT the manual
+        // re-anchor and our own caret moves (#103: after OUR arrow/Home/End,
+        // a position-0..2 read is a deliberate re-anchor, not a glitch).
+        var ownCaretMoveRecent = reason != ManualReanchorReason &&
+            _lastOwnCaretMoveInject != 0 &&
+            Environment.TickCount64 - _lastOwnCaretMoveInject < OwnCaretMoveWindowMs;
+        if (reason != ManualReanchorReason &&
+            !ownCaretMoveRecent &&
             context != null &&
             context.CaretUtf16 < 3 &&
             context.Text.Length > 10)
@@ -1358,10 +1390,72 @@ public partial class MainWindow : Window
         // engine is buffer-absolute, the trimmed sentence is not).
         var enginePtr = NativeBridge.dasher_get_output_text(_vm.Handle);
         var engineFullText = enginePtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(enginePtr) ?? "" : "";
+        // #103: after our own arrow/Home/End injection the engine buffer
+        // legitimately sits AHEAD of the deliberately-moved caret — the
+        // target-lag guard in Decide() would wait for a catch-up that never
+        // comes (the LEFT-arrow re-anchor miss, log-confirmed 2026-11-03).
+        // Map the FIELD caret into BUFFER coordinates (the buffer holds the
+        // sentence window from the last seed: buffer position = field caret
+        // minus the seeded window start — NOT the raw field caret, unless the
+        // window happened to start at 0) and truncate the engine text there
+        // so the comparison anchors at where the user actually is.
+        var bufferCaretIdx = -1;
+        if (ownCaretMoveRecent && _seededWindowStartUtf16 >= 0)
+        {
+            bufferCaretIdx = Math.Clamp(context.CaretUtf16 - _seededWindowStartUtf16, 0, engineFullText.Length);
+            if (bufferCaretIdx < engineFullText.Length)
+            {
+                engineFullText = engineFullText[..bufferCaretIdx];
+                KbLog($"Context seed ({reason}): own-caret-move window — engine text truncated to caret (buffer idx {bufferCaretIdx}) for compare");
+            }
+        }
         var decision = ContextSeedPolicy.Decide(engineFullText, context.Text, context.CaretUtf16);
         if (decision.Action == ContextSeedAction.Skip)
         {
-            KbLog($"Context seed ({reason}): {decision.Reason}");
+            // #103 completion: within the own-caret-move window, a sentence
+            // match still means the USER'S CARET MOVED — the engine's anchor
+            // sits at the buffer end (the old caret), not the new one. Move
+            // the offset instead of skipping: buffer-absolute is safe here
+            // because seeding is sentence-windowed (the buffer IS the seeded
+            // window plus subsequent output, and bufferCaretIdx above is its
+            // buffer-absolute index — the exact case the policy docs said
+            // set_offset was wrongly withheld for; the historical bug passed
+            // sentence-relative offsets into a multi-sentence buffer, which
+            // cannot happen with windowed seeding + the explicit index).
+            // Without this, an arrow WITHIN the sentence left the canvas
+            // anchored at the old position (the field-reported "arrows
+            // mostly don't re-anchor").
+            if (ownCaretMoveRecent && bufferCaretIdx >= 0 &&
+                decision.Reason.Contains("matching position"))
+            {
+                var moveBytes = NativeBridge.dasher_byte_offset_from_utf16(engineFullText, bufferCaretIdx);
+                NativeBridge.dasher_set_offset(_vm.Handle, moveBytes);
+                KbLog($"Context seed ({reason}): own-caret-move — sentence matched, engine offset moved to caret (buffer idx {bufferCaretIdx}, byte={moveBytes})");
+            }
+            else if (decision.Reason.Contains("matching position") &&
+                     _seededWindowStartUtf16 >= 0)
+            {
+                // The same anchor-follow for DELIBERATE caret moves we didn't
+                // inject (mouse clicks in the target — the #103 gap: the
+                // own-caret-move window only opens for OUR arrows). A mouse
+                // click within the current sentence passes every guard, the
+                // compare says "already there", and the canvas stays anchored
+                // at the old position — the field-reported "SOMETIMES cursor
+                // movement doesn't update the canvas, it just misses it".
+                // Same coordinate math as above, guarded to same-window.
+                var clickBufferIdx = Math.Clamp(
+                    context.CaretUtf16 - _seededWindowStartUtf16, 0, engineFullText.Length);
+                var clickBytes = NativeBridge.dasher_byte_offset_from_utf16(engineFullText, clickBufferIdx);
+                if (clickBytes != NativeBridge.dasher_get_offset(_vm.Handle))
+                {
+                    NativeBridge.dasher_set_offset(_vm.Handle, clickBytes);
+                    KbLog($"Context seed ({reason}): sentence matched, engine offset followed caret click (buffer idx {clickBufferIdx}, byte={clickBytes})");
+                }
+            }
+            else
+            {
+                KbLog($"Context seed ({reason}): {decision.Reason}");
+            }
             return;
         }
 
@@ -1373,6 +1467,10 @@ public partial class MainWindow : Window
         // 200 chars of a private email or message).
         KbLog($"Context seed ({reason}): {decision.Text.Length} of {context.Text.Length} chars, caret u16={decision.CaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, decision.Text, byteOffset);
+        // #103: remember where the seeded window starts (field-absolute) so
+        // later own-caret-move offsets can map the field caret into buffer
+        // coordinates: window start = caret minus the window's own length.
+        _seededWindowStartUtf16 = decision.CaretUtf16 - decision.Text.Length;
     }
 
 
@@ -1685,6 +1783,17 @@ public partial class MainWindow : Window
     private long _distrustQuietUntil;
     private const long DistrustQuietMs = 500;
 
+    /// <summary>#103: TickCount64 of our last arrow/Home/End injection (a
+    /// deliberate target-caret move). Within the window, the target-lag and
+    /// caret-glitch guards stand down — the user asked for the move.</summary>
+    private long _lastOwnCaretMoveInject;
+    private const long OwnCaretMoveWindowMs = 2000;
+
+    /// <summary>#103: field-absolute start of the sentence window at the
+    /// last seed (buffer coordinates = field caret minus this). -1 = no seed
+    /// yet this session.</summary>
+    private int _seededWindowStartUtf16 = -1;
+
     /// <summary>Dasher's own HWND (Zero before the window is shown).</summary>
     private IntPtr OurHwnd() => TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
 
@@ -1776,8 +1885,15 @@ public partial class MainWindow : Window
     {
         var inputs = BuildShieldedVkInputs(HeldShieldModifiers(), new[] { vk },
             out var count, out var shieldCount);
+        var sent = SendInput((uint)count, inputs, Marshal.SizeOf<INPUT>());
+        // #103 (review loop 1): our own arrow/Home/End injections move the
+        // TARGET caret on purpose — the guards that protect against UIA noise
+        // during typing stand down in the resulting window. Stamp ONLY on a
+        // confirmed send: a failed injection (UIPI block) would open the
+        // window with the guards down while nothing actually moved.
+        if (sent == count && vk is 0x25 or 0x26 or 0x27 or 0x28 or 0x24 or 0x23)
+            _lastOwnCaretMoveInject = Environment.TickCount64;
         var cbSize = Marshal.SizeOf<INPUT>();
-        var sent = SendInput((uint)count, inputs, cbSize);
         if (shieldCount > 0) KbLog($"  modifier shield: released {shieldCount} held modifier(s) around VK 0x{vk:X} and restored");
         KbLog($"  SendInput(VK 0x{vk:X}): cbSize={cbSize} sent={sent} (expected {count})");
     }
@@ -1952,6 +2068,9 @@ public partial class MainWindow : Window
         if (text == box.Text) return;
         box.Text = text;
         box.CaretIndex = caret;
+        // Same focus issue as EditorMoveCaret: keep the caret visible after
+        // a strip-button press.
+        box.Focus();
     }
 
     /// <summary>Caret move in the editor pane; the CaretIndexProperty handler
@@ -1962,6 +2081,11 @@ public partial class MainWindow : Window
         var box = MessageArea;
         if (box == null) return;
         box.CaretIndex = Services.EditorKeyActions.MoveCaret(box.Text ?? "", box.CaretIndex, delta);
+        // The strip button took focus off the pane — Avalonia hides the
+        // caret in an unfocused TextBox, so the move is invisible until the
+        // user clicks back in (field report: "caret doesn't move in the
+        // writing area but the canvas does"). Refocus so the caret shows.
+        box.Focus();
     }
 
     /// <summary>
@@ -2694,6 +2818,7 @@ public partial class MainWindow : Window
         Services.AnalyticsService.CaptureUiAction("main_toolbar", "new");
         if (_canvas == null || _vm == null) return;
         NativeBridge.dasher_reset(_vm.Handle);
+        _seededWindowStartUtf16 = -1; // #103 review: baseline died with the buffer
         _vm.OutputText = "";
     }
 
