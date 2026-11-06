@@ -70,6 +70,31 @@ public sealed class KeyboardTargetTracker : IDisposable
     [DllImport("user32.dll")]
     private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, IntPtr dwExtraInfo);
 
+    [DllImport("user32.dll")]
+    private static extern short GetKeyState(int nVirtKey);
+
+    [DllImport("user32.dll")]
+    private static extern uint SendInput(uint nInputs, AltInput[] pInputs, int cbSize);
+
+    /// <summary>Minimal INPUT for the ALT pair (SendInput, not keybd_event:
+    /// the legacy API can desynchronise press/release — the v0.1.44 stuck-Alt
+    /// regression).</summary>
+    [StructLayout(LayoutKind.Sequential)]
+    private struct AltInput
+    {
+        public uint type;
+        public ushort vk;
+        public ushort wScan;
+        public uint flags;
+        public uint time;
+        public IntPtr dwExtraInfo;
+    }
+
+    private static int AltInputSize => System.Runtime.InteropServices.Marshal.SizeOf<AltInput>();
+
+    private static void SendAltPair(AltInput[] inputs) =>
+        SendInput((uint)inputs.Length, inputs, AltInputSize);
+
     /// <summary>
     /// Record the currently-foreground window as the target (mode entry,
     /// Deactivated fallback). No-op for our own window or when foreground
@@ -351,11 +376,36 @@ public sealed class KeyboardTargetTracker : IDisposable
                 // switch silently doesn't happen (the #106 verification
                 // catches this, but the switch then NEVER lands — the
                 // field-reported "every keystroke skipped for 6+ seconds").
-                keybd_event(0x12 /* VK_MENU */, 0, 0, IntPtr.Zero);
-                keybd_event(0x12, 0, 2 /* KEYEVENTF_KEYUP */, IntPtr.Zero);
+                //
+                // v0.1.44 regression (field-confirmed 2026-11-06): the
+                // keybd_event press/release pair could desynchronise — the
+                // release was lost and the OS keyboard state kept Alt held
+                // ("Alt key hints highlighted, Outlook cycling through
+                // messages as I zoomed"). Fixed: both events go in ONE
+                // SendInput call (atomic — the input system cannot
+                // interleave them), and a safety release fires after
+                // SetForegroundWindow if GetAsyncKeyState still shows Alt
+                // down.
+                var altPair = new[]
+                {
+                    new AltInput { type = 1 /* INPUT_KEYBOARD */, vk = 0x12, flags = 0 },
+                    new AltInput { type = 1, vk = 0x12, flags = 2 /* KEYEVENTF_KEYUP */ },
+                };
+                SendAltPair(altPair);
 
                 var set = SetForegroundWindow(_target);
                 AttachThreadInput(ourThread, targetThread, false);
+
+                // Safety: if Alt is still logically down, release it (the
+                // input system is asynchronous; a stray consumer can eat
+                // the release half)
+                if ((GetKeyState(0x12) & 0x8000) != 0)
+                {
+                    Log("  → Alt still down after unlock — sending safety release");
+                    var safety = new[] { new AltInput { type = 1, vk = 0x12, flags = 2 } };
+                    SendAltPair(safety);
+                }
+
                 Log($"  → AttachThreadInput={attached} SetForegroundWindow={set}");
                 // #106: the switch is ASYNC — verify it landed (poll here on
                 // this background thread, never the UI thread). The field
