@@ -7,6 +7,19 @@ public static class NativeBridge
 {
     private const string DllName = "dasher";
 
+    // RFC 0023 item 3: runtime C-API level check (belt-and-braces; the build
+    // gate in Directory.Build.props is the primary).
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern int dasher_capi_version();
+
+    // RFC 0023 item 4: the running engine's version string (static storage).
+    [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+    internal static extern IntPtr dasher_get_engine_version();
+
+    /// <summary>Convenience: engine version as a string ("" if unavailable).</summary>
+    internal static string GetEngineVersion() =>
+        Marshal.PtrToStringAnsi(dasher_get_engine_version()) ?? "unknown";
+
     [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr dasher_create([MarshalAs(UnmanagedType.LPStr)] string data_dir,
         [MarshalAs(UnmanagedType.LPStr)] string? user_dir, out IntPtr out_error);

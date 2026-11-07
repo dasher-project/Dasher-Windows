@@ -1,0 +1,22 @@
+<Project>
+  <!-- RFC 0023 item 3: CAPI compatibility gate. The build FAILS if the pinned
+       DasherCore's dasher.h exposes a DASHER_CAPI_VERSION below the requirement.
+       "Can I bump the engine?" becomes a build check; green CI on a shared-deps
+       bump PR doubles as the compatibility proof. -->
+  <PropertyGroup>
+    <RequiredDasherCapiVersion>3</RequiredDasherCapiVersion>
+  </PropertyGroup>
+  <Target Name="DasherCapiGate" BeforeTargets="BeforeBuild"
+          Condition="Exists('$(MSBuildThisFileDirectory)DasherCore/src/dasher.h')">
+    <PropertyGroup>
+      <DasherHeaderContent>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)DasherCore/src/dasher.h'))</DasherHeaderContent>
+      <PinnedCapiVersion>$([System.Text.RegularExpressions.Regex]::Match($(DasherHeaderContent), '#define\s+DASHER_CAPI_VERSION\s+(\d+)').Groups[1].Value)</PinnedCapiVersion>
+    </PropertyGroup>
+    <Error Condition="'$(PinnedCapiVersion)' == ''"
+           Text="CAPI gate: DASHER_CAPI_VERSION not found in DasherCore/src/dasher.h (submodule not checked out?)"/>
+    <Error Condition="'$(PinnedCapiVersion)' != '' AND $([System.Version]::Parse('$(PinnedCapiVersion).0')) &lt; $([System.Version]::Parse('$(RequiredDasherCapiVersion).0'))"
+           Text="CAPI gate: pinned DasherCore exposes CAPI version $(PinnedCapiVersion), this frontend requires >= $(RequiredDasherCapiVersion). Bump the DasherCore submodule (see .github/workflows/shared-deps-bump.yml)."/>
+    <Message Importance="high"
+             Text="CAPI gate: pinned DasherCore CAPI version $(PinnedCapiVersion) (required >= $(RequiredDasherCapiVersion)) — OK"/>
+  </Target>
+</Project>
