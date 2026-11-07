@@ -2,36 +2,12 @@
   <!-- RFC 0023 item 3: CAPI compatibility gate. The build FAILS if the pinned
        DasherCore's dasher.h exposes a DASHER_CAPI_VERSION below the requirement.
        "Can I bump the engine?" becomes a build check; green CI on a shared-deps
-       bump PR doubles as the compatibility proof.
-
-       Implementation note: the header is read by PowerShell rather than an
-       MSBuild property regex — C headers contain semicolons/quotes/newlines
-       that MSBuild property expansion mangles (the first version of this gate
-       false-failed exactly that way). -->
+       bump PR doubles as the compatibility proof. See Scripts/check-capi.ps1. -->
   <PropertyGroup>
     <RequiredDasherCapiVersion>3</RequiredDasherCapiVersion>
   </PropertyGroup>
   <Target Name="DasherCapiGate" BeforeTargets="BeforeBuild"
           Condition="Exists('$(MSBuildThisFileDirectory)DasherCore/src/dasher.h')">
-    <PropertyGroup>
-      <DasherCapiGateScript>
-        $ErrorActionPreference = 'Stop'
-        $h = Get-Content -Raw -LiteralPath '$(MSBuildThisFileDirectory)DasherCore/src/dasher.h'
-        if ($h -match '#define\s+DASHER_CAPI_VERSION\s+(\d+)') {
-          $pinned = [int]$Matches[1]
-          $required = [int]'$(RequiredDasherCapiVersion)'
-          if ($pinned -lt $required) {
-            Write-Error "CAPI gate: pinned DasherCore exposes CAPI version $pinned, this frontend requires >= $required. Bump the DasherCore submodule (see .github/workflows/shared-deps-bump.yml)."
-            exit 1
-          }
-          Write-Host "CAPI gate: pinned DasherCore CAPI version $pinned (required >= $required) — OK"
-        } else {
-          Write-Error "CAPI gate: DASHER_CAPI_VERSION not found in DasherCore/src/dasher.h"
-          exit 1
-        }
-      </DasherCapiGateScript>
-    </PropertyGroup>
-    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;$(DasherCapiGateScript)&quot;"
-          CustomErrorRegularExpression="CAPI gate" />
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)Scripts\check-capi.ps1&quot; -HeaderPath &quot;$(MSBuildThisFileDirectory)DasherCore\src\dasher.h&quot; -Required $(RequiredDasherCapiVersion)" />
   </Target>
 </Project>
