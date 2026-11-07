@@ -1,0 +1,13 @@
+<Project>
+  <!-- RFC 0023 item 3: CAPI compatibility gate. The build FAILS if the pinned
+       DasherCore's dasher.h exposes a DASHER_CAPI_VERSION below the requirement.
+       "Can I bump the engine?" becomes a build check; green CI on a shared-deps
+       bump PR doubles as the compatibility proof. See Scripts/check-capi.ps1. -->
+  <PropertyGroup>
+    <RequiredDasherCapiVersion>3</RequiredDasherCapiVersion>
+  </PropertyGroup>
+  <Target Name="DasherCapiGate" BeforeTargets="BeforeBuild"
+          Condition="Exists('$(MSBuildThisFileDirectory)DasherCore/src/dasher.h')">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)Scripts\check-capi.ps1&quot; -HeaderPath &quot;$(MSBuildThisFileDirectory)DasherCore\src\dasher.h&quot; -Required $(RequiredDasherCapiVersion)" />
+  </Target>
+</Project>

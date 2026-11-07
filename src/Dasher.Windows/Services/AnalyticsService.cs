@@ -98,6 +98,24 @@ public static class AnalyticsService
         _distinctId = _settings.GetOrCreateAnonymousId();
     }
 
+    private static string? _cachedEngineVersion;
+
+    /// <summary>RFC 0023 item 4 — running engine version, cached (P/Invoke per event is wasteful).</summary>
+    private static string EngineVersion()
+    {
+        if (_cachedEngineVersion is not null) return _cachedEngineVersion;
+        try
+        {
+            var v = Engine.NativeBridge.GetEngineVersion();
+            _cachedEngineVersion = string.IsNullOrEmpty(v) ? "unknown" : v;
+        }
+        catch
+        {
+            _cachedEngineVersion = "unknown"; // native lib predates the API
+        }
+        return _cachedEngineVersion;
+    }
+
     /// <summary>
     /// Returns the default properties appended to every event so all frontends
     /// can be distinguished in the shared PostHog project.
@@ -110,6 +128,10 @@ public static class AnalyticsService
             ["app_variant"] = "dasher-windows",
             ["app_version"] = UpdateChecker.GetCurrentVersion(),
             ["os_version"] = RuntimeInformation.OSDescription,
+            // RFC 0023 item 4: the bundled DasherCore's version. Runtime call
+            // (dasher_get_engine_version, DasherCore#109); falls back to the
+            // build-time submodule describe if the native lib predates it.
+            ["engine_version"] = EngineVersion(),
             // posthog-dotnet sends no $os SDK context, so OS breakdowns/filters in
             // PostHog were empty for Windows events. Supply it for parity with the
             // Apple/Android SDKs (which auto-send $os).
