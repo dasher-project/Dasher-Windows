@@ -1,27 +1,29 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Dasher Analytics Event Schema v1",
-  "description": "Published openly at https://github.com/dasher-project/Dasher-Windows. If it's not in this schema, it's not collected. All Dasher frontends (Windows, Apple, GTK) share the same PostHog project — events are distinguished by the default properties below.",
+  "description": "CANONICAL copy (governance) — RFC 0022 item 6. Frontend copies are generated: each frontend's schema-sync workflow pulls this file and opens a PR when it changes. Edit HERE, never in a frontend repo. Published openly at https://github.com/dasher-project/Dasher-Windows. If it's not in this schema, it's not collected. All Dasher frontends (Windows, Apple, GTK) share the same PostHog project — events are distinguished by the default properties below.",
   "default_properties": {
     "description": "Automatically appended to every event from every frontend",
     "properties": {
       "platform": {
         "type": "string",
         "examples": [
-          "windows",
-          "macos",
+          "android",
           "ios",
+          "linux",
+          "macos",
           "visionos",
-          "linux"
+          "windows"
         ]
       },
       "app_variant": {
         "type": "string",
         "examples": [
-          "dasher-windows",
-          "dasher-mac",
+          "dasher-android",
+          "dasher-gtk",
           "dasher-ios",
-          "dasher-gtk"
+          "dasher-mac",
+          "dasher-windows"
         ]
       },
       "app_version": {
@@ -31,11 +33,6 @@
       "os_version": {
         "type": "string",
         "example": "Microsoft Windows 10.0.19045"
-      },
-      "$os": {
-        "type": "string",
-        "const": "Windows",
-        "description": "The posthog-dotnet SDK sends no $os context, so it is set explicitly — keeps OS breakdowns consistent with the Apple/Android SDKs."
       },
       "$geoip_disable": {
         "type": "boolean",
@@ -118,24 +115,85 @@
         "stack_trace": {
           "type": "string",
           "note": "May contain file paths but not user text"
-        },
-        "exception_type": {
+        }
+      },
+      "pii": false
+    },
+    "ime_mode_restore": {
+      "description": "The IME decided which mode (docked/floating) to open in — every input-view creation. Android only. Decision inputs for the dock/float lifecycle debugging (Dasher-Android #73/#75).",
+      "properties": {
+        "saved_mode": {
           "type": "string",
-          "note": "Original exception type name; set explicitly on deferred reports where the SDK's native typing names the SavedCrashException wrapper instead (#60)"
+          "enum": [
+            "docked",
+            "floating",
+            "<unset>"
+          ]
         },
-        "source": {
-          "type": "string",
-          "note": "Where the exception was caught (e.g. Program.Main)"
+        "always_docked": {
+          "type": "boolean",
+          "description": "The Settings → Input escape hatch is enabled"
         },
-        "engine_log_tail": {
+        "floating_before": {
+          "type": "boolean",
+          "description": "Stale floating state present BEFORE self-healing (true = the #73 path)"
+        },
+        "restored_floating": {
+          "type": "boolean",
+          "description": "The decision: the keyboard opened floating"
+        },
+        "overlay_perm": {
+          "type": "boolean",
+          "description": "SYSTEM_ALERT_WINDOW permission granted"
+        }
+      },
+      "pii": false
+    },
+    "ime_float_enter": {
+      "description": "The IME entered floating mode. Android only.",
+      "properties": {
+        "reason": {
           "type": "string",
-          "note": "Deferred reports only: last engine diagnostic lines captured with the crash"
+          "enum": [
+            "button",
+            "restore"
+          ],
+          "description": "button = explicit user tap; restore = saved-preference restore on keyboard show"
+        }
+      },
+      "pii": false
+    },
+    "ime_float_exit": {
+      "description": "The IME left floating mode. Android only.",
+      "properties": {
+        "persist": {
+          "type": "boolean",
+          "description": "false = system-driven cleanup, the saved preference is unchanged"
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "button",
+            "selfheal",
+            "unbind",
+            "destroy"
+          ],
+          "description": "button = user tapped Dock; selfheal = stale-state cleanup at show; unbind = input binding went away (IME switch); destroy = the IME service was destroyed while floating"
+        }
+      },
+      "pii": false
+    },
+    "ime_always_docked_changed": {
+      "description": "User toggled Settings → Input → 'Keyboard always starts docked'. Android only. Adoption of this escape hatch is the signal for whether last-mode restore is the right default.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
         }
       },
       "pii": false
     },
     "ui_action": {
-      "description": "RFC 0001 2026-10-28 amendment: the user activated a control in the main UI (anything outside the settings windows). Opt-in gated like every event.",
+      "description": "User activated a control in the main UI (outside settings windows) — RFC 0001 2026-10-28 amendment. Answers 'where should main-UI focus go'.",
       "properties": {
         "surface": {
           "type": "string",
@@ -143,37 +201,33 @@
             "main_toolbar",
             "status_bar",
             "ime_toolbar",
-            "control_tree"
-          ],
-          "description": "ime_toolbar = the keyboard (direct-entry) mode mini-bar. status_bar also covers the bottom message-pane header (speak / copy / new / paste / enter-direct-mode controls). The RFC's ime_topbar surface has no Windows equivalent and is therefore never emitted."
+            "ime_topbar"
+          ]
         },
         "action": {
           "type": "string",
-          "description": "Fixed vocabulary; new identifiers require a schema update. select_all: retained for historical events, no emitter since #80 (mini-bar button removed)",
-          "enum": [
+          "description": "Fixed vocabulary; new identifiers require a schema update",
+          "examples": [
             "new",
             "open",
             "save",
+            "pause_play",
+            "game_mode",
             "settings",
             "copy",
-            "copy_selection",
-            "cut",
-            "paste",
-            "select_all",
-            "speak",
-            "stop_speak",
+            "share",
+            "emoji_toggle",
             "speed_up",
             "speed_down",
-            "backspace",
-            "arrow_left",
-            "arrow_right",
             "layout",
-            "direct_mode",
-            "game_mode",
-            "control_mode",
-            "reanchor",
+            "float",
+            "dock",
             "hide",
-            "select"
+            "cursor_left",
+            "cursor_right",
+            "backspace",
+            "select_all",
+            "paste"
           ]
         },
         "state": {
@@ -181,23 +235,30 @@
           "enum": [
             "on",
             "off",
-            "right",
-            "left",
-            "bottom",
-            "top"
+            "paused",
+            "playing",
+            "text",
+            "emoji",
+            "selection",
+            "char",
+            "none",
+            "no_connection"
           ],
-          "description": "Toggles (direct_mode, game_mode, control_mode, hide) carry on/off; the layout action carries the pane position. For select actions: \"dist=<char|word|paragraph|all>,forward=<yes|no>\"."
+          "description": "Optional — toggle states, or the delete kind for the backspace action"
         }
       },
       "pii": false
     },
     "setting_changed": {
-      "description": "RFC 0001 2026-10-28 amendment: the user committed a settings change at the widget site. Programmatic changes (engine init, defaults, migrations) never emit this.",
+      "description": "User committed a settings change — RFC 0001 2026-10-28 amendment. Answers 'which settings are the priority'. Fires at the widget commit site only (never for programmatic engine changes).",
       "properties": {
         "setting_id": {
           "type": "string",
-          "description": "Canonical identifier: the DasherCore parameter display name (e.g. Max Speed (bits/sec)) or the frontend setting key (e.g. output_font_size, access_method). Locale caveat: engine parameter display names follow the UI locale (RFC 0003), so the same setting may report under its translated name — frontend keys are locale-stable. Speech engine credentials are deliberately excluded (secrets).",
-          "example": "Max Speed (bits/sec)"
+          "description": "Canonical identifier: DasherCore parameter name or frontend setting key",
+          "examples": [
+            "Max Bitrate",
+            "output_font_size"
+          ]
         },
         "value_type": {
           "type": "string",
@@ -214,7 +275,7 @@
             "number",
             "string"
           ],
-          "description": "Present only for bool/number/enum values from a fixed vocabulary. OMITTED for string settings - free text is never collected"
+          "description": "Present ONLY for bool/number/enum (fixed vocabularies). NEVER for string settings — free text is not collected"
         },
         "surface": {
           "type": "string",
@@ -222,11 +283,44 @@
             "settings",
             "main_ui",
             "ime"
-          ],
-          "description": "Where the change was made. Windows currently emits settings and main_ui only"
+          ]
         }
       },
       "pii": false
+    },
+    "settings_reset_defaults": {
+      "description": "User reset every engine parameter to its built-in default",
+      "properties": {},
+      "pii": false
+    },
+    "training_reset": {
+      "description": "User deleted their accumulated training data via the Preferences training row",
+      "properties": {},
+      "pii": false
+    },
+    "engine_error": {
+      "description": "DasherCore raised its sticky error flag (RFC 0009 A2). Non-fatal: reported once per session and the app keeps running.",
+      "properties": {
+        "exception_type": {
+          "type": "string",
+          "example": "DasherEngineError"
+        },
+        "source": {
+          "type": "string",
+          "example": "frame_tick",
+          "note": "Where the flag was observed"
+        },
+        "stack_trace": {
+          "type": "string",
+          "note": "Fixed marker string identifying the flag, not a captured stack"
+        },
+        "engine_log_tail": {
+          "type": "string",
+          "note": "Last engine log lines, PII-scrubbed"
+        }
+      },
+      "pii": false,
+      "note": "Shares the PostHog `$exception` channel with `crash`; the two are distinguished by exception_type."
     }
   },
   "explicitly_not_collected": [
@@ -236,8 +330,6 @@
     "User name, email, or account info",
     "IP address (scrubbed at ingest)",
     "Training text contents",
-    "Game mode target text",
-    "Values of free-text/string settings (2026-10-28 amendment: only the fact that such a setting changed is collected)",
-    "File paths of any kind (2026-10-28 amendment)"
+    "Game mode target text"
   ]
 }
