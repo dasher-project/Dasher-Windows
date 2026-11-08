@@ -6,7 +6,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>dasher.ico</ApplicationIcon>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionPrefix>6.0.0</VersionPrefix>
     <InformationalVersion Condition="'$(ReleaseVersion)' != ''">$(ReleaseVersion)</InformationalVersion>
     <InformationalVersion Condition="'$(ReleaseVersion)' == ''">$(VersionPrefix)-dev</InformationalVersion>
   </PropertyGroup>
