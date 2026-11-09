@@ -396,11 +396,14 @@ public sealed class KeyboardTargetTracker : IDisposable
         { IsBackground = true, Name = "fg-restore" };
         escalation.Start();
 
-        // #112: the budget now covers TWO settle polls (one per attach+set
-        // attempt — the retry added where the Alt tap was retired).
-        if (!escalation.Join(EscalationBudgetMs + 2 * ForegroundSettleBudgetMs))
+        // #112 review loop 2: the restore path may now run TWO full
+        // attach+set+detach handshakes plus their settle polls inside the
+        // Join budget — the previous 550 ms (one handshake + two polls)
+        // spuriously fail-softed slow-but-alive targets mid-retry. The
+        // budget below is accounted per attempt (see RestoreJoinBudgetMs).
+        if (!escalation.Join(RestoreJoinBudgetMs))
         {
-            Log($"  → restore did not complete within {EscalationBudgetMs + 2 * ForegroundSettleBudgetMs}ms — skipping injection this event (no UI block)");
+            Log($"  → restore did not complete within {RestoreJoinBudgetMs}ms — skipping injection this event (no UI block)");
             // The thread stays busy (flag held) until it completes; further
             // calls skip injection rather than stacking hung handshakes.
             return false;
@@ -433,6 +436,21 @@ public sealed class KeyboardTargetTracker : IDisposable
     /// the handshake reports success (SetForegroundWindow returns before the
     /// switch lands). The verification poll runs on the escalation thread.</summary>
     private const int ForegroundSettleBudgetMs = 150;
+
+    /// <summary>Scheduling/thread-start slack folded into
+    /// <see cref="RestoreJoinBudgetMs"/> — the escalation thread itself needs
+    /// a slice before its first handshake.</summary>
+    private const int ScheduleSlackMs = 200;
+
+    /// <summary>#112 review loop 2: total Join budget for the escalation
+    /// thread, accounted per attempt: TWO full attach+set+detach handshakes
+    /// (EscalationBudgetMs each — the initial attempt plus the
+    /// verify-failure retry) + TWO settle polls (ForegroundSettleBudgetMs
+    /// each, one per attempt) + ScheduleSlackMs. 2×250 + 2×150 + 200 =
+    /// 1000 ms, so slow-but-alive targets complete instead of being
+    /// spuriously fail-softed mid-handshake.</summary>
+    private const int RestoreJoinBudgetMs =
+        2 * EscalationBudgetMs + 2 * ForegroundSettleBudgetMs + ScheduleSlackMs;
 
     /// <summary>#106/#112: poll (escalation thread only) for the async
     /// foreground switch to land within the settle budget. Returns the
@@ -481,7 +499,13 @@ public sealed class KeyboardTargetTracker : IDisposable
         // Same gate as MainWindow.KbLog
         if (msg.StartsWith("  ") && !Services.LogManager.AdvancedLogging) return;
 
-        try { File.AppendAllText(LogPath, $"{DateTime.Now:HH:mm:ss.fff} [tracker] {msg}\n"); } catch { }
+        // #112 review loop 2: serialize with the other keyboard_debug.log
+        // writers (UI thread, hygiene watchdog) via the shared LogManager
+        // lock — no diagnostic line dropped to a sharing violation.
+        lock (Services.LogManager.KeyboardLogLock)
+        {
+            try { File.AppendAllText(LogPath, $"{DateTime.Now:HH:mm:ss.fff} [tracker] {msg}\n"); } catch { }
+        }
     }
 
     // ── Win32 ───────────────────────────────────────────────────────────────

@@ -23,6 +23,15 @@ namespace Dasher.Windows.Services;
 /// </summary>
 public static class LogManager
 {
+    /// <summary>#112 review loop 2: lock serializing every writer to
+    /// keyboard_debug.log — the UI thread (MainWindow.KbLog), the tracker's
+    /// fg-restore thread (KeyboardTargetTracker.Log) and the hygiene
+    /// watchdog's timer thread (ModifierHygiene.Log) all File.AppendAllText
+    /// the same file; concurrent appends throw sharing violations that the
+    /// writers silently swallow, dropping exactly the diagnostic lines that
+    /// matter.</summary>
+    public static readonly object KeyboardLogLock = new();
+
     /// <summary>Files managed by this class (relative to the Dasher dir).</summary>
     private static readonly string[] ManagedLogs =
     {

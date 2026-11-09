@@ -1096,7 +1096,14 @@ public partial class MainWindow : Window
         // errors, seeds) always logs.
         if (msg.StartsWith("  ") && !Services.LogManager.AdvancedLogging) return;
         var line = $"[KB] {DateTime.Now:HH:mm:ss.fff} {msg}{Environment.NewLine}";
-        try { File.AppendAllText(KbLogPath, line); } catch { }
+        // #112 review loop 2: serialize with the other keyboard_debug.log
+        // writers (the tracker's fg-restore thread, the hygiene watchdog)
+        // via the shared LogManager lock — no diagnostic line dropped to a
+        // sharing violation.
+        lock (Services.LogManager.KeyboardLogLock)
+        {
+            try { File.AppendAllText(KbLogPath, line); } catch { }
+        }
     }
 
     private void SetNoActivate(bool enable)

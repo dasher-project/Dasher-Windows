@@ -18,6 +18,12 @@ namespace Dasher.Windows.Services;
 /// user mid-chord (Shift+arrow in the target) must not have their Shift
 /// stolen. Ctrl/Alt/Win are the corruption class. Both SIDES are queried and
 /// released independently (RCtrl/AltGr users hold the right variants).
+///
+/// #112 review loop 2: "not shielded" does not mean "unpoliced" — the RFC
+/// 0021 select-chords SYNTHESIZE Shift (Ctrl+Shift+arrows), so Shift IS in
+/// the synthesized set. ModifierHygiene polices it (sided, VK_LSHIFT/
+/// VK_RSHIFT) even though this shield deliberately does not restore it: a
+/// stranded Shift is just as much a chord-corruption hazard as a Ctrl.
 /// </summary>
 public static class InjectionShield
 {
