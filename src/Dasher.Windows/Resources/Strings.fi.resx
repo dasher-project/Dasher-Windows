@@ -98,7 +98,7 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
     <value>Siirrä kohdistinta oikealle (pidä painettuna toistaaksesi)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Auto</value>
+    <value>Automaattinen</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Automaattinen keskityskohde</value>
@@ -156,6 +156,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="control" xml:space="preserve">
     <value>Kontrolli</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Lisää kankaalle Select-, Move- ja Delete-muokkauskomennot: valitse, siirrä tai poista tekstiä kirjaimella, sanalla, lauseella, kappaleella tai kaikilla, eteenpäin tai taaksepäin.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Ohjaustila: käytössä</value>
@@ -303,6 +306,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Tehty</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Siirrä näppäimistöikkunaa vetämällä</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Liikuta kohdistinta yhdessä kohdassa aktivoidaksesi napsautuksen sen sijaan, että painaisit painiketta tai kytkintä.</value>
@@ -618,6 +624,9 @@ Voit muuttaa tätä milloin tahansa kohdassa Asetukset &gt; Tietosuoja.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Vie lähtömateriaalina ei ole vielä koulutusdataa</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>TTS-moottoria ei ole saatavilla. Asenna puheenvälittäjä järjestelmälle TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Ei käyttäjäkoulutusdataa vielä</value>

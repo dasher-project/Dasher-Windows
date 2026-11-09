@@ -157,6 +157,9 @@ Unaweza kubadilisha hili wakati wowote kwenye Mipangilio &gt; Faragha.</value>
   <data name="control" xml:space="preserve">
     <value>Udhibiti</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Inaongeza Chagua, Hamisha na Futa amri za uhariri kwenye turubai: chagua, sogeza au futa maandishi kwa herufi, neno, sentensi, aya au vyote, mbele au nyuma.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Hali ya udhibiti: imewezeshwa</value>
   </data>
@@ -303,6 +306,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Imekamilika</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Buruta ili kusogeza kidirisha cha kibodi</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Kaa juu ya sehemu moja ili kusababisha kubofya, badala ya kubonyeza kitufe au swichi.</value>
@@ -618,6 +624,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Hakuna data ya mafunzo ya kusafirisha bado</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Hakuna injini ya TTS inayopatikana. Sakinisha kisambaza sauti kwa mfumo wa TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Hakuna data ya mafunzo ya mtumiaji bado</value>

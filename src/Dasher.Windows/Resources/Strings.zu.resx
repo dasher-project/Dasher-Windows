@@ -157,6 +157,9 @@ Ungakushintsha lokhu noma yinini ku-Settings &gt; Privacy.</value>
   <data name="control" xml:space="preserve">
     <value>Ukulawula</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Yengeza Khetha, Hambisa futhi Susa imiyalo yokuhlela kukhanvasi: khetha, hambisa noma susa umbhalo ngohlamvu, igama, umusho, indima noma konke, phambili noma emuva.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Imodi yokulawula: ivuliwe</value>
   </data>
@@ -303,6 +306,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Kuqediwe</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Hudula ukuze uhambise iwindi lekhibhodi</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Hlala endaweni eyodwa ukuze uqalise ukuchofoza, esikhundleni sokucindezela inkinobho noma iswishi.</value>
@@ -618,6 +624,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Asikakayitholi idatha yokuqeqesha yokuthekelisa okwamanje</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Ayikho injini ye-TTS etholakalayo. Faka i-speech-dispatcher yesistimu ye-TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Akukho idatha yokuqeqesha yomsebenzisi okwamanje</value>

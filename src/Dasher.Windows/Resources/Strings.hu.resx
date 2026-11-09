@@ -98,7 +98,7 @@ Ezt bármikor megváltoztathatja a Beállítások &gt; Adatvédelem menüpontban
     <value>Mozgassa a kurzort jobbra (tartsa nyomva a ismétléshez)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Autó</value>
+    <value>Automatikus</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Automatikus középre igazítás</value>
@@ -156,6 +156,9 @@ Ezt bármikor megváltoztathatja a Beállítások &gt; Adatvédelem menüpontban
   </data>
   <data name="control" xml:space="preserve">
     <value>Kontroll</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Kijelölés, áthelyezés és törlés szerkesztési parancsokat ad a vászonhoz: szöveg kijelölése, mozgatása vagy törlése betűnként, szónként, mondatonként, bekezdésenként vagy mindegyikenként, előre vagy hátra.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Vezérlési mód: engedélyezve</value>
@@ -303,6 +306,9 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   </data>
   <data name="done" xml:space="preserve">
     <value>Kész</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Húzza a billentyűzet ablakát</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Lebegjen egy helyben a kattintás kiváltásához a gomb vagy kapcsoló megnyomása helyett.</value>
@@ -618,6 +624,9 @@ Ezt bármikor módosíthatja a Beállítások &gt; Adatvédelem menüpontban.</v
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Még nincs exportálható képzési adat</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Nem áll rendelkezésre TTS motor. Telepítse a beszéd diszpécsert a rendszer TTS-hez.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Még nincs felhasználói képzési adat</value>

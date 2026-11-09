@@ -98,7 +98,7 @@ Toto můžete kdykoliv změnit v Nastavení &gt; Soukromí.</value>
     <value>Přesuň kurzor doprava (držet pro opakování)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Car</value>
+    <value>Automaticky</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Automatické centrování cíle</value>
@@ -156,6 +156,9 @@ Toto můžete kdykoliv změnit v Nastavení &gt; Soukromí.</value>
   </data>
   <data name="control" xml:space="preserve">
     <value>Kontrola</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Přidá na plátno editační příkazy Select, Move a Delete: výběr, přesun nebo odstranění textu po písmenech, slovech, větách, odstavcích nebo vše, dopředu nebo dozadu.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Režim ovládání: zapnuto</value>
@@ -303,6 +306,9 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Hotovo</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Tažením přesunete okno klávesnice</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Zůstaňte na jednom místě, abyste vyvolali kliknutí, místo stisknutí tlačítka nebo spínače.</value>
@@ -618,6 +624,9 @@ Toto nastavení můžete kdykoli změnit v Nastavení &gt; Soukromí.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Žádná výcviková data k exportu zatím</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Není k dispozici žádný motor TTS. Nainstalujte hlasový dispečer pro systém TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Dosud žádná data o školení uživatele</value>

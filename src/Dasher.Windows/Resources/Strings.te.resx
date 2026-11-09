@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>నియంత్రణ</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>కాన్వాస్‌కి ఎంచుకోండి, తరలించు మరియు తొలగించు సవరణ ఆదేశాలను జోడిస్తుంది: అక్షరం, పదం, వాక్యం, పేరా లేదా అన్నీ, ముందుకు లేదా వెనుకకు వచనాన్ని ఎంచుకోండి, తరలించండి లేదా తొలగించండి.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>నియంత్రణ మోడ్: ప్రారంభించబడింది</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>పూర్తయింది</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>కీబోర్డ్ విండోను తరలించడానికి లాగండి</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>బటన్ లేదా స్విచ్‌ను నొక్కడానికి బదులుగా, క్లిక్‌ను ప్రేరేపించడానికి ఒక చోట హోవర్ చేయండి.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>ఇంకా ఎగుమతి చేయడానికి ట్రెయినింగ్ డేటా లేదు</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>TTS ఇంజిన్ అందుబాటులో లేదు. సిస్టమ్ TTS కోసం స్పీచ్-డిస్పాచర్‌ను ఇన్‌స్టాల్ చేయండి.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>ఇంకా వినియోగదారు ట్రెయినింగ్ డేటా లేదు</value>

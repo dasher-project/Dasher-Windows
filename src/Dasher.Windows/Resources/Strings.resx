@@ -130,6 +130,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="check_again" xml:space="preserve">
     <value>Check Again</value>
   </data>
+  <data name="check_for_updates" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
   <data name="choose" xml:space="preserve">
     <value>Choose...</value>
   </data>
@@ -159,6 +162,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="control" xml:space="preserve">
     <value>Control</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Adds Select, Move and Delete editing commands to the canvas: select, move or delete text by letter, word, sentence, paragraph or all, forwards or backwards.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Control mode: enabled</value>
@@ -306,6 +312,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Done</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Drag to move the keyboard window</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Hover in one spot to trigger a click, instead of pressing a button or switch.</value>
@@ -624,6 +633,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>No training data to export yet</value>
   </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>No TTS engine available. Install speech-dispatcher for system TTS.</value>
+  </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>No user training data yet</value>
   </data>
@@ -759,6 +771,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   <data name="read" xml:space="preserve">
     <value>Read</value>
   </data>
+  <data name="reanchor_context" xml:space="preserve">
+    <value>Re-anchor context</value>
+  </data>
   <data name="release_the_pinch_to_pause" xml:space="preserve">
     <value>Release the pinch to pause</value>
   </data>
@@ -827,6 +842,9 @@ You can change this anytime in Settings &gt; Privacy.</value>
   </data>
   <data name="scan_speed" xml:space="preserve">
     <value>Scan Speed</value>
+  </data>
+  <data name="select_all" xml:space="preserve">
+    <value>Select All</value>
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>Selection Method</value>

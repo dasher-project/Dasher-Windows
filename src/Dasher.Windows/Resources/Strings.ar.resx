@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>تحكم</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>إضافة أوامر التحرير التحديد والنقل والحذف إلى اللوحة القماشية: تحديد النص أو نقله أو حذفه بالحرف أو الكلمة أو الجملة أو الفقرة أو الكل، للأمام أو للخلف.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>وضع التحكم: مفعل</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>منتهي</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>اسحب لتحريك نافذة لوحة المفاتيح</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>حوم في مكان واحد لتفعيل النقر، بدلاً من الضغط على زر أو مفتاح.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>لا توجد بيانات تدريب للتصدير بعد</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>لا يتوفر محرك TTS. تثبيت مرسل الكلام لنظام TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>لا توجد بيانات تدريب للمستخدم بعد</value>

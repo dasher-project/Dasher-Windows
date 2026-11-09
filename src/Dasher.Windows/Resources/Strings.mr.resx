@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>नियंत्रण</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>कॅनव्हासमध्ये निवडा, हलवा आणि हटवा संपादन आदेश जोडते: अक्षर, शब्द, वाक्य, परिच्छेद किंवा सर्व, फॉरवर्ड किंवा बॅकवर्ड द्वारे मजकूर निवडा, हलवा किंवा हटवा.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>नियंत्रण मोड: सक्षम</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>पूर्ण झाले</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>कीबोर्ड विंडो हलविण्यासाठी ड्रॅग करा</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>बटण किंवा स्विच दाबण्याऐवजी एका ठिकाणी होव्हर करून क्लिक ट्रिगर करा.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>निर्यात करण्यासाठी अजून प्रशिक्षण डेटा नाही</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>कोणतेही TTS इंजिन उपलब्ध नाही. सिस्टम TTS साठी स्पीच-डिस्पॅचर स्थापित करा.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>अजून वापरकर्ता प्रशिक्षण डेटा नाही</value>

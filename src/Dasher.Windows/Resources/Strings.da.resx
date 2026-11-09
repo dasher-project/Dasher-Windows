@@ -98,7 +98,7 @@ Du kan ændre dette når som helst under Indstillinger &gt; Privatliv.</value>
     <value>Flyt indsætningspunktet til højre (hold nede for at gentage)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Bil</value>
+    <value>Automatisk</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Automatisk centrering af mål</value>
@@ -156,6 +156,9 @@ Du kan ændre dette når som helst under Indstillinger &gt; Privatliv.</value>
   </data>
   <data name="control" xml:space="preserve">
     <value>Kontrol</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Tilføjer Vælg, Flyt og Slet redigeringskommandoer til lærredet: vælg, flyt eller slet tekst efter bogstav, ord, sætning, afsnit eller alle, fremad eller tilbage.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Kontroltilstand: aktiveret</value>
@@ -303,6 +306,9 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Færdig</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Træk for at flytte tastaturvinduet</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Hold musen over ét punkt for at udløse et klik i stedet for at trykke på en knap eller kontakt.</value>
@@ -618,6 +624,9 @@ Du kan til enhver tid ændre dette i Indstillinger &gt; Privatliv.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Ingen træningsdata at eksportere endnu</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Ingen TTS-motor tilgængelig. Installer taledispatcher til system TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Ingen brugertræningsdata endnu</value>

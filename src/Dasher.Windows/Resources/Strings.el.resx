@@ -98,7 +98,7 @@
     <value>Μετακίνηση δρομέα δεξιά (κρατήστε πατημένο για επανάληψη)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Αυτο</value>
+    <value>Αυτόματο</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Αυτόματο κεντράρισμα στόχου</value>
@@ -156,6 +156,9 @@
   </data>
   <data name="control" xml:space="preserve">
     <value>Έλεγχος</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Προσθέτει εντολές επεξεργασίας Επιλογή, Μετακίνηση και Διαγραφή στον καμβά: επιλέξτε, μετακινήστε ή διαγράψτε κείμενο ανά γράμμα, λέξη, πρόταση, παράγραφο ή όλα, προς τα εμπρός ή προς τα πίσω.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Λειτουργία ελέγχου: ενεργοποιημένη</value>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>Γινώμενος</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Σύρετε για να μετακινήσετε το παράθυρο του πληκτρολογίου</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Κράτα τον δείκτη σε ένα σημείο για να ενεργοποιήσεις ένα κλικ, αντί να πατήσεις ένα κουμπί ή διακόπτη.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Δεν υπάρχει ακόμη δεδομένα εκπαίδευσης προς εξαγωγή</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Δεν υπάρχει διαθέσιμος κινητήρας TTS. Εγκαταστήστε τον αποστολέα ομιλίας για το σύστημα TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Δεν υπάρχουν ακόμη δεδομένα εκπαίδευσης χρήστη</value>

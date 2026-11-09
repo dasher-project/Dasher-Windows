@@ -98,7 +98,7 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
     <value>Verplaats cursor naar rechts (ingedrukt houden om te herhalen)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Auto</value>
+    <value>Automatisch</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Auto-Centre Doel</value>
@@ -156,6 +156,9 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="control" xml:space="preserve">
     <value>Controle</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Voegt bewerkingsopdrachten voor selecteren, verplaatsen en verwijderen toe aan het canvas: selecteer, verplaats of verwijder tekst per letter, woord, zin, alinea of ​​alles, vooruit of achteruit.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Bedieningsmodus: ingeschakeld</value>
@@ -303,6 +306,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Klaar</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Sleep om het toetsenbordvenster te verplaatsen</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Zweef op één plek om een klik te activeren, in plaats van een knop of schakelaar in te drukken.</value>
@@ -618,6 +624,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Nog geen trainingsgegevens om te exporteren</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Geen TTS-engine beschikbaar. Spraakverzender voor systeem TTS installeren.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Nog geen trainingsgegevens van gebruikers</value>

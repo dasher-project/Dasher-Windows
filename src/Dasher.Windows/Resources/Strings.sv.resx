@@ -98,7 +98,7 @@ Du kan ändra detta när som helst i Inställningar &gt; Integritet.</value>
     <value>Flytta markören åt höger (håll in för upprepa)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Bil</value>
+    <value>Automatisk</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Automatiskt centrerat mål</value>
@@ -156,6 +156,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Integritet.</value>
   </data>
   <data name="control" xml:space="preserve">
     <value>Kontroll</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Lägger till redigeringskommandon Välj, Flytta och Ta bort till arbetsytan: välj, flytta eller ta bort text efter bokstav, ord, mening, stycke eller allt, framåt eller bakåt.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Kontrollläge: aktiverat</value>
@@ -303,6 +306,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Gjort</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Dra för att flytta tangentbordsfönstret</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Håll blicken på en punkt för att aktivera ett klick, istället för att trycka på en knapp eller en switch.</value>
@@ -618,6 +624,9 @@ Du kan ändra detta när som helst i Inställningar &gt; Sekretess.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Inga träningsdata att exportera ännu</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Ingen TTS-motor tillgänglig. Installera speech-dispatcher för system TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Inga användarträningsdata ännu</value>

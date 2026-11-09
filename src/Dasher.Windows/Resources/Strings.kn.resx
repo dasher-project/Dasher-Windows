@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>ನಿಯಂತ್ರಣ</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>ಕ್ಯಾನ್ವಾಸ್‌ಗೆ ಸೆಲೆಕ್ಟ್, ಮೂವ್ ಮತ್ತು ಡಿಲೀಟ್ ಎಡಿಟಿಂಗ್ ಕಮಾಂಡ್‌ಗಳನ್ನು ಸೇರಿಸುತ್ತದೆ: ಅಕ್ಷರ, ಪದ, ವಾಕ್ಯ, ಪ್ಯಾರಾಗ್ರಾಫ್ ಅಥವಾ ಎಲ್ಲಾ ಮೂಲಕ ಪಠ್ಯವನ್ನು ಆಯ್ಕೆ ಮಾಡಿ, ಸರಿಸಿ ಅಥವಾ ಅಳಿಸಿ, ಮುಂದಕ್ಕೆ ಅಥವಾ ಹಿಂದಕ್ಕೆ.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>ನಿಯಂತ್ರಣ ಮೋಡ್: ಸಕ್ರಿಯವಾಗಿದೆ</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>ಮುಗಿದಿದೆ</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>ಕೀಬೋರ್ಡ್ ವಿಂಡೋವನ್ನು ಸರಿಸಲು ಎಳೆಯಿರಿ</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>ಬಟನ್ ಅಥವಾ ಸ್ವಿಚ್ ಒತ್ತುವ ಬದಲು, ಕ್ಲಿಕ್ ಅನ್ನು ಪ್ರೇರೇಪಿಸಲು ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ ಹವರ್ ಮಾಡಿ.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>ಈಗಿನವರೆಗೆ ರಫ್ತಿಗೆ ತಯಾರಿರುವ ತರಬೇತಿ ಡೇಟಾ ಇಲ್ಲ</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>ಯಾವುದೇ TTS ಎಂಜಿನ್ ಲಭ್ಯವಿಲ್ಲ. ಸಿಸ್ಟಂ TTS ಗಾಗಿ ಸ್ಪೀಚ್ ಡಿಸ್ಪ್ಯಾಚರ್ ಅನ್ನು ಸ್ಥಾಪಿಸಿ.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>ಇನ್ನೂ ಯಾವುದೇ ಬಳಕೆದಾರ ತರಬೇತಿ ಡೇಟಾ ಇಲ್ಲ</value>

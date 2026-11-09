@@ -98,7 +98,7 @@
     <value>将插入点向右移动（按住可重复）</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>汽车</value>
+    <value>自动</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>自动居中目标</value>
@@ -156,6 +156,9 @@
   </data>
   <data name="control" xml:space="preserve">
     <value>控制</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>将选择、移动和删除编辑命令添加到画布：按字母、单词、句子、段落或全部向前或向后选择、移动或删除文本。</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>控制模式：已启用</value>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>完毕</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>拖动以移动键盘窗口</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>悬停在一个位置以触发点击，而不是按按钮或开关。</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>暂无可导出的训练数据</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>没有可用的 TTS 引擎。为系统 TTS 安装语音调度程序。</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>尚无用户训练数据</value>

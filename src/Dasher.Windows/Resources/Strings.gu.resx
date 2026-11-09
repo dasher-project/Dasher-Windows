@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>નियંત્રણ</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>કેનવાસમાં પસંદ કરો, ખસેડો અને કાઢી નાખો સંપાદન આદેશો ઉમેરે છે: અક્ષર, શબ્દ, વાક્ય, ફકરો અથવા બધા દ્વારા, આગળ અથવા પાછળની તરફ ટેક્સ્ટ પસંદ કરો, ખસેડો અથવા કાઢી નાખો.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>કન્ટ્રોલ મોડ: સક્રિય</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>થઈ ગયું</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>કીબોર્ડ વિન્ડોને ખસેડવા માટે ખેંચો</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>બટન અથવા સ્વિચ દબાવવાની જગ્યાએ ક્લિક ટ્રિગર કરવા માટે એક જ જગ્યાએ હોવર કરો.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>હજી નિકાસ કરવા માટે કોઈ તાલીમ ડેટા નથી</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>કોઈ TTS એન્જિન ઉપલબ્ધ નથી. સિસ્ટમ TTS માટે સ્પીચ-ડિસ્પેચર ઇન્સ્ટોલ કરો.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>અત્યાર સુધી કોઇ વપરાશકર્તા તાલીમ ડેટા નથી</value>

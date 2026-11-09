@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>ਕੰਟਰੋਲ</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>ਕੈਨਵਸ ਵਿੱਚ ਸਿਲੈਕਟ, ਮੂਵ ਅਤੇ ਡਿਲੀਟ ਸੰਪਾਦਨ ਕਮਾਂਡਾਂ ਨੂੰ ਜੋੜਦਾ ਹੈ: ਅੱਖਰ, ਸ਼ਬਦ, ਵਾਕ, ਪੈਰਾਗ੍ਰਾਫ ਜਾਂ ਸਾਰੇ, ਅੱਗੇ ਜਾਂ ਪਿੱਛੇ ਵੱਲ ਟੈਕਸਟ ਨੂੰ ਚੁਣੋ, ਮੂਵ ਕਰੋ ਜਾਂ ਮਿਟਾਓ।</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>ਕੰਟਰੋਲ ਮੋਡ: ਚਾਲੂ</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>ਹੋ ਗਿਆ</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>ਕੀਬੋਰਡ ਵਿੰਡੋ ਨੂੰ ਮੂਵ ਕਰਨ ਲਈ ਖਿੱਚੋ</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>ਇੱਕ ਥਾਂ 'ਤੇ ਹੋਵਰ ਕਰੋ ਤਾਂ ਕਿ ਕਲਿੱਕ ਟ੍ਰਿਗਰ ਹੋਵੇ, ਬਟਨ ਜਾਂ ਸਵਿੱਚ ਦਬਾਉਣ ਦੀ ਬਜਾਏ।</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>ਹਾਲੇ ਕੋਈ ਟ੍ਰੇਨਿੰਗ ਡਾਟਾ ਐਕਸਪੋਰਟ ਕਰਨ ਲਈ ਨਹੀਂ</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>ਕੋਈ TTS ਇੰਜਣ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਸਿਸਟਮ TTS ਲਈ ਸਪੀਚ-ਡਿਸਪੈਚਰ ਸਥਾਪਤ ਕਰੋ।</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>ਹਾਲੇ ਕੋਈ ਯੂਜ਼ਰ ਟ੍ਰੇਨਿੰਗ ਡਾਟਾ ਨਹੀਂ</value>

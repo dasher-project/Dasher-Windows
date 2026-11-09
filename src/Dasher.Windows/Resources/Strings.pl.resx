@@ -157,6 +157,9 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
   <data name="control" xml:space="preserve">
     <value>Sterowanie</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Dodaje do obszaru roboczego polecenia edycji Wybierz, Przenieś i Usuń: zaznacz, przesuń lub usuń tekst po literze, słowie, zdaniu, akapicie lub całości, do przodu lub do tyłu.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Tryb sterowania: włączony</value>
   </data>
@@ -303,6 +306,9 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
   </data>
   <data name="done" xml:space="preserve">
     <value>Zrobione</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Przeciągnij, aby przesunąć okno klawiatury</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Przytrzymaj w jednym miejscu, aby wywołać kliknięcie, zamiast naciskać przycisk lub przełącznik.</value>
@@ -618,6 +624,9 @@ Możesz to zmienić w dowolnym momencie w Ustawieniach &gt; Prywatność.</value
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Brak danych treningowych do eksportu</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Brak dostępnego silnika TTS. Zainstaluj dyspozytora mowy dla systemowego TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Brak danych treningowych użytkownika</value>
