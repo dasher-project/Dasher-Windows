@@ -316,108 +316,9 @@ public static class TargetContextReader
             string? text = document.GetText(-1);
             if (text == null) return null;
 
-            // Compute the caret offset from the document start.
-            int caretUtf16 = text.Length; // default: end of text
-            try
-            {
-                // Preferred: TextPattern2.GetCaretRange — the ONLY API that
-                // reports the caret's ACTIVE end during a non-collapsed
-                // selection ("selection anchors wrong caret endpoint":
-                // measuring through sel.Start anchors predictions at the
-                // beginning of a leftward-extended selection). Providers
-                // without TextPattern2 (older, some Electron builds) throw
-                // on the cast and fall through.
-                IUIAutomationTextRange? caretRange = null;
-                try
-                {
-                    if (pattern is IUIAutomationTextPattern2 tp2)
-                    {
-                        var active = 0;
-                        caretRange = tp2.GetCaretRange(out active);
-                        if (caretRange != null)
-                            Log($"  [UIA] caret via GetCaretRange (active={active})");
-                    }
-                }
-                catch { /* no TextPattern2 — selection-based fallback below */ }
-
-                if (caretRange != null)
-                {
-                    var truncated = document.Clone();
-                    truncated.MoveEndpointByRange(
-                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
-                        caretRange,
-                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
-                    var beforeCaret = truncated.GetText(-1) ?? "";
-                    caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
-                }
-                else if ((caretRange = TryRangeFromSystemCaret(uia, pattern, targetHwnd)) != null)
-                {
-                    // System caret → RangeFromPoint: exact caret position
-                    // including the ACTIVE end of a selection, for any
-                    // provider supporting RangeFromPoint (nearly all).
-                    // Covers backward selections (Shift+Left, Ctrl+Shift+Home,
-                    // right-to-left drag) that TextPattern1 ranges cannot
-                    // describe — they carry no direction information.
-                    var truncated = document.Clone();
-                    truncated.MoveEndpointByRange(
-                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
-                        caretRange,
-                        TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
-                    var beforeCaret = truncated.GetText(-1) ?? "";
-                    caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
-                    Log($"[UIA] caret via system caret → RangeFromPoint: {caretUtf16}");
-                }
-                else
-                {
-                    var selection = pattern.GetSelection();
-                    if (selection != null && selection.Length > 0)
-                    {
-                        var sel = selection.GetElement(0);
-                        // Last-resort selection fallback. TextPattern1 cannot
-                        // report selection DIRECTION — that is the documented
-                        // reason TextPattern2.GetCaretRange exists — so for a
-                        // non-collapsed selection we anchor at the END, the
-                        // active end of forward selections (shift+Right,
-                        // Ctrl+Shift+End, left-to-right drag). Backward
-                        // selections are handled exactly by the two paths
-                        // above whenever the system caret is visible; the
-                        // residual case (no TextPattern2, hidden caret) is
-                        // genuinely undetectable via TextPattern1.
-                        var selStart = sel.Clone();
-                        var startLen = 0;
-                        {
-                            var t = document.Clone();
-                            t.MoveEndpointByRange(
-                                TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
-                                selStart,
-                                TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
-                            startLen = (t.GetText(-1) ?? "").Length;
-                        }
-                        var selEndLen = 0;
-                        {
-                            var t = document.Clone();
-                            t.MoveEndpointByRange(
-                                TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
-                                sel,
-                                TextPatternRangeEndpoint.TextPatternRangeEndpoint_End);
-                            selEndLen = (t.GetText(-1) ?? "").Length;
-                        }
-                        caretUtf16 = Math.Clamp(
-                            selStart.CompareEndpoints(
-                                TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start,
-                                sel,
-                                TextPatternRangeEndpoint.TextPatternRangeEndpoint_End) == 0
-                                ? startLen   // collapsed
-                                : selEndLen, // non-collapsed → active end
-                            0, text.Length);
-                        Log($"  [UIA] caret via selection: start={startLen} end={selEndLen} → {caretUtf16}");
-                    }
-                }
-            }
-            catch
-            {
-                caretUtf16 = text.Length;
-            }
+            // Seeding keeps the end-of-text default when every rung is
+            // dead (today's behavior — only MUTATING callers refuse).
+            int caretUtf16 = ResolveCaretOffset(uia, pattern, document, text, targetHwnd, out _);
 
             Log($"  [UIA] read {text.Length} chars, caret16={caretUtf16}, source={source}");
             return new TargetContext(text, caretUtf16, source);
@@ -427,6 +328,134 @@ public static class TargetContextReader
             Log($"[UIA] TextPattern read threw: {ex.Message}");
             return null;
         }
+    }
+
+    /// <summary>
+    /// The caret's document-relative UTF-16 offset, via the capability
+    /// ladder below (each step's rationale lives with its code). Shared by
+    /// the context read here and the RFC 0021/#121 unit actions
+    /// (TargetTextActions sentence spans measure from the caret too).
+    /// Defaults to end-of-text when every step is unavailable;
+    /// <paramref name="resolved"/> is false exactly then — the seeding
+    /// read here keeps the default, but a MUTATING caller must refuse to
+    /// anchor on a defaulted offset (review round 2: a backward sentence
+    /// delete from a fabricated end-of-text caret would silently remove
+    /// the user's last sentence at the wrong spot while telemetry claimed
+    /// via=uia-select). Public so the ladder's resolved/unresolved
+    /// contract is pinnable (SelectSpanByOffsets precedent).
+    /// </summary>
+    public static int ResolveCaretOffset(
+        CUIAutomationClass uia, IUIAutomationTextPattern pattern,
+        IUIAutomationTextRange document, string text, IntPtr targetHwnd,
+        out bool resolved)
+    {
+        int caretUtf16 = text.Length; // default: end of text
+        resolved = false;
+        try
+        {
+            // Preferred: TextPattern2.GetCaretRange — the ONLY API that
+            // reports the caret's ACTIVE end during a non-collapsed
+            // selection ("selection anchors wrong caret endpoint":
+            // measuring through sel.Start anchors predictions at the
+            // beginning of a leftward-extended selection). Providers
+            // without TextPattern2 (older, some Electron builds) throw
+            // on the cast and fall through.
+            IUIAutomationTextRange? caretRange = null;
+            try
+            {
+                if (pattern is IUIAutomationTextPattern2 tp2)
+                {
+                    var active = 0;
+                    caretRange = tp2.GetCaretRange(out active);
+                    if (caretRange != null)
+                        Log($"  [UIA] caret via GetCaretRange (active={active})");
+                }
+            }
+            catch { /* no TextPattern2 — selection-based fallback below */ }
+
+            if (caretRange != null)
+            {
+                var truncated = document.Clone();
+                truncated.MoveEndpointByRange(
+                    TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
+                    caretRange,
+                    TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
+                var beforeCaret = truncated.GetText(-1) ?? "";
+                caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
+                resolved = true;
+            }
+            else if ((caretRange = TryRangeFromSystemCaret(uia, pattern, targetHwnd)) != null)
+            {
+                // System caret → RangeFromPoint: exact caret position
+                // including the ACTIVE end of a selection, for any
+                // provider supporting RangeFromPoint (nearly all).
+                // Covers backward selections (Shift+Left, Ctrl+Shift+Home,
+                // right-to-left drag) that TextPattern1 ranges cannot
+                // describe — they carry no direction information.
+                var truncated = document.Clone();
+                truncated.MoveEndpointByRange(
+                    TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
+                    caretRange,
+                    TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
+                var beforeCaret = truncated.GetText(-1) ?? "";
+                caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
+                resolved = true;
+                Log($"[UIA] caret via system caret → RangeFromPoint: {caretUtf16}");
+            }
+            else
+            {
+                var selection = pattern.GetSelection();
+                if (selection != null && selection.Length > 0)
+                {
+                    var sel = selection.GetElement(0);
+                    // Last-resort selection fallback. TextPattern1 cannot
+                    // report selection DIRECTION — that is the documented
+                    // reason TextPattern2.GetCaretRange exists — so for a
+                    // non-collapsed selection we anchor at the END, the
+                    // active end of forward selections (shift+Right,
+                    // Ctrl+Shift+End, left-to-right drag). Backward
+                    // selections are handled exactly by the two paths
+                    // above whenever the system caret is visible; the
+                    // residual case (no TextPattern2, hidden caret) is
+                    // genuinely undetectable via TextPattern1.
+                    var selStart = sel.Clone();
+                    var startLen = 0;
+                    {
+                        var t = document.Clone();
+                        t.MoveEndpointByRange(
+                            TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
+                            selStart,
+                            TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
+                        startLen = (t.GetText(-1) ?? "").Length;
+                    }
+                    var selEndLen = 0;
+                    {
+                        var t = document.Clone();
+                        t.MoveEndpointByRange(
+                            TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
+                            sel,
+                            TextPatternRangeEndpoint.TextPatternRangeEndpoint_End);
+                        selEndLen = (t.GetText(-1) ?? "").Length;
+                    }
+                    caretUtf16 = Math.Clamp(
+                        selStart.CompareEndpoints(
+                            TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start,
+                            sel,
+                            TextPatternRangeEndpoint.TextPatternRangeEndpoint_End) == 0
+                            ? startLen   // collapsed
+                            : selEndLen, // non-collapsed → active end
+                        0, text.Length);
+                    resolved = true;
+                    Log($"  [UIA] caret via selection: start={startLen} end={selEndLen} → {caretUtf16}");
+                }
+            }
+        }
+        catch
+        {
+            caretUtf16 = text.Length;
+            resolved = false;
+        }
+        return caretUtf16;
     }
 
     /// <summary>
