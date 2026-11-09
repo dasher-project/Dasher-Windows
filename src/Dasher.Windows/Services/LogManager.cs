@@ -32,6 +32,41 @@ public static class LogManager
     /// matter.</summary>
     public static readonly object KeyboardLogLock = new();
 
+    /// <summary>The shared keyboard_debug.log path (same file KbLog, the
+    /// tracker and the hygiene watchdog append to).</summary>
+    public static string KeyboardLogPath => Path.Combine(DasherDir, "keyboard_debug.log");
+
+    /// <summary>
+    /// #115: guarded-log a swallowed pump-adjacent native-callback failure.
+    /// Distinct marker lines (SEH vs managed) + the callback name, so a
+    /// field log positively identifies which callback was guarded — these
+    /// lines are rare, always-on diagnostics (never gated on
+    /// AdvancedLogging). Returns the marker string so unit tests can pin it
+    /// without touching the log file.
+    /// </summary>
+    public static string PumpCallbackGuardLog(string callbackName, Exception ex)
+    {
+        try
+        {
+            var marker = ex is System.Runtime.InteropServices.SEHException seh
+                ? $"pump callback guarded (SEH): {callbackName} (0x{seh.HResult:X}) — swallowed, continuing"
+                : $"pump callback guarded (Exception): {callbackName} {ex.GetType().Name}: {ex.Message} — swallowed, continuing";
+            try
+            {
+                lock (KeyboardLogLock)
+                {
+                    File.AppendAllText(KeyboardLogPath, $"{DateTime.Now:HH:mm:ss.fff} [pump] {marker}\n");
+                }
+            }
+            catch { /* logging must never re-throw into the guard */ }
+            return marker;
+        }
+        catch
+        {
+            return "";
+        }
+    }
+
     /// <summary>Files managed by this class (relative to the Dasher dir).</summary>
     private static readonly string[] ManagedLogs =
     {

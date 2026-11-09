@@ -313,9 +313,39 @@ public static class AnalyticsService
                 // SDK's native $exception typing names the wrapper class.
                 crashProps["exception_type"] = exceptionType;
 
-                // Use CaptureException so PostHog Error Tracking sees it as $exception
-                var ex = new SavedCrashException(exceptionType, stackTrace);
-                PostHogSdk.CaptureException(ex, _distinctId, crashProps, null, false, DateTimeOffset.UtcNow);
+                // #115 crash-envelope fidelity: posthog-dotnet 2.7.1's
+                // CaptureException rebuilds $exception_type/$exception_
+                // message/$exception_list from the Exception INSTANCE
+                // (ExceptionPropertiesBuilder.Build overwrites any passed
+                // properties), so the deferred upload reported type
+                // "SavedCrashException" and the SDK's frames (StackTrace of
+                // a never-thrown exception) carried no original methods —
+                // PostHog grouped by the envelope type and every
+                // $exception_functions column read []. The raw path —
+                // Capture(distinctId, "$exception", properties) — sends
+                // properties untouched, so the envelope is built by hand
+                // from the ORIGINAL type/message/frames
+                // (DeferredCrashEnvelope). Chosen over the SDK's
+                // CaptureException because no Type-faithful Exception
+                // instance can exist for a type parsed off disk;
+                // structured frames ARE possible on the raw path.
+                // stack_trace + app_version stay as properties for the
+                // detail pane.
+                var message = DeferredCrashEnvelope.ParseOriginalMessage(exceptionType, stackTrace);
+                crashProps["$exception_type"] = exceptionType;
+                crashProps["$exception_message"] = message;
+                crashProps["$exception_level"] = "error";
+                crashProps["$exception_personURL"] =
+                    $"https://eu.posthog.com/project/{ProjectToken}/person/{_distinctId}";
+                crashProps["$exception_list"] = DeferredCrashEnvelope.BuildExceptionList(
+                    exceptionType, message, stackTrace);
+
+                // Event timestamp = the crash time (file write), not the
+                // flush time — the deferred event lands in the right day's
+                // trends. (Was UtcNow before #115.)
+                var crashTime = File.GetLastWriteTimeUtc(CrashFilePath);
+                PostHogSdk.Capture(_distinctId, "$exception", crashProps, null, false,
+                    (DateTimeOffset)(crashTime.Year > 2020 ? crashTime : DateTime.UtcNow));
                 PostHogSdk.FlushAsync().Wait(TimeSpan.FromSeconds(5));
 
                 File.Delete(CrashFilePath); // sent — no longer needed locally
@@ -358,7 +388,11 @@ public static class AnalyticsService
 /// <summary>
 /// Reconstructed exception for deferred crash reporting (RFC 0009).
 /// Carries the original exception type name and saved stack trace so
-/// PostHogSdk.CaptureException produces a proper $exception event.
+/// callers can inspect them. Since #115 the deferred upload no longer goes
+/// through CaptureException with this wrapper (the SDK reports the wrapper's
+/// type and no original frames); FlushPendingCrash builds the envelope via
+/// <see cref="DeferredCrashEnvelope"/> instead. Retained for its #60 tests
+/// and as the on-disk format's reference reconstruction.
 /// The saved frames are installed via ExceptionDispatchInfo.SetRemoteStackTrace
 /// (#60): the SDK reads ex.StackTrace / ex.GetType(), not ToString() — without
 /// this the deferred reports arrived as type-only events with no frames,

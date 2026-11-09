@@ -151,70 +151,84 @@ public sealed class KeyboardTargetTracker : IDisposable
         }
         catch { /* never block install on this optimisation */ }
 
+        // #115: the hook proc is delivered INSIDE DispatchMessage on the UI
+        // thread — an SEH (or any throw) from this body unwinds the Avalonia
+        // message loop and kills the app (v0.1.38 field crash). The body
+        // lives in OnWinEvent so PumpGuard wraps exactly it; a guarded
+        // callback is never fatal.
         _proc = (hook, eventType, hwnd, idObject, idChild, thread, time) =>
-        {
-            if (hwnd == IntPtr.Zero) return;
-
-            // EVENT_OBJECT_FOCUS fires for non-window objects too (individual
-            // controls, accessible elements) — the hwnd is still the containing
-            // window. Only the foreground event is filtered to OBJID_WINDOW;
-            // filtering focus events would reject browser/Electron editable
-            // elements that are not windowed controls.
-            if (eventType == EVENT_SYSTEM_FOREGROUND && idObject != 0 /* OBJID_WINDOW */) return;
-
-            // Normalize to the root window — the tracked target is always a
-            // root (see TargetWindowIdentity). A child-control HWND here would
-            // break SetForegroundWindow restoration and would make the change
-            // comparison meaningless (focus on a child of the current target
-            // is a same-window field change, not a new target).
-            var root = TargetWindowIdentity.RootOf(hwnd);
-            if (root == IntPtr.Zero) return; // can't root — ignore, never store raw
-            hwnd = root;
-
-            if (hwnd == _ourHwnd) return; // Dasher gained focus — not a target
-
-            var changed = hwnd != _target;
-
-            if (eventType == EVENT_OBJECT_FOCUS)
-            {
-                // Background-focus guard ("background focus replaces target"):
-                // focus events are system-wide and background applications
-                // emit them for internal control focus changes without being
-                // foreground. Accepting one would let a background app hijack
-                // the target — its text would enter predictions and it would
-                // be ACTIVATED for injected input. Two tiers:
-                //
-                //  - hwnd == _target: a same-window field change. It cannot
-                //    hijack anything (the window is already the target) and
-                //    MUST be accepted unconditionally — hook callbacks are
-                //    delivered asynchronously, and gating them on a live
-                //    GetForegroundWindow() would discard valid field
-                //    transitions whenever the foreground flickered between
-                //    the event and its delivery ("delayed focus events get
-                //    discarded").
-                //  - hwnd != _target: a focus event can only PROMOTE a new
-                //    target when its window really is the foreground —
-                //    EVENT_SYSTEM_FOREGROUND covers the ordinary switches.
-                if (hwnd != _target)
-                {
-                    var fgRoot = TargetWindowIdentity.RootOf(GetForegroundWindow());
-                    if (fgRoot == IntPtr.Zero || hwnd != fgRoot) return;
-                }
-            }
-            // else EVENT_SYSTEM_FOREGROUND: hwnd IS the new foreground by
-            // definition of the event — no guard needed.
-
-            _target = hwnd;
-            Raise(eventType == EVENT_OBJECT_FOCUS
-                ? (changed ? "focus changed (new window)" : "focus changed")
-                : (changed ? "foreground changed" : "foreground re-focus"));
-        };
+            Services.PumpGuard.Run(nameof(OnWinEvent),
+                () => OnWinEvent(hook, eventType, hwnd, idObject, idChild, thread, time));
 
         _foregroundHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
             IntPtr.Zero, _proc, 0, 0, WINEVENT_OUTOFCONTEXT);
         _focusHook = SetWinEventHook(EVENT_OBJECT_FOCUS, EVENT_OBJECT_FOCUS,
             IntPtr.Zero, _proc, 0, 0, WINEVENT_OUTOFCONTEXT);
         Log($"Hooks installed: fg=0x{_foregroundHook:X} focus=0x{_focusHook:X}");
+    }
+
+    /// <summary>#115: the WinEvent hook-proc body (both hooks share it).
+    /// ALWAYS invoked through <see cref="Services.PumpGuard.Run"/> — a
+    /// native/COM failure inside RootOf/GetForegroundWindow must never
+    /// propagate into DispatchMessage.</summary>
+    private void OnWinEvent(IntPtr hook, uint eventType, IntPtr hwnd, int idObject,
+        int idChild, uint dwEventThread, uint dwmsEventTime)
+    {
+        if (hwnd == IntPtr.Zero) return;
+
+        // EVENT_OBJECT_FOCUS fires for non-window objects too (individual
+        // controls, accessible elements) — the hwnd is still the containing
+        // window. Only the foreground event is filtered to OBJID_WINDOW;
+        // filtering focus events would reject browser/Electron editable
+        // elements that are not windowed controls.
+        if (eventType == EVENT_SYSTEM_FOREGROUND && idObject != 0 /* OBJID_WINDOW */) return;
+
+        // Normalize to the root window — the tracked target is always a
+        // root (see TargetWindowIdentity). A child-control HWND here would
+        // break SetForegroundWindow restoration and would make the change
+        // comparison meaningless (focus on a child of the current target
+        // is a same-window field change, not a new target).
+        var root = TargetWindowIdentity.RootOf(hwnd);
+        if (root == IntPtr.Zero) return; // can't root — ignore, never store raw
+        hwnd = root;
+
+        if (hwnd == _ourHwnd) return; // Dasher gained focus — not a target
+
+        var changed = hwnd != _target;
+
+        if (eventType == EVENT_OBJECT_FOCUS)
+        {
+            // Background-focus guard ("background focus replaces target"):
+            // focus events are system-wide and background applications
+            // emit them for internal control focus changes without being
+            // foreground. Accepting one would let a background app hijack
+            // the target — its text would enter predictions and it would
+            // be ACTIVATED for injected input. Two tiers:
+            //
+            //  - hwnd == _target: a same-window field change. It cannot
+            //    hijack anything (the window is already the target) and
+            //    MUST be accepted unconditionally — hook callbacks are
+            //    delivered asynchronously, and gating them on a live
+            //    GetForegroundWindow() would discard valid field
+            //    transitions whenever the foreground flickered between
+            //    the event and its delivery ("delayed focus events get
+            //    discarded").
+            //  - hwnd != _target: a focus event can only PROMOTE a new
+            //    target when its window really is the foreground —
+            //    EVENT_SYSTEM_FOREGROUND covers the ordinary switches.
+            if (hwnd != _target)
+            {
+                var fgRoot = TargetWindowIdentity.RootOf(GetForegroundWindow());
+                if (fgRoot == IntPtr.Zero || hwnd != fgRoot) return;
+            }
+        }
+        // else EVENT_SYSTEM_FOREGROUND: hwnd IS the new foreground by
+        // definition of the event — no guard needed.
+
+        _target = hwnd;
+        Raise(eventType == EVENT_OBJECT_FOCUS
+            ? (changed ? "focus changed (new window)" : "focus changed")
+            : (changed ? "foreground changed" : "foreground re-focus"));
     }
 
     /// <summary>Remove both hooks (idempotent; also called by Dispose).</summary>

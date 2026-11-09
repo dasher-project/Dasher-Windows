@@ -3119,31 +3119,40 @@ public partial class MainWindow : Window
 
     private void OnEngineSpeak(IntPtr textPtr, int interrupt, IntPtr user_data)
     {
-        if (textPtr == IntPtr.Zero) return;
-        var text = Marshal.PtrToStringUTF8(textPtr);
-        if (string.IsNullOrEmpty(text)) return;
-        _ = SpeechService.Instance.SpeakAsync(text, interrupt != 0);
+        // #115: native speak callback — fires on the engine frame thread
+        // (the pump thread); guarded so an SEH can never reach DispatchMessage.
+        Services.PumpGuard.Run(nameof(OnEngineSpeak), () =>
+        {
+            if (textPtr == IntPtr.Zero) return;
+            var text = Marshal.PtrToStringUTF8(textPtr);
+            if (string.IsNullOrEmpty(text)) return;
+            _ = SpeechService.Instance.SpeakAsync(text, interrupt != 0);
+        });
     }
 
     private void OnParameterChanged(int parameterKey, IntPtr userData)
     {
-        if (parameterKey == ParameterKeys.LP_MAX_BITRATE)
+        // #115: native parameter-changed callback on the pump thread — guarded.
+        Services.PumpGuard.Run(nameof(OnParameterChanged), () =>
         {
-            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            if (parameterKey == ParameterKeys.LP_MAX_BITRATE)
             {
-                if (_vm == null || _vm.Handle == IntPtr.Zero) return;
-                _vm.LoadSpeedFromEngine();
-            });
-        }
-        else if (parameterKey == ParameterKeys.BP_CONTROL_MODE)
-        {
-            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+                    _vm.LoadSpeedFromEngine();
+                });
+            }
+            else if (parameterKey == ParameterKeys.BP_CONTROL_MODE)
             {
-                if (_vm == null || _vm.Handle == IntPtr.Zero) return;
-                _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
-                UpdateControlModeLabel();
-            });
-        }
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    if (_vm == null || _vm.Handle == IntPtr.Zero) return;
+                    _controlModeActive = NativeBridge.dasher_get_bool_parameter(_vm.Handle, ParameterKeys.BP_CONTROL_MODE) != 0;
+                    UpdateControlModeLabel();
+                });
+            }
+        });
     }
 
     [DllImport("user32.dll")] private static extern bool OpenClipboard(IntPtr hWndNewOwner);
