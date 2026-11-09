@@ -260,6 +260,31 @@ public static class SelectActions
         };
     }
 
+    // ── RFC 0021 amendment: sentence-accurate direct-mode delete (#121) ───
+
+    /// <summary>The mechanism a direct-mode delete actually applied.
+    /// SentenceSpan = the #121 measured sentence span (SentenceWindow over
+    /// the target document read) + plain Delete; ParagraphSpan = the #89
+    /// TextPattern paragraph span + Delete; Chords = key composition.</summary>
+    public enum DirectDeleteMechanism { SentenceSpan, ParagraphSpan, Chords }
+
+    /// <summary>The telemetry suffix riding the direct-mode delete
+    /// ui_action for the mechanism APPLIED. #121: sentence-exact deletes
+    /// report via=uia-select; fallback=paragraph is kept ONLY on the
+    /// degradation paths where the sentence measurement was unavailable.
+    /// Paragraph keeps its #89 via=uia; chord-only granularities carry no
+    /// suffix. Pure so the tag ladder is pinnable.</summary>
+    public static string DirectDeleteSuffix(SelectDistance dist, DirectDeleteMechanism via)
+    {
+        if (dist == SelectDistance.Sentence)
+            return via == DirectDeleteMechanism.SentenceSpan ? ",via=uia-select"
+                : via == DirectDeleteMechanism.ParagraphSpan ? ",via=uia,fallback=paragraph"
+                : ",fallback=paragraph";
+        return dist == SelectDistance.Paragraph && via == DirectDeleteMechanism.ParagraphSpan
+            ? ",via=uia"
+            : "";
+    }
+
     /// <summary>Editor-mode caret move over the pane text (pure). All =
     /// document start/end; the rest measure with the same boundary
     /// functions the select path uses.</summary>

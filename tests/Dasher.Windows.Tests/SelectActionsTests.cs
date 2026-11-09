@@ -403,6 +403,51 @@ public class SelectActionsTests
         var (s2, e2) = SelectActions.DeleteBounds("abc", 3, SelectDistance.Word, SelectDirection.Forward);
         Assert.Equal(3, s2); Assert.Equal(3, e2);
     }
+
+    // ── Direct-mode sentence delete (#121) ───────────────────────────────
+
+    [Fact]
+    public void DirectDeleteSuffix_sentence_exact_path_reports_uia_select()
+    {
+        // field logs must distinguish the sentence-exact mechanism from
+        // the #89 paragraph spans (via=uia)
+        Assert.Equal(",via=uia-select",
+            SelectActions.DirectDeleteSuffix(SelectDistance.Sentence, SelectActions.DirectDeleteMechanism.SentenceSpan));
+    }
+
+    [Fact]
+    public void DirectDeleteSuffix_sentence_degradations_keep_fallback_tag()
+    {
+        // paragraph span applied after sentence measurement failed…
+        Assert.Equal(",via=uia,fallback=paragraph",
+            SelectActions.DirectDeleteSuffix(SelectDistance.Sentence, SelectActions.DirectDeleteMechanism.ParagraphSpan));
+        // …and the chord composition (no UIA at all)
+        Assert.Equal(",fallback=paragraph",
+            SelectActions.DirectDeleteSuffix(SelectDistance.Sentence, SelectActions.DirectDeleteMechanism.Chords));
+    }
+
+    [Fact]
+    public void DirectDeleteSuffix_other_granularities_unchanged()
+    {
+        Assert.Equal(",via=uia",
+            SelectActions.DirectDeleteSuffix(SelectDistance.Paragraph, SelectActions.DirectDeleteMechanism.ParagraphSpan));
+        Assert.Equal("", SelectActions.DirectDeleteSuffix(SelectDistance.Paragraph, SelectActions.DirectDeleteMechanism.Chords));
+        Assert.Equal("", SelectActions.DirectDeleteSuffix(SelectDistance.Word, SelectActions.DirectDeleteMechanism.Chords));
+        Assert.Equal("", SelectActions.DirectDeleteSuffix(SelectDistance.Char, SelectActions.DirectDeleteMechanism.Chords));
+        Assert.Equal("", SelectActions.DirectDeleteSuffix(SelectDistance.All, SelectActions.DirectDeleteMechanism.Chords));
+    }
+
+    [Fact]
+    public void DeleteKeystrokes_sentence_still_maps_to_the_paragraph_composition()
+    {
+        // The degradation rung: sentence has no chord of its own — the
+        // paragraph select+Delete composition IS its chord fallback.
+        var plan = SelectActions.DeleteKeystrokes(SelectDistance.Sentence, SelectDirection.Backward);
+        Assert.Equal(2, plan.Count); // Ctrl+Shift+Up then plain Delete
+        Assert.True(plan[0].Ctrl && plan[0].Shift);
+        Assert.Equal((ushort)0x26, plan[0].Arrow);
+        Assert.Equal((ushort)0x2E, plan[1].Arrow);
+    }
 }
 
 

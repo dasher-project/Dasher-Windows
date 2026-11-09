@@ -1547,14 +1547,16 @@ public partial class MainWindow : Window
         }
         var (dist, dir) = action;
         var forward = dir == Services.SelectDirection.Forward;
-        // Sentence has no Windows chord and no UIA unit: every direct-mode
-        // path falls back to paragraph granularity (logged + flagged in
-        // telemetry so field data never reads sentence-accurate when the
-        // applied granularity was paragraph).
+        // Sentence has no Windows chord: select/move fall back to paragraph
+        // granularity (logged + flagged in telemetry so field data never
+        // reads sentence-accurate when the applied granularity was
+        // paragraph). Delete (#121) no longer degrades — it measures the
+        // sentence span itself first (see the delete branch); chordDist
+        // still names the granularity every chord-based path uses.
         var chordDist = dist == Services.SelectDistance.Sentence
             ? Services.SelectDistance.Paragraph : dist;
         var sentenceFallback = dist == Services.SelectDistance.Sentence ? ",fallback=paragraph" : "";
-        if (dist == Services.SelectDistance.Sentence)
+        if (dist == Services.SelectDistance.Sentence && name != "delete")
             KbLog($"{name}: sentence granularity has no direct-mode mapping - paragraph fallback");
         // Reentrancy (review loop 1): dwell-repeat can fire a second action
         // while the first awaits UIA. A generation counter supersedes the
@@ -1642,6 +1644,50 @@ public partial class MainWindow : Window
             }
             else // delete
             {
+                if (dist == Services.SelectDistance.Sentence)
+                {
+                    // #121: sentence has no Windows chord — and UIA has no
+                    // TextUnit_Sentence, so the measurement is the
+                    // product's own (SentenceWindow, the same boundaries
+                    // the editor-mode delete uses) applied to the target's
+                    // document read; the measured span is Select()ed via
+                    // TextPattern and one plain Delete key makes the
+                    // deletion sentence-exact. The caret echo the Select
+                    // provokes is covered by the wide own-inject window
+                    // armed above (the paste/select precedent); the
+                    // generation counter + in-flight box guard the
+                    // double-mutation races.
+                    var span = await Services.TargetTextActions.SelectSentenceSpanAsync(
+                        _targetTracker.Current, forward, superseded: Superseded);
+                    if (span == Services.TargetTextActions.SpanOutcome.MeasuredEmpty)
+                    {
+                        // Measured: nothing sentence-granular to delete at
+                        // this caret — a no-op. Falling back to paragraph
+                        // here would delete MORE than the user asked.
+                        KbLog("  delete sentence: measured span empty at caret - no-op");
+                        Services.AnalyticsService.CaptureUiAction("control_tree", "delete",
+                            $"dist=sentence,forward={(forward ? "yes" : "no")},via=uia-select,empty=yes");
+                        return;
+                    }
+                    if (span == Services.TargetTextActions.SpanOutcome.Applied)
+                    {
+                        // Post-await guards (same as the paragraph rung):
+                        // superseded, picker-opened or focus lost → no key.
+                        if (generation != _unitActionGeneration || _pickerSessionActive ||
+                            !_targetTracker.TargetIsForegroundOrUnknown(OurHwnd())) return;
+                        SendVirtualKey(VK_DELETE);
+                        Services.ModifierHygiene.AssertClean("sentence-delete");
+                        Services.AnalyticsService.CaptureUiAction("control_tree", "delete",
+                            $"dist=sentence,forward={(forward ? "yes" : "no")},via=uia-select");
+                        return;
+                    }
+                    KbLog("  delete sentence: no UIA sentence measurement - paragraph fallback (#121)");
+                    // post-await: superseded, picker-opened or focus lost → no fallback
+                    if (generation != _unitActionGeneration || _pickerSessionActive ||
+                        !_targetTracker.TargetIsForegroundOrUnknown(OurHwnd())) return;
+                    // deliberate fall-through: the paragraph rung below is
+                    // the degradation, telemetry-tagged fallback=paragraph
+                }
                 if (chordDist == Services.SelectDistance.Paragraph)
                 {
                     // Precise unit span via TextPattern, then the Delete
@@ -1657,8 +1703,10 @@ public partial class MainWindow : Window
                         if (generation != _unitActionGeneration || _pickerSessionActive ||
                             !_targetTracker.TargetIsForegroundOrUnknown(OurHwnd())) return;
                         SendVirtualKey(VK_DELETE);
+                        if (dist == Services.SelectDistance.Sentence)
+                            Services.ModifierHygiene.AssertClean("sentence-delete");
                         Services.AnalyticsService.CaptureUiAction("control_tree", "delete",
-                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")},via=uia{sentenceFallback}");
+                            $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")}{Services.SelectActions.DirectDeleteSuffix(dist, Services.SelectActions.DirectDeleteMechanism.ParagraphSpan)}");
                         return;
                     }
                     KbLog("  delete paragraph: no TextPattern - chord composition fallback");

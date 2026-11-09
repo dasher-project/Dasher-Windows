@@ -22,6 +22,15 @@ public static class TargetTextActions
 {
     public enum Unit { Word, Paragraph }
 
+    /// <summary>Outcome of a measured sentence-span action (#121):
+    /// Applied = span selected, caller sends the Delete key;
+    /// MeasuredEmpty = measurement succeeded but the span is degenerate
+    /// (caret at a document edge — nothing sentence-granular to delete;
+    /// falling back to paragraph would delete MORE than asked);
+    /// Unavailable = the target refused UIA measurement (no TextPattern,
+    /// hung provider, endpoint-count mismatch) — caller falls back.</summary>
+    public enum SpanOutcome { Applied, MeasuredEmpty, Unavailable }
+
     // Interop enums (Interop.UIAutomationClient): endpoint/unit params are
     // enum-typed in this interop assembly.
     private static readonly TextPatternRangeEndpoint EndpointStart =
@@ -54,17 +63,35 @@ public static class TargetTextActions
     /// </summary>
     public static Task<bool> ExtendSelectionAsync(IntPtr targetHwnd, Unit unit, bool forward, int timeoutMs = 300, Func<bool>? superseded = null)
         => RunAsync(targetHwnd, timeoutMs, (range, aborted) =>
-        {
-            var r = range.Clone();
-            var moved = r.MoveEndpointByUnit(
-                forward ? EndpointEnd : EndpointStart,
-                UnitValue(unit),
-                forward ? 1 : -1);
-            if (moved == 0) { Log($"  [TextAction] at document edge (moved=0)"); return false; }
-            if (aborted() || (superseded?.Invoke() ?? false)) { Log("  [TextAction] aborted/superseded before Select — result discarded"); return false; }
-            r.Select();
-            return true;
-        }, $"extend-selection unit={unit} forward={forward}");
+            ExtendSelectionByUnit(range, unit, forward,
+                () => aborted() || (superseded?.Invoke() ?? false)),
+            $"extend-selection unit={unit} forward={forward}");
+
+    /// <summary>
+    /// The shared span op behind <see cref="ExtendSelectionAsync"/> and
+    /// <see cref="SelectUnitSpanAsync"/>: clone the range the target
+    /// reports as its first selection, move one endpoint one unit
+    /// (the MEASUREMENT — the provider walks TextUnit boundaries), then
+    /// Select the moved range. Public and range-parameterised so tests
+    /// drive it with a fake text provider (measured bounds, the Select
+    /// call, edge/supersede semantics — see TargetTextActionsTests).
+    /// <paramref name="cancelled"/> is checked immediately before the
+    /// Select: a timeout or a newer dispatch must not land a stale
+    /// selection.
+    /// </summary>
+    public static bool ExtendSelectionByUnit(
+        IUIAutomationTextRange selection, Unit unit, bool forward, Func<bool> cancelled)
+    {
+        var r = selection.Clone();
+        var moved = r.MoveEndpointByUnit(
+            forward ? EndpointEnd : EndpointStart,
+            UnitValue(unit),
+            forward ? 1 : -1);
+        if (moved == 0) { Log($"  [TextAction] at document edge (moved=0)"); return false; }
+        if (cancelled()) { Log("  [TextAction] aborted/superseded before Select — result discarded"); return false; }
+        r.Select();
+        return true;
+    }
 
     /// <summary>
     /// Move the target's caret by one unit (degenerate-range move + Select;
@@ -96,6 +123,81 @@ public static class TargetTextActions
     /// </summary>
     public static Task<bool> SelectUnitSpanAsync(IntPtr targetHwnd, Unit unit, bool forward, int timeoutMs = 300, Func<bool>? superseded = null)
         => ExtendSelectionAsync(targetHwnd, unit, forward, timeoutMs, superseded);
+
+    // ── #121: measured sentence spans ─────────────────────────────────────
+    //
+    // UIA has NO TextUnit_Sentence (the TextUnit ladder is
+    // Character/Format/Word/Line/Paragraph/Page/Document), so the sentence
+    // delete cannot ride MoveEndpointByUnit like word/paragraph do. It
+    // measures with the product's ONE sentence definition instead —
+    // SentenceWindow, the same boundary set the editor-mode delete and the
+    // context seeding use — over the target's document text + caret (the
+    // context-read machinery), then selects the measured span by
+    // character-count endpoint moves from the document range and the caller
+    // sends one plain Delete key.
+
+    /// <summary>The measured sentence-delete span (#121), pure: the
+    /// (start, end) UTF-16 offsets a sentence delete removes. Backward:
+    /// sentence start → caret; forward: caret → just past the next
+    /// boundary — identical to the editor-mode DeleteBounds semantics (the
+    /// same SentenceWindow measurement), so both modes agree on what a
+    /// "sentence" is. May be degenerate at document edges (nothing to
+    /// delete).</summary>
+    public static (int Start, int End) SentenceSpanOffsets(string text, int caretUtf16, bool forward)
+    {
+        var caret = Math.Clamp(caretUtf16, 0, text.Length);
+        var bound = SentenceWindow.SentenceBound(text, caret,
+            forward ? SelectDirection.Forward : SelectDirection.Backward);
+        return forward ? (caret, bound) : (bound, caret);
+    }
+
+    /// <summary>Build the [start, end) range from the document range by
+    /// character-count endpoint moves and Select it (UIA ranges have no
+    /// absolute-offset constructor; counts are verified — a provider that
+    /// clamps or swallows a move fails the action rather than selecting the
+    /// wrong span). Public and range-parameterised so tests drive it with a
+    /// fake text provider. <paramref name="cancelled"/> is checked
+    /// immediately before Select: a timeout or newer dispatch must not land
+    /// a stale selection.</summary>
+    public static bool SelectSpanByOffsets(
+        IUIAutomationTextRange document, int documentLength,
+        int start, int end, Func<bool> cancelled)
+    {
+        if (end <= start || start < 0 || end > documentLength) return false;
+        var r = document.Clone();                                                    // [0, N]
+        if (r.MoveEndpointByUnit(EndpointEnd, TextUnit.TextUnit_Character, start - documentLength)
+            != start - documentLength) return false;                                 // [0, start]
+        if (r.MoveEndpointByUnit(EndpointStart, TextUnit.TextUnit_Character, start)
+            != start) return false;                                                  // [start, start]
+        if (r.MoveEndpointByUnit(EndpointEnd, TextUnit.TextUnit_Character, end - start)
+            != end - start) return false;                                            // [start, end]
+        if (cancelled()) { Log("  [TextAction] aborted/superseded before Select — result discarded"); return false; }
+        r.Select();
+        return true;
+    }
+
+    /// <summary>
+    /// Measure + select the sentence span around the target's caret (#121 —
+    /// direct mode's sentence delete was a silent paragraph fallback, RFC
+    /// 0021's "no chord exists" gap). Runs the document read + caret ladder
+    /// + span select on the same guarded STA machinery as the other unit
+    /// actions. See <see cref="SpanOutcome"/> for the contract.
+    /// </summary>
+    public static Task<SpanOutcome> SelectSentenceSpanAsync(
+        IntPtr targetHwnd, bool forward, int timeoutMs = 300, Func<bool>? superseded = null)
+        => RunPatternAsync(targetHwnd, timeoutMs, (document, text, caret, aborted) =>
+        {
+            var (start, end) = SentenceSpanOffsets(text, caret, forward);
+            if (end <= start)
+            {
+                Log($"  [TextAction:sentence-span] measured empty (caret {caret}, text {text.Length})");
+                return SpanOutcome.MeasuredEmpty;
+            }
+            return SelectSpanByOffsets(document, text.Length, start, end,
+                    () => aborted() || (superseded?.Invoke() ?? false))
+                ? SpanOutcome.Applied
+                : SpanOutcome.Unavailable;
+        }, $"select-sentence-span forward={forward}");
 
     // ── machinery (the ReadAsync pattern, applied to MUTATING actions) ──────
     //
@@ -166,6 +268,84 @@ public static class TargetTextActions
             var applied = op(selection.GetElement(0), aborted);
             Log($"  [TextAction:{name}] applied={applied}");
             return applied;
+        }
+        finally
+        {
+            if (comInit) CoUninitialize();
+        }
+    }
+
+    // ── #121 pattern-level machinery: same thread/timeout/abort scaffolding
+    // as RunAsync, but the op receives the DOCUMENT (range + text + caret
+    // via the TargetContextReader ladder) instead of the current selection —
+    // the sentence span is measured from the caret, not extended from a
+    // selection edge.
+
+    private delegate SpanOutcome PatternOp(
+        IUIAutomationTextRange document, string text, int caretUtf16, Func<bool> aborted);
+
+    private static async Task<SpanOutcome> RunPatternAsync(IntPtr targetHwnd, int timeoutMs, PatternOp op, string name)
+    {
+        if (targetHwnd == IntPtr.Zero) return SpanOutcome.Unavailable;
+
+        var tcs = new TaskCompletionSource<SpanOutcome>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var aborted = new System.Runtime.CompilerServices.StrongBox<bool>();
+        var thread = new Thread(() =>
+        {
+            try { tcs.TrySetResult(RunPatternSync(targetHwnd, op, name, () => Volatile.Read(ref aborted.Value))); }
+            catch { tcs.TrySetResult(SpanOutcome.Unavailable); }
+        })
+        {
+            IsBackground = true,
+            Name = "UIA-TextAction",
+        };
+        thread.Start();
+
+        using var cts = new CancellationTokenSource(timeoutMs);
+        await using (cts.Token.Register(() =>
+        {
+            Volatile.Write(ref aborted.Value, true);
+            tcs.TrySetResult(SpanOutcome.Unavailable);
+        }))
+        {
+            return await tcs.Task.ConfigureAwait(false);
+        }
+    }
+
+    private static SpanOutcome RunPatternSync(IntPtr targetHwnd, PatternOp op, string name, Func<bool> aborted)
+    {
+        int hr = CoInitializeEx(IntPtr.Zero, COINIT_APARTMENTTHREADED);
+        bool comInit = hr == 0 || hr == 1; // S_OK or S_FALSE
+        try
+        {
+            uint pid = 0;
+            GetWindowThreadProcessId(targetHwnd, ref pid);
+            if (pid == 0) return SpanOutcome.Unavailable;
+
+            var uia = new CUIAutomationClass();
+            var pattern = TargetContextReader.FindTextPatternForWindow(uia, targetHwnd, pid, out _);
+            if (pattern == null)
+            {
+                Log($"  [TextAction:{name}] no TextPattern — caller falls back");
+                return SpanOutcome.Unavailable;
+            }
+
+            var document = pattern.DocumentRange;
+            if (document == null)
+            {
+                Log($"  [TextAction:{name}] no document range");
+                return SpanOutcome.Unavailable;
+            }
+            var text = document.GetText(-1);
+            if (text == null)
+            {
+                Log($"  [TextAction:{name}] document read failed");
+                return SpanOutcome.Unavailable;
+            }
+            var caret = TargetContextReader.ResolveCaretOffset(uia, pattern, document, text, targetHwnd);
+            var outcome = op(document, text, caret, aborted);
+            Log($"  [TextAction:{name}] {outcome}");
+            return outcome;
         }
         finally
         {
