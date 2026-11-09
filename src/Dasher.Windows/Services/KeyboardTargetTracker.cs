@@ -67,34 +67,6 @@ public sealed class KeyboardTargetTracker : IDisposable
     [DllImport("user32.dll")]
     private static extern bool IsWindow(IntPtr hWnd);
 
-    [DllImport("user32.dll")]
-    private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, IntPtr dwExtraInfo);
-
-    [DllImport("user32.dll")]
-    private static extern short GetKeyState(int nVirtKey);
-
-    [DllImport("user32.dll")]
-    private static extern uint SendInput(uint nInputs, AltInput[] pInputs, int cbSize);
-
-    /// <summary>Minimal INPUT for the ALT pair (SendInput, not keybd_event:
-    /// the legacy API can desynchronise press/release — the v0.1.44 stuck-Alt
-    /// regression).</summary>
-    [StructLayout(LayoutKind.Sequential)]
-    private struct AltInput
-    {
-        public uint type;
-        public ushort vk;
-        public ushort wScan;
-        public uint flags;
-        public uint time;
-        public IntPtr dwExtraInfo;
-    }
-
-    private static int AltInputSize => System.Runtime.InteropServices.Marshal.SizeOf<AltInput>();
-
-    private static void SendAltPair(AltInput[] inputs) =>
-        SendInput((uint)inputs.Length, inputs, AltInputSize);
-
     /// <summary>
     /// Record the currently-foreground window as the target (mode entry,
     /// Deactivated fallback). No-op for our own window or when foreground
@@ -369,42 +341,28 @@ public sealed class KeyboardTargetTracker : IDisposable
                 {
                     Log("  → AttachThreadInput failed — trying SetForegroundWindow alone");
                 }
-                // Foreground-lock unlock (the classic Windows workaround): a
-                // synthetic ALT press tells Windows "the user interacted with
-                // this process", granting foreground-transfer permission.
-                // Without it, SetForegroundWindow returns TRUE while the
-                // switch silently doesn't happen (the #106 verification
-                // catches this, but the switch then NEVER lands — the
-                // field-reported "every keystroke skipped for 6+ seconds").
-                //
-                // v0.1.44 regression (field-confirmed 2026-11-06): the
-                // keybd_event press/release pair could desynchronise — the
-                // release was lost and the OS keyboard state kept Alt held
-                // ("Alt key hints highlighted, Outlook cycling through
-                // messages as I zoomed"). Fixed: both events go in ONE
-                // SendInput call (atomic — the input system cannot
-                // interleave them), and a safety release fires after
-                // SetForegroundWindow if GetAsyncKeyState still shows Alt
-                // down.
-                var altPair = new[]
-                {
-                    new AltInput { type = 1 /* INPUT_KEYBOARD */, vk = 0x12, flags = 0 },
-                    new AltInput { type = 1, vk = 0x12, flags = 2 /* KEYEVENTF_KEYUP */ },
-                };
-                SendAltPair(altPair);
-
+                // #112: the synthetic ALT "foreground-lock unlock" tap that
+                // used to run here is RETIRED — this tracker must NEVER
+                // synthesize modifier keys again. The classic workaround taps
+                // Alt to pretend "the user interacted", but the tap raced our
+                // own output injections (this restore thread vs. the
+                // injection path, no ordering discipline): a single transient
+                // Alt-down landing mid-stream turned every concurrent
+                // keystroke into an Alt+letter accelerator in Outlook —
+                // Heide's v6.0.0 storm (ribbon commands fired while she
+                // zoomed; a message got deleted; minimize→restore "messed
+                // up" the same way). Atomicity (#99/39ee590) could not fix a
+                // transient, and the old GetKeyState "safety release" read
+                // the thread-synchronized state — stale on a background
+                // thread, so it could pass while Alt was effectively
+                // latched. The AttachThreadInput escalation itself satisfies
+                // the foreground lock in the cases where plain
+                // SetForegroundWindow is denied; on #106 verify-failure we
+                // retry the attach+set pair once below instead. Marker line
+                // so the next field logs positively confirm the new path.
+                Log("foreground-unlock: alt-tap retired (#112)");
                 var set = SetForegroundWindow(_target);
                 AttachThreadInput(ourThread, targetThread, false);
-
-                // Safety: if Alt is still logically down, release it (the
-                // input system is asynchronous; a stray consumer can eat
-                // the release half)
-                if ((GetKeyState(0x12) & 0x8000) != 0)
-                {
-                    Log("  → Alt still down after unlock — sending safety release");
-                    var safety = new[] { new AltInput { type = 1, vk = 0x12, flags = 2 } };
-                    SendAltPair(safety);
-                }
 
                 Log($"  → AttachThreadInput={attached} SetForegroundWindow={set}");
                 // #106: the switch is ASYNC — verify it landed (poll here on
@@ -413,12 +371,21 @@ public sealed class KeyboardTargetTracker : IDisposable
                 // SendInput lands with the foreground STILL Dasher — the
                 // keystrokes went into Dasher itself ("arrows and delete
                 // just aren't doing anything in the target").
-                for (var waited = 0; waited < ForegroundSettleBudgetMs; waited += 10)
+                if (!SwitchSettled())
                 {
-                    if (GetForegroundWindow() == _target) return;
-                    Thread.Sleep(10);
+                    // #112: ONE retry of the attach+set pair when the
+                    // verification fails (the previous attach is already
+                    // detached — re-attach cleanly), then fail-soft: skip
+                    // the injection this round (#93) and let the #108
+                    // streak/backoff machinery ride. Never escalate to
+                    // synthetic modifier keys.
+                    var reattached = AttachThreadInput(ourThread, targetThread, true);
+                    var reset = SetForegroundWindow(_target);
+                    AttachThreadInput(ourThread, targetThread, false);
+                    Log($"  → retry: AttachThreadInput={reattached} SetForegroundWindow={reset}");
+                    if (!SwitchSettled())
+                        Log($"  → switch never landed within {ForegroundSettleBudgetMs}ms (fg=0x{GetForegroundWindow():X})");
                 }
-                Log($"  → switch never landed within {ForegroundSettleBudgetMs}ms (fg=0x{GetForegroundWindow():X})");
             }
             catch { }
             finally
@@ -429,9 +396,14 @@ public sealed class KeyboardTargetTracker : IDisposable
         { IsBackground = true, Name = "fg-restore" };
         escalation.Start();
 
-        if (!escalation.Join(EscalationBudgetMs + ForegroundSettleBudgetMs))
+        // #112 review loop 2: the restore path may now run TWO full
+        // attach+set+detach handshakes plus their settle polls inside the
+        // Join budget — the previous 550 ms (one handshake + two polls)
+        // spuriously fail-softed slow-but-alive targets mid-retry. The
+        // budget below is accounted per attempt (see RestoreJoinBudgetMs).
+        if (!escalation.Join(RestoreJoinBudgetMs))
         {
-            Log($"  → restore did not complete within {EscalationBudgetMs + ForegroundSettleBudgetMs}ms — skipping injection this event (no UI block)");
+            Log($"  → restore did not complete within {RestoreJoinBudgetMs}ms — skipping injection this event (no UI block)");
             // The thread stays busy (flag held) until it completes; further
             // calls skip injection rather than stacking hung handshakes.
             return false;
@@ -464,6 +436,34 @@ public sealed class KeyboardTargetTracker : IDisposable
     /// the handshake reports success (SetForegroundWindow returns before the
     /// switch lands). The verification poll runs on the escalation thread.</summary>
     private const int ForegroundSettleBudgetMs = 150;
+
+    /// <summary>Scheduling/thread-start slack folded into
+    /// <see cref="RestoreJoinBudgetMs"/> — the escalation thread itself needs
+    /// a slice before its first handshake.</summary>
+    private const int ScheduleSlackMs = 200;
+
+    /// <summary>#112 review loop 2: total Join budget for the escalation
+    /// thread, accounted per attempt: TWO full attach+set+detach handshakes
+    /// (EscalationBudgetMs each — the initial attempt plus the
+    /// verify-failure retry) + TWO settle polls (ForegroundSettleBudgetMs
+    /// each, one per attempt) + ScheduleSlackMs. 2×250 + 2×150 + 200 =
+    /// 1000 ms, so slow-but-alive targets complete instead of being
+    /// spuriously fail-softed mid-handshake.</summary>
+    private const int RestoreJoinBudgetMs =
+        2 * EscalationBudgetMs + 2 * ForegroundSettleBudgetMs + ScheduleSlackMs;
+
+    /// <summary>#106/#112: poll (escalation thread only) for the async
+    /// foreground switch to land within the settle budget. Returns the
+    /// verified truth — never SetForegroundWindow's return value.</summary>
+    private bool SwitchSettled()
+    {
+        for (var waited = 0; waited < ForegroundSettleBudgetMs; waited += 10)
+        {
+            if (GetForegroundWindow() == _target) return true;
+            Thread.Sleep(10);
+        }
+        return GetForegroundWindow() == _target;
+    }
 
     private int _escalationBusy;
 
@@ -499,7 +499,13 @@ public sealed class KeyboardTargetTracker : IDisposable
         // Same gate as MainWindow.KbLog
         if (msg.StartsWith("  ") && !Services.LogManager.AdvancedLogging) return;
 
-        try { File.AppendAllText(LogPath, $"{DateTime.Now:HH:mm:ss.fff} [tracker] {msg}\n"); } catch { }
+        // #112 review loop 2: serialize with the other keyboard_debug.log
+        // writers (UI thread, hygiene watchdog) via the shared LogManager
+        // lock — no diagnostic line dropped to a sharing violation.
+        lock (Services.LogManager.KeyboardLogLock)
+        {
+            try { File.AppendAllText(LogPath, $"{DateTime.Now:HH:mm:ss.fff} [tracker] {msg}\n"); } catch { }
+        }
     }
 
     // ── Win32 ───────────────────────────────────────────────────────────────
