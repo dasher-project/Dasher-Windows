@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>کنٹرول</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>کینوس میں سلیکٹ، موو اور ڈیلیٹ ایڈیٹنگ کمانڈز شامل کرتا ہے: حرف، لفظ، جملہ، پیراگراف یا سبھی، آگے یا پیچھے کی طرف متن کو منتخب، منتقل یا حذف کریں۔</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>کنٹرول موڈ: فعال</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>ہو گیا</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>کی بورڈ ونڈو کو منتقل کرنے کے لیے گھسیٹیں۔</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>کسی بٹن یا سوئچ کو دبانے کی بجائے ایک جگہ پر ہوور کریں تاکہ کلک ٹرگر ہو۔</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>ابھی تک برآمد کرنے کے لیے کوئی ٹریننگ ڈیٹا نہیں ہے</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>کوئی TTS انجن دستیاب نہیں ہے۔ سسٹم TTS کے لیے اسپیچ ڈسپیچر انسٹال کریں۔</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>ابھی تک کوئی یوزر ٹریننگ ڈیٹا نہیں ہے</value>

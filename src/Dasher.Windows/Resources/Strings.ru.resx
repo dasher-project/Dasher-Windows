@@ -98,7 +98,7 @@
     <value>Переместить курсор вправо (удерживать для повторения)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Авто</value>
+    <value>Автоматически</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Автоматическое центрирование цели</value>
@@ -156,6 +156,9 @@
   </data>
   <data name="control" xml:space="preserve">
     <value>Управление</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Добавляет на холст команды редактирования «Выбрать», «Переместить» и «Удалить»: выделить, переместить или удалить текст по букве, слову, предложению, абзацу или всему тексту вперед или назад.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Режим управления: включён</value>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>Сделанный</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Перетащите, чтобы переместить окно клавиатуры</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Наведите курсор в одну точку, чтобы вызвать клик, вместо нажатия кнопки или переключателя.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Нет данных обучения для экспорта</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Движок TTS отсутствует. Установите речевой диспетчер для системы TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Нет пользовательских данных обучения</value>

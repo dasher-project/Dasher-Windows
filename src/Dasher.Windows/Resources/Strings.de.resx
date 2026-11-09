@@ -98,7 +98,7 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
     <value>Bewegen Sie den Cursor nach rechts (gedrückt halten zum Wiederholen)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Auto</value>
+    <value>Automatisch</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Ziel automatisch zentrieren</value>
@@ -156,6 +156,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   </data>
   <data name="control" xml:space="preserve">
     <value>Kontrolle</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Fügt der Leinwand die Bearbeitungsbefehle „Auswählen“, „Verschieben“ und „Löschen“ hinzu: Wählen, verschieben oder löschen Sie Text nach Buchstaben, Wörtern, Sätzen, Absätzen oder allen, vorwärts oder rückwärts.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Steuermodus: aktiviert</value>
@@ -303,6 +306,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Erledigt</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Ziehen Sie, um das Tastaturfenster zu verschieben</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Schweben Sie an einer Stelle, um einen Klick auszulösen, anstatt eine Taste oder einen Schalter zu drücken.</value>
@@ -618,6 +624,9 @@ Sie können dies jederzeit unter Einstellungen &gt; Datenschutz ändern.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Noch keine Trainingsdaten zum Exportieren vorhanden</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Keine TTS-Engine verfügbar. Installieren Sie den Speech-Dispatcher für das System TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Noch keine Benutzerschulungsdaten</value>

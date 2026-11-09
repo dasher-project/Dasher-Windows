@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>নিয়ন্ত্রণ</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>ক্যানভাসে সিলেক্ট, মুভ এবং ডিলিট এডিটিং কমান্ড যোগ করে: অক্ষর, শব্দ, বাক্য, অনুচ্ছেদ বা সমস্ত, ফরোয়ার্ড বা পিছনের দ্বারা পাঠ্য নির্বাচন, সরান বা মুছুন।</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>নিয়ন্ত্রণ মোড: সক্রিয়</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>সম্পন্ন হয়েছে</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>কীবোর্ড উইন্ডো সরাতে টেনে আনুন</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>একটি বোতাম বা সুইচ চাপার পরিবর্তে একটি স্থানে হোভার করুন ক্লিক ট্রিগার করার জন্য।</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>এখন পর্যন্ত রপ্তানি করার কোনো প্রশিক্ষণ তথ্য নেই</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>কোনো TTS ইঞ্জিন উপলব্ধ নেই। সিস্টেম TTS-এর জন্য স্পিচ-ডিসপ্যাচার ইনস্টল করুন।</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>এখনও কোনো ব্যবহারকারীর প্রশিক্ষণ ডেটা নেই</value>

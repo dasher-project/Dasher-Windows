@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>നിയന്ത്രണം</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>എഡിറ്റിംഗ് കമാൻഡുകൾ തിരഞ്ഞെടുക്കുക, നീക്കുക, ഇല്ലാതാക്കുക എന്നിവ ക്യാൻവാസിലേക്ക് ചേർക്കുന്നു: അക്ഷരം, വാക്ക്, വാക്യം, ഖണ്ഡിക അല്ലെങ്കിൽ എല്ലാം, മുന്നോട്ട് അല്ലെങ്കിൽ പിന്നിലേക്ക് വാചകം തിരഞ്ഞെടുക്കുക, നീക്കുക അല്ലെങ്കിൽ ഇല്ലാതാക്കുക.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>നിയന്ത്രണ മോഡ്: സജീവം</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>ചെയ്തുകഴിഞ്ഞു</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>കീബോർഡ് വിൻഡോ നീക്കാൻ വലിച്ചിടുക</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>ഒരു സ്ഥലത്ത് നിൽക്കുക ക്ലിക്ക് ട്രിഗർ ചെയ്യാൻ, ബട്ടൺ അല്ലെങ്കിൽ സ്വിച്ച് അമർത്തുന്നതിനുപകരം.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>ഇനിയും എക്സ്പോർട്ട് ചെയ്യാനുള്ള പരിശീലന ഡാറ്റ ഇല്ല</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>TTS എഞ്ചിൻ ലഭ്യമല്ല. സിസ്റ്റം TTS-നായി സ്പീച്ച്-ഡിസ്പാച്ചർ ഇൻസ്റ്റാൾ ചെയ്യുക.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>ഇനിയും ഉപയോക്തൃ പരിശീലന ഡാറ്റ ഇല്ല</value>

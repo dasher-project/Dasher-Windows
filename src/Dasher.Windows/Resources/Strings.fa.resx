@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>کنترل</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>دستورات ویرایش Select، Move و Delete را به بوم اضافه می کند: متن را بر اساس حرف، کلمه، جمله، پاراگراف یا همه، به جلو یا عقب انتخاب کنید، حرکت دهید یا حذف کنید.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>حالت کنترل: فعال</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>انجام شد</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>برای حرکت دادن پنجره صفحه کلید بکشید</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>در یک نقطه معلق بمانید تا کلیک فعال شود، به جای اینکه دکمه یا سوئیچ را فشار دهید.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>هنوز داده آموزشی برای صادر کردن وجود ندارد</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>موتور TTS موجود نیست. پخش کننده گفتار را برای سیستم TTS نصب کنید.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>هنوز داده‌های آموزشی کاربر وجود ندارد</value>

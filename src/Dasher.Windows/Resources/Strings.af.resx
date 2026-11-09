@@ -157,6 +157,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   <data name="control" xml:space="preserve">
     <value>Beheer</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Voeg Kies-, Skuif- en Vee-redigeeropdragte by die doek: kies, skuif of vee teks uit per letter, woord, sin, paragraaf of alles, vorentoe of agtertoe.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Beheermodus: aangeskakel</value>
   </data>
@@ -303,6 +306,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Klaar</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Sleep om die sleutelbordvenster te skuif</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Sweef op een plek om 'n klik te veroorsaak, in plaas daarvan om 'n knoppie of skakelaar te druk.</value>
@@ -618,6 +624,9 @@ Jy kan dit enige tyd verander in Instellings &gt; Privaatheid.</value>
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Nog geen opleidingsdata om uit te voer nie</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Geen TTS-enjin beskikbaar nie. Installeer spraakversender vir stelsel TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Nog geen gebruikers opleidingsdata nie</value>

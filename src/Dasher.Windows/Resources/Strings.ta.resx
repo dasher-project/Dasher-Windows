@@ -157,6 +157,9 @@
   <data name="control" xml:space="preserve">
     <value>கட்டுப்பாடு</value>
   </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>கேன்வாஸில் தேர்ந்தெடு, நகர்த்து மற்றும் நீக்கு எடிட்டிங் கட்டளைகளைச் சேர்க்கிறது: எழுத்து, சொல், வாக்கியம், பத்தி அல்லது அனைத்தும், முன்னோக்கி அல்லது பின்னோக்கி உரையைத் தேர்ந்தெடுக்கவும், நகர்த்தவும் அல்லது நீக்கவும்.</value>
+  </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>கட்டுப்பாட்டு முறை: இயலுமைப்படுத்தப்பட்டது</value>
   </data>
@@ -303,6 +306,9 @@
   </data>
   <data name="done" xml:space="preserve">
     <value>முடிந்தது</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>விசைப்பலகை சாளரத்தை நகர்த்த இழுக்கவும்</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>ஒரு இடத்தில் நிலைநிறுத்தி கிளிக் செய்யவும், பொத்தான் அல்லது ஸ்விட்ச் அழுத்தாமல்.</value>
@@ -618,6 +624,9 @@
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>இன்னும் ஏற்றுமதி செய்ய பயிற்சி தரவு இல்லை</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>TTS இன்ஜின் இல்லை. கணினி TTSக்கான பேச்சு-அனுப்பியலை நிறுவவும்.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>இன்னும் பயனர் பயிற்சி தரவு இல்லை</value>

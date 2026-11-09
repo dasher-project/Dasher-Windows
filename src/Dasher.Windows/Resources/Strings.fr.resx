@@ -98,7 +98,7 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
     <value>Déplacer le curseur vers la droite (maintenir pour répéter)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Voiture</value>
+    <value>Automatique</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Cible de centrage automatique</value>
@@ -156,6 +156,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="control" xml:space="preserve">
     <value>Contrôle</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Ajoute des commandes d'édition Sélectionner, Déplacer et Supprimer au canevas : sélectionner, déplacer ou supprimer du texte par lettre, mot, phrase, paragraphe ou tout, vers l'avant ou vers l'arrière.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Mode de contrôle : activé</value>
@@ -302,6 +305,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="done" xml:space="preserve">
     <value>Fait</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Faites glisser pour déplacer la fenêtre du clavier</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Survolez un endroit pour déclencher un clic, au lieu d’appuyer sur un bouton ou un interrupteur.</value>
@@ -619,6 +625,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Pas encore de données d'entraînement à exporter</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Aucun moteur TTS disponible. Installez le répartiteur vocal pour le système TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Pas encore de données de formation utilisateur</value>

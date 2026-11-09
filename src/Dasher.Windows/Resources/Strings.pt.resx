@@ -98,7 +98,7 @@ Você pode mudar isso a qualquer momento em Configurações &gt; Privacidade.</v
     <value>Mover cursor para a direita (segure para repetir)</value>
   </data>
   <data name="auto" xml:space="preserve">
-    <value>Auto</value>
+    <value>Automático</value>
   </data>
   <data name="auto_centre_target" xml:space="preserve">
     <value>Centro Automotivo Target</value>
@@ -156,6 +156,9 @@ Você pode mudar isso a qualquer momento em Configurações &gt; Privacidade.</v
   </data>
   <data name="control" xml:space="preserve">
     <value>Controle</value>
+  </data>
+  <data name="control_mode_description" xml:space="preserve">
+    <value>Adiciona comandos de edição Selecionar, Mover e Excluir à tela: selecione, mova ou exclua texto por letra, palavra, frase, parágrafo ou todos, para frente ou para trás.</value>
   </data>
   <data name="control_mode_enabled" xml:space="preserve">
     <value>Modo de controle: ativado</value>
@@ -303,6 +306,9 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   </data>
   <data name="done" xml:space="preserve">
     <value>Feito</value>
+  </data>
+  <data name="drag_to_move_the_keyboard_window" xml:space="preserve">
+    <value>Arraste para mover a janela do teclado</value>
   </data>
   <data name="dwell_description" xml:space="preserve">
     <value>Passe o cursor em um ponto para disparar um clique, em vez de pressionar um botão ou interruptor.</value>
@@ -618,6 +624,9 @@ Você pode alterar isso a qualquer momento em Configurações &gt; Privacidade.<
   </data>
   <data name="no_training_data_to_export_yet" xml:space="preserve">
     <value>Ainda não há dados de treinamento para exportar</value>
+  </data>
+  <data name="no_tts_engine_available" xml:space="preserve">
+    <value>Nenhum mecanismo TTS disponível. Instale o despachante de fala para o sistema TTS.</value>
   </data>
   <data name="no_user_training_data_yet" xml:space="preserve">
     <value>Ainda não há dados de treinamento do usuário</value>
