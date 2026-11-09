@@ -316,7 +316,9 @@ public static class TargetContextReader
             string? text = document.GetText(-1);
             if (text == null) return null;
 
-            int caretUtf16 = ResolveCaretOffset(uia, pattern, document, text, targetHwnd);
+            // Seeding keeps the end-of-text default when every rung is
+            // dead (today's behavior — only MUTATING callers refuse).
+            int caretUtf16 = ResolveCaretOffset(uia, pattern, document, text, targetHwnd, out _);
 
             Log($"  [UIA] read {text.Length} chars, caret16={caretUtf16}, source={source}");
             return new TargetContext(text, caretUtf16, source);
@@ -333,13 +335,22 @@ public static class TargetContextReader
     /// ladder below (each step's rationale lives with its code). Shared by
     /// the context read here and the RFC 0021/#121 unit actions
     /// (TargetTextActions sentence spans measure from the caret too).
-    /// Defaults to end-of-text when every step is unavailable.
+    /// Defaults to end-of-text when every step is unavailable;
+    /// <paramref name="resolved"/> is false exactly then — the seeding
+    /// read here keeps the default, but a MUTATING caller must refuse to
+    /// anchor on a defaulted offset (review round 2: a backward sentence
+    /// delete from a fabricated end-of-text caret would silently remove
+    /// the user's last sentence at the wrong spot while telemetry claimed
+    /// via=uia-select). Public so the ladder's resolved/unresolved
+    /// contract is pinnable (SelectSpanByOffsets precedent).
     /// </summary>
-    internal static int ResolveCaretOffset(
+    public static int ResolveCaretOffset(
         CUIAutomationClass uia, IUIAutomationTextPattern pattern,
-        IUIAutomationTextRange document, string text, IntPtr targetHwnd)
+        IUIAutomationTextRange document, string text, IntPtr targetHwnd,
+        out bool resolved)
     {
         int caretUtf16 = text.Length; // default: end of text
+        resolved = false;
         try
         {
             // Preferred: TextPattern2.GetCaretRange — the ONLY API that
@@ -371,6 +382,7 @@ public static class TargetContextReader
                     TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
                 var beforeCaret = truncated.GetText(-1) ?? "";
                 caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
+                resolved = true;
             }
             else if ((caretRange = TryRangeFromSystemCaret(uia, pattern, targetHwnd)) != null)
             {
@@ -387,6 +399,7 @@ public static class TargetContextReader
                     TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
                 var beforeCaret = truncated.GetText(-1) ?? "";
                 caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
+                resolved = true;
                 Log($"[UIA] caret via system caret → RangeFromPoint: {caretUtf16}");
             }
             else
@@ -432,6 +445,7 @@ public static class TargetContextReader
                             ? startLen   // collapsed
                             : selEndLen, // non-collapsed → active end
                         0, text.Length);
+                    resolved = true;
                     Log($"  [UIA] caret via selection: start={startLen} end={selEndLen} → {caretUtf16}");
                 }
             }
@@ -439,6 +453,7 @@ public static class TargetContextReader
         catch
         {
             caretUtf16 = text.Length;
+            resolved = false;
         }
         return caretUtf16;
     }

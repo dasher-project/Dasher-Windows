@@ -24,11 +24,15 @@ public static class TargetTextActions
 
     /// <summary>Outcome of a measured sentence-span action (#121):
     /// Applied = span selected, caller sends the Delete key;
-    /// MeasuredEmpty = measurement succeeded but the span is degenerate
-    /// (caret at a document edge — nothing sentence-granular to delete;
-    /// falling back to paragraph would delete MORE than asked);
+    /// MeasuredEmpty = measurement succeeded but the span is degenerate —
+    /// caret at a document edge OR in the leading whitespace before its
+    /// sentence (nothing sentence-granular to delete; falling back to
+    /// paragraph would delete MORE than asked). NOTE: the empty=yes
+    /// telemetry tag rides this outcome, so it CONFLATES both cases
+    /// (kept as-is for stream continuity);
     /// Unavailable = the target refused UIA measurement (no TextPattern,
-    /// hung provider, endpoint-count mismatch) — caller falls back.</summary>
+    /// hung provider, endpoint-count mismatch, unresolved caret) —
+    /// caller falls back.</summary>
     public enum SpanOutcome { Applied, MeasuredEmpty, Unavailable }
 
     // Interop enums (Interop.UIAutomationClient): endpoint/unit params are
@@ -342,7 +346,18 @@ public static class TargetTextActions
                 Log($"  [TextAction:{name}] document read failed");
                 return SpanOutcome.Unavailable;
             }
-            var caret = TargetContextReader.ResolveCaretOffset(uia, pattern, document, text, targetHwnd);
+            var caret = TargetContextReader.ResolveCaretOffset(uia, pattern, document, text, targetHwnd, out bool caretResolved);
+            if (!caretResolved)
+            {
+                // Review round 2: a defaulted (end-of-text) caret must
+                // never anchor a MUTATING action — a backward sentence
+                // delete would silently remove the user's last sentence
+                // at the wrong spot while telemetry claimed via=uia-select.
+                // Unavailable → the caller's paragraph fallback
+                // (fallback=paragraph).
+                Log($"  [TextAction:{name}] caret unresolved (defaulted offset) - refusing to anchor a delete");
+                return SpanOutcome.Unavailable;
+            }
             var outcome = op(document, text, caret, aborted);
             Log($"  [TextAction:{name}] {outcome}");
             return outcome;

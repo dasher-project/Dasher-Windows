@@ -140,6 +140,26 @@ public class TargetTextActionsTests
     }
 
     [Fact]
+    public void Span_provider_that_clamps_a_LATER_move_never_selects()
+    {
+        // review round 2: the moved: queue serves the FIRST move exactly
+        // (-21), the second too (12), the THIRD falls short (5 of the
+        // requested 12) — the endpoint-count verification must fail the
+        // action at that move, before any Select (a short span would
+        // delete the wrong text)
+        var ops = new List<Op>();
+        var applied = TargetTextActions.SelectSpanByOffsets(
+            new RecordingRange(ops, -21, 12, 5), documentLength: 33, start: 12, end: 24, () => false);
+        Assert.False(applied);
+        Assert.Equal(new[]
+        {
+            new Op("move", End, TextUnit.TextUnit_Character, 12 - 33), // [0,33] → [0,12] (served -21)
+            new Op("move", Start, TextUnit.TextUnit_Character, 12),     // [0,12] → [12,12] (served 12)
+            new Op("move", End, TextUnit.TextUnit_Character, 12),       // served 5 ≠ 12 → stop
+        }, ops); // no select
+    }
+
+    [Fact]
     public void Span_cancelled_before_select_discards_the_result()
     {
         // the double-mutation guard: a superseding action (or the timeout)
@@ -195,6 +215,85 @@ public class TargetTextActionsTests
         Assert.False(TargetTextActions.ExtendSelectionByUnit(
             new RecordingRange(ops, moved: 0), TargetTextActions.Unit.Paragraph, forward: true, () => false));
         Assert.Equal(new[] { new Op("move", End, TextUnit.TextUnit_Paragraph, 1) }, ops);
+    }
+
+    // ── ResolveCaretOffset: defaulted ≠ resolved (review round 2) ────────
+    //
+    // A defaulted (end-of-text) caret must be distinguishable from a
+    // measured one: the #121 sentence delete refuses to anchor on a
+    // default (a backward delete would silently remove the user's last
+    // sentence at the wrong spot while telemetry claimed via=uia-select).
+
+    /// <summary>Fake range reporting empty text and collapsed endpoints —
+    /// enough surface for the selection rung's before-caret arithmetic.
+    /// Everything else throws (the ladder must not reach it).</summary>
+    private sealed class FlatRange : IUIAutomationTextRange
+    {
+        public IUIAutomationTextRange Clone() => this;
+        public int CompareEndpoints(TextPatternRangeEndpoint source, IUIAutomationTextRange range, TextPatternRangeEndpoint target) => 0;
+        public void MoveEndpointByRange(TextPatternRangeEndpoint source, IUIAutomationTextRange range, TextPatternRangeEndpoint target) { }
+        public string GetText(int maxLength) => "";
+        public void Select() { }
+        public int Compare(IUIAutomationTextRange range) => throw new NotSupportedException();
+        public void ExpandToEnclosingUnit(TextUnit unit) => throw new NotSupportedException();
+        public IUIAutomationTextRange FindAttribute(int attr, object val, int backward) => throw new NotSupportedException();
+        public IUIAutomationTextRange FindText(string text, int backward, int ignoreCase) => throw new NotSupportedException();
+        public object GetAttributeValue(int attr) => throw new NotSupportedException();
+        public double[] GetBoundingRectangles() => throw new NotSupportedException();
+        public IUIAutomationElement GetEnclosingElement() => throw new NotSupportedException();
+        public int Move(TextUnit unit, int count) => throw new NotSupportedException();
+        public int MoveEndpointByUnit(TextPatternRangeEndpoint endpoint, TextUnit unit, int count) => throw new NotSupportedException();
+        public void AddToSelection() => throw new NotSupportedException();
+        public void RemoveFromSelection() => throw new NotSupportedException();
+        public void ScrollIntoView(int alignToTop) => throw new NotSupportedException();
+        public IUIAutomationElementArray GetChildren() => throw new NotSupportedException();
+    }
+
+    /// <summary>Fake pattern: no TextPattern2, GetSelection configurable
+    /// (null = every rung dead; a collapsed range = the last rung
+    /// answers). RangeFromPoint throws — these tests pass hwnd 0 so the
+    /// system-caret rung bails before ever calling it.</summary>
+    private sealed class StubPattern : IUIAutomationTextPattern
+    {
+        private readonly IUIAutomationTextRangeArray? _selection;
+        public StubPattern(IUIAutomationTextRangeArray? selection) => _selection = selection;
+        public IUIAutomationTextRangeArray GetSelection() => _selection!;
+        public IUIAutomationTextRangeArray GetVisibleRanges() => throw new NotSupportedException();
+        public IUIAutomationTextRange RangeFromChild(IUIAutomationElement child) => throw new NotSupportedException();
+        public IUIAutomationTextRange RangeFromPoint(tagPOINT pt) => throw new NotSupportedException();
+        public IUIAutomationTextRange DocumentRange => throw new NotSupportedException();
+        public SupportedTextSelection SupportedTextSelection => throw new NotSupportedException();
+    }
+
+    private sealed class SingleRange : IUIAutomationTextRangeArray
+    {
+        private readonly IUIAutomationTextRange _range;
+        public SingleRange(IUIAutomationTextRange range) => _range = range;
+        public int Length => 1;
+        public IUIAutomationTextRange GetElement(int index) =>
+            index == 0 ? _range : throw new ArgumentOutOfRangeException(nameof(index));
+    }
+
+    [Fact]
+    public void Caret_ladder_reports_unresolved_when_every_rung_is_dead()
+    {
+        // no TextPattern2, no system caret (hwnd 0), no selection array —
+        // the offset defaults to end-of-text and MUST say unresolved
+        var caret = TargetContextReader.ResolveCaretOffset(
+            new CUIAutomationClass(), new StubPattern(selection: null),
+            new FlatRange(), "Alpha beta.", IntPtr.Zero, out bool resolved);
+        Assert.False(resolved);
+        Assert.Equal("Alpha beta.".Length, caret);
+    }
+
+    [Fact]
+    public void Caret_ladder_reports_resolved_via_the_selection_rung()
+    {
+        var caret = TargetContextReader.ResolveCaretOffset(
+            new CUIAutomationClass(), new StubPattern(new SingleRange(new FlatRange())),
+            new FlatRange(), "Alpha beta.", IntPtr.Zero, out bool resolved);
+        Assert.True(resolved);
+        Assert.Equal(0, caret); // collapsed selection at the document start
     }
 }
 

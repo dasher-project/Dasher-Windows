@@ -1719,8 +1719,11 @@ public partial class MainWindow : Window
             }
 
             if (name != "select")
+                // Chord rung (review round 2): the suffix comes from the
+                // DirectDeleteSuffix(Chords) helper the tests pin, not a
+                // hand-built copy (drift risk).
                 Services.AnalyticsService.CaptureUiAction("control_tree", name,
-                    $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")}{sentenceFallback}");
+                    $"dist={dist.ToString().ToLowerInvariant()},forward={(forward ? "yes" : "no")}{Services.SelectActions.DirectDeleteSuffix(dist, Services.SelectActions.DirectDeleteMechanism.Chords)}");
         }
         else
         {
