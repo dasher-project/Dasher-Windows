@@ -516,7 +516,9 @@ public partial class DasherCanvas : Control
     {
         // Contract (dasher.h): fill *out_width/*out_height and return 0 on
         // success; return non-zero to fall back to the engine's estimate.
-        try
+        // #115: the callback fires inside dasher_frame on the pump thread —
+        // PumpGuard returns the contract's fallback (1) on any failure.
+        return Services.PumpGuard.Run(nameof(OnTextSize), () =>
         {
             if (textPtr == IntPtr.Zero)
                 return 1;
@@ -530,25 +532,23 @@ public partial class DasherCanvas : Control
                 Marshal.WriteInt32(outHeight, h);
             }
             return rc;
-        }
-        catch
-        {
-            // Not-yet-ready font system etc. — the engine falls back to its
-            // estimate without caching, and retries next frame.
-            return 1;
-        }
+        }, fallback: 1);
     }
 
     private static void OnEngineLog(int level, IntPtr messagePtr, IntPtr userData)
     {
-        if (messagePtr == IntPtr.Zero) return;
-        var msg = Marshal.PtrToStringUTF8(messagePtr) ?? "";
+        // #115: native callback on the pump thread — guarded, never fatal.
+        Services.PumpGuard.Run(nameof(OnEngineLog), () =>
+        {
+            if (messagePtr == IntPtr.Zero) return;
+            var msg = Marshal.PtrToStringUTF8(messagePtr) ?? "";
 
-        // RFC 0009: feed engine log ring buffer for crash reports (info+ only)
-        if (level >= 1)
-            Services.AnalyticsService.AppendEngineLog(level, msg);
+            // RFC 0009: feed engine log ring buffer for crash reports (info+ only)
+            if (level >= 1)
+                Services.AnalyticsService.AppendEngineLog(level, msg);
 
-        System.Diagnostics.Debug.WriteLine($"[DasherCore:{level}] {msg}");
+            System.Diagnostics.Debug.WriteLine($"[DasherCore:{level}] {msg}");
+        });
     }
 
     private void TrySetScreenSize()
@@ -683,30 +683,40 @@ public partial class DasherCanvas : Control
 
     private void OnEngineMessage(int messageType, IntPtr textPtr, IntPtr userData)
     {
-        var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
-        var isWarning = messageType == 1;
-        Dispatcher.UIThread.Post(() =>
+        // #115: native callback inside dasher_frame (pump thread) — guarded,
+        // never fatal.
+        Services.PumpGuard.Run(nameof(OnEngineMessage), () =>
         {
-            EngineMessage?.Invoke(this, new EngineMessageEventArgs(text, isWarning));
+            var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
+            var isWarning = messageType == 1;
+            Dispatcher.UIThread.Post(() =>
+            {
+                EngineMessage?.Invoke(this, new EngineMessageEventArgs(text, isWarning));
+            });
         });
     }
 
     private void OnEngineOutputEvent(int eventType, IntPtr textPtr, IntPtr userData)
     {
-        var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
-        // ANY output event (insert/delete/clear) changes the buffer: mark
-        // OutputText stale so the next Tick re-reads it. This replaces the
-        // old per-frame full-buffer poll (a fresh .NET string of the whole
-        // session 60x/s — allocation grew linearly with session length, so
-        // GC pressure and stutter worsened the more you typed until
-        // restart; Android is event-driven and never had it).
-        _outputDirty = true;
-        // Events normally fire on the dasher_frame() thread; buffer-clear
-        // events may fire on the thread calling the reset function itself.
-        // Marshal to the UI thread preserving order.
-        Dispatcher.UIThread.Post(() =>
+        // #115: native callback inside dasher_frame (pump thread) — guarded,
+        // never fatal.
+        Services.PumpGuard.Run(nameof(OnEngineOutputEvent), () =>
         {
-            EngineOutput?.Invoke(this, new EngineOutputEventArgs(eventType, text));
+            var text = textPtr != IntPtr.Zero ? Marshal.PtrToStringUTF8(textPtr) ?? "" : "";
+            // ANY output event (insert/delete/clear) changes the buffer: mark
+            // OutputText stale so the next Tick re-reads it. This replaces the
+            // old per-frame full-buffer poll (a fresh .NET string of the whole
+            // session 60x/s — allocation grew linearly with session length, so
+            // GC pressure and stutter worsened the more you typed until
+            // restart; Android is event-driven and never had it).
+            _outputDirty = true;
+            // Events normally fire on the dasher_frame() thread; buffer-clear
+            // events may fire on the thread calling the reset function itself.
+            // Marshal to the UI thread preserving order.
+            Dispatcher.UIThread.Post(() =>
+            {
+                EngineOutput?.Invoke(this, new EngineOutputEventArgs(eventType, text));
+            });
         });
     }
 
