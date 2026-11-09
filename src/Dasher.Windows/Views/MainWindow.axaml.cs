@@ -454,6 +454,11 @@ public partial class MainWindow : Window
         Services.PickerSession.Register(SuspendTargetTracking, ResumeTargetTracking);
         Services.PickerSession.Log = KbLog;
 
+        // #112 modifier hygiene: start the 1 Hz watchdog sweep that releases
+        // any stranded Alt/Ctrl/Shift (any path, not just ours). Stopped in
+        // OnClosing so the sweep never outlives the window.
+        Services.ModifierHygiene.EnsureStarted();
+
         // RFC 0018: everything startup-blocking (data install, engine create,
         // v5 scan) runs off the UI thread so the overlay animates; the
         // spinner must never freeze and the window must never go dead.
@@ -856,6 +861,7 @@ public partial class MainWindow : Window
         foreach (var s in _editKeyRepeatStates) s.Stop();
         Services.PickerSession.Unregister(SuspendTargetTracking, ResumeTargetTracking);
         Services.PickerSession.Log = null;
+        Services.ModifierHygiene.Shutdown(); // #112: stop the hygiene watchdog
         SaveWindowGeometry();
         _canvas?.Shutdown();
         _ = AnalyticsService.ShutdownAsync();
@@ -1743,6 +1749,10 @@ public partial class MainWindow : Window
         if (shieldCount > 0) KbLog($"  modifier shield: released {shieldCount} held modifier(s) around chord and restored");
         KbLog($"  select chord: ctrl={ctrl} shift={shift} arrow={arrow?.ToString("X") ?? "-"} " +
               $"letter={letter?.ToString() ?? "-"} sent={sent}/{count}");
+        // #112: this batch carried Shift/Ctrl key-downs — assert the OS
+        // really shows them up (a consumer can eat a release half; the
+        // assert verifies OS state, not our array).
+        Services.ModifierHygiene.AssertClean("select-chord");
     }
 
     private int _contextSeedGeneration;
@@ -1889,6 +1899,10 @@ public partial class MainWindow : Window
         var sent = SendInput((uint)inputs.Length, inputs, cbSize);
         if (n > 0) KbLog($"  modifier shield: released {n} held modifier(s) around '{c}' and restored");
         KbLog($"  SendInput('{c}'): cbSize={cbSize} sent={sent} (expected {inputs.Length})");
+        // #112: the shield tail re-presses held modifiers — assert the OS
+        // state after every modifier-carrying batch (hygiene trumps the
+        // restore: a surviving modifier IS the storm condition).
+        Services.ModifierHygiene.AssertClean("unicode-char");
     }
 
     private void SendVirtualKey(ushort vk)
@@ -1906,6 +1920,7 @@ public partial class MainWindow : Window
         var cbSize = Marshal.SizeOf<INPUT>();
         if (shieldCount > 0) KbLog($"  modifier shield: released {shieldCount} held modifier(s) around VK 0x{vk:X} and restored");
         KbLog($"  SendInput(VK 0x{vk:X}): cbSize={cbSize} sent={sent} (expected {count})");
+        Services.ModifierHygiene.AssertClean("virtual-key"); // #112 editing-key path
     }
 
     [DllImport("user32.dll")]
@@ -2135,6 +2150,9 @@ public partial class MainWindow : Window
         SendInput((uint)count, inputs, cbSize);
         if (shieldCount > 0) KbLog($"  modifier shield: released {shieldCount} held modifier(s) around Ctrl+{name} and restored");
         KbLog($"  Ctrl+{name} sent to target 0x{_targetTracker.Current:X}");
+        // #112: the clipboard-bridge chord carries a Ctrl key-down — assert
+        // the OS shows it up after the batch.
+        Services.ModifierHygiene.AssertClean("ctrl-chord");
     }
 
     private void OnKbCopy(object? sender, RoutedEventArgs e)
