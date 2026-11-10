@@ -2360,19 +2360,22 @@ public partial class MainWindow : Window
         // Copy). The old behaviour copied the engine's whole output buffer,
         // which is not "what you selected" from the user's point of view
         // (issue #95). Editor mode keeps its own pane-copy button.
-        SendCtrlChord(VK_KEY_C, "C");
+        if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Copy);
+        else SendCtrlChord(VK_KEY_C, "C");
     }
 
     private void OnKbCut(object? sender, RoutedEventArgs e)
     {
         Services.AnalyticsService.CaptureUiAction("ime_toolbar", "cut");
-        SendCtrlChord(VK_KEY_X, "X");
+        if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Cut);
+        else SendCtrlChord(VK_KEY_X, "X");
     }
 
     private void OnKbPaste(object? sender, RoutedEventArgs e)
     {
         Services.AnalyticsService.CaptureUiAction("ime_toolbar", "paste");
-        SendCtrlChord(VK_KEY_V, "V");
+        if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Paste);
+        else SendCtrlChord(VK_KEY_V, "V");
     }
 
     private void UpdateWindowMinimum()
