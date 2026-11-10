@@ -122,6 +122,9 @@ int main() {
         }
         Check(bridge.Read(value) == S_OK);
         Check(value.before + value.selection + value.after == L"async\n");
+        Check(bridge.Replace(value.token, 2, L"", L"") == S_OK);
+        Check(bridge.Read(value) == S_OK);
+        Check(value.before == L"as" && value.selection.empty() && value.after == L"ync\n");
         complete = false;
         asyncBridge->ReadAsync([&](HRESULT result, Snapshot snapshot) {
             Check(result == S_FALSE && snapshot.token == 0);

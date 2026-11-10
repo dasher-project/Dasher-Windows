@@ -221,6 +221,11 @@ HRESULT TextContext::ReplaceLocked(ITfContext* context, TfEditCookie cookie, std
     std::wstring actual;
     if (FAILED(result = GetText(range.Get(), cookie, actual, static_cast<ULONG>(expected.size())))) return result;
     if (actual != expected) return S_FALSE;
+    if (expected.empty() && replacement.empty()) {
+        TF_SELECTION caret{range.Get(), {TF_AE_NONE, FALSE}};
+        return context->SetSelection(cookie, 1, &caret);
+    }
+
     result = range->SetText(cookie, 0, replacement.empty() ? L"" : replacement.data(),
                             static_cast<LONG>(replacement.size()));
     if (result != S_OK) return result;
