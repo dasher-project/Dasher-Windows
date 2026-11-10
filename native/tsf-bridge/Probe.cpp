@@ -207,7 +207,7 @@ private:
     }
 
     void PollEditConnection() {
-        if (!canConnectToDasher_ || !dasherEnabled_ || !context_ || !EditorForeground()) {
+        if (!canConnectToDasher_ || !context_ || !EditorForeground()) {
             connection_.reset();
             return;
         }
@@ -219,7 +219,11 @@ private:
                 0, nullptr, OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION, nullptr);
             if (connection->handle == INVALID_HANDLE_VALUE) return;
             DWORD mode = PIPE_READMODE_BYTE | PIPE_NOWAIT;
-            if (!SetNamedPipeHandleState(connection->handle, &mode, nullptr, nullptr)) return;
+            if (!SetNamedPipeHandleState(connection->handle, &mode, nullptr, nullptr)) {
+                Trace("pipe-mode-failed", HRESULT_FROM_WIN32(GetLastError()));
+                return;
+            }
+            Trace("pipe-connected");
             connection_ = std::move(connection);
         }
 
@@ -241,6 +245,7 @@ private:
             return;
         }
 
+        Trace("pipe-request", S_OK, request.operation, request.length);
         if (request.operation == 2) {
             auto weak = weak_from_this();
             const auto epoch = epoch_;
@@ -248,6 +253,7 @@ private:
                 const auto panel = weak.lock();
                 if (!panel || panel->epoch_ != epoch || !panel->EditorForeground() || GetTickCount64() >= deadline)
                     result = S_FALSE;
+                Trace("context-read", result, value.before.size(), value.selection.size());
                 if (result == S_OK) connection->ReplyContext(result, epoch, value.before);
                 else connection->ReplyContext(result, 0);
             });
@@ -473,11 +479,6 @@ private:
             case WM_TIMER:
                 self->RefreshDocument();
                 self->PollEditConnection();
-                if (self->context_ && self->EditorForeground() && GetTickCount64() >= self->restoreAt_) {
-                    if (!IsWindowVisible(hwnd) || IsIconic(hwnd)) ShowWindow(hwnd, SW_SHOWNOACTIVATE);
-                } else if (IsWindowVisible(hwnd) && !IsIconic(hwnd)) {
-                    ShowWindow(hwnd, SW_HIDE);
-                }
                 return 0;
             case WM_COMMAND:
                 if (HIWORD(wparam) == STN_CLICKED) self->Command(LOWORD(wparam));
@@ -538,6 +539,7 @@ public:
 
     HRESULT STDMETHODCALLTYPE Activate(ITfThreadMgr* manager, TfClientId client) override {
         if (!manager || manager_) return E_UNEXPECTED;
+        Trace("profile-activate");
         try {
             panel_ = std::make_shared<Panel>(client);
             manager_ = manager;
@@ -548,6 +550,7 @@ public:
                 IID_ITfThreadFocusSink, static_cast<ITfThreadFocusSink*>(this), &threadCookie_);
             if (SUCCEEDED(result) && !panel_->Create()) result = E_FAIL;
             if (SUCCEEDED(result)) result = OnSetThreadFocus();
+            Trace("profile-activate-result", result);
             if (FAILED(result)) Deactivate();
             return result;
         } catch (...) {
