@@ -13,27 +13,27 @@ internal static class TsfEditClient
 {
     internal enum EditOperation : ushort { Insert = 0, Delete = 1, Backspace = 3, Left = 4, Right = 5, Copy = 6, Cut = 7, Paste = 8 }
     internal const int MaxTextLength = 512;
-    private const uint ProtocolVersion = 2;
+    private const uint ProtocolVersion = 3;
     private const int TimeoutMilliseconds = 1500;
 
-    internal static uint ForegroundThread()
+    internal static uint ForegroundEditorProcess()
     {
-        var thread = GetWindowThreadProcessId(GetForegroundWindow(), out var process);
-        return process == (uint)Environment.ProcessId ? 0 : thread;
+        GetWindowThreadProcessId(GetForegroundWindow(), out var process);
+        return process == (uint)Environment.ProcessId ? 0 : process;
     }
 
-    internal static async Task<(int Result, ulong Epoch)> EditAsync(uint editorThread, ulong epoch, string value, EditOperation operation)
+    internal static async Task<(int Result, ulong Epoch)> EditAsync(uint editorProcess, ulong epoch, string value, EditOperation operation)
     {
         if (value.Length > MaxTextLength || (value.Length == 0 && operation is EditOperation.Insert or EditOperation.Delete)) throw new ArgumentException("Invalid TSF edit.");
-        var response = await RequestAsync(editorThread, epoch, value, (ushort)operation)
+        var response = await RequestAsync(editorProcess, epoch, value, (ushort)operation)
             .ConfigureAwait(false);
         return (BinaryPrimitives.ReadInt32LittleEndian(response),
             BinaryPrimitives.ReadUInt64LittleEndian(response.AsSpan(8)));
     }
 
-    internal static async Task<(string Before, ulong Epoch)?> ReadAsync(uint editorThread)
+    internal static async Task<(string Before, ulong Epoch)?> ReadAsync(uint editorProcess)
     {
-        var response = await RequestAsync(editorThread, 0, "", 2).ConfigureAwait(false);
+        var response = await RequestAsync(editorProcess, 0, "", 2).ConfigureAwait(false);
         if (BinaryPrimitives.ReadInt32LittleEndian(response) != 0) return null;
         var length = BinaryPrimitives.ReadInt32LittleEndian(response.AsSpan(4));
         if (length is < 0 or > MaxTextLength) throw new IOException("Invalid TSF response length.");
@@ -41,12 +41,12 @@ internal static class TsfEditClient
             BinaryPrimitives.ReadUInt64LittleEndian(response.AsSpan(8)));
     }
 
-    private static async Task<byte[]> RequestAsync(uint editorThread, ulong epoch, string value, ushort operation)
+    private static async Task<byte[]> RequestAsync(uint editorProcess, ulong epoch, string value, ushort operation)
     {
-        if (editorThread == 0) throw new ArgumentException("No focused editor.");
+        if (editorProcess == 0) throw new ArgumentException("No focused editor.");
 
         using var deadline = new CancellationTokenSource(TimeoutMilliseconds);
-        using var pipe = new NamedPipeServerStream($"Dasher.Tsf.Edit.v2.{editorThread}",
+        using var pipe = new NamedPipeServerStream($"Dasher.Tsf.Edit.v3.{editorProcess}",
             PipeDirection.InOut, 1, PipeTransmissionMode.Byte,
             PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
 
