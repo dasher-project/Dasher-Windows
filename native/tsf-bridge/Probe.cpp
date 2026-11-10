@@ -50,6 +50,50 @@ bool CanConnectToDasher() {
     return ok && !elevation.TokenIsElevated;
 }
 
+class Clipboard {
+public:
+    explicit Clipboard(HWND owner) : open_(OpenClipboard(owner) != FALSE) {}
+    ~Clipboard() { if (open_) CloseClipboard(); }
+
+    bool Copy(std::wstring_view text) const {
+        if (!open_) return false;
+        const auto bytes = (text.size() + 1) * sizeof(wchar_t);
+        const auto memory = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, bytes);
+        if (!memory) return false;
+        auto destination = static_cast<wchar_t*>(GlobalLock(memory));
+        if (!destination) {
+            GlobalFree(memory);
+            return false;
+        }
+        text.copy(destination, text.size());
+        GlobalUnlock(memory);
+        if (EmptyClipboard() && SetClipboardData(CF_UNICODETEXT, memory)) return true;
+        GlobalFree(memory);
+        return false;
+    }
+
+    std::wstring Read() const {
+        if (!open_) return {};
+        const auto memory = GetClipboardData(CF_UNICODETEXT);
+        if (!memory) return {};
+        const auto capacity = GlobalSize(memory) / sizeof(wchar_t);
+        const auto source = static_cast<const wchar_t*>(GlobalLock(memory));
+        if (!source) return {};
+        try {
+            const auto length = wcsnlen_s(source, capacity);
+            auto text = length < capacity ? std::wstring(source, length) : std::wstring{};
+            GlobalUnlock(memory);
+            return text;
+        } catch (...) {
+            GlobalUnlock(memory);
+            throw;
+        }
+    }
+
+private:
+    bool open_;
+};
+
 struct EditRequest {
     std::uint32_t version;
     std::uint16_t length;
@@ -190,7 +234,7 @@ private:
         DWORD count;
         if (!ReadFile(connection->handle, &request, sizeof(request), &count, nullptr) ||
             count != sizeof(request) || request.version != 2 || (!request.length && request.operation < 2) ||
-            request.length > tsf_bridge::ContextLimit || request.operation > 5 ||
+            request.length > tsf_bridge::ContextLimit || request.operation > 8 ||
             GetTickCount64() >= request.deadline || busy_) {
             if (request.operation == 2) connection->ReplyContext(E_INVALIDARG, 0);
             else connection->Reply(E_INVALIDARG);
@@ -228,13 +272,34 @@ private:
             std::wstring text(request.text, request.length);
             const bool backspace = request.operation == 3;
             const bool deleteText = request.operation == 1;
-            const bool move = request.operation >= 4;
+            const bool move = request.operation == 4 || request.operation == 5;
+            const bool copy = request.operation == 6;
+            const bool cut = request.operation == 7;
+            const bool paste = request.operation == 8;
             if (result != S_OK || !panel->EditorForeground() ||
-                GetTickCount64() >= request.deadline || (!backspace && !move && !value.selection.empty()) ||
+                GetTickCount64() >= request.deadline || (request.operation < 2 && !value.selection.empty()) ||
                 (deleteText && !value.before.ends_with(text))) {
                 panel->busy_ = false;
                 connection->Reply(result == S_OK ? S_FALSE : result);
                 return;
+            }
+
+            if (copy || cut) {
+                const auto copied = value.selection.empty() || Clipboard(panel->hwnd_).Copy(value.selection);
+                if (copy || !copied || value.selection.empty()) {
+                    panel->busy_ = false;
+                    connection->Reply(copied ? S_OK : E_FAIL, epoch);
+                    return;
+                }
+            }
+            std::wstring replacement;
+            if (paste) {
+                replacement = Clipboard(panel->hwnd_).Read();
+                if (replacement.empty()) {
+                    panel->busy_ = false;
+                    connection->Reply(S_OK, epoch);
+                    return;
+                }
             }
 
             auto offset = value.before.size();
@@ -269,9 +334,11 @@ private:
             } else if (deleteText) {
                 offset -= text.size();
             }
-            const bool removing = backspace || deleteText;
+            const bool removing = backspace || deleteText || cut;
+            if (cut || paste) text = value.selection;
+            if (!removing && !paste) replacement = std::move(text);
             panel->bridge_->ReplaceAsync(value.token, offset,
-                removing ? text : L"", removing ? L"" : text,
+                removing || paste ? text : L"", std::move(replacement),
                 [weak, epoch, connection](HRESULT editResult) {
                     if (auto panel = weak.lock(); panel && panel->epoch_ == epoch) panel->busy_ = false;
                     Trace("dasher-edit", editResult);

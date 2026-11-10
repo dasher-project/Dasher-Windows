@@ -11,7 +11,7 @@ namespace Dasher.Windows.Services;
 
 internal static class TsfEditClient
 {
-    internal enum EditOperation : ushort { Insert = 0, Delete = 1, Backspace = 3, Left = 4, Right = 5 }
+    internal enum EditOperation : ushort { Insert = 0, Delete = 1, Backspace = 3, Left = 4, Right = 5, Copy = 6, Cut = 7, Paste = 8 }
     internal const int MaxTextLength = 512;
     private const uint ProtocolVersion = 2;
     private const int TimeoutMilliseconds = 1500;
