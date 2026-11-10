@@ -19,7 +19,7 @@ constexpr wchar_t WindowClass[] = L"Dasher.TsfProbe.F34A69AD";
 constexpr wchar_t Word[] = L"[dasher-test]";
 constexpr wchar_t RegistryKey[] = L"Software\\Classes\\CLSID\\{F34A69AD-9AD0-49D7-801F-DD95A1BBEA46}";
 constexpr UINT CaptureUndo = WM_APP + 1;
-enum Button { Read = 100, Insert, Undo, Minimize };
+enum Button { Read = 100, Insert, Undo, Minimize, ConnectDasher };
 HINSTANCE module;
 
 
@@ -64,6 +64,19 @@ struct EditConnection {
     HANDLE handle = INVALID_HANDLE_VALUE;
     ~EditConnection() { if (handle != INVALID_HANDLE_VALUE) CloseHandle(handle); }
 
+    void ReplyContext(HRESULT result, std::uint64_t epoch, std::wstring_view before = {}) const {
+        struct {
+            HRESULT result;
+            std::uint32_t length;
+            std::uint64_t epoch;
+            wchar_t before[tsf_bridge::ContextLimit];
+        } response{result, static_cast<std::uint32_t>(before.size()), epoch, {}};
+        static_assert(sizeof(response) == 1040);
+        before.copy(response.before, before.size());
+        DWORD written;
+        WriteFile(handle, &response, sizeof(response), &written, nullptr);
+    }
+
     void Reply(HRESULT result, std::uint64_t epoch = 0) const {
         const std::uint64_t response[] = {static_cast<std::uint32_t>(result), epoch};
         DWORD written;
@@ -96,8 +109,9 @@ public:
         AddControl(L"STATIC", L"Insert test word", Insert, 100, 36, 115, 28);
         AddControl(L"STATIC", L"Undo test insert", Undo, 220, 36, 115, 28);
         AddControl(L"STATIC", L"Minimize for 2s", Minimize, 340, 36, 155, 28);
-        status_ = AddControl(L"STATIC", L"Focus a test editor, then click Read.", 0, 10, 73, 485, 38);
-        preview_ = AddControl(L"STATIC", L"", 0, 10, 113, 485, 102);
+        AddControl(L"STATIC", L"Allow Dasher in this editor", ConnectDasher, 10, 73, 190, 24);
+        status_ = AddControl(L"STATIC", L"Focus a test editor, then click Read.", 0, 10, 101, 485, 34);
+        preview_ = AddControl(L"STATIC", L"", 0, 10, 138, 485, 80);
         if (!status_ || !preview_ || !SetTimer(hwnd_, 1, 100, nullptr)) {
             Close();
             return false;
@@ -149,13 +163,13 @@ private:
     }
 
     void PollEditConnection() {
-        if (!canConnectToDasher_ || !context_ || !EditorForeground()) {
+        if (!canConnectToDasher_ || !dasherEnabled_ || !context_ || !EditorForeground()) {
             connection_.reset();
             return;
         }
         if (!connection_) {
             wchar_t path[96];
-            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v1.%lu", GetCurrentThreadId());
+            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v2.%lu", GetCurrentThreadId());
             auto connection = std::make_shared<EditConnection>();
             connection->handle = CreateFileW(path, GENERIC_READ | GENERIC_WRITE,
                 0, nullptr, OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION, nullptr);
@@ -175,10 +189,24 @@ private:
         EditRequest request{};
         DWORD count;
         if (!ReadFile(connection->handle, &request, sizeof(request), &count, nullptr) ||
-            count != sizeof(request) || request.version != 1 || !request.length ||
-            request.length > tsf_bridge::ContextLimit || request.deleteText > 1 ||
+            count != sizeof(request) || request.version != 2 || (!request.length && request.deleteText != 2) ||
+            request.length > tsf_bridge::ContextLimit || request.deleteText > 2 ||
             GetTickCount64() >= request.deadline || busy_) {
-            connection->Reply(E_INVALIDARG);
+            if (request.deleteText == 2) connection->ReplyContext(E_INVALIDARG, 0);
+            else connection->Reply(E_INVALIDARG);
+            return;
+        }
+
+        if (request.deleteText == 2) {
+            auto weak = weak_from_this();
+            const auto epoch = epoch_;
+            previewBridge_->ReadAsync([weak, epoch, connection, deadline = request.deadline](HRESULT result, Snapshot value) {
+                const auto panel = weak.lock();
+                if (!panel || panel->epoch_ != epoch || !panel->EditorForeground() || GetTickCount64() >= deadline)
+                    result = S_FALSE;
+                if (result == S_OK) connection->ReplyContext(result, epoch, value.before);
+                else connection->ReplyContext(result, 0);
+            });
             return;
         }
 
@@ -228,6 +256,20 @@ private:
 
     void Command(int command) {
         Trace("command", S_OK, command, undo_.token != 0);
+        if (command == ConnectDasher) {
+            if (!context_ || !EditorForeground()) return;
+            dasherEnabled_ = !dasherEnabled_;
+            connection_.reset();
+            bridge_->SetContext(context_.Get());
+            previewBridge_->SetContext(context_.Get());
+            ++epoch_;
+            busy_ = false;
+            undo_ = {};
+            SetWindowTextW(GetDlgItem(hwnd_, ConnectDasher),
+                dasherEnabled_ ? L"Disconnect Dasher" : L"Allow Dasher in this editor");
+            Status(dasherEnabled_ ? L"Dasher connection enabled" : L"Dasher disconnected", S_OK);
+            return;
+        }
         if (command == Minimize) {
             restoreAt_ = GetTickCount64() + 2000;
             ShowWindow(hwnd_, SW_SHOWMINNOACTIVE);
@@ -363,6 +405,7 @@ private:
     Snapshot undo_;
     std::wstring expected_;
     bool busy_{};
+    bool dasherEnabled_{};
 };
 
 class Service final : public ITfTextInputProcessor, public ITfThreadMgrEventSink,
