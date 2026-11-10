@@ -220,8 +220,17 @@ HRESULT TextContext::ReplaceLocked(ITfContext* context, TfEditCookie cookie, std
     std::wstring actual;
     if (FAILED(result = GetText(range.Get(), cookie, actual, static_cast<ULONG>(expected.size())))) return result;
     if (actual != expected) return S_FALSE;
-    return range->SetText(cookie, 0, replacement.empty() ? L"" : replacement.data(),
-                          static_cast<LONG>(replacement.size()));
+    result = range->SetText(cookie, 0, replacement.empty() ? L"" : replacement.data(),
+                            static_cast<LONG>(replacement.size()));
+    if (result != S_OK) return result;
+
+    // The next edit is relative to the caret. Providers can leave the
+    // selection at its old location after SetText, so place it explicitly.
+    // A caret failure here follows a committed edit and must never be retried.
+    result = range->Collapse(cookie, TF_ANCHOR_END);
+    if (FAILED(result)) return EditAppliedCaretUnavailable;
+    TF_SELECTION caret{range.Get(), {TF_AE_NONE, FALSE}};
+    return FAILED(context->SetSelection(cookie, 1, &caret)) ? EditAppliedCaretUnavailable : S_OK;
 }
 
 }
