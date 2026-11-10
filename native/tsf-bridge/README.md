@@ -83,13 +83,10 @@ an interactive Windows session.
 ## Exercise the Dasher connection
 
 Rebuild and register the updated DLL, then restart the scratch editor so it
-loads that DLL. Select **Dasher TSF Probe** in the editor with **Win+Space**.
+loads that DLL. Select **Dasher TSF Probe** in the editor with **Win+Space** and click **Allow Dasher in this editor** on the panel.
 Set `$env:DASHER_EXPERIMENTAL_TSF = '1'` before launching the matching Dasher
 build. Enter Direct mode and focus the scratch editor. Zoom in to insert text,
 then zoom back to delete it. Use an editor running without elevation.
 
-This opt-in path covers engine inserts and deletes. Direct-mode context reads
-and toolbar actions still use the existing implementation. The edit queue stops
-on a rejected edit, changed editor, or timeout. Restart Dasher to begin another
-test session. Check the keyboard diagnostics for a TSF output stop and the
+This opt-in path covers engine inserts, deletes, and context reads. Toolbar actions still use the existing implementation. Dasher stops the queue after a rejected edit or timeout and resumes after a fresh TSF context read. Check the keyboard diagnostics for a TSF output stop and the
 probe log in the Windows temporary directory for the edit result.

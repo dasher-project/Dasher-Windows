@@ -329,6 +329,16 @@ public partial class MainWindow : Window
             }
         };
         Activated += (_, _) => _canvas?.ForceFrameLoopRevive();
+        if (UseTsfOutput)
+        {
+            var contextTimer = new Avalonia.Threading.DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(400)
+            };
+            contextTimer.Tick += (_, _) => _ = SeedContextFromTargetAsync("caret poll");
+            Closed += (_, _) => contextTimer.Stop();
+            contextTimer.Start();
+        }
     }
 
     private void SeedTrackers(PixelPoint position, Size size)
@@ -1287,6 +1297,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void ArmSelectionWatch()
     {
+        if (UseTsfOutput) return;
         var target = _targetTracker.Current;
         if (target == IntPtr.Zero || target == _lastWatchTarget) return;
         // Set _lastWatchTarget only on CONFIRMED success — a sticky field
@@ -1324,8 +1335,58 @@ public partial class MainWindow : Window
     /// (session-context reset, v5 parity); never blocks the UI thread
     /// (background read, 300 ms budget).
     /// </summary>
+    private void ScheduleTsfContextRefresh(string reason)
+    {
+        if (_tsfPending != 0 || !_tsfEdits.IsCompleted || WindowState == WindowState.Minimized ||
+            _pickerSessionActive || _vm is not { IsKeyboardMode: true } vm || vm.Handle == IntPtr.Zero)
+            return;
+
+        var thread = Services.TsfEditClient.ForegroundThread();
+        if (thread == 0) return;
+        _tsfEdits = RefreshTsfContextAsync(vm.Handle, thread, reason);
+    }
+
+    private async Task RefreshTsfContextAsync(IntPtr handle, uint thread, string reason)
+    {
+        try
+        {
+            var context = await Services.TsfEditClient.ReadAsync(thread);
+            if (context is not { } snapshot || _tsfPending != 0 || _pickerSessionActive ||
+                WindowState == WindowState.Minimized || _vm is not { IsKeyboardMode: true } vm ||
+                vm.Handle != handle || Services.TsfEditClient.ForegroundThread() != thread)
+                return;
+
+            var output = NativeBridge.dasher_get_output_text(handle);
+            var current = output == IntPtr.Zero ? "" : Marshal.PtrToStringUTF8(output) ?? "";
+            if (snapshot.Before != current)
+            {
+                var offset = NativeBridge.dasher_byte_offset_from_utf16(snapshot.Before, snapshot.Before.Length);
+                NativeBridge.dasher_seed_buffer(handle, snapshot.Before, offset);
+                KbLog($"TSF context refreshed ({reason}): {snapshot.Before.Length} UTF-16 units");
+            }
+            _tsfEditorThread = thread;
+            _tsfEditorEpoch = snapshot.Epoch;
+            _tsfReanchorRequired = false;
+            _tsfOutputStopped = false;
+        }
+        catch (TimeoutException)
+        {
+            // The focused window may be Dasher, the taskbar or an editor
+            // without the TSF input method. Preserve the current buffer.
+        }
+        catch (Exception exception)
+        {
+            KbLog($"TSF context refresh failed: {exception.GetType().Name}");
+        }
+    }
+
     private async Task SeedContextFromTargetAsync(string reason)
     {
+        if (UseTsfOutput)
+        {
+            ScheduleTsfContextRefresh(reason);
+            return;
+        }
         if (_vm == null || !_vm.IsKeyboardMode || _vm.Handle == IntPtr.Zero) return;
         if (_targetTracker.Current == IntPtr.Zero) return;
 
@@ -1564,14 +1625,6 @@ public partial class MainWindow : Window
         // 200 chars of a private email or message).
         KbLog($"Context seed ({reason}): {decision.Text.Length} of {context.Text.Length} chars, caret u16={decision.CaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, decision.Text, byteOffset);
-        if (UseTsfOutput && reason == ManualReanchorReason && _tsfReanchorRequired && _tsfPending == 0)
-        {
-            _tsfEditorThread = 0;
-            _tsfEditorEpoch = 0;
-            _tsfReanchorRequired = false;
-            _tsfOutputStopped = false;
-            KbLog("TSF output rearmed after manual context refresh");
-        }
         // #103: remember where the seeded window starts (field-absolute) so
         // later own-caret-move offsets can map the field caret into buffer
         // coordinates: window start = caret minus the window's own length.
