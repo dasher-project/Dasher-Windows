@@ -47,7 +47,8 @@ public:
     using EditCompletion = std::function<void(HRESULT)>;
     void ReadAsync(ReadCompletion completion);
     void ReplaceAsync(std::uint64_t token, size_t start, std::wstring expected,
-                      std::wstring replacement, EditCompletion completion);
+                      std::wstring replacement, EditCompletion completion,
+                      std::function<bool()> canApply = {});
 
 private:
     HRESULT ReadLocked(ITfContext* context, TfEditCookie cookie, Snapshot& snapshot);

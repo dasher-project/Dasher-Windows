@@ -40,6 +40,37 @@ void Trace(const char* event, HRESULT result = S_OK, size_t first = 0, size_t se
     CloseHandle(file);
 }
 
+bool CanConnectToDasher() {
+    HANDLE token;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &token)) return false;
+    TOKEN_ELEVATION elevation{};
+    DWORD size;
+    const auto ok = GetTokenInformation(token, TokenElevation, &elevation, sizeof(elevation), &size);
+    CloseHandle(token);
+    return ok && !elevation.TokenIsElevated;
+}
+
+struct EditRequest {
+    std::uint32_t version;
+    std::uint16_t length;
+    std::uint16_t deleteText;
+    std::uint64_t deadline;
+    std::uint64_t editorEpoch;
+    wchar_t text[tsf_bridge::ContextLimit];
+};
+static_assert(sizeof(EditRequest) == 1048);
+
+struct EditConnection {
+    HANDLE handle = INVALID_HANDLE_VALUE;
+    ~EditConnection() { if (handle != INVALID_HANDLE_VALUE) CloseHandle(handle); }
+
+    void Reply(HRESULT result, std::uint64_t epoch = 0) const {
+        const std::uint64_t response[] = {static_cast<std::uint32_t>(result), epoch};
+        DWORD written;
+        WriteFile(handle, response, sizeof(response), &written, nullptr);
+    }
+};
+
 std::wstring Text(const Snapshot& snapshot) {
     return snapshot.before + snapshot.selection + snapshot.after;
 }
@@ -115,6 +146,78 @@ private:
 
     bool EditorForeground() const {
         return GetWindowThreadProcessId(GetForegroundWindow(), nullptr) == GetCurrentThreadId();
+    }
+
+    void PollEditConnection() {
+        if (!canConnectToDasher_ || !context_ || !EditorForeground()) {
+            connection_.reset();
+            return;
+        }
+        if (!connection_) {
+            wchar_t path[96];
+            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v1.%lu", GetCurrentThreadId());
+            auto connection = std::make_shared<EditConnection>();
+            connection->handle = CreateFileW(path, GENERIC_READ | GENERIC_WRITE,
+                0, nullptr, OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION, nullptr);
+            if (connection->handle == INVALID_HANDLE_VALUE) return;
+            DWORD mode = PIPE_READMODE_BYTE | PIPE_NOWAIT;
+            if (!SetNamedPipeHandleState(connection->handle, &mode, nullptr, nullptr)) return;
+            connection_ = std::move(connection);
+        }
+
+        DWORD available;
+        if (!PeekNamedPipe(connection_->handle, nullptr, 0, nullptr, &available, nullptr)) {
+            connection_.reset();
+            return;
+        }
+        if (available < sizeof(EditRequest)) return;
+        auto connection = std::exchange(connection_, nullptr);
+        EditRequest request{};
+        DWORD count;
+        if (!ReadFile(connection->handle, &request, sizeof(request), &count, nullptr) ||
+            count != sizeof(request) || request.version != 1 || !request.length ||
+            request.length > tsf_bridge::ContextLimit || request.deleteText > 1 ||
+            GetTickCount64() >= request.deadline || busy_) {
+            connection->Reply(E_INVALIDARG);
+            return;
+        }
+
+        if (request.editorEpoch && request.editorEpoch != epoch_) {
+            connection->Reply(S_FALSE);
+            return;
+        }
+        busy_ = true;
+        undo_ = {};
+        auto weak = weak_from_this();
+        auto epoch = epoch_;
+        bridge_->ReadAsync([weak, epoch, connection, request](HRESULT result, Snapshot value) {
+            auto panel = weak.lock();
+            if (!panel || panel->epoch_ != epoch) {
+                connection->Reply(S_FALSE);
+                return;
+            }
+
+            std::wstring text(request.text, request.length);
+            if (result != S_OK || !panel->EditorForeground() ||
+                GetTickCount64() >= request.deadline || !value.selection.empty() ||
+                (request.deleteText && !value.before.ends_with(text))) {
+                panel->busy_ = false;
+                connection->Reply(result == S_OK ? S_FALSE : result);
+                return;
+            }
+
+            const auto offset = request.deleteText ? value.before.size() - text.size() : value.before.size();
+            panel->bridge_->ReplaceAsync(value.token, offset,
+                request.deleteText ? text : L"", request.deleteText ? L"" : text,
+                [weak, epoch, connection](HRESULT editResult) {
+                    if (auto panel = weak.lock(); panel && panel->epoch_ == epoch) panel->busy_ = false;
+                    Trace("dasher-edit", editResult);
+                    connection->Reply(editResult, epoch);
+                }, [weak, deadline = request.deadline] {
+                    const auto panel = weak.lock();
+                    return panel && panel->EditorForeground() && GetTickCount64() < deadline;
+                });
+        });
     }
 
     void Status(const wchar_t* message, HRESULT result) {
@@ -225,6 +328,7 @@ private:
             case WM_MOUSEACTIVATE: return MA_NOACTIVATE;
             case WM_TIMER:
                 self->RefreshDocument();
+                self->PollEditConnection();
                 if (self->context_ && self->EditorForeground() && GetTickCount64() >= self->restoreAt_) {
                     if (!IsWindowVisible(hwnd) || IsIconic(hwnd)) ShowWindow(hwnd, SW_SHOWNOACTIVATE);
                 } else if (IsWindowVisible(hwnd) && !IsIconic(hwnd)) {
@@ -252,8 +356,10 @@ private:
     ComPtr<ITfDocumentMgr> document_;
     ComPtr<ITfContext> context_;
     HWND hwnd_{}, status_{}, preview_{};
-    std::uint64_t epoch_{}, insertToken_{}, restoreAt_{};
+    std::uint64_t epoch_{GetTickCount64()}, insertToken_{}, restoreAt_{};
     size_t offset_{};
+    const bool canConnectToDasher_ = CanConnectToDasher();
+    std::shared_ptr<EditConnection> connection_;
     Snapshot undo_;
     std::wstring expected_;
     bool busy_{};

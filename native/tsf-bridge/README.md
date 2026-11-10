@@ -79,3 +79,17 @@ service activation, creation of the non-activating panel, and deactivation.
 The bridge tests also exercise asynchronous reads, edits, and invalidation.
 Installing and selecting the profile and testing editor compatibility require
 an interactive Windows session.
+
+## Exercise the Dasher connection
+
+Rebuild and register the updated DLL, then restart the scratch editor so it
+loads that DLL. Select **Dasher TSF Probe** in the editor with **Win+Space**.
+Set `$env:DASHER_EXPERIMENTAL_TSF = '1'` before launching the matching Dasher
+build. Enter Direct mode and focus the scratch editor. Zoom in to insert text,
+then zoom back to delete it. Use an editor running without elevation.
+
+This opt-in path covers engine inserts and deletes. Direct-mode context reads
+and toolbar actions still use the existing implementation. The edit queue stops
+on a rejected edit, changed editor, or timeout. Restart Dasher to begin another
+test session. Check the keyboard diagnostics for a TSF output stop and the
+probe log in the Windows temporary directory for the edit result.
