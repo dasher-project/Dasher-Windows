@@ -183,12 +183,13 @@ private:
                 auto panel = weak.lock();
                 if (!panel || panel->epoch_ != epoch) return;
                 Trace(inserting ? "insert-complete" : "undo-complete", result);
-                if (inserting && result == S_OK) {
+                if (inserting && (result == S_OK || result == tsf_bridge::EditAppliedCaretUnavailable)) {
                     PostMessageW(panel->hwnd_, CaptureUndo, 1, 0);
                     return;
                 }
                 panel->busy_ = false;
                 panel->Status(result == S_OK ? L"Test word removed" :
+                    result == tsf_bridge::EditAppliedCaretUnavailable ? L"Test word removed. Caret unavailable" :
                     result == S_FALSE ? L"Editor changed. Edit skipped" : L"Edit failed", result);
             });
     }

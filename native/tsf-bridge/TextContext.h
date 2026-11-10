@@ -12,6 +12,9 @@
 namespace tsf_bridge {
 
 inline constexpr LONG ContextLimit = 512;
+// Text was committed, but the provider could not position the caret.
+// Refresh the context before issuing another edit.
+inline constexpr HRESULT EditAppliedCaretUnavailable = MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_ITF, 0x401);
 
 struct Snapshot {
     std::uint64_t token{};

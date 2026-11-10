@@ -112,12 +112,12 @@ int main() {
         // A Direct-mode client refreshes its token after each accepted edit.
         for (const auto* word : {L" one", L" two", L" three"}) {
             Check(bridge.Read(value) == S_OK);
-            const auto end = (value.before + value.selection + value.after).size() - 1;
+            const auto end = value.before.size();
             Check(bridge.Replace(value.token, end, L"", word) == S_OK);
         }
         for (const auto* word : {L" three", L" two", L" one"}) {
             Check(bridge.Read(value) == S_OK);
-            const auto end = (value.before + value.selection + value.after).size() - 1;
+            const auto end = value.before.size();
             Check(bridge.Replace(value.token, end - wcslen(word), word, L"") == S_OK);
         }
         Check(bridge.Read(value) == S_OK);
