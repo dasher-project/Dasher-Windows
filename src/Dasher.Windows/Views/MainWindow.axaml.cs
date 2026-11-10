@@ -323,7 +323,10 @@ public partial class MainWindow : Window
             var wasMinimized = lastState == WindowState.Minimized;
             lastState = WindowState;
             if (wasMinimized && WindowState != WindowState.Minimized)
+            {
                 _canvas?.ForceFrameLoopRevive();
+                _ = SeedContextFromTargetAsync("window restored");
+            }
         };
         Activated += (_, _) => _canvas?.ForceFrameLoopRevive();
     }
@@ -1171,10 +1174,11 @@ public partial class MainWindow : Window
     private ulong _tsfEditorEpoch;
     private int _tsfPending;
     private bool _tsfOutputStopped;
+    private bool _tsfReanchorRequired;
 
     private void QueueTsfEdit(string text, bool delete)
     {
-        if (_tsfOutputStopped || text.Length == 0) return;
+        if (_tsfOutputStopped || _tsfReanchorRequired || text.Length == 0) return;
         var thread = Services.TsfEditClient.ForegroundThread();
         if (_tsfEditorThread == 0) _tsfEditorThread = thread;
         if (thread == 0 || thread != _tsfEditorThread || _tsfPending >= 32)
@@ -1203,6 +1207,11 @@ public partial class MainWindow : Window
             var (result, epoch) = await Services.TsfEditClient.EditAsync(thread, _tsfEditorEpoch, text, delete);
             _tsfEditorEpoch = epoch;
             if (result != 0) StopTsfOutput($"editor returned 0x{result:X8}");
+        }
+        catch (TimeoutException exception)
+        {
+            _tsfReanchorRequired = true;
+            StopTsfOutput(exception.Message);
         }
         catch (Exception exception)
         {
@@ -1555,6 +1564,14 @@ public partial class MainWindow : Window
         // 200 chars of a private email or message).
         KbLog($"Context seed ({reason}): {decision.Text.Length} of {context.Text.Length} chars, caret u16={decision.CaretUtf16} → byte={byteOffset}");
         NativeBridge.dasher_seed_buffer(_vm.Handle, decision.Text, byteOffset);
+        if (UseTsfOutput && reason == ManualReanchorReason && _tsfReanchorRequired && _tsfPending == 0)
+        {
+            _tsfEditorThread = 0;
+            _tsfEditorEpoch = 0;
+            _tsfReanchorRequired = false;
+            _tsfOutputStopped = false;
+            KbLog("TSF output rearmed after manual context refresh");
+        }
         // #103: remember where the seeded window starts (field-absolute) so
         // later own-caret-move offsets can map the field caret into buffer
         // coordinates: window start = caret minus the window's own length.
