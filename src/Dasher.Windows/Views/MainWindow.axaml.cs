@@ -1186,9 +1186,9 @@ public partial class MainWindow : Window
     private bool _tsfOutputStopped;
     private bool _tsfReanchorRequired;
 
-    private void QueueTsfEdit(string text, bool delete)
+    private void QueueTsfEdit(string text, Services.TsfEditClient.EditOperation operation)
     {
-        if (_tsfOutputStopped || _tsfReanchorRequired || text.Length == 0) return;
+        if (_tsfOutputStopped || _tsfReanchorRequired || (text.Length == 0 && operation is Services.TsfEditClient.EditOperation.Insert or Services.TsfEditClient.EditOperation.Delete)) return;
         var thread = Services.TsfEditClient.ForegroundThread();
         if (_tsfEditorThread == 0) _tsfEditorThread = thread;
         if (thread == 0 || thread != _tsfEditorThread || _tsfPending >= 32)
@@ -1198,10 +1198,10 @@ public partial class MainWindow : Window
         }
 
         ++_tsfPending;
-        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, thread, text, delete);
+        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, thread, text, operation);
     }
 
-    private async Task ApplyTsfEditAsync(Task previous, uint thread, string text, bool delete)
+    private async Task ApplyTsfEditAsync(Task previous, uint thread, string text, Services.TsfEditClient.EditOperation operation)
     {
         try
         {
@@ -1214,7 +1214,7 @@ public partial class MainWindow : Window
                 return;
             }
 
-            var (result, epoch) = await Services.TsfEditClient.EditAsync(thread, _tsfEditorEpoch, text, delete);
+            var (result, epoch) = await Services.TsfEditClient.EditAsync(thread, _tsfEditorEpoch, text, operation);
             _tsfEditorEpoch = epoch;
             if (result != 0) StopTsfOutput($"editor returned 0x{result:X8}");
         }
@@ -1251,9 +1251,9 @@ public partial class MainWindow : Window
         if (UseTsfOutput)
         {
             if (e.EventType == EngineOutputEventArgs.EventInsert)
-                QueueTsfEdit(e.Text, delete: false);
+                QueueTsfEdit(e.Text, Services.TsfEditClient.EditOperation.Insert);
             else if (e.EventType == EngineOutputEventArgs.EventDelete)
-                QueueTsfEdit(e.Text, delete: true);
+                QueueTsfEdit(e.Text, Services.TsfEditClient.EditOperation.Delete);
             return;
         }
 
@@ -2186,7 +2186,8 @@ public partial class MainWindow : Window
         if (_vm is { IsKeyboardMode: true })
         {
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("ime_toolbar", "backspace");
-            SendBackspaces(1);
+            if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Backspace);
+            else SendBackspaces(1);
         }
         else
         {
@@ -2221,7 +2222,8 @@ public partial class MainWindow : Window
                 KbLog("  arrow_left skipped: target not foreground and restore unavailable");
                 return;
             }
-            SendVirtualKey(VK_LEFT);
+            if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Left);
+            else SendVirtualKey(VK_LEFT);
         }
         else
         {
@@ -2256,7 +2258,8 @@ public partial class MainWindow : Window
                 KbLog("  arrow_right skipped: target not foreground and restore unavailable");
                 return;
             }
-            SendVirtualKey(VK_RIGHT);
+            if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Right);
+            else SendVirtualKey(VK_RIGHT);
         }
         else
         {

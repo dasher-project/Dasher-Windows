@@ -11,6 +11,7 @@ namespace Dasher.Windows.Services;
 
 internal static class TsfEditClient
 {
+    internal enum EditOperation : ushort { Insert = 0, Delete = 1, Backspace = 3, Left = 4, Right = 5 }
     internal const int MaxTextLength = 512;
     private const uint ProtocolVersion = 2;
     private const int TimeoutMilliseconds = 1500;
@@ -18,10 +19,10 @@ internal static class TsfEditClient
     internal static uint ForegroundThread()
         => GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero);
 
-    internal static async Task<(int Result, ulong Epoch)> EditAsync(uint editorThread, ulong epoch, string value, bool delete)
+    internal static async Task<(int Result, ulong Epoch)> EditAsync(uint editorThread, ulong epoch, string value, EditOperation operation)
     {
-        if (value.Length is 0 or > MaxTextLength) throw new ArgumentException("Invalid TSF edit.");
-        var response = await RequestAsync(editorThread, epoch, value, delete ? (ushort)1 : (ushort)0)
+        if (value.Length > MaxTextLength || (value.Length == 0 && operation is EditOperation.Insert or EditOperation.Delete)) throw new ArgumentException("Invalid TSF edit.");
+        var response = await RequestAsync(editorThread, epoch, value, (ushort)operation)
             .ConfigureAwait(false);
         return (BinaryPrimitives.ReadInt32LittleEndian(response),
             BinaryPrimitives.ReadUInt64LittleEndian(response.AsSpan(8)));

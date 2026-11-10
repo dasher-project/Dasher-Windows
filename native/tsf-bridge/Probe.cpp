@@ -53,7 +53,7 @@ bool CanConnectToDasher() {
 struct EditRequest {
     std::uint32_t version;
     std::uint16_t length;
-    std::uint16_t deleteText;
+    std::uint16_t operation;
     std::uint64_t deadline;
     std::uint64_t editorEpoch;
     wchar_t text[tsf_bridge::ContextLimit];
@@ -189,15 +189,15 @@ private:
         EditRequest request{};
         DWORD count;
         if (!ReadFile(connection->handle, &request, sizeof(request), &count, nullptr) ||
-            count != sizeof(request) || request.version != 2 || (!request.length && request.deleteText != 2) ||
-            request.length > tsf_bridge::ContextLimit || request.deleteText > 2 ||
+            count != sizeof(request) || request.version != 2 || (!request.length && request.operation < 2) ||
+            request.length > tsf_bridge::ContextLimit || request.operation > 5 ||
             GetTickCount64() >= request.deadline || busy_) {
-            if (request.deleteText == 2) connection->ReplyContext(E_INVALIDARG, 0);
+            if (request.operation == 2) connection->ReplyContext(E_INVALIDARG, 0);
             else connection->Reply(E_INVALIDARG);
             return;
         }
 
-        if (request.deleteText == 2) {
+        if (request.operation == 2) {
             auto weak = weak_from_this();
             const auto epoch = epoch_;
             previewBridge_->ReadAsync([weak, epoch, connection, deadline = request.deadline](HRESULT result, Snapshot value) {
@@ -226,17 +226,52 @@ private:
             }
 
             std::wstring text(request.text, request.length);
+            const bool backspace = request.operation == 3;
+            const bool deleteText = request.operation == 1;
+            const bool move = request.operation >= 4;
             if (result != S_OK || !panel->EditorForeground() ||
-                GetTickCount64() >= request.deadline || !value.selection.empty() ||
-                (request.deleteText && !value.before.ends_with(text))) {
+                GetTickCount64() >= request.deadline || (!backspace && !move && !value.selection.empty()) ||
+                (deleteText && !value.before.ends_with(text))) {
                 panel->busy_ = false;
                 connection->Reply(result == S_OK ? S_FALSE : result);
                 return;
             }
 
-            const auto offset = request.deleteText ? value.before.size() - text.size() : value.before.size();
+            auto offset = value.before.size();
+            if (move) {
+                text.clear();
+                if (request.operation == 4 && value.selection.empty() && offset > 0) {
+                    --offset;
+                    if (offset > 0 && value.before[offset] >= 0xDC00 && value.before[offset] <= 0xDFFF)
+                        --offset;
+                } else if (request.operation == 5) {
+                    offset += value.selection.size();
+                    if (value.selection.empty() && !value.after.empty()) {
+                        ++offset;
+                        if (value.after.size() > 1 && value.after.front() >= 0xD800 && value.after.front() <= 0xDBFF)
+                            ++offset;
+                    }
+                }
+            } else if (backspace) {
+                text = value.selection;
+                if (text.empty() && !value.before.empty()) {
+                    --offset;
+                    if (offset > 0 && value.before[offset] >= 0xDC00 && value.before[offset] <= 0xDFFF &&
+                        value.before[offset - 1] >= 0xD800 && value.before[offset - 1] <= 0xDBFF)
+                        --offset;
+                    text = value.before.substr(offset);
+                }
+                if (text.empty()) {
+                    panel->busy_ = false;
+                    connection->Reply(S_OK, epoch);
+                    return;
+                }
+            } else if (deleteText) {
+                offset -= text.size();
+            }
+            const bool removing = backspace || deleteText;
             panel->bridge_->ReplaceAsync(value.token, offset,
-                request.deleteText ? text : L"", request.deleteText ? L"" : text,
+                removing ? text : L"", removing ? L"" : text,
                 [weak, epoch, connection](HRESULT editResult) {
                     if (auto panel = weak.lock(); panel && panel->epoch_ == epoch) panel->busy_ = false;
                     Trace("dasher-edit", editResult);
