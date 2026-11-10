@@ -66,12 +66,20 @@
     <Feature Id="MainFeature" Title="Dasher" Level="1">
       <ComponentGroupRef Id="AppFiles" />
       <ComponentGroupRef Id="DataFiles" />
+      <ComponentRef Id="TsfTextService" />
       <ComponentRef Id="StartMenuShortcut" />
       <ComponentRef Id="DesktopShortcut" />
       <ComponentRef Id="AppDataFolderComponent" />
       <ComponentRef Id="RegistryEntries" />
     </Feature>
   </Package>
+
+  <Fragment>
+    <Component Id="TsfTextService" Directory="INSTALLFOLDER" Guid="*">
+      <!-- The DLL registers its COM class and TSF keyboard profiles together. -->
+      <File Id="TsfTextServiceDll" Source="$(var.TsfSource)" KeyPath="yes" SelfRegCost="0" />
+    </Component>
+  </Fragment>
 
   <Fragment>
     <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
