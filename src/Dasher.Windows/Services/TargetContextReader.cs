@@ -185,7 +185,7 @@ public static class TargetContextReader
     /// engine to a different field — the huge canvas jumps.
     /// </summary>
     internal static IUIAutomationTextPattern? FindTextPatternForWindow(
-        CUIAutomationClass uia, IntPtr targetHwnd, uint targetPid, out string source)
+        CUIAutomationClass uia, IntPtr targetHwnd, uint targetPid, out string source, bool searchDescendants = true)
     {
         source = "toplevel";
         try
@@ -258,7 +258,7 @@ public static class TargetContextReader
             // Try TextPattern on the element we found.
             var pattern = element.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId)
                 as IUIAutomationTextPattern;
-            if (pattern == null)
+            if (pattern == null && searchDescendants)
             {
                 // Last resort: search descendants for the first element
                 // with TextPattern (greptile: "top-level lookup misses
@@ -307,7 +307,7 @@ public static class TargetContextReader
         try
         {
             var uia = new CUIAutomationClass();
-            var pattern = FindTextPatternForWindow(uia, targetHwnd, targetPid, out var source);
+            var pattern = FindTextPatternForWindow(uia, targetHwnd, targetPid, out var source, searchDescendants: false);
             if (pattern == null) return null;
 
             var document = pattern.DocumentRange;
@@ -316,9 +316,8 @@ public static class TargetContextReader
             string? text = document.GetText(-1);
             if (text == null) return null;
 
-            // Seeding keeps the end-of-text default when every rung is
-            // dead (today's behavior — only MUTATING callers refuse).
-            int caretUtf16 = ResolveCaretOffset(uia, pattern, document, text, targetHwnd, out _);
+            int caretUtf16 = ResolveCaretOffset(uia, pattern, document, text, targetHwnd, out var resolved);
+            if (!resolved) return null;
 
             Log($"  [UIA] read {text.Length} chars, caret16={caretUtf16}, source={source}");
             return new TargetContext(text, caretUtf16, source);
