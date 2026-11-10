@@ -1190,10 +1190,10 @@ public partial class MainWindow : Window
     {
         if (_tsfOutputStopped || _tsfReanchorRequired || (text.Length == 0 && operation is Services.TsfEditClient.EditOperation.Insert or Services.TsfEditClient.EditOperation.Delete)) return;
         var thread = Services.TsfEditClient.ForegroundThread();
-        if (_tsfEditorThread == 0) _tsfEditorThread = thread;
-        if (thread == 0 || thread != _tsfEditorThread || _tsfPending >= 32)
+        if (thread == 0 || thread != _tsfEditorThread || _tsfEditorEpoch == 0) return;
+        if (_tsfPending >= 32)
         {
-            StopTsfOutput("editor changed or edit queue full");
+            StopTsfOutput("edit queue full");
             return;
         }
 
