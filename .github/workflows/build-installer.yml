@@ -91,11 +91,18 @@ jobs:
       - name: Install WiX v5
         run: dotnet tool install --global wix --version 5.0.2
 
+      - name: Build and test TSF text service (x64)
+        run: |
+          cmake -S native/tsf-bridge -B native/tsf-bridge/build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build native/tsf-bridge/build
+          ctest --test-dir native/tsf-bridge/build --output-on-failure
+
       - name: Build MSI
         working-directory: installer
         run: |
-          wix build dasher.wxs -o ../publish/Dasher-Windows.msi `
+          wix build dasher.wxs -arch x64 -o ../publish/Dasher-Windows.msi `
             -d AppSource="../publish/app" `
+            -d TsfSource="../native/tsf-bridge/build/tsf_probe.dll" `
             -d Version="${{ steps.version.outputs.msi }}"
 
       # ── MSIX (app package with self-signed cert for sideloading) ─────────────
