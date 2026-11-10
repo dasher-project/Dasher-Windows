@@ -203,7 +203,9 @@ private:
     }
 
     bool EditorForeground() const {
-        return GetWindowThreadProcessId(GetForegroundWindow(), nullptr) == GetCurrentThreadId();
+        DWORD process = 0;
+        GetWindowThreadProcessId(GetForegroundWindow(), &process);
+        return process == GetCurrentProcessId();
     }
 
     void PollEditConnection() {
@@ -213,7 +215,7 @@ private:
         }
         if (!connection_) {
             wchar_t path[96];
-            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v2.%lu", GetCurrentThreadId());
+            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v3.%lu", GetCurrentProcessId());
             auto connection = std::make_shared<EditConnection>();
             connection->handle = CreateFileW(path, GENERIC_READ | GENERIC_WRITE,
                 0, nullptr, OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION, nullptr);
@@ -240,7 +242,7 @@ private:
         EditRequest request{};
         DWORD count;
         if (!ReadFile(connection->handle, &request, sizeof(request), &count, nullptr) ||
-            count != sizeof(request) || request.version != 2 || (!request.length && request.operation < 2) ||
+            count != sizeof(request) || request.version != 3 || (!request.length && request.operation < 2) ||
             request.length > tsf_bridge::ContextLimit || request.operation > 8 ||
             GetTickCount64() >= request.deadline || busy_) {
             if (request.operation == 2) connection->ReplyContext(E_INVALIDARG, 0);

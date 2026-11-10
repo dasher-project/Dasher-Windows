@@ -1180,7 +1180,7 @@ public partial class MainWindow : Window
     private static readonly bool UseTsfOutput =
         Environment.GetEnvironmentVariable("DASHER_EXPERIMENTAL_TSF") == "1";
     private Task _tsfEdits = Task.CompletedTask;
-    private uint _tsfEditorThread;
+    private uint _tsfEditorProcess;
     private ulong _tsfEditorEpoch;
     private int _tsfPending;
     private bool _tsfOutputStopped;
@@ -1189,8 +1189,8 @@ public partial class MainWindow : Window
     private void QueueTsfEdit(string text, Services.TsfEditClient.EditOperation operation)
     {
         if (_tsfOutputStopped || _tsfReanchorRequired || (text.Length == 0 && operation is Services.TsfEditClient.EditOperation.Insert or Services.TsfEditClient.EditOperation.Delete)) return;
-        var thread = Services.TsfEditClient.ForegroundThread();
-        if (thread == 0 || thread != _tsfEditorThread || _tsfEditorEpoch == 0) return;
+        var process = Services.TsfEditClient.ForegroundEditorProcess();
+        if (process == 0 || process != _tsfEditorProcess || _tsfEditorEpoch == 0) return;
         if (_tsfPending >= 32)
         {
             StopTsfOutput("edit queue full");
@@ -1198,23 +1198,23 @@ public partial class MainWindow : Window
         }
 
         ++_tsfPending;
-        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, thread, text, operation);
+        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, process, text, operation);
     }
 
-    private async Task ApplyTsfEditAsync(Task previous, uint thread, string text, Services.TsfEditClient.EditOperation operation)
+    private async Task ApplyTsfEditAsync(Task previous, uint process, string text, Services.TsfEditClient.EditOperation operation)
     {
         try
         {
             await previous;
             if (_tsfOutputStopped) return;
             if (_vm is not { IsKeyboardMode: true } || _pickerSessionActive ||
-                Services.TsfEditClient.ForegroundThread() != thread)
+                Services.TsfEditClient.ForegroundEditorProcess() != process)
             {
                 StopTsfOutput("editor no longer available");
                 return;
             }
 
-            var (result, epoch) = await Services.TsfEditClient.EditAsync(thread, _tsfEditorEpoch, text, operation);
+            var (result, epoch) = await Services.TsfEditClient.EditAsync(process, _tsfEditorEpoch, text, operation);
             _tsfEditorEpoch = epoch;
             if (result != 0) StopTsfOutput($"editor returned 0x{result:X8}");
         }
@@ -1341,19 +1341,19 @@ public partial class MainWindow : Window
             _pickerSessionActive || _vm is not { IsKeyboardMode: true } vm || vm.Handle == IntPtr.Zero)
             return;
 
-        var thread = Services.TsfEditClient.ForegroundThread();
-        if (thread == 0) return;
-        _tsfEdits = RefreshTsfContextAsync(vm.Handle, thread, reason);
+        var process = Services.TsfEditClient.ForegroundEditorProcess();
+        if (process == 0) return;
+        _tsfEdits = RefreshTsfContextAsync(vm.Handle, process, reason);
     }
 
-    private async Task RefreshTsfContextAsync(IntPtr handle, uint thread, string reason)
+    private async Task RefreshTsfContextAsync(IntPtr handle, uint process, string reason)
     {
         try
         {
-            var context = await Services.TsfEditClient.ReadAsync(thread);
+            var context = await Services.TsfEditClient.ReadAsync(process);
             if (context is not { } snapshot || _tsfPending != 0 || _pickerSessionActive ||
                 WindowState == WindowState.Minimized || _vm is not { IsKeyboardMode: true } vm ||
-                vm.Handle != handle || Services.TsfEditClient.ForegroundThread() != thread)
+                vm.Handle != handle || Services.TsfEditClient.ForegroundEditorProcess() != process)
                 return;
 
             var output = NativeBridge.dasher_get_output_text(handle);
@@ -1364,7 +1364,7 @@ public partial class MainWindow : Window
                 NativeBridge.dasher_seed_buffer(handle, snapshot.Before, offset);
                 KbLog($"TSF context refreshed ({reason}): {snapshot.Before.Length} UTF-16 units");
             }
-            _tsfEditorThread = thread;
+            _tsfEditorProcess = process;
             _tsfEditorEpoch = snapshot.Epoch;
             _tsfReanchorRequired = false;
             _tsfOutputStopped = false;
