@@ -35,7 +35,7 @@ public sealed class KeyboardTargetTracker : IDisposable
     /// tracker uses it at Install time when the foreground is Dasher itself
     /// (fresh launch) — bridging to the user's typing target without
     /// waiting for the first focus event.</summary>
-    public void SetRememberedTarget(IntPtr target) => _rememberedTarget = target;
+    public void SetRememberedTarget(IntPtr target) => _rememberedTarget = IsTaskbar(target) ? IntPtr.Zero : target;
 
     /// <summary>
     /// True when the tracked target is still the foreground window (or the
@@ -67,6 +67,16 @@ public sealed class KeyboardTargetTracker : IDisposable
     [DllImport("user32.dll")]
     private static extern bool IsWindow(IntPtr hWnd);
 
+    private static bool IsTaskbar(IntPtr window)
+    {
+        var name = new System.Text.StringBuilder(64);
+        if (GetClassName(window, name, name.Capacity) == 0) return false;
+        return name.ToString() is "Shell_TrayWnd" or "Shell_SecondaryTrayWnd";
+    }
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern int GetClassName(IntPtr window, System.Text.StringBuilder name, int capacity);
+
     /// <summary>
     /// Record the currently-foreground window as the target (mode entry,
     /// Deactivated fallback). No-op for our own window or when foreground
@@ -77,7 +87,7 @@ public sealed class KeyboardTargetTracker : IDisposable
         if (foregroundHwnd == IntPtr.Zero || foregroundHwnd == ourHwnd) return false;
 
         var root = TargetWindowIdentity.RootOf(foregroundHwnd);
-        if (root == IntPtr.Zero) return false;
+        if (root == IntPtr.Zero || IsTaskbar(root)) return false;
 
         if (root == _target) return false;
         _target = root;
@@ -121,7 +131,7 @@ public sealed class KeyboardTargetTracker : IDisposable
             {
                 var fg = GetForegroundWindow();
                 var root = fg == IntPtr.Zero ? IntPtr.Zero : TargetWindowIdentity.RootOf(fg);
-                if (root != IntPtr.Zero && root != ourHwnd)
+                if (root != IntPtr.Zero && root != ourHwnd && !IsTaskbar(root))
                 {
                     _target = root;
                     Log($"Install: initial target from foreground = 0x{root:X}");
@@ -189,7 +199,7 @@ public sealed class KeyboardTargetTracker : IDisposable
         // comparison meaningless (focus on a child of the current target
         // is a same-window field change, not a new target).
         var root = TargetWindowIdentity.RootOf(hwnd);
-        if (root == IntPtr.Zero) return; // can't root — ignore, never store raw
+        if (root == IntPtr.Zero || IsTaskbar(root)) return;
         hwnd = root;
 
         if (hwnd == _ourHwnd) return; // Dasher gained focus — not a target

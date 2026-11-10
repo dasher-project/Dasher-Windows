@@ -37,7 +37,14 @@ internal static class TsfEditClient
         BinaryPrimitives.WriteUInt64LittleEndian(request.AsSpan(16), epoch);
         Encoding.Unicode.GetBytes(value, request.AsSpan(24));
 
-        await pipe.WaitForConnectionAsync(deadline.Token).ConfigureAwait(false);
+        try
+        {
+            await pipe.WaitForConnectionAsync(deadline.Token).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (deadline.IsCancellationRequested)
+        {
+            throw new TimeoutException("No TSF service connected for the focused editor.");
+        }
         await pipe.WriteAsync(request, deadline.Token).ConfigureAwait(false);
         var response = new byte[16];
         await pipe.ReadExactlyAsync(response, deadline.Token).ConfigureAwait(false);
