@@ -169,7 +169,8 @@ void TextContext::ReadAsync(ReadCompletion completion) {
 }
 
 void TextContext::ReplaceAsync(std::uint64_t token, size_t start, std::wstring expected,
-                               std::wstring replacement, EditCompletion completion) {
+                               std::wstring replacement, EditCompletion completion,
+                               std::function<bool()> canApply) {
     auto weak = weak_from_this();
     auto context = context_;
     if (!context) { completion(TF_E_DISCONNECTED); return; }
@@ -177,9 +178,9 @@ void TextContext::ReplaceAsync(std::uint64_t token, size_t start, std::wstring e
     auto epoch = contextEpoch_;
     const auto result = Run(context.Get(), clientId_, TF_ES_ASYNC | TF_ES_READWRITE,
         [weak, epoch, token, start, expected = std::move(expected),
-         replacement = std::move(replacement), completion](TfEditCookie cookie) {
+         replacement = std::move(replacement), completion, canApply = std::move(canApply)](TfEditCookie cookie) {
             auto self = weak.lock();
-            auto result = self && epoch == self->contextEpoch_
+            auto result = self && epoch == self->contextEpoch_ && (!canApply || canApply())
                 ? self->ReplaceLocked(self->context_.Get(), cookie, token, start, expected, replacement) : S_FALSE;
             completion(result);
             return result;

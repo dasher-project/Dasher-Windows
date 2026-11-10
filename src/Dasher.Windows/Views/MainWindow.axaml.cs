@@ -1164,6 +1164,62 @@ public partial class MainWindow : Window
         }
     }
 
+    private static readonly bool UseTsfOutput =
+        Environment.GetEnvironmentVariable("DASHER_EXPERIMENTAL_TSF") == "1";
+    private Task _tsfEdits = Task.CompletedTask;
+    private uint _tsfEditorThread;
+    private ulong _tsfEditorEpoch;
+    private int _tsfPending;
+    private bool _tsfOutputStopped;
+
+    private void QueueTsfEdit(string text, bool delete)
+    {
+        if (_tsfOutputStopped || text.Length == 0) return;
+        var thread = Services.TsfEditClient.ForegroundThread();
+        if (_tsfEditorThread == 0) _tsfEditorThread = thread;
+        if (thread == 0 || thread != _tsfEditorThread || _tsfPending >= 32)
+        {
+            StopTsfOutput("editor changed or edit queue full");
+            return;
+        }
+
+        ++_tsfPending;
+        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, thread, text, delete);
+    }
+
+    private async Task ApplyTsfEditAsync(Task previous, uint thread, string text, bool delete)
+    {
+        try
+        {
+            await previous;
+            if (_tsfOutputStopped) return;
+            if (_vm is not { IsKeyboardMode: true } || _pickerSessionActive ||
+                Services.TsfEditClient.ForegroundThread() != thread)
+            {
+                StopTsfOutput("editor no longer available");
+                return;
+            }
+
+            var (result, epoch) = await Services.TsfEditClient.EditAsync(thread, _tsfEditorEpoch, text, delete);
+            _tsfEditorEpoch = epoch;
+            if (result != 0) StopTsfOutput($"editor returned 0x{result:X8}");
+        }
+        catch (Exception exception)
+        {
+            StopTsfOutput(exception.GetType().Name);
+        }
+        finally
+        {
+            --_tsfPending;
+        }
+    }
+
+    private void StopTsfOutput(string reason)
+    {
+        _tsfOutputStopped = true;
+        KbLog($"TSF output stopped: {reason}");
+    }
+
     private void OnEngineOutputCore(object? sender, EngineOutputEventArgs e)
     {
         if (_vm == null || !_vm.IsKeyboardMode) return;
@@ -1172,6 +1228,15 @@ public partial class MainWindow : Window
         // dialog as the typing target from our own output-triggered focus
         // restoration.
         if (_pickerSessionActive) return;
+
+        if (UseTsfOutput)
+        {
+            if (e.EventType == EngineOutputEventArgs.EventInsert)
+                QueueTsfEdit(e.Text, delete: false);
+            else if (e.EventType == EngineOutputEventArgs.EventDelete)
+                QueueTsfEdit(e.Text, delete: true);
+            return;
+        }
 
         switch (e.EventType)
         {
