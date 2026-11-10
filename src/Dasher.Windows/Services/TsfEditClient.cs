@@ -17,7 +17,10 @@ internal static class TsfEditClient
     private const int TimeoutMilliseconds = 1500;
 
     internal static uint ForegroundThread()
-        => GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero);
+    {
+        var thread = GetWindowThreadProcessId(GetForegroundWindow(), out var process);
+        return process == (uint)Environment.ProcessId ? 0 : thread;
+    }
 
     internal static async Task<(int Result, ulong Epoch)> EditAsync(uint editorThread, ulong epoch, string value, EditOperation operation)
     {
@@ -74,5 +77,5 @@ internal static class TsfEditClient
     private static extern IntPtr GetForegroundWindow();
 
     [DllImport("user32.dll")]
-    private static extern uint GetWindowThreadProcessId(IntPtr hwnd, IntPtr processId);
+    private static extern uint GetWindowThreadProcessId(IntPtr hwnd, out uint processId);
 }

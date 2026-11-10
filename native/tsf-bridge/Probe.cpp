@@ -218,6 +218,9 @@ private:
             connection->handle = CreateFileW(path, GENERIC_READ | GENERIC_WRITE,
                 0, nullptr, OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION, nullptr);
             if (connection->handle == INVALID_HANDLE_VALUE) return;
+            ULONG serverProcess;
+            if (!GetNamedPipeServerProcessId(connection->handle, &serverProcess) ||
+                serverProcess == GetCurrentProcessId()) return;
             DWORD mode = PIPE_READMODE_BYTE | PIPE_NOWAIT;
             if (!SetNamedPipeHandleState(connection->handle, &mode, nullptr, nullptr)) {
                 Trace("pipe-mode-failed", HRESULT_FROM_WIN32(GetLastError()));
