@@ -322,13 +322,26 @@ public partial class MainWindow : Window
             if (e.Property.Name != nameof(WindowState)) return;
             var wasMinimized = lastState == WindowState.Minimized;
             lastState = WindowState;
+            if (UseTsfOutput && WindowState == WindowState.Minimized)
+            {
+                _tsfRestorePending = true;
+                StopTsfOutput("window minimized");
+            }
             if (wasMinimized && WindowState != WindowState.Minimized)
             {
                 _canvas?.ForceFrameLoopRevive();
-                _ = SeedContextFromTargetAsync("window restored");
+                if (UseTsfOutput)
+                    Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
+                else
+                    _ = SeedContextFromTargetAsync("window restored");
             }
         };
-        Activated += (_, _) => _canvas?.ForceFrameLoopRevive();
+        Activated += (_, _) =>
+        {
+            _canvas?.ForceFrameLoopRevive();
+            if (_tsfRestorePending)
+                Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
+        };
         if (UseTsfOutput)
         {
             var contextTimer = new Avalonia.Threading.DispatcherTimer
@@ -1185,6 +1198,7 @@ public partial class MainWindow : Window
     private int _tsfPending;
     private bool _tsfOutputStopped;
     private bool _tsfReanchorRequired;
+    private bool _tsfRestorePending;
 
     private void QueueTsfEdit(string text, Services.TsfEditClient.EditOperation operation)
     {
@@ -1217,16 +1231,16 @@ public partial class MainWindow : Window
 
             var (result, token) = await Services.TsfEditClient.EditAsync(process, _tsfContextToken, text, operation);
             _tsfContextToken = token;
-            if (result != 0) StopTsfOutput($"editor returned 0x{result:X8}");
+            if (result != 0) StopTsfOutput($"{operation} returned 0x{result:X8}");
         }
         catch (TimeoutException exception)
         {
             _tsfReanchorRequired = true;
-            StopTsfOutput(exception.Message);
+            StopTsfOutput($"{operation}: {exception.Message}");
         }
         catch (Exception exception)
         {
-            StopTsfOutput(exception.GetType().Name);
+            StopTsfOutput($"{operation}: {exception.GetType().Name}");
         }
         finally
         {
@@ -1347,6 +1361,20 @@ public partial class MainWindow : Window
         _tsfEdits = RefreshTsfContextAsync(vm.Handle, process, reason);
     }
 
+    private void RestoreTsfTarget()
+    {
+        if (WindowState == WindowState.Minimized || _pickerSessionActive ||
+            _vm is not { IsKeyboardMode: true }) return;
+
+        // The taskbar can activate Dasher during restore even in Direct mode.
+        // TSF only serves the foreground editor, so return focus to the
+        // tracked window when Dasher itself received it.
+        var ourWindow = OurHwnd();
+        if (ourWindow != IntPtr.Zero && GetForegroundWindow() == ourWindow)
+            _targetTracker.EnsureForeground(ourWindow);
+        ScheduleTsfContextRefresh("window restored");
+    }
+
     private async Task RefreshTsfContextAsync(IntPtr handle, uint process, string reason)
     {
         try
@@ -1376,6 +1404,7 @@ public partial class MainWindow : Window
             }
             _tsfEditorProcess = process;
             _tsfContextToken = snapshot.Token;
+            _tsfRestorePending = false;
             _tsfReanchorRequired = false;
             _tsfOutputStopped = false;
         }
