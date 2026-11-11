@@ -1339,8 +1339,6 @@ public partial class MainWindow : Window
     /// the new sentence — the re-anchor the user wants). The previous
     /// full-document compare was the Outlook reset cause; the sentence window
     /// is immune to the signature/formatting inconsistencies that broke it.
-    /// A manual re-anchor button on the mini-bar provides a belt-and-braces
-    /// override if the watch misses an edge case.
     /// </summary>
     private void ArmSelectionWatch()
     {
@@ -1360,19 +1358,6 @@ public partial class MainWindow : Window
         {
             _lastWatchTarget = target;
         }
-    }
-
-    /// <summary>
-    /// Manual re-anchor (mini-bar button): force a fresh read + seed regardless
-    /// of the watch — for when the user clicks somewhere the watch missed or
-    /// just wants certainty about the current context.
-    /// </summary>
-    private void OnManualReanchor(object? sender, RoutedEventArgs e)
-    {
-        if (_vm is not { IsKeyboardMode: true }) return;
-        Services.AnalyticsService.CaptureUiAction("ime_toolbar", "reanchor");
-        KbLog("Manual re-anchor requested");
-        _ = SeedContextFromTargetAsync(ManualReanchorReason);
     }
 
     /// <summary>
@@ -1500,10 +1485,8 @@ public partial class MainWindow : Window
         // incoherent reads competes with the zoom loop (the field-reported
         // "constant tiny stutter while switching tasks"). Suppress further
         // attempts briefly — same-window only (a genuine app switch is
-        // exempt: its first read is the highest-value one). The manual
-        // re-anchor always bypasses — an explicit user command must read.
-        if (reason != ManualReanchorReason &&
-            _targetTracker.Current == _lastReadTarget &&
+        // exempt: its first read is the highest-value one).
+        if (_targetTracker.Current == _lastReadTarget &&
             Environment.TickCount64 < _distrustQuietUntil)
         {
             KbLog($"Context seed ({reason}): quiet period after distrust — skipping read");
@@ -1552,14 +1535,11 @@ public partial class MainWindow : Window
         // churn carries them through focus/foreground, which the v1 guard
         // did not cover: caret-0 via "caret moved" was skipped while caret-0
         // via "foreground changed" was SEEDED — the 3-jump cluster
-        // mid-typing). The guard now covers every reason EXCEPT the manual
-        // re-anchor and our own caret moves (#103: after OUR arrow/Home/End,
+        // mid-typing). The guard exempts our own caret moves (#103: after arrow/Home/End,
         // a position-0..2 read is a deliberate re-anchor, not a glitch).
-        var ownCaretMoveRecent = reason != ManualReanchorReason &&
-            _lastOwnCaretMoveInject != 0 &&
+        var ownCaretMoveRecent = _lastOwnCaretMoveInject != 0 &&
             Environment.TickCount64 - _lastOwnCaretMoveInject < OwnCaretMoveWindowMs;
-        if (reason != ManualReanchorReason &&
-            !ownCaretMoveRecent &&
+        if (!ownCaretMoveRecent &&
             context != null &&
             context.CaretUtf16 < 3 &&
             context.Text.Length > 10)
@@ -1594,10 +1574,7 @@ public partial class MainWindow : Window
         // new state after FlapHysteresisLimit distrusts.
         var trust = Services.ContextSeedPolicy.EvaluateReadTrust(
             _lastReadSource, _lastReadLength, context.Source, context.Text.Length, context.CaretUtf16,
-            // a MANUAL re-anchor is an explicit user command ("force a fresh
-            // read + seed... wants certainty") — never gated (review loop 1
-            // on #97: v2's every-reason gating would have betrayed it)
-            sameTargetWindow: _targetTracker.Current == _lastReadTarget && reason != ManualReanchorReason,
+            sameTargetWindow: _targetTracker.Current == _lastReadTarget,
             consecutiveDistrusts: _flapDistrustCount, lastDistrustedSource: _lastDistrustedSource,
             pendingAdoptionSource: _pendingAdoptionSource, pendingAdoptionLength: _pendingAdoptionLength);
         if (trust == Services.ContextSeedPolicy.ReadTrust.Distrust)
@@ -2043,12 +2020,6 @@ public partial class MainWindow : Window
 
     private int _contextSeedGeneration;
 
-    /// <summary>Seed reason for the mini-bar's manual re-anchor button.
-    /// Shared constant: the read-trust gate exempts this reason (an
-    /// explicit user command must never be gated) — a one-site rename would
-    /// silently disable the exemption (fails safe: reverts to gating).</summary>
-    private const string ManualReanchorReason = "manual re-anchor";
-
     /// <summary>Serialises direct-mode unit actions (review loop 1):
     /// incremented at every dispatch; a continuation that observes a newer
     /// generation has been superseded by a dwell-repeat action and must not
@@ -2085,7 +2056,7 @@ public partial class MainWindow : Window
 
     /// <summary>#101: suppress read attempts until this TickCount64 (set
     /// after a distrust — the churn costs a UIA round-trip per event and
-    /// competes with the zoom loop). Manual re-anchor always bypasses.</summary>
+    /// competes with the zoom loop).</summary>
     private long _distrustQuietUntil;
     private const long DistrustQuietMs = 500;
 
