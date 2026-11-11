@@ -14,11 +14,19 @@ void Check(bool success, const char* step) {
     }
 }
 
-BOOL CALLBACK FindProbeWindow(HWND window, LPARAM result) {
+struct BridgeWindowSearch {
+    HMODULE library;
+    HWND window{};
+};
+
+BOOL CALLBACK FindBridgeWindow(HWND window, LPARAM result) {
+    auto& search = *reinterpret_cast<BridgeWindowSearch*>(result);
+    if (GetWindowLongPtrW(window, GWLP_HINSTANCE) != reinterpret_cast<LONG_PTR>(search.library))
+        return TRUE;
     wchar_t className[64]{};
     if (!GetClassNameW(window, className, ARRAYSIZE(className)) ||
-        lstrcmpW(className, L"Dasher.TsfProbe.F34A69AD") != 0) return TRUE;
-    *reinterpret_cast<HWND*>(result) = window;
+        lstrcmpW(className, L"Dasher.TsfBridge.F34A69AD") != 0) return TRUE;
+    search.window = window;
     return FALSE;
 }
 
@@ -46,12 +54,13 @@ int wmain(int argc, wchar_t** argv) {
         Check(SUCCEEDED(manager->Activate(&client)), "Activate manager");
         for (int run = 0; run != 2; ++run) {
             Check(SUCCEEDED(service->Activate(manager.Get(), client)), "Activate service");
-            HWND panel = nullptr;
-            EnumThreadWindows(GetCurrentThreadId(), FindProbeWindow, reinterpret_cast<LPARAM>(&panel));
-            Check(panel != nullptr, "Find panel");
-            Check((GetWindowLongPtrW(panel, GWL_EXSTYLE) & WS_EX_NOACTIVATE) != 0, "Panel style");
+            BridgeWindowSearch search{library};
+            EnumThreadWindows(GetCurrentThreadId(), FindBridgeWindow, reinterpret_cast<LPARAM>(&search));
+            Check(search.window != nullptr, "Find bridge window");
+            Check((GetWindowLongPtrW(search.window, GWL_EXSTYLE) & WS_EX_NOACTIVATE) != 0, "Bridge window style");
+            Check(!IsWindowVisible(search.window) && !GetWindow(search.window, GW_CHILD), "Hidden window without controls");
             Check(SUCCEEDED(service->Deactivate()), "Deactivate service");
-            Check(!IsWindow(panel), "Close panel");
+            Check(!IsWindow(search.window), "Close bridge window");
         }
         Check(SUCCEEDED(manager->Deactivate()), "Deactivate manager");
     }
