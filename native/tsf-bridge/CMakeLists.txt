@@ -18,7 +18,7 @@ endif()
 
 
 add_library(tsf_probe SHARED Probe.cpp Probe.def)
-target_link_libraries(tsf_probe PRIVATE tsf_bridge user32 advapi32)
+target_link_libraries(tsf_probe PRIVATE tsf_bridge user32 advapi32 shell32)
 set_property(TARGET tsf_bridge tsf_probe PROPERTY
     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 

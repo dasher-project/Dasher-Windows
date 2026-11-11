@@ -1,4 +1,5 @@
 #include "TextContext.h"
+#include <shlobj.h>
 
 #include <cwchar>
 #include <cstdio>
@@ -19,6 +20,26 @@ constexpr wchar_t WindowClass[] = L"Dasher.TsfBridge.F34A69AD";
 constexpr wchar_t RegistryKey[] = L"Software\\Classes\\CLSID\\{F34A69AD-9AD0-49D7-801F-DD95A1BBEA46}";
 HINSTANCE module;
 TF_INPUTPROCESSORPROFILE previousProfile{};
+
+bool IsInstalledDasherServer(HANDLE pipe) {
+    ULONG pid = 0;
+    if (!GetNamedPipeServerProcessId(pipe, &pid) || pid == GetCurrentProcessId()) return false;
+    const auto process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
+    if (!process) return false;
+    wchar_t image[MAX_PATH];
+    DWORD length = ARRAYSIZE(image);
+    const bool queried = QueryFullProcessImageNameW(process, 0, image, &length);
+    CloseHandle(process);
+    if (!queried) return false;
+
+    PWSTR programFiles = nullptr;
+    if (FAILED(SHGetKnownFolderPath(FOLDERID_ProgramFilesX64, KF_FLAG_DONT_VERIFY, nullptr, &programFiles)))
+        return false;
+    wchar_t expected[MAX_PATH];
+    const auto formatted = swprintf_s(expected, L"%ls\\Dasher\\Dasher.Windows.exe", programFiles);
+    CoTaskMemFree(programFiles);
+    return formatted > 0 && CompareStringOrdinal(image, length, expected, formatted, TRUE) == CSTR_EQUAL;
+}
 
 
 void Trace(const char* event, HRESULT result = S_OK, size_t first = 0, size_t second = 0) {
@@ -189,14 +210,12 @@ private:
         }
         if (!connection_) {
             wchar_t path[96];
-            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v4.%lu", GetCurrentProcessId());
+            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v5.%lu", GetCurrentProcessId());
             auto connection = std::make_shared<EditConnection>();
             connection->handle = CreateFileW(path, GENERIC_READ | GENERIC_WRITE,
                 0, nullptr, OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION, nullptr);
             if (connection->handle == INVALID_HANDLE_VALUE) return;
-            ULONG serverProcess;
-            if (!GetNamedPipeServerProcessId(connection->handle, &serverProcess) ||
-                serverProcess == GetCurrentProcessId()) return;
+            if (!IsInstalledDasherServer(connection->handle)) return;
             DWORD mode = PIPE_READMODE_BYTE | PIPE_NOWAIT;
             if (!SetNamedPipeHandleState(connection->handle, &mode, nullptr, nullptr)) {
                 Trace("pipe-mode-failed", HRESULT_FROM_WIN32(GetLastError()));
@@ -216,7 +235,7 @@ private:
         EditRequest request{};
         DWORD count;
         if (!ReadFile(connection->handle, &request, sizeof(request), &count, nullptr) ||
-            count != sizeof(request) || request.version != 4 || (!request.length && request.operation < 2) ||
+            count != sizeof(request) || request.version != 5 || (!request.length && request.operation < 2) ||
             request.length > tsf_bridge::ContextLimit || request.operation > 8 ||
             GetTickCount64() >= request.deadline || busy_) {
             if (request.operation == 2) connection->ReplyContext(E_INVALIDARG, 0);

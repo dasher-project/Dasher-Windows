@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Win32.SafeHandles;
 
 namespace Dasher.Windows.Services;
 
@@ -13,7 +14,7 @@ internal static class TsfEditClient
 {
     internal enum EditOperation : ushort { Insert = 0, Delete = 1, Backspace = 3, Left = 4, Right = 5, Copy = 6, Cut = 7, Paste = 8 }
     internal const int MaxTextLength = 512;
-    private const uint ProtocolVersion = 4;
+    private const uint ProtocolVersion = 5;
     private const int TimeoutMilliseconds = 1500;
 
     [DllImport("tsf_probe.dll", ExactSpelling = true)]
@@ -50,7 +51,7 @@ internal static class TsfEditClient
         if (editorProcess == 0) throw new ArgumentException("No focused editor.");
 
         using var deadline = new CancellationTokenSource(TimeoutMilliseconds);
-        using var pipe = new NamedPipeServerStream($"Dasher.Tsf.Edit.v4.{editorProcess}",
+        using var pipe = new NamedPipeServerStream($"Dasher.Tsf.Edit.v5.{editorProcess}",
             PipeDirection.InOut, 1, PipeTransmissionMode.Byte,
             PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
 
@@ -66,6 +67,9 @@ internal static class TsfEditClient
         try
         {
             await pipe.WaitForConnectionAsync(deadline.Token).ConfigureAwait(false);
+            if (!GetNamedPipeClientProcessId(pipe.SafePipeHandle, out var clientProcess) ||
+                clientProcess != editorProcess || ForegroundEditorProcess() != editorProcess)
+                throw new IOException("The TSF pipe client is not the focused editor.");
         }
         catch (OperationCanceledException) when (deadline.IsCancellationRequested)
         {
@@ -82,4 +86,7 @@ internal static class TsfEditClient
 
     [DllImport("user32.dll")]
     private static extern uint GetWindowThreadProcessId(IntPtr hwnd, out uint processId);
+
+    [DllImport("kernel32.dll")]
+    private static extern bool GetNamedPipeClientProcessId(SafePipeHandle pipe, out uint processId);
 }
