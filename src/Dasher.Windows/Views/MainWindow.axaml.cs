@@ -414,6 +414,7 @@ public partial class MainWindow : Window
         WireCustomActions(); // after _canvas is populated - the ctor-time call saw null (review loop 3)
         _vm = DataContext as MainWindowViewModel;
         if (_canvas == null || _vm == null) return;
+        _canvas.CanAdvanceFrame = CanAdvanceDirectModeFrame;
 
         ThemeBrushes.Initialize(this);
 
@@ -1205,15 +1206,22 @@ public partial class MainWindow : Window
     private bool UseTsfOutput { get; set; }
     private bool RouteThroughTsf => UseTsfOutput &&
         (_tsfFallbackWindow == IntPtr.Zero || GetForegroundWindow() != _tsfFallbackWindow);
+
+    private bool CanAdvanceDirectModeFrame() =>
+        _vm is not { IsKeyboardMode: true } || !RouteThroughTsf ||
+        (!_tsfOutputStopped && !_tsfReanchorRequired && _tsfContextToken != 0 &&
+         GetForegroundWindow() == _tsfEditorWindow);
     private Task _tsfEdits = Task.CompletedTask;
     private IntPtr _tsfFallbackWindow;
+    private IntPtr _tsfReadRetryWindow;
     private IntPtr _tsfEditorWindow;
     private int _tsfTargetGeneration;
     private uint _tsfEditorProcess;
     private ulong _tsfContextToken;
     private int _tsfPending;
     private bool _tsfOutputStopped;
-    private bool _tsfReanchorRequired;
+    private readonly System.Collections.Generic.HashSet<IntPtr> _tsfUncertainWindows = new();
+    private bool _tsfReanchorRequired => _tsfUncertainWindows.Contains(GetForegroundWindow());
     private bool _tsfRestoringTarget;
 
     private void SetTsfProfileActive(bool active)
@@ -1267,10 +1275,10 @@ public partial class MainWindow : Window
 
         ++_tsfPending;
         KbLog($"TSF {operation} queued: units={text.Length} pending={_tsfPending} token={_tsfContextToken}");
-        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, process, _tsfTargetGeneration, text, operation);
+        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, process, _tsfEditorWindow, _tsfTargetGeneration, text, operation);
     }
 
-    private async Task ApplyTsfEditAsync(Task previous, uint process, int generation, string text, Services.TsfEditClient.EditOperation operation)
+    private async Task ApplyTsfEditAsync(Task previous, uint process, IntPtr window, int generation, string text, Services.TsfEditClient.EditOperation operation)
     {
         try
         {
@@ -1278,7 +1286,7 @@ public partial class MainWindow : Window
             if (_tsfOutputStopped || generation != _tsfTargetGeneration) return;
             if (!UseTsfOutput || _vm is not { IsKeyboardMode: true } || _pickerSessionActive ||
                 WindowState == WindowState.Minimized ||
-                GetForegroundWindow() != _tsfEditorWindow ||
+                GetForegroundWindow() != window ||
                 Services.TsfEditClient.ForegroundEditorProcess() != process)
             {
                 StopTsfOutput("editor no longer available");
@@ -1286,24 +1294,26 @@ public partial class MainWindow : Window
             }
 
             var (result, token) = await Services.TsfEditClient.EditAsync(process, _tsfContextToken, text, operation);
+            if (result != 0) _tsfUncertainWindows.Add(window);
             if (generation != _tsfTargetGeneration) return;
             _tsfContextToken = token;
             KbLog($"TSF {operation} completed: result=0x{result:X8} token={token}");
             if (result != 0)
             {
-                _tsfReanchorRequired = true;
                 StopTsfOutput($"{operation} returned 0x{result:X8}");
             }
         }
         catch (TimeoutException exception)
         {
             // The editor never connected, so this request was never sent.
-            StopTsfOutput($"{operation}: {exception.Message}");
+            if (generation == _tsfTargetGeneration)
+                StopTsfOutput($"{operation}: {exception.Message}");
         }
         catch (Exception exception)
         {
-            _tsfReanchorRequired = true;
-            StopTsfOutput($"{operation}: {exception.GetType().Name}");
+            _tsfUncertainWindows.Add(window);
+            if (generation == _tsfTargetGeneration)
+                StopTsfOutput($"{operation}: {exception.GetType().Name}");
         }
         finally
         {
@@ -1459,8 +1469,12 @@ public partial class MainWindow : Window
         try
         {
             var context = await Services.TsfEditClient.ReadAsync(process);
-            if (context is not { Token: not 0 } snapshot || !IsTsfContextTarget(handle, window, process, generation))
+            if (!IsTsfContextTarget(handle, window, process, generation)) return;
+            if (context is not { Token: not 0 } snapshot)
+            {
+                await TryUseTsfFallbackAsync(handle, window, process, generation);
                 return;
+            }
 
             // The engine has already applied queued edits to its local buffer.
             // Let them run only if this read confirmed their original caret.
@@ -1482,27 +1496,45 @@ public partial class MainWindow : Window
             _tsfEditorProcess = process;
             _tsfEditorWindow = window;
             _tsfContextToken = snapshot.Token;
-            _tsfReanchorRequired = false;
+            _tsfReadRetryWindow = IntPtr.Zero;
+            _tsfUncertainWindows.Remove(window);
             _tsfOutputStopped = false;
         }
-        catch (TimeoutException)
+        catch (Exception exception) when (exception is TimeoutException or OperationCanceledException or IOException)
         {
-            if (_tsfPending != 0 || _tsfReanchorRequired || !IsTsfContextTarget(handle, window, process, generation) ||
-                _targetTracker.Current != Services.TargetWindowIdentity.RootOf(window))
-                return;
-            _tsfContextToken = 0;
-            await SeedLegacyContextAsync("TSF unavailable");
-            if (IsTsfContextTarget(handle, window, process, generation))
+            if (exception is IOException && _tsfReadRetryWindow != window &&
+                IsTsfContextTarget(handle, window, process, generation))
             {
-                _tsfFallbackWindow = window;
-                ArmSelectionWatch();
-                KbLog($"TSF unavailable for pid={process}; using legacy Direct mode");
+                _tsfReadRetryWindow = window;
+                StopTsfOutput("editor context connection interrupted");
+                return;
             }
+            await TryUseTsfFallbackAsync(handle, window, process, generation);
         }
         catch (Exception exception)
         {
             KbLog($"TSF context refresh failed: {exception.GetType().Name}");
         }
+    }
+
+    private async Task TryUseTsfFallbackAsync(IntPtr handle, IntPtr window, uint process, int generation)
+    {
+        bool IsCurrent() => IsTsfContextTarget(handle, window, process, generation) &&
+            _targetTracker.Current == Services.TargetWindowIdentity.RootOf(window);
+
+        if (!IsCurrent() || _tsfReanchorRequired) return;
+        if (_tsfPending != 0)
+        {
+            StopTsfOutput("editor context unavailable before queued edits");
+            return;
+        }
+
+        _tsfContextToken = 0;
+        await SeedLegacyContextAsync("TSF unavailable", IsCurrent);
+        if (!IsCurrent()) return;
+        _tsfFallbackWindow = window;
+        ArmSelectionWatch();
+        KbLog($"TSF unavailable for pid={process}; using legacy Direct mode");
     }
 
     private async Task SeedContextFromTargetAsync(string reason)
@@ -1515,10 +1547,12 @@ public partial class MainWindow : Window
         await SeedLegacyContextAsync(reason);
     }
 
-    private async Task SeedLegacyContextAsync(string reason)
+    private async Task SeedLegacyContextAsync(string reason, Func<bool>? isCurrent = null)
     {
         if (_vm == null || !_vm.IsKeyboardMode || _vm.Handle == IntPtr.Zero) return;
-        if (_targetTracker.Current == IntPtr.Zero) return;
+        var target = _targetTracker.Current;
+        var handle = _vm.Handle;
+        if (target == IntPtr.Zero) return;
 
         // Debounce: rapid focus churn (mode entry -> target re-focus) must
         // not stack concurrent reads/seeds. 500ms (not 150ms): mid-word
@@ -1531,7 +1565,7 @@ public partial class MainWindow : Window
         _contextSeedGeneration++;
         var generation = _contextSeedGeneration;
         await Task.Delay(500); // let the target's caret settle AND the user finish their word
-        if (generation != _contextSeedGeneration) return; // superseded
+        if (!StillCurrent()) return;
 
         // (#101) Quiet period after a distrust: the read churn behind
         // incoherent reads competes with the zoom loop (the field-reported
@@ -1566,20 +1600,14 @@ public partial class MainWindow : Window
             return;
         }
 
-        // Stale-seed guard: a queued focus event whose target was superseded
-        // mid-debounce must not leak the OLD window's text — verified here at
-        // seed time, right before the read ("stale focus bypasses foreground
-        // guard"). When dropped, the new foreground's own event chain seeds.
-        if (!_targetTracker.TargetIsForegroundOrUnknown(OurHwnd()))
-        {
-            KbLog($"Context seed ({reason}): stale — target no longer foreground, dropping");
-            return;
-        }
+        if (!StillCurrent()) return;
+        var context = await TargetContextReader.ReadAsync(target);
+        if (!StillCurrent()) return;
 
-        var context = await TargetContextReader.ReadAsync(_targetTracker.Current);
-        if (generation != _contextSeedGeneration) return;
-
-        if (_vm.Handle == IntPtr.Zero) return;
+        bool StillCurrent() => generation == _contextSeedGeneration &&
+            _vm is { IsKeyboardMode: true } vm && vm.Handle == handle &&
+            _targetTracker.Current == target && _targetTracker.TargetIsForegroundOrUnknown(OurHwnd()) &&
+            (isCurrent?.Invoke() ?? !RouteThroughTsf);
 
         // CARET-GLITCH GUARD (#104, field-confirmed 2026-11-03): Outlook's
         // UIA returns caret position 0 or 1 during rapid text transitions —

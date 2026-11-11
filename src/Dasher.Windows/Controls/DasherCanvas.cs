@@ -344,9 +344,16 @@ public partial class DasherCanvas : Control
         catch { }
     }
 
+    internal Func<bool>? CanAdvanceFrame { get; set; }
+
     private void StepFrame()
     {
         if (_handle == IntPtr.Zero || _paused) return;
+        if (CanAdvanceFrame?.Invoke() == false)
+        {
+            _lastWallMs = -1;
+            return;
+        }
 
         var wallMs = DateTimeOffset.UtcNow.Ticks / 10000.0;
         if (_lastWallMs < 0) _lastWallMs = wallMs;
