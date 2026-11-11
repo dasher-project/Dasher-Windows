@@ -67,6 +67,22 @@ public sealed class KeyboardTargetTracker : IDisposable
     [DllImport("user32.dll")]
     private static extern bool IsWindow(IntPtr hWnd);
 
+    [StructLayout(LayoutKind.Sequential)]
+    private struct ScreenPoint
+    {
+        public int X;
+        public int Y;
+    }
+
+    [DllImport("user32.dll")]
+    private static extern bool GetCursorPos(out ScreenPoint point);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr WindowFromPoint(ScreenPoint point);
+
+    internal static bool IsPointerOverTaskbar() =>
+        GetCursorPos(out var point) && IsTaskbar(TargetWindowIdentity.RootOf(WindowFromPoint(point)));
+
     private static bool IsTaskbar(IntPtr window)
     {
         var name = new System.Text.StringBuilder(64);
