@@ -323,10 +323,7 @@ public partial class MainWindow : Window
             var wasMinimized = lastState == WindowState.Minimized;
             lastState = WindowState;
             if (UseTsfOutput && WindowState == WindowState.Minimized)
-            {
-                _tsfRestorePending = true;
                 StopTsfOutput("window minimized");
-            }
             if (wasMinimized && WindowState != WindowState.Minimized)
             {
                 _canvas?.ForceFrameLoopRevive();
@@ -339,7 +336,7 @@ public partial class MainWindow : Window
         Activated += (_, _) =>
         {
             _canvas?.ForceFrameLoopRevive();
-            if (_tsfRestorePending)
+            if (UseTsfOutput && !_pickerSessionActive && _vm is { IsKeyboardMode: true })
                 Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
         };
         if (UseTsfOutput)
@@ -1202,7 +1199,6 @@ public partial class MainWindow : Window
     private int _tsfPending;
     private bool _tsfOutputStopped;
     private bool _tsfReanchorRequired;
-    private bool _tsfRestorePending;
     private bool _tsfRestoringTarget;
 
     private static void SetTsfProfileActive(bool active)
@@ -1231,6 +1227,11 @@ public partial class MainWindow : Window
         if (process == 0 || process != _tsfEditorProcess || _tsfContextToken == 0)
         {
             KbLog($"TSF {operation} held: foreground pid={process} anchor pid={_tsfEditorProcess} token={_tsfContextToken}");
+            if (process == 0 && GetForegroundWindow() == OurHwnd())
+            {
+                StopTsfOutput("Dasher received focus during Direct mode");
+                Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
+            }
             return;
         }
         if (_tsfPending >= 32)
@@ -1402,6 +1403,9 @@ public partial class MainWindow : Window
             // legacy tracker blocks this UI thread while waiting for focus.
             var ourWindow = OurHwnd();
             var target = _targetTracker.Current;
+            if (ourWindow != IntPtr.Zero &&
+                (Services.WindowDialogStyles.GetExStyle(ourWindow) & WS_EX_NOACTIVATE) == 0)
+                SetNoActivate(true);
             if (ourWindow != IntPtr.Zero && GetForegroundWindow() == ourWindow)
             {
                 var requested = Services.WindowDialogStyles.TrySetForeground(target);
@@ -1454,7 +1458,6 @@ public partial class MainWindow : Window
             }
             _tsfEditorProcess = process;
             _tsfContextToken = snapshot.Token;
-            _tsfRestorePending = false;
             _tsfReanchorRequired = false;
             _tsfOutputStopped = false;
         }
