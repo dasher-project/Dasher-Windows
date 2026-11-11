@@ -21,6 +21,7 @@ constexpr wchar_t RegistryKey[] = L"Software\\Classes\\CLSID\\{F34A69AD-9AD0-49D
 constexpr UINT CaptureUndo = WM_APP + 1;
 enum Button { Read = 100, Insert, Undo, Minimize, ConnectDasher };
 HINSTANCE module;
+TF_INPUTPROCESSORPROFILE previousProfile{};
 
 
 void Trace(const char* event, HRESULT result = S_OK, size_t first = 0, size_t second = 0) {
@@ -717,4 +718,36 @@ STDAPI DllRegisterServer() {
 }
 STDAPI DllUnregisterServer() {
     try { return UpdateRegistration(false); } catch (...) { return E_OUTOFMEMORY; }
+}
+
+STDAPI DasherSetTsfProfileActive(BOOL activate) {
+    ComPtr<ITfInputProcessorProfileMgr> profiles;
+    auto result = CoCreateInstance(CLSID_TF_InputProcessorProfiles, nullptr, CLSCTX_INPROC_SERVER,
+        IID_PPV_ARGS(&profiles));
+    if (FAILED(result)) return result;
+
+    TF_INPUTPROCESSORPROFILE current{};
+    result = profiles->GetActiveProfile(GUID_TFCAT_TIP_KEYBOARD, &current);
+    if (result != S_OK) return result;
+    const bool dasherActive = current.clsid == ServiceId && current.guidProfile == ProfileId;
+    if (!activate) {
+        if (!dasherActive) {
+            previousProfile = {};
+            return S_OK;
+        }
+        if (!previousProfile.dwProfileType) return S_FALSE;
+        result = profiles->ActivateProfile(previousProfile.dwProfileType, previousProfile.langid,
+            previousProfile.clsid, previousProfile.guidProfile, previousProfile.hkl, TF_IPPMF_FORSESSION);
+        if (result == S_OK) previousProfile = {};
+        return result;
+    }
+    if (dasherActive) return S_OK;
+    for (const auto language : Languages) {
+        if (language != current.langid) continue;
+        result = profiles->ActivateProfile(TF_PROFILETYPE_INPUTPROCESSOR, language, ServiceId,
+            ProfileId, nullptr, TF_IPPMF_FORSESSION | TF_IPPMF_ENABLEPROFILE);
+        if (result == S_OK) previousProfile = current;
+        return result;
+    }
+    return HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
 }

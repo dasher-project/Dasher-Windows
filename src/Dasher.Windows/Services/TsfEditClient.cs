@@ -16,6 +16,10 @@ internal static class TsfEditClient
     private const uint ProtocolVersion = 4;
     private const int TimeoutMilliseconds = 1500;
 
+    [DllImport("tsf_probe.dll", ExactSpelling = true)]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.ApplicationDirectory)]
+    internal static extern int DasherSetTsfProfileActive([MarshalAs(UnmanagedType.Bool)] bool activate);
+
     internal static uint ForegroundEditorProcess()
     {
         GetWindowThreadProcessId(GetForegroundWindow(), out var process);
