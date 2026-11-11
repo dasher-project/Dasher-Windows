@@ -324,7 +324,7 @@ public partial class MainWindow : Window
             lastState = WindowState;
             if (UseTsfOutput && WindowState == WindowState.Minimized)
             {
-                _tsfTaskbarActivationPending = false;
+                _tsfTaskbarHoldUntil = 0;
                 _tsfFallbackWindow = IntPtr.Zero;
                 _tsfContextToken = 0;
                 ++_tsfTargetGeneration;
@@ -334,7 +334,7 @@ public partial class MainWindow : Window
             {
                 _canvas?.ForceFrameLoopRevive();
                 if (UseTsfOutput)
-                    Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
+                    Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreTsfTarget(bypassTaskbarHold: true));
                 else
                     _ = SeedContextFromTargetAsync("window restored");
             }
@@ -343,17 +343,7 @@ public partial class MainWindow : Window
         {
             _canvas?.ForceFrameLoopRevive();
             if (UseTsfOutput && !_pickerSessionActive && _vm is { IsKeyboardMode: true })
-            {
-                // Keep an already-visible Dasher active while the pointer is
-                // on the taskbar so Windows can toggle it on the next click.
-                if (WindowState != WindowState.Minimized && KeyboardTargetTracker.IsPointerOverTaskbar())
-                {
-                    _tsfTaskbarActivationPending = true;
-                    KbLog("TSF focus handoff deferred while pointer is over the taskbar");
-                    return;
-                }
-                Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
-            }
+                Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreTsfTarget());
         };
         if (TsfAvailable)
         {
@@ -364,13 +354,14 @@ public partial class MainWindow : Window
             contextTimer.Tick += (_, _) =>
             {
                 if (!UseTsfOutput) return;
-                if (_tsfTaskbarActivationPending)
+                if (_tsfTaskbarHoldUntil != 0)
                 {
                     if (GetForegroundWindow() != OurHwnd())
-                        _tsfTaskbarActivationPending = false;
-                    else if (!KeyboardTargetTracker.IsPointerOverTaskbar())
+                        _tsfTaskbarHoldUntil = 0;
+                    else
                     {
-                        RestoreTsfTarget();
+                        if (Environment.TickCount64 >= _tsfTaskbarHoldUntil || !KeyboardTargetTracker.IsPointerOverTaskbar())
+                            RestoreTsfTarget(bypassTaskbarHold: true);
                         return;
                     }
                 }
@@ -1245,7 +1236,8 @@ public partial class MainWindow : Window
     private readonly System.Collections.Generic.HashSet<IntPtr> _tsfUncertainWindows = new();
     private bool _tsfReanchorRequired => _tsfUncertainWindows.Contains(GetForegroundWindow());
     private bool _tsfRestoringTarget;
-    private bool _tsfTaskbarActivationPending;
+    private const int TaskbarFocusHoldMs = 5000;
+    private long _tsfTaskbarHoldUntil;
 
     private void SetTsfProfileActive(bool active)
     {
@@ -1253,7 +1245,7 @@ public partial class MainWindow : Window
         if (!active)
         {
             UseTsfOutput = false;
-            _tsfTaskbarActivationPending = false;
+            _tsfTaskbarHoldUntil = 0;
             _tsfFallbackWindow = IntPtr.Zero;
             _tsfContextToken = 0;
             _tsfOutputStopped = true;
@@ -1287,7 +1279,7 @@ public partial class MainWindow : Window
             if (process == 0 && GetForegroundWindow() == OurHwnd())
             {
                 StopTsfOutput("Dasher received focus during Direct mode");
-                Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
+                Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreTsfTarget());
             }
             return;
         }
@@ -1439,24 +1431,39 @@ public partial class MainWindow : Window
             return;
 
         var window = GetForegroundWindow();
-        if (_tsfFallbackWindow != window) _tsfFallbackWindow = IntPtr.Zero;
-        if (_tsfFallbackWindow != IntPtr.Zero) return;
         var process = Services.TsfEditClient.ForegroundEditorProcess();
         if (process == 0) return;
+        if (_tsfFallbackWindow != window) _tsfFallbackWindow = IntPtr.Zero;
+        if (_tsfFallbackWindow != IntPtr.Zero) return;
         _tsfEdits = RefreshTsfContextAsync(vm.Handle, window, process, _tsfTargetGeneration, reason);
     }
 
-    private async void RestoreTsfTarget()
+    private async void RestoreTsfTarget(bool bypassTaskbarHold = false)
     {
         if (!UseTsfOutput || WindowState == WindowState.Minimized || _pickerSessionActive ||
             _vm is not { IsKeyboardMode: true } || _tsfRestoringTarget) return;
-        _tsfTaskbarActivationPending = false;
+
+        var ourWindow = OurHwnd();
+        // An already-visible Dasher must keep focus while the pointer is on
+        // the taskbar so Windows can minimize it on the next click.
+        if (!bypassTaskbarHold && ourWindow != IntPtr.Zero && GetForegroundWindow() == ourWindow &&
+            KeyboardTargetTracker.IsPointerOverTaskbar())
+        {
+            if (_tsfTaskbarHoldUntil == 0)
+            {
+                // The pointer may also be parked here during keyboard activation.
+                _tsfTaskbarHoldUntil = Environment.TickCount64 + TaskbarFocusHoldMs;
+                KbLog("TSF focus handoff deferred while pointer is over the taskbar");
+            }
+            return;
+        }
+
+        _tsfTaskbarHoldUntil = 0;
         _tsfRestoringTarget = true;
         try
         {
             // Let Windows process activation messages between checks. The
             // legacy tracker blocks this UI thread while waiting for focus.
-            var ourWindow = OurHwnd();
             var target = _targetTracker.Current;
             if (ourWindow != IntPtr.Zero &&
                 (Services.WindowDialogStyles.GetExStyle(ourWindow) & WS_EX_NOACTIVATE) == 0)
