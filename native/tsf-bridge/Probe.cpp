@@ -254,6 +254,7 @@ private:
             }
 
             std::wstring text(request.text, request.length);
+            const bool insert = request.operation == 0;
             const bool backspace = request.operation == 3;
             const bool deleteText = request.operation == 1;
             const bool move = request.operation == 4 || request.operation == 5;
@@ -261,8 +262,8 @@ private:
             const bool cut = request.operation == 7;
             const bool paste = request.operation == 8;
             if (result != S_OK || value.token != request.contextToken || !panel->EditorForeground() ||
-                GetTickCount64() >= request.deadline || (request.operation < 2 && !value.selection.empty()) ||
-                (deleteText && !value.before.ends_with(text))) {
+                GetTickCount64() >= request.deadline ||
+                (deleteText && (!value.selection.empty() || !value.before.ends_with(text)))) {
                 panel->busy_ = false;
                 connection->Reply(result == S_OK ? S_FALSE : result);
                 return;
@@ -319,10 +320,10 @@ private:
                 offset -= text.size();
             }
             const bool removing = backspace || deleteText || cut;
-            if (cut || paste) text = value.selection;
             if (!removing && !paste) replacement = std::move(text);
+            if (insert || cut || paste) text = value.selection;
             panel->bridge_->ReplaceAsync(value.token, offset,
-                removing || paste ? text : L"", std::move(replacement),
+                removing || insert || paste ? std::move(text) : std::wstring{}, std::move(replacement),
                 [weak, epoch, connection](HRESULT editResult) {
                     const auto panel = weak.lock();
                     const bool sameDocument = panel && panel->epoch_ == epoch;
