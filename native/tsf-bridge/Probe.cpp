@@ -99,7 +99,7 @@ struct EditRequest {
     std::uint16_t length;
     std::uint16_t operation;
     std::uint64_t deadline;
-    std::uint64_t editorEpoch;
+    std::uint64_t contextToken;
     wchar_t text[tsf_bridge::ContextLimit];
 };
 static_assert(sizeof(EditRequest) == 1048);
@@ -219,7 +219,7 @@ private:
         }
         if (!connection_) {
             wchar_t path[96];
-            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v3.%lu", GetCurrentProcessId());
+            swprintf_s(path, L"\\\\.\\pipe\\Dasher.Tsf.Edit.v4.%lu", GetCurrentProcessId());
             auto connection = std::make_shared<EditConnection>();
             connection->handle = CreateFileW(path, GENERIC_READ | GENERIC_WRITE,
                 0, nullptr, OPEN_EXISTING, SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION, nullptr);
@@ -246,7 +246,7 @@ private:
         EditRequest request{};
         DWORD count;
         if (!ReadFile(connection->handle, &request, sizeof(request), &count, nullptr) ||
-            count != sizeof(request) || request.version != 3 || (!request.length && request.operation < 2) ||
+            count != sizeof(request) || request.version != 4 || (!request.length && request.operation < 2) ||
             request.length > tsf_bridge::ContextLimit || request.operation > 8 ||
             GetTickCount64() >= request.deadline || busy_) {
             if (request.operation == 2) connection->ReplyContext(E_INVALIDARG, 0);
@@ -258,18 +258,18 @@ private:
         if (request.operation == 2) {
             auto weak = weak_from_this();
             const auto epoch = epoch_;
-            previewBridge_->ReadAsync([weak, epoch, connection, deadline = request.deadline](HRESULT result, Snapshot value) {
+            bridge_->ReadAsync([weak, epoch, connection, deadline = request.deadline](HRESULT result, Snapshot value) {
                 const auto panel = weak.lock();
                 if (!panel || panel->epoch_ != epoch || !panel->EditorForeground() || GetTickCount64() >= deadline)
                     result = S_FALSE;
                 Trace("context-read", result, value.before.size(), value.selection.size());
-                if (result == S_OK) connection->ReplyContext(result, epoch, value.before);
+                if (result == S_OK) connection->ReplyContext(result, value.token, value.before);
                 else connection->ReplyContext(result, 0);
-            });
+            }, true);
             return;
         }
 
-        if (request.editorEpoch && request.editorEpoch != epoch_) {
+        if (!request.contextToken || request.contextToken != bridge_->CurrentToken()) {
             connection->Reply(S_FALSE);
             return;
         }
@@ -291,7 +291,7 @@ private:
             const bool copy = request.operation == 6;
             const bool cut = request.operation == 7;
             const bool paste = request.operation == 8;
-            if (result != S_OK || !panel->EditorForeground() ||
+            if (result != S_OK || value.token != request.contextToken || !panel->EditorForeground() ||
                 GetTickCount64() >= request.deadline || (request.operation < 2 && !value.selection.empty()) ||
                 (deleteText && !value.before.ends_with(text))) {
                 panel->busy_ = false;
@@ -303,7 +303,7 @@ private:
                 const auto copied = value.selection.empty() || Clipboard(panel->hwnd_).Copy(value.selection);
                 if (copy || !copied || value.selection.empty()) {
                     panel->busy_ = false;
-                    connection->Reply(copied ? S_OK : E_FAIL, epoch);
+                    connection->Reply(copied ? S_OK : E_FAIL, value.token);
                     return;
                 }
             }
@@ -312,7 +312,7 @@ private:
                 replacement = Clipboard(panel->hwnd_).Read();
                 if (replacement.empty()) {
                     panel->busy_ = false;
-                    connection->Reply(S_OK, epoch);
+                    connection->Reply(S_OK, value.token);
                     return;
                 }
             }
@@ -343,7 +343,7 @@ private:
                 }
                 if (text.empty()) {
                     panel->busy_ = false;
-                    connection->Reply(S_OK, epoch);
+                    connection->Reply(S_OK, value.token);
                     return;
                 }
             } else if (deleteText) {
@@ -355,14 +355,16 @@ private:
             panel->bridge_->ReplaceAsync(value.token, offset,
                 removing || paste ? text : L"", std::move(replacement),
                 [weak, epoch, connection](HRESULT editResult) {
-                    if (auto panel = weak.lock(); panel && panel->epoch_ == epoch) panel->busy_ = false;
+                    const auto panel = weak.lock();
+                    const bool sameDocument = panel && panel->epoch_ == epoch;
+                    if (sameDocument) panel->busy_ = false;
                     Trace("dasher-edit", editResult);
-                    connection->Reply(editResult, epoch);
+                    connection->Reply(editResult, sameDocument ? panel->bridge_->CurrentToken() : 0);
                 }, [weak, deadline = request.deadline] {
                     const auto panel = weak.lock();
                     return panel && panel->EditorForeground() && GetTickCount64() < deadline;
-                });
-        });
+                }, true);
+        }, true);
     }
 
     void Status(const wchar_t* message, HRESULT result) {

@@ -1,5 +1,6 @@
 #include "TextContext.h"
 
+#include <atomic>
 #include <functional>
 #include <limits>
 #include <new>
@@ -9,6 +10,7 @@ namespace tsf_bridge {
 namespace {
 
 using Microsoft::WRL::ComPtr;
+std::atomic<std::uint64_t> nextToken{};
 
 class EditSession final : public ITfEditSession {
 public:
@@ -118,12 +120,20 @@ void TextContext::SetContext(ITfContext* context) {
     snapshot_ = {};
 }
 
-HRESULT TextContext::ReadLocked(ITfContext* context, TfEditCookie cookie, Snapshot& snapshot) {
+HRESULT TextContext::ReadLocked(ITfContext* context, TfEditCookie cookie, Snapshot& snapshot,
+                                bool preserveUnchangedToken) {
     Snapshot captured;
     ComPtr<ITfRange> selection;
     const auto result = Capture(context, cookie, captured, selection);
     if (FAILED(result)) return result;
-    captured.token = ++nextToken_;
+    LONG start = 0, end = 0;
+    const bool unchanged = preserveUnchangedToken && selection_ &&
+        captured.before == snapshot_.before && captured.selection == snapshot_.selection &&
+        captured.after == snapshot_.after &&
+        SUCCEEDED(selection->CompareStart(cookie, selection_.Get(), TF_ANCHOR_START, &start)) &&
+        SUCCEEDED(selection->CompareEnd(cookie, selection_.Get(), TF_ANCHOR_END, &end)) &&
+        start == 0 && end == 0;
+    captured.token = unchanged ? snapshot_.token : ++nextToken;
     snapshot = captured;
     snapshot_ = std::move(captured);
     selection_ = std::move(selection);
@@ -150,18 +160,18 @@ HRESULT TextContext::Replace(std::uint64_t token, size_t start, std::wstring_vie
     });
 }
 
-void TextContext::ReadAsync(ReadCompletion completion) {
+void TextContext::ReadAsync(ReadCompletion completion, bool preserveUnchangedToken) {
     auto weak = weak_from_this();
     auto context = context_;
     if (!context) { completion(TF_E_DISCONNECTED, {}); return; }
     if (weak.expired()) { completion(E_UNEXPECTED, {}); return; }
     auto epoch = contextEpoch_;
     const auto result = Run(context.Get(), clientId_, TF_ES_ASYNC | TF_ES_READ,
-        [weak, epoch, completion](TfEditCookie cookie) {
+        [weak, epoch, completion, preserveUnchangedToken](TfEditCookie cookie) {
             Snapshot snapshot;
             auto self = weak.lock();
             auto result = self && epoch == self->contextEpoch_
-                ? self->ReadLocked(self->context_.Get(), cookie, snapshot) : S_FALSE;
+                ? self->ReadLocked(self->context_.Get(), cookie, snapshot, preserveUnchangedToken) : S_FALSE;
             completion(result, std::move(snapshot));
             return result;
         });
@@ -170,7 +180,7 @@ void TextContext::ReadAsync(ReadCompletion completion) {
 
 void TextContext::ReplaceAsync(std::uint64_t token, size_t start, std::wstring expected,
                                std::wstring replacement, EditCompletion completion,
-                               std::function<bool()> canApply) {
+                               std::function<bool()> canApply, bool captureAfterEdit) {
     auto weak = weak_from_this();
     auto context = context_;
     if (!context) { completion(TF_E_DISCONNECTED); return; }
@@ -178,10 +188,16 @@ void TextContext::ReplaceAsync(std::uint64_t token, size_t start, std::wstring e
     auto epoch = contextEpoch_;
     const auto result = Run(context.Get(), clientId_, TF_ES_ASYNC | TF_ES_READWRITE,
         [weak, epoch, token, start, expected = std::move(expected),
-         replacement = std::move(replacement), completion, canApply = std::move(canApply)](TfEditCookie cookie) {
+         replacement = std::move(replacement), completion, canApply = std::move(canApply),
+         captureAfterEdit](TfEditCookie cookie) {
             auto self = weak.lock();
             auto result = self && epoch == self->contextEpoch_ && (!canApply || canApply())
                 ? self->ReplaceLocked(self->context_.Get(), cookie, token, start, expected, replacement) : S_FALSE;
+            if (result == S_OK && captureAfterEdit) {
+                Snapshot snapshot;
+                if (self->ReadLocked(self->context_.Get(), cookie, snapshot) != S_OK)
+                    result = EditAppliedCaretUnavailable;
+            }
             completion(result);
             return result;
         });
