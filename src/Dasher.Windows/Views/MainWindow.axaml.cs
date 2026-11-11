@@ -1181,7 +1181,7 @@ public partial class MainWindow : Window
         Environment.GetEnvironmentVariable("DASHER_EXPERIMENTAL_TSF") == "1";
     private Task _tsfEdits = Task.CompletedTask;
     private uint _tsfEditorProcess;
-    private ulong _tsfEditorEpoch;
+    private ulong _tsfContextToken;
     private int _tsfPending;
     private bool _tsfOutputStopped;
     private bool _tsfReanchorRequired;
@@ -1190,7 +1190,7 @@ public partial class MainWindow : Window
     {
         if (_tsfOutputStopped || _tsfReanchorRequired || (text.Length == 0 && operation is Services.TsfEditClient.EditOperation.Insert or Services.TsfEditClient.EditOperation.Delete)) return;
         var process = Services.TsfEditClient.ForegroundEditorProcess();
-        if (process == 0 || process != _tsfEditorProcess || _tsfEditorEpoch == 0) return;
+        if (process == 0 || process != _tsfEditorProcess || _tsfContextToken == 0) return;
         if (_tsfPending >= 32)
         {
             StopTsfOutput("edit queue full");
@@ -1208,14 +1208,15 @@ public partial class MainWindow : Window
             await previous;
             if (_tsfOutputStopped) return;
             if (_vm is not { IsKeyboardMode: true } || _pickerSessionActive ||
+                WindowState == WindowState.Minimized ||
                 Services.TsfEditClient.ForegroundEditorProcess() != process)
             {
                 StopTsfOutput("editor no longer available");
                 return;
             }
 
-            var (result, epoch) = await Services.TsfEditClient.EditAsync(process, _tsfEditorEpoch, text, operation);
-            _tsfEditorEpoch = epoch;
+            var (result, token) = await Services.TsfEditClient.EditAsync(process, _tsfContextToken, text, operation);
+            _tsfContextToken = token;
             if (result != 0) StopTsfOutput($"editor returned 0x{result:X8}");
         }
         catch (TimeoutException exception)
@@ -1351,10 +1352,19 @@ public partial class MainWindow : Window
         try
         {
             var context = await Services.TsfEditClient.ReadAsync(process);
-            if (context is not { } snapshot || _tsfPending != 0 || _pickerSessionActive ||
+            if (context is not { } snapshot || _pickerSessionActive ||
                 WindowState == WindowState.Minimized || _vm is not { IsKeyboardMode: true } vm ||
                 vm.Handle != handle || Services.TsfEditClient.ForegroundEditorProcess() != process)
                 return;
+
+            // The engine has already applied queued edits to its local buffer.
+            // Let them run only if this read confirmed their original caret.
+            if (_tsfPending != 0)
+            {
+                if (_tsfEditorProcess != process || _tsfContextToken != snapshot.Token)
+                    StopTsfOutput("editor context changed before queued edits");
+                return;
+            }
 
             var output = NativeBridge.dasher_get_output_text(handle);
             var current = output == IntPtr.Zero ? "" : Marshal.PtrToStringUTF8(output) ?? "";
@@ -1365,7 +1375,7 @@ public partial class MainWindow : Window
                 KbLog($"TSF context refreshed ({reason}): {snapshot.Before.Length} UTF-16 units");
             }
             _tsfEditorProcess = process;
-            _tsfEditorEpoch = snapshot.Epoch;
+            _tsfContextToken = snapshot.Token;
             _tsfReanchorRequired = false;
             _tsfOutputStopped = false;
         }

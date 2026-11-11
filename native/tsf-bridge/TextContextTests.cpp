@@ -101,11 +101,29 @@ int main() {
             complete = true;
         });
         PumpUntil(complete);
+        const auto originalToken = asyncValue.token;
+        complete = false;
+        asyncBridge->ReadAsync([&](HRESULT result, Snapshot snapshot) {
+            Check(result == S_OK && snapshot.token == originalToken);
+            complete = true;
+        }, true);
+        PumpUntil(complete);
+        Check(bridge.Read(value) == S_OK);
+        Check(bridge.Replace(value.token, 1, L"", L"") == S_OK);
+        complete = false;
+        asyncBridge->ReadAsync([&](HRESULT result, Snapshot snapshot) {
+            Check(result == S_OK && snapshot.token != originalToken && snapshot.before == L"t");
+            asyncValue = std::move(snapshot);
+            complete = true;
+        }, true);
+        PumpUntil(complete);
+        Check(asyncBridge->Replace(originalToken, 1, L"", L"bad") == S_FALSE);
         complete = false;
         asyncBridge->ReplaceAsync(asyncValue.token, 0, L"two", L"async", [&](HRESULT result) {
             Check(result == S_OK);
+            Check(asyncBridge->CurrentToken() != 0 && asyncBridge->CurrentToken() != asyncValue.token);
             complete = true;
-        });
+        }, {}, true);
         PumpUntil(complete);
         Check(bridge.Read(value) == S_OK);
         Check(value.before + value.selection + value.after == L"async\n");

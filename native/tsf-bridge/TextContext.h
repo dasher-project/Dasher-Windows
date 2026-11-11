@@ -45,13 +45,15 @@ public:
     // the TSF apartment, including on immediate request failure.
     using ReadCompletion = std::function<void(HRESULT, Snapshot)>;
     using EditCompletion = std::function<void(HRESULT)>;
-    void ReadAsync(ReadCompletion completion);
+    void ReadAsync(ReadCompletion completion, bool preserveUnchangedToken = false);
+    std::uint64_t CurrentToken() const { return snapshot_.token; }
     void ReplaceAsync(std::uint64_t token, size_t start, std::wstring expected,
                       std::wstring replacement, EditCompletion completion,
-                      std::function<bool()> canApply = {});
+                      std::function<bool()> canApply = {}, bool captureAfterEdit = false);
 
 private:
-    HRESULT ReadLocked(ITfContext* context, TfEditCookie cookie, Snapshot& snapshot);
+    HRESULT ReadLocked(ITfContext* context, TfEditCookie cookie, Snapshot& snapshot,
+                       bool preserveUnchangedToken = false);
     HRESULT ReplaceLocked(ITfContext* context, TfEditCookie cookie, std::uint64_t token,
                           size_t start, std::wstring_view expected, std::wstring_view replacement);
     std::uint64_t contextEpoch_{};
@@ -59,7 +61,6 @@ private:
     Microsoft::WRL::ComPtr<ITfContext> context_;
     Microsoft::WRL::ComPtr<ITfRange> selection_;
     Snapshot snapshot_;
-    std::uint64_t nextToken_{};
 };
 
 }
