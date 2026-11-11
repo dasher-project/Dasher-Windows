@@ -1192,7 +1192,8 @@ public partial class MainWindow : Window
     }
 
     private static readonly bool UseTsfOutput =
-        Environment.GetEnvironmentVariable("DASHER_EXPERIMENTAL_TSF") == "1";
+        Environment.GetEnvironmentVariable("DASHER_EXPERIMENTAL_TSF") == "1" ||
+        File.Exists(Path.Combine(AppContext.BaseDirectory, "tsf_probe.dll"));
     private Task _tsfEdits = Task.CompletedTask;
     private uint _tsfEditorProcess;
     private ulong _tsfContextToken;
