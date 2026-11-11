@@ -34,59 +34,19 @@ The test executable creates a real TSF thread manager and an in-memory document
 context. It verifies insertion, replacement of the second of two matching words,
 deletion, a context change, and UTF-16 range validation.
 
-## Try the standalone probe
+## Test the installed bridge
 
-The build also produces `tsf_probe.dll`, an experimental Windows input method
-with a small non-activating panel. The panel runs on the editor's TSF thread.
-It uses asynchronous edit sessions and invalidates pending operations when the
-editor context changes. It reads document text only when you click **Read** or
-perform a test edit. It displays the preview locally and writes no document log.
+Install the x64 MSI, launch Dasher from the Start menu, and enter Direct
+mode. Dasher activates its TSF profile for the supported English (US and UK)
+keyboard languages and restores the prior profile on exit when possible.
+The DLL uses a hidden window on the editor thread to receive edit requests.
 
-Use the x64 build with a 64-bit editor. The profile is registered under English
-(United States). From an elevated 64-bit PowerShell, copy the DLL to a stable,
-administrator-writable location and register it:
+1. Open a scratch document in a non-elevated Notepad window.
+2. Use Direct mode to insert and delete text.
+3. Minimize Dasher, move the caret in Notepad, restore Dasher, and type at
+   the new position.
 
-```powershell
-$probeDir = Join-Path $env:ProgramFiles 'Dasher TSF Probe'
-New-Item -ItemType Directory -Force $probeDir | Out-Null
-Copy-Item 'C:\path\to\tsf_probe.dll' $probeDir
-& "$env:WINDIR\System32\regsvr32.exe" (Join-Path $probeDir 'tsf_probe.dll')
-```
-
-1. Open a scratch document in Notepad and type a short sentence. Leave a
-   collapsed caret somewhere in the sentence.
-2. With Notepad focused, use **Win+Space** to select **Dasher TSF Probe**.
-   If the profile is missing, check that English (United States) or English (United Kingdom) is installed
-   and look for the probe in that language's keyboard settings.
-3. Click **Read** and verify the before/selection/after display. Click
-   **Insert test word** and check that `[dasher-test]` appeared at the caret.
-4. Click **Minimize for 2s**. The panel should return without activating.
-   Click **Undo test insert**. Verify the original text is intact.
-5. Insert again, move the caret to a different position, then click Undo.
-   The edit should be rejected. Repeat in the editor you want to validate.
-
-The undo action applies to the last verified insertion in the current editor.
-Read, focus loss, or another insertion invalidates it. After switching back
-to your normal input method, close the test editors and unregister the probe
-from elevated PowerShell:
-
-```powershell
-& "$env:WINDIR\System32\regsvr32.exe" /u (Join-Path $probeDir 'tsf_probe.dll')
-```
-
-The automated probe test loads the DLL through its COM factory and exercises
-service activation, creation of the non-activating panel, and deactivation.
-The bridge tests also exercise asynchronous reads, edits, and invalidation.
-Installing and selecting the profile and testing editor compatibility require
-an interactive Windows session.
-
-## Exercise the Dasher connection
-
-Rebuild and register the updated DLL, then restart the scratch editor so it
-loads that DLL. Select **Dasher TSF Probe** in the editor with **Win+Space** and click **Allow Dasher in this editor** on the panel.
-Set `$env:DASHER_EXPERIMENTAL_TSF = '1'` before launching the matching Dasher
-build. Enter Direct mode and focus the scratch editor. Zoom in to insert text,
-then zoom back to delete it. Use an editor running without elevation.
-
-This opt-in path covers engine inserts, deletes, and context reads. Toolbar actions still use the existing implementation. Dasher stops the queue after a rejected edit or timeout and resumes after a fresh TSF context read. Check the keyboard diagnostics for a TSF output stop and the
-probe log in the Windows temporary directory for the edit result.
+The automated tests exercise the text context and the hidden window's
+activation and teardown. The MSI and the editor integration require an
+interactive Windows session. Keyboard diagnostics and the
+dasher-tsf-probe.log file record operation results without document text.
