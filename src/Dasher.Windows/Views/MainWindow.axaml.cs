@@ -349,7 +349,11 @@ public partial class MainWindow : Window
                 Interval = TimeSpan.FromMilliseconds(400)
             };
             contextTimer.Tick += (_, _) => _ = SeedContextFromTargetAsync("caret poll");
-            Closed += (_, _) => contextTimer.Stop();
+            Closed += (_, _) =>
+            {
+                contextTimer.Stop();
+                SetTsfProfileActive(false);
+            };
             contextTimer.Start();
         }
     }
@@ -1200,6 +1204,20 @@ public partial class MainWindow : Window
     private bool _tsfReanchorRequired;
     private bool _tsfRestorePending;
     private bool _tsfRestoringTarget;
+
+    private static void SetTsfProfileActive(bool active)
+    {
+        if (!UseTsfOutput) return;
+        try
+        {
+            var result = Services.TsfEditClient.DasherSetTsfProfileActive(active);
+            KbLog($"TSF profile active={active}: 0x{result:X8}");
+        }
+        catch (Exception exception) when (exception is DllNotFoundException or EntryPointNotFoundException)
+        {
+            KbLog($"TSF profile active={active}: {exception.GetType().Name}");
+        }
+    }
 
     private void QueueTsfEdit(string text, Services.TsfEditClient.EditOperation operation)
     {
@@ -2666,6 +2684,7 @@ public partial class MainWindow : Window
             // (DasherWindow.cpp HandleWinEvent). Install on the UI thread so
             // callbacks arrive here.
             _targetTracker.Install(OurHwnd());
+            SetTsfProfileActive(true);
             ArmSelectionWatch();
         }
         else
@@ -2679,6 +2698,7 @@ public partial class MainWindow : Window
             this.Opacity = 1.0;
 
             _targetTracker.Remove();
+            SetTsfProfileActive(false);
             TargetContextReader.StopSelectionWatch(); // review #6: don't leak the UIA subscription
             _lastWatchTarget = IntPtr.Zero;
             SetNoActivate(false);
