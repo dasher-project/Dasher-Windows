@@ -339,13 +339,16 @@ public partial class MainWindow : Window
             if (UseTsfOutput && !_pickerSessionActive && _vm is { IsKeyboardMode: true })
                 Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
         };
-        if (UseTsfOutput)
+        if (TsfAvailable)
         {
             var contextTimer = new Avalonia.Threading.DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(400)
             };
-            contextTimer.Tick += (_, _) => _ = SeedContextFromTargetAsync("caret poll");
+            contextTimer.Tick += (_, _) =>
+            {
+                if (UseTsfOutput) ScheduleTsfContextRefresh("caret poll");
+            };
             Closed += (_, _) =>
             {
                 contextTimer.Stop();
@@ -1191,9 +1194,10 @@ public partial class MainWindow : Window
         }
     }
 
-    private static readonly bool UseTsfOutput =
+    private static readonly bool TsfAvailable =
         Environment.GetEnvironmentVariable("DASHER_EXPERIMENTAL_TSF") == "1" ||
         File.Exists(Path.Combine(AppContext.BaseDirectory, "tsf_probe.dll"));
+    private bool UseTsfOutput { get; set; }
     private Task _tsfEdits = Task.CompletedTask;
     private uint _tsfEditorProcess;
     private ulong _tsfContextToken;
@@ -1202,15 +1206,22 @@ public partial class MainWindow : Window
     private bool _tsfReanchorRequired;
     private bool _tsfRestoringTarget;
 
-    private static void SetTsfProfileActive(bool active)
+    private void SetTsfProfileActive(bool active)
     {
-        if (!UseTsfOutput) return;
+        if (!TsfAvailable || UseTsfOutput == active) return;
+        if (!active)
+        {
+            UseTsfOutput = false;
+            _tsfContextToken = 0;
+            _tsfOutputStopped = true;
+        }
         try
         {
             var result = Services.TsfEditClient.DasherSetTsfProfileActive(active);
             KbLog($"TSF profile active={active}: 0x{result:X8}");
+            if (active && result == 0) UseTsfOutput = true;
         }
-        catch (Exception exception) when (exception is DllNotFoundException or EntryPointNotFoundException)
+        catch (Exception exception) when (exception is DllNotFoundException or EntryPointNotFoundException or BadImageFormatException)
         {
             KbLog($"TSF profile active={active}: {exception.GetType().Name}");
         }
@@ -1252,7 +1263,7 @@ public partial class MainWindow : Window
         {
             await previous;
             if (_tsfOutputStopped) return;
-            if (_vm is not { IsKeyboardMode: true } || _pickerSessionActive ||
+            if (!UseTsfOutput || _vm is not { IsKeyboardMode: true } || _pickerSessionActive ||
                 WindowState == WindowState.Minimized ||
                 Services.TsfEditClient.ForegroundEditorProcess() != process)
             {
@@ -1380,7 +1391,7 @@ public partial class MainWindow : Window
 
     private async void RestoreTsfTarget()
     {
-        if (WindowState == WindowState.Minimized || _pickerSessionActive ||
+        if (!UseTsfOutput || WindowState == WindowState.Minimized || _pickerSessionActive ||
             _vm is not { IsKeyboardMode: true } || _tsfRestoringTarget) return;
         _tsfRestoringTarget = true;
         try
@@ -1420,7 +1431,7 @@ public partial class MainWindow : Window
         try
         {
             var context = await Services.TsfEditClient.ReadAsync(process);
-            if (context is not { } snapshot || _pickerSessionActive ||
+            if (context is not { } snapshot || !UseTsfOutput || _pickerSessionActive ||
                 WindowState == WindowState.Minimized || _vm is not { IsKeyboardMode: true } vm ||
                 vm.Handle != handle || Services.TsfEditClient.ForegroundEditorProcess() != process)
                 return;
