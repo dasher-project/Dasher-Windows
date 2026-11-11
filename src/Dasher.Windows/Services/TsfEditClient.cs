@@ -36,13 +36,14 @@ internal static class TsfEditClient
             BinaryPrimitives.ReadUInt64LittleEndian(response.AsSpan(8)));
     }
 
-    internal static async Task<(string Before, ulong Token)?> ReadAsync(uint editorProcess)
+    internal static async Task<(int Result, string Before, ulong Token)> ReadAsync(uint editorProcess)
     {
         var response = await RequestAsync(editorProcess, 0, "", 2).ConfigureAwait(false);
-        if (BinaryPrimitives.ReadInt32LittleEndian(response) != 0) return null;
+        var result = BinaryPrimitives.ReadInt32LittleEndian(response);
+        if (result != 0) return (result, "", 0);
         var length = BinaryPrimitives.ReadInt32LittleEndian(response.AsSpan(4));
         if (length is < 0 or > MaxTextLength) throw new IOException("Invalid TSF response length.");
-        return (Encoding.Unicode.GetString(response.AsSpan(16, length * sizeof(char))),
+        return (result, Encoding.Unicode.GetString(response.AsSpan(16, length * sizeof(char))),
             BinaryPrimitives.ReadUInt64LittleEndian(response.AsSpan(8)));
     }
 

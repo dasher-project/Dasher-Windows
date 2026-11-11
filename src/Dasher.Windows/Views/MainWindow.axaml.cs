@@ -324,6 +324,7 @@ public partial class MainWindow : Window
             lastState = WindowState;
             if (UseTsfOutput && WindowState == WindowState.Minimized)
             {
+                _tsfTaskbarActivationPending = false;
                 _tsfFallbackWindow = IntPtr.Zero;
                 _tsfContextToken = 0;
                 ++_tsfTargetGeneration;
@@ -342,7 +343,17 @@ public partial class MainWindow : Window
         {
             _canvas?.ForceFrameLoopRevive();
             if (UseTsfOutput && !_pickerSessionActive && _vm is { IsKeyboardMode: true })
+            {
+                // Keep an already-visible Dasher active while the pointer is
+                // on the taskbar so Windows can toggle it on the next click.
+                if (WindowState != WindowState.Minimized && KeyboardTargetTracker.IsPointerOverTaskbar())
+                {
+                    _tsfTaskbarActivationPending = true;
+                    KbLog("TSF focus handoff deferred while pointer is over the taskbar");
+                    return;
+                }
                 Avalonia.Threading.Dispatcher.UIThread.Post(RestoreTsfTarget);
+            }
         };
         if (TsfAvailable)
         {
@@ -352,7 +363,18 @@ public partial class MainWindow : Window
             };
             contextTimer.Tick += (_, _) =>
             {
-                if (UseTsfOutput) ScheduleTsfContextRefresh("caret poll");
+                if (!UseTsfOutput) return;
+                if (_tsfTaskbarActivationPending)
+                {
+                    if (GetForegroundWindow() != OurHwnd())
+                        _tsfTaskbarActivationPending = false;
+                    else if (!KeyboardTargetTracker.IsPointerOverTaskbar())
+                    {
+                        RestoreTsfTarget();
+                        return;
+                    }
+                }
+                ScheduleTsfContextRefresh("caret poll");
             };
             Closed += (_, _) =>
             {
@@ -1223,6 +1245,7 @@ public partial class MainWindow : Window
     private readonly System.Collections.Generic.HashSet<IntPtr> _tsfUncertainWindows = new();
     private bool _tsfReanchorRequired => _tsfUncertainWindows.Contains(GetForegroundWindow());
     private bool _tsfRestoringTarget;
+    private bool _tsfTaskbarActivationPending;
 
     private void SetTsfProfileActive(bool active)
     {
@@ -1230,6 +1253,7 @@ public partial class MainWindow : Window
         if (!active)
         {
             UseTsfOutput = false;
+            _tsfTaskbarActivationPending = false;
             _tsfFallbackWindow = IntPtr.Zero;
             _tsfContextToken = 0;
             _tsfOutputStopped = true;
@@ -1426,6 +1450,7 @@ public partial class MainWindow : Window
     {
         if (!UseTsfOutput || WindowState == WindowState.Minimized || _pickerSessionActive ||
             _vm is not { IsKeyboardMode: true } || _tsfRestoringTarget) return;
+        _tsfTaskbarActivationPending = false;
         _tsfRestoringTarget = true;
         try
         {
@@ -1468,11 +1493,14 @@ public partial class MainWindow : Window
     {
         try
         {
-            var context = await Services.TsfEditClient.ReadAsync(process);
+            var snapshot = await Services.TsfEditClient.ReadAsync(process);
             if (!IsTsfContextTarget(handle, window, process, generation)) return;
-            if (context is not { Token: not 0 } snapshot)
+            if (snapshot.Result != 0 || snapshot.Token == 0)
             {
-                await TryUseTsfFallbackAsync(handle, window, process, generation);
+                var failure = snapshot.Result != 0
+                    ? $"context read returned 0x{snapshot.Result:X8}"
+                    : "context read returned no caret token";
+                await TryUseTsfFallbackAsync(handle, window, process, generation, failure);
                 return;
             }
 
@@ -1509,7 +1537,13 @@ public partial class MainWindow : Window
                 StopTsfOutput("editor context connection interrupted");
                 return;
             }
-            await TryUseTsfFallbackAsync(handle, window, process, generation);
+            var failure = exception switch
+            {
+                TimeoutException => "editor did not connect",
+                OperationCanceledException => "editor connected but the context request timed out",
+                _ => $"context connection failed ({exception.GetType().Name})"
+            };
+            await TryUseTsfFallbackAsync(handle, window, process, generation, failure);
         }
         catch (Exception exception)
         {
@@ -1517,7 +1551,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private async Task TryUseTsfFallbackAsync(IntPtr handle, IntPtr window, uint process, int generation)
+    private async Task TryUseTsfFallbackAsync(IntPtr handle, IntPtr window, uint process, int generation, string failure)
     {
         bool IsCurrent() => IsTsfContextTarget(handle, window, process, generation) &&
             _targetTracker.Current == Services.TargetWindowIdentity.RootOf(window);
@@ -1534,7 +1568,20 @@ public partial class MainWindow : Window
         if (!IsCurrent()) return;
         _tsfFallbackWindow = window;
         ArmSelectionWatch();
-        KbLog($"TSF unavailable for pid={process}; using legacy Direct mode");
+        KbLog($"TSF unavailable for {GetEditorProcessName(process)} (pid={process}): {failure}; using legacy Direct mode");
+    }
+
+    private static string GetEditorProcessName(uint process)
+    {
+        try
+        {
+            using var editor = Process.GetProcessById((int)process);
+            return editor.ProcessName;
+        }
+        catch (Exception exception) when (exception is ArgumentException or InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            return "unknown editor";
+        }
     }
 
     private async Task SeedContextFromTargetAsync(string reason)
