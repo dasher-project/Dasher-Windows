@@ -323,7 +323,12 @@ public partial class MainWindow : Window
             var wasMinimized = lastState == WindowState.Minimized;
             lastState = WindowState;
             if (UseTsfOutput && WindowState == WindowState.Minimized)
+            {
+                _tsfFallbackWindow = IntPtr.Zero;
+                _tsfContextToken = 0;
+                ++_tsfTargetGeneration;
                 StopTsfOutput("window minimized");
+            }
             if (wasMinimized && WindowState != WindowState.Minimized)
             {
                 _canvas?.ForceFrameLoopRevive();
@@ -1198,7 +1203,12 @@ public partial class MainWindow : Window
         Environment.GetEnvironmentVariable("DASHER_EXPERIMENTAL_TSF") == "1" ||
         File.Exists(Path.Combine(AppContext.BaseDirectory, "tsf_probe.dll"));
     private bool UseTsfOutput { get; set; }
+    private bool RouteThroughTsf => UseTsfOutput &&
+        (_tsfFallbackWindow == IntPtr.Zero || GetForegroundWindow() != _tsfFallbackWindow);
     private Task _tsfEdits = Task.CompletedTask;
+    private IntPtr _tsfFallbackWindow;
+    private IntPtr _tsfEditorWindow;
+    private int _tsfTargetGeneration;
     private uint _tsfEditorProcess;
     private ulong _tsfContextToken;
     private int _tsfPending;
@@ -1212,8 +1222,10 @@ public partial class MainWindow : Window
         if (!active)
         {
             UseTsfOutput = false;
+            _tsfFallbackWindow = IntPtr.Zero;
             _tsfContextToken = 0;
             _tsfOutputStopped = true;
+            ++_tsfTargetGeneration;
         }
         try
         {
@@ -1236,7 +1248,8 @@ public partial class MainWindow : Window
         }
         if (text.Length == 0 && operation is Services.TsfEditClient.EditOperation.Insert or Services.TsfEditClient.EditOperation.Delete) return;
         var process = Services.TsfEditClient.ForegroundEditorProcess();
-        if (process == 0 || process != _tsfEditorProcess || _tsfContextToken == 0)
+        if (process == 0 || process != _tsfEditorProcess ||
+            GetForegroundWindow() != _tsfEditorWindow || _tsfContextToken == 0)
         {
             KbLog($"TSF {operation} held: foreground pid={process} anchor pid={_tsfEditorProcess} token={_tsfContextToken}");
             if (process == 0 && GetForegroundWindow() == OurHwnd())
@@ -1254,17 +1267,18 @@ public partial class MainWindow : Window
 
         ++_tsfPending;
         KbLog($"TSF {operation} queued: units={text.Length} pending={_tsfPending} token={_tsfContextToken}");
-        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, process, text, operation);
+        _tsfEdits = ApplyTsfEditAsync(_tsfEdits, process, _tsfTargetGeneration, text, operation);
     }
 
-    private async Task ApplyTsfEditAsync(Task previous, uint process, string text, Services.TsfEditClient.EditOperation operation)
+    private async Task ApplyTsfEditAsync(Task previous, uint process, int generation, string text, Services.TsfEditClient.EditOperation operation)
     {
         try
         {
             await previous;
-            if (_tsfOutputStopped) return;
+            if (_tsfOutputStopped || generation != _tsfTargetGeneration) return;
             if (!UseTsfOutput || _vm is not { IsKeyboardMode: true } || _pickerSessionActive ||
                 WindowState == WindowState.Minimized ||
+                GetForegroundWindow() != _tsfEditorWindow ||
                 Services.TsfEditClient.ForegroundEditorProcess() != process)
             {
                 StopTsfOutput("editor no longer available");
@@ -1272,17 +1286,23 @@ public partial class MainWindow : Window
             }
 
             var (result, token) = await Services.TsfEditClient.EditAsync(process, _tsfContextToken, text, operation);
+            if (generation != _tsfTargetGeneration) return;
             _tsfContextToken = token;
             KbLog($"TSF {operation} completed: result=0x{result:X8} token={token}");
-            if (result != 0) StopTsfOutput($"{operation} returned 0x{result:X8}");
+            if (result != 0)
+            {
+                _tsfReanchorRequired = true;
+                StopTsfOutput($"{operation} returned 0x{result:X8}");
+            }
         }
         catch (TimeoutException exception)
         {
-            _tsfReanchorRequired = true;
+            // The editor never connected, so this request was never sent.
             StopTsfOutput($"{operation}: {exception.Message}");
         }
         catch (Exception exception)
         {
+            _tsfReanchorRequired = true;
             StopTsfOutput($"{operation}: {exception.GetType().Name}");
         }
         finally
@@ -1306,7 +1326,7 @@ public partial class MainWindow : Window
         // restoration.
         if (_pickerSessionActive) return;
 
-        if (UseTsfOutput)
+        if (RouteThroughTsf)
         {
             if (e.EventType == EngineOutputEventArgs.EventInsert)
                 QueueTsfEdit(e.Text, Services.TsfEditClient.EditOperation.Insert);
@@ -1353,7 +1373,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void ArmSelectionWatch()
     {
-        if (UseTsfOutput) return;
+        if (RouteThroughTsf) return;
         var target = _targetTracker.Current;
         if (target == IntPtr.Zero || target == _lastWatchTarget) return;
         // Set _lastWatchTarget only on CONFIRMED success — a sticky field
@@ -1380,13 +1400,16 @@ public partial class MainWindow : Window
     /// </summary>
     private void ScheduleTsfContextRefresh(string reason)
     {
-        if (_tsfPending != 0 || !_tsfEdits.IsCompleted || WindowState == WindowState.Minimized ||
+        if (!UseTsfOutput || _tsfPending != 0 || !_tsfEdits.IsCompleted || WindowState == WindowState.Minimized ||
             _pickerSessionActive || _vm is not { IsKeyboardMode: true } vm || vm.Handle == IntPtr.Zero)
             return;
 
+        var window = GetForegroundWindow();
+        if (_tsfFallbackWindow != window) _tsfFallbackWindow = IntPtr.Zero;
+        if (_tsfFallbackWindow != IntPtr.Zero) return;
         var process = Services.TsfEditClient.ForegroundEditorProcess();
         if (process == 0) return;
-        _tsfEdits = RefreshTsfContextAsync(vm.Handle, process, reason);
+        _tsfEdits = RefreshTsfContextAsync(vm.Handle, window, process, _tsfTargetGeneration, reason);
     }
 
     private async void RestoreTsfTarget()
@@ -1426,21 +1449,24 @@ public partial class MainWindow : Window
         }
     }
 
-    private async Task RefreshTsfContextAsync(IntPtr handle, uint process, string reason)
+    private bool IsTsfContextTarget(IntPtr handle, IntPtr window, uint process, int generation) =>
+        generation == _tsfTargetGeneration && UseTsfOutput && !_pickerSessionActive && WindowState != WindowState.Minimized &&
+        _vm is { IsKeyboardMode: true } vm && vm.Handle == handle &&
+        GetForegroundWindow() == window && Services.TsfEditClient.ForegroundEditorProcess() == process;
+
+    private async Task RefreshTsfContextAsync(IntPtr handle, IntPtr window, uint process, int generation, string reason)
     {
         try
         {
             var context = await Services.TsfEditClient.ReadAsync(process);
-            if (context is not { } snapshot || !UseTsfOutput || _pickerSessionActive ||
-                WindowState == WindowState.Minimized || _vm is not { IsKeyboardMode: true } vm ||
-                vm.Handle != handle || Services.TsfEditClient.ForegroundEditorProcess() != process)
+            if (context is not { Token: not 0 } snapshot || !IsTsfContextTarget(handle, window, process, generation))
                 return;
 
             // The engine has already applied queued edits to its local buffer.
             // Let them run only if this read confirmed their original caret.
             if (_tsfPending != 0)
             {
-                if (_tsfEditorProcess != process || _tsfContextToken != snapshot.Token)
+                if (_tsfEditorWindow != window || _tsfEditorProcess != process || _tsfContextToken != snapshot.Token)
                     StopTsfOutput("editor context changed before queued edits");
                 return;
             }
@@ -1454,14 +1480,24 @@ public partial class MainWindow : Window
                 KbLog($"TSF context refreshed ({reason}): {snapshot.Before.Length} UTF-16 units");
             }
             _tsfEditorProcess = process;
+            _tsfEditorWindow = window;
             _tsfContextToken = snapshot.Token;
             _tsfReanchorRequired = false;
             _tsfOutputStopped = false;
         }
         catch (TimeoutException)
         {
-            // The focused window may be Dasher, the taskbar or an editor
-            // without the TSF input method. Preserve the current buffer.
+            if (_tsfPending != 0 || _tsfReanchorRequired || !IsTsfContextTarget(handle, window, process, generation) ||
+                _targetTracker.Current != Services.TargetWindowIdentity.RootOf(window))
+                return;
+            _tsfContextToken = 0;
+            await SeedLegacyContextAsync("TSF unavailable");
+            if (IsTsfContextTarget(handle, window, process, generation))
+            {
+                _tsfFallbackWindow = window;
+                ArmSelectionWatch();
+                KbLog($"TSF unavailable for pid={process}; using legacy Direct mode");
+            }
         }
         catch (Exception exception)
         {
@@ -1471,11 +1507,16 @@ public partial class MainWindow : Window
 
     private async Task SeedContextFromTargetAsync(string reason)
     {
-        if (UseTsfOutput)
+        if (RouteThroughTsf)
         {
             ScheduleTsfContextRefresh(reason);
             return;
         }
+        await SeedLegacyContextAsync(reason);
+    }
+
+    private async Task SeedLegacyContextAsync(string reason)
+    {
         if (_vm == null || !_vm.IsKeyboardMode || _vm.Handle == IntPtr.Zero) return;
         if (_targetTracker.Current == IntPtr.Zero) return;
 
@@ -2261,7 +2302,7 @@ public partial class MainWindow : Window
         if (_vm is { IsKeyboardMode: true })
         {
             if (reportTelemetry) Services.AnalyticsService.CaptureUiAction("ime_toolbar", "backspace");
-            if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Backspace);
+            if (RouteThroughTsf) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Backspace);
             else SendBackspaces(1);
         }
         else
@@ -2297,7 +2338,7 @@ public partial class MainWindow : Window
                 KbLog("  arrow_left skipped: target not foreground and restore unavailable");
                 return;
             }
-            if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Left);
+            if (RouteThroughTsf) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Left);
             else SendVirtualKey(VK_LEFT);
         }
         else
@@ -2333,7 +2374,7 @@ public partial class MainWindow : Window
                 KbLog("  arrow_right skipped: target not foreground and restore unavailable");
                 return;
             }
-            if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Right);
+            if (RouteThroughTsf) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Right);
             else SendVirtualKey(VK_RIGHT);
         }
         else
@@ -2435,21 +2476,21 @@ public partial class MainWindow : Window
         // Copy). The old behaviour copied the engine's whole output buffer,
         // which is not "what you selected" from the user's point of view
         // (issue #95). Editor mode keeps its own pane-copy button.
-        if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Copy);
+        if (RouteThroughTsf) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Copy);
         else SendCtrlChord(VK_KEY_C, "C");
     }
 
     private void OnKbCut(object? sender, RoutedEventArgs e)
     {
         Services.AnalyticsService.CaptureUiAction("ime_toolbar", "cut");
-        if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Cut);
+        if (RouteThroughTsf) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Cut);
         else SendCtrlChord(VK_KEY_X, "X");
     }
 
     private void OnKbPaste(object? sender, RoutedEventArgs e)
     {
         Services.AnalyticsService.CaptureUiAction("ime_toolbar", "paste");
-        if (UseTsfOutput) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Paste);
+        if (RouteThroughTsf) QueueTsfEdit("", Services.TsfEditClient.EditOperation.Paste);
         else SendCtrlChord(VK_KEY_V, "V");
     }
 
