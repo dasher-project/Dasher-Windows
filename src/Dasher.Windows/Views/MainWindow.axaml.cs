@@ -1199,12 +1199,22 @@ public partial class MainWindow : Window
     private bool _tsfOutputStopped;
     private bool _tsfReanchorRequired;
     private bool _tsfRestorePending;
+    private bool _tsfRestoringTarget;
 
     private void QueueTsfEdit(string text, Services.TsfEditClient.EditOperation operation)
     {
-        if (_tsfOutputStopped || _tsfReanchorRequired || (text.Length == 0 && operation is Services.TsfEditClient.EditOperation.Insert or Services.TsfEditClient.EditOperation.Delete)) return;
+        if (_tsfOutputStopped || _tsfReanchorRequired)
+        {
+            KbLog($"TSF {operation} held: stopped={_tsfOutputStopped} reanchor={_tsfReanchorRequired} pending={_tsfPending}");
+            return;
+        }
+        if (text.Length == 0 && operation is Services.TsfEditClient.EditOperation.Insert or Services.TsfEditClient.EditOperation.Delete) return;
         var process = Services.TsfEditClient.ForegroundEditorProcess();
-        if (process == 0 || process != _tsfEditorProcess || _tsfContextToken == 0) return;
+        if (process == 0 || process != _tsfEditorProcess || _tsfContextToken == 0)
+        {
+            KbLog($"TSF {operation} held: foreground pid={process} anchor pid={_tsfEditorProcess} token={_tsfContextToken}");
+            return;
+        }
         if (_tsfPending >= 32)
         {
             StopTsfOutput("edit queue full");
@@ -1212,6 +1222,7 @@ public partial class MainWindow : Window
         }
 
         ++_tsfPending;
+        KbLog($"TSF {operation} queued: units={text.Length} pending={_tsfPending} token={_tsfContextToken}");
         _tsfEdits = ApplyTsfEditAsync(_tsfEdits, process, text, operation);
     }
 
@@ -1231,6 +1242,7 @@ public partial class MainWindow : Window
 
             var (result, token) = await Services.TsfEditClient.EditAsync(process, _tsfContextToken, text, operation);
             _tsfContextToken = token;
+            KbLog($"TSF {operation} completed: result=0x{result:X8} token={token}");
             if (result != 0) StopTsfOutput($"{operation} returned 0x{result:X8}");
         }
         catch (TimeoutException exception)
@@ -1361,18 +1373,38 @@ public partial class MainWindow : Window
         _tsfEdits = RefreshTsfContextAsync(vm.Handle, process, reason);
     }
 
-    private void RestoreTsfTarget()
+    private async void RestoreTsfTarget()
     {
         if (WindowState == WindowState.Minimized || _pickerSessionActive ||
-            _vm is not { IsKeyboardMode: true }) return;
-
-        // The taskbar can activate Dasher during restore even in Direct mode.
-        // TSF only serves the foreground editor, so return focus to the
-        // tracked window when Dasher itself received it.
-        var ourWindow = OurHwnd();
-        if (ourWindow != IntPtr.Zero && GetForegroundWindow() == ourWindow)
-            _targetTracker.EnsureForeground(ourWindow);
-        ScheduleTsfContextRefresh("window restored");
+            _vm is not { IsKeyboardMode: true } || _tsfRestoringTarget) return;
+        _tsfRestoringTarget = true;
+        try
+        {
+            // Let Windows process activation messages between checks. The
+            // legacy tracker blocks this UI thread while waiting for focus.
+            var ourWindow = OurHwnd();
+            var target = _targetTracker.Current;
+            if (ourWindow != IntPtr.Zero && GetForegroundWindow() == ourWindow)
+            {
+                var requested = Services.WindowDialogStyles.TrySetForeground(target);
+                KbLog($"TSF restore focus requested={requested} target=0x{target:X}");
+                for (var attempt = 0; attempt < 10 && GetForegroundWindow() == ourWindow; ++attempt)
+                    await Task.Delay(50);
+            }
+            if (WindowState != WindowState.Minimized && !_pickerSessionActive)
+            {
+                KbLog($"TSF restore foreground=0x{GetForegroundWindow():X} target=0x{target:X}");
+                ScheduleTsfContextRefresh("window restored");
+            }
+        }
+        catch (Exception exception)
+        {
+            KbLog($"TSF restore failed: {exception.GetType().Name}");
+        }
+        finally
+        {
+            _tsfRestoringTarget = false;
+        }
     }
 
     private async Task RefreshTsfContextAsync(IntPtr handle, uint process, string reason)
