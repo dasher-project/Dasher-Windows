@@ -134,7 +134,9 @@ std::wstring Text(const Snapshot& snapshot) {
 
 class Panel : public std::enable_shared_from_this<Panel> {
 public:
-    explicit Panel(TfClientId client) : bridge_(std::make_shared<TextContext>(client)), previewBridge_(std::make_shared<TextContext>(client)) {}
+    Panel(ITfThreadMgr* manager, TfClientId client)
+        : manager_(manager), bridge_(std::make_shared<TextContext>(client)),
+          previewBridge_(std::make_shared<TextContext>(client)) {}
 
     bool Create() {
         WNDCLASSW window{};
@@ -205,7 +207,9 @@ private:
     bool EditorForeground() const {
         DWORD process = 0;
         GetWindowThreadProcessId(GetForegroundWindow(), &process);
-        return process == GetCurrentProcessId();
+        BOOL focused = FALSE;
+        return process == GetCurrentProcessId() &&
+            SUCCEEDED(manager_->IsThreadFocus(&focused)) && focused;
     }
 
     void PollEditConnection() {
@@ -502,6 +506,7 @@ private:
         return DefWindowProcW(hwnd, message, wparam, lparam);
     }
 
+    ComPtr<ITfThreadMgr> manager_;
     std::shared_ptr<TextContext> bridge_, previewBridge_;
     ComPtr<ITfDocumentMgr> document_;
     ComPtr<ITfContext> context_;
@@ -546,7 +551,7 @@ public:
         if (!manager || manager_) return E_UNEXPECTED;
         Trace("profile-activate");
         try {
-            panel_ = std::make_shared<Panel>(client);
+            panel_ = std::make_shared<Panel>(manager, client);
             manager_ = manager;
             auto result = manager_.As(&source_);
             if (SUCCEEDED(result)) result = source_->AdviseSink(
