@@ -322,9 +322,10 @@ public partial class MainWindow : Window
             if (e.Property.Name != nameof(WindowState)) return;
             var wasMinimized = lastState == WindowState.Minimized;
             lastState = WindowState;
+            if (WindowState == WindowState.Minimized)
+                _taskbarFocusHoldUntil = 0;
             if (UseTsfOutput && WindowState == WindowState.Minimized)
             {
-                _tsfTaskbarHoldUntil = 0;
                 _tsfFallbackWindow = IntPtr.Zero;
                 _tsfContextToken = 0;
                 ++_tsfTargetGeneration;
@@ -333,47 +334,41 @@ public partial class MainWindow : Window
             if (wasMinimized && WindowState != WindowState.Minimized)
             {
                 _canvas?.ForceFrameLoopRevive();
-                if (UseTsfOutput)
-                    Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreTsfTarget(bypassTaskbarHold: true));
-                else
-                    _ = SeedContextFromTargetAsync("window restored");
+                if (_vm is { IsKeyboardMode: true })
+                    Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreDirectTarget(bypassTaskbarHold: true));
             }
         };
         Activated += (_, _) =>
         {
             _canvas?.ForceFrameLoopRevive();
-            if (UseTsfOutput && !_pickerSessionActive && _vm is { IsKeyboardMode: true })
-                Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreTsfTarget());
+            if (!_pickerSessionActive && _vm is { IsKeyboardMode: true })
+                Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreDirectTarget());
         };
-        if (TsfAvailable)
+        var contextTimer = new Avalonia.Threading.DispatcherTimer
         {
-            var contextTimer = new Avalonia.Threading.DispatcherTimer
+            Interval = TimeSpan.FromMilliseconds(400)
+        };
+        contextTimer.Tick += (_, _) =>
+        {
+            if (_taskbarFocusHoldUntil != 0)
             {
-                Interval = TimeSpan.FromMilliseconds(400)
-            };
-            contextTimer.Tick += (_, _) =>
-            {
-                if (!UseTsfOutput) return;
-                if (_tsfTaskbarHoldUntil != 0)
+                if (GetForegroundWindow() != OurHwnd())
+                    _taskbarFocusHoldUntil = 0;
+                else
                 {
-                    if (GetForegroundWindow() != OurHwnd())
-                        _tsfTaskbarHoldUntil = 0;
-                    else
-                    {
-                        if (Environment.TickCount64 >= _tsfTaskbarHoldUntil || !KeyboardTargetTracker.IsPointerOverTaskbar())
-                            RestoreTsfTarget(bypassTaskbarHold: true);
-                        return;
-                    }
+                    if (Environment.TickCount64 >= _taskbarFocusHoldUntil || !KeyboardTargetTracker.IsPointerOverTaskbar())
+                        RestoreDirectTarget(bypassTaskbarHold: true);
+                    return;
                 }
-                ScheduleTsfContextRefresh("caret poll");
-            };
-            Closed += (_, _) =>
-            {
-                contextTimer.Stop();
-                SetTsfProfileActive(false);
-            };
-            contextTimer.Start();
-        }
+            }
+            if (UseTsfOutput) ScheduleTsfContextRefresh("caret poll");
+        };
+        Closed += (_, _) =>
+        {
+            contextTimer.Stop();
+            SetTsfProfileActive(false);
+        };
+        contextTimer.Start();
     }
 
     private void SeedTrackers(PixelPoint position, Size size)
@@ -1221,9 +1216,10 @@ public partial class MainWindow : Window
         (_tsfFallbackWindow == IntPtr.Zero || GetForegroundWindow() != _tsfFallbackWindow);
 
     private bool CanAdvanceDirectModeFrame() =>
-        _vm is not { IsKeyboardMode: true } || !RouteThroughTsf ||
-        (!_tsfOutputStopped && !_tsfReanchorRequired && _tsfContextToken != 0 &&
-         GetForegroundWindow() == _tsfEditorWindow);
+        _vm is not { IsKeyboardMode: true } ||
+        (!_restoringDirectTarget && _taskbarFocusHoldUntil == 0 &&
+         (!RouteThroughTsf || (!_tsfOutputStopped && !_tsfReanchorRequired &&
+          _tsfContextToken != 0 && GetForegroundWindow() == _tsfEditorWindow)));
     private Task _tsfEdits = Task.CompletedTask;
     private IntPtr _tsfFallbackWindow;
     private IntPtr _tsfReadRetryWindow;
@@ -1235,9 +1231,9 @@ public partial class MainWindow : Window
     private bool _tsfOutputStopped;
     private readonly System.Collections.Generic.HashSet<IntPtr> _tsfUncertainWindows = new();
     private bool _tsfReanchorRequired => _tsfUncertainWindows.Contains(GetForegroundWindow());
-    private bool _tsfRestoringTarget;
+    private bool _restoringDirectTarget;
     private const int TaskbarFocusHoldMs = 5000;
-    private long _tsfTaskbarHoldUntil;
+    private long _taskbarFocusHoldUntil;
 
     private void SetTsfProfileActive(bool active)
     {
@@ -1245,7 +1241,7 @@ public partial class MainWindow : Window
         if (!active)
         {
             UseTsfOutput = false;
-            _tsfTaskbarHoldUntil = 0;
+            _taskbarFocusHoldUntil = 0;
             _tsfFallbackWindow = IntPtr.Zero;
             _tsfContextToken = 0;
             _tsfOutputStopped = true;
@@ -1279,7 +1275,7 @@ public partial class MainWindow : Window
             if (process == 0 && GetForegroundWindow() == OurHwnd())
             {
                 StopTsfOutput("Dasher received focus during Direct mode");
-                Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreTsfTarget());
+                Avalonia.Threading.Dispatcher.UIThread.Post(() => RestoreDirectTarget());
             }
             return;
         }
@@ -1438,10 +1434,10 @@ public partial class MainWindow : Window
         _tsfEdits = RefreshTsfContextAsync(vm.Handle, window, process, _tsfTargetGeneration, reason);
     }
 
-    private async void RestoreTsfTarget(bool bypassTaskbarHold = false)
+    private async void RestoreDirectTarget(bool bypassTaskbarHold = false)
     {
-        if (!UseTsfOutput || WindowState == WindowState.Minimized || _pickerSessionActive ||
-            _vm is not { IsKeyboardMode: true } || _tsfRestoringTarget) return;
+        if (WindowState == WindowState.Minimized || _pickerSessionActive ||
+            _vm is not { IsKeyboardMode: true } || _restoringDirectTarget) return;
 
         var ourWindow = OurHwnd();
         // An already-visible Dasher must keep focus while the pointer is on
@@ -1449,17 +1445,17 @@ public partial class MainWindow : Window
         if (!bypassTaskbarHold && ourWindow != IntPtr.Zero && GetForegroundWindow() == ourWindow &&
             KeyboardTargetTracker.IsPointerOverTaskbar())
         {
-            if (_tsfTaskbarHoldUntil == 0)
+            if (_taskbarFocusHoldUntil == 0)
             {
                 // The pointer may also be parked here during keyboard activation.
-                _tsfTaskbarHoldUntil = Environment.TickCount64 + TaskbarFocusHoldMs;
-                KbLog("TSF focus handoff deferred while pointer is over the taskbar");
+                _taskbarFocusHoldUntil = Environment.TickCount64 + TaskbarFocusHoldMs;
+                KbLog("Direct mode focus handoff deferred while pointer is over the taskbar");
             }
             return;
         }
 
-        _tsfTaskbarHoldUntil = 0;
-        _tsfRestoringTarget = true;
+        _taskbarFocusHoldUntil = 0;
+        _restoringDirectTarget = true;
         try
         {
             // Let Windows process activation messages between checks. The
@@ -1471,23 +1467,25 @@ public partial class MainWindow : Window
             if (ourWindow != IntPtr.Zero && GetForegroundWindow() == ourWindow)
             {
                 var requested = Services.WindowDialogStyles.TrySetForeground(target);
-                KbLog($"TSF restore focus requested={requested} target=0x{target:X}");
+                KbLog($"Direct mode restore focus requested={requested} target=0x{target:X}");
                 for (var attempt = 0; attempt < 10 && GetForegroundWindow() == ourWindow; ++attempt)
                     await Task.Delay(50);
             }
-            if (WindowState != WindowState.Minimized && !_pickerSessionActive)
+            var foreground = GetForegroundWindow();
+            if (WindowState != WindowState.Minimized && !_pickerSessionActive &&
+                foreground != IntPtr.Zero && foreground != ourWindow)
             {
-                KbLog($"TSF restore foreground=0x{GetForegroundWindow():X} target=0x{target:X}");
-                ScheduleTsfContextRefresh("window restored");
+                KbLog($"Direct mode restore foreground=0x{foreground:X} target=0x{target:X}");
+                await SeedContextFromTargetAsync("window restored");
             }
         }
         catch (Exception exception)
         {
-            KbLog($"TSF restore failed: {exception.GetType().Name}");
+            KbLog($"Direct mode restore failed: {exception.GetType().Name}");
         }
         finally
         {
-            _tsfRestoringTarget = false;
+            _restoringDirectTarget = false;
         }
     }
 
@@ -2807,6 +2805,7 @@ public partial class MainWindow : Window
             this.Opacity = 1.0;
 
             _targetTracker.Remove();
+            _taskbarFocusHoldUntil = 0;
             SetTsfProfileActive(false);
             TargetContextReader.StopSelectionWatch(); // review #6: don't leak the UIA subscription
             _lastWatchTarget = IntPtr.Zero;
