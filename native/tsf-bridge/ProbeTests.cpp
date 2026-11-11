@@ -14,6 +14,14 @@ void Check(bool success, const char* step) {
     }
 }
 
+BOOL CALLBACK FindProbeWindow(HWND window, LPARAM result) {
+    wchar_t className[64]{};
+    if (!GetClassNameW(window, className, ARRAYSIZE(className)) ||
+        lstrcmpW(className, L"Dasher.TsfProbe.F34A69AD") != 0) return TRUE;
+    *reinterpret_cast<HWND*>(result) = window;
+    return FALSE;
+}
+
 }
 
 int wmain(int argc, wchar_t** argv) {
@@ -38,8 +46,9 @@ int wmain(int argc, wchar_t** argv) {
         Check(SUCCEEDED(manager->Activate(&client)), "Activate manager");
         for (int run = 0; run != 2; ++run) {
             Check(SUCCEEDED(service->Activate(manager.Get(), client)), "Activate service");
-            const auto panel = FindWindowW(L"Dasher.TsfProbe.F34A69AD", L"Dasher TSF Probe");
-            Check(panel && GetWindowThreadProcessId(panel, nullptr) == GetCurrentThreadId(), "Find panel");
+            HWND panel = nullptr;
+            EnumThreadWindows(GetCurrentThreadId(), FindProbeWindow, reinterpret_cast<LPARAM>(&panel));
+            Check(panel != nullptr, "Find panel");
             Check((GetWindowLongPtrW(panel, GWL_EXSTYLE) & WS_EX_NOACTIVATE) != 0, "Panel style");
             Check(SUCCEEDED(service->Deactivate()), "Deactivate service");
             Check(!IsWindow(panel), "Close panel");
