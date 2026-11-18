@@ -66,7 +66,7 @@ public sealed class SpeechService : IDisposable
     public static string[] RequiredCredentialKeys(string engine) => engine switch
     {
         "azure" => ["SubscriptionKey", "Region"],
-        "google" => ["KeyFilePath"],
+        "google" => ["KeyFilePath", "ApiKey"],
         "polly" => ["AccessKeyId", "SecretAccessKey", "Region"],
         "openai" => ["ApiKey"],
         "elevenlabs" => ["ApiKey"],
@@ -279,16 +279,15 @@ public sealed class SpeechService : IDisposable
     private AbstractTtsClient? GetOrCreateClient()
     {
         if (!_needsRecreate && _client != null) return _client;
-        _client?.Dispose();
+        var old = _client;
         try
         {
             // Rust TTS backend (parity with Dasher-Apple): same
             // AbstractTtsClient surface, Rust engine underneath. The
             // native DLLs ship with the NuGet package (win-x64).
-            var rustCreds = BuildRustCredentials();
+            var rustCreds = BuildRustCredentials(SelectedEngine, Credentials);
             _client = new RustTtsWrapper.RustTtsClient(SelectedEngine, rustCreds);
             _needsRecreate = false;
-            return _client;
         }
         catch (Exception ex)
         {
@@ -296,53 +295,71 @@ public sealed class SpeechService : IDisposable
             _client = null;
             return null;
         }
+        finally
+        {
+            // Dispose off the UI thread: the Rust dispose path stops and
+            // joins in-flight synthesis (up to a 10s wait per request), and
+            // a stalled network synth must not freeze the settings panel.
+            if (old != null)
+                _ = Task.Run(() => { try { old.Dispose(); } catch { } });
+        }
+        return _client;
     }
 
     /// <summary>
     /// Maps stored PascalCase credential keys to the Rust wrapper's canonical
     /// camelCase keys. Schema source of truth: TtsClient.GetEngineSetups()
-    /// (verified against RustTtsWrapper.Bindings 1.13.1). Engines not listed
-    /// per-engine below take a plain apiKey; sapi/edge/sherpaonnx need none.
+    /// (verified against RustTtsWrapper.Bindings 1.13.1; pinned by
+    /// RustCredentialMappingTests). Only non-empty values are sent: the Rust
+    /// engines read credentials with a present-key check, so an empty string
+    /// would shadow an engine default (e.g. watson's us-south region).
+    /// Engines not listed per-engine below take a plain apiKey;
+    /// sapi/edge/sherpaonnx need none.
     /// </summary>
-    private Dictionary<string, string> BuildRustCredentials()
+    internal static Dictionary<string, string> BuildRustCredentials(
+        string engine, IReadOnlyDictionary<string, string> credentials)
     {
+        string? Val(string key) => credentials.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v : null;
+
         var c = new Dictionary<string, string>();
-        switch (SelectedEngine)
+        switch (engine)
         {
             case "sapi":
             case "edge":
             case "sherpaonnx":
                 break; // no credentials
             case "azure":
-                c["subscriptionKey"] = Credentials.GetValueOrDefault("SubscriptionKey", "");
-                c["region"] = Credentials.GetValueOrDefault("Region", "");
+                if (Val("SubscriptionKey") is { } subKey) c["subscriptionKey"] = subKey;
+                if (Val("Region") is { } azRegion) c["region"] = azRegion;
                 break;
             case "google":
-                if (Credentials.TryGetValue("KeyFilePath", out var kfp))
-                    c["keyFilePath"] = kfp;
-                else if (Credentials.TryGetValue("ApiKey", out var gk))
-                    c["apiKey"] = gk;
+                // Rust accepts either keyFilePath or apiKey (RequiredAny).
+                if (Val("KeyFilePath") is { } kfp) c["keyFilePath"] = kfp;
+                else if (Val("ApiKey") is { } gk) c["apiKey"] = gk;
                 break;
             case "polly":
-                c["accessKeyId"] = Credentials.GetValueOrDefault("AccessKeyId", "");
-                c["secretAccessKey"] = Credentials.GetValueOrDefault("SecretAccessKey", "");
-                c["region"] = Credentials.GetValueOrDefault("Region", "us-east-1");
+                if (Val("AccessKeyId") is { } accessKey) c["accessKeyId"] = accessKey;
+                if (Val("SecretAccessKey") is { } secret) c["secretAccessKey"] = secret;
+                if (Val("Region") is { } pollyRegion) c["region"] = pollyRegion;
                 break;
             case "watson":
-                c["apiKey"] = Credentials.GetValueOrDefault("ApiKey", "");
-                c["region"] = Credentials.GetValueOrDefault("Region", "");
-                c["instanceId"] = Credentials.GetValueOrDefault("InstanceId", "");
+                if (Val("ApiKey") is { } watsonKey) c["apiKey"] = watsonKey;
+                if (Val("Region") is { } watsonRegion) c["region"] = watsonRegion;
+                if (Val("InstanceId") is { } inst) c["instanceId"] = inst;
                 break;
             case "playht":
-                c["apiKey"] = Credentials.GetValueOrDefault("ApiKey", "");
-                c["userId"] = Credentials.GetValueOrDefault("UserId", "");
+                if (Val("ApiKey") is { } playKey) c["apiKey"] = playKey;
+                if (Val("UserId") is { } userId) c["userId"] = userId;
                 break;
             case "witai":
-                c["token"] = Credentials.GetValueOrDefault("Token", "");
+                // "Token" is the current field; "ApiKey" is the pre-Rust
+                // spelling, kept so existing stored settings keep working.
+                var token = Val("Token") ?? Val("ApiKey");
+                if (token is { }) c["token"] = token;
                 break;
             default:
                 // All remaining cloud engines use a simple apiKey
-                c["apiKey"] = Credentials.GetValueOrDefault("ApiKey", "");
+                if (Val("ApiKey") is { } apiKey) c["apiKey"] = apiKey;
                 break;
         }
         return c;

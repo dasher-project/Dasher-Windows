@@ -2478,7 +2478,13 @@ public class SettingsPanel : Decorator
                 }
             }).Show(browseVoicesBtn);
         };
-        var voiceRow = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        // Grid (not a horizontal StackPanel): the combo must be width-capped
+        // by the panel, otherwise a long Azure voice name sizes it to full
+        // text width (StackPanel measures children with infinite width) and
+        // pushes the Browse… button out of view.
+        var voiceRow = new Grid { ColumnDefinitions = new("*,Auto") };
+        voiceCombo.SetValue(Grid.ColumnProperty, 0);
+        browseVoicesBtn.SetValue(Grid.ColumnProperty, 1);
         voiceRow.Children.Add(voiceCombo);
         voiceRow.Children.Add(browseVoicesBtn);
         voiceHeader.Children.Add(voiceRow);

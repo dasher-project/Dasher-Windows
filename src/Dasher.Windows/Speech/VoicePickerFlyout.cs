@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
@@ -13,19 +13,21 @@ namespace Dasher.Windows.Speech;
 
 /// <summary>
 /// Searchable, filterable voice picker (parity with Dasher-Apple's
-/// SpeechVoiceBrowser). Opens as a Flyout from the speech settings and
-/// lets the user search by name, filter by language/gender, and preview
-/// voices before selecting.
+/// SpeechVoiceBrowser). Opens as a Flyout from the speech settings:
+/// search by name/id, filter by language and gender, commit with a
+/// single click or Enter. Keyboard users browse with the arrow keys
+/// and commit with Enter/Space (selection alone does not commit).
 /// </summary>
 public sealed class VoicePickerFlyout
 {
     private readonly SpeechService _svc;
     private readonly Action _onSelectionChanged;
+    private Flyout? _flyout;
     private TextBox? _searchBox;
     private ComboBox? _languageFilter;
     private ComboBox? _genderFilter;
     private TextBlock? _resultCount;
-    private ItemsControl? _voiceList;
+    private ListBox? _voiceList;
     private TextBlock? _statusText;
     private string _search = "";
 
@@ -40,10 +42,9 @@ public sealed class VoicePickerFlyout
 
     public void Show(Control placementTarget)
     {
-        var flyout = new Flyout();
-        var panel = BuildPanel();
-        flyout.Content = panel;
-        flyout.ShowAt(placementTarget);
+        _flyout = new Flyout();
+        _flyout.Content = BuildPanel();
+        _flyout.ShowAt(placementTarget);
         _searchBox?.Focus();
     }
 
@@ -84,26 +85,30 @@ public sealed class VoicePickerFlyout
         _statusText = new TextBlock { FontSize = 12, TextWrapping = TextWrapping.Wrap, IsVisible = false };
         panel.Children.Add(_statusText);
 
-        _voiceList = new ItemsControl { MaxHeight = 280 };
+        // ListBox (not ItemsControl) for built-in virtualization — Edge and
+        // Azure expose 300-500 voices and the list is refiltered per keystroke.
+        _voiceList = new ListBox { MaxHeight = 280 };
         _voiceList.ItemTemplate = new Avalonia.Controls.Templates.FuncDataTemplate<TtsVoice>((voice, _) =>
         {
-            var isSelected = voice?.Id == _svc.SelectedVoiceId;
-            var border = new Border
-            {
-                Padding = new Thickness(8, 6),
-                CornerRadius = new CornerRadius(4),
-                Background = isSelected ? Brushes.LightBlue : null,
-                Cursor = new Avalonia.Input.Cursor(Avalonia.Input.StandardCursorType.Hand),
-            };
             var sp = new StackPanel { Spacing = 2 };
             sp.Children.Add(new TextBlock { Text = voice?.Name ?? "", FontSize = 12, FontWeight = FontWeight.Medium });
             var subtitle = BuildSubtitle(voice);
             if (!string.IsNullOrEmpty(subtitle))
                 sp.Children.Add(new TextBlock { Text = subtitle, FontSize = 10, Foreground = Brushes.Gray });
-            border.Child = sp;
-            border.PointerPressed += (_, _) => Select(voice, border);
-            return border;
+            // Single pointer press commits: pointer users (touch, eye gaze)
+            // pay a high cost per click, so browse-then-commit is wrong here.
+            sp.PointerPressed += (_, _) => Commit(voice);
+            return sp;
         });
+        // Keyboard: arrows browse (ListBox selection), Enter/Space commits.
+        _voiceList.KeyDown += (s, e) =>
+        {
+            if (e.Key is Key.Enter or Key.Space && _voiceList.SelectedItem is TtsVoice voice)
+            {
+                Commit(voice);
+                e.Handled = true;
+            }
+        };
         panel.Children.Add(_voiceList);
 
         PopulateFilters();
@@ -123,7 +128,6 @@ public sealed class VoicePickerFlyout
     {
         var voices = _svc.AvailableVoices;
 
-        // LanguageCodes is List<LanguageInfo> with Bcp47/Display properties
         var languages = new List<string> { AnyLanguage };
         languages.AddRange(voices
             .SelectMany(v => v.LanguageCodes ?? [])
@@ -177,9 +181,10 @@ public sealed class VoicePickerFlyout
             return true;
         }).ToList();
 
-        _voiceList!.Items.Clear();
-        foreach (var v in filtered)
-            _voiceList.Items.Add(v);
+        // Reassign ItemsSource wholesale — virtualization means only the
+        // visible containers are realized, so this stays cheap per keystroke.
+        _voiceList!.ItemsSource = filtered;
+        _voiceList.SelectedItem = filtered.FirstOrDefault(v => v.Id == _svc.SelectedVoiceId);
 
         _resultCount!.Text = filtered.Count == 1
             ? "1 result"
@@ -190,25 +195,11 @@ public sealed class VoicePickerFlyout
             _statusText.Text = _svc.ErrorMessage ?? "No voices found";
     }
 
-    private void Select(TtsVoice? voice, Border? clickedBorder)
+    private void Commit(TtsVoice? voice)
     {
         _svc.SelectedVoiceId = voice?.Id;
         _onSelectionChanged();
-        // Highlight the selection and close the flyout
-        if (clickedBorder?.Parent is Panel p)
-        {
-            // Walk up to find the FlyoutPresenter
-            var current = (Visual?)p;
-            while (current != null)
-            {
-                if (current is FlyoutPresenter fp)
-                {
-                    fp.IsVisible = false;
-                    return;
-                }
-                current = current.GetVisualParent();
-            }
-        }
+        _flyout?.Hide();
     }
 
     private static string BuildSubtitle(TtsVoice? voice)
