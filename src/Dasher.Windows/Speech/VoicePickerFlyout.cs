@@ -30,6 +30,7 @@ public sealed class VoicePickerFlyout
     private ListBox? _voiceList;
     private TextBlock? _statusText;
     private string _search = "";
+    private bool _initialSelectionApplied;
 
     private const string AnyLanguage = "Any";
     private const string AnyGender = "Any";
@@ -184,7 +185,14 @@ public sealed class VoicePickerFlyout
         // Reassign ItemsSource wholesale — virtualization means only the
         // visible containers are realized, so this stays cheap per keystroke.
         _voiceList!.ItemsSource = filtered;
-        _voiceList.SelectedItem = filtered.FirstOrDefault(v => v.Id == _svc.SelectedVoiceId);
+        // Mark the current voice only on the initial fill: re-assigning
+        // SelectedItem per keystroke scrolls the list back into view and
+        // makes it jump while the user types.
+        if (!_initialSelectionApplied)
+        {
+            _voiceList.SelectedItem = filtered.FirstOrDefault(v => v.Id == _svc.SelectedVoiceId);
+            _initialSelectionApplied = true;
+        }
 
         _resultCount!.Text = filtered.Count == 1
             ? "1 result"
@@ -192,12 +200,17 @@ public sealed class VoicePickerFlyout
 
         _statusText!.IsVisible = voices.Count == 0;
         if (voices.Count == 0)
-            _statusText.Text = _svc.ErrorMessage ?? "No voices found";
+        {
+            _statusText.Text = _svc.IsLoadingVoices
+                ? "Loading voices…"
+                : _svc.ErrorMessage ?? "No voices found";
+        }
     }
 
     private void Commit(TtsVoice? voice)
     {
         _svc.SelectedVoiceId = voice?.Id;
+        _svc.SaveSettings();
         _onSelectionChanged();
         _flyout?.Hide();
     }

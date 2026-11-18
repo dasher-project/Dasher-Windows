@@ -326,8 +326,15 @@ public sealed class SpeechService : IDisposable
         {
             case "sapi":
             case "edge":
-            case "sherpaonnx":
                 break; // no credentials
+            case "sherpaonnx":
+                // Optional model selection fields (schema: modelPath, modelId,
+                // numThreads, numSteps, provider, referenceAudio, referenceText).
+                // Historically we stored ModelPath/ModelId; keep passing them
+                // through so users with a custom model keep working.
+                if (Val("ModelPath") is { } modelPath) c["modelPath"] = modelPath;
+                if (Val("ModelId") is { } modelId) c["modelId"] = modelId;
+                break;
             case "azure":
                 if (Val("SubscriptionKey") is { } subKey) c["subscriptionKey"] = subKey;
                 if (Val("Region") is { } azRegion) c["region"] = azRegion;
@@ -346,6 +353,14 @@ public sealed class SpeechService : IDisposable
                 if (Val("ApiKey") is { } watsonKey) c["apiKey"] = watsonKey;
                 if (Val("Region") is { } watsonRegion) c["region"] = watsonRegion;
                 if (Val("InstanceId") is { } inst) c["instanceId"] = inst;
+                // Legacy migration: pre-Rust settings stored a ServiceUrl of
+                // the form https://api.<region>.text-to-speech.watson.cloud.ibm.com/instances/<id>
+                // which encodes both region and instanceId.
+                if (Val("ServiceUrl") is { } svcUrl && TryParseWatsonServiceUrl(svcUrl, out var r, out var i))
+                {
+                    c.TryAdd("region", r);
+                    c.TryAdd("instanceId", i);
+                }
                 break;
             case "playht":
                 if (Val("ApiKey") is { } playKey) c["apiKey"] = playKey;
@@ -363,6 +378,21 @@ public sealed class SpeechService : IDisposable
                 break;
         }
         return c;
+    }
+
+    /// <summary>Parses a Watson TTS service URL into (region, instanceId).
+    /// Returns false for anything that doesn't match the documented shape
+    /// rather than guessing — a wrong region silently breaks auth.</summary>
+    internal static bool TryParseWatsonServiceUrl(string url, out string region, out string instanceId)
+    {
+        (region, instanceId) = ("", "");
+        var match = System.Text.RegularExpressions.Regex.Match(url,
+            @"^https://api\.([a-z0-9-]+)\.text-to-speech\.watson\.cloud\.ibm\.com/instances/([0-9a-f-]+)$",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (!match.Success) return false;
+        region = match.Groups[1].Value.ToLowerInvariant();
+        instanceId = match.Groups[2].Value;
+        return true;
     }
 
     public void SaveSettings()

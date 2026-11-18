@@ -5,10 +5,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <!-- win-x64 so the Rust TTS natives flow to the test output for the
+         schema contract test (matches the app's supported target). -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Dasher.Windows\Dasher.Windows.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Rust engine schema contract test (RustEngineSchemaContractTests)
+         loads the native rust_tts_wrapper.dll, so the test project needs
+         the bindings package + its win-x64 natives. -->
+    <PackageReference Include="RustTtsWrapper.Bindings" Version="1.13.1" />
   </ItemGroup>
 
   <ItemGroup>

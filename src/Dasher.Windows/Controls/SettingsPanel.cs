@@ -2465,6 +2465,9 @@ public class SettingsPanel : Decorator
             Foreground = BrushLabel,
             BorderThickness = new Thickness(0),
             CornerRadius = new CornerRadius(4),
+            // Enabled by LoadVoicesIntoCombo — the picker browses the
+            // loaded list, so it can't open against an empty snapshot.
+            IsEnabled = false,
         };
         browseVoicesBtn.Click += (s2, e2) =>
         {
@@ -2588,6 +2591,9 @@ public class SettingsPanel : Decorator
             // Auto-populated combo population is not a user commit: the
             // SelectedIndex assignments below would fire the handler.
             _populatingVoices = true;
+            // The picker browses the loaded list — keep Browse… disabled
+            // while loading so it can't snapshot an empty list.
+            browseVoicesBtn.IsEnabled = false;
             try
             {
                 await svc.LoadVoicesAsync();
@@ -2612,6 +2618,7 @@ public class SettingsPanel : Decorator
             finally
             {
                 loadVoicesBtn.IsEnabled = true;
+                browseVoicesBtn.IsEnabled = true;
                 if (--_voiceLoadDepth == 0)
                     _populatingVoices = false;
             }
