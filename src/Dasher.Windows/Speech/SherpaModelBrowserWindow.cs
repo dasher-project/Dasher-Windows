@@ -110,63 +110,69 @@ public sealed class SherpaModelBrowserWindow : Window
 
         var row = new DockPanel { Margin = new Thickness(0, 0, 0, 6) };
 
-        // Right: action stack (Use / Download / progress / Remove)
-        var actions = new StackPanel { Spacing = 4 };
-        DockPanel.SetDock(actions, Dock.Right);
-        actions.SetValue(MarginProperty, new Thickness(12, 0, 0, 0));
-
+        // Right: ONE action button — Install / Use / Remove — so the label
+        // itself tells you the row's state (in use is carried by the row
+        // styling, not a disabled button). Downloading swaps in progress.
+        Control action;
         if (_downloads.TryGetValue(m.Id, out var cts))
         {
-            var prog = new ProgressBar { MinWidth = 110, MinHeight = 12, IsIndeterminate = true };
-            actions.Children.Add(prog);
+            var wrap = new StackPanel { Spacing = 2 };
+            wrap.Children.Add(new ProgressBar { MinWidth = 110, MinHeight = 12, IsIndeterminate = true });
             var cancel = new Button { Content = "Cancel", FontSize = 10, Padding = new Thickness(6, 2), HorizontalAlignment = HorizontalAlignment.Right };
-            cancel.Click += (s, e) => { cts.Cancel(); };
-            actions.Children.Add(cancel);
+            cancel.Click += (s, e) => cts.Cancel();
+            wrap.Children.Add(cancel);
+            action = wrap;
         }
-        else if (installed && selected)
+        else if (!installed && m.Availability == "blocked")
         {
-            actions.Children.Add(new Button { Content = "In use ✓", FontSize = 10, Padding = new Thickness(6, 2), IsEnabled = false });
-            actions.Children.Add(BuildRemoveButton(m));
-        }
-        else if (installed)
-        {
-            var use = new Button { Content = "Use", FontSize = 10, Padding = new Thickness(6, 2), IsEnabled = speakable };
-            use.Click += (s, e) => Select(m);
-            actions.Children.Add(use);
-            actions.Children.Add(BuildRemoveButton(m));
-        }
-        else if (m.Availability == "blocked")
-        {
-            actions.Children.Add(new TextBlock
+            action = new TextBlock
             {
                 Text = string.IsNullOrEmpty(m.Reason) ? "Unavailable" : $"Unavailable ({m.Reason})",
                 FontSize = 9,
                 Foreground = Brushes.Gray,
                 TextWrapping = TextWrapping.Wrap,
                 MaxWidth = 130,
-            });
+                VerticalAlignment = VerticalAlignment.Center,
+            };
         }
         else
         {
-            // Download & use in one action — AAC users pay a high cost per
-            // click, so browse-then-commit is wrong here (same rule as the
-            // voice picker).
-            var dl = new Button
+            Button btn;
+            if (!installed)
             {
-                Content = speakable ? $"Download {FormatSize(m.FileSizeMb)}" : "Pending audio fix",
-                FontSize = 10,
-                Padding = new Thickness(6, 2),
-                IsEnabled = speakable,
-            };
-            dl.Click += async (s, e) => await DownloadAndUse(m, dl);
-            actions.Children.Add(dl);
+                // Install does double duty: download + select (AAC users pay
+                // a high cost per click — browse-then-commit is wrong here).
+                btn = new Button
+                {
+                    Content = speakable ? $"Install {FormatSize(m.FileSizeMb)}" : "Pending audio fix",
+                    FontSize = 10,
+                    Padding = new Thickness(6, 2),
+                    IsEnabled = speakable,
+                };
+                btn.Click += async (s, e) => await InstallAndUse(m, btn);
+            }
+            else if (selected)
+            {
+                btn = new Button { Content = "Remove", FontSize = 10, Padding = new Thickness(6, 2) };
+                btn.Click += (s, e) => Remove(m);
+            }
+            else
+            {
+                btn = new Button { Content = "Use", FontSize = 10, Padding = new Thickness(6, 2), IsEnabled = speakable };
+                btn.Click += (s, e) => Select(m);
+            }
+            action = btn;
         }
+        DockPanel.SetDock(action, Dock.Right);
+        action.SetValue(MarginProperty, new Thickness(12, 0, 0, 0));
+        action.SetValue(VerticalAlignmentProperty, VerticalAlignment.Center);
+        row.Children.Add(action);
 
-        // Left: title + subtitle
-        var info = new StackPanel { Spacing = 2 };
+        // Left: title + subtitle (in-use carried here, bold + colour)
+        var info = new StackPanel { Spacing = 2, VerticalAlignment = VerticalAlignment.Center };
         var title = new TextBlock
         {
-            Text = DisplayName(m),
+            Text = selected ? $"{DisplayName(m)} · In use" : DisplayName(m),
             FontSize = 12,
             FontWeight = selected ? FontWeight.Bold : FontWeight.Medium,
         };
@@ -180,35 +186,7 @@ public sealed class SherpaModelBrowserWindow : Window
             TextWrapping = TextWrapping.Wrap,
         });
         row.Children.Add(info);
-        row.Children.Add(actions);
         return row;
-    }
-
-    private Button BuildRemoveButton(TtsLocalModel m)
-    {
-        var rm = new Button { Content = "Remove", FontSize = 10, Padding = new Thickness(6, 2), HorizontalAlignment = HorizontalAlignment.Right };
-        rm.Click += (s, e) =>
-        {
-            try
-            {
-                _models.Uninstall(m.Id);
-                if (m.Id == _models.CurrentModelId)
-                {
-                    // Removing the in-use model clears the selection.
-                    _svc.Credentials.Remove("ModelId");
-                    _svc.SelectedVoiceId = null;
-                    _svc.InvalidateClient();
-                    _svc.SaveSettings();
-                    _onSelectionChanged();
-                }
-                RefreshCatalogue();
-            }
-            catch (Exception ex)
-            {
-                SetError(ex.Message);
-            }
-        };
-        return rm;
     }
 
     private void Select(TtsLocalModel m)
@@ -225,7 +203,29 @@ public sealed class SherpaModelBrowserWindow : Window
         }
     }
 
-    private async Task DownloadAndUse(TtsLocalModel m, Button button)
+    private void Remove(TtsLocalModel m)
+    {
+        try
+        {
+            _models.Uninstall(m.Id);
+            if (m.Id == _models.CurrentModelId)
+            {
+                // Removing the in-use model clears the selection.
+                _svc.Credentials.Remove("ModelId");
+                _svc.SelectedVoiceId = null;
+                _svc.InvalidateClient();
+                _svc.SaveSettings();
+                _onSelectionChanged();
+            }
+            RefreshCatalogue();
+        }
+        catch (Exception ex)
+        {
+            SetError(ex.Message);
+        }
+    }
+
+    private async Task InstallAndUse(TtsLocalModel m, Button button)
     {
         button.IsEnabled = false;
         var cts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
