@@ -3,11 +3,17 @@ using Xunit;
 
 namespace Dasher.Windows.Tests;
 
+// NOTE: this class shares the rust_tts_wrapper.dll native library with
+// RustEngineSchemaContractTests; both carry [Collection("rust-tts-native")]
+// so xunit runs them sequentially instead of contending for the DLL
+// (observed as an intermittent SearchModels failure in full-suite runs).
+
 /// <summary>
 /// Windows synthesis capability per sherpa model family (verified by live
-/// probes at RustTtsWrapper 1.13.1 — see AACTools/rust-tts-wrapper#116):
-/// MMS and Kokoro speak; vits/piper and matcha fail tokenization; kitten
-/// fails engine creation. This gate keeps AAC users from downloading a
+/// probes at RustTtsWrapper.Bindings 1.13.2 — see AACTools/rust-tts-
+/// wrapper#116): MMS, Kokoro, and VITS/Piper speak (VITS unlocked by the
+/// 1.13.2 sherpa-g2p fix); Kitten still fails engine creation and Matcha
+/// still fails tokenization. This gate keeps AAC users from downloading a
 /// voice that cannot speak in this build.
 /// </summary>
 public class SherpaCapabilityTests
@@ -15,15 +21,14 @@ public class SherpaCapabilityTests
     [Theory]
     [InlineData("mms")]
     [InlineData("kokoro")]
-    [InlineData("MMS")]
-    [InlineData("Kokoro")]
+    [InlineData("vits")]
+    [InlineData("VITS")]
     public void Verified_families_are_speakable(string family)
     {
         Assert.True(SherpaSynthesisCapability.IsSpeakable(family));
     }
 
     [Theory]
-    [InlineData("vits")]
     [InlineData("kitten")]
     [InlineData("matcha")]
     public void Broken_families_are_gated(string family)

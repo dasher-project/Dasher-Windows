@@ -3,6 +3,9 @@ using Xunit;
 
 namespace Dasher.Windows.Tests;
 
+// Shares the rust_tts_wrapper.dll native library with SherpaCapabilityTests
+// — the collection keeps the two classes off xunit's parallel lanes.
+[Collection("rust-tts-native")]
 /// <summary>
 /// Pins the C# credential mapping to the ACTUAL Rust schema, loaded from
 /// the native rust_tts_wrapper.dll via TtsClient.GetEngineSetups(). Unlike

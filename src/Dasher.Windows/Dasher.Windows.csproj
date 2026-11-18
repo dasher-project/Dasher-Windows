@@ -29,7 +29,7 @@
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
     <PackageReference Include="DotNetTtsWrapper" Version="1.1.6" />
-    <PackageReference Include="RustTtsWrapper.Bindings" Version="1.13.1" />
+    <PackageReference Include="RustTtsWrapper.Bindings" Version="1.13.2" />
     <PackageReference Include="eyetuitive.NET" Version="1.7.1" />
     <PackageReference Include="Interop.UIAutomationClient" Version="10.19041.0" />
     <PackageReference Include="Lucide.Avalonia" Version="0.2.10" />

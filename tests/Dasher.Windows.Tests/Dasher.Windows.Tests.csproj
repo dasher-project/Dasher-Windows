@@ -18,7 +18,7 @@
     <!-- Rust engine schema contract test (RustEngineSchemaContractTests)
          loads the native rust_tts_wrapper.dll, so the test project needs
          the bindings package + its win-x64 natives. -->
-    <PackageReference Include="RustTtsWrapper.Bindings" Version="1.13.1" />
+    <PackageReference Include="RustTtsWrapper.Bindings" Version="1.13.2" />
   </ItemGroup>
 
   <ItemGroup>
