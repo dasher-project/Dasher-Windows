@@ -2442,7 +2442,46 @@ public class SettingsPanel : Decorator
             HorizontalAlignment = HorizontalAlignment.Stretch,
             FontSize = 12,
         };
-        voiceHeader.Children.Add(voiceCombo);
+        // Voice picker (Apple parity): searchable, filterable browser in
+        // addition to the quick ComboBox for the currently-loaded list
+        var browseVoicesBtn = new Button
+        {
+            Content = new DockPanel
+            {
+                Children =
+                {
+                    new TextBlock
+                    {
+                        Text = "Browse…",
+                        FontSize = 11,
+                        VerticalAlignment = VerticalAlignment.Center,
+                    },
+                },
+            },
+            Padding = new Thickness(8, 4),
+            FontSize = 11,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+            CornerRadius = new CornerRadius(4),
+        };
+        browseVoicesBtn.Click += (s2, e2) =>
+        {
+            new Speech.VoicePickerFlyout(svc, () =>
+            {
+                // refresh the quick combo selection to match
+                if (!string.IsNullOrEmpty(svc.SelectedVoiceId))
+                {
+                    var idx = svc.AvailableVoices.FindIndex(v => v.Id == svc.SelectedVoiceId);
+                    voiceCombo.SelectedIndex = idx >= 0 ? idx + 1 : 0;
+                }
+            }).Show(browseVoicesBtn);
+        };
+        var voiceRow = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        voiceRow.Children.Add(voiceCombo);
+        voiceRow.Children.Add(browseVoicesBtn);
+        voiceHeader.Children.Add(voiceRow);
 
         var rateLabel = new TextBlock
         {

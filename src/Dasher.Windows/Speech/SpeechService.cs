@@ -275,16 +275,58 @@ public sealed class SpeechService : IDisposable
         _client?.Dispose();
         try
         {
-            var creds = BuildCredentials();
-            _client = TtsFactory.CreateClient(SelectedEngine, creds);
+            // Rust TTS backend (parity with Dasher-Apple): same
+            // AbstractTtsClient surface, Rust engine underneath. The
+            // native DLLs ship with the NuGet package (win-x64).
+            var rustCreds = BuildRustCredentials();
+            _client = new RustTtsWrapper.RustTtsClient(SelectedEngine, rustCreds);
             _needsRecreate = false;
             return _client;
         }
-        catch
+        catch (Exception ex)
         {
+            ErrorMessage = ex.Message;
             _client = null;
             return null;
         }
+    }
+
+    /// <summary>Rust canonical credential keys (per rust-tts-wrapper docs:
+    // TtsClient.GetEngineSetups() is the authoritative schema). SAPI and
+    /// Sherpa need no credentials; cloud engines use their documented keys.</summary>
+    private Dictionary<string, string> BuildRustCredentials()
+    {
+        var c = new Dictionary<string, string>();
+        switch (SelectedEngine)
+        {
+            case "sapi":
+            case "sherpaonnx":
+                break; // no credentials
+            case "azure":
+                c["subscriptionKey"] = Credentials.GetValueOrDefault("SubscriptionKey", "");
+                c["region"] = Credentials.GetValueOrDefault("Region", "");
+                break;
+            case "google":
+                if (Credentials.TryGetValue("KeyFilePath", out var kfp))
+                    c["keyFilePath"] = kfp;
+                else if (Credentials.TryGetValue("ApiKey", out var gk))
+                    c["apiKey"] = gk;
+                break;
+            case "polly":
+                c["accessKeyId"] = Credentials.GetValueOrDefault("AccessKeyId", "");
+                c["secretAccessKey"] = Credentials.GetValueOrDefault("SecretAccessKey", "");
+                c["region"] = Credentials.GetValueOrDefault("Region", "us-east-1");
+                break;
+            case "watson":
+                c["apiKey"] = Credentials.GetValueOrDefault("ApiKey", "");
+                c["region"] = Credentials.GetValueOrDefault("Region", "");
+                break;
+            default:
+                // All remaining cloud engines use a simple apiKey
+                c["apiKey"] = Credentials.GetValueOrDefault("ApiKey", "");
+                break;
+        }
+        return c;
     }
 
     private ITtsCredentials? BuildCredentials()
