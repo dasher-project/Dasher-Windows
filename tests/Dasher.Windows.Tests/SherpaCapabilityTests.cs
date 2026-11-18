@@ -51,13 +51,37 @@ public class SherpaCapabilityTests
     {
         // Full catalogue is 1770 models at 1.13.2 — a 400-limit sample only
         // catches 1 of 4 kokoro models, which made this test flaky and the
-        // browser's list truncated.
-        var registry = RustTtsWrapper.TtsClient.SearchModels("", 2000);
+        // browser's list truncated. SearchLimit headroom matches the browser.
+        var registry = RustTtsWrapper.TtsClient.SearchModels("", 5000);
         Assert.True(registry.Count >= 1500, $"expected the full catalogue, got {registry.Count}");
         foreach (var family in SherpaSynthesisCapability.SpeakableTypes)
         {
             Assert.Contains(registry, m => string.Equals(m.ModelType, family, StringComparison.OrdinalIgnoreCase));
         }
+    }
+
+    [Fact]
+    public void Row_helpers_format_names_sizes_and_subtitles()
+    {
+        var m = new RustTtsWrapper.TtsLocalModel
+        {
+            Id = "piper-en_US-john-medium",
+            Name = "john",
+            ModelType = "vits",
+            Quality = "medium",
+            FileSizeMb = 64.1,
+            NumSpeakers = 1,
+            License = "MIT",
+        };
+        Assert.Equal("John", SherpaModelBrowserWindow.DisplayName(m));
+        Assert.Equal("MMS", SherpaModelBrowserWindow.DisplayName(new RustTtsWrapper.TtsLocalModel { Id = "x", Name = "", ModelType = "mms" }));
+        Assert.Equal("MMS", SherpaModelBrowserWindow.DisplayName(new RustTtsWrapper.TtsLocalModel { Id = "x", Name = "unknown", ModelType = "mms" }));
+        Assert.Equal("64.1 MB", SherpaModelBrowserWindow.FormatSize(64.1));
+        Assert.Equal("1.2 GB", SherpaModelBrowserWindow.FormatSize(1228.8));
+        Assert.Contains("Vits", SherpaModelBrowserWindow.BuildSubtitle(m));
+        Assert.Contains("medium", SherpaModelBrowserWindow.BuildSubtitle(m));
+        Assert.Contains("64.1 MB", SherpaModelBrowserWindow.BuildSubtitle(m));
+        Assert.Contains("MIT", SherpaModelBrowserWindow.BuildSubtitle(m));
     }
 
     [Fact]
@@ -67,9 +91,11 @@ public class SherpaCapabilityTests
         // (~1700 entries) carrying Installed flags; the browser's
         // "Installed only" toggle is built from InstalledModels(), and the
         // unfiltered list made the toggle a no-op (every id "installed").
+        // Machine-independent: on a clean machine the installed list is
+        // empty and raw is the full flagged catalogue (~1770) — the count
+        // separation below pins the regression everywhere.
         var service = new SherpaModelService(SpeechService.Instance);
         var installed = service.InstalledModels();
-        Assert.NotEmpty(installed); // probes installed several models locally
         Assert.All(installed, m => Assert.True(m.Installed));
 
         var raw = RustTtsWrapper.TtsClient.GetLocalModels(SherpaModelService.EngineId);

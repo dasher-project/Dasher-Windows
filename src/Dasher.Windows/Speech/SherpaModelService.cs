@@ -22,14 +22,12 @@ public sealed class SherpaModelService
     public SherpaModelService(SpeechService speech) => _speech = speech;
 
     public string? CurrentModelId =>
-        _speech.Credentials.TryGetValue("ModelId", out var v) && !string.IsNullOrWhiteSpace(v) ? v : null;
-
-    /// <summary>Registry entries for a query (the wrapper's embedded
+        _speech.Credentials.TryGetValue("ModelId", out var v) && !string.IsNullOrWhiteSpace(v) ? v : null;    /// <summary>Registry entries for a query (the wrapper's embedded
     /// catalogue — 1770 models at Bindings 1.13.2). Empty query lists the
-    /// whole catalogue; the default limit of 2000 covers it (a smaller cap
-    /// silently hides most of the voices, e.g. only 1 of 4 kokoro models
-    /// appeared at limit 400).</summary>
-    public List<RustTtsWrapper.TtsLocalModel> Search(string query, int limit = 2000) =>
+    /// whole catalogue; the default limit of 5000 keeps generous headroom
+    /// over the catalogue size (a tight cap is a silent truncation cliff —
+    /// at limit 400 only 1 of 4 kokoro models appeared).</summary>
+    public List<RustTtsWrapper.TtsLocalModel> Search(string query, int limit = 5000) =>
         RustTtsWrapper.TtsClient.SearchModels(query, limit);
 
     /// <summary>Locally installed models (under

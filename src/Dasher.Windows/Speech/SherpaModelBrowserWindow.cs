@@ -35,9 +35,16 @@ public sealed class SherpaModelBrowserWindow : Window
     private List<TtsLocalModel> _catalogue = [];
     private HashSet<string> _installedIds = [];
     private readonly Dictionary<string, CancellationTokenSource> _downloads = [];
+    private readonly HashSet<string> _userCancelled = [];
+    private bool _rebuildingFilters;
     private string _search = "";
 
     private const string AllFamilies = "All";
+
+    // Headroom over the full catalogue (1770 models at Bindings 1.13.2):
+    // a capped search is a silent truncation cliff, so keep generous room
+    // for registry growth.
+    private const int SearchLimit = 5000;
 
     public SherpaModelBrowserWindow(SpeechService svc, Action onSelectionChanged)
     {
@@ -51,6 +58,19 @@ public sealed class SherpaModelBrowserWindow : Window
         CanResize = true;
         WindowStartupLocation = WindowStartupLocation.CenterOwner;
         Content = BuildUi();
+        // Closing mid-download must not orphan a multi-hundred-MB download
+        // whose only Cancel affordance just vanished — cancel everything
+        // in flight (the catch path cleans up state and skips selection).
+        // Flagged as user-cancelled so the closed window's status line
+        // doesn't claim a timeout nobody saw.
+        Closed += (_, _) =>
+        {
+            foreach (var kv in _downloads)
+            {
+                _userCancelled.Add(kv.Key);
+                try { kv.Value.Cancel(); } catch { }
+            }
+        };
         RefreshCatalogue();
     }
 
@@ -79,7 +99,7 @@ public sealed class SherpaModelBrowserWindow : Window
 
         var filters = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12 };
         _familyFilter = new ComboBox { MinWidth = 120, FontSize = 11 };
-        _familyFilter.SelectionChanged += (s, e) => RefreshList();
+        _familyFilter.SelectionChanged += (s, e) => { if (!_rebuildingFilters) RefreshList(); };
         var famWrap = new StackPanel { Spacing = 2 };
         famWrap.Children.Add(new TextBlock { Text = "Family", FontSize = 9, Foreground = Brushes.Gray });
         famWrap.Children.Add(_familyFilter);
@@ -119,7 +139,7 @@ public sealed class SherpaModelBrowserWindow : Window
             var wrap = new StackPanel { Spacing = 2 };
             wrap.Children.Add(new ProgressBar { MinWidth = 110, MinHeight = 12, IsIndeterminate = true });
             var cancel = new Button { Content = "Cancel", FontSize = 10, Padding = new Thickness(6, 2), HorizontalAlignment = HorizontalAlignment.Right };
-            cancel.Click += (s, e) => cts.Cancel();
+            cancel.Click += (s, e) => { _userCancelled.Add(m.Id); cts.Cancel(); };
             wrap.Children.Add(cancel);
             action = wrap;
         }
@@ -156,10 +176,19 @@ public sealed class SherpaModelBrowserWindow : Window
                 btn = new Button { Content = "Remove", FontSize = 10, Padding = new Thickness(6, 2) };
                 btn.Click += (s, e) => Remove(m);
             }
+            else if (speakable)
+            {
+                btn = new Button { Content = "Use", FontSize = 10, Padding = new Thickness(6, 2) };
+                btn.Click += (s, e) => Select(m);
+            }
             else
             {
-                btn = new Button { Content = "Use", FontSize = 10, Padding = new Thickness(6, 2), IsEnabled = speakable };
-                btn.Click += (s, e) => Select(m);
+                // Installed but gated (family pending an upstream audio fix):
+                // removal is the only useful action — disk cleanup, not
+                // synthesis. A disabled "Use" here would be a dead row that
+                // could never be removed from the UI.
+                btn = new Button { Content = "Remove", FontSize = 10, Padding = new Thickness(6, 2) };
+                btn.Click += (s, e) => Remove(m);
             }
             action = btn;
         }
@@ -230,6 +259,7 @@ public sealed class SherpaModelBrowserWindow : Window
         button.IsEnabled = false;
         var cts = new CancellationTokenSource(TimeSpan.FromMinutes(10));
         _downloads[m.Id] = cts;
+        _userCancelled.Remove(m.Id);
         RefreshList(); // show progress row
         try
         {
@@ -246,7 +276,12 @@ public sealed class SherpaModelBrowserWindow : Window
         }
         catch (OperationCanceledException)
         {
-            SetStatus(null);
+            // The 10-minute timeout cancels the same token as the user's
+            // Cancel button — only the flag separates them.
+            if (_userCancelled.Contains(m.Id))
+                SetStatus(null);
+            else
+                SetError($"Download of {DisplayName(m)} timed out.");
             RefreshList();
         }
         catch (Exception ex)
@@ -257,6 +292,7 @@ public sealed class SherpaModelBrowserWindow : Window
         finally
         {
             _downloads.Remove(m.Id, out _);
+            _userCancelled.Remove(m.Id);
             cts.Dispose();
         }
     }
@@ -265,14 +301,28 @@ public sealed class SherpaModelBrowserWindow : Window
     {
         try
         {
-            _catalogue = _models.Search("", 2000);
+            _catalogue = _models.Search("", SearchLimit);
             _installedIds = _models.InstalledModels().Select(m => m.Id).ToHashSet();
 
+            // Preserve the user's family filter across rebuilds (Select /
+            // Remove / install-completion all land here); suppress the
+            // intermediate SelectionChanged churn so the list is filtered
+            // exactly once.
+            var previousFamily = _familyFilter?.SelectedItem as string;
             var families = new List<string> { AllFamilies };
             families.AddRange(_catalogue.Select(m => m.ModelType).Where(t => !string.IsNullOrEmpty(t)).Distinct().OrderBy(t => t));
-            _familyFilter!.Items.Clear();
-            foreach (var f in families) _familyFilter.Items.Add(f);
-            _familyFilter.SelectedIndex = 0;
+            _rebuildingFilters = true;
+            try
+            {
+                _familyFilter!.Items.Clear();
+                foreach (var f in families) _familyFilter.Items.Add(f);
+                var restore = families.FirstOrDefault(f => f == previousFamily) ?? AllFamilies;
+                _familyFilter.SelectedItem = restore;
+            }
+            finally
+            {
+                _rebuildingFilters = false;
+            }
 
             var dir = RustTtsWrapper.TtsClient.GetModelsDir(SherpaModelService.EngineId);
             _footer!.Text = $"Models are stored in {dir} · Only families verified to speak on Windows can be downloaded (others pending an upstream audio fix).";

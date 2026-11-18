@@ -19,6 +19,13 @@ public sealed class SpeechService : IDisposable
     public string SelectedEngine { get; set; } = "sapi";
     public Dictionary<string, string> Credentials { get; set; } = new();
     public string? SelectedVoiceId { get; set; }
+    /// <summary>Sherpa's voice source is the selected model: true when a
+    /// usable ModelId credential is stored. Shared by the no-model error
+    /// message, the settings Retry/Browse visibility, and the model
+    /// service — keep one definition.</summary>
+    public bool HasSherpaModel =>
+        SelectedEngine == "sherpaonnx" &&
+        Credentials.TryGetValue("ModelId", out var mid) && !string.IsNullOrWhiteSpace(mid);
     public List<TtsVoice> AvailableVoices { get; private set; } = [];
     public bool IsSpeaking { get; private set; }
     public bool IsLoadingVoices { get; private set; }
@@ -95,6 +102,13 @@ public sealed class SpeechService : IDisposable
     private bool _needsRecreate = true;
     private SpeechSynthesizer? _sapiSynth;
     private System.Media.SoundPlayer? _rustPlayer;
+    // Incremented on every Stop(): a stop that lands between the playback
+    // thread constructing the player and calling PlaySync must not be lost
+    // to the already-dead previous player. SoundPlayer members aren't
+    // documented as thread-safe; the cross-thread Stop-PlaySync pair works
+    // via winmm's process-global PlaySound(null) cancellation — accepted,
+    // but don't extend this pattern.
+    private long _playbackGeneration;
 
     private SpeechService()
     {
@@ -142,10 +156,9 @@ public sealed class SpeechService : IDisposable
                 AvailableVoices = await client.GetVoicesAsync();
                 // Sherpa lists 0 voices SILENTLY when no model is selected
                 // (the model is the voice source). Make that actionable.
-                if (SelectedEngine == "sherpaonnx" && AvailableVoices.Count == 0 &&
-                    !(Credentials.TryGetValue("ModelId", out var mid) && !string.IsNullOrWhiteSpace(mid)))
+                if (SelectedEngine == "sherpaonnx" && AvailableVoices.Count == 0 && !HasSherpaModel)
                 {
-                    ErrorMessage = "No voice model selected — use Manage models… to download one.";
+                    ErrorMessage = "No voice model selected — use Browse… to download one.";
                 }
             }
             if (SelectedVoiceId != null && !AvailableVoices.Any(v => v.Id == SelectedVoiceId))
@@ -204,11 +217,17 @@ public sealed class SpeechService : IDisposable
                     var wav = BuildWavHeader(pcm,
                         synth.SampleRate > 0 ? synth.SampleRate : 22050,
                         synth.Channels > 0 ? synth.Channels : 1);
+                    var generation = System.Threading.Interlocked.Read(ref _playbackGeneration);
                     await Task.Run(() =>
                     {
                         _rustPlayer?.Stop();
                         _rustPlayer?.Dispose();
                         _rustPlayer = new System.Media.SoundPlayer(new MemoryStream(wav));
+                        // Re-check after construction: a Stop() that arrived
+                        // while we were building the player must win — the
+                        // user asked for silence, not a new utterance.
+                        if (System.Threading.Interlocked.Read(ref _playbackGeneration) != generation)
+                            return;
                         _rustPlayer.PlaySync();
                     });
                 }
@@ -304,6 +323,7 @@ public sealed class SpeechService : IDisposable
             _rustPlayer?.Stop();
         }
         catch { }
+        System.Threading.Interlocked.Increment(ref _playbackGeneration);
         IsSpeaking = false;
     }
 
@@ -507,5 +527,8 @@ public sealed class SpeechService : IDisposable
         _sapiSynth = null;
         _client?.Dispose();
         _client = null;
+        _rustPlayer?.Stop();
+        _rustPlayer?.Dispose();
+        _rustPlayer = null;
     }
 }

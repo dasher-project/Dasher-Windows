@@ -2654,10 +2654,14 @@ public class SettingsPanel : Decorator
             }
             finally
             {
-                // Retry only exists when the last load produced nothing —
-                // loads are automatic, failures are the one manual case.
-                retryVoicesBtn.IsVisible = svc.AvailableVoices.Count == 0;
-                browseVoicesBtn.IsEnabled = true;
+                // Retry only helps when a re-fetch could change the outcome —
+                // sherpa with no model needs Browse (the error message says
+                // so), not another fetch of the same nothing.
+                retryVoicesBtn.IsVisible = svc.AvailableVoices.Count == 0 && !svc.HasSherpaModel;
+                // Browse opens the loaded list for non-sherpa engines — keep
+                // it disabled after a failed load rather than opening a
+                // picker against an empty snapshot.
+                browseVoicesBtn.IsEnabled = svc.SelectedEngine == "sherpaonnx" || svc.AvailableVoices.Count > 0;
                 if (--_voiceLoadDepth == 0)
                     _populatingVoices = false;
             }
