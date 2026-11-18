@@ -29,7 +29,7 @@ public sealed class SpeechService : IDisposable
 
     public static readonly string[] EngineNames =
     [
-        "sapi", "azure", "google", "polly", "openai", "elevenlabs",
+        "sapi", "edge", "azure", "google", "polly", "openai", "elevenlabs",
         "watson", "playht", "witai", "gemini", "cartesia", "deepgram",
         "hume", "xai", "fishaudio", "mistral", "murf", "unrealspeech",
         "resemble", "upliftai", "modelslab", "sherpaonnx"
@@ -38,6 +38,7 @@ public sealed class SpeechService : IDisposable
     public static string EngineDisplayName(string engine) => engine switch
     {
         "sapi" => "SAPI (Windows)",
+        "edge" => "Microsoft Edge (Read Aloud)",
         "azure" => "Azure Cognitive Services",
         "google" => "Google Cloud TTS",
         "polly" => "Amazon Polly",
@@ -69,9 +70,9 @@ public sealed class SpeechService : IDisposable
         "polly" => ["AccessKeyId", "SecretAccessKey", "Region"],
         "openai" => ["ApiKey"],
         "elevenlabs" => ["ApiKey"],
-        "watson" => ["ApiKey", "ServiceUrl"],
+        "watson" => ["ApiKey", "Region", "InstanceId"],
         "playht" => ["ApiKey", "UserId"],
-        "witai" => ["ApiKey"],
+        "witai" => ["Token"],
         "gemini" => ["ApiKey"],
         "cartesia" => ["ApiKey"],
         "deepgram" => ["ApiKey"],
@@ -116,6 +117,12 @@ public sealed class SpeechService : IDisposable
                     {
                         Id = v.VoiceInfo.Name,
                         Name = v.VoiceInfo.Name,
+                        Gender = v.VoiceInfo.Gender switch
+                        {
+                            System.Speech.Synthesis.VoiceGender.Male => DotNetTtsWrapper.Models.VoiceGender.Male,
+                            System.Speech.Synthesis.VoiceGender.Female => DotNetTtsWrapper.Models.VoiceGender.Female,
+                            _ => DotNetTtsWrapper.Models.VoiceGender.Unknown
+                        },
                         LanguageCodes =
                         [
                             new() { Bcp47 = v.VoiceInfo.Culture?.Name ?? "", Display = v.VoiceInfo.Culture?.DisplayName ?? "" }
@@ -291,15 +298,19 @@ public sealed class SpeechService : IDisposable
         }
     }
 
-    /// <summary>Rust canonical credential keys (per rust-tts-wrapper docs:
-    // TtsClient.GetEngineSetups() is the authoritative schema). SAPI and
-    /// Sherpa need no credentials; cloud engines use their documented keys.</summary>
+    /// <summary>
+    /// Maps stored PascalCase credential keys to the Rust wrapper's canonical
+    /// camelCase keys. Schema source of truth: TtsClient.GetEngineSetups()
+    /// (verified against RustTtsWrapper.Bindings 1.13.1). Engines not listed
+    /// per-engine below take a plain apiKey; sapi/edge/sherpaonnx need none.
+    /// </summary>
     private Dictionary<string, string> BuildRustCredentials()
     {
         var c = new Dictionary<string, string>();
         switch (SelectedEngine)
         {
             case "sapi":
+            case "edge":
             case "sherpaonnx":
                 break; // no credentials
             case "azure":
@@ -320,6 +331,14 @@ public sealed class SpeechService : IDisposable
             case "watson":
                 c["apiKey"] = Credentials.GetValueOrDefault("ApiKey", "");
                 c["region"] = Credentials.GetValueOrDefault("Region", "");
+                c["instanceId"] = Credentials.GetValueOrDefault("InstanceId", "");
+                break;
+            case "playht":
+                c["apiKey"] = Credentials.GetValueOrDefault("ApiKey", "");
+                c["userId"] = Credentials.GetValueOrDefault("UserId", "");
+                break;
+            case "witai":
+                c["token"] = Credentials.GetValueOrDefault("Token", "");
                 break;
             default:
                 // All remaining cloud engines use a simple apiKey
@@ -327,105 +346,6 @@ public sealed class SpeechService : IDisposable
                 break;
         }
         return c;
-    }
-
-    private ITtsCredentials? BuildCredentials()
-    {
-        return SelectedEngine switch
-        {
-            "sapi" => null,
-            "azure" => new AzureCredentials
-            {
-                SubscriptionKey = Credentials.GetValueOrDefault("SubscriptionKey", ""),
-                Region = Credentials.GetValueOrDefault("Region", "")
-            },
-            "google" => new GoogleCredentials
-            {
-                KeyFilePath = Credentials.GetValueOrDefault("KeyFilePath", "")
-            },
-            "polly" => new PollyCredentials
-            {
-                AccessKeyId = Credentials.GetValueOrDefault("AccessKeyId", ""),
-                SecretAccessKey = Credentials.GetValueOrDefault("SecretAccessKey", ""),
-                Region = Credentials.GetValueOrDefault("Region", "us-east-1")
-            },
-            "openai" => new OpenAICredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "elevenlabs" => new ElevenLabsCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "watson" => new WatsonCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", ""),
-                ServiceUrl = Credentials.GetValueOrDefault("ServiceUrl", "")
-            },
-            "playht" => new PlayHtCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", ""),
-                UserId = Credentials.GetValueOrDefault("UserId", "")
-            },
-            "witai" => new WitAiCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "gemini" => new GeminiCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "cartesia" => new CartesiaCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "deepgram" => new DeepgramCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "hume" => new HumeCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "xai" => new XaiCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "fishaudio" => new FishAudioCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "mistral" => new MistralCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "murf" => new MurfCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "unrealspeech" => new UnrealSpeechCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "resemble" => new ResembleCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "upliftai" => new UpliftAiCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "modelslab" => new ModelsLabCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "sherpaonnx" => new SherpaOnnxCredentials
-            {
-                ModelPath = Credentials.GetValueOrDefault("ModelPath", ""),
-                ModelId = Credentials.GetValueOrDefault("ModelId", "")
-            },
-            _ => null
-        };
     }
 
     public void SaveSettings()

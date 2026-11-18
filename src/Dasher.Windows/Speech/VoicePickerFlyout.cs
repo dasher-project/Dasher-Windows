@@ -60,7 +60,7 @@ public sealed class VoicePickerFlyout
 
         _searchBox = new TextBox
         {
-            Watermark = "Search voices",
+            PlaceholderText = "Search voices",
             FontSize = 12,
         };
         _searchBox.TextChanged += (s, e) => { _search = _searchBox.Text ?? ""; RefreshList(); };
