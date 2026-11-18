@@ -265,7 +265,7 @@ public sealed class SherpaModelBrowserWindow : Window
     {
         try
         {
-            _catalogue = _models.Search("", 400);
+            _catalogue = _models.Search("", 2000);
             _installedIds = _models.InstalledModels().Select(m => m.Id).ToHashSet();
 
             var families = new List<string> { AllFamilies };

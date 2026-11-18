@@ -3,10 +3,9 @@ using Xunit;
 
 namespace Dasher.Windows.Tests;
 
-// NOTE: this class shares the rust_tts_wrapper.dll native library with
-// RustEngineSchemaContractTests; both carry [Collection("rust-tts-native")]
-// so xunit runs them sequentially instead of contending for the DLL
-// (observed as an intermittent SearchModels failure in full-suite runs).
+// NOTE: shares the rust_tts_wrapper.dll native library with
+// RustEngineSchemaContractTests — the collection keeps the classes off
+// xunit's parallel lanes.
 
 /// <summary>
 /// Windows synthesis capability per sherpa model family (verified by live
@@ -16,6 +15,7 @@ namespace Dasher.Windows.Tests;
 /// still fails tokenization. This gate keeps AAC users from downloading a
 /// voice that cannot speak in this build.
 /// </summary>
+[Collection("rust-tts-native")]
 public class SherpaCapabilityTests
 {
     [Theory]
@@ -49,11 +49,31 @@ public class SherpaCapabilityTests
     [Fact]
     public void Speakable_families_exist_in_the_live_registry()
     {
-        var registry = RustTtsWrapper.TtsClient.SearchModels("", 400);
-        Assert.True(registry.Count >= 300, $"expected the full catalogue, got {registry.Count}");
+        // Full catalogue is 1770 models at 1.13.2 — a 400-limit sample only
+        // catches 1 of 4 kokoro models, which made this test flaky and the
+        // browser's list truncated.
+        var registry = RustTtsWrapper.TtsClient.SearchModels("", 2000);
+        Assert.True(registry.Count >= 1500, $"expected the full catalogue, got {registry.Count}");
         foreach (var family in SherpaSynthesisCapability.SpeakableTypes)
         {
             Assert.Contains(registry, m => string.Equals(m.ModelType, family, StringComparison.OrdinalIgnoreCase));
         }
+    }
+
+    [Fact]
+    public void InstalledModels_returns_only_actually_installed_models()
+    {
+        // Regression: the bindings' GetLocalModels returns the FULL catalogue
+        // (~1700 entries) carrying Installed flags; the browser's
+        // "Installed only" toggle is built from InstalledModels(), and the
+        // unfiltered list made the toggle a no-op (every id "installed").
+        var service = new SherpaModelService(SpeechService.Instance);
+        var installed = service.InstalledModels();
+        Assert.NotEmpty(installed); // probes installed several models locally
+        Assert.All(installed, m => Assert.True(m.Installed));
+
+        var raw = RustTtsWrapper.TtsClient.GetLocalModels(SherpaModelService.EngineId);
+        Assert.True(raw.Count > installed.Count,
+            $"raw list ({raw.Count}) should exceed the installed subset ({installed.Count})");
     }
 }

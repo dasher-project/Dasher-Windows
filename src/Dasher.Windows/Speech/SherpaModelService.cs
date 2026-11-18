@@ -25,14 +25,23 @@ public sealed class SherpaModelService
         _speech.Credentials.TryGetValue("ModelId", out var v) && !string.IsNullOrWhiteSpace(v) ? v : null;
 
     /// <summary>Registry entries for a query (the wrapper's embedded
-    /// catalogue; ~400 models at 1.13.1). Empty query lists the catalogue.</summary>
-    public List<RustTtsWrapper.TtsLocalModel> Search(string query, int limit = 200) =>
+    /// catalogue — 1770 models at Bindings 1.13.2). Empty query lists the
+    /// whole catalogue; the default limit of 2000 covers it (a smaller cap
+    /// silently hides most of the voices, e.g. only 1 of 4 kokoro models
+    /// appeared at limit 400).</summary>
+    public List<RustTtsWrapper.TtsLocalModel> Search(string query, int limit = 2000) =>
         RustTtsWrapper.TtsClient.SearchModels(query, limit);
 
     /// <summary>Locally installed models (under
-    /// %USERPROFILE%\.rust-tts-wrapper\sherpaonnx by default).</summary>
+    /// %USERPROFILE%\.rust-tts-wrapper\sherpaonnx by default). NOTE: the
+    /// bindings' GetLocalModels returns the full catalogue (~1700 entries)
+    /// carrying Installed flags, so filter to Installed=true — this is the
+    /// set the browser's "Installed only" toggle is built from, and using
+    /// the raw list made the filter a no-op.</summary>
     public List<RustTtsWrapper.TtsLocalModel> InstalledModels() =>
-        RustTtsWrapper.TtsClient.GetLocalModels(EngineId);
+        RustTtsWrapper.TtsClient.GetLocalModels(EngineId)
+            .Where(m => m.Installed)
+            .ToList();
 
     public Task InstallAsync(string modelId, IProgress<(double Fraction, string Status)> progress, CancellationToken ct) =>
         RustTtsWrapper.TtsClient.InstallModelAsync(EngineId, modelId, progress, ct);
