@@ -139,6 +139,13 @@ public sealed class SpeechService : IDisposable
                     return;
                 }
                 AvailableVoices = await client.GetVoicesAsync();
+                // Sherpa lists 0 voices SILENTLY when no model is selected
+                // (the model is the voice source). Make that actionable.
+                if (SelectedEngine == "sherpaonnx" && AvailableVoices.Count == 0 &&
+                    !(Credentials.TryGetValue("ModelId", out var mid) && !string.IsNullOrWhiteSpace(mid)))
+                {
+                    ErrorMessage = "No voice model selected — use Manage models… to download one.";
+                }
             }
             if (SelectedVoiceId != null && !AvailableVoices.Any(v => v.Id == SelectedVoiceId))
                 SelectedVoiceId = AvailableVoices.FirstOrDefault()?.Id;

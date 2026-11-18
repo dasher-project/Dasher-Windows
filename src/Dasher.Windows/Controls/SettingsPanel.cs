@@ -2492,6 +2492,38 @@ public class SettingsPanel : Decorator
         voiceRow.Children.Add(browseVoicesBtn);
         voiceHeader.Children.Add(voiceRow);
 
+        // Sherpa model management (parity with Apple's SherpaModelBrowser):
+        // the engine's voices come from a downloadable model, not the cloud.
+        var manageModelsBtn = new Button
+        {
+            Content = new TextBlock { Text = "Manage models…", FontSize = 11 },
+            Padding = new Thickness(8, 4),
+            FontSize = 11,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+            CornerRadius = new CornerRadius(4),
+            Margin = new Thickness(0, 6, 0, 0),
+        };
+        manageModelsBtn.Click += (s2, e2) =>
+        {
+            var owner = TopLevel.GetTopLevel(this) as Window;
+            var browser = new Speech.SherpaModelBrowserWindow(svc, () =>
+            {
+                // A model was selected/removed — reload the voice list.
+                _ = LoadVoicesIntoCombo();
+            });
+            if (owner != null) browser.Show(owner); else browser.Show();
+        };
+        var manageModelsRow = new StackPanel();
+        manageModelsRow.Children.Add(manageModelsBtn);
+        // Sherpa-only affordance: other engines list voices directly.
+        manageModelsRow.IsVisible = svc.SelectedEngine == "sherpaonnx";
+        engineCombo.SelectionChanged += (s2, e2) =>
+            manageModelsRow.IsVisible = svc.SelectedEngine == "sherpaonnx";
+        voiceHeader.Children.Add(manageModelsRow);
+
         var rateLabel = new TextBlock
         {
             Text = Loc.Tr("rate"),
