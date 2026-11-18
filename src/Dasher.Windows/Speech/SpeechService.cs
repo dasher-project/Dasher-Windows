@@ -94,6 +94,7 @@ public sealed class SpeechService : IDisposable
     private AbstractTtsClient? _client;
     private bool _needsRecreate = true;
     private SpeechSynthesizer? _sapiSynth;
+    private System.Media.SoundPlayer? _rustPlayer;
 
     private SpeechService()
     {
@@ -186,6 +187,33 @@ public sealed class SpeechService : IDisposable
             };
             if (interrupt)
                 client.Stop();
+            if (SelectedEngine == "sherpaonnx")
+            {
+                // The wrapper's sherpa playback on Windows writes a wav to
+                // %TEMP% and spawns powershell.exe SoundPlayer to play it —
+                // a visible console flash per utterance in a GUI app, a wav
+                // of the spoken text left on disk, and TtsOptions playback
+                // ignored. Synthesize to bytes instead (headerless 16-bit
+                // PCM, SampleRate/Channels on the result) and play in-
+                // process. Verified against Bindings 1.13.2: no subprocess,
+                // no temp file, options applied at synthesis.
+                var synth = await client.SynthToBytesAsync(text, options);
+                var pcm = synth.AudioData;
+                if (pcm is { Length: > 0 })
+                {
+                    var wav = BuildWavHeader(pcm,
+                        synth.SampleRate > 0 ? synth.SampleRate : 22050,
+                        synth.Channels > 0 ? synth.Channels : 1);
+                    await Task.Run(() =>
+                    {
+                        _rustPlayer?.Stop();
+                        _rustPlayer?.Dispose();
+                        _rustPlayer = new System.Media.SoundPlayer(new MemoryStream(wav));
+                        _rustPlayer.PlaySync();
+                    });
+                }
+                return;
+            }
             await client.SpeakAsync(text, options);
         }
         catch (Exception ex)
@@ -273,6 +301,7 @@ public sealed class SpeechService : IDisposable
         {
             _sapiSynth?.SpeakAsyncCancelAll();
             _client?.Stop();
+            _rustPlayer?.Stop();
         }
         catch { }
         IsSpeaking = false;
@@ -400,6 +429,33 @@ public sealed class SpeechService : IDisposable
         region = match.Groups[1].Value.ToLowerInvariant();
         instanceId = match.Groups[2].Value;
         return true;
+    }
+
+    /// <summary>Wraps headerless 16-bit PCM (what the Rust bindings'
+    /// SynthToBytesAsync returns for sherpa) in a canonical 44-byte WAV
+    /// header so it can be played by SoundPlayer in-process.</summary>
+    internal static byte[] BuildWavHeader(byte[] pcm, int sampleRate, int channels)
+    {
+        const short bitsPerSample = 16;
+        var blockAlign = (short)(channels * bitsPerSample / 8);
+        var byteRate = sampleRate * blockAlign;
+        using var ms = new MemoryStream(44 + pcm.Length);
+        using var w = new BinaryWriter(ms);
+        w.Write("RIFF"u8);
+        w.Write(36 + pcm.Length);
+        w.Write("WAVE"u8);
+        w.Write("fmt "u8);
+        w.Write(16);                       // fmt chunk size
+        w.Write((short)1);                 // PCM
+        w.Write((short)channels);
+        w.Write(sampleRate);
+        w.Write(byteRate);
+        w.Write(blockAlign);
+        w.Write(bitsPerSample);
+        w.Write("data"u8);
+        w.Write(pcm.Length);
+        w.Write(pcm);
+        return ms.ToArray();
     }
 
     public void SaveSettings()
