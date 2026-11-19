@@ -33,6 +33,7 @@ public sealed class PronunciationEditorWindow : Window
 
     private string _fileText = "";
     private string? _loadError;
+    private string? _lastSaveError;
 
     public PronunciationEditorWindow(SpeechService svc)
     {
@@ -173,17 +174,23 @@ public sealed class PronunciationEditorWindow : Window
         }
     }
 
-    private void Save()
+    /// <summary>Writes the file. Returns false (with the error recorded
+    /// in _lastSaveError) on failure — callers must NOT proceed with UI
+    /// state changes on failure, or the list shows an entry that was
+    /// never written while the error message is clobbered.</summary>
+    private bool TrySave()
     {
         try
         {
             var dir = Path.GetDirectoryName(SpeechService.PronunciationsPath);
             if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
             File.WriteAllText(SpeechService.PronunciationsPath, _fileText);
+            return true;
         }
         catch (Exception ex)
         {
-            _status!.Text = $"Could not save: {ex.Message}";
+            _lastSaveError = ex.Message;
+            return false;
         }
     }
 
@@ -230,8 +237,17 @@ public sealed class PronunciationEditorWindow : Window
             _status!.Text = "That pronunciation is already in the list.";
             return;
         }
+        // Save-failure contract: revert the in-memory edit and keep the
+        // error visible — never show a phantom entry the disk never saw,
+        // and never clear the user's typed input on a failed save.
+        var before = _fileText;
         _fileText = PronunciationFile.AppendEntry(_fileText, word, say);
-        Save();
+        if (!TrySave())
+        {
+            _fileText = before;
+            _status!.Text = $"Could not save: {_lastSaveError} (nothing was changed)";
+            return;
+        }
         _wordBox.Text = "";
         _sayBox.Text = "";
         RefreshList();
@@ -255,8 +271,14 @@ public sealed class PronunciationEditorWindow : Window
             RefreshList();
             return;
         }
+        var before = _fileText;
         _fileText = PronunciationFile.RemoveLines(_fileText, [target.LineIndex]);
-        Save();
+        if (!TrySave())
+        {
+            _fileText = before;
+            _status!.Text = $"Could not save: {_lastSaveError} (nothing was changed)";
+            return;
+        }
         Reload();
     }
 

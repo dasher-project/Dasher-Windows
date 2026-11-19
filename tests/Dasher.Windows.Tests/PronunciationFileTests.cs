@@ -152,7 +152,7 @@ public class PronunciationFileTests
     {
         var text = "botox = bow tocks\nbotox =\nnodelimiter\n# real comment\n";
         Assert.Equal(2, PronunciationFile.CountUnreadable(text));
-        Assert.Equal(1, PronunciationFile.ParseEntries(text).Count);
+        Assert.Single(PronunciationFile.ParseEntries(text));
     }
 
     [Fact]

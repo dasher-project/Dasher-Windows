@@ -110,5 +110,4 @@ public static class PronunciationFile
             string.Equals(e.Say, say.Trim(), StringComparison.OrdinalIgnoreCase));
 
     private static string[] Lines(string text) => (text ?? "").Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
-    private static string Normalize(string text) => string.Join("\n", Lines(text)) + "\n";
 }
