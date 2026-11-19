@@ -19,6 +19,13 @@ public sealed class SpeechService : IDisposable
     public string SelectedEngine { get; set; } = "sapi";
     public Dictionary<string, string> Credentials { get; set; } = new();
     public string? SelectedVoiceId { get; set; }
+    /// <summary>Sherpa's voice source is the selected model: true when a
+    /// usable ModelId credential is stored. Shared by the no-model error
+    /// message, the settings Retry/Browse visibility, and the model
+    /// service — keep one definition.</summary>
+    public bool HasSherpaModel =>
+        SelectedEngine == "sherpaonnx" &&
+        Credentials.TryGetValue("ModelId", out var mid) && !string.IsNullOrWhiteSpace(mid);
     public List<TtsVoice> AvailableVoices { get; private set; } = [];
     public bool IsSpeaking { get; private set; }
     public bool IsLoadingVoices { get; private set; }
@@ -29,7 +36,7 @@ public sealed class SpeechService : IDisposable
 
     public static readonly string[] EngineNames =
     [
-        "sapi", "azure", "google", "polly", "openai", "elevenlabs",
+        "sapi", "edge", "azure", "google", "polly", "openai", "elevenlabs",
         "watson", "playht", "witai", "gemini", "cartesia", "deepgram",
         "hume", "xai", "fishaudio", "mistral", "murf", "unrealspeech",
         "resemble", "upliftai", "modelslab", "sherpaonnx"
@@ -38,6 +45,7 @@ public sealed class SpeechService : IDisposable
     public static string EngineDisplayName(string engine) => engine switch
     {
         "sapi" => "SAPI (Windows)",
+        "edge" => "Microsoft Edge (Read Aloud)",
         "azure" => "Azure Cognitive Services",
         "google" => "Google Cloud TTS",
         "polly" => "Amazon Polly",
@@ -65,13 +73,13 @@ public sealed class SpeechService : IDisposable
     public static string[] RequiredCredentialKeys(string engine) => engine switch
     {
         "azure" => ["SubscriptionKey", "Region"],
-        "google" => ["KeyFilePath"],
+        "google" => ["KeyFilePath", "ApiKey"],
         "polly" => ["AccessKeyId", "SecretAccessKey", "Region"],
         "openai" => ["ApiKey"],
         "elevenlabs" => ["ApiKey"],
-        "watson" => ["ApiKey", "ServiceUrl"],
+        "watson" => ["ApiKey", "Region", "InstanceId"],
         "playht" => ["ApiKey", "UserId"],
-        "witai" => ["ApiKey"],
+        "witai" => ["Token"],
         "gemini" => ["ApiKey"],
         "cartesia" => ["ApiKey"],
         "deepgram" => ["ApiKey"],
@@ -116,6 +124,12 @@ public sealed class SpeechService : IDisposable
                     {
                         Id = v.VoiceInfo.Name,
                         Name = v.VoiceInfo.Name,
+                        Gender = v.VoiceInfo.Gender switch
+                        {
+                            System.Speech.Synthesis.VoiceGender.Male => DotNetTtsWrapper.Models.VoiceGender.Male,
+                            System.Speech.Synthesis.VoiceGender.Female => DotNetTtsWrapper.Models.VoiceGender.Female,
+                            _ => DotNetTtsWrapper.Models.VoiceGender.Unknown
+                        },
                         LanguageCodes =
                         [
                             new() { Bcp47 = v.VoiceInfo.Culture?.Name ?? "", Display = v.VoiceInfo.Culture?.DisplayName ?? "" }
@@ -132,6 +146,12 @@ public sealed class SpeechService : IDisposable
                     return;
                 }
                 AvailableVoices = await client.GetVoicesAsync();
+                // Sherpa lists 0 voices SILENTLY when no model is selected
+                // (the model is the voice source). Make that actionable.
+                if (SelectedEngine == "sherpaonnx" && AvailableVoices.Count == 0 && !HasSherpaModel)
+                {
+                    ErrorMessage = "No voice model selected — use Browse… to download one.";
+                }
             }
             if (SelectedVoiceId != null && !AvailableVoices.Any(v => v.Id == SelectedVoiceId))
                 SelectedVoiceId = AvailableVoices.FirstOrDefault()?.Id;
@@ -172,6 +192,14 @@ public sealed class SpeechService : IDisposable
             };
             if (interrupt)
                 client.Stop();
+            // Native playback for all Rust engines: since Bindings 1.13.5
+            // the Windows sherpa path plays in-process via WASAPI — no
+            // powershell subprocess, no %TEMP% wav, and TtsOptions volume
+            // is pre-applied to the samples (verified live on 1.13.5:
+            // zero spawns, no temp file, volume 100 vs 20 clearly
+            // distinct). Our SynthToBytesAsync workaround for the old
+            // powershell player was retired with that release; see
+            // AACTools/rust-tts-wrapper#120.
             await client.SpeakAsync(text, options);
         }
         catch (Exception ex)
@@ -272,118 +300,120 @@ public sealed class SpeechService : IDisposable
     private AbstractTtsClient? GetOrCreateClient()
     {
         if (!_needsRecreate && _client != null) return _client;
-        _client?.Dispose();
+        var old = _client;
         try
         {
-            var creds = BuildCredentials();
-            _client = TtsFactory.CreateClient(SelectedEngine, creds);
+            // Rust TTS backend (parity with Dasher-Apple): same
+            // AbstractTtsClient surface, Rust engine underneath. The
+            // native DLLs ship with the NuGet package (win-x64).
+            var rustCreds = BuildRustCredentials(SelectedEngine, Credentials);
+            _client = new RustTtsWrapper.RustTtsClient(SelectedEngine, rustCreds);
             _needsRecreate = false;
-            return _client;
         }
-        catch
+        catch (Exception ex)
         {
+            ErrorMessage = ex.Message;
             _client = null;
             return null;
         }
+        finally
+        {
+            // Dispose off the UI thread: the Rust dispose path stops and
+            // joins in-flight synthesis (up to a 10s wait per request), and
+            // a stalled network synth must not freeze the settings panel.
+            if (old != null)
+                _ = Task.Run(() => { try { old.Dispose(); } catch { } });
+        }
+        return _client;
     }
 
-    private ITtsCredentials? BuildCredentials()
+    /// <summary>
+    /// Maps stored PascalCase credential keys to the Rust wrapper's canonical
+    /// camelCase keys. Schema source of truth: TtsClient.GetEngineSetups()
+    /// (verified against RustTtsWrapper.Bindings 1.13.1; pinned by
+    /// RustCredentialMappingTests). Only non-empty values are sent: the Rust
+    /// engines read credentials with a present-key check, so an empty string
+    /// would shadow an engine default (e.g. watson's us-south region).
+    /// Engines not listed per-engine below take a plain apiKey;
+    /// sapi/edge/sherpaonnx need none.
+    /// </summary>
+    internal static Dictionary<string, string> BuildRustCredentials(
+        string engine, IReadOnlyDictionary<string, string> credentials)
     {
-        return SelectedEngine switch
+        string? Val(string key) => credentials.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v : null;
+
+        var c = new Dictionary<string, string>();
+        switch (engine)
         {
-            "sapi" => null,
-            "azure" => new AzureCredentials
-            {
-                SubscriptionKey = Credentials.GetValueOrDefault("SubscriptionKey", ""),
-                Region = Credentials.GetValueOrDefault("Region", "")
-            },
-            "google" => new GoogleCredentials
-            {
-                KeyFilePath = Credentials.GetValueOrDefault("KeyFilePath", "")
-            },
-            "polly" => new PollyCredentials
-            {
-                AccessKeyId = Credentials.GetValueOrDefault("AccessKeyId", ""),
-                SecretAccessKey = Credentials.GetValueOrDefault("SecretAccessKey", ""),
-                Region = Credentials.GetValueOrDefault("Region", "us-east-1")
-            },
-            "openai" => new OpenAICredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "elevenlabs" => new ElevenLabsCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "watson" => new WatsonCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", ""),
-                ServiceUrl = Credentials.GetValueOrDefault("ServiceUrl", "")
-            },
-            "playht" => new PlayHtCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", ""),
-                UserId = Credentials.GetValueOrDefault("UserId", "")
-            },
-            "witai" => new WitAiCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "gemini" => new GeminiCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "cartesia" => new CartesiaCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "deepgram" => new DeepgramCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "hume" => new HumeCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "xai" => new XaiCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "fishaudio" => new FishAudioCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "mistral" => new MistralCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "murf" => new MurfCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "unrealspeech" => new UnrealSpeechCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "resemble" => new ResembleCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "upliftai" => new UpliftAiCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "modelslab" => new ModelsLabCredentials
-            {
-                ApiKey = Credentials.GetValueOrDefault("ApiKey", "")
-            },
-            "sherpaonnx" => new SherpaOnnxCredentials
-            {
-                ModelPath = Credentials.GetValueOrDefault("ModelPath", ""),
-                ModelId = Credentials.GetValueOrDefault("ModelId", "")
-            },
-            _ => null
-        };
+            case "sapi":
+            case "edge":
+                break; // no credentials
+            case "sherpaonnx":
+                // Optional model selection fields (schema: modelPath, modelId,
+                // numThreads, numSteps, provider, referenceAudio, referenceText).
+                // Historically we stored ModelPath/ModelId; keep passing them
+                // through so users with a custom model keep working.
+                if (Val("ModelPath") is { } modelPath) c["modelPath"] = modelPath;
+                if (Val("ModelId") is { } modelId) c["modelId"] = modelId;
+                break;
+            case "azure":
+                if (Val("SubscriptionKey") is { } subKey) c["subscriptionKey"] = subKey;
+                if (Val("Region") is { } azRegion) c["region"] = azRegion;
+                break;
+            case "google":
+                // Rust accepts either keyFilePath or apiKey (RequiredAny).
+                if (Val("KeyFilePath") is { } kfp) c["keyFilePath"] = kfp;
+                else if (Val("ApiKey") is { } gk) c["apiKey"] = gk;
+                break;
+            case "polly":
+                if (Val("AccessKeyId") is { } accessKey) c["accessKeyId"] = accessKey;
+                if (Val("SecretAccessKey") is { } secret) c["secretAccessKey"] = secret;
+                if (Val("Region") is { } pollyRegion) c["region"] = pollyRegion;
+                break;
+            case "watson":
+                if (Val("ApiKey") is { } watsonKey) c["apiKey"] = watsonKey;
+                if (Val("Region") is { } watsonRegion) c["region"] = watsonRegion;
+                if (Val("InstanceId") is { } inst) c["instanceId"] = inst;
+                // Legacy migration: pre-Rust settings stored a ServiceUrl of
+                // the form https://api.<region>.text-to-speech.watson.cloud.ibm.com/instances/<id>
+                // which encodes both region and instanceId.
+                if (Val("ServiceUrl") is { } svcUrl && TryParseWatsonServiceUrl(svcUrl, out var r, out var i))
+                {
+                    c.TryAdd("region", r);
+                    c.TryAdd("instanceId", i);
+                }
+                break;
+            case "playht":
+                if (Val("ApiKey") is { } playKey) c["apiKey"] = playKey;
+                if (Val("UserId") is { } userId) c["userId"] = userId;
+                break;
+            case "witai":
+                // "Token" is the current field; "ApiKey" is the pre-Rust
+                // spelling, kept so existing stored settings keep working.
+                var token = Val("Token") ?? Val("ApiKey");
+                if (token is { }) c["token"] = token;
+                break;
+            default:
+                // All remaining cloud engines use a simple apiKey
+                if (Val("ApiKey") is { } apiKey) c["apiKey"] = apiKey;
+                break;
+        }
+        return c;
+    }
+
+    /// <summary>Parses a Watson TTS service URL into (region, instanceId).
+    /// Returns false for anything that doesn't match the documented shape
+    /// rather than guessing — a wrong region silently breaks auth.</summary>
+    internal static bool TryParseWatsonServiceUrl(string url, out string region, out string instanceId)
+    {
+        (region, instanceId) = ("", "");
+        var match = System.Text.RegularExpressions.Regex.Match(url,
+            @"^https://api\.([a-z0-9-]+)\.text-to-speech\.watson\.cloud\.ibm\.com/instances/([0-9a-f-]+)$",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (!match.Success) return false;
+        region = match.Groups[1].Value.ToLowerInvariant();
+        instanceId = match.Groups[2].Value;
+        return true;
     }
 
     public void SaveSettings()
