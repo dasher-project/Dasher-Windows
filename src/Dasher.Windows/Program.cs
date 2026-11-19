@@ -32,6 +32,12 @@ sealed class Program
         // an actionable message, before anything engine-touching runs.
         VerifyEngineExports();
 
+        // User pronunciation overrides: consumed by the Rust TTS wrapper
+        // (ignored by builds without the feature). Must run before any
+        // SpeechService client exists; the wrapper re-reads the file per
+        // utterance so edits apply without restarting Dasher.
+        Speech.SpeechService.ApplyPronunciationOverrides();
+
         try
         {
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
