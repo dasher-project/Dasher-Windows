@@ -197,6 +197,20 @@ public sealed class SpeechService : IDisposable
                 {
                     ErrorMessage = "No voice model selected — use Browse… to download one.";
                 }
+                // Cloud engines with credentials stored must never fail
+                // SILENTLY: the wrapper swallows HTTP failures (401/403/
+                // quota) on the voice list into an empty result, which
+                // reads as "no voices found" and Retry does nothing
+                // (Heide's Google report). Surface the likely cause so the
+                // user checks their key instead of hammering Retry.
+                if (AvailableVoices.Count == 0 && RequiredCredentialKeys(SelectedEngine).Length > 0
+                    && RequiredCredentialKeys(SelectedEngine).Any(k =>
+                        Credentials.TryGetValue(k, out var v) && !string.IsNullOrWhiteSpace(v)))
+                {
+                    ErrorMessage = SelectedEngine == "google"
+                        ? "Google returned no voices — if your credential is a JSON key file, paste the API key itself into the ApiKey field (this build reads the key file's first line only)."
+                        : "The speech service returned no voices — the credential may be wrong, expired, or out of quota.";
+                }
             }
             if (SelectedVoiceId != null && !AvailableVoices.Any(v => v.Id == SelectedVoiceId))
                 SelectedVoiceId = AvailableVoices.FirstOrDefault()?.Id;
