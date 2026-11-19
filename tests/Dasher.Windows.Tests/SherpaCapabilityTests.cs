@@ -9,11 +9,12 @@ namespace Dasher.Windows.Tests;
 
 /// <summary>
 /// Windows synthesis capability per sherpa model family (verified by live
-/// probes at RustTtsWrapper.Bindings 1.13.2 — see AACTools/rust-tts-
-/// wrapper#116): MMS, Kokoro, and VITS/Piper speak (VITS unlocked by the
-/// 1.13.2 sherpa-g2p fix); Kitten still fails engine creation and Matcha
-/// still fails tokenization. This gate keeps AAC users from downloading a
-/// voice that cannot speak in this build.
+/// probes at RustTtsWrapper.Bindings 1.13.6 — see AACTools/rust-tts-
+/// wrapper#116): MMS, Kokoro, VITS/Piper speak since 1.13.2 (sherpa-g2p),
+/// Kitten since 1.13.6 (lexicon-cache provisioning into
+/// %USERPROFILE%\.voicegarden-lexicons); Matcha is still gated — its
+/// vocoder provisioning remains broken at 1.13.6. This gate keeps AAC
+/// users from downloading a voice that cannot speak in this build.
 /// </summary>
 [Collection("rust-tts-native")]
 public class SherpaCapabilityTests
@@ -22,6 +23,7 @@ public class SherpaCapabilityTests
     [InlineData("mms")]
     [InlineData("kokoro")]
     [InlineData("vits")]
+    [InlineData("kitten")]
     [InlineData("VITS")]
     public void Verified_families_are_speakable(string family)
     {
@@ -29,21 +31,19 @@ public class SherpaCapabilityTests
     }
 
     [Theory]
-    [InlineData("kitten")]
     [InlineData("matcha")]
     public void Broken_families_are_gated(string family)
     {
         Assert.False(SherpaSynthesisCapability.IsSpeakable(family));
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("  ")]
-    [InlineData("not-a-family")]
-    public void Unknown_or_missing_families_are_gated(string? family)
+    [Fact]
+    public void Unknown_or_missing_families_are_gated()
     {
-        Assert.False(SherpaSynthesisCapability.IsSpeakable(family));
+        Assert.False(SherpaSynthesisCapability.IsSpeakable(null));
+        Assert.False(SherpaSynthesisCapability.IsSpeakable(""));
+        Assert.False(SherpaSynthesisCapability.IsSpeakable("  "));
+        Assert.False(SherpaSynthesisCapability.IsSpeakable("not-a-family"));
     }
 
     [Fact]

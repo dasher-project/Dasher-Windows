@@ -61,10 +61,13 @@ public sealed class SherpaModelService
 /// <summary>
 /// Which sherpa model families can actually SPEAK in this build. Windows
 /// capability is family-dependent (upstream issue AACTools/rust-tts-wrapper
-/// #116), verified by live probes on win-x64 at Bindings 1.13.2: MMS,
-/// Kokoro, and VITS/Piper (incl. inflect) synthesis works — the 1.13.2
-/// "sherpa-g2p in the Windows DLL" fix unlocked VITS. Kitten still fails
-/// engine creation and Matcha still fails tokenization. The browser uses
+/// #116), verified by live probes on win-x64 at Bindings 1.13.6: MMS,
+/// Kokoro, and VITS/Piper since the 1.13.2 sherpa-g2p fix; Kitten since
+/// the 1.13.6 lexicon-cache provisioning fix (bundles land in
+/// %USERPROFILE%\.voicegarden-lexicons, which the wrapper manages — never
+/// ship or hand-seed that directory in releases). Matcha is still gated:
+/// its vocoder provisioning remains broken at 1.13.6 (fresh installs end
+/// missing=[vocoder] and synthesis fails tokenization). The browser uses
 /// this gate so AAC users can't install a voice that cannot speak.
 /// </summary>
 public static class SherpaSynthesisCapability
@@ -75,6 +78,7 @@ public static class SherpaSynthesisCapability
         "mms",
         "kokoro",
         "vits",
+        "kitten",
     };
 
     public static bool IsSpeakable(string? modelType) =>
