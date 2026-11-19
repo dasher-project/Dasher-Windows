@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Avalonia;
@@ -12,11 +11,17 @@ namespace Dasher.Windows.Speech;
 
 /// <summary>
 /// In-app editor for the pronunciation-override file: a grid of
-/// word/say-it-as rows with add, remove, and a per-row "hear it" preview
+/// word/say-it-as rows with add, remove, and per-row "hear it" preview
 /// (spoken through the current engine, so the override — applied by the
 /// wrapper per utterance — is exactly what you hear). Saves are
 /// immediate (the file is tiny and the wrapper hot-reloads on mtime),
 /// and hand-written comments/blank lines in the file are preserved.
+///
+/// Concurrency contract with Notepad (and a second editor): every
+/// mutation RE-READS the file first and matches removals by content, so
+/// external edits between our reads are never clobbered by a stale
+/// snapshot; a failed read blocks the mutation instead of risking a
+/// destructive write.
 /// </summary>
 public sealed class PronunciationEditorWindow : Window
 {
@@ -27,6 +32,7 @@ public sealed class PronunciationEditorWindow : Window
     private TextBlock? _status;
 
     private string _fileText = "";
+    private string? _loadError;
 
     public PronunciationEditorWindow(SpeechService svc)
     {
@@ -73,9 +79,9 @@ public sealed class PronunciationEditorWindow : Window
         addPanel.Children.Add(labelRow);
 
         var inputRow = new Grid { ColumnDefinitions = new("*,12,*,Auto") };
-        _wordBox = new TextBox { PlaceholderText = "e.g. botox, or a name", FontSize = 12, Watermark = null! };
+        _wordBox = new TextBox { PlaceholderText = "e.g. botox, or a name", FontSize = 12 };
         _wordBox.SetValue(Grid.ColumnProperty, 0);
-        _sayBox = new TextBox { PlaceholderText = "e.g. bow tocks", FontSize = 12, Watermark = null! };
+        _sayBox = new TextBox { PlaceholderText = "e.g. bow tocks", FontSize = 12 };
         _sayBox.SetValue(Grid.ColumnProperty, 2);
 
         var addButtons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6, Margin = new Thickness(8, 0, 0, 0) };
@@ -107,7 +113,12 @@ public sealed class PronunciationEditorWindow : Window
 
             var actions = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
             var hear = new Button { Content = "Hear it", FontSize = 10, Padding = new Thickness(6, 2) };
-            hear.Click += (_, _) => { _ = _svc.SpeakAsync(e.Word); };
+            hear.Click += async (_, _) =>
+            {
+                await _svc.SpeakAsync(e.Word);
+                if (!string.IsNullOrEmpty(_svc.ErrorMessage))
+                    _status!.Text = _svc.ErrorMessage;
+            };
             var remove = new Button { Content = "Remove", FontSize = 10, Padding = new Thickness(6, 2) };
             remove.Click += (_, _) => OnRemove(e);
             actions.Children.Add(hear);
@@ -125,6 +136,10 @@ public sealed class PronunciationEditorWindow : Window
         return root;
     }
 
+    /// <summary>Reads the file. On failure the PREVIOUS text is kept and
+    /// the error recorded — mutations check _loadError and refuse, so a
+    /// transient read failure can never cascade into an empty-file
+    /// write.</summary>
     private void Reload()
     {
         try
@@ -132,11 +147,11 @@ public sealed class PronunciationEditorWindow : Window
             _fileText = File.Exists(SpeechService.PronunciationsPath)
                 ? File.ReadAllText(SpeechService.PronunciationsPath)
                 : "";
+            _loadError = null;
         }
         catch (Exception ex)
         {
-            _fileText = "";
-            _status!.Text = $"Could not read the file: {ex.Message}";
+            _loadError = ex.Message;
         }
         RefreshList();
     }
@@ -145,18 +160,23 @@ public sealed class PronunciationEditorWindow : Window
     {
         var entries = PronunciationFile.ParseEntries(_fileText);
         _list!.ItemsSource = entries;
-        _status!.Text = entries.Count == 0
-            ? "No pronunciations yet — add one above."
-            : $"{entries.Count} pronunciation{(entries.Count == 1 ? "" : "s")}";
+        var unreadable = PronunciationFile.CountUnreadable(_fileText);
+        if (_loadError != null)
+            _status!.Text = $"Cannot read the file right now — editing is paused. ({_loadError})";
+        else if (entries.Count == 0 && unreadable == 0)
+            _status!.Text = "No pronunciations yet — add one above.";
+        else
+        {
+            _status!.Text = $"{entries.Count} pronunciation{(entries.Count == 1 ? "" : "s")}";
+            if (unreadable > 0)
+                _status.Text += $" · {unreadable} unreadable line{(unreadable == 1 ? "" : "s")} (skipped — check spelling in the file)";
+        }
     }
 
     private void Save()
     {
         try
         {
-            // Ensure the starter file's directory exists even if the
-            // startup seeding was skipped (portable installs, first run
-            // ordering).
             var dir = Path.GetDirectoryName(SpeechService.PronunciationsPath);
             if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
             File.WriteAllText(SpeechService.PronunciationsPath, _fileText);
@@ -184,7 +204,7 @@ public sealed class PronunciationEditorWindow : Window
             _status!.Text = "Preview reads respellings aloud — for /IPA/, Add first, then use the row's Hear it.";
             return;
         }
-        _ = _svc.SpeakAsync(say);
+        HearThroughEngine(say);
     }
 
     private void OnAdd(object? sender, RoutedEventArgs e)
@@ -196,11 +216,15 @@ public sealed class PronunciationEditorWindow : Window
             _status!.Text = "Type both the word and how to say it.";
             return;
         }
-        if (word.Contains('=') || say.Contains('\n'))
+        if (word.Contains('='))
         {
             _status!.Text = "The word can't contain '='.";
             return;
         }
+        // Re-read first: an external edit (Notepad, another window)
+        // between our reads must not be clobbered by a stale snapshot.
+        Reload();
+        if (_loadError != null) return;
         if (PronunciationFile.Contains(_fileText, word, say))
         {
             _status!.Text = "That pronunciation is already in the list.";
@@ -215,8 +239,31 @@ public sealed class PronunciationEditorWindow : Window
 
     private void OnRemove(PronunciationFile.Entry entry)
     {
-        _fileText = PronunciationFile.RemoveLines(_fileText, [entry.LineIndex]);
+        // Re-read first (line indexes from the list's parse may be stale
+        // after external edits), then match by CONTENT — word (with the
+        // wrapper's whitespace-collapsed comparison) + say — so we delete
+        // the intended line even if lines shifted.
+        Reload();
+        if (_loadError != null) return;
+        var fresh = PronunciationFile.ParseEntries(_fileText);
+        var target = fresh.FirstOrDefault(f =>
+            string.Equals(PronunciationFile.NormalizeKey(f.Word), PronunciationFile.NormalizeKey(entry.Word), StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(f.Say, entry.Say, StringComparison.OrdinalIgnoreCase));
+        if (target == null)
+        {
+            // Already gone (edited externally) — nothing to do.
+            RefreshList();
+            return;
+        }
+        _fileText = PronunciationFile.RemoveLines(_fileText, [target.LineIndex]);
         Save();
-        Reload(); // line indexes shift after removal
+        Reload();
+    }
+
+    private async void HearThroughEngine(string text)
+    {
+        await _svc.SpeakAsync(text);
+        if (!string.IsNullOrEmpty(_svc.ErrorMessage))
+            _status!.Text = _svc.ErrorMessage;
     }
 }
