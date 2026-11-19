@@ -143,11 +143,21 @@ public sealed class SherpaModelBrowserWindow : Window
             wrap.Children.Add(cancel);
             action = wrap;
         }
-        else if (!installed && m.Availability == "blocked")
+        else if (!installed && m.Availability != "needs_download")
         {
+            // blocked = registry refuses; needs_assets = the archive ships
+            // incomplete (e.g. the matcha-fa_en-* pair has no pronunciation
+            // dictionary — the paired icefall matcha models are the working
+            // ones). Either way there is nothing installable here.
+            var label = m.Availability switch
+            {
+                "blocked" => "Unavailable",
+                "needs_assets" => "Incomplete assets",
+                _ => string.IsNullOrEmpty(m.Availability) ? "Unavailable" : m.Availability,
+            };
             action = new TextBlock
             {
-                Text = string.IsNullOrEmpty(m.Reason) ? "Unavailable" : $"Unavailable ({m.Reason})",
+                Text = string.IsNullOrEmpty(m.Reason) ? label : $"{label} ({m.Reason})",
                 FontSize = 9,
                 Foreground = Brushes.Gray,
                 TextWrapping = TextWrapping.Wrap,

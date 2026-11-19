@@ -10,10 +10,12 @@ namespace Dasher.Windows.Tests;
 /// <summary>
 /// Windows synthesis capability per sherpa model family (verified by live
 /// probes at RustTtsWrapper.Bindings 1.13.6 — see AACTools/rust-tts-
-/// wrapper#116): MMS, Kokoro, VITS/Piper speak since 1.13.2 (sherpa-g2p),
-/// Kitten since 1.13.6 (lexicon-cache provisioning into
-/// %USERPROFILE%\.voicegarden-lexicons); Matcha is still gated — its
-/// vocoder provisioning remains broken at 1.13.6. This gate keeps AAC
+/// wrapper#116): MMS, Kokoro, and VITS/Piper speak since 1.13.2
+/// (sherpa-g2p); Kitten and the paired Matcha models (icefall-en-ljspeech,
+/// icefall-zh-baker) since 1.13.6 (lexicon-cache provisioning into
+/// %USERPROFILE%\.voicegarden-lexicons). The registry-flagged fa_en matcha
+/// pair (needs_assets — no pronunciation dictionary) is held out by the
+/// browser's model-level availability gate, not here. This gate keeps AAC
 /// users from downloading a voice that cannot speak in this build.
 /// </summary>
 [Collection("rust-tts-native")]
@@ -24,17 +26,11 @@ public class SherpaCapabilityTests
     [InlineData("kokoro")]
     [InlineData("vits")]
     [InlineData("kitten")]
+    [InlineData("matcha")]
     [InlineData("VITS")]
     public void Verified_families_are_speakable(string family)
     {
         Assert.True(SherpaSynthesisCapability.IsSpeakable(family));
-    }
-
-    [Theory]
-    [InlineData("matcha")]
-    public void Broken_families_are_gated(string family)
-    {
-        Assert.False(SherpaSynthesisCapability.IsSpeakable(family));
     }
 
     [Fact]
