@@ -19,6 +19,51 @@ public sealed class SpeechService : IDisposable
     public string SelectedEngine { get; set; } = "sapi";
     public Dictionary<string, string> Credentials { get; set; } = new();
     public string? SelectedVoiceId { get; set; }
+
+    /// <summary>User pronunciation overrides: a Notepad-editable file the
+    /// Rust TTS wrapper applies before synthesis (word = respell or IPA).
+    /// Path is fixed so the docs, the settings UI, and the wrapper all
+    /// agree on one location.</summary>
+    public static readonly string PronunciationsPath = Path.Combine(ConfigDir, "pronunciations.txt");
+
+    /// <summary>Points the Rust TTS wrapper at the user's pronunciation
+    /// overrides via the RUST_TTS_PRONUNCIATIONS environment variable.
+    /// Bindings that implement the feature reload the file when it changes
+    /// (checked per utterance, no restart needed); earlier bindings ignore
+    /// the variable entirely, so this is safe to call unconditionally.
+    /// Creates a commented starter file on first run so the feature is
+    /// discoverable with Notepad, mirroring the training-file precedent.
+    /// Best-effort: never blocks startup.</summary>
+    public static void ApplyPronunciationOverrides()
+    {
+        try
+        {
+            if (!File.Exists(PronunciationsPath))
+            {
+                Directory.CreateDirectory(ConfigDir);
+                File.WriteAllText(PronunciationsPath,
+                    """
+                    # Dasher pronunciation overrides - edit with Notepad, no restart needed.
+                    # Changes apply to the next thing you speak.
+                    #
+                    # Lines like:
+                    #   botox = bow tocks        (a simpler spelling - works on every engine)
+                    #   botox = /ˈboʊ.tɑːks/     (exact sounds - sharpest on offline voices)
+                    #
+                    # Whole words only, matching ignores capitals. Multi-word
+                    # names work too:
+                    #   nguyen = wen
+                    #   san rafael = san rah fah el
+                    """);
+            }
+            Environment.SetEnvironmentVariable("RUST_TTS_PRONUNCIATIONS", PronunciationsPath);
+        }
+        catch
+        {
+            // Pronunciation overrides are an enhancement; any failure here
+            // (read-only disk, policy) must not affect startup or speech.
+        }
+    }
     /// <summary>Sherpa's voice source is the selected model: true when a
     /// usable ModelId credential is stored. Shared by the no-model error
     /// message, the settings Retry/Browse visibility, and the model
