@@ -2610,6 +2610,28 @@ public class SettingsPanel : Decorator
         volRow.Children.Add(volSlider);
         voiceHeader.Children.Add(volRow);
 
+        // Pronunciation overrides: opens the in-app editor (writes
+        // pronunciations.txt; the wrapper applies changes per utterance).
+        var pronunciationsBtn = new Button
+        {
+            Content = new TextBlock { Text = "Pronunciations…", FontSize = 11 },
+            Padding = new Thickness(8, 4),
+            FontSize = 11,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+            CornerRadius = new CornerRadius(4),
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+        pronunciationsBtn.Click += (s2, e2) =>
+        {
+            var owner = TopLevel.GetTopLevel(this) as Window;
+            var editor = new Speech.PronunciationEditorWindow(svc);
+            if (owner != null) editor.Show(owner); else editor.Show();
+        };
+        voiceHeader.Children.Add(pronunciationsBtn);
+
         _panel.Children.Add(voiceHeader);
 
         // Voice loading logic — used by button click AND auto-load on engine change.
