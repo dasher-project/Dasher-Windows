@@ -103,9 +103,13 @@ public class PronunciationFileTests
     [Fact]
     public void Crlf_files_parse_and_normalize()
     {
+        // Raw string literals do NOT normalize the source file's line
+        // endings — normalize Sample first so the test is identical on
+        // LF and CRLF checkouts (CI taught us this the hard way).
+        var sample = Sample.Replace("\r\n", "\n");
         // Notepad (and older tools) produce \r\n; the whole-file edit
         // path deliberately normalizes to LF, which the wrapper accepts.
-        var crlf = Sample.Replace("\n", "\r\n");
+        var crlf = sample.Replace("\n", "\r\n");
         var entries = PronunciationFile.ParseEntries(crlf);
         Assert.Equal(4, entries.Count);
         Assert.Equal("bow tocks", entries[0].Say);
