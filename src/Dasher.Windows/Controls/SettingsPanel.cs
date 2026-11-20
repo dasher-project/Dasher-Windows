@@ -468,6 +468,7 @@ public class SettingsPanel : Decorator
     private bool _populatingSelections;
     private bool _populatingVoices;
     private int _voiceLoadDepth;
+    private Speech.PronunciationEditorWindow? _pronunciationEditor;
 
     /// <summary>
     /// RFC 0001 2026-10-28: setting_changed for a slider on COMMIT — drag
@@ -2609,6 +2610,36 @@ public class SettingsPanel : Decorator
         volRow.Children.Add(volValue);
         volRow.Children.Add(volSlider);
         voiceHeader.Children.Add(volRow);
+
+        // Pronunciation overrides: opens the in-app editor (writes
+        // pronunciations.txt; the wrapper applies changes per utterance).
+        // Singleton: two editors hold independent snapshots and would
+        // clobber each other's saves — Activate the existing one instead.
+        var pronunciationsBtn = new Button
+        {
+            Content = new TextBlock { Text = "Pronunciations…", FontSize = 11 },
+            Padding = new Thickness(8, 4),
+            FontSize = 11,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+            CornerRadius = new CornerRadius(4),
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+        pronunciationsBtn.Click += (s2, e2) =>
+        {
+            if (_pronunciationEditor != null)
+            {
+                _pronunciationEditor.Activate();
+                return;
+            }
+            var owner = TopLevel.GetTopLevel(this) as Window;
+            _pronunciationEditor = new Speech.PronunciationEditorWindow(svc);
+            _pronunciationEditor.Closed += (_, _) => _pronunciationEditor = null;
+            if (owner != null) _pronunciationEditor.Show(owner); else _pronunciationEditor.Show();
+        };
+        voiceHeader.Children.Add(pronunciationsBtn);
 
         _panel.Children.Add(voiceHeader);
 
