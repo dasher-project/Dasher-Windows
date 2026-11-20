@@ -259,6 +259,20 @@ public sealed class SpeechService : IDisposable
             // distinct). Our SynthToBytesAsync workaround for the old
             // powershell player was retired with that release; see
             // AACTools/rust-tts-wrapper#120.
+            if (SelectedEngine == "google" && client is RustTtsWrapper.RustTtsClient rc)
+            {
+                // Google mitigation (upstream #136): the plain SpeakAsync
+                // registers a word-timing callback, which makes the engine
+                // add enableTimePointing to the request — a field the v1
+                // text:synthesize endpoint rejects with 400 on EVERY
+                // speak. Speaking via SpeakRequestAsync with a null
+                // timing callback keeps the field out of the request
+                // (verified with a live key: default and selected voices
+                // both speak). Dasher consumes no word timings, so this
+                // costs nothing; remove when the wrapper fix ships.
+                await rc.SpeakRequestAsync(text, null, options, null, System.Threading.CancellationToken.None);
+                return;
+            }
             await client.SpeakAsync(text, options);
         }
         catch (Exception ex)
