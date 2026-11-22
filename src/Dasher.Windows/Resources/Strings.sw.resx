@@ -112,6 +112,9 @@ Unaweza kubadilisha hili wakati wowote kwenye Mipangilio &gt; Faragha.</value>
   <data name="back" xml:space="preserve">
     <value>Nyuma</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Rudi kwa Dasher</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>futa</value>
   </data>
@@ -301,8 +304,32 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   <data name="diagnostics" xml:space="preserve">
     <value>Utambuzi</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>Ikiwa Dasher Direct Input haipo</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>Hali ya Moja kwa Moja iko tayari. Ongeza Dasher Direct Input ili ubashiri utumie maandishi yaliyo kabla ya kishale katika programu zaidi.</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>Anzisha tena Mac yako, kisha angalia orodha tena.</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>Weka Muktadha wa Maandishi</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>Katika Mipangilio ya Kibodi, nenda kwa Ingizo la Maandishi → Hariri → +. Tafuta Dasher Direct Input na ubofye Ongeza.</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>Boresha Utabiri katika Programu Zingine</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>Hali ya Moja kwa Moja</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>Hali ya Moja kwa Moja huanza mara tu ufikiaji unapatikana.</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>Ili kuanza, weka kishale cha maandishi kwenye sehemu ya kuandika.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Imekamilika</value>
@@ -543,6 +570,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Lugha / Eneo&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>Baadaye</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>Chini</value>
@@ -834,6 +864,9 @@ Unaweza kubadilisha hili wakati wowote katika Mipangilio &gt; Faragha.</value>
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>Mbinu ya Uchaguzi</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>Inatuma kwa {app}</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>huduma inafanya kazi? Angalia msaada wa usanidi kwenye kitufe cha Keyboard kwa amri za usakinishaji.</value>

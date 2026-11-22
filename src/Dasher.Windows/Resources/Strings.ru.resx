@@ -112,6 +112,9 @@
   <data name="back" xml:space="preserve">
     <value>Назад</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Вернуться к Dasher</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>Del</value>
   </data>
@@ -301,8 +304,32 @@
   <data name="diagnostics" xml:space="preserve">
     <value>Диагностика</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>Если Dasher Direct Input отсутствует</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>Прямой режим готов. Добавьте Dasher Direct Input, чтобы подсказки учитывали текст перед курсором в большем числе приложений.</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>Перезагрузите Mac, затем еще раз проверьте список.</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>Настройка текстового контекста</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>В настройках клавиатуры выберите «Ввод текста» → «Правка» → «+». Найдите Dasher Direct Input и нажмите «Добавить».</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>Улучшите прогнозы в других приложениях</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>Прямой режим</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>Прямой режим запускается, как только становится доступен доступ.</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>Чтобы начать, установите курсор в текстовое поле.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Сделанный</value>
@@ -543,6 +570,9 @@
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Язык / Регион&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>Позже</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>Нижний</value>
@@ -834,6 +864,9 @@
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>Метод выбора</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>Отправка на {app}</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>Служба запущена? Смотрите справку по настройке на кнопке Клавиатура для команд установки.</value>

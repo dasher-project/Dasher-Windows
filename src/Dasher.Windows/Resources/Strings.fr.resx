@@ -112,6 +112,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="back" xml:space="preserve">
     <value>Retour</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Retour à Dasher</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>del</value>
   </data>
@@ -300,8 +303,32 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   <data name="diagnostics" xml:space="preserve">
     <value>Diagnostic</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>Si Dasher Direct Input est manquant</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>Le mode direct est prêt. Ajoutez Dasher Direct Input pour que les prédictions utilisent le texte juste avant le curseur dans davantage d’applications.</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>Redémarrez votre Mac, puis vérifiez à nouveau la liste.</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>Configurer le contexte du texte</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>Dans les réglages Clavier, accédez à Saisie de texte → Modifier → +. Recherchez Dasher Direct Input, puis cliquez sur Ajouter.</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>Améliorer les prédictions dans d'autres applications</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>Mode direct</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>Le mode direct démarre dès que l'accès est disponible.</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>Placez le curseur dans un champ de texte pour commencer.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Fait</value>
@@ -544,6 +571,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Langue / Paramètres régionaux&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>Plus tard</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>Bas</value>
@@ -835,6 +865,9 @@ Vous pouvez modifier cela à tout moment dans Paramètres &gt; Confidentialité.
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>Méthode de sélection</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>Envoi à {app}</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>est-il en cours d'exécution ? Consultez l'aide sur le bouton Clavier pour les commandes d'installation.</value>

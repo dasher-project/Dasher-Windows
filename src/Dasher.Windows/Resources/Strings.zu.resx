@@ -112,6 +112,9 @@ Ungakushintsha lokhu noma yinini ku-Settings &gt; Privacy.</value>
   <data name="back" xml:space="preserve">
     <value>Emuva</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Buyela ku-Dasher</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>susa</value>
   </data>
@@ -301,8 +304,32 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   <data name="diagnostics" xml:space="preserve">
     <value>Ukuxilongwa</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>Uma i-Dasher Direct Input ingekho</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>Imodi Eqondile isilungile. Engeza i-Dasher Direct Input ukuze ukuqagela kusebenzise umbhalo ongaphambi kwekhesa ezinhlelweni zokusebenza eziningi.</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>Qala kabusha i-Mac yakho, bese uhlola uhlu futhi.</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>Setha Umongo Wombhalo</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>Kuzilungiselelo zekhibhodi, hamba kokuthi Okokufaka Umbhalo → Hlela → +. Sesha okuthi Dasher Direct Input bese uchofoza Engeza.</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>Thuthukisa ukubikezela kwezinye izinhlelo zokusebenza</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>Imodi Eqondile</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>Imodi Eqondile iqala ngokushesha ngemva kokuba usunikeze imvume Yokufinyeleleka.</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>Ukuze uqale, beka ikhesa endaweni yokufaka umbhalo.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Kuqediwe</value>
@@ -543,6 +570,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Ulimi / Indawo&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>Kamuva</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>Ngaphansi</value>
@@ -834,6 +864,9 @@ Ungashintsha lokhu noma nini kuzilungiselelo &gt; Ubumfihlo.</value>
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>Indlela Yokukhetha</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>Ithumela ku-{app}</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>inkonzo iyasebenza? Bheka usizo lokumisa ku-Keyboard batini ukuze uthole imiyalo yokufaka.</value>

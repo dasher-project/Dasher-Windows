@@ -112,6 +112,9 @@ Je kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="back" xml:space="preserve">
     <value>Terug</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Terug naar Dasher</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>del</value>
   </data>
@@ -301,8 +304,32 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   <data name="diagnostics" xml:space="preserve">
     <value>Diagnostiek</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>Als Dasher Direct Input ontbreekt</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>De directe modus is klaar. Voeg Dasher Direct Input toe zodat voorspellingen in meer apps de tekst vlak voor de cursor gebruiken.</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>Start uw Mac opnieuw op en controleer de lijst opnieuw.</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>Tekstcontext instellen</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>Ga in Toetsenbordinstellingen naar Tekstinvoer → Bewerken → +. Zoek naar Dasher Direct Input en klik op Toevoegen.</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>Verbeter voorspellingen in andere apps</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>Directe modus</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>Directe modus start zodra toegang beschikbaar is.</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>Plaats de tekstcursor in een tekstveld om te beginnen.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>Klaar</value>
@@ -543,6 +570,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;Taal / Locatie&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>Later</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>Onderkant</value>
@@ -834,6 +864,9 @@ U kunt dit op elk moment wijzigen in Instellingen &gt; Privacy.</value>
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>Selectiemethode</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>Verzenden naar {app}</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>Service actief? Zie de installatiehulp op de toetsenbordknop voor installatiescripts.</value>

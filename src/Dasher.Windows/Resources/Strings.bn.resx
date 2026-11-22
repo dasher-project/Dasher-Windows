@@ -112,6 +112,9 @@
   <data name="back" xml:space="preserve">
     <value>পেছনে</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Dasher এ ফিরে যান</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>মুছুন</value>
   </data>
@@ -301,8 +304,32 @@
   <data name="diagnostics" xml:space="preserve">
     <value>ডায়াগনস্টিকস</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>যদি Dasher Direct Input অনুপস্থিত থাকে</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>সরাসরি মোড প্রস্তুত। আরও অ্যাপে কার্সরের ঠিক আগের লেখা থেকে পূর্বাভাস পেতে Dasher Direct Input যোগ করুন।</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>আপনার ম্যাক রিস্টার্ট করুন, তারপর আবার তালিকা চেক করুন।</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>টেক্সট কনটেক্সট সেট আপ করুন</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>কীবোর্ড সেটিংসে, টেক্সট ইনপুট → সম্পাদনা → + এ যান। Dasher Direct Input অনুসন্ধান করুন এবং যোগ করুন ক্লিক করুন।</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>অন্যান্য অ্যাপে পূর্বাভাস উন্নত করুন</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>সরাসরি মোড</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>অ্যাক্সেস উপলব্ধ হওয়ার সাথে সাথে সরাসরি মোড শুরু হয়।</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>শুরু করতে একটি টেক্সট ফিল্ডে কার্সর রাখুন।</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>সম্পন্ন হয়েছে</value>
@@ -543,6 +570,9 @@
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;ভাষা / স্থানীয়&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>পরে</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>নীচে</value>
@@ -834,6 +864,9 @@
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>বাছাই পদ্ধতি</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>{app} এ পাঠানো হচ্ছে</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>সার্ভিস চালু আছে? ইনস্টল কমান্ডের জন্য কীবোর্ড বাটনের সেটআপ হেল্প দেখুন।</value>
