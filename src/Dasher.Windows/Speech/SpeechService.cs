@@ -197,13 +197,30 @@ public sealed class SpeechService : IDisposable
                 {
                     ErrorMessage = "No voice model selected — use Browse… to download one.";
                 }
+                // "No credentials at all" must never surface as a raw 403
+                // from the provider (Heide's screenshot: blank ApiKey box,
+                // cryptic "403 Forbidden", no hint the key was missing).
+                // The empty box is the message — say it in those terms,
+                // per-engine, before any provider error.
+                if (AvailableVoices.Count == 0 && string.IsNullOrEmpty(ErrorMessage))
+                {
+                    var required = RequiredCredentialKeys(SelectedEngine);
+                    var noneSet = required.Length > 0 && !required.Any(k =>
+                        Credentials.TryGetValue(k, out var v) && !string.IsNullOrWhiteSpace(v));
+                    if (noneSet)
+                    {
+                        ErrorMessage = SelectedEngine == "google"
+                            ? "No API key entered — paste an API key (it starts with AIza…) into the ApiKey box, not a JSON file."
+                            : $"No credentials entered — fill in the {string.Join(", ", required)} field{(required.Length == 1 ? "" : "s")} and the voices will load.";
+                    }
+                }
                 // Cloud engines with credentials stored must never fail
-                // SILENTLY: the wrapper swallows HTTP failures (401/403/
-                // quota) on the voice list into an empty result, which
-                // reads as "no voices found" and Retry does nothing
-                // (Heide's Google report). Surface the likely cause so the
-                // user checks their key instead of hammering Retry.
-                if (AvailableVoices.Count == 0 && RequiredCredentialKeys(SelectedEngine).Length > 0
+                // SILENTLY either: the wrapper swallows remaining HTTP
+                // failures (quota, key rejected) into empty results.
+                // Surface the likely cause so the user checks their key
+                // instead of hammering Retry.
+                if (AvailableVoices.Count == 0 && string.IsNullOrEmpty(ErrorMessage)
+                    && RequiredCredentialKeys(SelectedEngine).Length > 0
                     && RequiredCredentialKeys(SelectedEngine).Any(k =>
                         Credentials.TryGetValue(k, out var v) && !string.IsNullOrWhiteSpace(v)))
                 {
@@ -254,25 +271,10 @@ public sealed class SpeechService : IDisposable
             // Native playback for all Rust engines: since Bindings 1.13.5
             // the Windows sherpa path plays in-process via WASAPI — no
             // powershell subprocess, no %TEMP% wav, and TtsOptions volume
-            // is pre-applied to the samples (verified live on 1.13.5:
-            // zero spawns, no temp file, volume 100 vs 20 clearly
-            // distinct). Our SynthToBytesAsync workaround for the old
-            // powershell player was retired with that release; see
-            // AACTools/rust-tts-wrapper#120.
-            if (SelectedEngine == "google" && client is RustTtsWrapper.RustTtsClient rc)
-            {
-                // Google mitigation (upstream #136): the plain SpeakAsync
-                // registers a word-timing callback, which makes the engine
-                // add enableTimePointing to the request — a field the v1
-                // text:synthesize endpoint rejects with 400 on EVERY
-                // speak. Speaking via SpeakRequestAsync with a null
-                // timing callback keeps the field out of the request
-                // (verified with a live key: default and selected voices
-                // both speak). Dasher consumes no word timings, so this
-                // costs nothing; remove when the wrapper fix ships.
-                await rc.SpeakRequestAsync(text, null, options, null, System.Threading.CancellationToken.None);
-                return;
-            }
+            // is pre-applied to the samples. 1.16.2 additionally hardens
+            // local playback (unique temp names so overlapping utterances
+            // can't clobber each other; stop() kills the player). See
+            // AACTools/rust-tts-wrapper#120 and #139.
             await client.SpeakAsync(text, options);
         }
         catch (Exception ex)
