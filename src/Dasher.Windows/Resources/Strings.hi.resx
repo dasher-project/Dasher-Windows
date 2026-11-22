@@ -112,6 +112,9 @@
   <data name="back" xml:space="preserve">
     <value>वापस</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Dasher पर वापस जाएँ</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>डिल</value>
   </data>
@@ -301,8 +304,32 @@
   <data name="diagnostics" xml:space="preserve">
     <value>निदान</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>यदि Dasher Direct Input गायब है</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>प्रत्यक्ष मोड तैयार है। ज़्यादा ऐप में पूर्वानुमान के लिए कर्सर के ठीक पहले का टेक्स्ट इस्तेमाल करने हेतु Dasher Direct Input जोड़ें।</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>अपने Mac को पुनरारंभ करें, फिर सूची दोबारा जांचें।</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>टेक्स्ट संदर्भ सेट करें</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>कीबोर्ड सेटिंग्स में, टेक्स्ट इनपुट → एडिट → + पर जाएं। Dasher Direct Input खोजें और जोड़ें पर क्लिक करें।</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>अन्य ऐप्स में पूर्वानुमानों में सुधार करें</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>प्रत्यक्ष मोड</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>एक्सेस उपलब्ध होते ही डायरेक्ट मोड शुरू हो जाता है।</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>शुरू करने के लिए टेक्स्ट कर्सर को किसी टेक्स्ट फ़ील्ड में रखें।</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>हो गया</value>
@@ -543,6 +570,9 @@
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;भाषा / लोकल&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>बाद में</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>तल</value>
@@ -834,6 +864,9 @@
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>चयन विधि</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>{app} पर भेजा जा रहा है</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>सेवा चल रही है? इंस्टॉल कमांड के लिए कीबोर्ड बटन पर सेटअप मदद देखें।</value>

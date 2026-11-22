@@ -112,6 +112,9 @@
   <data name="back" xml:space="preserve">
     <value>返回</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>返回Dasher</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>删除</value>
   </data>
@@ -301,8 +304,32 @@
   <data name="diagnostics" xml:space="preserve">
     <value>诊断</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>如果缺少 Dasher Direct Input</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>直接模式已就绪。添加 Dasher Direct Input 后，可在更多应用中根据光标前的文字进行预测。</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>重新启动 Mac，然后再次检查列表。</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>设置文本上下文</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>在键盘设置中，转到文本输入→编辑→+。搜索 Dasher Direct Input 并单击“添加”。</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>改进其他应用程序中的预测</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>直接模式</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>一旦可以访问，直接模式就会启动。</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>将光标放在文本输入框中即可开始。</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>完毕</value>
@@ -543,6 +570,9 @@
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;语言/地区&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>稍后</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>底部</value>
@@ -834,6 +864,9 @@
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>选择方法</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>发送至{app}</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>服务正在运行吗？请在键盘按钮上的设置帮助中查看安装命令。</value>

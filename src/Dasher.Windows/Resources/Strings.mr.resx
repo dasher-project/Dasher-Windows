@@ -112,6 +112,9 @@
   <data name="back" xml:space="preserve">
     <value>मागे</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Dasher वर परत</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>Del</value>
   </data>
@@ -301,8 +304,32 @@
   <data name="diagnostics" xml:space="preserve">
     <value>निदान</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>जर Dasher Direct Input गहाळ असेल</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>थेट मोड तयार आहे. अधिक ॲप्समध्ये कर्सरच्या अगोदरचा मजकूर अंदाजांसाठी वापरण्यासाठी Dasher Direct Input जोडा.</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>तुमचा Mac रीस्टार्ट करा, नंतर सूची पुन्हा तपासा.</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>मजकूर संदर्भ सेट करा</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>कीबोर्ड सेटिंग्जमध्ये, मजकूर इनपुट → संपादन → + वर जा. Dasher Direct Input शोधा आणि जोडा क्लिक करा.</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>इतर ॲप्समधील अंदाज सुधारा</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>थेट मोड</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>प्रवेश उपलब्ध होताच डायरेक्ट मोड सुरू होतो.</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>सुरू करण्यासाठी मजकूर कर्सर एखाद्या मजकूर फील्डमध्ये ठेवा.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>पूर्ण झाले</value>
@@ -543,6 +570,9 @@
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;भाषा / स्थानिक भाषा&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>नंतर</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>तळ</value>
@@ -834,6 +864,9 @@
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>निवड पद्धत</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>{app} ला पाठवत आहे</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>सेवा चालू आहे का? इन्स्टॉलेशन कमांडसाठी कीबोर्ड बटणावर सेटअप मदत पहा.</value>

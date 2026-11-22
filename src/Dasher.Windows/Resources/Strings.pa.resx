@@ -112,6 +112,9 @@
   <data name="back" xml:space="preserve">
     <value>ਪਿੱਛੇ</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>Dasher 'ਤੇ ਵਾਪਸ ਜਾਓ</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>Del</value>
   </data>
@@ -301,8 +304,32 @@
   <data name="diagnostics" xml:space="preserve">
     <value>ਡਾਇਗਨੌਸਟਿਕਸ</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>ਜੇਕਰ Dasher Direct Input ਗੁੰਮ ਹੈ</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>ਸਿੱਧਾ ਮੋਡ ਤਿਆਰ ਹੈ। ਹੋਰ ਐਪਾਂ ਵਿੱਚ ਅਨੁਮਾਨਾਂ ਲਈ ਕਰਸਰ ਤੋਂ ਠੀਕ ਪਹਿਲਾਂ ਵਾਲਾ ਟੈਕਸਟ ਵਰਤਣ ਲਈ Dasher Direct Input ਸ਼ਾਮਲ ਕਰੋ।</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>ਆਪਣੇ ਮੈਕ ਨੂੰ ਰੀਸਟਾਰਟ ਕਰੋ, ਫਿਰ ਸੂਚੀ ਨੂੰ ਦੁਬਾਰਾ ਚੈੱਕ ਕਰੋ।</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>ਟੈਕਸਟ ਸੰਦਰਭ ਸੈੱਟ ਕਰੋ</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>ਕੀਬੋਰਡ ਸੈਟਿੰਗਾਂ ਵਿੱਚ, ਟੈਕਸਟ ਇਨਪੁਟ → ਐਡਿਟ → + 'ਤੇ ਜਾਓ। Dasher Direct Input ਦੀ ਖੋਜ ਕਰੋ ਅਤੇ ਜੋੜੋ 'ਤੇ ਕਲਿੱਕ ਕਰੋ।</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>ਹੋਰ ਐਪਾਂ ਵਿੱਚ ਪੂਰਵ ਅਨੁਮਾਨਾਂ ਵਿੱਚ ਸੁਧਾਰ ਕਰੋ</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>ਸਿੱਧਾ ਮੋਡ</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>ਪਹੁੰਚ ਉਪਲਬਧ ਹੁੰਦੇ ਹੀ ਡਾਇਰੈਕਟ ਮੋਡ ਸ਼ੁਰੂ ਹੋ ਜਾਂਦਾ ਹੈ।</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਟੈਕਸਟ ਕਰਸਰ ਕਿਸੇ ਟੈਕਸਟ ਖੇਤਰ ਵਿੱਚ ਰੱਖੋ।</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>ਹੋ ਗਿਆ</value>
@@ -543,6 +570,9 @@
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>&lt;b&gt;ਭਾਸ਼ਾ / ਲੋਕੇਲ&lt;/b&gt;</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>ਬਾਅਦ ਵਿੱਚ</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>ਹੇਠਾਂ</value>
@@ -834,6 +864,9 @@
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>ਚੋਣ ਵਿਧੀ</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>{app} ਨੂੰ ਭੇਜਿਆ ਜਾ ਰਿਹਾ ਹੈ</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>ਸੇਵਾ ਚੱਲ ਰਹੀ ਹੈ? ਇੰਸਟਾਲ ਕਮਾਂਡਾਂ ਲਈ ਕੀਬੋਰਡ ਬਟਨ 'ਤੇ ਸੈਟਅਪ ਸਹਾਇਤਾ ਵੇਖੋ।</value>

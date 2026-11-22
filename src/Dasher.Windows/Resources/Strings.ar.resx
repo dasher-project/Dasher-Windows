@@ -112,6 +112,9 @@
   <data name="back" xml:space="preserve">
     <value>عودة</value>
   </data>
+  <data name="back_to_dasher" xml:space="preserve">
+    <value>العودة إلى Dasher</value>
+  </data>
   <data name="backspace_label" xml:space="preserve">
     <value>حذف</value>
   </data>
@@ -301,8 +304,32 @@
   <data name="diagnostics" xml:space="preserve">
     <value>التشخيص</value>
   </data>
+  <data name="direct_input_missing" xml:space="preserve">
+    <value>إذا كان Dasher Direct Input مفقودًا</value>
+  </data>
+  <data name="direct_input_ready_description" xml:space="preserve">
+    <value>الوضع المباشر جاهز. أضف Dasher Direct Input لتستخدم التوقعات النص الذي يسبق مؤشر الكتابة مباشرةً في مزيد من التطبيقات.</value>
+  </data>
+  <data name="direct_input_restart" xml:space="preserve">
+    <value>أعد تشغيل جهاز Mac الخاص بك، ثم تحقق من القائمة مرة أخرى.</value>
+  </data>
+  <data name="direct_input_setup_button" xml:space="preserve">
+    <value>إعداد سياق النص</value>
+  </data>
+  <data name="direct_input_setup_steps" xml:space="preserve">
+    <value>في إعدادات لوحة المفاتيح، انتقل إلى إدخال النص → تحرير → +. ابحث عن Dasher Direct Input وانقر فوق "إضافة".</value>
+  </data>
+  <data name="direct_input_setup_title" xml:space="preserve">
+    <value>تحسين التوقعات في تطبيقات أخرى</value>
+  </data>
   <data name="direct_mode" xml:space="preserve">
     <value>الوضع المباشر</value>
+  </data>
+  <data name="direct_mode_access_resume" xml:space="preserve">
+    <value>يبدأ الوضع المباشر بمجرد توفر الوصول.</value>
+  </data>
+  <data name="direct_mode_focus_editor" xml:space="preserve">
+    <value>ضع مؤشر الكتابة في حقل نص للبدء.</value>
   </data>
   <data name="done" xml:space="preserve">
     <value>منتهي</value>
@@ -543,6 +570,9 @@
   </data>
   <data name="language_locale_2" xml:space="preserve">
     <value>اللغة المحلية</value>
+  </data>
+  <data name="later" xml:space="preserve">
+    <value>لاحقاً</value>
   </data>
   <data name="layout_bottom" xml:space="preserve">
     <value>قاع</value>
@@ -834,6 +864,9 @@
   </data>
   <data name="selection_method" xml:space="preserve">
     <value>طريقة الاختيار</value>
+  </data>
+  <data name="sending_to_app_format" xml:space="preserve">
+    <value>إرسال إلى {app}</value>
   </data>
   <data name="service_running_see_the_setup_help_on_the_keyboard_button_fo" xml:space="preserve">
     <value>هل الخدمة تعمل؟ انظر مساعدة الإعداد على زر لوحة المفاتيح لأوامر التثبيت.</value>
