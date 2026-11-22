@@ -118,7 +118,13 @@ public sealed class SpeechService : IDisposable
     public static string[] RequiredCredentialKeys(string engine) => engine switch
     {
         "azure" => ["SubscriptionKey", "Region"],
-        "google" => ["KeyFilePath", "ApiKey"],
+        // Google shows only ApiKey — the keyFilePath field was fiddly and
+        // mostly a JSON-file trap (field report: "I feel we should not
+        // show access to keyFilePath"). A keyFilePath stored by older
+        // versions is still honoured silently by BuildRustCredentials;
+        // if it's a service-account JSON the engine now fails with a
+        // clear, actionable message instead.
+        "google" => ["ApiKey"],
         "polly" => ["AccessKeyId", "SecretAccessKey", "Region"],
         "openai" => ["ApiKey"],
         "elevenlabs" => ["ApiKey"],
@@ -234,13 +240,77 @@ public sealed class SpeechService : IDisposable
         }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
+            // Provider failures arrive as raw HTTP blobs (Google's is a
+            // multi-line JSON body). Two rules before anything reaches
+            // the UI: (1) no credentials stored = the message is about
+            // the empty box, never the provider's rejection of nothing;
+            // (2) otherwise extract the human sentence from the JSON
+            // ("message" field) and show that, not the payload.
+            var required = RequiredCredentialKeys(SelectedEngine);
+            var noneSet = required.Length > 0 && !required.Any(k =>
+                Credentials.TryGetValue(k, out var v) && !string.IsNullOrWhiteSpace(v));
+            ErrorMessage = noneSet
+                ? SelectedEngine == "google"
+                    ? "No API key entered — paste an API key (it starts with AIza…) into the ApiKey box, not a JSON file."
+                    : $"No credentials entered — fill in the {string.Join(", ", required)} field{(required.Length == 1 ? "" : "s")} and the voices will load."
+                : FriendlyProviderError(ex.InnerException?.Message ?? ex.Message);
             AvailableVoices = [];
         }
         finally
         {
             IsLoadingVoices = false;
         }
+    }
+
+    /// <summary>Turns raw provider error text into something a user can
+    /// read: extracts the "message" (or "detail"/"error") sentence from a
+    /// JSON body, and truncates anything still unwieldy. The full text
+    /// stays in the logs/diagnostics — the settings panel gets one line.
+    /// </summary>
+    internal static string FriendlyProviderError(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return "Unknown error.";
+        try
+        {
+            var start = raw.IndexOf('{');
+            if (start >= 0)
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(
+                    raw[start..].Substring(0, FindJsonEnd(raw, start)));
+                var root = doc.RootElement;
+                foreach (var path in new[] { "error/message", "message", "detail", "error" })
+                {
+                    var el = root;
+                    var ok = true;
+                    foreach (var seg in path.Split('/'))
+                    {
+                        if (el.ValueKind == System.Text.Json.JsonValueKind.Object &&
+                            el.TryGetProperty(seg, out el)) continue;
+                        ok = false; break;
+                    }
+                    if (ok && el.ValueKind == System.Text.Json.JsonValueKind.String)
+                    {
+                        var msg = el.GetString();
+                        if (!string.IsNullOrWhiteSpace(msg)) return msg;
+                    }
+                }
+            }
+        }
+        catch { /* not JSON — fall through to truncation */ }
+        return raw.Length <= 160 ? raw : raw[..160].TrimEnd() + "…";
+    }
+
+    private static int FindJsonEnd(string s, int start)
+    {
+        // Balanced-brace scan from the first '{' so trailing log noise
+        // after the JSON body doesn't break parsing.
+        var depth = 0;
+        for (var i = start; i < s.Length; i++)
+        {
+            if (s[i] == '{') depth++;
+            else if (s[i] == '}' && --depth == 0) return i - start + 1;
+        }
+        return s.Length - start;
     }
 
     public async Task SpeakAsync(string text, bool interrupt = true)
