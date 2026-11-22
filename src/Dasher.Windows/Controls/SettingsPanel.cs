@@ -468,6 +468,7 @@ public class SettingsPanel : Decorator
     private bool _populatingSelections;
     private bool _populatingVoices;
     private int _voiceLoadDepth;
+    private Speech.PronunciationEditorWindow? _pronunciationEditor;
 
     /// <summary>
     /// RFC 0001 2026-10-28: setting_changed for a slider on COMMIT — drag
@@ -2317,6 +2318,12 @@ public class SettingsPanel : Decorator
 
         var credentialsPanel = new StackPanel { Spacing = 6, Margin = new Thickness(0, 8, 0, 0) };
 
+        // Declared here (before RebuildCredentials) so credential edits can
+        // trigger a voice reload through the delegate: the load routine is a
+        // local function further down and can't be referenced directly from
+        // code that precedes its captured controls. Assigned at the bottom.
+        Func<Task>? autoLoadVoices = null;
+
         void RebuildCredentials()
         {
             credentialsPanel.Children.Clear();
@@ -2360,16 +2367,21 @@ public class SettingsPanel : Decorator
                 };
                 textBox.LostFocus += (s, e) =>
                 {
-                    svc.Credentials[key] = textBox.Text ?? "";
+                    var newVal = textBox.Text ?? "";
+                    // Value guard: rebuilds and focus shuffles raise
+                    // LostFocus with unchanged text — only real edits
+                    // justify re-fetching the engine's voice list.
+                    var changed = newVal != svc.Credentials.GetValueOrDefault(key, "");
+                    svc.Credentials[key] = newVal;
                     svc.InvalidateClient();
                     svc.SaveSettings();
+                    if (changed && autoLoadVoices != null)
+                        _ = autoLoadVoices();
                 };
                 row.Children.Add(textBox);
                 credentialsPanel.Children.Add(row);
             }
         }
-
-        Func<Task>? autoLoadVoices = null;
 
         engineCombo.SelectionChanged += async (s, e) =>
         {
@@ -2412,12 +2424,16 @@ public class SettingsPanel : Decorator
             Spacing = 8,
         };
 
-        var loadVoicesBtn = new Button
+        // Voices load automatically (panel open, engine change, credential
+        // change) — the only manual affordance is retrying a failed load,
+        // and it only appears when the last load failed.
+        var retryVoicesBtn = new Button
         {
-            Content = Loc.Tr("load_voices"),
+            Content = "Retry",
             FontSize = 12,
+            IsVisible = false,
         };
-        voiceBtnRow.Children.Add(loadVoicesBtn);
+        voiceBtnRow.Children.Add(retryVoicesBtn);
 
         var voiceCountLabel = new TextBlock
         {
@@ -2442,7 +2458,75 @@ public class SettingsPanel : Decorator
             HorizontalAlignment = HorizontalAlignment.Stretch,
             FontSize = 12,
         };
-        voiceHeader.Children.Add(voiceCombo);
+        // Voice picker (Apple parity): searchable, filterable browser in
+        // addition to the quick ComboBox for the currently-loaded list
+        var browseVoicesBtn = new Button
+        {
+            Content = new DockPanel
+            {
+                Children =
+                {
+                    new TextBlock
+                    {
+                        Text = "Browse…",
+                        FontSize = 11,
+                        VerticalAlignment = VerticalAlignment.Center,
+                    },
+                },
+            },
+            Padding = new Thickness(8, 4),
+            FontSize = 11,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+            CornerRadius = new CornerRadius(4),
+            // Sherpa opens immediately (models don't need a voice load);
+            // other engines are enabled by LoadVoicesIntoCombo — the
+            // picker browses the loaded list.
+            IsEnabled = false,
+        };
+        // One Browse… for every engine: sherpa's voices ARE its models
+        // (download/manage in a window — progress and cancel need the
+        // space); every other engine gets the quick searchable picker.
+        browseVoicesBtn.IsEnabled = svc.SelectedEngine == "sherpaonnx";
+        browseVoicesBtn.Click += (s2, e2) =>
+        {
+            if (svc.SelectedEngine == "sherpaonnx")
+            {
+                var owner = TopLevel.GetTopLevel(this) as Window;
+                var browser = new Speech.SherpaModelBrowserWindow(svc, () =>
+                {
+                    // A model was selected/removed — reload the voice list.
+                    _ = LoadVoicesIntoCombo();
+                });
+                if (owner != null) browser.Show(owner); else browser.Show();
+                return;
+            }
+            new Speech.VoicePickerFlyout(svc, () =>
+            {
+                // refresh the quick combo selection to match
+                if (!string.IsNullOrEmpty(svc.SelectedVoiceId))
+                {
+                    var idx = svc.AvailableVoices.FindIndex(v => v.Id == svc.SelectedVoiceId);
+                    voiceCombo.SelectedIndex = idx >= 0 ? idx + 1 : 0;
+                }
+            }).Show(browseVoicesBtn);
+        };
+        // Engine switches flip which surface Browse… opens: sherpa is
+        // immediately browsable, others wait for their voice list.
+        engineCombo.SelectionChanged += (s2, e2) =>
+            browseVoicesBtn.IsEnabled = svc.SelectedEngine == "sherpaonnx";
+        // Grid (not a horizontal StackPanel): the combo must be width-capped
+        // by the panel, otherwise a long Azure voice name sizes it to full
+        // text width (StackPanel measures children with infinite width) and
+        // pushes the Browse… button out of view.
+        var voiceRow = new Grid { ColumnDefinitions = new("*,Auto") };
+        voiceCombo.SetValue(Grid.ColumnProperty, 0);
+        browseVoicesBtn.SetValue(Grid.ColumnProperty, 1);
+        voiceRow.Children.Add(voiceCombo);
+        voiceRow.Children.Add(browseVoicesBtn);
+        voiceHeader.Children.Add(voiceRow);
 
         var rateLabel = new TextBlock
         {
@@ -2527,6 +2611,36 @@ public class SettingsPanel : Decorator
         volRow.Children.Add(volSlider);
         voiceHeader.Children.Add(volRow);
 
+        // Pronunciation overrides: opens the in-app editor (writes
+        // pronunciations.txt; the wrapper applies changes per utterance).
+        // Singleton: two editors hold independent snapshots and would
+        // clobber each other's saves — Activate the existing one instead.
+        var pronunciationsBtn = new Button
+        {
+            Content = new TextBlock { Text = "Pronunciations…", FontSize = 11 },
+            Padding = new Thickness(8, 4),
+            FontSize = 11,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = BrushControlBg,
+            Foreground = BrushLabel,
+            BorderThickness = new Thickness(0),
+            CornerRadius = new CornerRadius(4),
+            Margin = new Thickness(0, 8, 0, 0),
+        };
+        pronunciationsBtn.Click += (s2, e2) =>
+        {
+            if (_pronunciationEditor != null)
+            {
+                _pronunciationEditor.Activate();
+                return;
+            }
+            var owner = TopLevel.GetTopLevel(this) as Window;
+            _pronunciationEditor = new Speech.PronunciationEditorWindow(svc);
+            _pronunciationEditor.Closed += (_, _) => _pronunciationEditor = null;
+            if (owner != null) _pronunciationEditor.Show(owner); else _pronunciationEditor.Show();
+        };
+        voiceHeader.Children.Add(pronunciationsBtn);
+
         _panel.Children.Add(voiceHeader);
 
         // Voice loading logic — used by button click AND auto-load on engine change.
@@ -2537,18 +2651,23 @@ public class SettingsPanel : Decorator
         // while the first still populates, so re-entrance just re-arms it.)
         async Task LoadVoicesIntoCombo()
         {
-            loadVoicesBtn.IsEnabled = false;
+            retryVoicesBtn.IsVisible = false;
             voiceCountLabel.Text = Loc.Tr("loading");
             _voiceLoadDepth++;
             // Auto-populated combo population is not a user commit: the
             // SelectedIndex assignments below would fire the handler.
             _populatingVoices = true;
+            // The picker browses the loaded list — keep Browse… disabled
+            // while loading so it can't snapshot an empty list (sherpa
+            // browse is model-driven, so it stays available).
+            if (svc.SelectedEngine != "sherpaonnx")
+                browseVoicesBtn.IsEnabled = false;
             try
             {
                 await svc.LoadVoicesAsync();
                 voiceCountLabel.Text = svc.AvailableVoices.Count > 0
                     ? string.Format(Loc.Tr("voices_count_format"), svc.AvailableVoices.Count)
-                    : Loc.Tr("no_voices_found");
+                    : svc.ErrorMessage ?? Loc.Tr("no_voices_found");
                 voiceCombo.Items.Clear();
                 voiceCombo.Items.Add(Loc.Tr("label_default"));
                 foreach (var v in svc.AvailableVoices)
@@ -2566,13 +2685,20 @@ public class SettingsPanel : Decorator
             }
             finally
             {
-                loadVoicesBtn.IsEnabled = true;
+                // Retry only helps when a re-fetch could change the outcome —
+                // sherpa with no model needs Browse (the error message says
+                // so), not another fetch of the same nothing.
+                retryVoicesBtn.IsVisible = svc.AvailableVoices.Count == 0 && !svc.HasSherpaModel;
+                // Browse opens the loaded list for non-sherpa engines — keep
+                // it disabled after a failed load rather than opening a
+                // picker against an empty snapshot.
+                browseVoicesBtn.IsEnabled = svc.SelectedEngine == "sherpaonnx" || svc.AvailableVoices.Count > 0;
                 if (--_voiceLoadDepth == 0)
                     _populatingVoices = false;
             }
         }
 
-        loadVoicesBtn.Click += async (s, e) => await LoadVoicesIntoCombo();
+        retryVoicesBtn.Click += async (s, e) => await LoadVoicesIntoCombo();
 
         voiceCombo.SelectionChanged += (s, e) =>
         {
