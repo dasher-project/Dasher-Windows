@@ -206,6 +206,56 @@ public static class TargetContextReader
                     element = focused;
                     source = "element";
                     Log($"  [UIA] focused element class='{focused.CurrentClassName}' in target window — using it");
+
+                    // Whole-document re-scope (Gecko field report "canvas
+                    // jumps all around"): after focus churn, the focused
+                    // element can resolve to the page DOCUMENT — a 9,000+
+                    // char read that re-anchors the engine near the start
+                    // of the page. Nobody types a Dasher context that big:
+                    // when the resolved element is huge AND the system
+                    // caret is available, re-scope to the deepest element
+                    // enclosing the caret (the actual textarea).
+                    if (element != null)
+                    {
+                        var textLen = 0;
+                        try
+                        {
+                            var p = (IUIAutomationTextPattern)element.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId);
+                            textLen = (p.DocumentRange.GetText(-1) ?? "").Length;
+                        }
+                        catch { }
+                        if (textLen > OversizedReadThreshold)
+                        {
+                            try
+                            {
+                                var caretPt = GetSystemCaretScreenPoint(targetHwnd);
+                                if (caretPt.HasValue)
+                                {
+                                    var docPattern = (IUIAutomationTextPattern)element.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId);
+                                    var deepest = docPattern.RangeFromPoint(caretPt.Value).GetEnclosingElement();
+                                    if (deepest != null)
+                                    {
+                                        var deepLen = 0;
+                                        try
+                                        {
+                                            var dp = (IUIAutomationTextPattern)deepest.GetCurrentPattern(UIA_PatternIds.UIA_TextPatternId);
+                                            deepLen = (dp.DocumentRange.GetText(-1) ?? "").Length;
+                                        }
+                                        catch { }
+                                        if (deepLen > 0 && deepLen < textLen)
+                                        {
+                                            Log($"  [UIA] oversized read ({textLen} chars) — re-scoped to caret's enclosing element ({deepLen} chars)");
+                                            element = deepest;
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Log($"  [UIA] oversized read re-scope failed: {ex.Message}");
+                            }
+                        }
+                    }
                 }
             }
             catch { /* GetFocusedElement can throw on hung providers */ }
@@ -329,6 +379,80 @@ public static class TargetContextReader
         }
     }
 
+    /// <summary>Reads larger than this from the focused element trigger a
+    /// re-scope to the caret's enclosing element: focus churn can resolve
+    /// the page DOCUMENT instead of the textarea (Gecko field report — a
+    /// 9,231-char read re-anchored the engine near the page start).</summary>
+    private const int OversizedReadThreshold = 2000;
+
+    /// <summary>Pure decision for the Gecko RangeFromPoint round-down
+    /// correction: when a Mozilla target's RangeFromPoint returned a
+    /// single-character range, the caret boundary is that character's END
+    /// (one past the Start-side measurement). Unit-tested; every other
+    /// shape keeps the measured Start.</summary>
+    internal static int AdjustCaretForProviderRoundDown(bool mozillaWindow, bool rangeIsSingleChar, int measuredStart) =>
+        mozillaWindow && rangeIsSingleChar ? measuredStart + 1 : measuredStart;
+
+    /// <summary>True when the RangeFromPoint result spans exactly one
+    /// character — the "character containing the caret point" shape Gecko
+    /// returns. Degenerate ranges (End == Start) and multi-char ranges
+    /// keep the uncorrected measurement.</summary>
+    private static bool RangeWidthIsSingleChar(
+        IUIAutomationTextRange document, IUIAutomationTextRange caretRange, int measuredStart)
+    {
+        try
+        {
+            var t = document.Clone();
+            t.MoveEndpointByRange(
+                TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
+                caretRange,
+                TextPatternRangeEndpoint.TextPatternRangeEndpoint_End);
+            var throughEnd = (t.GetText(-1) ?? "").Length;
+            return throughEnd == measuredStart + 1;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>True when the RangeFromPoint result is degenerate
+    /// (End == Start) — a zero-width position, carrying no char-width
+    /// information either way.</summary>
+    private static bool RangeIsDegenerate(
+        IUIAutomationTextRange document, IUIAutomationTextRange caretRange, int measuredStart)
+    {
+        try
+        {
+            var t = document.Clone();
+            t.MoveEndpointByRange(
+                TextPatternRangeEndpoint.TextPatternRangeEndpoint_End,
+                caretRange,
+                TextPatternRangeEndpoint.TextPatternRangeEndpoint_End);
+            return (t.GetText(-1) ?? "").Length == measuredStart;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>Firefox and Thunderbird top-level windows carry this
+    /// class; the round-down correction is scoped to Gecko only.</summary>
+    private static bool IsMozillaWindow(IntPtr hwnd)
+    {
+        try
+        {
+            var sb = new System.Text.StringBuilder(256);
+            GetClassName(hwnd, sb, 256);
+            return sb.ToString() is "MozillaWindowClass" or "MozillaDropShadowWindowClass";
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     /// <summary>
     /// The caret's document-relative UTF-16 offset, via the capability
     /// ladder below (each step's rationale lives with its code). Shared by
@@ -398,8 +522,38 @@ public static class TargetContextReader
                     TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start);
                 var beforeCaret = truncated.GetText(-1) ?? "";
                 caretUtf16 = Math.Clamp(beforeCaret.Length, 0, text.Length);
+
+                // Gecko round-down correction (Firefox/Thunderbird field
+                // report "canvas jumps and doesn't zoom"): the caret point
+                // sits on a character boundary; Gecko's RangeFromPoint
+                // returns the SINGLE CHARACTER containing that point —
+                // the char BEFORE the boundary — so Start-side measuring
+                // reports the caret one behind on every read and the
+                // engine offset steps backward per keystroke. Providers
+                // that round up or return a degenerate range are
+                // unaffected: degenerate End==Start, and the correction
+                // is gated on the single-char shape + Mozilla window
+                // class. Measuring to the char's END is the boundary the
+                // caret actually blinks at, in every position (end of
+                // text, mid-text inserts, after arrow keys).
+                var mozilla = IsMozillaWindow(targetHwnd);
+                var rangeIsSingleChar = mozilla && RangeWidthIsSingleChar(document, caretRange, caretUtf16);
+                // Gecko also returns a DEGENERATE range at the rounded-down
+                // boundary ([len-1, len-1) with the caret after the final
+                // char): correct that shape only at end-of-text, where a
+                // deliberate caret-before-last-char park is rare and the
+                // cost of missing the correction is the per-keystroke
+                // backward step that resets the canvas.
+                var rangeIsDegenerateAtEnd = mozilla && caretUtf16 == text.Length - 1 &&
+                    RangeIsDegenerate(document, caretRange, caretUtf16);
+                var adjusted = AdjustCaretForProviderRoundDown(
+                    mozilla, rangeIsSingleChar || rangeIsDegenerateAtEnd, caretUtf16);
+                if (adjusted != caretUtf16)
+                    Log($"[UIA] caret via system caret → RangeFromPoint: {caretUtf16} (gecko round-down corrected to {adjusted})");
+                else
+                    Log($"[UIA] caret via system caret → RangeFromPoint: {caretUtf16}");
+                caretUtf16 = adjusted;
                 resolved = true;
-                Log($"[UIA] caret via system caret → RangeFromPoint: {caretUtf16}");
             }
             else
             {
@@ -500,8 +654,10 @@ public static class TargetContextReader
     /// selection, which TextPattern1 ranges cannot express. Returns null
     /// when the caret is hidden or anything along the way is unavailable.
     /// </summary>
-    private static IUIAutomationTextRange? TryRangeFromSystemCaret(
-        CUIAutomationClass uia, IUIAutomationTextPattern pattern, IntPtr targetHwnd)
+    /// <summary>The caret point in screen coordinates, computed exactly as
+    /// TryRangeFromSystemCaret does (middle of the caret bar), for callers
+    /// that need the point itself (oversized-read re-scoping).</summary>
+    private static tagPOINT? GetSystemCaretScreenPoint(IntPtr targetHwnd)
     {
         try
         {
@@ -510,26 +666,28 @@ public static class TargetContextReader
             uint tid = GetWindowThreadProcessId(targetHwnd, ref pid);
             if (tid == 0 || !GetGUIThreadInfo(tid, ref info) || info.hwndCaret == IntPtr.Zero)
                 return null;
-
-            // The caret window must belong to the target — a foreign thread's
-            // caret (attached-input edge cases) would seed the wrong position.
             if (!TargetWindowIdentity.IsOwnedBy(info.hwndCaret, targetHwnd))
                 return null;
-
-            // Point inside the caret bar: horizontal middle of the (usually
-            // thin) rect, vertical middle of its height. Degenerate rects
-            // (zero size) still anchor at their top-left.
             var rc = info.rcCaret;
             var width = Math.Max(0, rc.Right - rc.Left);
             var height = Math.Max(0, rc.Bottom - rc.Top);
-            var pt = new tagPOINT
-            {
-                x = rc.Left + width / 2,
-                y = rc.Top + height / 2,
-            };
+            var pt = new tagPOINT { x = rc.Left + width / 2, y = rc.Top + height / 2 };
             if (!ClientToScreen(info.hwndCaret, ref pt)) return null;
+            return pt;
+        }
+        catch
+        {
+            return null;
+        }
+    }
 
-            return pattern.RangeFromPoint(pt);
+    private static IUIAutomationTextRange? TryRangeFromSystemCaret(
+        CUIAutomationClass uia, IUIAutomationTextPattern pattern, IntPtr targetHwnd)
+    {
+        try
+        {
+            var pt = GetSystemCaretScreenPoint(targetHwnd);
+            return pt.HasValue ? pattern.RangeFromPoint(pt.Value) : null;
         }
         catch
         {
